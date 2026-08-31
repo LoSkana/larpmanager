@@ -14559,6 +14559,16 @@ msgstr ""
 "Nyní vidíš registrační formulář tak, jak jej vidí účastník. Vyber vstupenku,"
 " vyplň povinná pole a dokonči registraci, abys poznal celý proces."
 
+#, python-format
+msgid ""
+"Casting is not possible: there are %(shortage)s more participants to assign "
+"than available characters. Add more characters or exclude some participants "
+"before proceeding."
+msgstr ""
+"Casting není možné: je o %(shortage)s účastníků k přiřazení více než "
+"dostupných postav. Před pokračováním přidej další postavy nebo některé "
+"účastníky vyřaď."
+
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"
 " your personal data with this organization, in accordance with the GDPR and "
@@ -14855,6 +14865,16 @@ msgstr ""
 "zacházet s maximální péčí. Konkrétně budou tyto údaje zpřístupněny pouze "
 "organizátorům akcí, na které se rozhodneš zaregistrovat. Nebudou předávány, "
 "sdíleny ani zpracovávány žádným jiným způsobem."
+
+#, python-format
+msgid ""
+"Casting is not possible: there are %(casting_shortage)s more participants to assign than available characters.\n"
+"                    You can increase \"Additional preferences\" to assign non-selected characters randomly to some participant,\n"
+"                    reduce the participants to cast, or adjust the filters above before running the algorithm."
+msgstr ""
+"Casting není možné: je o %(casting_shortage)s účastníků k přiřazení více než dostupných postav.\n"
+"                    Můžeš zvýšit „Další preference“, aby se některým účastníkům náhodně přiřadily nevybrané postavy,\n"
+"                    snížit počet účastníků k obsazení nebo před spuštěním algoritmu upravit filtry výše."
 
 msgid ""
 "Your data will be saved in the system, which is used by several "

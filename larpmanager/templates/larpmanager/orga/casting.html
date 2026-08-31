@@ -62,46 +62,56 @@
             <p class="hide">
                 {% trans "Participants:" %} <span id="num_pl"></span>, {% trans "Characters:" %} <span id="num_ch"></span>
             </p>
-            <hr />
-            <div class="centerized">
-                <button id="exec">{% trans "Start algorithm" %}</button>
-            </div>
-            <hr />
-            <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>
-            <hr />
-            <p>
-                <i>{% trans "Guide:" %}
-                    <span class="YES">YES</span> - {% trans "Choice available, click to lock" %},
-                    <span class="NO">NO</span> - {% trans "Choice locked, click to make it available" %},
-                    <span class="MR">MR</span> - {% trans "Mirror type character, not selectable" %},
-                    <span class="CH">CH</span> - {% trans "Character already assigned, not selectable" %},
-                    <span class="EP">EP</span> - {% trans "Preference not valid" %}
-                </i>
-            </p>
-            <hr />
-            <table id="main_grid">
-                <thead>
-                </thead>
-                <tbody>
-                    <!-- filled later -->
-                </tbody>
-            </table>
-            <hr />
-            <div id="risultati"></div>
-            <p id="not_assigned_after"></p>
-            <div id="load" class="centerized">
-                <input id="res" name="res" type="hidden" />
-                <input type="submit"
-                       id="go"
-                       name="submit"
-                       onclick="return window.lmTesting ? true : confirm('Are you sure? There's no coming back!')"
-                       value="{% trans "Upload" %}" />
-                <p>
-                    {% trans "Assign selected characters to participants." %}
-                    <br />
-                    <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading!" %})</i>
+            {% if not casting_feasible %}
+                <hr />
+                <p class="errorlist">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    {% blocktrans %}Casting is not possible: there are {{ casting_shortage }} more participants to assign than available characters.
+                    You can increase "Additional preferences" to assign non-selected characters randomly to some participant,
+                    reduce the participants to cast, or adjust the filters above before running the algorithm.{% endblocktrans %}
                 </p>
-            </div>
+            {% else %}
+                <hr />
+                <div class="centerized">
+                    <button id="exec">{% trans "Start algorithm" %}</button>
+                </div>
+                <hr />
+                <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>
+                <hr />
+                <p>
+                    <i>{% trans "Guide:" %}
+                        <span class="YES">YES</span> - {% trans "Choice available, click to lock" %},
+                        <span class="NO">NO</span> - {% trans "Choice locked, click to make it available" %},
+                        <span class="MR">MR</span> - {% trans "Mirror type character, not selectable" %},
+                        <span class="CH">CH</span> - {% trans "Character already assigned, not selectable" %},
+                        <span class="EP">EP</span> - {% trans "Preference not valid" %}
+                    </i>
+                </p>
+                <hr />
+                <table id="main_grid">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <!-- filled later -->
+                    </tbody>
+                </table>
+                <hr />
+                <div id="risultati"></div>
+                <p id="not_assigned_after"></p>
+                <div id="load" class="centerized">
+                    <input id="res" name="res" type="hidden" />
+                    <input type="submit"
+                           id="go"
+                           name="submit"
+                           onclick="return window.lmTesting ? true : confirm('Are you sure? There's no coming back!')"
+                           value="{% trans "Upload" %}" />
+                    <p>
+                        {% trans "Assign selected characters to participants." %}
+                        <br />
+                        <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading!" %})</i>
+                    </p>
+                </div>
+            {% endif %}
         </form>
         <p id="assegnazioni"></p>
     </div>

@@ -14869,6 +14869,16 @@ msgstr ""
 "Wybierz bilet, wypełnij wymagane pola i dokończ rejestrację, aby poznać cały"
 " proces."
 
+#, python-format
+msgid ""
+"Casting is not possible: there are %(shortage)s more participants to assign "
+"than available characters. Add more characters or exclude some participants "
+"before proceeding."
+msgstr ""
+"Casting nie jest możliwy: jest o %(shortage)s więcej uczestników do "
+"przypisania niż dostępnych postaci. Dodaj więcej postaci lub wyklucz "
+"niektórych uczestników przed kontynuowaniem."
+
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"
 " your personal data with this organization, in accordance with the GDPR and "
@@ -15173,6 +15183,16 @@ msgstr ""
 "się z nimi z najwyższą starannością. W szczególności będą one widoczne "
 "wyłącznie dla organizatorów wydarzeń, na które zdecydujesz się zapisać. Nie "
 "będą one przekazywane, udostępniane ani przetwarzane w żaden inny sposób."
+
+#, python-format
+msgid ""
+"Casting is not possible: there are %(casting_shortage)s more participants to assign than available characters.\n"
+"                    You can increase \"Additional preferences\" to assign non-selected characters randomly to some participant,\n"
+"                    reduce the participants to cast, or adjust the filters above before running the algorithm."
+msgstr ""
+"Casting nie jest możliwy: jest o %(casting_shortage)s więcej uczestników do przypisania niż dostępnych postaci.\n"
+"                    Możesz zwiększyć „Dodatkowe preferencje”, aby losowo przypisać niektórym uczestnikom niewybrane postaci,\n"
+"                    zmniejszyć liczbę uczestników do Castingu lub dostosować powyższe filtry przed uruchomieniem algorytmu."
 
 msgid ""
 "Your data will be saved in the system, which is used by several "

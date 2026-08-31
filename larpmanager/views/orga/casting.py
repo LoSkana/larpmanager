@@ -507,6 +507,12 @@ def get_casting_data(
     for priority_key in ("reg_priority", "pay_priority"):
         context[priority_key] = int(get_event_config(context["event"].id, f"casting_{priority_key}", context=context))
 
+    # Feasibility check: casting is impossible if there are fewer available
+    # (untaken) elements than players still needing an assignment.
+    available_untaken_count = len(set(available_choices) - set(taken_characters))
+    context["casting_shortage"] = max(0, len(players_info) - available_untaken_count)
+    context["casting_feasible"] = context["casting_shortage"] == 0
+
 
 def _casting_prepare(context: dict) -> tuple[set, dict[Any, Any], dict[Any, list[Any]]]:
     """Prepare casting data for a specific run and type.
@@ -698,6 +704,22 @@ def orga_casting(
         if form.is_valid():
             # Process casting assignment if submit button was clicked
             if request.POST.get("submit"):
+                # Re-check feasibility server-side before applying assignments,
+                # so a stale page can't be used to submit an impossible casting.
+                casting_details(context)
+                get_casting_data(context, form)
+                if not context["casting_feasible"]:
+                    messages.error(
+                        request,
+                        _(
+                            "Casting is not possible: there are %(shortage)s more participants to assign than "
+                            "available characters. Add more characters or exclude some participants before proceeding."
+                        )
+                        % {"shortage": context["casting_shortage"]},
+                    )
+                    context["form"] = form
+                    return render(request, "larpmanager/orga/casting.html", context)
+
                 assign_casting(request, context)
                 return redirect(request.path_info)
         else:

@@ -14769,6 +14769,16 @@ msgstr ""
 "täytä pakolliset kentät ja suorita ilmoittautuminen kokeaksesi koko "
 "prosessin."
 
+#, python-format
+msgid ""
+"Casting is not possible: there are %(shortage)s more participants to assign "
+"than available characters. Add more characters or exclude some participants "
+"before proceeding."
+msgstr ""
+"Casting ei ole mahdollista: osallistujia on %(shortage)s enemmän kuin "
+"käytettävissä olevia hahmoja. Lisää hahmoja tai sulje joitakin osallistujia "
+"pois ennen jatkamista."
+
 msgid ""
 "By clicking the button below, you confirm that you consent to the sharing of"
 " your personal data with this organization, in accordance with the GDPR and "
@@ -15072,6 +15082,16 @@ msgstr ""
 "huolellisesti. Tietosi näkyvät nimenomaan vain niiden tapahtumien "
 "järjestäjille, joihin päätät ilmoittautua. Tietoja ei luovuteta, jaeta eikä "
 "käsitellä millään muulla tavalla."
+
+#, python-format
+msgid ""
+"Casting is not possible: there are %(casting_shortage)s more participants to assign than available characters.\n"
+"                    You can increase \"Additional preferences\" to assign non-selected characters randomly to some participant,\n"
+"                    reduce the participants to cast, or adjust the filters above before running the algorithm."
+msgstr ""
+"Casting ei ole mahdollista: osallistujia on %(casting_shortage)s enemmän kuin käytettävissä olevia hahmoja.\n"
+"                    Voit lisätä \"Lisätoiveita\", jotta joillekin osallistujille voidaan antaa satunnaisesti hahmoja, joita he eivät ole valinneet,\n"
+"                    vähentää castattavien osallistujien määrää tai muokata yllä olevia suodattimia ennen algoritmin suorittamista."
 
 msgid ""
 "Your data will be saved in the system, which is used by several "

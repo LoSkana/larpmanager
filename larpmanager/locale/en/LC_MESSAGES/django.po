@@ -8833,6 +8833,16 @@ msgstr ""
 msgid "Characters:"
 msgstr ""
 
+#, python-format
+msgid ""
+"Casting is not possible: there are %(casting_shortage)s more participants to "
+"assign than available characters.\n"
+"                    You can increase \"Additional preferences\" to assign "
+"non-selected characters randomly to some participant,\n"
+"                    reduce the participants to cast, or adjust the filters "
+"above before running the algorithm."
+msgstr ""
+
 msgid "Start algorithm"
 msgstr ""
 
@@ -12775,6 +12785,13 @@ msgid ""
 msgstr ""
 
 msgid "Results not present"
+msgstr ""
+
+#, python-format
+msgid ""
+"Casting is not possible: there are %(shortage)s more participants to assign "
+"than available characters. Add more characters or exclude some participants "
+"before proceeding."
 msgstr ""
 
 #, python-format
