@@ -1,31 +1,66 @@
 {% load show_tags i18n %}
 {% for fact in sheet_factions %}
-    <h2 class="c">{{ fact.name }}</h2>
-    {% for idx, question in fact.questions.items %}
-        {% if question.typ == 'e' %}
-            {% with fact.fields|get:idx as field %}
-                {% if field %}
-                    {% if screen or question.printable %}
-                        <h2 class="c title">{{ question.name }}</h2>
-                        <div class="plot">{% show_char field run 1 %}</div>
-                    {% endif %}
-                {% endif %}
-            {% endwith %}
-        {% elif question.typ == 'text' %}
-            {% if fact.text and show_faction.text %}
-                {% if not fact.only_text %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
-                <div class="plot">{% show_char fact.text run 1 %}</div>
-            {% endif %}
-        {% else %}
-            {% with fact.fields|get:idx as field %}
-                {% if field %}
-                    {% if screen or question.printable %}
-                        <div class="go-inline">
-                            <b>{{ question.name }}:&nbsp;</b>{% get_character_field field options %}
-                        </div>
-                    {% endif %}
-                {% endif %}
-            {% endwith %}
+    {% if fact.typ != 'g' or check %}
+        {% if fact.name %}
+            <h1 class="c">
+                <a href="{% url 'faction' run.get_slug fact.uuid %}" target="_blank">{{ fact.name }}</a>
+            </h1>
         {% endif %}
-    {% endfor %}
+        {% count_sheet_titles fact.fields fact.questions screen fact.text show_faction.text visibility_e_only=False teaser_content=fact.teaser show_teaser=show_faction.teaser as title_count %}
+        {% for idx, question in fact.questions.items %}
+            {% if question.typ == 'teaser' %}
+                {% if fact.teaser and show_faction.teaser %}
+                    <div class="go-block">
+                        {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
+                        <div class="plot">{% show_char fact.teaser run 1 %}</div>
+                    </div>
+                {% endif %}
+            {% elif question.typ == 'e' %}
+                {% with fact.fields|get:idx as field %}
+                    {% if field %}
+                        {% if screen or question.printable %}
+                            {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
+                            <div class="plot">{% show_char field run 1 %}</div>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% elif question.typ == 'text' %}
+                {% if fact.text and show_faction.text %}
+                    {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
+                    <div class="plot">{% show_char fact.text run 1 %}</div>
+                {% endif %}
+            {% elif question.typ == 'p' and question.visibility == 'e' %}
+                {% with fact.fields|get:idx as field %}
+                    {% if field %}
+                        {% if screen or question.printable %}
+                            {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
+                            <div class="plot">{{ field|linebreaksbr }}</div>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% elif question.typ == 'p' %}
+                {% with fact.fields|get:idx as field %}
+                    {% if field %}
+                        {% if screen or question.printable %}
+                            <div class="go-block">
+                                {% if title_count > 1 %}<b>{{ question.name }}:</b>{% endif %}
+                                <div class="plot">{{ field|linebreaksbr }}</div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% else %}
+                {% with fact.fields|get:idx as field %}
+                    {% if field %}
+                        {% if screen or question.printable %}
+                            <div class="go-inline">
+                                <b>{{ question.name }}:&nbsp;</b>{% get_character_field field options %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+        <hr class="clear" />
+    {% endif %}
 {% endfor %}

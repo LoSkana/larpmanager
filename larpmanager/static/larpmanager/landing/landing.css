@@ -1811,7 +1811,12 @@ body.landing #tutorial-descr img {
     flex: 1;
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    padding: 0 0 1rem;
+    padding: 1rem 0 0;
+    order: 2;
+  }
+
+  body.landing #tutorials .feature {
+    order: 1;
   }
 }
 

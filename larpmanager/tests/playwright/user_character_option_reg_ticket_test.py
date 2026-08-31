@@ -149,7 +149,10 @@ def create_character(page: Any) -> None:
 
     # check previous option is not selected anymore
     expect_normalized(page, page.locator("#one"), "The character has missing values in required fields: choose")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
+    expect_normalized(page, page.locator("#one"),
+        "The character has missing values in required fields: choose "
+        "Player: Admin Test Presentation sdsa asadas",
+    )
     sidebar(page, "Edit")
 
     # check only one option available

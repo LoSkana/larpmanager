@@ -30,28 +30,32 @@
                             {% include "elements/sheet/fields.html" %}
                         {% endif %}
                     </div>
-                    {% include "elements/sheet/teaser.html" %}
+                    {% if check %}
+                        {% include "elements/sheet/teaser.html" with char=sheet_char %}
+                    {% else %}
+                        {% include "elements/sheet/teaser.html" %}
+                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="sheet">
+            <hr class="clear" />
             {% if check %}
-                <hr class="clear" />
                 {% include "elements/sheet/pdf.html" %}
                 {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
+                {% include "elements/sheet/texts.html" with char=sheet_char %}
                 {% include "elements/sheet/experience.html" %}
                 {% include "elements/sheet/inventories.html" %}
-                {% include "elements/sheet/factions.html" %}
-                {% include "elements/sheet/guilds.html" %}
-                {% include "elements/sheet/texts.html" with char=sheet_char %}
+            {% endif %}
+            {% include "elements/sheet/factions.html" %}
+            {% include "elements/sheet/guilds.html" %}
+            {% if check %}
                 {% include "elements/sheet/plots.html" %}
                 {% include "elements/sheet/quests.html" %}
                 {% include "elements/sheet/relationships.html" %}
                 {% include "elements/sheet/questbuilder.html" %}
                 {% include "elements/sheet/speedlarp.html" %}
                 {% include "elements/sheet/prologue.html" %}
-            {% else %}
-                {% include "elements/sheet/texts.html" %}
             {% endif %}
         </div>
     </div>

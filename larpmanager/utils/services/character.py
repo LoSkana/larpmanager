@@ -560,19 +560,25 @@ def get_character_sheet_guilds(context: dict, *, only_visible: bool = False) -> 
     if "guild" not in context["features"]:
         return
 
-    guild_event = get_event_class_parent(context["event"].id, "guild", context=context)
     all_guilds = {}
-    accepted_guilds = (
-        Guild.objects.filter(
-            event=guild_event,
-            memberships__character=context["character"],
-            memberships__status=GuildMembershipStatus.ACCEPTED,
+    if not only_visible:
+        guild_event = get_event_class_parent(context["event"].id, "guild", context=context)
+        accepted_guilds = (
+            Guild.objects.filter(
+                event=guild_event,
+                memberships__character=context["character"],
+                memberships__status=GuildMembershipStatus.ACCEPTED,
+            )
+            .order_by("order")
+            .distinct()
         )
-        .order_by("order")
-        .distinct()
-    )
-    for guild in accepted_guilds:
-        all_guilds[guild.id] = guild.show_complete()
+        for guild in accepted_guilds:
+            all_guilds[guild.id] = guild.show_complete()
+    else:
+        guild_numbers = context["char"].get("guilds", [])
+        for guild_number in guild_numbers:
+            guild_id = context.get("guild_mapping", {}).get(guild_number)
+            all_guilds[guild_id] = context["guilds"].get(guild_number)
 
     context["sheet_guilds"] = []
 

@@ -94,7 +94,7 @@ def reading(live_server: Any, page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
+        Presentation pppresssent totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
         """,
     )
 
@@ -122,14 +122,16 @@ def reading(live_server: Any, page: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
+        "Presentation pppresssent totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
     )
 
     # check reading plot
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
+    expect_normalized(page, page.locator("#one"),
+        "testona wwwww prova bruuuu",
+    )
 
 
 def relationships(live_server: Any, page: Any) -> None:
