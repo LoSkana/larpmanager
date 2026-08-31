@@ -284,6 +284,11 @@ def test_faction_all(pw_page: Any) -> None:
     expect_normalized(page, page.locator("#one"),
   """
       Fill in the missing information in your profile to complete your registration
+      Primary Faction 1
+      Transversal Faction 1
+      Transversal Faction 2
+      Transversal Faction 3
+      Secret Faction 1
       Player: User Test
         Presentation
         Alpha teaser
@@ -345,6 +350,8 @@ def test_faction_all(pw_page: Any) -> None:
     expect_normalized(page, page.locator("#one"),
         """
         Fill in the missing information in your profile to complete your registration
+        Primary Faction 1
+        Transversal Faction 1
         Beta teaser
 
         Primary Faction 1

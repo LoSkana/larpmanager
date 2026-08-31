@@ -622,3 +622,60 @@ body.association.new_v22 .user_resize {
 .payment-membership-info i {
   margin-right: 0.4rem;
 }
+
+/*** CHARACTER SHEET QUICKBAR ***/
+
+#sheet-quickbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em 1.5em;
+  z-index: 50;
+  background-color: rgba(var(--sec-rgb), 0.9);
+  border-radius: 10px;
+}
+
+#sheet-quickbar a {
+  color: var(--pri-clr);
+  white-space: nowrap;
+  margin: 0;
+}
+
+#sheet-quickbar a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 840px) {
+  #sheet-quickbar {
+    position: sticky;
+    top: 0.5em;
+    left: auto;
+    right: auto;
+    width: auto;
+    margin: 0.5em;
+    padding: 0.5em 1em;
+    z-index: 5;
+  }
+}
+
+@media (min-width: 841px) {
+  #sheet-quickbar {
+    position: fixed;
+    left: 0;
+    right: 1em;
+    bottom: 1em;
+    padding: 0.6em 1.5em;
+    justify-content: center;
+  }
+
+  #page-wrapper.sidebar #sheet-quickbar {
+    left: 26ch;
+  }
+
+  .new_v22 #page-wrapper.sidebar.sidebar-collapsed #sheet-quickbar {
+    left: 4em;
+  }
+
+  .character {
+    padding-bottom: 3em;
+  }
+}

@@ -8,6 +8,8 @@
 {% endblock nav %}
 {% block content %}
     <div class="character">
+        <nav id="sheet-quickbar" hidden>
+        </nav>
         {% if missing_fields %}
             <i>{% trans "The character has missing values in required fields:" %} {{ missing_fields }}</i>
             <hr />
@@ -61,6 +63,28 @@
     </div>
 {% endblock content %}
 {% block js %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+    var quickbar = document.getElementById('sheet-quickbar');
+    if (quickbar === null) return;
+
+    var headings = document.querySelectorAll('.sheet h1.c');
+    var links = [];
+    headings.forEach(function(heading, idx) {
+        var text = heading.textContent.trim();
+        if (text.length === 0) return;
+        heading.id = heading.id || 'sheet-h2-' + idx;
+        var link = document.createElement('a');
+        link.href = '#' + heading.id;
+        link.textContent = text;
+        links.push(link);
+    });
+
+    if (links.length < 2) return;
+    links.forEach(function(link) { quickbar.appendChild(link); });
+    quickbar.hidden = false;
+});
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js">});</script>
     {% if pref %}
         <script>

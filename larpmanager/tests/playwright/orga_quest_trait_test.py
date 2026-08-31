@@ -68,6 +68,7 @@ def test_quest_trait(pw_page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         "Fill in the missing information in your profile to complete your registration "
+        "torta - nonna torta - nonna "
         "player: admin test presentation test teaser test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "/test/gallery/")
