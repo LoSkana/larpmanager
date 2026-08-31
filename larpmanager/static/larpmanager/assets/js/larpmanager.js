@@ -674,7 +674,7 @@ function replaceNewUrl() {
             newUrl = href;
         } else {
             let currentUrl = window.location.href;
-            let cleanedUrl = currentUrl.split('#')[0];
+            let cleanedUrl = currentUrl.split('#')[0].split('?')[0];
             newUrl = cleanedUrl + 'new/';
         }
         if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {

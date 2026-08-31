@@ -6768,6 +6768,9 @@ msgstr "<b>%(number)s</b> %(label)s ke schválení"
 msgid "Activate features for the organization"
 msgstr "Aktivovat funkce pro organizaci"
 
+msgid "Assigned outside expressed preferences"
+msgstr "Přiřazeno mimo vyjádřené preference"
+
 msgid "Charge transaction fees to participant"
 msgstr "Účtuj transakční poplatky účastníkovi"
 
@@ -7324,6 +7327,9 @@ msgstr "Přiřazení vybraných postav účastníkům."
 
 msgid "Browse events that have already taken place"
 msgstr "Prohlédni si akce, které již proběhly"
+
+msgid "Characters left unassigned by the algorithm"
+msgstr "Postavy, které algoritmus nepřiřadil"
 
 msgid "Click on a name to go and view it directly."
 msgstr "Klikni na název a zobraz si jej přímo."

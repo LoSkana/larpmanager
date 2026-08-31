@@ -8879,6 +8879,12 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
+msgid "Characters left unassigned by the algorithm"
+msgstr ""
+
+msgid "Assigned outside expressed preferences"
+msgstr ""
+
 msgid "Configure form:"
 msgstr ""
 

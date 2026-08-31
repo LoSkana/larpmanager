@@ -6768,6 +6768,9 @@ msgstr "<b>%(number)s</b> %(label)s hyväksyttäväksi"
 msgid "Activate features for the organization"
 msgstr "Ota käyttöön organisaation ominaisuuksia"
 
+msgid "Assigned outside expressed preferences"
+msgstr "Määritetty ilmaistujen toiveiden ulkopuolelle"
+
 msgid "Charge transaction fees to participant"
 msgstr "Veloita transaktiomaksut osallistujalta"
 
@@ -7323,6 +7326,9 @@ msgstr "Määritä valitut hahmot osallistujille."
 
 msgid "Browse events that have already taken place"
 msgstr "Selaa jo pidettyjä tapahtumia"
+
+msgid "Characters left unassigned by the algorithm"
+msgstr "Hahmot, jotka algoritmi jätti määrittämättä"
 
 msgid "Click on a name to go and view it directly."
 msgstr "Klikkaa nimeä siirtyäksesi katsomaan sitä suoraan."
