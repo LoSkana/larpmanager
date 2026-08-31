@@ -230,6 +230,12 @@
   margin: 0 0 0 1em;
 }
 
+@media (max-width: 840px) {
+  .gallery.sheet-cols .el {
+    margin: 0;
+  }
+}
+
 .gallery.sheet-cols .text {
   order: 1;
   flex: 1 1 auto;
