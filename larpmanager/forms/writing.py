@@ -22,6 +22,7 @@ from typing import Any, ClassVar
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -375,26 +376,33 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
             The saved instance with updated plot-character relationships.
 
         """
-        instance = super().save()
+        # Lock the plot row so a concurrent duplicate submit (e.g. double-click)
+        # blocks until this transaction commits, instead of racing on the
+        # plot-character unique constraint below.
+        with transaction.atomic():
+            if self.instance.pk:
+                Plot.objects.select_for_update().get(pk=self.instance.pk)
 
-        # Persist the instance to ensure it has a primary key
-        instance.save()
+            instance = super().save()
 
-        # Create or update plot-character relationships for each character
-        for ch_id in self.chars_id:
-            (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            # Persist the instance to ensure it has a primary key
+            instance.save()
 
-            # Extract role text from cleaned_data or raw data
-            field = f"char_role_{pr.character_id}"
-            value = self.cleaned_data.get(field, "")
-            if not value:
-                value = self.data.get(field, "")
-            if not value:
-                continue
+            # Create or update plot-character relationships for each character
+            for ch_id in self.chars_id:
+                (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
 
-            # Update and save the relationship with role text
-            pr.text = value
-            pr.save()
+                # Extract role text from cleaned_data or raw data
+                field = f"char_role_{pr.character_id}"
+                value = self.cleaned_data.get(field, "")
+                if not value:
+                    value = self.data.get(field, "")
+                if not value:
+                    continue
+
+                # Update and save the relationship with role text
+                pr.text = value
+                pr.save()
 
         return instance
 
