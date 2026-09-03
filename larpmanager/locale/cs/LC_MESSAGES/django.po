@@ -1004,6 +1004,9 @@ msgstr "Postranní panel"
 msgid "Sign In"
 msgstr "Přihlásit se"
 
+msgid "Sign in"
+msgstr "Přihlásit se"
+
 msgid "Signups"
 msgstr "Přihlášení"
 
@@ -1828,6 +1831,9 @@ msgstr "Právní název"
 
 msgid "Link color"
 msgstr "Barva odkazu"
+
+msgid "Loading..."
+msgstr "Načítání..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Soukromá zpráva:"
 msgid "Promote to admin"
 msgstr "Povýšit na správce"
 
-msgid "QR Code Check-in"
-msgstr "Odbavení pomocí QR kódu"
-
 msgid "Realized revenue"
 msgstr "Realizované příjmy"
 
@@ -4385,6 +4388,9 @@ msgstr "Uzavření sbírky"
 msgid "Complete sheet (Pdf)"
 msgstr "Kompletní list (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Potvrdit check-in pro"
+
 msgid "Country of the event"
 msgstr "Země konání akce"
 
@@ -4862,6 +4868,9 @@ msgstr "Vytvořena nová postava!"
 msgid "Newsletter preferences"
 msgstr "Předvolby pro zasílání novinek"
 
+msgid "No additional details."
+msgstr "Žádné další podrobnosti."
+
 msgid "No address was ignored"
 msgstr "Žádná adresa nebyla vynechána"
 
@@ -5077,6 +5086,9 @@ msgstr "E-mail účastníka"
 
 msgid "Total registration fee:"
 msgstr "Celkový registrační poplatek:"
+
+msgid "Unable to load details."
+msgstr "Nelze načíst podrobnosti."
 
 msgid "Welcome to LarpManager!"
 msgstr "Vítej v LarpManageru!"
@@ -5667,6 +5679,9 @@ msgstr "Pozvánka zaslaná na %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Živý chat není nastaven."
+
+msgid "Load checked-in participants"
+msgstr "Načíst účastníky s potvrzeným check-inem"
 
 msgid "Manage modules for workshops"
 msgstr "Spravovat moduly pro workshopy"
@@ -6386,6 +6401,9 @@ msgstr "Registrace se otevírají: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Zkontrolovat osobní údaje účastníků"
+
+msgid "Search by player or character name"
+msgstr "Hledat podle jména hráče nebo postavy"
 
 msgid "Set the registration external link"
 msgstr "Nastav externí odkaz pro registraci"

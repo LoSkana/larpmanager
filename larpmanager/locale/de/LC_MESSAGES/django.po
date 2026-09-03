@@ -1004,6 +1004,9 @@ msgstr "Seitenleiste"
 msgid "Sign In"
 msgstr "Anmelden"
 
+msgid "Sign in"
+msgstr "Anmelden"
+
 msgid "Signups"
 msgstr "Anmeldungen"
 
@@ -1828,6 +1831,9 @@ msgstr "Juristischer Name"
 
 msgid "Link color"
 msgstr "Linkfarbe"
+
+msgid "Loading..."
+msgstr "Wird geladen..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Private Nachricht:"
 msgid "Promote to admin"
 msgstr "Zum Admin befördern"
 
-msgid "QR Code Check-in"
-msgstr "QR-Code-Check-in"
-
 msgid "Realized revenue"
 msgstr "Realisierte Einnahmen"
 
@@ -4385,6 +4388,9 @@ msgstr "Die Sammlung schließen"
 msgid "Complete sheet (Pdf)"
 msgstr "Vollständiger Bogen (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Check-in bestätigen für"
+
 msgid "Country of the event"
 msgstr "Land der Veranstaltung"
 
@@ -4862,6 +4868,9 @@ msgstr "Neuer Charakter erstellt!"
 msgid "Newsletter preferences"
 msgstr "Newsletter-Einstellungen"
 
+msgid "No additional details."
+msgstr "Keine weiteren Details."
+
 msgid "No address was ignored"
 msgstr "Keine Adresse wurde ignoriert"
 
@@ -5077,6 +5086,9 @@ msgstr "Die E-Mail des Teilnehmers"
 
 msgid "Total registration fee:"
 msgstr "Anmeldegebühr insgesamt:"
+
+msgid "Unable to load details."
+msgstr "Details konnten nicht geladen werden."
 
 msgid "Welcome to LarpManager!"
 msgstr "Willkommen beim LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Einladung an %(email)s gesendet"
 
 msgid "Live chat is not configured."
 msgstr "Der Live-Chat ist nicht eingerichtet."
+
+msgid "Load checked-in participants"
+msgstr "Eingecheckte Teilnehmende laden"
 
 msgid "Manage modules for workshops"
 msgstr "Verwalte Module für Workshops"
@@ -6386,6 +6401,9 @@ msgstr "Die Anmeldungen beginnen am: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Überprüfe persönliche Daten der Teilnehmenden"
+
+msgid "Search by player or character name"
+msgstr "Nach Spieler- oder Charakternamen suchen"
 
 msgid "Set the registration external link"
 msgstr "Setze den externen Link für die Registrierung"

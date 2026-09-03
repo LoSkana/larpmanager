@@ -1004,6 +1004,9 @@ msgstr "Zijbalk"
 msgid "Sign In"
 msgstr "Aanmelden"
 
+msgid "Sign in"
+msgstr "Inloggen"
+
 msgid "Signups"
 msgstr "Aanmeldingen"
 
@@ -1828,6 +1831,9 @@ msgstr "Juridische naam"
 
 msgid "Link color"
 msgstr "Link kleur"
+
+msgid "Loading..."
+msgstr "Laden..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Privébericht:"
 msgid "Promote to admin"
 msgstr "Bevorder tot beheerder"
 
-msgid "QR Code Check-in"
-msgstr "QR-code check-in"
-
 msgid "Realized revenue"
 msgstr "Gerealiseerde omzet"
 
@@ -4385,6 +4388,9 @@ msgstr "Sluit de inzameling"
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Check-in bevestigen voor"
+
 msgid "Country of the event"
 msgstr "Land van het evenement"
 
@@ -4862,6 +4868,9 @@ msgstr "Nieuw personage gemaakt!"
 msgid "Newsletter preferences"
 msgstr "Voorkeuren nieuwsbrief"
 
+msgid "No additional details."
+msgstr "Geen aanvullende details."
+
 msgid "No address was ignored"
 msgstr "Er is geen enkel adres over het hoofd gezien"
 
@@ -5077,6 +5086,9 @@ msgstr "E-mailadres van de deelnemer"
 
 msgid "Total registration fee:"
 msgstr "Totale registratiekosten:"
+
+msgid "Unable to load details."
+msgstr "Kan details niet laden."
 
 msgid "Welcome to LarpManager!"
 msgstr "Welkom bij LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Uitnodiging verstuurd naar %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "De livechat is niet ingesteld."
+
+msgid "Load checked-in participants"
+msgstr "Ingecheckte deelnemers laden"
 
 msgid "Manage modules for workshops"
 msgstr "Beheer modules voor workshops"
@@ -6387,6 +6402,9 @@ msgstr "Registraties openen op: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Bekijk persoonsgegevens van deelnemers"
+
+msgid "Search by player or character name"
+msgstr "Zoeken op naam van speler of personage"
 
 msgid "Set the registration external link"
 msgstr "De externe link voor registratie instellen"

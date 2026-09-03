@@ -126,11 +126,10 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
         context = check_event_context(request, event_slug, "orga_exp_deliveries")
         try:
             run = Run.objects.get(uuid=run_id, event__slug=event_slug)
-            character_ids = (
-                Registration.objects.filter(run=run, cancellation_date__isnull=True)
-                .values_list("characters__id", flat=True)
-                .distinct()
-            )
+            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+            if request.GET.get("checked_in_only") == "1":
+                registrations = registrations.filter(check_in__checked_in_at__isnull=False)
+            character_ids = registrations.values_list("characters__id", flat=True).distinct()
             character_ids = [cid for cid in character_ids if cid is not None]
             character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
             form = OrgaDeliveryExpForm(
@@ -160,6 +159,8 @@ def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpRespo
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
     run_uuid = context["run"].uuid
     new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run_uuid}&frame=1"
+    if request.GET.get("checked_in_only") == "1":
+        new_url += "&checked_in_only=1"
     return redirect(new_url)
 
 

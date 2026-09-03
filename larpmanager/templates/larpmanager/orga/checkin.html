@@ -7,34 +7,62 @@
     {% trans "Scan participant QR codes on-site to mark them present. Works offline: scans are queued locally and synced automatically once you're back online." %}
 {% endblock info %}
 {% block content %}
-    <div id="checkin_status">
-        <span id="checkin_sync_state" class="checkin-online">{% trans "Online" %}</span>
-        <span id="checkin_queue_count"></span>
+    <div id="checkin">
+        <div id="checkin_status">
+            <input type="text"
+                   id="checkin_search"
+                   placeholder="{% trans 'Search by player or character name' %}" />
+            <button type="button" id="checkin_scan_btn" class="btn">{% trans "Scan QR code" %}</button>
+            <span id="checkin_sync_state" class="checkin-online">{% trans "Online" %}</span>
+            <span id="checkin_queue_count"></span>
+        </div>
+        <table id="checkin_table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Participant" %}</th>
+                    <th>{% trans "Character" %}</th>
+                    <th>{% trans "Payment" %}</th>
+                    <th>{% trans "Present" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <dialog id="checkin_scan_popup" class="popup_delete">
+            <div id="checkin_reader"></div>
+            <p id="checkin_scan_result"></p>
+            <button type="button" id="checkin_scan_close" class="btn">{% trans "Close" %}</button>
+        </dialog>
+        <dialog id="checkin_detail_popup" class="popup_delete">
+            <div id="checkin_detail_content"></div>
+            <button type="button" id="checkin_detail_close" class="btn">{% trans "Close" %}</button>
+        </dialog>
+        <dialog id="checkin_signin_popup" class="popup_delete">
+            <p id="checkin_signin_message"></p>
+            <button type="button" id="checkin_signin_confirm" class="btn">{% trans "Confirm" %}</button>
+            <button type="button" id="checkin_signin_cancel" class="btn">{% trans "Cancel" %}</button>
+        </dialog>
+        <table id="checkin_summary">
+            <tbody>
+                <tr>
+                    <th>{% trans "Present" %}</th>
+                    <td id="checkin_summary_present"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Not scanned" %}</th>
+                    <td id="checkin_summary_remaining"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Total" %}</th>
+                    <td id="checkin_summary_total"></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div id="checkinChartContainer" class="accounting_record"></div>
-    <button type="button" id="checkin_scan_btn" class="btn">{% trans "Scan QR code" %}</button>
-    <table id="checkin_table">
-        <thead>
-            <tr>
-                <th>{% trans "Participant" %}</th>
-                <th>{% trans "Character" %}</th>
-                <th>{% trans "Payment" %}</th>
-                <th>{% trans "Present" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <dialog id="checkin_scan_popup">
-        <div id="checkin_reader"></div>
-        <p id="checkin_scan_result"></p>
-        <button type="button" id="checkin_scan_close" class="btn">{% trans "Close" %}</button>
-    </dialog>
 {% endblock content %}
 {% block js %}
-    <script type="text/javascript"
-            src="https://cdn.canvasjs.com/canvasjs.min.js"
-            defer></script>
     <script type="text/javascript"
             src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
             defer></script>
@@ -44,11 +72,61 @@
 
   var CHECKIN_DATA = {{ checkin_data|safe }};
   var SCAN_URL = "{% url 'orga_checkin_scan' run.get_slug %}";
+  var DETAIL_URL = "{% url 'orga_checkin_detail' run.get_slug %}";
   var CSRF_TOKEN = "{{ csrf_token }}";
   var QUEUE_KEY = "checkin_queue_{{ run.id }}";
 
   var byUuid = {};
   CHECKIN_DATA.forEach(function (row) { byUuid[row.uuid] = row; });
+
+  var searchText = "";
+  var detailCache = {};
+
+  function matchesSearch(row) {
+    if (!searchText) return true;
+    var haystack = (row.member + " " + row.character).toLowerCase();
+    return haystack.indexOf(searchText) !== -1;
+  }
+
+  function renderDetail(container, detail) {
+    var parts = [];
+    if (detail.ticket) parts.push("<b>{% trans 'Ticket' %}:</b> " + detail.ticket);
+    if (detail.faction) parts.push("<b>{% trans 'Faction' %}:</b> " + detail.faction);
+    detail.addons.forEach(function (addon) {
+      parts.push("<b>" + addon.name + ":</b> " + addon.value);
+    });
+    detail.character_fields.forEach(function (field) {
+      parts.push("<b>" + field.name + ":</b> " + field.value);
+    });
+    container.innerHTML = parts.length ? parts.join("<br>") : "{% trans 'No additional details.' %}";
+  }
+
+  function openDetail(uuid) {
+    var popup = document.getElementById("checkin_detail_popup");
+    var container = document.getElementById("checkin_detail_content");
+    popup.showModal();
+
+    var cached = detailCache[uuid];
+    if (cached) {
+      renderDetail(container, cached);
+      return;
+    }
+
+    container.textContent = "{% trans 'Loading...' %}";
+    fetch(DETAIL_URL + "?uuid=" + encodeURIComponent(uuid))
+      .then(function (resp) { return resp.json(); })
+      .then(function (data) {
+        if (data.res !== "ok") {
+          container.textContent = "{% trans 'Unable to load details.' %}";
+          return;
+        }
+        detailCache[uuid] = data;
+        renderDetail(container, data);
+      })
+      .catch(function () {
+        container.textContent = "{% trans 'Unable to load details.' %}";
+      });
+  }
 
   function loadQueue() {
     try {
@@ -64,37 +142,27 @@
       queue.length ? ("{% trans 'Pending sync:' %} " + queue.length) : "";
   }
 
-  function renderChart() {
+  function renderSummary() {
     var present = 0;
     CHECKIN_DATA.forEach(function (row) { if (row.checked_in_at) present += 1; });
-    var remaining = CHECKIN_DATA.length - present;
-    if (window.CanvasJS) {
-      var chart = new CanvasJS.Chart("checkinChartContainer", {
-        theme: "dark2",
-        data: [{
-          type: "pie",
-          indexLabel: "{label} ({y})",
-          dataPoints: [
-            { label: "{% trans 'Present' %}", y: present },
-            { label: "{% trans 'Not scanned' %}", y: remaining }
-          ]
-        }]
-      });
-      chart.render();
-    }
+    document.getElementById("checkin_summary_present").textContent = present;
+    document.getElementById("checkin_summary_remaining").textContent = CHECKIN_DATA.length - present;
+    document.getElementById("checkin_summary_total").textContent = CHECKIN_DATA.length;
   }
 
   function renderTable() {
     var tbody = document.querySelector("#checkin_table tbody");
     tbody.innerHTML = "";
-    CHECKIN_DATA.forEach(function (row) {
+    CHECKIN_DATA.filter(matchesSearch).forEach(function (row) {
       var tr = document.createElement("tr");
       tr.dataset.uuid = row.uuid;
       tr.innerHTML =
+        "<td><button type='button' class='btn checkin-expand-btn'><i class='fas fa-circle-info'></i></button></td>" +
         "<td>" + row.member + "</td>" +
         "<td>" + row.character + "</td>" +
         "<td>" + (row.paid ? "{% trans 'Paid' %}" : "{% trans 'Outstanding' %}") + "</td>" +
-        "<td class='checkin-present'>" + (row.checked_in_at ? "{% trans 'Yes' %}" : "{% trans 'No' %}") + "</td>";
+        "<td class='checkin-present'>" + (row.checked_in_at ? "{% trans 'Yes' %}" : "{% trans 'No' %}") + "</td>" +
+        "<td>" + (row.checked_in_at ? "" : "<button type='button' class='btn checkin-signin-btn'>{% trans 'Sign in' %}</button>") + "</td>";
       tbody.appendChild(tr);
     });
   }
@@ -104,7 +172,7 @@
     if (!row) return;
     row.checked_in_at = checkedInAt;
     renderTable();
-    renderChart();
+    renderSummary();
   }
 
   function postScan(uuid, scannedAt, onDone) {
@@ -119,9 +187,11 @@
       },
       body: body.toString()
     }).then(function (resp) {
-      return resp.json().then(function (data) { return { status: resp.status, data: data }; });
+      return resp.json().catch(function () { return null; }).then(function (data) {
+        return { status: resp.status, data: data };
+      });
     }).then(function (result) {
-      onDone(result.data.res === "ok", result.status, result.data);
+      onDone(!!result.data && result.data.res === "ok", result.status, result.data);
     }).catch(function () {
       onDone(false, 0, null);
     });
@@ -218,11 +288,54 @@
 
   document.getElementById("checkin_scan_btn").addEventListener("click", openScanner);
   document.getElementById("checkin_scan_close").addEventListener("click", closeScanner);
+
+  document.getElementById("checkin_search").addEventListener("input", function (ev) {
+    searchText = ev.target.value.trim().toLowerCase();
+    renderTable();
+  });
+
+  document.querySelector("#checkin_table tbody").addEventListener("click", function (ev) {
+    var tr = ev.target.closest("tr[data-uuid]");
+    if (!tr) return;
+    var uuid = tr.dataset.uuid;
+
+    if (ev.target.classList.contains("checkin-expand-btn")) {
+      openDetail(uuid);
+    } else if (ev.target.classList.contains("checkin-signin-btn")) {
+      confirmSignIn(uuid);
+    }
+  });
+
+  document.getElementById("checkin_detail_close").addEventListener("click", function () {
+    document.getElementById("checkin_detail_popup").close();
+  });
+
+  var signinUuid = null;
+
+  function confirmSignIn(uuid) {
+    var row = byUuid[uuid];
+    if (!row) return;
+    signinUuid = uuid;
+    document.getElementById("checkin_signin_message").textContent =
+      "{% trans 'Confirm check-in for' %} " + row.member + "?";
+    document.getElementById("checkin_signin_popup").showModal();
+  }
+
+  document.getElementById("checkin_signin_confirm").addEventListener("click", function () {
+    document.getElementById("checkin_signin_popup").close();
+    if (signinUuid) handleScan(signinUuid);
+    signinUuid = null;
+  });
+
+  document.getElementById("checkin_signin_cancel").addEventListener("click", function () {
+    document.getElementById("checkin_signin_popup").close();
+    signinUuid = null;
+  });
   window.addEventListener("online", setOnlineState);
   window.addEventListener("offline", setOnlineState);
 
   renderTable();
-  renderChart();
+  renderSummary();
   saveQueue(loadQueue());
   setOnlineState();
 })();

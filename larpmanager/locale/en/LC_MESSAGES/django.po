@@ -8992,19 +8992,31 @@ msgid ""
 "are queued locally and synced automatically once you're back online."
 msgstr ""
 
-msgid "Online"
+msgid "Search by player or character name"
 msgstr ""
 
 msgid "Scan QR code"
 msgstr ""
 
+msgid "Online"
+msgstr ""
+
 msgid "Present"
 msgstr ""
 
-msgid "Pending sync:"
+msgid "Not scanned"
 msgstr ""
 
-msgid "Not scanned"
+msgid "No additional details."
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Unable to load details."
+msgstr ""
+
+msgid "Pending sync:"
 msgstr ""
 
 msgid "Outstanding"
@@ -9014,6 +9026,9 @@ msgid "Yes"
 msgstr ""
 
 msgid "No"
+msgstr ""
+
+msgid "Sign in"
 msgstr ""
 
 msgid "Offline"
@@ -9026,6 +9041,9 @@ msgid "Checked in:"
 msgstr ""
 
 msgid "Scan rejected:"
+msgstr ""
+
+msgid "Confirm check-in for"
 msgstr ""
 
 msgid "Character Inventories"
@@ -9166,6 +9184,9 @@ msgid ""
 msgstr ""
 
 msgid "Load participants"
+msgstr ""
+
+msgid "Load checked-in participants"
 msgstr ""
 
 msgid "Participants"
@@ -10552,9 +10573,6 @@ msgid ""
 msgstr ""
 
 msgid "You can now create the ticket for reserves"
-msgstr ""
-
-msgid "QR Code Check-in"
 msgstr ""
 
 msgid ""

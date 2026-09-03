@@ -1004,6 +1004,9 @@ msgstr "Sidofält"
 msgid "Sign In"
 msgstr "Logga in"
 
+msgid "Sign in"
+msgstr "Logga in"
+
 msgid "Signups"
 msgstr "Anmälningar"
 
@@ -1828,6 +1831,9 @@ msgstr "Juridiskt namn"
 
 msgid "Link color"
 msgstr "Länkens färg"
+
+msgid "Loading..."
+msgstr "Laddar..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Privat meddelande:"
 msgid "Promote to admin"
 msgstr "Befordra till administratör"
 
-msgid "QR Code Check-in"
-msgstr "Incheckning med QR-kod"
-
 msgid "Realized revenue"
 msgstr "Realiserade intäkter"
 
@@ -4385,6 +4388,9 @@ msgstr "Stäng insamlingen"
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett blad (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Bekräfta incheckning för"
+
 msgid "Country of the event"
 msgstr "Land där evenemanget äger rum"
 
@@ -4862,6 +4868,9 @@ msgstr "Ny karaktär skapad!"
 msgid "Newsletter preferences"
 msgstr "Preferenser för nyhetsbrev"
 
+msgid "No additional details."
+msgstr "Inga ytterligare uppgifter."
+
 msgid "No address was ignored"
 msgstr "Ingen adress har utelämnats"
 
@@ -5077,6 +5086,9 @@ msgstr "Deltagarens e-postadress"
 
 msgid "Total registration fee:"
 msgstr "Total registreringsavgift:"
+
+msgid "Unable to load details."
+msgstr "Kunde inte läsa in information."
 
 msgid "Welcome to LarpManager!"
 msgstr "Välkommen till LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Inbjudan skickad till %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Livechatten är inte konfigurerad."
+
+msgid "Load checked-in participants"
+msgstr "Läs in incheckade deltagare"
 
 msgid "Manage modules for workshops"
 msgstr "Hantera moduler för workshops"
@@ -6386,6 +6401,9 @@ msgstr "Registreringar öppnas: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Granska deltagarnas personuppgifter"
+
+msgid "Search by player or character name"
+msgstr "Sök efter spelar- eller karaktärsnamn"
 
 msgid "Set the registration external link"
 msgstr "Ange den externa länken för registrering"

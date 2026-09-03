@@ -107,6 +107,11 @@ urlpatterns = [
         name="orga_checkin_scan",
     ),
     path(
+        "<slug:event_slug>/manage/checkin/detail/",
+        views_ock.orga_checkin_detail,
+        name="orga_checkin_detail",
+    ),
+    path(
         "<slug:event_slug>/manage/registrations/",
         views_or.orga_registrations,
         name="orga_registrations",

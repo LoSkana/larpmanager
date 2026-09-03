@@ -1004,6 +1004,9 @@ msgstr "Barre latérale"
 msgid "Sign In"
 msgstr "Se connecter"
 
+msgid "Sign in"
+msgstr "Se connecter"
+
 msgid "Signups"
 msgstr "Inscriptions"
 
@@ -1828,6 +1831,9 @@ msgstr "Nom légal"
 
 msgid "Link color"
 msgstr "Couleur du lien"
+
+msgid "Loading..."
+msgstr "Chargement..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Message privé:"
 msgid "Promote to admin"
 msgstr "Promouvoir au rang d'administrateur"
 
-msgid "QR Code Check-in"
-msgstr "Check-in par code QR"
-
 msgid "Realized revenue"
 msgstr "Recettes réalisées"
 
@@ -4385,6 +4388,9 @@ msgstr "Ferme la cagnotte"
 msgid "Complete sheet (Pdf)"
 msgstr "Fiche complète (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Confirmer le check-in pour"
+
 msgid "Country of the event"
 msgstr "Pays de la manifestation"
 
@@ -4862,6 +4868,9 @@ msgstr "Nouveau personnage créé!"
 msgid "Newsletter preferences"
 msgstr "Préférences pour le bulletin d'information"
 
+msgid "No additional details."
+msgstr "Aucun détail supplémentaire."
+
 msgid "No address was ignored"
 msgstr "Aucune adresse n'a été ignorée"
 
@@ -5077,6 +5086,9 @@ msgstr "L'adresse électronique du participant"
 
 msgid "Total registration fee:"
 msgstr "Frais d'inscription totaux:"
+
+msgid "Unable to load details."
+msgstr "Impossible de charger les détails."
 
 msgid "Welcome to LarpManager!"
 msgstr "Bienvenue à LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Invitation envoyée à %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Le chat en direct n'est pas configuré."
+
+msgid "Load checked-in participants"
+msgstr "Charger les participants ayant effectué le check-in"
 
 msgid "Manage modules for workshops"
 msgstr "Gère les modules des ateliers"
@@ -6386,6 +6401,9 @@ msgstr "Ouverture des inscriptions le : %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Consulte les données personnelles des participants"
+
+msgid "Search by player or character name"
+msgstr "Rechercher par nom de joueur ou de personnage"
 
 msgid "Set the registration external link"
 msgstr "Définis le lien externe d'inscription"

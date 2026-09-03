@@ -6,9 +6,16 @@
 {% block content %}
     {% url 'orga_exp_deliveries_load' run.get_slug as load_url %}
     {% trans "Load participants" as load_label %}
-    {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" %}
-        {% include "elements/table/header.html" %}
-    {% endwith %}
+    {% trans "Load checked-in participants" as load_checked_in_label %}
+    {% if "checkin" in features %}
+        {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" extra_link_url_2=load_url|add:"?checked_in_only=1" extra_link_icon_2="fas fa-user-check" extra_link_label_2=load_checked_in_label extra_link_class_2="form-new" %}
+            {% include "elements/table/header.html" %}
+        {% endwith %}
+    {% else %}
+        {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" %}
+            {% include "elements/table/header.html" %}
+        {% endwith %}
+    {% endif %}
     <table id="deliveries"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"

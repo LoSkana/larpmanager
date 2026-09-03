@@ -13,6 +13,13 @@
                 {{ extra_link_label }}
             </a>
         {% endif %}
+        {% if extra_link_url_2 %}
+            <a class="new button {{ extra_link_class_2 }}"
+               href="{{ extra_link_url_2 }}">
+                {% if extra_link_icon_2 %}<i class="{{ extra_link_icon_2 }}"></i>{% endif %}
+                {{ extra_link_label_2 }}
+            </a>
+        {% endif %}
         {% if upload %}
             <a class="new button no_v22"
                href="{% url 'orga_upload' run.get_slug upload %}">

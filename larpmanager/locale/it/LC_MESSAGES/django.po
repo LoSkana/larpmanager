@@ -1004,6 +1004,9 @@ msgstr "Barra laterale"
 msgid "Sign In"
 msgstr "Accedi"
 
+msgid "Sign in"
+msgstr "Accedi"
+
 msgid "Signups"
 msgstr "Iscrizioni"
 
@@ -1828,6 +1831,9 @@ msgstr "Nome legale"
 
 msgid "Link color"
 msgstr "Colore del link"
+
+msgid "Loading..."
+msgstr "Caricamento..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Messaggio privato:"
 msgid "Promote to admin"
 msgstr "Promuovi ad amministratore"
 
-msgid "QR Code Check-in"
-msgstr "Check-in con codice QR"
-
 msgid "Realized revenue"
 msgstr "Ricavi realizzati"
 
@@ -4385,6 +4388,9 @@ msgstr "Chiudi la colletta"
 msgid "Complete sheet (Pdf)"
 msgstr "Scheda completa (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Conferma il check-in per"
+
 msgid "Country of the event"
 msgstr "Paese dell'evento"
 
@@ -4862,6 +4868,9 @@ msgstr "Nuovo personaggio creato!"
 msgid "Newsletter preferences"
 msgstr "Preferenze per la newsletter"
 
+msgid "No additional details."
+msgstr "Nessun dettaglio aggiuntivo."
+
 msgid "No address was ignored"
 msgstr "Nessun indirizzo è stato tralasciato"
 
@@ -5077,6 +5086,9 @@ msgstr "L'e-mail del partecipante"
 
 msgid "Total registration fee:"
 msgstr "Quota di iscrizione totale:"
+
+msgid "Unable to load details."
+msgstr "Impossibile caricare i dettagli."
 
 msgid "Welcome to LarpManager!"
 msgstr "Benvenuto su LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Invito inviato a %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "La chat live non è configurata."
+
+msgid "Load checked-in participants"
+msgstr "Carica i partecipanti che hanno effettuato il check-in"
 
 msgid "Manage modules for workshops"
 msgstr "Gestisci i moduli per i workshop"
@@ -6386,6 +6401,9 @@ msgstr "Apertura delle iscrizioni il: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Consulta i dati personali dei partecipanti"
+
+msgid "Search by player or character name"
+msgstr "Cerca per nome del giocatore o del personaggio"
 
 msgid "Set the registration external link"
 msgstr "Imposta il link esterno di registrazione"
