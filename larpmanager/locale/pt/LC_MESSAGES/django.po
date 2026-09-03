@@ -1004,6 +1004,9 @@ msgstr "Barra lateral"
 msgid "Sign In"
 msgstr "Iniciar sessão"
 
+msgid "Sign in"
+msgstr "Iniciar sessão"
+
 msgid "Signups"
 msgstr "Inscrições"
 
@@ -1828,6 +1831,9 @@ msgstr "Nome legal"
 
 msgid "Link color"
 msgstr "Cor das ligações"
+
+msgid "Loading..."
+msgstr "A carregar..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Mensagem privada:"
 msgid "Promote to admin"
 msgstr "Promover a administrador"
 
-msgid "QR Code Check-in"
-msgstr "Check-in por código QR"
-
 msgid "Realized revenue"
 msgstr "Receita realizada"
 
@@ -4385,6 +4388,9 @@ msgstr "Encerrar a coleta"
 msgid "Complete sheet (Pdf)"
 msgstr "Ficha completa (PDF)"
 
+msgid "Confirm check-in for"
+msgstr "Confirmar check-in para"
+
 msgid "Country of the event"
 msgstr "País do evento"
 
@@ -4862,6 +4868,9 @@ msgstr "Nova personagem criada!"
 msgid "Newsletter preferences"
 msgstr "Preferências da newsletter"
 
+msgid "No additional details."
+msgstr "Sem detalhes adicionais."
+
 msgid "No address was ignored"
 msgstr "Nenhum endereço foi ignorado"
 
@@ -5077,6 +5086,9 @@ msgstr "O e-mail do participante"
 
 msgid "Total registration fee:"
 msgstr "Taxa total de inscrição:"
+
+msgid "Unable to load details."
+msgstr "Não foi possível carregar os detalhes."
 
 msgid "Welcome to LarpManager!"
 msgstr "Bem-vindo ao LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Convite enviado para %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "O chat em direto não está configurado."
+
+msgid "Load checked-in participants"
+msgstr "Carregar participantes com check-in efetuado"
 
 msgid "Manage modules for workshops"
 msgstr "Gerir módulos para workshops"
@@ -6386,6 +6401,9 @@ msgstr "Inscrições abrem em: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Consultar dados pessoais dos participantes"
+
+msgid "Search by player or character name"
+msgstr "Pesquisar por nome de jogador ou personagem"
 
 msgid "Set the registration external link"
 msgstr "Define a ligação externa de inscrição"

@@ -33,6 +33,7 @@ from larpmanager.admin.base import (
 )
 from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
+    CheckIn,
     Registration,
     RegistrationCharacterRel,
     RegistrationInstallment,
@@ -177,6 +178,16 @@ class RegistrationInstallmentAdmin(DefModelAdmin):
     search_fields: ClassVar[tuple] = ("id", "uuid")
     autocomplete_fields: ClassVar[list] = ["event"]
     list_filter = (EventFilter,)
+
+
+@admin.register(CheckIn)
+class CheckInAdmin(DefModelAdmin):
+    """Admin interface for CheckIn model."""
+
+    list_display: ClassVar[tuple] = ("id", "registration", "checked_in_at", "checked_in_by")
+    search_fields: ClassVar[tuple] = ("id",)
+    autocomplete_fields: ClassVar[list] = ["registration", "checked_in_by"]
+    list_filter = (RegistrationFilter, "checked_in_at")
 
 
 @admin.register(RegistrationSurcharge)

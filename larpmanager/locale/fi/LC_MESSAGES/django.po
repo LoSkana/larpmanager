@@ -1004,6 +1004,9 @@ msgstr "Sivupalkki"
 msgid "Sign In"
 msgstr "Kirjaudu sisään"
 
+msgid "Sign in"
+msgstr "Kirjaudu sisään"
+
 msgid "Signups"
 msgstr "Ilmoittautumiset"
 
@@ -1828,6 +1831,9 @@ msgstr "Virallinen nimi"
 
 msgid "Link color"
 msgstr "Linkin väri"
+
+msgid "Loading..."
+msgstr "Ladataan..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Yksityisviesti:"
 msgid "Promote to admin"
 msgstr "Nosta järjestelmänvalvojaksi"
 
-msgid "QR Code Check-in"
-msgstr "QR-koodilla sisäänkirjautuminen"
-
 msgid "Realized revenue"
 msgstr "Toteutuneet tulot"
 
@@ -4385,6 +4388,9 @@ msgstr "Sulje keräys"
 msgid "Complete sheet (Pdf)"
 msgstr "Täydellinen lomake (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Vahvista sisäänkirjautuminen henkilölle"
+
 msgid "Country of the event"
 msgstr "Tapahtuman maa"
 
@@ -4862,6 +4868,9 @@ msgstr "Uusi hahmo luotu!"
 msgid "Newsletter preferences"
 msgstr "Uutiskirjeen asetukset"
 
+msgid "No additional details."
+msgstr "Ei lisätietoja."
+
 msgid "No address was ignored"
 msgstr "Yhtään osoitetta ei jätetty huomiotta"
 
@@ -5077,6 +5086,9 @@ msgstr "Osallistujan sähköpostiosoite"
 
 msgid "Total registration fee:"
 msgstr "Ilmoittautumismaksu yhteensä:"
+
+msgid "Unable to load details."
+msgstr "Tietojen lataaminen epäonnistui."
 
 msgid "Welcome to LarpManager!"
 msgstr "Tervetuloa LarpManageriin!"
@@ -5667,6 +5679,9 @@ msgstr "Kutsu lähetetty osoitteeseen %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Live-chat-toimintoa ei ole määritetty."
+
+msgid "Load checked-in participants"
+msgstr "Lataa sisäänkirjautuneet osallistujat"
 
 msgid "Manage modules for workshops"
 msgstr "Hallitse työpajojen moduuleja"
@@ -6386,6 +6401,9 @@ msgstr "Ilmoittautumiset aukeavat: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Tarkista osallistujien henkilötiedot"
+
+msgid "Search by player or character name"
+msgstr "Hae pelaajan tai hahmon nimellä"
 
 msgid "Set the registration external link"
 msgstr "Aseta rekisteröinnin ulkoinen linkki"

@@ -1004,6 +1004,9 @@ msgstr "Πλευρική γραμμή"
 msgid "Sign In"
 msgstr "Σύνδεση"
 
+msgid "Sign in"
+msgstr "Σύνδεση"
+
 msgid "Signups"
 msgstr "Εγγραφές"
 
@@ -1828,6 +1831,9 @@ msgstr "Νόμιμο όνομα"
 
 msgid "Link color"
 msgstr "Χρώμα συνδέσμων"
+
+msgid "Loading..."
+msgstr "Φόρτωση..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Ιδιωτικό μήνυμα:"
 msgid "Promote to admin"
 msgstr "Προαγωγή σε διαχειριστή"
 
-msgid "QR Code Check-in"
-msgstr "Check-in con codice QR"
-
 msgid "Realized revenue"
 msgstr "Πραγματοποιημένα έσοδα"
 
@@ -4385,6 +4388,9 @@ msgstr "Κλείσε τη συλλογή"
 msgid "Complete sheet (Pdf)"
 msgstr "Πλήρες φύλλο (PDF)"
 
+msgid "Confirm check-in for"
+msgstr "Επιβεβαίωση check-in για"
+
 msgid "Country of the event"
 msgstr "Χώρα του event"
 
@@ -4862,6 +4868,9 @@ msgstr "Δημιουργήθηκε νέος χαρακτήρας!"
 msgid "Newsletter preferences"
 msgstr "Προτιμήσεις ενημερωτικού δελτίου"
 
+msgid "No additional details."
+msgstr "Δεν υπάρχουν επιπλέον λεπτομέρειες."
+
 msgid "No address was ignored"
 msgstr "Δεν αγνοήθηκε καμία διεύθυνση"
 
@@ -5077,6 +5086,9 @@ msgstr "Το email του συμμετέχοντα"
 
 msgid "Total registration fee:"
 msgstr "Συνολικό κόστος εγγραφής:"
+
+msgid "Unable to load details."
+msgstr "Δεν είναι δυνατή η φόρτωση λεπτομερειών."
 
 msgid "Welcome to LarpManager!"
 msgstr "Καλώς ήρθες στο LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Η πρόσκληση στάλθηκε στο %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Η ζωντανή συνομιλία δεν έχει ρυθμιστεί."
+
+msgid "Load checked-in participants"
+msgstr "Φόρτωση συμμετεχόντων που έκαναν check-in"
 
 msgid "Manage modules for workshops"
 msgstr "Διαχείριση ενοτήτων για εργαστήρια"
@@ -6386,6 +6401,9 @@ msgstr "Άνοιγμα εγγραφών στις: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Έλεγχος προσωπικών δεδομένων συμμετεχόντων"
+
+msgid "Search by player or character name"
+msgstr "Αναζήτηση με όνομα παίκτη ή χαρακτήρα"
 
 msgid "Set the registration external link"
 msgstr "Όρισε τον εξωτερικό σύνδεσμο εγγραφής"

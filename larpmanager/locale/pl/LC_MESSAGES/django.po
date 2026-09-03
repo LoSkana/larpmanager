@@ -1004,6 +1004,9 @@ msgstr "Pasek boczny"
 msgid "Sign In"
 msgstr "Zaloguj się"
 
+msgid "Sign in"
+msgstr "Zaloguj się"
+
 msgid "Signups"
 msgstr "Zapisy"
 
@@ -1828,6 +1831,9 @@ msgstr "Nazwa prawna"
 
 msgid "Link color"
 msgstr "Kolor łącza"
+
+msgid "Loading..."
+msgstr "Ładowanie..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Prywatna wiadomość:"
 msgid "Promote to admin"
 msgstr "Awansuj na administratora"
 
-msgid "QR Code Check-in"
-msgstr "Check-in kodem QR"
-
 msgid "Realized revenue"
 msgstr "Zrealizowane przychody"
 
@@ -4385,6 +4388,9 @@ msgstr "Zamknij zbiórkę"
 msgid "Complete sheet (Pdf)"
 msgstr "Pełny arkusz (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Potwierdź check-in dla"
+
 msgid "Country of the event"
 msgstr "Kraj wydarzenia"
 
@@ -4862,6 +4868,9 @@ msgstr "Stworzono nową postać!"
 msgid "Newsletter preferences"
 msgstr "Preferencje dotyczące biuletynu"
 
+msgid "No additional details."
+msgstr "Brak dodatkowych szczegółów."
+
 msgid "No address was ignored"
 msgstr "Żaden adres nie został pominięty"
 
@@ -5077,6 +5086,9 @@ msgstr "Adres e-mail uczestnika"
 
 msgid "Total registration fee:"
 msgstr "Całkowita opłata rejestracyjna:"
+
+msgid "Unable to load details."
+msgstr "Nie można wczytać szczegółów."
 
 msgid "Welcome to LarpManager!"
 msgstr "Witamy w LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Zaproszenie wysłane do %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Czat na żywo nie jest skonfigurowany."
+
+msgid "Load checked-in participants"
+msgstr "Wczytaj uczestników z potwierdzonym check-inem"
 
 msgid "Manage modules for workshops"
 msgstr "Zarządzaj modułami warsztatów"
@@ -6386,6 +6401,9 @@ msgstr "Rejestracja rozpoczyna się w dniu: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Przeglądaj dane osobowe uczestników"
+
+msgid "Search by player or character name"
+msgstr "Szukaj według imienia gracza lub postaci"
 
 msgid "Set the registration external link"
 msgstr "Ustaw zewnętrzny link do rejestracji"

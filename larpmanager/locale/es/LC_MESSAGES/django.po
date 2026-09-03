@@ -1004,6 +1004,9 @@ msgstr "Barra lateral"
 msgid "Sign In"
 msgstr "Iniciar sesión"
 
+msgid "Sign in"
+msgstr "Iniciar sesión"
+
 msgid "Signups"
 msgstr "Inscripciones"
 
@@ -1828,6 +1831,9 @@ msgstr "Nombre legal"
 
 msgid "Link color"
 msgstr "Color del enlace"
+
+msgid "Loading..."
+msgstr "Cargando..."
 
 msgid "Matchmaker"
 msgstr "Matchmaker"
@@ -3575,9 +3581,6 @@ msgstr "Mensaje privado:"
 msgid "Promote to admin"
 msgstr "Ascender a administrador"
 
-msgid "QR Code Check-in"
-msgstr "Check-in con código QR"
-
 msgid "Realized revenue"
 msgstr "Ingresos realizados"
 
@@ -4385,6 +4388,9 @@ msgstr "Cierra la colecta"
 msgid "Complete sheet (Pdf)"
 msgstr "Ficha completa (Pdf)"
 
+msgid "Confirm check-in for"
+msgstr "Confirmar el check-in de"
+
 msgid "Country of the event"
 msgstr "País del evento"
 
@@ -4862,6 +4868,9 @@ msgstr "Nuevo personaje creado!"
 msgid "Newsletter preferences"
 msgstr "Preferencias del boletín"
 
+msgid "No additional details."
+msgstr "No hay detalles adicionales."
+
 msgid "No address was ignored"
 msgstr "No se ha pasado por alto ninguna dirección"
 
@@ -5077,6 +5086,9 @@ msgstr "Correo electrónico del participante"
 
 msgid "Total registration fee:"
 msgstr "Cuota total de inscripción:"
+
+msgid "Unable to load details."
+msgstr "No se pueden cargar los detalles."
 
 msgid "Welcome to LarpManager!"
 msgstr "¡Bienvenido a LarpManager!"
@@ -5667,6 +5679,9 @@ msgstr "Invitación enviada a %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "El chat en vivo no está configurado."
+
+msgid "Load checked-in participants"
+msgstr "Cargar participantes que han hecho check-in"
 
 msgid "Manage modules for workshops"
 msgstr "Gestiona módulos para talleres"
@@ -6386,6 +6401,9 @@ msgstr "Apertura de inscripciones en: %(date)s"
 
 msgid "Review participants' personal data"
 msgstr "Revisa los datos personales de los participantes"
+
+msgid "Search by player or character name"
+msgstr "Buscar por nombre de jugador o personaje"
 
 msgid "Set the registration external link"
 msgstr "Establecer el enlace externo de registro"

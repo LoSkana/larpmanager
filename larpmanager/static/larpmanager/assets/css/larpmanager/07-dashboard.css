@@ -830,6 +830,7 @@ body.floating_iframe .inner {
 #checkin_status {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 1em;
   margin-bottom: 0.5em;
 }
@@ -844,16 +845,14 @@ body.floating_iframe .inner {
   font-weight: bold;
 }
 
-#checkinChartContainer {
-  height: 250px;
-  max-width: 400px;
+#checkin_summary {
+  margin-top: 1em;
+  width: auto;
 }
 
-#checkin_scan_popup {
-  border: none;
-  border-radius: 0.5em;
-  padding: 1em;
-  max-width: 90vw;
+#checkin_summary th {
+  text-align: left;
+  padding-right: 1em;
 }
 
 #checkin_reader {
@@ -862,4 +861,29 @@ body.floating_iframe .inner {
 
 .checkin-present {
   text-align: center;
+}
+
+#checkin_search {
+  width: min(100%, 300px);
+}
+
+.checkin-expand-btn {
+  padding: 1em;
+}
+
+#checkin .popup_delete {
+  padding: 1em;
+}
+
+#checkin .popup_delete button {
+  margin-top: 1em;
+}
+
+#checkin_signin_cancel {
+  margin-top: 3em;
+}
+
+#checkin_signin_popup[open] {
+  display: flex;
+  flex-direction: column;
 }

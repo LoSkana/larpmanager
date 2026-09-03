@@ -366,7 +366,7 @@
     - character
 - model: larpmanager.feature
   fields:
-    name: QR Code Check-in
+    name: Check-in
     descr: Generates a unique QR code per registration and lets staff scan it on-site
       to mark participants present, working offline with automatic sync
     slug: checkin
