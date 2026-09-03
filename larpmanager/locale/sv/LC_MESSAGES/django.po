@@ -1943,6 +1943,12 @@ msgstr "Välj alla"
 msgid "Selectable"
 msgstr "Valbar"
 
+msgid "Set hidden"
+msgstr "Dölj"
+
+msgid "Set locked"
+msgstr "Lås"
+
 msgid "Short name"
 msgstr "Kort namn"
 

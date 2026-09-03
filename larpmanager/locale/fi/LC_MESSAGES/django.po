@@ -1943,6 +1943,12 @@ msgstr "Valitse kaikki"
 msgid "Selectable"
 msgstr "Valittavissa"
 
+msgid "Set hidden"
+msgstr "Aseta piilotetuksi"
+
+msgid "Set locked"
+msgstr "Aseta lukituksi"
+
 msgid "Short name"
 msgstr "Lyhyt nimi"
 

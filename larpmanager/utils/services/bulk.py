@@ -37,10 +37,11 @@ import datetime
 
 from larpmanager.cache.bulk import get_bulk_options_cache
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
-from larpmanager.models.form import WritingAnswer, WritingChoice
+from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestionType
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
     WarehouseArea,
@@ -226,6 +227,8 @@ class Operations(models.IntegerChoices):
     SET_FACT_PROGRESS = 25, _("Set progress step")
     SET_FACT_ASSIGNED = 26, _("Set assigned staff member")
     SET_ITEM_AREA_REMAINING = 27, _("Assign remaining stock to area")
+    SET_CHAR_HIDE = 28, _("Set hidden")
+    SET_CHAR_LOCKED = 29, _("Set locked")
 
 
 def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[str]) -> QuerySet:
@@ -585,6 +588,52 @@ def exec_set_char_status(context: dict, target: str, uuids: list[str]) -> str:
     return dict(CharacterStatus.choices).get(target, target)
 
 
+_BOOL_TARGETS = {"1": True, "0": False}
+
+
+def _get_bulk_bool_target(target: str) -> bool:
+    """Parse a bulk operation's boolean target value ("1"/"0")."""
+    if target not in _BOOL_TARGETS:
+        msg = "invalid boolean target"
+        raise ValueError(msg)
+    return _BOOL_TARGETS[target]
+
+
+def _bulk_bool_choices() -> list[dict]:
+    """Build the Yes/No target choices used by boolean bulk operations."""
+    return [{"uuid": "1", "name": _("Yes")}, {"uuid": "0", "name": _("No")}]
+
+
+def exec_set_char_hide(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the hidden flag for specified characters in the event."""
+    value = _get_bulk_bool_target(target)
+    get_event_elements(context["event"].id, Character, context=context).filter(uuid__in=uuids).update(hide=value)
+    return _("Yes") if value else _("No")
+
+
+def exec_set_char_locked(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the locked flag for specified characters in the event."""
+    value = _get_bulk_bool_target(target)
+    get_event_elements(context["event"].id, Character, context=context).filter(uuid__in=uuids).update(locked=value)
+    return _("Yes") if value else _("No")
+
+
+def _get_char_question_types(context: dict) -> set:
+    """Return the set of active writing question types for characters in this event."""
+    event_id = context["event"].id
+    questions = get_cached_writing_questions(event_id, QuestionApplicable.CHARACTER)
+    return {question["typ"] for question in questions}
+
+
+def _add_char_hide_locked_options(context: dict) -> None:
+    """Append hide/locked toggle operations if the corresponding question type is active."""
+    question_types = _get_char_question_types(context)
+    if WritingQuestionType.HIDE in question_types:
+        context["bulk"].append(_bulk_op(Operations.SET_CHAR_HIDE, _bulk_bool_choices()))
+    if WritingQuestionType.LOCKED in question_types:
+        context["bulk"].append(_bulk_op(Operations.SET_CHAR_LOCKED, _bulk_bool_choices()))
+
+
 def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
     """Process bulk operations on character objects.
 
@@ -618,6 +667,8 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             Operations.SET_CHAR_PROGRESS: exec_set_char_progress,
             Operations.SET_CHAR_ASSIGNED: exec_set_char_assigned,
             Operations.SET_CHAR_STATUS: exec_set_char_status,
+            Operations.SET_CHAR_HIDE: exec_set_char_hide,
+            Operations.SET_CHAR_LOCKED: exec_set_char_locked,
         }
         # Execute the bulk operation and raise exception to return result
         raise ReturnNowError(exec_bulk(request, context, mapping, Character, allow_delete=True))
@@ -684,6 +735,8 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
         context["bulk"].append(
             _bulk_op(Operations.SET_CHAR_STATUS, status_choices),
         )
+
+    _add_char_hide_locked_options(context)
     _add_bulk_delete_option(request, context)
 
 
