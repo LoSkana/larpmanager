@@ -3858,6 +3858,9 @@ msgstr "Ennakkoilmoittautumiset"
 msgid "Pre-Registrations"
 msgstr "Esirekisteröinnit"
 
+msgid "Pre-registrations"
+msgstr "Ennakkoilmoittautumiset"
+
 msgid "Profile completed"
 msgstr "Profiili valmis"
 

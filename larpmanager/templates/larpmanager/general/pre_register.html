@@ -4,55 +4,59 @@
     {% trans "Pre-Register" %}
 {% endblock title %}
 {% block content %}
-    <div class="detail">
-        <p>{% trans "Registrations for this event are not open yet, but you can pre-register." %}</p>
-        <p>
-            {% trans "Pre-registration is free. It does not guarantee a spot, but gives you priority when registration opens." %}
-        </p>
+    <div class="form_container auto_resize">
+        <div class="detail">
+            <p>{% trans "Registrations for this event are not open yet, but you can pre-register." %}</p>
+            <p>
+                {% trans "Pre-registration is free. It does not guarantee a spot, but gives you priority when registration opens." %}
+            </p>
+        </div>
+        {% if event %}
+            <form action="{{ request.path }}"  method="post">
+                {% csrf_token %}
+                <h2>{% trans "New pre-registration" %}</h2>
+                <table class="mob ">
+                    {{ form.as_table }}
+                </table>
+                <input id="submit" type="submit" value="{% trans "Confirm" %}">
+            </form>
+        {% endif %}
+        {% if already %}
+            <hr />
+            <h2>{% trans "Pre-registrations" %}</h2>
+            <table class="mob">
+                <tr>
+                    <th>{% trans "Event" %}</th>
+                    {% if preferences %}
+                        <th>{% trans "Preference order" %}</th>
+                    {% endif %}
+                    <th>{% trans "Do you want to tell us something?" %}</th>
+                    <th></th>
+                </tr>
+                {% for al in already %}
+                    <tr>
+                        <td>{{ al.event }}</td>
+                        {% if preferences %}<td>{{ al.pref }}</td>{% endif %}
+                        <td>{{ al.info }}</td>
+                        <td>
+                            <a href="{% url 'pre_register_remove' al.event.slug %}">{% trans "Delete" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if not event %}
+            <hr />
+            <form action="{{ request.path }}"  method="post">
+                {% csrf_token %}
+                <h2>{% trans "New pre-registration" %}</h2>
+                <table class="mob ">
+                    {{ form.as_table }}
+                </table>
+                <input id="submit" type="submit" value="{% trans "Confirm" %}">
+            </form>
+        {% endif %}
     </div>
-    {% if event %}
-        <form action="{{ request.path }}"  method="post">
-            {% csrf_token %}
-            <h2>{% trans "New pre-registration" %}</h2>
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input id="submit" type="submit" value="{% trans "Confirm" %}">
-        </form>
-        <hr />
-    {% endif %}
-    <h2>{% trans "Pre-registration" %}</h2>
-    <table class="mob">
-        <tr>
-            <th>{% trans "Event" %}</th>
-            {% if preferences %}
-                <th>{% trans "Preference order" %}</th>
-            {% endif %}
-            <th>{% trans "Do you want to tell us something?" %}</th>
-            <th></th>
-        </tr>
-        {% for al in already %}
-            <tr>
-                <td>{{ al.event }}</td>
-                {% if preferences %}<td>{{ al.pref }}</td>{% endif %}
-                <td>{{ al.info }}</td>
-                <td>
-                    <a href="{% url 'pre_register_remove' al.event.slug %}">{% trans "Delete" %}</a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% if not event %}
-        <form action="{{ request.path }}"  method="post">
-            {% csrf_token %}
-            <h2>{% trans "New pre-registration" %}</h2>
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input id="submit" type="submit" value="{% trans "Confirm" %}">
-        </form>
-        <hr />
-    {% endif %}
 {% endblock content %}
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {

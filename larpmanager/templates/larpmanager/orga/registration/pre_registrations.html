@@ -39,6 +39,7 @@
         </thead>
         {% for el in dc.list %}
             <tr>
+                <td></td>
                 <td>{{ el.member }}</td>
                 <td>{{ el.member.email }}</td>
                 {% if preferences %}<td>{{ el.pref }}</td>{% endif %}
