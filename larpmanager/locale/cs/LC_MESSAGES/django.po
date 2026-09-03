@@ -1943,6 +1943,12 @@ msgstr "Vybrat vše"
 msgid "Selectable"
 msgstr "Zvolitelný"
 
+msgid "Set hidden"
+msgstr "Nastavit jako skryté"
+
+msgid "Set locked"
+msgstr "Nastavit jako zamčené"
+
 msgid "Short name"
 msgstr "Krátký název"
 

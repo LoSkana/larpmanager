@@ -1943,6 +1943,12 @@ msgstr "Επιλογή όλων"
 msgid "Selectable"
 msgstr "Επιλέξιμο"
 
+msgid "Set hidden"
+msgstr "Ορισμός ως κρυφό"
+
+msgid "Set locked"
+msgstr "Ορισμός ως κλειδωμένο"
+
 msgid "Short name"
 msgstr "Σύντομο όνομα"
 

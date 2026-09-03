@@ -1943,6 +1943,12 @@ msgstr "Tout sélectionner"
 msgid "Selectable"
 msgstr "Sélectionnable"
 
+msgid "Set hidden"
+msgstr "Masquer"
+
+msgid "Set locked"
+msgstr "Verrouiller"
+
 msgid "Short name"
 msgstr "Nom court"
 
