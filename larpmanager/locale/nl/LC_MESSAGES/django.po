@@ -3858,6 +3858,9 @@ msgstr "Voorinschrijvingen"
 msgid "Pre-Registrations"
 msgstr "Voorinschrijvingen"
 
+msgid "Pre-registrations"
+msgstr "Voorregistraties"
+
 msgid "Profile completed"
 msgstr "Profiel voltooid"
 

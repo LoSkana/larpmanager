@@ -3858,6 +3858,9 @@ msgstr "Předběžné registrace"
 msgid "Pre-Registrations"
 msgstr "Předregistrace"
 
+msgid "Pre-registrations"
+msgstr "Předregistrace"
+
 msgid "Profile completed"
 msgstr "Profil dokončen"
 

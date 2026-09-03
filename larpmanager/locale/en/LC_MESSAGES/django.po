@@ -7635,6 +7635,9 @@ msgstr ""
 msgid "New pre-registration"
 msgstr ""
 
+msgid "Pre-registrations"
+msgstr ""
+
 msgid "Preference order"
 msgstr ""
 

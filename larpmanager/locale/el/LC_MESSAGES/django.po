@@ -3858,6 +3858,9 @@ msgstr "Προεγγραφές"
 msgid "Pre-Registrations"
 msgstr "Προεγγραφές"
 
+msgid "Pre-registrations"
+msgstr "Προεγγραφές"
+
 msgid "Profile completed"
 msgstr "Το προφίλ ολοκληρώθηκε"
 

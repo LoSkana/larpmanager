@@ -94,6 +94,29 @@ from larpmanager.utils.registrations.status import _set_membership_context
 logger = logging.getLogger(__name__)
 
 
+def _save_pre_registration(context: dict, form: PreRegistrationForm) -> None:
+    """Save a new pre-registration entry and update the member's data-share consent."""
+    new_event_uuid = form.cleaned_data["new_event"]
+    # Only save if an event was actually selected
+    if new_event_uuid != "":
+        with transaction.atomic():
+            new_event = get_object_uuid(Event, new_event_uuid)
+            # Get new_pref from form or stored default if field was removed
+            new_pref = getattr(form, "_default_new_pref", form.cleaned_data.get("new_pref"))
+            PreRegistration(
+                member=context["member"],
+                event=new_event,
+                pref=new_pref,
+                info=form.cleaned_data["new_info"],
+            ).save()
+
+    if "share" in form.cleaned_data:
+        membership = context["membership"]
+        if membership.status == MembershipStatus.EMPTY:
+            membership.status = MembershipStatus.JOINED
+        membership.save()
+
+
 @login_required
 def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     """Handle pre-registration for events before full registration opens.
@@ -166,20 +189,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     if request.method == "POST":
         form = PreRegistrationForm(request.POST, context=context)
         if form.is_valid():
-            new_event_uuid = form.cleaned_data["new_event"]
-            # Only save if an event was actually selected
-            if new_event_uuid != "":
-                with transaction.atomic():
-                    new_event = get_object_uuid(Event, new_event_uuid)
-                    # Get new_pref from form or stored default if field was removed
-                    new_pref = getattr(form, "_default_new_pref", form.cleaned_data.get("new_pref"))
-                    PreRegistration(
-                        member=context["member"],
-                        event=new_event,
-                        pref=new_pref,
-                        info=form.cleaned_data["new_info"],
-                    ).save()
-
+            _save_pre_registration(context, form)
             messages.success(request, _("Pre-registrations saved!"))
             return redirect("pre_register")
     else:

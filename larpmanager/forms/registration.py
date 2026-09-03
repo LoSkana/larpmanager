@@ -55,6 +55,7 @@ from larpmanager.models.form import (
     RegistrationQuestionApplicable,
     RegistrationQuestionType,
 )
+from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -1738,6 +1739,18 @@ class PreRegistrationForm(BaseForm):
             label=_("General information"),
             help_text=_("Is there anything else you would like to tell us?"),
         )
+
+        membership = self.context.get("membership")
+        if not membership or membership.status == MembershipStatus.EMPTY:
+            self.fields["share"] = forms.BooleanField(
+                required=True,
+                label=_("Authorisation"),
+                help_text=_(
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our "
+                    "Privacy Policy",
+                )
+                + "?",
+            )
 
 
 class RegistrationTransferForm(BaseForm):
