@@ -476,14 +476,20 @@ def _get_exe_otp_actions_data(association_id: int) -> dict:
     """Return OTP-missing entries for association executives and event organizers."""
     result = {}
 
-    executive_role = AssociationRole.objects.filter(association_id=association_id, number=1).first()
-    executives = list(executive_role.members.all()) if executive_role else []
+    executive_roles = AssociationRole.objects.filter(association_id=association_id, number=1).prefetch_related(
+        "members"
+    )
+    executives_by_id = {member.id: member for role in executive_roles for member in role.members.all()}
+    executives = list(executives_by_id.values())
     missing_executives = _members_without_otp(executives)
     if missing_executives:
         result["otp_missing_executives"] = {"count": len(missing_executives), "names": missing_executives}
 
-    organizer_roles = EventRole.objects.filter(event__association_id=association_id, number=1).prefetch_related(
-        "members"
+    one_month_ago = timezone.now().date() - timedelta(days=30)
+    organizer_roles = (
+        EventRole.objects.filter(event__association_id=association_id, number=1, event__runs__end__gte=one_month_ago)
+        .distinct()
+        .prefetch_related("members")
     )
     organizers_by_id = {member.id: member for role in organizer_roles for member in role.members.all()}
     missing_organizers = _members_without_otp(list(organizers_by_id.values()))
