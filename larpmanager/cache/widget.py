@@ -53,6 +53,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
     RefundStatus,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.casting import Casting, Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, ProgressStep, RegistrationStatus, Run
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
@@ -351,6 +352,11 @@ def _init_exe_log_widget_cache(association_id: int) -> dict:
     return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
 
 
+def _is_demo_association(association_id: int) -> bool:
+    """Return True if the association is a demo instance (skips OTP checks)."""
+    return Association.objects.filter(id=association_id, demo_type__isnull=False).exists()
+
+
 def _members_without_otp(members: list[Member]) -> list[str]:
     """Return display names of members whose user has no confirmed OTP (TOTP) device."""
     if not members:
@@ -476,9 +482,10 @@ def _get_exe_otp_actions_data(association_id: int) -> dict:
     """Return OTP-missing entries for association executives and event organizers."""
     result = {}
 
-    executive_roles = AssociationRole.objects.filter(association_id=association_id, number=1).prefetch_related(
-        "members"
-    )
+    if _is_demo_association(association_id):
+        return result
+
+    executive_roles = AssociationRole.objects.filter(association_id=association_id).prefetch_related("members")
     executives_by_id = {member.id: member for role in executive_roles for member in role.members.all()}
     executives = list(executives_by_id.values())
     missing_executives = _members_without_otp(executives)
@@ -631,14 +638,25 @@ def _init_orga_actions_cache(run: Run) -> dict:
     if open_questions_count > 0:
         data["open_help_questions"] = {"count": open_questions_count}
 
-    # Event organizers without two-factor authentication (OTP) enabled
+    data.update(_get_orga_otp_actions_data(run))
+
+    return data
+
+
+def _get_orga_otp_actions_data(run: Run) -> dict:
+    """Return OTP-missing entries for event organizers of the given run."""
+    result = {}
+
+    if _is_demo_association(get_run_association_id(run.id)):
+        return result
+
     organizer_role = EventRole.objects.filter(event_id=run.event_id, number=1).first()
     organizers = list(organizer_role.members.all()) if organizer_role else []
     missing_organizers = _members_without_otp(organizers)
     if missing_organizers:
-        data["otp_missing_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
+        result["otp_missing_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
 
-    return data
+    return result
 
 
 def _init_orga_actions_writing(data: dict, run: Run, context: dict) -> None:
