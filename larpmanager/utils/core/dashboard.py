@@ -139,7 +139,13 @@ def _exe_pending_approval_actions(context: dict, actions_data: dict) -> None:
         )
 
 
-def _exe_actions(request: HttpRequest, context: dict, association_features: dict | None = None) -> None:
+def _exe_actions(
+    request: HttpRequest,
+    context: dict,
+    association_features: dict | None = None,
+    *,
+    include_user_actions: bool = True,
+) -> None:
     """Determine available executive actions based on association features.
 
     Adds action items to the management dashboard based on user permissions
@@ -149,6 +155,8 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         request: HTTP request object
         context: Context dictionary containing association ID and other data
         association_features: Dictionary of association features, defaults to None
+        include_user_actions: Whether to include executive-only user priorities.
+            Set to False when reusing this function for the organizer dashboard.
 
     Returns:
         None: Modifies context in place by adding action items
@@ -176,8 +184,9 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
     # Process accounting-specific actions
     _exe_accounting_actions(context, association_features)
 
-    # Process user-specific actions
-    _exe_users_actions(context, association_features, actions_data)
+    # Process user-specific actions (executive-only: skip when reused for orga dashboard)
+    if include_user_actions:
+        _exe_users_actions(context, association_features, actions_data)
 
     actions = {
         "exe_methods": _("Set up payment methods for participants"),
@@ -733,7 +742,7 @@ def _orga_build_lists(request: HttpRequest, context: dict, features: dict) -> No
 
     # Reuse the executive checks for association-level priorities, but drop the
     # executive actions which are not relevant on the organizer dashboard
-    _exe_actions(request, context)
+    _exe_actions(request, context, include_user_actions=False)
     context.pop("actions_list", None)
 
     _orga_actions_priorities(context, features)
