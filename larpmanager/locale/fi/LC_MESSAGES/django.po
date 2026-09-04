@@ -1805,6 +1805,9 @@ msgstr "Tapahtuman nimi"
 msgid "Event type"
 msgstr "Tapahtuman tyyppi"
 
+msgid "Executives"
+msgstr "Johto"
+
 msgid "Experience"
 msgstr "Kokemus"
 
@@ -3481,6 +3484,9 @@ msgstr "Tapahtuman kirjanpito"
 
 msgid "Event navigation"
 msgstr "Tapahtuman navigointi"
+
+msgid "Event organizers"
+msgstr "Tapahtuman järjestäjät"
 
 msgid "Expected revenue"
 msgstr "Odotetut tulot"
@@ -9343,6 +9349,11 @@ msgstr "Täydellinen asuinosoitteesi, mukaan lukien katu, kaupunki ja maa"
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Ilmoittautumisesi tähän tapahtumaan on peruutettu onnistuneesti."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr ""
+"%(role)s, jolla ei ole kaksivaiheista todennusta (OTP) käytössä: %(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""

@@ -435,6 +435,12 @@ body.association.new_v20 .user_resize {
   min-width: 180px;
 }
 
+@media (max-width: 841px) {
+  .ability-search-bar {
+    flex: 0;
+  }
+}
+
 @media (min-width: 841px) {
   .ability-top-row {
     flex-direction: row;

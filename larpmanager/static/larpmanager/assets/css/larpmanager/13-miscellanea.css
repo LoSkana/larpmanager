@@ -634,6 +634,10 @@ body.association.new_v22 .user_resize {
   border-radius: 10px;
 }
 
+#sheet-quickbar[hidden] {
+  display: none;
+}
+
 #sheet-quickbar a {
   color: var(--pri-clr);
   white-space: nowrap;

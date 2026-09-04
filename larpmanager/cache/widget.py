@@ -29,6 +29,7 @@ from django.db.models import Count, Max, Subquery
 from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from larpmanager.accounting.balance import (
     association_accounting_summary,
@@ -43,6 +44,7 @@ from larpmanager.cache.basic import (
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.registration_counts import get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
+from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     PaymentInvoice,
@@ -60,7 +62,7 @@ from larpmanager.models.form import (
     RegistrationQuestionApplicable,
     WritingQuestion,
 )
-from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
+from larpmanager.models.member import LogOperationType, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
 from larpmanager.models.registration import (
     Registration,
@@ -349,6 +351,18 @@ def _init_exe_log_widget_cache(association_id: int) -> dict:
     return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
 
 
+def _members_without_otp(members: list[Member]) -> list[str]:
+    """Return display names of members whose user has no confirmed OTP (TOTP) device."""
+    if not members:
+        return []
+
+    user_ids = [member.user_id for member in members]
+    confirmed_user_ids = set(
+        TOTPDevice.objects.filter(user_id__in=user_ids, confirmed=True).values_list("user_id", flat=True)
+    )
+    return [str(member) for member in members if member.user_id not in confirmed_user_ids]
+
+
 def _init_exe_actions_cache(association_id: int) -> dict:
     """Compute all action counts for executive dashboard."""
     data = {}
@@ -453,7 +467,30 @@ def _init_exe_actions_cache(association_id: int) -> dict:
 
     data.update(_get_ildb_actions_data(association_id))
 
+    data.update(_get_exe_otp_actions_data(association_id))
+
     return data
+
+
+def _get_exe_otp_actions_data(association_id: int) -> dict:
+    """Return OTP-missing entries for association executives and event organizers."""
+    result = {}
+
+    executive_role = AssociationRole.objects.filter(association_id=association_id, number=1).first()
+    executives = list(executive_role.members.all()) if executive_role else []
+    missing_executives = _members_without_otp(executives)
+    if missing_executives:
+        result["otp_missing_executives"] = {"count": len(missing_executives), "names": missing_executives}
+
+    organizer_roles = EventRole.objects.filter(event__association_id=association_id, number=1).prefetch_related(
+        "members"
+    )
+    organizers_by_id = {member.id: member for role in organizer_roles for member in role.members.all()}
+    missing_organizers = _members_without_otp(list(organizers_by_id.values()))
+    if missing_organizers:
+        result["otp_missing_event_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
+
+    return result
 
 
 def _get_ildb_actions_data(association_id: int) -> dict:
@@ -587,6 +624,13 @@ def _init_orga_actions_cache(run: Run) -> dict:
     ).count()
     if open_questions_count > 0:
         data["open_help_questions"] = {"count": open_questions_count}
+
+    # Event organizers without two-factor authentication (OTP) enabled
+    organizer_role = EventRole.objects.filter(event_id=run.event_id, number=1).first()
+    organizers = list(organizer_role.members.all()) if organizer_role else []
+    missing_organizers = _members_without_otp(organizers)
+    if missing_organizers:
+        data["otp_missing_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
 
     return data
 

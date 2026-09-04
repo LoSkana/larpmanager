@@ -26,6 +26,7 @@ from axes.signals import user_locked_out
 from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_save
 from django.dispatch import receiver
+from django_otp.plugins.otp_totp.models import TOTPDevice
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from safedelete.signals import post_softdelete, pre_softdelete
 
@@ -172,7 +173,7 @@ from larpmanager.cache.run import (
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
 from larpmanager.cache.warehouse import on_warehouse_item_assignment_changed, on_warehouse_item_tags_m2m_changed
-from larpmanager.cache.widget import reset_widgets
+from larpmanager.cache.widget import clear_widget_cache_association, clear_widget_cache_for_event, reset_widgets
 from larpmanager.cache.writing import clear_relationship_tags_cache
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
@@ -629,6 +630,33 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
     for member in instance.members.all():
         reset_event_links(member.id, instance.association_id)
 
+    # Refresh the cache to check executive role OTP
+    if instance.number == 1:
+        clear_widget_cache_association(instance.association_id)
+
+
+def on_association_role_members_widget_cache_changed(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear the exe dashboard widget cache when executive-role (number 1) membership changes."""
+    action = kwargs.get("action", "")
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    # Forward: instance is the AssociationRole itself
+    if isinstance(instance, AssociationRole):
+        if instance.number == 1:
+            clear_widget_cache_association(instance.association_id)
+        return
+
+    # Reverse: instance is a Member; pk_set holds the affected AssociationRole ids
+    pk_set = kwargs.get("pk_set") or set()
+    if not pk_set:
+        return
+    association_ids = (
+        AssociationRole.objects.filter(pk__in=pk_set, number=1).values_list("association_id", flat=True).distinct()
+    )
+    for association_id in association_ids:
+        clear_widget_cache_association(association_id)
+
 
 @receiver(post_save, sender=AssociationText)
 def post_save_association_text(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
@@ -971,11 +999,69 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     if instance.deleted is None:
         publish_event_role(instance.id)
 
+    # Refresh the cache to check organizer's role OTP
+    if instance.number == 1:
+        clear_widget_cache_for_event(instance.event_id)
+        clear_widget_cache_association(association_id)
+
 
 @receiver(post_softdelete, sender=EventRole)
 def post_softdelete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
     """Rebuild the published crew list after an event role is soft deleted."""
     publish_event_role(instance.id)
+
+
+def on_event_role_members_widget_cache_changed(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear the orga/exe dashboard widget caches when organizer-role (number 1) membership changes."""
+    action = kwargs.get("action", "")
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    # Forward: instance is the EventRole itself
+    if isinstance(instance, EventRole):
+        if instance.number == 1:
+            clear_widget_cache_for_event(instance.event_id)
+            clear_widget_cache_association(get_event_association_id(instance.event_id))
+        return
+
+    # Reverse: instance is a Member; pk_set holds the affected EventRole ids
+    pk_set = kwargs.get("pk_set") or set()
+    if not pk_set:
+        return
+    event_ids = EventRole.objects.filter(pk__in=pk_set, number=1).values_list("event_id", flat=True).distinct()
+    for event_id in event_ids:
+        clear_widget_cache_for_event(event_id)
+        clear_widget_cache_association(get_event_association_id(event_id))
+
+
+def _clear_otp_widget_cache_for_user(user_id: int) -> None:
+    """Clear exe/orga widget caches for every association/event where this user holds a number=1 role."""
+    association_ids = (
+        AssociationRole.objects.filter(members__user_id=user_id, number=1)
+        .values_list("association_id", flat=True)
+        .distinct()
+    )
+    for association_id in association_ids:
+        clear_widget_cache_association(association_id)
+
+    event_ids = (
+        EventRole.objects.filter(members__user_id=user_id, number=1).values_list("event_id", flat=True).distinct()
+    )
+    for event_id in event_ids:
+        clear_widget_cache_for_event(event_id)
+        clear_widget_cache_association(get_event_association_id(event_id))
+
+
+@receiver(post_save, sender=TOTPDevice)
+def post_save_totp_device_widget_cache(sender: type, instance: TOTPDevice, **kwargs: Any) -> None:
+    """Clear OTP-status widget caches for the roles the device's user holds."""
+    _clear_otp_widget_cache_for_user(instance.user_id)
+
+
+@receiver(post_delete, sender=TOTPDevice)
+def post_delete_totp_device_widget_cache(sender: type, instance: TOTPDevice, **kwargs: Any) -> None:
+    """Clear OTP-status widget caches for the roles the device's user held."""
+    _clear_otp_widget_cache_for_user(instance.user_id)
 
 
 @receiver(post_save, sender=EventText)
@@ -1778,6 +1864,9 @@ for _bulk_model in _BULK_MODELS:
 
 m2m_changed.connect(on_event_role_members_changed, sender=EventRole.members.through)
 post_softdelete.connect(on_event_role_deleted, sender=EventRole)
+
+m2m_changed.connect(on_association_role_members_widget_cache_changed, sender=AssociationRole.members.through)
+m2m_changed.connect(on_event_role_members_widget_cache_changed, sender=EventRole.members.through)
 
 
 @receiver(user_locked_out)

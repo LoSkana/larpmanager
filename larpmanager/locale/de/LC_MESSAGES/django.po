@@ -1805,6 +1805,9 @@ msgstr "Name der Veranstaltung"
 msgid "Event type"
 msgstr "Art der Veranstaltung"
 
+msgid "Executives"
+msgstr "Leitungsmitglieder"
+
 msgid "Experience"
 msgstr "Erfahrung"
 
@@ -3481,6 +3484,9 @@ msgstr "Veranstaltungsbuchhaltung"
 
 msgid "Event navigation"
 msgstr "Veranstaltungsnavigation"
+
+msgid "Event organizers"
+msgstr "Veranstaltungsorganisatoren"
 
 msgid "Expected revenue"
 msgstr "Erwartete Einnahmen"
@@ -9512,6 +9518,11 @@ msgstr "Deine vollständige Wohnadresse mit Straße, Stadt und Land"
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Deine Anmeldung für diese Veranstaltung wurde erfolgreich storniert."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr ""
+"%(role)s ohne aktivierte Zwei-Faktor-Authentifizierung (OTP): %(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
