@@ -1805,6 +1805,9 @@ msgstr "Evenemangets namn"
 msgid "Event type"
 msgstr "Typ av evenemang"
 
+msgid "Executives"
+msgstr "Ansvariga"
+
 msgid "Experience"
 msgstr "Erfarenhet"
 
@@ -3481,6 +3484,9 @@ msgstr "Redovisning av evenemang"
 
 msgid "Event navigation"
 msgstr "Navigering för evenemang"
+
+msgid "Event organizers"
+msgstr "Eventarrangörer"
 
 msgid "Expected revenue"
 msgstr "Förväntade intäkter"
@@ -9317,6 +9323,10 @@ msgstr "Din fullständiga bostadsadress, inklusive gata, stad och land"
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Din anmälan till detta evenemang har avregistrerats."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr "%(role)s utan aktiverad tvåfaktorsautentisering (OTP): %(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""

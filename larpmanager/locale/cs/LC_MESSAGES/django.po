@@ -1805,6 +1805,9 @@ msgstr "Název události"
 msgid "Event type"
 msgstr "Typ události"
 
+msgid "Executives"
+msgstr "Vedení"
+
 msgid "Experience"
 msgstr "Zkušenost"
 
@@ -3481,6 +3484,9 @@ msgstr "Účtování událostí"
 
 msgid "Event navigation"
 msgstr "Navigace pro události"
+
+msgid "Event organizers"
+msgstr "Organizátoři akce"
 
 msgid "Expected revenue"
 msgstr "Očekávané příjmy"
@@ -9281,6 +9287,10 @@ msgstr "Úplná adresa bydliště včetně ulice, města a země"
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Tvoje registrace na tuto akci byla úspěšně zrušena."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr "%(role)s bez povoleného dvoufaktorového ověřování (OTP): %(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""

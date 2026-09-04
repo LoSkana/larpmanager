@@ -50,6 +50,20 @@ if TYPE_CHECKING:
     from django.http import HttpRequest
 
 
+def _check_otp_priority(context: dict, actions_data: dict, data_key: str, permission_key: str, role_label: str) -> None:
+    """Add a priority listing role members (precomputed in the widget cache) without OTP enabled."""
+    names = actions_data.get(data_key, {}).get("names", [])
+    if not names:
+        return
+
+    _add_priority(
+        context,
+        _("%(role)s without two-factor authentication (OTP) enabled: %(list)s")
+        % {"role": role_label, "list": ", ".join(names)},
+        permission_key,
+    )
+
+
 def _exe_suggestions(context: dict) -> None:
     """Add priority tasks and suggestions to the executive management context.
 
@@ -223,6 +237,9 @@ def _exe_users_actions(context: dict, enabled_features: dict[str, Any], actions_
             count=actions_data["open_help_questions"]["count"],
         )
 
+    _check_otp_priority(context, actions_data, "otp_missing_executives", "exe_roles", _("Executives"))
+    _check_otp_priority(context, actions_data, "otp_missing_event_organizers", "exe_roles", _("Event organizers"))
+
 
 def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> None:
     """Process accounting-related setup actions for executives.
@@ -390,6 +407,8 @@ def _orga_actions_priorities(context: dict, features: dict) -> None:  # noqa: C9
     _orga_exp_actions(context, features, actions_data)
 
     _orga_casting_actions(context, features, actions_data)
+
+    _check_otp_priority(context, actions_data, "otp_missing_organizers", "orga_roles", _("Event organizers"))
 
 
 def _orga_user_actions(

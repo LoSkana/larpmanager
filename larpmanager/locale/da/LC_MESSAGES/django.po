@@ -1805,6 +1805,9 @@ msgstr "Eventnavn"
 msgid "Event type"
 msgstr "Eventtype"
 
+msgid "Executives"
+msgstr "Ledelse"
+
 msgid "Experience"
 msgstr "Erfaring"
 
@@ -3481,6 +3484,9 @@ msgstr "Eventregnskab"
 
 msgid "Event navigation"
 msgstr "Eventnavigation"
+
+msgid "Event organizers"
+msgstr "Arrangører"
 
 msgid "Expected revenue"
 msgstr "Forventet indtægt"
@@ -9283,6 +9289,10 @@ msgstr "Din fulde bopælsadresse inklusive gade, by og land"
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Din tilmelding til dette arrangement er blevet annulleret."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr "%(role)s uden aktiveret to-faktor-autentificering (OTP): %(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""

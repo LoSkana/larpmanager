@@ -1805,6 +1805,9 @@ msgstr "Όνομα εκδήλωσης"
 msgid "Event type"
 msgstr "Τύπος event"
 
+msgid "Executives"
+msgstr "Διοργανωτές"
+
 msgid "Experience"
 msgstr "Εμπειρία"
 
@@ -3481,6 +3484,9 @@ msgstr "Λογιστική εκδήλωσης"
 
 msgid "Event navigation"
 msgstr "Πλοήγηση εκδήλωσης"
+
+msgid "Event organizers"
+msgstr "Διοργανωτές εκδηλώσεων"
 
 msgid "Expected revenue"
 msgstr "Αναμενόμενα έσοδα"
@@ -9494,6 +9500,12 @@ msgstr ""
 
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Η εγγραφή σου σε αυτή την εκδήλωση ακυρώθηκε επιτυχώς."
+
+#, python-format
+msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
+msgstr ""
+"%(role)s χωρίς ενεργοποιημένο έλεγχο ταυτότητας δύο παραγόντων (OTP): "
+"%(list)s"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
