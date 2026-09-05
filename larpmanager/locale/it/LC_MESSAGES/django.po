@@ -2693,6 +2693,9 @@ msgstr "Indirizzo legale"
 msgid "Manage events"
 msgstr "Gestisci gli eventi"
 
+msgid "Mark as valid"
+msgstr "Segna come valido"
+
 msgid "Maximum votes"
 msgstr "Massimo voti"
 
@@ -2877,6 +2880,9 @@ msgstr "Torna ai badge"
 
 msgid "Bank Statement"
 msgstr "Estratto conto bancario"
+
+msgid "Birth province"
+msgstr "Provincia di nascita"
 
 msgid "Bring a friend"
 msgstr "Porta un amico"
@@ -5556,6 +5562,9 @@ msgstr "Funzionalità %(name)s attivata!"
 msgid "Files recognized in the ZIP"
 msgstr "File riconosciuti nello ZIP"
 
+msgid "Fiscal code marked as valid"
+msgstr "Codice fiscale segnato come valido"
+
 msgid "Items that will be modified"
 msgstr "Voci che verranno modificate"
 
@@ -6527,6 +6536,9 @@ msgstr "Richiesta di reimpostazione della password per %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Pagamenti in attesa di account delegati"
 
+msgid "Province where you were born (code)"
+msgstr "Provincia in cui sei nato/a (codice)"
+
 msgid "Registrations status for this event"
 msgstr "Stato delle iscrizioni per questo evento"
 
@@ -6575,8 +6587,8 @@ msgstr "<b>%(number)s</b> membri da approvare"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> rimborsi da consegnare"
 
-msgid "City and country where you were born"
-msgstr "Città e paese di nascita"
+msgid "City where you were born (full name)"
+msgstr "Città in cui sei nato/a (nome completo)"
 
 msgid "Confirmation of registration request"
 msgstr "Conferma richiesta iscrizione"
@@ -7669,6 +7681,9 @@ msgstr ""
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Suggerimento: Le risposte corrette a questa domanda sono"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "La provincia italiana di nascita deve essere un codice di 2 lettere"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Gestisci i punti esperienza assegnati ai personaggi"
@@ -8829,6 +8844,12 @@ msgstr "Attenzione: il modulo contiene errori nei seguenti campi."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Attenzione: il modulo contiene errori nei seguenti campi:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"La provincia di nascita non corrisponde al luogo di nascita (previsto "
+"%(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr ""

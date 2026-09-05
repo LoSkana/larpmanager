@@ -4560,7 +4560,13 @@ msgstr ""
 msgid "Birth place"
 msgstr ""
 
-msgid "City and country where you were born"
+msgid "City where you were born (full name)"
+msgstr ""
+
+msgid "Birth province"
+msgstr ""
+
+msgid "Province where you were born (code)"
 msgstr ""
 
 msgid ""
@@ -4651,6 +4657,13 @@ msgid "Legal Gender"
 msgstr ""
 
 msgid "Enter your legal gender as it appears on official documents."
+msgstr ""
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr ""
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
 msgstr ""
 
 msgid "Inactive"
@@ -7306,6 +7319,9 @@ msgid "Supplied"
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "Mark as valid"
 msgstr ""
 
 msgid "No fiscal code errors found. All member records are consistent."
@@ -12745,6 +12761,9 @@ msgid "Member approved!"
 msgstr ""
 
 msgid "Member refused!"
+msgstr ""
+
+msgid "Fiscal code marked as valid"
 msgstr ""
 
 msgid "Profile updated"

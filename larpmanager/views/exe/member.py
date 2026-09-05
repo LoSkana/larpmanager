@@ -35,7 +35,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, get_member_config, save_single_config
 from larpmanager.forms.member import (
     ExeMemberForm,
     ExeMembershipDocumentForm,
@@ -336,6 +336,10 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
 
         # Check each member's fiscal code for correctness
         for member in members:
+            # Skip members whose fiscal code was manually marked valid
+            if get_member_config(member.id, "fiscal_code_valid"):
+                continue
+
             check = calculate_fiscal_code(member)
             if not check:
                 continue
@@ -349,6 +353,32 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
                 context["cf"].append(check)
 
     return render(request, "larpmanager/exe/users/membership_check.html", context)
+
+
+@login_required
+def exe_membership_check_valid(request: HttpRequest, member_uuid: str) -> HttpResponse:
+    """Mark a member's fiscal code as manually validated, skipping it in future checks.
+
+    Shows a confirmation page before applying the change: bare frame popup when opened
+    via the iframe modal, full-chrome confirm page on a direct GET otherwise.
+    """
+    context = check_association_context(request, "exe_membership_check")
+    member = get_assoc_member(member_uuid, context["association_id"])
+
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method != "POST":
+        context["frame"] = is_frame
+        context["el_name"] = str(member)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
+
+    save_single_config(member, "fiscal_code_valid", "True")
+    messages.success(request, _("Fiscal code marked as valid"))
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+    return redirect("exe_membership_check")
 
 
 @login_required

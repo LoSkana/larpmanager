@@ -523,6 +523,11 @@ urlpatterns = [
         name="exe_membership_check",
     ),
     path(
+        "manage/check_membership/<slug:member_uuid>/valid/",
+        views_em.exe_membership_check_valid,
+        name="exe_membership_check_valid",
+    ),
+    path(
         "manage/registry/",
         views_em.exe_membership_registry,
         name="exe_membership_registry",

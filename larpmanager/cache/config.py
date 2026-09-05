@@ -37,6 +37,7 @@ EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "t
 
 # Centralized config defaults, used when a caller does not pass an explicit default_value.
 # Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
+# No need to set if False, as it's the default value
 CONFIG_DEFAULTS: dict[str, Any] = {
     "debug_toolbar_enabled": False,
     "payment_custom_reason": "",

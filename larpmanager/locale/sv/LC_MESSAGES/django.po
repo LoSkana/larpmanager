@@ -2693,6 +2693,9 @@ msgstr "Juridisk adress"
 msgid "Manage events"
 msgstr "Hantera evenemang"
 
+msgid "Mark as valid"
+msgstr "Markera som giltig"
+
 msgid "Maximum votes"
 msgstr "Högsta antal röster"
 
@@ -2877,6 +2880,9 @@ msgstr "Tillbaka till Badges"
 
 msgid "Bank Statement"
 msgstr "Kontoutdrag"
+
+msgid "Birth province"
+msgstr "Födelseprovins"
 
 msgid "Bring a friend"
 msgstr "Ta med en vän"
@@ -5556,6 +5562,9 @@ msgstr "Funktion %(name)s aktiverad!"
 msgid "Files recognized in the ZIP"
 msgstr "Filer som känns igen i ZIP"
 
+msgid "Fiscal code marked as valid"
+msgstr "Personnummer markerat som giltigt"
+
 msgid "Items that will be modified"
 msgstr "Objekt som kommer att modifieras"
 
@@ -6527,6 +6536,9 @@ msgstr "Begäran om återställning av lösenord för %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Betalningar i avvaktan på delegerade konton"
 
+msgid "Province where you were born (code)"
+msgstr "Provins där du föddes (kod)"
+
 msgid "Registrations status for this event"
 msgstr "Registreringsstatus för detta evenemang"
 
@@ -6575,8 +6587,8 @@ msgstr "<b>%(number)s</b> medlemmar att godkänna"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> återbetalningar att leverera"
 
-msgid "City and country where you were born"
-msgstr "Stad och land där du är född"
+msgid "City where you were born (full name)"
+msgstr "Stad där du föddes (fullständigt namn)"
 
 msgid "Confirmation of registration request"
 msgstr "Bekräftelse på begäran om registrering"
@@ -7664,6 +7676,9 @@ msgstr "Slutför checklistan för att låsa upp alla plattformsfunktioner:"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Italiensk födelseprovins måste vara en kod med 2 bokstäver"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Hantera erfarenhetspoäng som tilldelats karaktärer"
@@ -8769,6 +8784,11 @@ msgstr "Observera: formuläret innehåller fel i följande fält."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Observera: formuläret innehåller fel i följande fält:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"Födelseprovinsen stämmer inte överens med födelseorten (förväntade %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Konfigurera biljetttyper, priser och nivåer för deltagarna."
