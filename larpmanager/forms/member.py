@@ -530,6 +530,7 @@ class ProfileForm(BaseProfileForm):
             "presentation",
             "birth_date",
             "birth_place",
+            "birth_province",
             "nationality",
             "document_type",
             "document",
