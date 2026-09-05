@@ -2693,6 +2693,9 @@ msgstr "Právní adresa"
 msgid "Manage events"
 msgstr "Správa událostí"
 
+msgid "Mark as valid"
+msgstr "Označit jako platné"
+
 msgid "Maximum votes"
 msgstr "Maximální počet hlasů"
 
@@ -5555,6 +5558,9 @@ msgstr "Funkce %(name)s aktivována!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Soubory rozpoznané v ZIP"
+
+msgid "Fiscal code marked as valid"
+msgstr "Daňový kód označen jako platný"
 
 msgid "Items that will be modified"
 msgstr "Položky, které budou upraveny"

@@ -2693,6 +2693,9 @@ msgstr "Νόμιμη διεύθυνση"
 msgid "Manage events"
 msgstr "Διαχείριση εκδηλώσεων"
 
+msgid "Mark as valid"
+msgstr "Σήμανση ως έγκυρου"
+
 msgid "Maximum votes"
 msgstr "Μέγιστες ψήφοι"
 
@@ -5555,6 +5558,9 @@ msgstr "Η λειτουργία %(name)s ενεργοποιήθηκε!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Αρχεία που αναγνωρίστηκαν στο ZIP"
+
+msgid "Fiscal code marked as valid"
+msgstr "Ο φορολογικός κωδικός σημειώθηκε ως έγκυρος"
 
 msgid "Items that will be modified"
 msgstr "Αντικείμενα που θα τροποποιηθούν"

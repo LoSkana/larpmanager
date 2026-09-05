@@ -2693,6 +2693,9 @@ msgstr "Wettelijk adres"
 msgid "Manage events"
 msgstr "Evenementen beheren"
 
+msgid "Mark as valid"
+msgstr "Markeren als geldig"
+
 msgid "Maximum votes"
 msgstr "Maximaal aantal stemmen"
 
@@ -5555,6 +5558,9 @@ msgstr "Functie %(name)s geactiveerd!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Bestanden herkend in de ZIP"
+
+msgid "Fiscal code marked as valid"
+msgstr "Fiscaal nummer gemarkeerd als geldig"
 
 msgid "Items that will be modified"
 msgstr "Items die worden gewijzigd"

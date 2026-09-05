@@ -521,6 +521,12 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
         for faction_id, question__uuid, answer_text in WritingAnswer.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.COMPUTED,
+            ],
         ).values_list("element_id", "question__uuid", "text"):
             # Initialize nested dictionary structure as needed
             if faction_id not in faction_answers_map:
@@ -531,6 +537,7 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
         for faction_id, question__uuid, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
         ).values_list("element_id", "question__uuid", "option_id"):
             # Initialize nested dictionary and list structures as needed
             if faction_id not in faction_answers_map:
@@ -620,6 +627,12 @@ def _get_guilds_answers_choices(context: dict, fields_data: dict, guild_ids: lis
         for guild_id, question__uuid, answer_text in WritingAnswer.objects.filter(
             element_id__in=guild_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.COMPUTED,
+            ],
         ).values_list("element_id", "question__uuid", "text"):
             if guild_id not in guild_answers_map:
                 guild_answers_map[guild_id] = {}
@@ -628,6 +641,7 @@ def _get_guilds_answers_choices(context: dict, fields_data: dict, guild_ids: lis
         for guild_id, question__uuid, option_id in WritingChoice.objects.filter(
             element_id__in=guild_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
         ).values_list("element_id", "question__uuid", "option_id"):
             if guild_id not in guild_answers_map:
                 guild_answers_map[guild_id] = {}

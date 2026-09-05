@@ -7308,6 +7308,9 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+msgid "Mark as valid"
+msgstr ""
+
 msgid "No fiscal code errors found. All member records are consistent."
 msgstr ""
 
@@ -12745,6 +12748,9 @@ msgid "Member approved!"
 msgstr ""
 
 msgid "Member refused!"
+msgstr ""
+
+msgid "Fiscal code marked as valid"
 msgstr ""
 
 msgid "Profile updated"

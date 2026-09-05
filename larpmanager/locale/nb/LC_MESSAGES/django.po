@@ -2693,6 +2693,9 @@ msgstr "Juridisk adresse"
 msgid "Manage events"
 msgstr "Administrer arrangementer"
 
+msgid "Mark as valid"
+msgstr "Marker som gyldig"
+
 msgid "Maximum votes"
 msgstr "Maksimalt antall stemmer"
 
@@ -5555,6 +5558,9 @@ msgstr "Funksjon %(name)s aktivert!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Filer som gjenkjennes i ZIP-filen"
+
+msgid "Fiscal code marked as valid"
+msgstr "Fødselsnummer markert som gyldig"
 
 msgid "Items that will be modified"
 msgstr "Elementer som vil bli endret"

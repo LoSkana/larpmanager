@@ -2693,6 +2693,9 @@ msgstr "Adres prawny"
 msgid "Manage events"
 msgstr "Zarządzanie wydarzeniami"
 
+msgid "Mark as valid"
+msgstr "Oznacz jako prawidłowy"
+
 msgid "Maximum votes"
 msgstr "Maksymalna liczba głosów"
 
@@ -5555,6 +5558,9 @@ msgstr "Funkcja %(name)s aktywowana!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Pliki rozpoznane w pliku ZIP"
+
+msgid "Fiscal code marked as valid"
+msgstr "Kod podatkowy oznaczony jako prawidłowy"
 
 msgid "Items that will be modified"
 msgstr "Elementy, które zostaną zmodyfikowane"

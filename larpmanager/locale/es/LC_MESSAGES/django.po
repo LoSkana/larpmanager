@@ -2693,6 +2693,9 @@ msgstr "Domicilio legal"
 msgid "Manage events"
 msgstr "Gestionar eventos"
 
+msgid "Mark as valid"
+msgstr "Marcar como válido"
+
 msgid "Maximum votes"
 msgstr "Número máximo de votos"
 
@@ -5555,6 +5558,9 @@ msgstr "¡Característica %(name)s activada!"
 
 msgid "Files recognized in the ZIP"
 msgstr "Archivos reconocidos en el ZIP"
+
+msgid "Fiscal code marked as valid"
+msgstr "Código fiscal marcado como válido"
 
 msgid "Items that will be modified"
 msgstr "Elementos que se modificarán"

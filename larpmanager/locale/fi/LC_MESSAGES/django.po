@@ -2693,6 +2693,9 @@ msgstr "Oikeudellinen osoite"
 msgid "Manage events"
 msgstr "Hallitse tapahtumia"
 
+msgid "Mark as valid"
+msgstr "Merkitse kelvolliseksi"
+
 msgid "Maximum votes"
 msgstr "Enimmäisäänet"
 
@@ -5555,6 +5558,9 @@ msgstr "Ominaisuus %(name)s aktivoitu!"
 
 msgid "Files recognized in the ZIP"
 msgstr "ZIP:ssä tunnistetut tiedostot"
+
+msgid "Fiscal code marked as valid"
+msgstr "Verotunnus merkitty kelvolliseksi"
 
 msgid "Items that will be modified"
 msgstr "Muutettavat kohteet"
