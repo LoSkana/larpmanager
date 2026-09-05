@@ -2881,6 +2881,9 @@ msgstr "Powrót do Badges"
 msgid "Bank Statement"
 msgstr "Wyciąg z konta"
 
+msgid "Birth province"
+msgstr "Prowincja urodzenia"
+
 msgid "Bring a friend"
 msgstr "Przyprowadź przyjaciela"
 
@@ -6533,6 +6536,9 @@ msgstr "Prośba o zresetowanie hasła dla %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Oczekujące płatności dla kont delegowanych"
 
+msgid "Province where you were born (code)"
+msgstr "Prowincja, w której się urodziłeś(-aś) (kod)"
+
 msgid "Registrations status for this event"
 msgstr "Status rejestracji na to wydarzenie"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> członków do zatwierdzenia"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> zwrotów do dostarczenia"
 
-msgid "City and country where you were born"
-msgstr "Miasto i kraj urodzenia"
+msgid "City where you were born (full name)"
+msgstr "Miasto, w którym się urodziłeś(-aś) (pełna nazwa)"
 
 msgid "Confirmation of registration request"
 msgstr "Potwierdzenie wniosku o rejestrację"
@@ -7672,6 +7678,9 @@ msgstr "Ukończ listę kontrolną, aby odblokować wszystkie funkcje platformy:"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Włoska prowincja urodzenia musi być dwuliterowym kodem"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Zarządzaj punktami doświadczenia przyznanymi postaciom"
@@ -8805,6 +8814,11 @@ msgstr "Uwaga: formularz zawiera błędy w następujących polach."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Uwaga: formularz zawiera błędy w następujących polach:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"Prowincja urodzenia nie odpowiada miejscu urodzenia (oczekiwano %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Skonfiguruj rodzaje biletów, ceny i progi cenowe dla uczestników."

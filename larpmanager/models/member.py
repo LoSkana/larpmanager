@@ -25,6 +25,7 @@ from typing import Any, ClassVar
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
@@ -40,8 +41,11 @@ from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, MediaTokenMixin, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.core.codes import countries
+from larpmanager.utils.users.municipalities import get_province_for_birth_place
 
 logger = logging.getLogger(__name__)
+
+ITALIAN_PROVINCE_CODE_LENGTH = 2
 
 SENSITIVE_DISCLAIMER = _(
     "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants."
@@ -197,7 +201,15 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     birth_place = models.CharField(
         max_length=150,
         verbose_name=_("Birth place"),
-        help_text=_("City and country where you were born"),
+        help_text=_("City where you were born (full name)"),
+        blank=True,
+        null=True,
+    )
+
+    birth_province = models.CharField(
+        max_length=150,
+        verbose_name=_("Birth province"),
+        help_text=_("Province where you were born (code)"),
         blank=True,
         null=True,
     )
@@ -340,6 +352,24 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
                 name="member_email_idx",
             ),
         ]
+
+    def clean(self) -> None:
+        """Check birth province is a valid Italian province code, consistent with birth place."""
+        if self.nationality != "IT" or not self.birth_province:
+            return
+
+        if len(self.birth_province) > ITALIAN_PROVINCE_CODE_LENGTH:
+            raise ValidationError({"birth_province": _("Italian birth province must be a 2-letter code")})
+
+        if self.birth_place:
+            expected_province = get_province_for_birth_place(self.birth_place)
+            if expected_province and expected_province != self.birth_province.upper():
+                raise ValidationError(
+                    {
+                        "birth_province": _("Birth province does not match birth place (expected %(exp)s)")
+                        % {"exp": expected_province}
+                    }
+                )
 
     def __str__(self) -> str:
         """Return string representation."""

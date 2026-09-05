@@ -4560,7 +4560,13 @@ msgstr ""
 msgid "Birth place"
 msgstr ""
 
-msgid "City and country where you were born"
+msgid "City where you were born (full name)"
+msgstr ""
+
+msgid "Birth province"
+msgstr ""
+
+msgid "Province where you were born (code)"
 msgstr ""
 
 msgid ""
@@ -4651,6 +4657,13 @@ msgid "Legal Gender"
 msgstr ""
 
 msgid "Enter your legal gender as it appears on official documents."
+msgstr ""
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr ""
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
 msgstr ""
 
 msgid "Inactive"

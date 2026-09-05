@@ -2881,6 +2881,9 @@ msgstr "Zurück zu den Badges"
 msgid "Bank Statement"
 msgstr "Kontoauszug"
 
+msgid "Birth province"
+msgstr "Geburtsprovinz"
+
 msgid "Bring a friend"
 msgstr "Bring einen Freund mit"
 
@@ -6533,6 +6536,9 @@ msgstr "Anfrage zum Zurücksetzen des Passworts für %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Ausstehende Zahlungen auf delegierten Konten"
 
+msgid "Province where you were born (code)"
+msgstr "Provinz, in der du geboren wurdest (Code)"
+
 msgid "Registrations status for this event"
 msgstr "Anmeldestatus für diese Veranstaltung"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> zuzulassende Mitglieder"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> zu liefernde Erstattungen"
 
-msgid "City and country where you were born"
-msgstr "Stadt und Land, in denen du geboren wurdest"
+msgid "City where you were born (full name)"
+msgstr "Stadt, in der du geboren wurdest (vollständiger Name)"
 
 msgid "Confirmation of registration request"
 msgstr "Bestätigung des Registrierungsantrags"
@@ -7674,6 +7680,9 @@ msgstr ""
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hinweis: Die richtigen Antworten auf diese Frage sind"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Die italienische Geburtsprovinz muss ein zweibuchstabiger Code sein"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Verwalte die an Charaktere vergebenen Erfahrungspunkte"
@@ -8865,6 +8874,12 @@ msgstr "Achtung: Das Formular enthält Fehler in den folgenden Feldern."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Achtung: Das Formular enthält Fehler in den folgenden Feldern:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"Die Geburtsprovinz stimmt nicht mit dem Geburtsort überein (erwartet: "
+"%(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Konfiguriere Ticketarten, Preise und Preisstufen für die Teilnehmer."

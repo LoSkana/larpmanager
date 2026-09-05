@@ -2881,6 +2881,9 @@ msgstr "Takaisin Badgesiin"
 msgid "Bank Statement"
 msgstr "Pankkitiliote"
 
+msgid "Birth province"
+msgstr "Syntymämaakunta"
+
 msgid "Bring a friend"
 msgstr "Ota ystävä mukaan"
 
@@ -6533,6 +6536,9 @@ msgstr "Salasanan nollauspyyntö käyttäjälle %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Maksut, jotka ovat vireillä delegoiduilla tileillä"
 
+msgid "Province where you were born (code)"
+msgstr "Maakunta, jossa synnyit (koodi)"
+
 msgid "Registrations status for this event"
 msgstr "Tämän tapahtuman ilmoittautumistilanne"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> hyväksyttävät jäsenet"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> toimitettavat palautukset"
 
-msgid "City and country where you were born"
-msgstr "Syntymäpaikkakunta ja -maa"
+msgid "City where you were born (full name)"
+msgstr "Kaupunki, jossa synnyit (koko nimi)"
 
 msgid "Confirmation of registration request"
 msgstr "Ilmoittautumispyynnön vahvistus"
@@ -7670,6 +7676,9 @@ msgstr "Täytä tarkistuslista avataksesi kaikki ominaisuudet:"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Italian syntymämaakunnan on oltava 2-kirjaiminen koodi"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Hallitse hahmoille myönnettyjä kokemuspisteitä"
@@ -8785,6 +8794,10 @@ msgstr "Huomio: lomakkeessa on virheitä seuraavissa kentissä."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Huomio: lomakkeessa on virheitä seuraavissa kentissä:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr "Syntymämaakunta ei vastaa syntymäpaikkaa (odotettu %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Määritä lipputyypit, hinnat ja osallistujien tasot."

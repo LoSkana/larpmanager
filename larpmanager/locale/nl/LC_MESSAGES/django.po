@@ -2881,6 +2881,9 @@ msgstr "Terug naar de badges"
 msgid "Bank Statement"
 msgstr "Bankafschrift"
 
+msgid "Birth province"
+msgstr "Geboorteprovincie"
+
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
 
@@ -6534,6 +6537,9 @@ msgstr "Verzoek om het wachtwoord van %(user)s te resetten"
 msgid "Payments pending delegated accounts"
 msgstr "Openstaande betalingen voor gedelegeerde accounts"
 
+msgid "Province where you were born (code)"
+msgstr "Provincie waar je geboren bent (code)"
+
 msgid "Registrations status for this event"
 msgstr "Registratiestatus voor dit evenement"
 
@@ -6582,8 +6588,8 @@ msgstr "<b>%(number)s</b> leden om goed te keuren"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> restituties te leveren"
 
-msgid "City and country where you were born"
-msgstr "Stad en land waar je geboren bent"
+msgid "City where you were born (full name)"
+msgstr "Plaats waar je geboren bent (volledige naam)"
 
 msgid "Confirmation of registration request"
 msgstr "Bevestiging van registratieaanvraag"
@@ -7676,6 +7682,9 @@ msgstr ""
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Italiaanse geboorteprovincie moet een code van 2 letters zijn"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Beheer ervaringspunten die aan personages zijn toegekend"
@@ -8823,6 +8832,11 @@ msgstr "Let op: het formulier bevat fouten in de volgende velden."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Let op: het formulier bevat fouten in de volgende velden:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"Geboorteprovincie komt niet overeen met geboorteplaats (verwacht %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Stel de soorten tickets, prijzen en tariefniveaus voor deelnemers in."

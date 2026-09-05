@@ -2881,6 +2881,9 @@ msgstr "Tilbage til Badges"
 msgid "Bank Statement"
 msgstr "Kontoudtog"
 
+msgid "Birth province"
+msgstr "Fødselsprovins"
+
 msgid "Bring a friend"
 msgstr "Tag en ven med"
 
@@ -6533,6 +6536,9 @@ msgstr "Anmodning om nulstilling af adgangskode for %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Ventende betalinger for delegerede konti"
 
+msgid "Province where you were born (code)"
+msgstr "Provinsen, hvor du blev født (kode)"
+
 msgid "Registrations status for this event"
 msgstr "Tilmeldingsstatus for dette event"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> medlemmer til godkendelse"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> refusioner til udbetaling"
 
-msgid "City and country where you were born"
-msgstr "By og land, hvor du blev født"
+msgid "City where you were born (full name)"
+msgstr "Byen, hvor du blev født (fuldt navn)"
 
 msgid "Confirmation of registration request"
 msgstr "Bekræftelse af tilmeldingsanmodning"
@@ -7670,6 +7676,9 @@ msgstr "Fuldfør tjeklisten for at låse op for alle funktioner:"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Tip: De korrekte svar på dette spørgsmål er"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Italiensk fødselsprovins skal være en kode på 2 bogstaver"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Administrer erfaringspoint, der tildeles karakterer"
@@ -8765,6 +8774,10 @@ msgstr "Bemærk: Formularen indeholder fejl i følgende felter."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Bemærk: formularen indeholder fejl i følgende felter:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr "Fødselsprovinsen matcher ikke fødestedet (forventet %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Konfigurer billettyper, priser og niveauer for deltagere."

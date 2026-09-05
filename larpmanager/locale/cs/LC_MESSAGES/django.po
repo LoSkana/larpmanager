@@ -2881,6 +2881,9 @@ msgstr "Zpět na Badges"
 msgid "Bank Statement"
 msgstr "Výpis z bankovního účtu"
 
+msgid "Birth province"
+msgstr "Provincie narození"
+
 msgid "Bring a friend"
 msgstr "Přiveď kamaráda"
 
@@ -6533,6 +6536,9 @@ msgstr "Žádost o obnovení hesla pro %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Nevyřízené platby na delegovaných účtech"
 
+msgid "Province where you were born (code)"
+msgstr "Provincie, kde ses narodil/a (kód)"
+
 msgid "Registrations status for this event"
 msgstr "Stav registrací pro tuto událost"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> členů ke schválení"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> náhrady k dodání"
 
-msgid "City and country where you were born"
-msgstr "Město a země, kde ses narodil/a"
+msgid "City where you were born (full name)"
+msgstr "Město, kde ses narodil/a (celý název)"
 
 msgid "Confirmation of registration request"
 msgstr "Potvrzení žádosti o registraci"
@@ -7671,6 +7677,9 @@ msgstr "Dokončením kontrolního seznamu odemkneš všechny funkce platformy:"
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "Italská provincie narození musí být dvoupísmenný kód"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Spravuj zkušenostní body přidělené postavám"
@@ -8769,6 +8778,10 @@ msgstr "Pozor: formulář obsahuje chyby v následujících polích."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Pozor: formulář obsahuje chyby v následujících polích:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr "Provincie narození neodpovídá místu narození (očekává se %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr "Nastav typy vstupenek, ceny a cenové úrovně pro účastníky."

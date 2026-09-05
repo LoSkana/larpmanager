@@ -2881,6 +2881,9 @@ msgstr "Volver a Badges"
 msgid "Bank Statement"
 msgstr "Extracto bancario"
 
+msgid "Birth province"
+msgstr "Provincia de nacimiento"
+
 msgid "Bring a friend"
 msgstr "Trae un amigo"
 
@@ -6533,6 +6536,9 @@ msgstr "Solicitud de restablecimiento de contraseña para %(user)s"
 msgid "Payments pending delegated accounts"
 msgstr "Pagos pendientes de cuentas delegadas"
 
+msgid "Province where you were born (code)"
+msgstr "Provincia donde naciste (código)"
+
 msgid "Registrations status for this event"
 msgstr "Estado de las inscripciones para este evento"
 
@@ -6581,8 +6587,8 @@ msgstr "<b>%(number)s</b> miembros a aprobar"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> reembolsos a entregar"
 
-msgid "City and country where you were born"
-msgstr "Ciudad y país de nacimiento"
+msgid "City where you were born (full name)"
+msgstr "Ciudad donde naciste (nombre completo)"
 
 msgid "Confirmation of registration request"
 msgstr "Confirmación de la solicitud de inscripción"
@@ -7674,6 +7680,9 @@ msgstr ""
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Sugerencia: Las respuestas correctas a esta pregunta son"
+
+msgid "Italian birth province must be a 2-letter code"
+msgstr "La provincia italiana de nacimiento debe ser un código de 2 letras"
 
 msgid "Manage experience points awarded to characters"
 msgstr "Gestiona los puntos de experiencia asignados a los personajes"
@@ -8829,6 +8838,12 @@ msgstr "Atención: el formulario contiene errores en los siguientes campos."
 
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Atención: el formulario contiene errores en los siguientes campos:"
+
+#, python-format
+msgid "Birth province does not match birth place (expected %(exp)s)"
+msgstr ""
+"La provincia de nacimiento no coincide con el lugar de nacimiento (se "
+"esperaba %(exp)s)"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr ""
