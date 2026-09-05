@@ -107,11 +107,10 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
             """
             <div class="feature_checkbox">
                 <input type="checkbox" name="{2}" value="{3}" id="{4}" {5}>
-                <span class="lm_tooltip">
-                <span class="hide lm_tooltiptext">{0} ({1})</span>
                 <label for="{6}">{7}</label>
-                <a href="#" feat="{8}"><i class="fas fa-question-circle"></i></a>
-                </span>
+                <a href="#" class="lm_tooltip" feat="{8}">
+                <span class="hide lm_tooltiptext">{0} ({1})</span>
+                <i class="fas fa-question-circle"></i></a>
             </div>""",
             checkbox_elements,
         )
