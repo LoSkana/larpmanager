@@ -231,7 +231,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             event = event.parent
 
         # Initialize registration questions and get counts
-        self._init_registration_question(self.instance, event)
+        self._init_registration_question(self.instance, event.id)
         params_run = self.params.get("run")
         registration_counts = get_registration_counts(params_run.id, params_run.event_id)
         self.registration_counts = registration_counts

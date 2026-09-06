@@ -575,7 +575,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         except (TypeError, ValueError):
             return get_config_default("collapse_options_min")
 
-    def _init_registration_question(self, instance: Any | None, event: Event) -> None:
+    def _init_registration_question(self, instance: Any | None, event_id: int) -> None:
         """Initialize registration questions and answers from existing instance.
 
         Loads existing answers and choices from the database for a given registration
@@ -584,7 +584,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         Args:
             instance: Registration instance to load data from. Can be None for new registrations.
-            event: Event object providing context for question filtering and options.
+            event_id: id of the Event providing context for question filtering and options.
 
         Returns:
             None: This method modifies instance attributes in place.
@@ -611,11 +611,11 @@ class BaseRegistrationForm(BaseModelFormRun):
                     self.multiples[choice_answer.question_id].add(choice_answer)
 
         # Finalize question initialization with event context (loads cached questions)
-        self._init_questions(event)
+        self._init_questions(event_id)
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Initialize questions for the given event."""
-        self.questions = get_cached_registration_questions(event.id)
+        self.questions = get_cached_registration_questions(event_id)
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""
@@ -881,9 +881,9 @@ class BaseRegistrationForm(BaseModelFormRun):
             List of initialized field keys that were successfully created.
 
         """
-        # Get the event from the current run context
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        # Get the event id from the current run context
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
 
         # Initialize container for field keys that will be created
         field_keys = []

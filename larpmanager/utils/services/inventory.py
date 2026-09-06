@@ -61,7 +61,7 @@ def perform_transfer(
             balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=source,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": source.event, "number": 1},
+                defaults={"amount": 0, "event_id": source.event_id, "number": 1},
             )
             if balance.amount < amount:
                 msg = "Not enough resources"
@@ -74,7 +74,7 @@ def perform_transfer(
             balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=target,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": target.event, "number": 1},
+                defaults={"amount": 0, "event_id": target.event_id, "number": 1},
             )
             balance.amount += amount
             balance.save()

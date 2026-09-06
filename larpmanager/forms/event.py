@@ -1498,7 +1498,7 @@ class OrgaRunForm(ConfigForm):
 
         dl = []
 
-        if not self.params.get("is_creation", False) and (not self.instance.pk or not self.instance.event):
+        if not self.params.get("is_creation", False) and (not self.instance.pk or not self.instance.event_id):
             event_field = forms.ChoiceField(
                 required=True,
                 choices=[

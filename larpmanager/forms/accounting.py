@@ -536,7 +536,7 @@ class OrgaDiscountForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Build choices from all runs in the same event
-        choices = [(m.id, str(m)) for m in Run.objects.filter(event=self.params["run"].event)]
+        choices = [(m.id, str(m)) for m in Run.objects.filter(event_id=self.params["run"].event_id)]
 
         # Create multiple choice field with checkbox widgets
         widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})

@@ -218,7 +218,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.tickets_map = {}
         if self.waiting_check:
             return
-        self._init_registration_question(self.instance, event)
+        self._init_registration_question(self.instance, event.id)
         for question in self.questions:
             self.init_question(question, registration_counts)
         self.tickets_map = json.dumps(self.tickets_map)
@@ -678,15 +678,15 @@ class MatchmakerForm(BaseRegistrationForm):
         self.section_descriptions = {}
         self.profiles = {}
 
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
         for question in self.questions:
             self._init_matchmaker_field(question)
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Load only the matchmaker-applicable registration questions."""
         self.questions = get_cached_registration_questions(
-            event.id, applicable=RegistrationQuestionApplicable.MATCHMAKER
+            event_id, applicable=RegistrationQuestionApplicable.MATCHMAKER
         )
 
     def _init_matchmaker_field(self, question: dict) -> None:
@@ -739,17 +739,17 @@ class RequestApprovalForm(BaseRegistrationForm):
         self.section_descriptions = {}
         self.profiles = {}
 
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
         for question in self.questions:
             self._init_request_field(question)
 
         # Keep the confirmation checkbox first
         self.fields = {"confirm": self.fields.pop("confirm"), **self.fields}
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Load only the request-applicable registration questions."""
-        self.questions = get_cached_registration_questions(event.id, applicable=RegistrationQuestionApplicable.REQUEST)
+        self.questions = get_cached_registration_questions(event_id, applicable=RegistrationQuestionApplicable.REQUEST)
 
     def _init_request_field(self, question: dict) -> None:
         """Initialize a single request question field (mirrors RegistrationForm.init_question)."""
@@ -825,7 +825,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Extract run and event from params
         self.run = self.params["run"]
-        self.event = self.params["run"].event
+        self.event_id = self.params["run"].event_id
 
         # Configure member widget with association
         self.configure_field_association("member", self.params["association_id"])
@@ -1041,7 +1041,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get available traits (excluding those assigned to others)
         available = (
-            Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids).select_related("quest")
+            Trait.objects.filter(event_id=self.event_id)
+            .exclude(id__in=already_assigned_trait_ids)
+            .select_related("quest")
         )
 
         for qt in self.params["quest_types"].values():

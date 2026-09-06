@@ -50,7 +50,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.casting import AssignmentTrait
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption
 from larpmanager.models.member import Member, MembershipStatus, get_user_membership
 from larpmanager.models.registration import (
@@ -697,20 +697,20 @@ def process_accounting_discount_post_save(discount_item: AccountingItemDiscount)
 def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:
     """Process registration ticket after save."""
     logger.debug("RegistrationTicket saved: %s at %s", ticket, timezone.now())
-    check_registration_events(ticket.event)
+    check_registration_events(ticket.event_id)
 
 
 def process_registration_option_post_save(option: RegistrationOption) -> None:
     """Process registration option after save."""
     logger.debug("RegistrationOption saved: %s at %s", option, timezone.now())
-    check_registration_events(option.question.event)
+    check_registration_events(option.question.event_id)
 
 
-def check_registration_events(event: Event) -> None:
+def check_registration_events(event_id: int) -> None:
     """Trigger background accounting updates for all registrations in an event."""
     registration_ids = [
         str(registration_id)
-        for run in get_event_runs(event.id)
+        for run in get_event_runs(event_id)
         for registration_id in run.registrations.values_list("id", flat=True)
     ]
     check_registration_background(",".join(registration_ids))
