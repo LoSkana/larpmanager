@@ -304,6 +304,9 @@ def _questions_load(
             return result
         question_instance, was_created = result
 
+    # Keep name in sync with the csv, even for questions matched by type
+    question_instance.name = question_name
+
     # Process and validate each field in the row data
     for field_name, field_value in row_data.items():
         error = _process_question_field(field_name, field_value, field_mappings, question_instance)
