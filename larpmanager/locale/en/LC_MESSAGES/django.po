@@ -1696,6 +1696,14 @@ msgstr ""
 msgid "You can use the following fields; they will be filled in automatically:"
 msgstr ""
 
+msgid "Custom IBAN"
+msgstr ""
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+
 msgid "Disable provisional registrations"
 msgstr ""
 
