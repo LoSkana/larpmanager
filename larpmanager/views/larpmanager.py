@@ -1348,7 +1348,7 @@ def lm_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Show run deletion confirmation page and process deletion."""
     check_lm_admin(request)
     run = get_object_or_404(Run, uuid=run_uuid)
-    registration_count = Registration.objects.filter(run__event=run.event).count()
+    registration_count = Registration.objects.filter(run__event_id=run.event_id).count()
 
     if request.method == "POST":
         delete_run_task(str(run.uuid))

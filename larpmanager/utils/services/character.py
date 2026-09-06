@@ -895,7 +895,7 @@ def _persist_auto_relationships(character: Character, sources_map: dict[int, set
         ref_chars_by_number = {
             c.number: c
             for c in Character.objects.filter(
-                event=character.event, number__in=sources_map.keys(), deleted__isnull=True
+                event_id=character.event_id, number__in=sources_map.keys(), deleted__isnull=True
             )
         }
 

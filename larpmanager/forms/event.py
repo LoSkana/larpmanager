@@ -260,7 +260,7 @@ class OrgaEventForm(BaseModelForm):
         lst = Event.objects.filter(association_id=self.params.get("association_id"), slug=data)
         if self.instance is not None and self.instance.pk is not None:
             lst = lst.exclude(pk=self.instance.pk)
-        if lst.count() > 0:
+        if lst.exists():
             msg = "Slug already used!"
             raise ValidationError(msg)
 
@@ -1359,13 +1359,15 @@ class OrgaEventTextForm(BaseModelForm):
         if default:
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             # Ensure the existing default is not the current instance being edited
-            if res.count() > 0 and res.first().pk != self.instance.pk:
+            first = res.first()
+            if first and first.pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Validate language-type combination uniqueness
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         # Ensure the existing combination is not the current instance being edited
-        if res.count() > 0 and res.first().pk != self.instance.pk:
+        first = res.first()
+        if first and first.pk != self.instance.pk:
             self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data

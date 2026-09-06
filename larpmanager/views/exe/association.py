@@ -77,11 +77,15 @@ def exe_roles(request: HttpRequest) -> HttpResponse:
         def_callback,
     )
 
-    # Attach pending (unredeemed) invites to each role for display
+    # Attach pending (unredeemed) invites to each role for display (batched to avoid one query per role)
+    pending_invites_by_role: dict[int, list[RoleInvite]] = {}
+    pending_invites = RoleInvite.objects.filter(
+        association_role_id__in=[role.id for role in context["list"]], redeemed_by__isnull=True, deleted__isnull=True
+    )
+    for invite in pending_invites:
+        pending_invites_by_role.setdefault(invite.association_role_id, []).append(invite)
     for role in context["list"]:
-        role.pending_invites = RoleInvite.objects.filter(
-            association_role=role, redeemed_by__isnull=True, deleted__isnull=True
-        )
+        role.pending_invites = pending_invites_by_role.get(role.id, [])
 
     return render(request, "larpmanager/exe/roles.html", context)
 

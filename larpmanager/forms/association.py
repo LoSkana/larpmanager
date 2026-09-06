@@ -222,18 +222,18 @@ class ExeAssociationTextForm(BaseModelForm):
                 association_id=self.params.get("association_id"), default=True, typ=typ
             )
             # Ensure we're not comparing against the current instance
-            if res.count() > 0 and res.first().pk != self.instance.pk:
+            first = res.first()
+            if first and first.pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
         res = AssociationText.objects.filter(
             association_id=self.params.get("association_id"), language=language, typ=typ
         )
-        if res.count() > 0:
-            first = res.first()
-            # Ensure we're not comparing against the current instance
-            if first.pk != self.instance.pk:
-                self.add_error("language", "There is already a language of this type!")
+        first = res.first()
+        # Ensure we're not comparing against the current instance
+        if first and first.pk != self.instance.pk:
+            self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 
@@ -1024,7 +1024,7 @@ class FirstAssociationForm(BaseModelForm):
             lst = lst.exclude(pk=self.instance.pk)
 
         # Raise validation error if slug already exists
-        if lst.count() > 0:
+        if lst.exists():
             msg = "Slug already used!"
             raise ValidationError(msg)
 

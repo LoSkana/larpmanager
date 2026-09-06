@@ -215,11 +215,12 @@ def _init_user_character_widget_cache(run: Run) -> dict:
     # Get all characters for this run
     characters = get_event_elements(run.event_id, Character)
 
-    # Count by status
-    counts["creation"] = characters.filter(status=CharacterStatus.CREATION).count()
-    counts["proposed"] = characters.filter(status=CharacterStatus.PROPOSED).count()
-    counts["review"] = characters.filter(status=CharacterStatus.REVIEW).count()
-    counts["approved"] = characters.filter(status=CharacterStatus.APPROVED).count()
+    # Count by status in a single grouped query
+    status_counts = dict(characters.values_list("status").annotate(cnt=Count("id")).values_list("status", "cnt"))
+    counts["creation"] = status_counts.get(CharacterStatus.CREATION, 0)
+    counts["proposed"] = status_counts.get(CharacterStatus.PROPOSED, 0)
+    counts["review"] = status_counts.get(CharacterStatus.REVIEW, 0)
+    counts["approved"] = status_counts.get(CharacterStatus.APPROVED, 0)
 
     return counts
 
@@ -229,9 +230,14 @@ def _init_progress_widget_cache(run: Run) -> dict:
     characters = get_event_elements(run.event_id, Character)
     steps = ProgressStep.objects.filter(event_id=run.event_id, deleted=None).order_by("order")
 
+    # Single grouped query
+    counts_by_progress = dict(
+        characters.values_list("progress").annotate(cnt=Count("id")).values_list("progress", "cnt")
+    )
+
     step_counts = []
     for step in steps:
-        count = characters.filter(progress=step).count()
+        count = counts_by_progress.get(step.id, 0)
         if count:
             step_counts.append({"name": step.name, "count": count})
 
@@ -239,7 +245,7 @@ def _init_progress_widget_cache(run: Run) -> dict:
     if step_counts:
         result["steps"] = step_counts
 
-    no_step_count = characters.filter(progress__isnull=True).count()
+    no_step_count = counts_by_progress.get(None, 0)
     if no_step_count:
         result["no_step"] = no_step_count
 
@@ -322,34 +328,48 @@ def _init_orga_log_widget_cache(run: Run) -> dict:
     """Compute log statistics and recent logs for event dashboard."""
     base_query = Log.objects.filter(run_id=run.id)
 
-    # Count logs by operation type
-    operation_counts = {}
-    for op_type, op_label in LogOperationType.choices:
-        count = base_query.filter(operation_type=op_type).count()
-        if count > 0:
-            operation_counts[op_type] = {"label": op_label, "count": count}
+    # Count logs by operation type in a single grouped query
+    counts_by_type = dict(
+        base_query.values_list("operation_type").annotate(cnt=Count("id")).values_list("operation_type", "cnt")
+    )
+    operation_counts = {
+        op_type: {"label": op_label, "count": counts_by_type[op_type]}
+        for op_type, op_label in LogOperationType.choices
+        if counts_by_type.get(op_type, 0) > 0
+    }
 
     # Get recent logs (last 5)
     recent_logs = base_query.select_related("member").order_by("-created")[:5]
 
-    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+    return {
+        "operation_counts": operation_counts,
+        "recent_logs": list(recent_logs),
+        "total_count": sum(counts_by_type.values()),
+    }
 
 
 def _init_exe_log_widget_cache(association_id: int) -> dict:
     """Compute log statistics and recent logs for organization dashboard."""
     base_query = Log.objects.filter(association_id=association_id)
 
-    # Count logs by operation type
-    operation_counts = {}
-    for op_type, op_label in LogOperationType.choices:
-        count = base_query.filter(operation_type=op_type).count()
-        if count > 0:
-            operation_counts[op_type] = {"label": op_label, "count": count}
+    # Count logs by operation type in a single grouped query
+    counts_by_type = dict(
+        base_query.values_list("operation_type").annotate(cnt=Count("id")).values_list("operation_type", "cnt")
+    )
+    operation_counts = {
+        op_type: {"label": op_label, "count": counts_by_type[op_type]}
+        for op_type, op_label in LogOperationType.choices
+        if counts_by_type.get(op_type, 0) > 0
+    }
 
     # Get recent logs (last 5)
     recent_logs = base_query.select_related("member", "run__event").order_by("-created")[:5]
 
-    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+    return {
+        "operation_counts": operation_counts,
+        "recent_logs": list(recent_logs),
+        "total_count": sum(counts_by_type.values()),
+    }
 
 
 def _is_demo_association(association_id: int) -> bool:

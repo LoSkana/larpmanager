@@ -615,7 +615,7 @@ class RegistrationForm(BaseRegistrationForm):
             if cod:
                 try:
                     # Look for registration with matching special code in same event
-                    Registration.objects.get(uuid=cod, run__event=run.event)
+                    Registration.objects.get(uuid=cod, run__event_id=run.event_id)
                 except ObjectDoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")

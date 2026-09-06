@@ -973,8 +973,11 @@ class OrgaCharacterForm(CharacterForm):
             PlotCharacterRel.objects.create(character=instance, plot=plot)
 
         # update texts (rows added client side are not declared fields, read them from raw data)
+        # refetch only if the plot set changed, otherwise reuse the list already loaded in _init_plots
+        plot_characters = instance.get_plot_characters(self.params["event"].id) if (to_add or to_remove) else self.plots
+
         to_update = []
-        for pr in instance.get_plot_characters(self.params["event"].id):
+        for pr in plot_characters:
             field = f"pl_{pr.plot_id}"
             text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
             if text is None or text == pr.text:

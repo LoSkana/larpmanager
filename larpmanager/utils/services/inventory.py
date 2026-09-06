@@ -99,9 +99,9 @@ def generate_base_inventories(instance: Character, *, check: bool = False) -> No
 
     inventory_name = f"{instance.name}'s Personal Storage"
     # Check if the character already has a personal inventory
-    if Inventory.objects.filter(owners=instance, event=instance.event, name=inventory_name).exists():
+    if Inventory.objects.filter(owners=instance, event_id=instance.event_id, name=inventory_name).exists():
         return
 
-    inventory = Inventory.objects.create(name=inventory_name, event=instance.event)
+    inventory = Inventory.objects.create(name=inventory_name, event_id=instance.event_id)
     inventory.owners.add(instance)
     inventory.save()
