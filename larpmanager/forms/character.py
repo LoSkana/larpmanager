@@ -310,7 +310,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Sets up a multiple choice field for selectable factions if the faction
         feature is enabled for the event.
         """
-        if "faction" not in self.params.get("features"):
+        if self.params.get("lite_mode") or "faction" not in self.params.get("features"):
             return
 
         queryset = get_event_elements(self.params.get("run").event_id, Faction, context=self.params).filter(
@@ -767,7 +767,7 @@ class OrgaCharacterForm(CharacterForm):
 
     def _init_relationships(self) -> None:
         """Init relationships data."""
-        if "relationships" not in self.params.get("features"):
+        if self.params.get("lite_mode") or "relationships" not in self.params.get("features"):
             return
 
         # Load relationship field max length from event configuration
@@ -859,7 +859,9 @@ class OrgaCharacterForm(CharacterForm):
         if not get_event_config(self.params["event"].id, "user_character_approval", context=self.params):
             self.delete_field("status")
 
-        if get_event_config(self.params["event"].id, "casting_mirror", context=self.params):
+        if not self.params.get("lite_mode") and get_event_config(
+            self.params["event"].id, "casting_mirror", context=self.params
+        ):
             if "mirror" in self.fields:
                 characters_query = get_event_elements(self.params["run"].event_id, Character, context=self.params).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
@@ -868,7 +870,7 @@ class OrgaCharacterForm(CharacterForm):
             self.delete_field("mirror")
 
         # Add active field for campaign feature
-        if "campaign" in self.params["features"]:
+        if not self.params.get("lite_mode") and "campaign" in self.params["features"]:
             self.fields["active"] = forms.BooleanField(
                 required=False,
                 label=_("Active"),
@@ -892,7 +894,7 @@ class OrgaCharacterForm(CharacterForm):
         Sets up plot selection options and plot-related character
         attributes for story-driven character development.
         """
-        if "plot" not in self.params["features"]:
+        if self.params.get("lite_mode") or "plot" not in self.params["features"]:
             return
 
         self.fields["plots"] = forms.ModelMultipleChoiceField(
@@ -989,7 +991,7 @@ class OrgaCharacterForm(CharacterForm):
 
     def _init_exp(self) -> None:
         """Initialize EPX (ability/delivery) form fields if experience points feature is enabled."""
-        if "experience" not in self.params["features"]:
+        if self.params.get("lite_mode") or "experience" not in self.params["features"]:
             return
 
         # experience ability
@@ -1034,7 +1036,7 @@ class OrgaCharacterForm(CharacterForm):
         Sets up faction choice fields with proper widget configuration
         when faction feature is enabled.
         """
-        if "faction" not in self.params["features"]:
+        if self.params.get("lite_mode") or "faction" not in self.params["features"]:
             return
 
         queryset = get_event_elements(self.params["run"].event_id, Faction, context=self.params)
