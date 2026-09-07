@@ -103,7 +103,8 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
         reset_event_links(context["member"].id, context["association_id"])
 
         # Set intro_driver to "first_event" if this is the first event for the association
-        if Event.objects.filter(association_id=context["association_id"]).count() == 1:
+        # (reuses the pre-creation check from context)
+        if context["first_event"]:
             association = Association.objects.get(pk=context["association_id"])
             save_single_config(association, "intro_driver", "first_event")
 

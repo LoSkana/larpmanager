@@ -349,7 +349,7 @@ def auto_assign_sequential_numbers(instance: Any) -> None:  # noqa: C901
             queryset = None
             scope_id = None
             if hasattr(instance, "event") and instance.event:
-                queryset = instance.__class__.objects.filter(event=instance.event)
+                queryset = instance.__class__.objects.filter(event_id=instance.event_id)
                 scope_id = f"event_{instance.event_id}"
             if hasattr(instance, "association") and instance.association:
                 queryset = instance.__class__.objects.filter(association=instance.association)

@@ -1357,7 +1357,7 @@ def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
         chosen = regs[0:to_upgrade]
 
         # Get the target ticket for upgrading selected registrations
-        ticket = get_object_or_404(RegistrationTicket, event=context["run"].event, name=context["ticket"])
+        ticket = get_object_or_404(RegistrationTicket, event_id=context["run"].event_id, name=context["ticket"])
 
         # Upgrade chosen registrations to the target ticket tier
         for el in chosen:

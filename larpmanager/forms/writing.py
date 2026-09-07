@@ -229,10 +229,10 @@ class BaseWritingForm(BaseRegistrationForm):
         # noinspection PyProtectedMember
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)  # noqa: SLF001  # Django model metadata
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Initialize questions filtered by applicable type using cache."""
         self.params.get("features", [])
-        self.questions = get_cached_writing_questions(event.id, self.applicable)
+        self.questions = get_cached_writing_questions(event_id, self.applicable)
 
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""
@@ -619,7 +619,7 @@ class GuildForm(WritingForm, BaseWritingForm):
         event = self.params["event"]
         if not self.instance.pk:
             self.instance.event = event
-        self._init_registration_question(self.instance, event)
+        self._init_registration_question(self.instance, event.id)
 
         fields_default = {"name", "teaser", "text", "cover", "secret"}
         fields_custom = set()

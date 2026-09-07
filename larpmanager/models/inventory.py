@@ -90,7 +90,7 @@ class Inventory(UuidMixin, BaseConceptModel):
             balance, _created = PoolBalance.objects.get_or_create(
                 inventory=self,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": self.event, "number": 1},
+                defaults={"amount": 0, "event_id": self.event_id, "number": 1},
             )
             pool_balances.append({"type": pool_type, "balance": balance})
         return pool_balances

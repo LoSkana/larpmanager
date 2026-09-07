@@ -28,6 +28,7 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -305,13 +306,13 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[str, str], list[str]
     return trait_choices, assigned_trait_uuids, {}
 
 
-def check_player_skip_characters(relation: RegistrationCharacterRel, context: dict) -> bool:
+def check_player_skip_characters(relation: RegistrationCharacterRel, context: dict, character_counts: dict) -> bool:
     """Check if registration has reached maximum allowed characters."""
     # Get max characters allowed from event config
     max_characters_allowed = int(get_event_config(context["event"].id, "casting_characters", context=context))
 
-    # Check if current character count meets or exceeds limit
-    return RegistrationCharacterRel.objects.filter(registration=relation).count() >= max_characters_allowed
+    # Check if current character count meets or exceeds limit (pre-batched)
+    return character_counts.get(relation.id, 0) >= max_characters_allowed
 
 
 def check_player_skip_quests(registration: Registration, quest_type: QuestType) -> bool:
@@ -329,6 +330,7 @@ def skip_casting_player(
     casting_filter_options: dict,
     cached_membership_statuses: dict,
     cached_aim_memberships: set,
+    character_counts: dict,
 ) -> bool:
     """Check if player should be skipped in casting based on various criteria.
 
@@ -341,6 +343,7 @@ def skip_casting_player(
         casting_filter_options: Dictionary with casting filter options (tickets, memberships, pays)
         cached_membership_statuses: Cached membership statuses keyed by member ID
         cached_aim_memberships: Cached aim membership data for additional status checks
+        character_counts: Pre-batched map of registration id to assigned character count
 
     Returns:
         True if player should be skipped in casting, False otherwise
@@ -381,7 +384,7 @@ def skip_casting_player(
     # Check for existing assignments based on casting type
     if "quest_type" not in context:
         # Character casting - check if already assigned to character
-        has_existing_assignment = check_player_skip_characters(registration, context)
+        has_existing_assignment = check_player_skip_characters(registration, context, character_counts)
     else:
         # Quest casting - check if already assigned to quest
         has_existing_assignment = check_player_skip_quests(registration, context["quest_type"])
@@ -446,9 +449,18 @@ def get_casting_data(
         ticket__tier__in=[TicketTier.WAITING],
     )
     registrations_query = registrations_query.order_by("created").select_related("ticket", "member")
+
+    # Pre-batch character counts per registration
+    character_counts = dict(
+        RegistrationCharacterRel.objects.filter(registration__in=registrations_query)
+        .values("registration_id")
+        .annotate(cnt=Count("id"))
+        .values_list("registration_id", "cnt")
+    )
+
     for registration in registrations_query:
         # Skip players that don't match filter criteria (ticket, membership, payment)
-        if skip_casting_player(context, registration, filter_options, cache_memberships, cache_aim):
+        if skip_casting_player(context, registration, filter_options, cache_memberships, cache_aim, character_counts):
             continue
 
         # Add player info with ticket priority and registration/payment dates
@@ -486,7 +498,7 @@ def get_casting_data(
     # Load character avoidance texts (reasons players can't play certain characters)
     avoidance_texts = {}
     typ = context["quest_type"].number if "quest_type" in context else 0
-    for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=typ):
+    for avoidance_entry in CastingAvoid.objects.filter(run=context["run"], typ=typ).select_related("member"):
         avoidance_texts[avoidance_entry.member.uuid] = avoidance_entry.text
 
     # Serialize all data to JSON for client-side casting algorithm

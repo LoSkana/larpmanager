@@ -329,7 +329,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     ).count()
 
     ticket_prices = RegistrationTicket.objects.filter(
-        event=run.event, tier__in=PLAYER_TIERS, deleted__isnull=True
+        event_id=run.event_id, tier__in=PLAYER_TIERS, deleted__isnull=True
     ).aggregate(costo=Min("price"), costo_max=Max("price"))
 
     # Load publication metadata from EventConfig
