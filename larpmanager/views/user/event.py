@@ -45,7 +45,7 @@ from larpmanager.cache.question import get_writing_field_names
 from larpmanager.cache.registration_counts import get_registration_counts
 from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.cache.writing import get_writing_element_fields, get_writing_element_fields_batch
-from larpmanager.forms.registration import MatchmakerForm
+from larpmanager.forms.registration import DebriefForm, MatchmakerForm, SingleApplicableRegistrationForm
 from larpmanager.models.accounting import AccountingItemDiscount, PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -1275,25 +1275,47 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     return JsonResponse(aux)
 
 
-@login_required
-def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Player-facing page to answer the matchmaker questions for an existing registration."""
-    context = get_event_context(request, event_slug, "matchmaker")
+def _single_applicable_form_view(
+    request: HttpRequest,
+    event_slug: str,
+    feature_slug: str,
+    form_class: type[SingleApplicableRegistrationForm],
+    template: str,
+) -> HttpResponse:
+    """Handle a player-facing page for a specific form related to registrations.
+
+    Requires an existing, non-pending registration and reuses the standard answer/choice save flow.
+    """
+    context = get_event_context(request, event_slug, feature_slug)
 
     registration = context.get("registration")
     if not registration or registration.pending:
-        messages.warning(request, _("You must register for the event before answering the matchmaker questions"))
+        messages.warning(request, _("You must register for the event before answering these questions"))
         return redirect("register", event_slug=context["run"].get_slug())
 
     if request.method == "POST":
-        form = MatchmakerForm(request.POST, request.FILES, instance=registration, context=context)
+        form = form_class(request.POST, request.FILES, instance=registration, context=context)
         if form.is_valid():
             form.save()
             messages.success(request, _("Answers saved!"))
-            return redirect("matchmaker", event_slug=context["run"].get_slug())
+            return redirect(feature_slug, event_slug=context["run"].get_slug())
     else:
-        form = MatchmakerForm(instance=registration, context=context)
+        form = form_class(instance=registration, context=context)
 
     context["form"] = form
 
-    return render(request, "larpmanager/event/matchmaker.html", context)
+    return render(request, template, context)
+
+
+@login_required
+def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to answer the matchmaker questions for an existing registration."""
+    return _single_applicable_form_view(
+        request, event_slug, "matchmaker", MatchmakerForm, "larpmanager/event/matchmaker.html"
+    )
+
+
+@login_required
+def debrief(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to answer the debrief questions for an existing registration."""
+    return _single_applicable_form_view(request, event_slug, "debrief", DebriefForm, "larpmanager/event/debrief.html")

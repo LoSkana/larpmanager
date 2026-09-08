@@ -26,22 +26,34 @@ from django.db.models import Prefetch
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
-from larpmanager.cache.registration_lookup import clear_registration_tickets_cache, get_registration_tickets
+from larpmanager.cache.registration_lookup import (
+    clear_registration_tickets_cache,
+    get_active_registrations,
+    get_registration_tickets,
+)
 from larpmanager.cache.writing import clear_relationship_tags_cache
+from larpmanager.forms.base import DEFAULT_LIKERT_MAX
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
-from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption
+from larpmanager.models.form import (
+    REGISTRATION_APPLICABLE_TO_TYPE,
+    BaseQuestionType,
+    RegistrationOption,
+    RegistrationQuestionApplicable,
+    RegistrationQuestionType,
+)
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
 )
-from larpmanager.models.writing import get_event_class_parent
+from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import (
     backend_order,
@@ -62,7 +74,11 @@ from larpmanager.utils.edit.orga import (
     orga_new,
 )
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
-from larpmanager.utils.registrations.questions import get_ordered_registration_questions
+from larpmanager.utils.registrations.questions import (
+    get_ordered_registration_questions,
+    get_registration_answers_by_question,
+    get_registration_choices_by_question,
+)
 
 
 @login_required
@@ -437,3 +453,112 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     if action.config.get("relationship_tags"):
         clear_relationship_tags_cache(get_event_class_parent(context["event"].id, model_class, context=context))
     return JsonResponse({"ok": True})
+
+
+def _orga_single_applicable_answers(
+    request: HttpRequest,
+    event_slug: str,
+    permission_slug: str,
+    applicable: RegistrationQuestionApplicable,
+    page_info: str,
+    template: str,
+) -> HttpResponse:
+    """Show, per participant, the answers to the questions of a single applicable form.
+
+    Shared by matchmaker/debrief (and any future single-applicable-question orga review
+    page): matchmaker additionally resolves RegistrationQuestionType.FACTION_PREFERENCE
+    answers (raw comma-separated faction uuids) into ranked faction names.
+    """
+    context = check_event_context(request, event_slug, permission_slug)
+    context["page_info"] = page_info
+
+    questions = list(
+        get_ordered_registration_questions(context, applicable=applicable).prefetch_related(
+            Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
+        )
+    )
+    context["questions"] = questions
+
+    registrations = (
+        get_active_registrations(context["run"].id).select_related("member").order_by("member__name", "member__surname")
+    )
+
+    question_ids = [question.id for question in questions]
+
+    answers_by_registration = get_registration_answers_by_question(question_ids, registration__run=context["run"])
+    choices_by_registration = get_registration_choices_by_question(question_ids, registration__run=context["run"])
+
+    faction_names_by_uuid = {}
+    if applicable == RegistrationQuestionApplicable.MATCHMAKER:
+        faction_names_by_uuid = {
+            str(uuid): name
+            for uuid, name in get_event_elements(context["event"].id, Faction, context=context).values_list(
+                "uuid", "name"
+            )
+        }
+
+    rows = []
+    for registration in registrations:
+        cells = []
+        has_answer = False
+        for question in questions:
+            if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
+                value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            elif question.typ == RegistrationQuestionType.FACTION_PREFERENCE:
+                raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
+                names = [faction_names_by_uuid[uuid] for uuid in raw.split(",") if uuid in faction_names_by_uuid]
+                value = ", ".join(f"{i}. {name}" for i, name in enumerate(names, start=1))
+            else:
+                value = answers_by_registration.get(registration.id, {}).get(question.id, "")
+            if value:
+                has_answer = True
+            cells.append(value)
+        if has_answer:
+            rows.append({"registration": registration, "cells": cells})
+
+    context["rows"] = rows
+    context["likert_charts"] = _get_likert_charts(questions, rows)
+
+    return render(request, template, context)
+
+
+def _get_likert_charts(questions: list, rows: list) -> list:
+    """Build per-question answer distributions for likert questions, for bar charts."""
+    likert_charts = []
+    for idx, question in enumerate(questions):
+        if question.typ != RegistrationQuestionType.LIKERT:
+            continue
+        scale_max = question.max_length or DEFAULT_LIKERT_MAX
+        counts = [0] * scale_max
+        for row in rows:
+            value = row["cells"][idx]
+            if value.isdigit() and 1 <= int(value) <= scale_max:
+                counts[int(value) - 1] += 1
+        likert_charts.append({"question": question, "scale_max": scale_max, "counts": counts})
+    return likert_charts
+
+
+@login_required
+def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show, per participant, the answers to the matchmaker questions."""
+    return _orga_single_applicable_answers(
+        request,
+        event_slug,
+        "orga_matchmaker_answers",
+        RegistrationQuestionApplicable.MATCHMAKER,
+        _("Review participant answers to the matchmaker questions"),
+        "larpmanager/orga/matchmaker.html",
+    )
+
+
+@login_required
+def orga_debrief_answers(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show, per participant, the answers to the debrief questions."""
+    return _orga_single_applicable_answers(
+        request,
+        event_slug,
+        "orga_debrief_answers",
+        RegistrationQuestionApplicable.DEBRIEF,
+        _("Review participant answers to the debrief questions"),
+        "larpmanager/orga/debrief.html",
+    )

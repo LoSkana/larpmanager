@@ -381,6 +381,7 @@ def notify_deadlines(run: Any) -> None:
         "cast": "Missing casting preferences",
         "char": "Character not yet created",
         "char_confirm": "Character not yet approved",
+        "debrief": "Debrief not yet compiled",
     }
 
     for organizer in get_event_organizers_by_event(run.event_id):

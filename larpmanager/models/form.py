@@ -136,6 +136,7 @@ RegistrationQuestionType = extend_textchoices(
         ("QUOTA", "reg_quotas", _("Payment Installments")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
         ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
+        ("LIKERT", "l", _("Likert scale")),
     ],
 )
 
@@ -219,6 +220,7 @@ class RegistrationQuestionApplicable(models.TextChoices):
     REGISTRATION = "r", "registration"
     MATCHMAKER = "m", "matchmaker"
     REQUEST = "q", "request"
+    DEBRIEF = "b", "debrief"
 
 
 def _get_registration_mapping() -> dict[str, str | None]:
@@ -230,6 +232,7 @@ def _get_registration_mapping() -> dict[str, str | None]:
         "registration": None,
         "matchmaker": "matchmaker",
         "request": "config:registration_approval_process",
+        "debrief": "debrief",
     }
 
 
@@ -237,6 +240,7 @@ REGISTRATION_TYPE_TO_APPLICABLE = {
     "registration": RegistrationQuestionApplicable.REGISTRATION,
     "matchmaker": RegistrationQuestionApplicable.MATCHMAKER,
     "request": RegistrationQuestionApplicable.REQUEST,
+    "debrief": RegistrationQuestionApplicable.DEBRIEF,
 }
 
 REGISTRATION_APPLICABLE_TO_TYPE = {value: key for key, value in REGISTRATION_TYPE_TO_APPLICABLE.items()}
@@ -578,7 +582,7 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "Optional - For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)",
+            "number of options; For Likert scale questions, maximum value of the scale (0 = no limit)",
         ),
     )
 

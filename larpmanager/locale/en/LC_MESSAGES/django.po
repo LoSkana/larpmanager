@@ -4268,6 +4268,9 @@ msgstr ""
 msgid "Faction preference"
 msgstr ""
 
+msgid "Likert scale"
+msgstr ""
+
 msgid "Mandatory"
 msgstr ""
 
@@ -4348,7 +4351,8 @@ msgstr ""
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options (0 = no limit)"
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
 msgstr ""
 
 msgid ""
@@ -5513,6 +5517,9 @@ msgstr ""
 msgid "Character not yet confirmed"
 msgstr ""
 
+msgid "Debrief not yet compiled"
+msgstr ""
+
 msgid "Show help tip"
 msgstr ""
 
@@ -6259,6 +6266,15 @@ msgstr ""
 msgid "The registrations to the event <i>%(run)s</i> are closed!"
 msgstr ""
 
+msgid "Debrief"
+msgstr ""
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
 msgid "Get to know all the characters before the event"
 msgstr ""
 
@@ -6473,9 +6489,6 @@ msgid "Matchmaker"
 msgstr ""
 
 msgid "No matchmaker questions have been set up for this event yet."
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid "Registration not open"
@@ -9162,6 +9175,18 @@ msgstr ""
 msgid "View all deadlines that must be met for this event"
 msgstr ""
 
+msgid "Debrief answers"
+msgstr ""
+
+msgid "No debrief questions have been created yet."
+msgstr ""
+
+msgid "Configure the debrief form"
+msgstr ""
+
+msgid "No participant has answered the debrief form yet."
+msgstr ""
+
 msgid "Cost"
 msgstr ""
 
@@ -9199,10 +9224,7 @@ msgid ""
 "criterion."
 msgstr ""
 
-msgid "Load participants"
-msgstr ""
-
-msgid "Load checked-in participants"
+msgid "Load characters"
 msgstr ""
 
 msgid "Participants"
@@ -10488,6 +10510,14 @@ msgid "You can now set the matchmaker form"
 msgstr ""
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+
+msgid "You can now set the debrief form"
+msgstr ""
+
+msgid ""
 "Allows participants to submit questions, and organizers to review and "
 "organize them"
 msgstr ""
@@ -11352,6 +11382,9 @@ msgstr ""
 msgid "Review participant answers to the matchmaker questions"
 msgstr ""
 
+msgid "Review participant answers to the debrief questions"
+msgstr ""
+
 msgid "Manage the registration surcharges"
 msgstr ""
 
@@ -11589,6 +11622,9 @@ msgid "Registration Form"
 msgstr ""
 
 msgid "Matchmaker Form"
+msgstr ""
+
+msgid "Debrief Form"
 msgstr ""
 
 msgid "Registration Quota"
@@ -11831,6 +11867,9 @@ msgstr ""
 msgid "Answer questions to help match you with characters!"
 msgstr ""
 
+msgid "Answer questions about your experience at the event!"
+msgstr ""
+
 msgid "Register to the event"
 msgstr ""
 
@@ -12047,6 +12086,11 @@ msgid "The question type, allowed values are"
 msgstr ""
 
 msgid "The question status, allowed values are"
+msgstr ""
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options (0 = no limit)"
 msgstr ""
 
 msgid "The name of the question this option belongs to"
@@ -12882,6 +12926,15 @@ msgstr ""
 msgid "Registration settings updated!"
 msgstr ""
 
+msgid "From participants"
+msgstr ""
+
+msgid "From checked-in participants"
+msgstr ""
+
+msgid "From participants who filled the debrief"
+msgstr ""
+
 msgid "Participation in"
 msgstr ""
 
@@ -13130,8 +13183,7 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr ""
 
-msgid ""
-"You must register for the event before answering the matchmaker questions"
+msgid "You must register for the event before answering these questions"
 msgstr ""
 
 msgid "Answers saved!"

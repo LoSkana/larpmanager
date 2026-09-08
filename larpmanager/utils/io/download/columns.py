@@ -169,9 +169,9 @@ def _get_column_names(context: dict) -> None:
     elif context["typ"] in _EXP_SIMPLE_TYPES:
         _exp_simple_column_names(context)
 
-    # Handle registration form (questions + options) export; matchmaker questions share
+    # Handle registration form (questions + options) export; matchmaker/debrief questions share
     # the same RegistrationQuestion fields, just scoped to a different "applicable" value
-    elif context["typ"] in ("registration_form", "matchmaker_form"):
+    elif context["typ"] in ("registration_form", "matchmaker_form", "debrief_form"):
         # First dict: Question definitions with name, type, status
         # Second dict: Option definitions linked to questions
         context["columns"] = [
@@ -200,8 +200,8 @@ def _get_column_names(context: dict) -> None:
             },
         ]
 
-        # Matchmaker options carry no registration fee, drop the irrelevant column
-        if context["typ"] == "matchmaker_form":
+        # Matchmaker/debrief options carry no registration fee, drop the irrelevant column
+        if context["typ"] in ("matchmaker_form", "debrief_form"):
             del context["columns"][1]["price"]
 
     # Handle character/writing form (questions + options) export

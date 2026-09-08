@@ -42,6 +42,10 @@ from larpmanager.models.experience import (
     RuleExp,
     SystemExp,
 )
+from larpmanager.models.form import (
+    RegistrationQuestion,
+    RegistrationQuestionApplicable,
+)
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, get_event_elements
 from larpmanager.utils.core.base import get_event_context
@@ -58,6 +62,7 @@ from larpmanager.utils.io.download import (
     export_rules,
     zip_exports,
 )
+from larpmanager.utils.registrations.questions import get_answered_registration_ids
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
 logger = logging.getLogger(__name__)
@@ -96,6 +101,30 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["upload"] = "exp_deliveries"
     context["download"] = 1
 
+    load_url = reverse("orga_exp_deliveries_load", args=[event_slug])
+    load_options = [
+        {"url": load_url, "icon": "fas fa-users", "label": _("From participants"), "link_class": "form-new"}
+    ]
+    if "checkin" in context["features"]:
+        load_options.append(
+            {
+                "url": f"{load_url}?checked_in_only=1",
+                "icon": "fas fa-user-check",
+                "label": _("From checked-in participants"),
+                "link_class": "form-new",
+            }
+        )
+    if "debrief" in context["features"]:
+        load_options.append(
+            {
+                "url": f"{load_url}?debrief_only=1",
+                "icon": "fas fa-comment-dots",
+                "label": _("From participants who filled the debrief"),
+                "link_class": "form-new",
+            }
+        )
+    context["load_options"] = load_options
+
     # Expose system column only when multiple systems are configured
     context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
@@ -129,6 +158,16 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
             registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
             if request.GET.get("checked_in_only") == "1":
                 registrations = registrations.filter(check_in__checked_in_at__isnull=False)
+            if request.GET.get("debrief_only") == "1":
+                debrief_question_ids = list(
+                    RegistrationQuestion.objects.filter(
+                        event_id=context["event"].id,
+                        applicable=RegistrationQuestionApplicable.DEBRIEF,
+                        deleted__isnull=True,
+                    ).values_list("id", flat=True)
+                )
+                answered_registration_ids = get_answered_registration_ids(debrief_question_ids, registration__run=run)
+                registrations = registrations.filter(id__in=answered_registration_ids)
             character_ids = registrations.values_list("characters__id", flat=True).distinct()
             character_ids = [cid for cid in character_ids if cid is not None]
             character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
@@ -161,6 +200,8 @@ def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpRespo
     new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run_uuid}&frame=1"
     if request.GET.get("checked_in_only") == "1":
         new_url += "&checked_in_only=1"
+    if request.GET.get("debrief_only") == "1":
+        new_url += "&debrief_only=1"
     return redirect(new_url)
 
 

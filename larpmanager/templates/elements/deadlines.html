@@ -255,5 +255,28 @@
                 </td>
             </tr>
         {% endif %}
+        {% if res.debrief %}
+            <tr>
+                <td>
+                    <b>{% trans "Debrief not yet compiled" %}</b>
+                </td>
+                <td>
+                    <a href="{% url 'debrief' run.get_slug %}">{% trans "give them this address" %}</a>
+                </td>
+                <td>{{ res.debrief|length }}</td>
+                <td>
+                    {% for el in res.debrief %}
+                        {% include "elements/comma.html" %}
+                        {{ el.0 }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for el in res.debrief %}
+                        {% include "elements/comma.html" %}
+                        {{ el.1 }}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endif %}
     </tbody>
 </table>

@@ -832,6 +832,9 @@ msgstr "Utworzony"
 msgid "Credits"
 msgstr "Kredyty"
 
+msgid "Debrief"
+msgstr "Podsumowanie"
+
 msgid "Decline"
 msgstr "Odrzuć"
 
@@ -2369,6 +2372,9 @@ msgstr "Nazwa kredytów"
 msgid "Data sharing"
 msgstr "Udostępnianie danych"
 
+msgid "Debrief Form"
+msgstr "Formularz podsumowania"
+
 msgid "Description:"
 msgstr "Opis:"
 
@@ -2422,6 +2428,9 @@ msgstr "Nota prawna"
 
 msgid "Legal notice"
 msgstr "Nota prawna"
+
+msgid "Likert scale"
+msgstr "Skala Likerta"
 
 msgid "Members list"
 msgstr "Lista członków"
@@ -3206,6 +3215,9 @@ msgstr "Termin (data)"
 msgid "Deadline (days)"
 msgstr "Termin (dni)"
 
+msgid "Debrief answers"
+msgstr "Odpowiedzi do podsumowania"
+
 msgid "Delegated users"
 msgstr "Delegowani użytkownicy"
 
@@ -3256,6 +3268,9 @@ msgstr "Typy inwentarza"
 
 msgid "Invite declined"
 msgstr "Zaproszenie odrzucone"
+
+msgid "Load characters"
+msgstr "Wczytaj postacie"
 
 msgid "Manage it here!"
 msgstr "Zarządzaj tutaj!"
@@ -3792,6 +3807,9 @@ msgstr "Sprawdzenie numeru identyfikacji podatkowej"
 msgid "Fixed instalments"
 msgstr "Stałe raty"
 
+msgid "From participants"
+msgstr "Od uczestników"
+
 msgid "Generating Bundle"
 msgstr "Tworzenie pakietu"
 
@@ -3812,9 +3830,6 @@ msgstr "Catering wewnętrzny"
 
 msgid "Invalid selection"
 msgstr "Nieprawidłowy wybór"
-
-msgid "Load participants"
-msgstr "Załaduj uczestników"
 
 msgid "Maximum available"
 msgstr "Maksymalna dostępna wartość"
@@ -5135,6 +5150,9 @@ msgstr "Utwórz kolejną postać"
 msgid "Create your organization"
 msgstr "Załóż swoją organizację"
 
+msgid "Debrief not yet compiled"
+msgstr "Podsumowanie nie zostało jeszcze opracowane"
+
 msgid "Disable character finder"
 msgstr "Wyłącz wyszukiwarkę postaci"
 
@@ -5426,6 +5444,9 @@ msgstr "Wybierz metodę płatności:"
 msgid "City or place of the event"
 msgstr "Miasto lub miejsce wydarzenia"
 
+msgid "Configure the debrief form"
+msgstr "Skonfiguruj formularz podsumowania"
+
 msgid "Disable auto relationships"
 msgstr "Wyłącz automatyczne powiązania"
 
@@ -5685,6 +5706,9 @@ msgstr "Wyłącz zatwierdzanie na poziomie zdarzeń"
 msgid "Enter your preferences here!"
 msgstr "Wprowadź swoje preferencje tutaj!"
 
+msgid "From checked-in participants"
+msgstr "Od uczestników, którzy się zameldowali"
+
 msgid "Go to organization dashboard"
 msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
 
@@ -5694,9 +5718,6 @@ msgstr "Zaproszenie wysłane do %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Czat na żywo nie jest skonfigurowany."
-
-msgid "Load checked-in participants"
-msgstr "Wczytaj uczestników z potwierdzonym check-inem"
 
 msgid "Manage modules for workshops"
 msgstr "Zarządzaj modułami warsztatów"
@@ -6225,6 +6246,9 @@ msgstr "Czy token został użyty"
 
 msgid "Workshop question answer options"
 msgstr "Opcje odpowiedzi na pytania z warsztatów"
+
+msgid "You can now set the debrief form"
+msgstr "Możesz teraz skonfigurować formularz podsumowania"
 
 msgid "You can now set the vote options"
 msgstr "Możesz teraz ustawić opcje głosowania"
@@ -7036,6 +7060,9 @@ msgstr "Aktualny bilans finansowy dla tego wydarzenia"
 msgid "Enter precisely your field of experience"
 msgstr "Podaj dokładnie swoją dziedzinę doświadczenia"
 
+msgid "From participants who filled the debrief"
+msgstr "Od uczestników, którzy wypełnili podsumowanie"
+
 msgid "IP address from which the token was used"
 msgstr "Adres IP, z którego token został użyty"
 
@@ -7384,6 +7411,9 @@ msgstr "Dowolnie wskaż kwotę darowizny"
 
 msgid "Manage fields that track participants' data"
 msgstr "Zarządzaj polami śledzącymi dane uczestników"
+
+msgid "No debrief questions have been created yet."
+msgstr "Nie utworzono jeszcze pytań do podsumowania."
 
 msgid "No outflows recorded for the selected year."
 msgstr "W wybranym roku nie odnotowano żadnych wypływów."
@@ -7982,6 +8012,9 @@ msgstr "Czy jest coś jeszcze, co chciałbyś nam powiedzieć?"
 msgid "List of recipient email address, comma separated."
 msgstr "Lista adresów e-mail odbiorców, oddzielona przecinkami."
 
+msgid "No participant has answered the debrief form yet."
+msgstr "Żaden uczestnik nie odpowiedział jeszcze na formularz podsumowania."
+
 msgid "Only some of the platform features are activated."
 msgstr "Aktywowane są tylko niektóre funkcje platformy."
 
@@ -8159,6 +8192,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Dołącz do naszego Discorda, aby uzyskać pomoc, pomysły lub zgłosić błędy"
 
+msgid "Review participant answers to the debrief questions"
+msgstr "Przejrzyj odpowiedzi uczestników na pytania do podsumowania"
+
 msgid "Select which of your characters you want to access:"
 msgstr "Wybierz, do której ze swoich postaci chcesz uzyskać dostęp:"
 
@@ -8195,6 +8231,9 @@ msgstr ""
 
 msgid "An assignment for this item and area already exists."
 msgstr "Przypisanie tego przedmiotu do tego obszaru już istnieje."
+
+msgid "Answer questions about your experience at the event!"
+msgstr "Odpowiedz na pytania o swoje doświadczenia z wydarzenia!"
 
 msgid "Check consistency of the participants' personal data"
 msgstr "Sprawdź spójność danych osobowych uczestników"
@@ -8584,6 +8623,9 @@ msgstr ""
 
 msgid "Main color for text content throughout your event's pages"
 msgstr "Główny kolor treści tekstowych na stronach wydarzenia"
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr "Nie skonfigurowano jeszcze pytań do podsumowania tego wydarzenia."
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Opcjonalne – inne opcje jako wymagania, oddzielone przecinkami"
@@ -9286,6 +9328,9 @@ msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Możesz również przesłać drugi plik z opcjami rejestracji:"
+
+msgid "You must register for the event before answering these questions"
+msgstr "Musisz zarejestrować się na wydarzenie, zanim odpowiesz na te pytania"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
@@ -10165,12 +10210,6 @@ msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
 "Przed utworzeniem zdolności musisz utworzyć co najmniej jeden typ zdolności"
-
-msgid ""
-"You must register for the event before answering the matchmaker questions"
-msgstr ""
-"Zanim odpowiesz na pytania matchmakera, musisz zarejestrować się na to "
-"wydarzenie"
 
 #, python-format
 msgid ""
@@ -13596,6 +13635,13 @@ msgstr ""
 "użytkownik zamiast organizacji?"
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+"Pozwala organizatorom definiować własne pytania, które uczestnicy wypełniają"
+" po wydarzeniu, aby zebrać ich opinie"
+
+msgid ""
 "No answer options have been defined yet. Use the button above to add an "
 "answer option for a workshop question."
 msgstr ""
@@ -14981,6 +15027,15 @@ msgstr ""
 "Wybierz z listy rozwijanej postacie, które chcesz dodać do gildii. Gracze "
 "mogą też sami zakładać gildie, zapraszać do nich postacie i zarządzać "
 "członkostwem na stronie wydarzenia."
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
+msgstr ""
+"Opcjonalne — dla pytań tekstowych: maksymalna liczba znaków; dla pytań "
+"wielokrotnego wyboru: maksymalna liczba opcji; dla pytań ze skalą Likerta: "
+"maksymalna wartość skali (0 = bez limitu)"
 
 msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"

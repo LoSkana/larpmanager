@@ -97,6 +97,9 @@ COPY_ELEMENTS: dict[str, CopyElement] = {
     "matchmaker_question": CopyElement(
         RegistrationQuestion, extra_filter={"applicable": RegistrationQuestionApplicable.MATCHMAKER}
     ),
+    "debrief_question": CopyElement(
+        RegistrationQuestion, extra_filter={"applicable": RegistrationQuestionApplicable.DEBRIEF}
+    ),
     "discount": CopyElement(Discount),
     "quota": CopyElement(RegistrationQuota, match_fields=("number",)),
     "installment": CopyElement(RegistrationInstallment, match_fields=("number",)),
@@ -384,6 +387,7 @@ def copy_registration(
     applicables = {
         "question": RegistrationQuestionApplicable.REGISTRATION,
         "matchmaker_question": RegistrationQuestionApplicable.MATCHMAKER,
+        "debrief_question": RegistrationQuestionApplicable.DEBRIEF,
     }
     for key, applicable in applicables.items():
         if key in targets:

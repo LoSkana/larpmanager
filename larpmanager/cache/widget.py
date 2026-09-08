@@ -200,6 +200,7 @@ def _init_deadline_widget_cache(run: Run) -> dict:
         "profile_del",
         "char",
         "char_confirm",
+        "debrief",
     ]:
         if category in deadline_data:
             counts[category] = len(deadline_data[category])

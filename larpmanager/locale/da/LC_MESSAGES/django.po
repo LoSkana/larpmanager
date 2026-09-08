@@ -832,6 +832,9 @@ msgstr "Oprettet"
 msgid "Credits"
 msgstr "Kreditter"
 
+msgid "Debrief"
+msgstr "Debrief"
+
 msgid "Decline"
 msgstr "Afvis"
 
@@ -2369,6 +2372,9 @@ msgstr "Kreditnavn"
 msgid "Data sharing"
 msgstr "Datadeling"
 
+msgid "Debrief Form"
+msgstr "Debriefskema"
+
 msgid "Description:"
 msgstr "Beskrivelse:"
 
@@ -2422,6 +2428,9 @@ msgstr "Juridisk meddelelse"
 
 msgid "Legal notice"
 msgstr "Juridisk meddelelse"
+
+msgid "Likert scale"
+msgstr "Likertskala"
 
 msgid "Members list"
 msgstr "Medlemsliste"
@@ -3206,6 +3215,9 @@ msgstr "Deadline (dato)"
 msgid "Deadline (days)"
 msgstr "Deadline (dage)"
 
+msgid "Debrief answers"
+msgstr "Debriefsvar"
+
 msgid "Delegated users"
 msgstr "Delegerede brugere"
 
@@ -3256,6 +3268,9 @@ msgstr "Inventartyper"
 
 msgid "Invite declined"
 msgstr "Invitation afslået"
+
+msgid "Load characters"
+msgstr "Indlæs karakterer"
 
 msgid "Manage it here!"
 msgstr "Administrer den her!"
@@ -3792,6 +3807,9 @@ msgstr "Tjek af skattekode"
 msgid "Fixed instalments"
 msgstr "Faste rater"
 
+msgid "From participants"
+msgstr "Fra deltagere"
+
 msgid "Generating Bundle"
 msgstr "Genererer pakke"
 
@@ -3812,9 +3830,6 @@ msgstr "Intern forplejning"
 
 msgid "Invalid selection"
 msgstr "Ugyldigt valg"
-
-msgid "Load participants"
-msgstr "Indlæs deltagere"
 
 msgid "Maximum available"
 msgstr "Maksimalt tilgængeligt"
@@ -5135,6 +5150,9 @@ msgstr "Opret en anden karakter"
 msgid "Create your organization"
 msgstr "Opret din organisation"
 
+msgid "Debrief not yet compiled"
+msgstr "Debrief er endnu ikke udfyldt"
+
 msgid "Disable character finder"
 msgstr "Deaktivér karaktersøgeren"
 
@@ -5426,6 +5444,9 @@ msgstr "Vælg betalingsmetode:"
 msgid "City or place of the event"
 msgstr "By eller sted for eventet"
 
+msgid "Configure the debrief form"
+msgstr "Konfigurer debriefskemaet"
+
 msgid "Disable auto relationships"
 msgstr "Deaktivér automatiske relationer"
 
@@ -5685,6 +5706,9 @@ msgstr "Deaktivér godkendelse på eventniveau"
 msgid "Enter your preferences here!"
 msgstr "Indtast dine præferencer her!"
 
+msgid "From checked-in participants"
+msgstr "Fra indtjekkede deltagere"
+
 msgid "Go to organization dashboard"
 msgstr "Gå til organisationsoversigten"
 
@@ -5694,9 +5718,6 @@ msgstr "Invitation sendt til %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Livechat er ikke konfigureret."
-
-msgid "Load checked-in participants"
-msgstr "Indlæs indtjekkede deltagere"
 
 msgid "Manage modules for workshops"
 msgstr "Administrer moduler til workshops"
@@ -6225,6 +6246,9 @@ msgstr "Om denne token er blevet brugt"
 
 msgid "Workshop question answer options"
 msgstr "Svarmuligheder til workshopspørgsmål"
+
+msgid "You can now set the debrief form"
+msgstr "Du kan nu opsætte debriefskemaet"
 
 msgid "You can now set the vote options"
 msgstr "Du kan nu angive stemmeindstillingerne"
@@ -7036,6 +7060,9 @@ msgstr "Aktuel økonomisk saldo for dette event"
 msgid "Enter precisely your field of experience"
 msgstr "Angiv præcist dit erfaringsområde"
 
+msgid "From participants who filled the debrief"
+msgstr "Fra deltagere, der har udfyldt debriefen"
+
 msgid "IP address from which the token was used"
 msgstr "IP-adresse, hvorfra denne token blev brugt"
 
@@ -7383,6 +7410,9 @@ msgstr "Angiv frit beløbet for din donation"
 
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felter, der registrerer deltagerdata"
+
+msgid "No debrief questions have been created yet."
+msgstr "Der er endnu ikke oprettet nogen debriefspørgsmål."
 
 msgid "No outflows recorded for the selected year."
 msgstr "Ingen udbetalinger registreret for det valgte år."
@@ -7980,6 +8010,9 @@ msgstr "Er der ellers noget, du gerne vil fortælle os?"
 msgid "List of recipient email address, comma separated."
 msgstr "Liste over modtageres e-mailadresser, adskilt med kommaer."
 
+msgid "No participant has answered the debrief form yet."
+msgstr "Ingen deltagere har endnu besvaret debriefskemaet."
+
 msgid "Only some of the platform features are activated."
 msgstr "Kun nogle af platformens funktioner er aktiveret."
 
@@ -8152,6 +8185,9 @@ msgstr "Hvis aktiveret, bruges moder-eventets faktioner ikke."
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Deltag i vores Discord for hjælp, idéer eller for at rapportere fejl"
 
+msgid "Review participant answers to the debrief questions"
+msgstr "Gennemgå deltagernes svar på debriefspørgsmålene"
+
 msgid "Select which of your characters you want to access:"
 msgstr "Vælg, hvilke af dine karakterer du vil have adgang til:"
 
@@ -8186,6 +8222,9 @@ msgstr "brug brede billeder i høj kvalitet for den bedste visuelle effekt"
 
 msgid "An assignment for this item and area already exists."
 msgstr "En tildeling for denne artikel og dette område findes allerede."
+
+msgid "Answer questions about your experience at the event!"
+msgstr "Besvar spørgsmål om din oplevelse af eventet!"
 
 msgid "Check consistency of the participants' personal data"
 msgstr "Tjek konsistensen af deltagernes personlige data"
@@ -8563,6 +8602,9 @@ msgstr "Hvis valgt, vises listen over forfattere for hvert event."
 
 msgid "Main color for text content throughout your event's pages"
 msgstr "Hovedfarve til tekstindhold på alle dit events sider"
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr "Der er endnu ikke opsat nogen debriefspørgsmål for dette event."
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valgfrit - Andre muligheder som krav, kommasepareret"
@@ -9201,6 +9243,9 @@ msgstr "Advarsel: Der findes allerede et godkendt medlem med samme navn!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan også uploade en anden fil med registreringsmulighederne:"
+
+msgid "You must register for the event before answering these questions"
+msgstr "Du skal tilmelde dig eventet, før du kan besvare disse spørgsmål"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valgfrit) Om evnen er synlig for brugere: true eller false"
@@ -10033,11 +10078,6 @@ msgstr ""
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr "Du skal oprette mindst én evnetype, før du kan oprette evner"
-
-msgid ""
-"You must register for the event before answering the matchmaker questions"
-msgstr ""
-"Du skal tilmelde dig eventet, før du kan besvare Matchmaker-spørgsmålene"
 
 #, python-format
 msgid ""
@@ -13436,6 +13476,13 @@ msgstr ""
 "dem i stedet for organisationen?"
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+"Lader arrangører definere tilpassede spørgsmål, som deltagerne kan udfylde "
+"efter eventet for at indsamle deres feedback"
+
+msgid ""
 "No answer options have been defined yet. Use the button above to add an "
 "answer option for a workshop question."
 msgstr ""
@@ -14797,6 +14844,15 @@ msgstr ""
 "Vælg de karakterer, der skal føjes til lauget, fra rullemenuen. Spillere kan"
 " også selv oprette laug, invitere karakterer og administrere medlemskab fra "
 "eventsiden."
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
+msgstr ""
+"Valgfrit - For tekstspørgsmål, maksimalt antal tegn; for spørgsmål med flere"
+" valgmuligheder, maksimalt antal muligheder; for Likertskalaspørgsmål, "
+"maksimal værdi på skalaen (0 = ingen grænse)"
 
 msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"

@@ -31,9 +31,15 @@ from larpmanager.cache.feature import get_association_features, get_event_featur
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Run
+from larpmanager.models.form import (
+    RegistrationQuestion,
+    RegistrationQuestionApplicable,
+)
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
+from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.registrations.questions import get_answered_registration_ids
 
 
 def get_users_data(member_ids: Any) -> Any:
@@ -128,6 +134,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
                 "profile_del",
                 "char",
                 "char_confirm",
+                "debrief",
             ]
         }
         features = get_event_features(run.event_id)
@@ -161,6 +168,9 @@ def check_run_deadlines(runs: list[Run]) -> list:
 
         # Check character creation deadlines
         deadlines_character(deadline_violations, features, player_ids, run)
+
+        # Check debrief question deadlines
+        deadlines_debrief(deadline_violations, features, player_ids, run)
 
         result = {category: get_users_data(violations) for category, violations in deadline_violations.items()}
         result["run"] = run
@@ -365,3 +375,38 @@ def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) 
     collect["char"] = missing
     if requires_approval:
         collect["char_confirm"] = uncorfimed
+
+
+def deadlines_debrief(collect: Any, features: Any, player_ids: Any, run: Any) -> None:
+    """Check debrief question submission for players."""
+    if "debrief" not in features:
+        return
+
+    # debrief is only relevant once the run has actually taken place
+    if not run.end or get_time_diff_today(run.end) >= 0:
+        return
+
+    question_ids = list(
+        RegistrationQuestion.objects.filter(
+            event_id=run.event_id, applicable=RegistrationQuestionApplicable.DEBRIEF, deleted__isnull=True
+        ).values_list("id", flat=True)
+    )
+    # Skip if no debrief question set
+    if not question_ids:
+        return
+
+    registrations_by_member = dict(
+        Registration.objects.filter(
+            run=run, member_id__in=player_ids, cancellation_date__isnull=True, pending=False
+        ).values_list("member_id", "id")
+    )
+
+    answered_registration_ids = get_answered_registration_ids(
+        question_ids, registration_id__in=registrations_by_member.values()
+    )
+
+    collect["debrief"] = {
+        member_id
+        for member_id, registration_id in registrations_by_member.items()
+        if registration_id not in answered_registration_ids
+    }

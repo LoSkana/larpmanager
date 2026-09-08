@@ -93,6 +93,14 @@
                     <td>{{ widgets.deadlines.char_confirm }}</td>
                 </tr>
             {% endif %}
+            {% if widgets.deadlines.debrief %}
+                <tr>
+                    <td>
+                        <b>{% trans "Debrief not yet compiled" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.debrief }}</td>
+                </tr>
+            {% endif %}
         </table>
     </div>
 {% endif %}

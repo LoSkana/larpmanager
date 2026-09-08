@@ -91,11 +91,11 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // Max length field visibility
-        const maxLengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title", "additional_tickets"];
+        const maxLengtheable = ["m", "t", "p", "e", "l", "name", "teaser", "text", "title", "additional_tickets"];
         $('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
 
         // Printable and visibility fields
-        if (["s", "m", "t", "p", "e", "c"].includes(selectedValue)) {
+        if (["s", "m", "t", "p", "e", "l", "c"].includes(selectedValue)) {
             $('#id_printable_tr').fadeIn(speed);
             $('#id_visibility_tr').fadeIn(speed);
         } else {
@@ -104,7 +104,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // Requirements gate only the questions rendered with their own field key
-        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e"].includes(selectedValue));
+        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e", "l"].includes(selectedValue));
 
         // Hide visibility for specific types
         if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
