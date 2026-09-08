@@ -832,6 +832,9 @@ msgstr "Δημιουργήθηκε"
 msgid "Credits"
 msgstr "Credits"
 
+msgid "Debrief"
+msgstr "Απολογισμός"
+
 msgid "Decline"
 msgstr "Απόρριψε"
 
@@ -2369,6 +2372,9 @@ msgstr "Όνομα credits"
 msgid "Data sharing"
 msgstr "Κοινοποίηση δεδομένων"
 
+msgid "Debrief Form"
+msgstr "Φόρμα απολογισμού"
+
 msgid "Description:"
 msgstr "Περιγραφή:"
 
@@ -2422,6 +2428,9 @@ msgstr "Νομική ειδοποίηση"
 
 msgid "Legal notice"
 msgstr "Νομική ειδοποίηση"
+
+msgid "Likert scale"
+msgstr "Κλίμακα Likert"
 
 msgid "Members list"
 msgstr "Λίστα μελών"
@@ -3206,6 +3215,9 @@ msgstr "Προθεσμία (ημερομηνία)"
 msgid "Deadline (days)"
 msgstr "Προθεσμία (ημέρες)"
 
+msgid "Debrief answers"
+msgstr "Απαντήσεις απολογισμού"
+
 msgid "Delegated users"
 msgstr "Εξουσιοδοτημένοι χρήστες"
 
@@ -3256,6 +3268,9 @@ msgstr "Τύποι απογραφής"
 
 msgid "Invite declined"
 msgstr "Η πρόσκληση απορρίφθηκε"
+
+msgid "Load characters"
+msgstr "Φόρτωση χαρακτήρων"
 
 msgid "Manage it here!"
 msgstr "Διαχειρίσου τη εδώ!"
@@ -3792,6 +3807,9 @@ msgstr "Έλεγχος φορολογικού κωδικού"
 msgid "Fixed instalments"
 msgstr "Σταθερές δόσεις"
 
+msgid "From participants"
+msgstr "Από συμμετέχοντες"
+
 msgid "Generating Bundle"
 msgstr "Δημιουργία πακέτου"
 
@@ -3812,9 +3830,6 @@ msgstr "Εσωτερική εστίαση"
 
 msgid "Invalid selection"
 msgstr "Μη έγκυρη επιλογή"
-
-msgid "Load participants"
-msgstr "Φόρτωση συμμετεχόντων"
 
 msgid "Maximum available"
 msgstr "Μέγιστο διαθέσιμο"
@@ -5135,6 +5150,9 @@ msgstr "Δημιούργησε έναν ακόμη χαρακτήρα"
 msgid "Create your organization"
 msgstr "Δημιούργησε τον οργανισμό σου"
 
+msgid "Debrief not yet compiled"
+msgstr "Ο απολογισμός δεν έχει συμπληρωθεί ακόμη"
+
 msgid "Disable character finder"
 msgstr "Απενεργοποίηση εύρεσης χαρακτήρα"
 
@@ -5426,6 +5444,9 @@ msgstr "Επίλεξε μέθοδο πληρωμής:"
 msgid "City or place of the event"
 msgstr "Πόλη ή τόπος του event"
 
+msgid "Configure the debrief form"
+msgstr "Ρύθμιση της φόρμας απολογισμού"
+
 msgid "Disable auto relationships"
 msgstr "Απενεργοποίηση αυτόματων σχέσεων"
 
@@ -5685,6 +5706,9 @@ msgstr "Απενεργοποίηση έγκρισης σε επίπεδο εκδ
 msgid "Enter your preferences here!"
 msgstr "Εισήγαγε εδώ τις προτιμήσεις σου!"
 
+msgid "From checked-in participants"
+msgstr "Από συμμετέχοντες που έχουν κάνει check-in"
+
 msgid "Go to organization dashboard"
 msgstr "Μετάβαση στον πίνακα οργανισμού"
 
@@ -5694,9 +5718,6 @@ msgstr "Η πρόσκληση στάλθηκε στο %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Η ζωντανή συνομιλία δεν έχει ρυθμιστεί."
-
-msgid "Load checked-in participants"
-msgstr "Φόρτωση συμμετεχόντων που έκαναν check-in"
 
 msgid "Manage modules for workshops"
 msgstr "Διαχείριση ενοτήτων για εργαστήρια"
@@ -6225,6 +6246,9 @@ msgstr "Αν αυτό το token έχει χρησιμοποιηθεί"
 
 msgid "Workshop question answer options"
 msgstr "Επιλογές απαντήσεων ερωτήσεων workshop"
+
+msgid "You can now set the debrief form"
+msgstr "Τώρα μπορείς να ρυθμίσεις τη φόρμα απολογισμού"
 
 msgid "You can now set the vote options"
 msgstr "Τώρα μπορείς να ορίσεις τις επιλογές ψηφοφορίας"
@@ -7037,6 +7061,9 @@ msgstr "Τρέχον οικονομικό υπόλοιπο για αυτή τη�
 msgid "Enter precisely your field of experience"
 msgstr "Δήλωσε με ακρίβεια τον τομέα εμπειρίας σου"
 
+msgid "From participants who filled the debrief"
+msgstr "Από συμμετέχοντες που συμπλήρωσαν τον απολογισμό"
+
 msgid "IP address from which the token was used"
 msgstr "Διεύθυνση IP από την οποία χρησιμοποιήθηκε το token"
 
@@ -7385,6 +7412,9 @@ msgstr "Δήλωσε ελεύθερα το ποσό της δωρεάς σου"
 
 msgid "Manage fields that track participants' data"
 msgstr "Διαχειρίσου τα πεδία που καταγράφουν τα δεδομένα των συμμετεχόντων"
+
+msgid "No debrief questions have been created yet."
+msgstr "Δεν έχουν δημιουργηθεί ακόμη ερωτήσεις απολογισμού."
 
 msgid "No outflows recorded for the selected year."
 msgstr "Δεν καταγράφηκαν εκροές για το επιλεγμένο έτος."
@@ -7989,6 +8019,9 @@ msgstr "Υπάρχει κάτι άλλο που θα ήθελες να μας π
 msgid "List of recipient email address, comma separated."
 msgstr "Λίστα διευθύνσεων email παραληπτών, χωρισμένων με κόμμα."
 
+msgid "No participant has answered the debrief form yet."
+msgstr "Κανένας συμμετέχων δεν έχει απαντήσει ακόμη στη φόρμα απολογισμού."
+
 msgid "Only some of the platform features are activated."
 msgstr ""
 "Είναι ενεργοποιημένες μόνο ορισμένες από τις λειτουργίες της πλατφόρμας."
@@ -8176,6 +8209,9 @@ msgstr ""
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Μπες στο Discord μας για βοήθεια, ιδέες ή για να αναφέρεις σφάλματα"
 
+msgid "Review participant answers to the debrief questions"
+msgstr "Δες τις απαντήσεις των συμμετεχόντων στις ερωτήσεις απολογισμού"
+
 msgid "Select which of your characters you want to access:"
 msgstr "Επίλεξε σε ποιον από τους χαρακτήρες σου θέλεις να έχεις πρόσβαση:"
 
@@ -8213,6 +8249,9 @@ msgstr ""
 
 msgid "An assignment for this item and area already exists."
 msgstr "Υπάρχει ήδη ανάθεση για αυτό το είδος και τον χώρο."
+
+msgid "Answer questions about your experience at the event!"
+msgstr "Απάντησε σε ερωτήσεις για την εμπειρία σου στο event!"
 
 msgid "Check consistency of the participants' personal data"
 msgstr "Έλεγχος συνέπειας των προσωπικών δεδομένων των συμμετεχόντων"
@@ -8627,6 +8666,9 @@ msgid "Main color for text content throughout your event's pages"
 msgstr ""
 "Κύριο χρώμα για το περιεχόμενο κειμένου σε όλες τις σελίδες της εκδήλωσής "
 "σου"
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr "Δεν έχουν οριστεί ακόμη ερωτήσεις απολογισμού για αυτό το event."
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Προαιρετικό - Άλλες επιλογές ως απαιτήσεις, χωρισμένες με κόμματα"
@@ -9400,6 +9442,9 @@ msgstr "Προειδοποίηση: υπάρχει ήδη εγκεκριμένο
 msgid "You can also upload a second file with the registration options:"
 msgstr ""
 "Μπορείς επίσης να ανεβάσεις ένα δεύτερο αρχείο με τις επιλογές εγγραφής:"
+
+msgid "You must register for the event before answering these questions"
+msgstr "Πρέπει να εγγραφείς στο event πριν απαντήσεις σε αυτές τις ερωτήσεις"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Προαιρετικό) Αν η ικανότητα είναι ορατή στους χρήστες: true ή false"
@@ -10351,12 +10396,6 @@ msgid ""
 msgstr ""
 "Πρέπει να δημιουργήσεις τουλάχιστον έναν τύπο ικανότητας για να "
 "δημιουργήσεις ικανότητες"
-
-msgid ""
-"You must register for the event before answering the matchmaker questions"
-msgstr ""
-"Πρέπει να εγγραφείς στην εκδήλωση πριν απαντήσεις στις ερωτήσεις του "
-"Matchmaker"
 
 #, python-format
 msgid ""
@@ -13824,6 +13863,14 @@ msgstr ""
 "εισιτηρίου, ώστε να τις πληρώνει ο χρήστης αντί για τον οργανισμό;"
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+"Επιτρέπει στους διοργανωτές να ορίζουν προσαρμοσμένες ερωτήσεις για να τις "
+"συμπληρώνουν οι συμμετέχοντες μετά το event, ώστε να συλλέγουν το feedback "
+"τους"
+
+msgid ""
 "No answer options have been defined yet. Use the button above to add an "
 "answer option for a workshop question."
 msgstr ""
@@ -15241,6 +15288,15 @@ msgstr ""
 "guild. Οι παίκτες μπορούν επίσης να δημιουργούν guilds μόνοι τους, να "
 "προσκαλούν χαρακτήρες και να διαχειρίζονται τη συμμετοχή από τη σελίδα του "
 "event."
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
+msgstr ""
+"Προαιρετικό - Για ερωτήσεις κειμένου, μέγιστος αριθμός χαρακτήρων· για "
+"πολλαπλές επιλογές, μέγιστος αριθμός επιλογών· για ερωτήσεις κλίμακας "
+"Likert, μέγιστη τιμή της κλίμακας (0 = χωρίς όριο)"
 
 msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"

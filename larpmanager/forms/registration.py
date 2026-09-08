@@ -656,21 +656,18 @@ class RegistrationGiftForm(RegistrationForm):
         self.has_mandatory = len(self.mandatory) > 0
 
 
-class MatchmakerForm(BaseRegistrationForm):
-    """Player-facing form for the matchmaker questions (e.g. "what would you like to play").
+class SingleApplicableRegistrationForm(BaseRegistrationForm):
+    """General base for player-facing forms, bound to an existing Registration, yet managed separately."""
 
-    Bound to an existing Registration; fully separate from the standard RegistrationForm
-    and from the casting (preference/ranking) feature - only handles questions with
-    applicable=RegistrationQuestionApplicable.MATCHMAKER, reusing the same
-    answer/choice save machinery as the standard registration form.
-    """
+    # The type of registration questions to handle
+    applicable: RegistrationQuestionApplicable
 
     class Meta:
         model = Registration
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with the matchmaker questions for the current event."""
+        """Initialize form with the applicable-scoped questions for the current event."""
         super().__init__(*args, **kwargs)
 
         self.questions = []
@@ -681,16 +678,14 @@ class MatchmakerForm(BaseRegistrationForm):
         event_id = self.params["run"].event_id
         self._init_registration_question(self.instance, event_id)
         for question in self.questions:
-            self._init_matchmaker_field(question)
+            self._init_applicable_field(question)
 
     def _init_questions(self, event_id: int) -> None:
-        """Load only the matchmaker-applicable registration questions."""
-        self.questions = get_cached_registration_questions(
-            event_id, applicable=RegistrationQuestionApplicable.MATCHMAKER
-        )
+        """Load only the questions matching this form's applicable value."""
+        self.questions = get_cached_registration_questions(event_id, applicable=self.applicable)
 
-    def _init_matchmaker_field(self, question: dict) -> None:
-        """Initialize a single matchmaker question field (mirrors RegistrationForm.init_question)."""
+    def _init_applicable_field(self, question: dict) -> None:
+        """Initialize a single question field (mirrors RegistrationForm.init_question)."""
         if skip_registration_question(question, self.instance, self.params["features"]):
             return
 
@@ -707,9 +702,21 @@ class MatchmakerForm(BaseRegistrationForm):
                 self.section_descriptions[question["section_name"]] = question["section_description"]
 
     def save(self, commit: bool = True) -> Registration:  # noqa: FBT001, FBT002, ARG002
-        """Save answers/choices for the matchmaker questions onto the bound registration."""
+        """Save answers/choices for the applicable-scoped questions onto the bound registration."""
         self.save_registration_questions(self.instance, is_organizer=False)
         return self.instance
+
+
+class MatchmakerForm(SingleApplicableRegistrationForm):
+    """Player-facing form for the matchmaker questions (e.g. "what would you like to play")."""
+
+    applicable = RegistrationQuestionApplicable.MATCHMAKER
+
+
+class DebriefForm(SingleApplicableRegistrationForm):
+    """Player-facing form for the debrief questions (post-event feedback from participants)."""
+
+    applicable = RegistrationQuestionApplicable.DEBRIEF
 
 
 class RequestApprovalForm(BaseRegistrationForm):

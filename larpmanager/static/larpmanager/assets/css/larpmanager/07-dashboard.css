@@ -45,6 +45,52 @@
   margin: 0.5em;
 }
 
+/* Dropdown button in the table header toolbar (e.g. "Load characters" with sub-options) */
+.staff-list .orga-buttons {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.button-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.button-dropdown summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.button-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.button-dropdown ul {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  margin: 0.2em 0 0;
+  padding: 0.3em 0;
+  list-style: none;
+  min-width: 100%;
+  white-space: nowrap;
+  background: var(--sec-clr);
+  border: 1px solid rgba(var(--pri-rgb), 0.2);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button-dropdown ul li a {
+  display: block;
+  padding: 0.5em 1em;
+}
+
+.button-dropdown ul li a:hover {
+  background: rgba(var(--pri-rgb), 0.08);
+}
+
 /*** MOBILE ***/
 
 @media screen and (max-width: 840px) {

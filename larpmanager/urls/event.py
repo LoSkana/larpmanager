@@ -234,6 +234,11 @@ urlpatterns = [
         name="matchmaker",
     ),
     path(
+        "<slug:event_slug>/debrief/",
+        views_ue.debrief,
+        name="debrief",
+    ),
+    path(
         "<slug:event_slug>/factions/",
         views_ue.factions,
         name="factions",

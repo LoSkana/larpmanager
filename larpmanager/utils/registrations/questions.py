@@ -69,6 +69,26 @@ def get_registration_answers_by_question(
     return answers_by_registration
 
 
+def get_answered_registration_ids(question_ids: list[int], **registration_filter: Any) -> set[int]:
+    """Get ids of registrations that have at least one answer or choice for the given questions.
+
+    Args:
+        question_ids: Ids of the registration questions to check for answers
+        registration_filter: Extra filter kwargs scoping which registrations are considered
+            (e.g. registration_id__in=[...] or registration__run=run)
+
+    """
+    return set(
+        RegistrationAnswer.objects.filter(question_id__in=question_ids, **registration_filter).values_list(
+            "registration_id", flat=True
+        )
+    ) | set(
+        RegistrationChoice.objects.filter(question_id__in=question_ids, **registration_filter).values_list(
+            "registration_id", flat=True
+        )
+    )
+
+
 def get_registration_choices_by_question(
     question_ids: list[int], **registration_filter: Any
 ) -> dict[int, dict[int, list[str]]]:

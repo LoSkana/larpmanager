@@ -74,6 +74,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+DEFAULT_LIKERT_MAX = 5
+
 
 class FormMixin:
     """Mixin for common form operations."""
@@ -1090,6 +1092,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
             self.init_faction_preference(field_key, question, is_required=is_required)
 
+        # Handle Likert scale fields
+        elif question["typ"] == RegistrationQuestionType.LIKERT:
+            self.init_likert(field_key, question, is_required=is_required, is_field_active=is_field_active)
+
         # Handle special question types (custom implementations)
         else:
             field_key = self.init_special(question, is_required=is_required)
@@ -1282,6 +1288,31 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         self.initial[field_key] = ",".join(ordered_uuids)
 
+    def init_likert(self, field_key: str, question: dict, *, is_required: bool, is_field_active: bool = True) -> None:
+        """Initialize a Likert scale field, rendered as radio choices from 1 to max_length.
+
+        The submitted value is the selected integer, stored as text answer.
+        """
+        scale_max = question.get("max_length") or DEFAULT_LIKERT_MAX
+        choices = [(str(value), str(value)) for value in range(1, scale_max + 1)]
+
+        widget = (
+            forms.RadioSelect(attrs={"class": "my-radio-class likert-radio"})
+            if is_field_active
+            else ReadOnlyChoiceWidget()
+        )
+
+        self.fields[field_key] = forms.ChoiceField(
+            required=is_required,
+            choices=choices,
+            widget=widget,
+            label=question["name"],
+            help_text=question["description"],
+        )
+
+        if question["id"] in self.answers:
+            self.initial[field_key] = self.answers[question["id"]].text
+
     def init_single(
         self,
         field_key: str,
@@ -1472,6 +1503,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.save_registration_text(instance, oid, question)
             elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
                 self.save_registration_faction_preference(instance, oid, question)
+            elif question["typ"] == RegistrationQuestionType.LIKERT:
+                self.save_registration_text(instance, oid, question)
 
     def save_registration_faction_preference(self, instance: Any, value: str | None, question: dict) -> None:
         """Sanitize and save the submitted faction ordering.

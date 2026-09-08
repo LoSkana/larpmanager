@@ -480,6 +480,18 @@
     module: matchmaker
 - model: larpmanager.eventpermission
   fields:
+    name: Debrief answers
+    descr: Review participant answers to the debrief questions
+    slug: orga_debrief_answers
+    number: 110
+    config: null
+    active_if: null
+    hidden: false
+    icon: comment-dots
+    feature: debrief
+    module: registration
+- model: larpmanager.eventpermission
+  fields:
     name: Surcharges
     descr: Manage the registration surcharges
     slug: orga_registration_surcharges

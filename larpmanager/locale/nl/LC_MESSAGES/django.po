@@ -832,6 +832,9 @@ msgstr "Gemaakt"
 msgid "Credits"
 msgstr "Credits"
 
+msgid "Debrief"
+msgstr "Nabespreking"
+
 msgid "Decline"
 msgstr "Afwijzen"
 
@@ -2369,6 +2372,9 @@ msgstr "Naam Credits"
 msgid "Data sharing"
 msgstr "Het delen van gegevens"
 
+msgid "Debrief Form"
+msgstr "Nabesprekingsformulier"
+
 msgid "Description:"
 msgstr "Beschrijving:"
 
@@ -2422,6 +2428,9 @@ msgstr "Wettelijke kennisgeving"
 
 msgid "Legal notice"
 msgstr "Wettelijke kennisgeving"
+
+msgid "Likert scale"
+msgstr "Likert-schaal"
 
 msgid "Members list"
 msgstr "Ledenlijst"
@@ -3206,6 +3215,9 @@ msgstr "Uiterste datum"
 msgid "Deadline (days)"
 msgstr "Termijn (dagen)"
 
+msgid "Debrief answers"
+msgstr "Antwoorden op de nabespreking"
+
 msgid "Delegated users"
 msgstr "Gedelegeerde gebruikers"
 
@@ -3256,6 +3268,9 @@ msgstr "Inventaristypen"
 
 msgid "Invite declined"
 msgstr "Uitnodiging geweigerd"
+
+msgid "Load characters"
+msgstr "Characters laden"
 
 msgid "Manage it here!"
 msgstr "Beheer het hier!"
@@ -3792,6 +3807,9 @@ msgstr "Fiscale codecontrole"
 msgid "Fixed instalments"
 msgstr "Vaste termijnen"
 
+msgid "From participants"
+msgstr "Van deelnemers"
+
 msgid "Generating Bundle"
 msgstr "Bundel wordt gegenereerd"
 
@@ -3812,9 +3830,6 @@ msgstr "Interne catering"
 
 msgid "Invalid selection"
 msgstr "Ongeldige selectie"
-
-msgid "Load participants"
-msgstr "Deelnemers laden"
 
 msgid "Maximum available"
 msgstr "Maximaal beschikbaar"
@@ -5135,6 +5150,9 @@ msgstr "Maak nog een personage aan"
 msgid "Create your organization"
 msgstr "Maak je organisatie aan"
 
+msgid "Debrief not yet compiled"
+msgstr "Nabespreking nog niet samengesteld"
+
 msgid "Disable character finder"
 msgstr "Karakterzoeker uitschakelen"
 
@@ -5426,6 +5444,9 @@ msgstr "Kies het betaalmiddel:"
 msgid "City or place of the event"
 msgstr "Stad of plaats van het evenement"
 
+msgid "Configure the debrief form"
+msgstr "Het nabesprekingsformulier configureren"
+
 msgid "Disable auto relationships"
 msgstr "Automatische relaties uitschakelen"
 
@@ -5685,6 +5706,9 @@ msgstr "Goedkeuring op gebeurtenisniveau uitschakelen"
 msgid "Enter your preferences here!"
 msgstr "Geef hier je voorkeuren aan!"
 
+msgid "From checked-in participants"
+msgstr "Van ingecheckte deelnemers"
+
 msgid "Go to organization dashboard"
 msgstr "Ga naar het dashboard van de organisatie"
 
@@ -5694,9 +5718,6 @@ msgstr "Uitnodiging verstuurd naar %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "De livechat is niet ingesteld."
-
-msgid "Load checked-in participants"
-msgstr "Ingecheckte deelnemers laden"
 
 msgid "Manage modules for workshops"
 msgstr "Beheer modules voor workshops"
@@ -6225,6 +6246,9 @@ msgstr "Of dit token is gebruikt"
 
 msgid "Workshop question answer options"
 msgstr "Antwoordopties voor vragen tijdens de workshop"
+
+msgid "You can now set the debrief form"
+msgstr "Je kunt nu het nabesprekingsformulier instellen"
 
 msgid "You can now set the vote options"
 msgstr "Je kunt nu de stemopties instellen"
@@ -7037,6 +7061,9 @@ msgstr "Huidige financiële balans voor dit evenement"
 msgid "Enter precisely your field of experience"
 msgstr "Vul nauwkeurig je ervaringsgebied in"
 
+msgid "From participants who filled the debrief"
+msgstr "Van deelnemers die de nabespreking hebben ingevuld"
+
 msgid "IP address from which the token was used"
 msgstr "IP-adres van waaruit het token is gebruikt"
 
@@ -7384,6 +7411,9 @@ msgstr "Geef vrij het bedrag van je donatie aan"
 
 msgid "Manage fields that track participants' data"
 msgstr "Beheer velden die deelnemersgegevens bijhouden"
+
+msgid "No debrief questions have been created yet."
+msgstr "Er zijn nog geen nabesprekingsvragen aangemaakt."
 
 msgid "No outflows recorded for the selected year."
 msgstr "Er zijn geen uitgaven geregistreerd voor het geselecteerde jaar."
@@ -7987,6 +8017,9 @@ msgstr "Is er nog iets dat je ons wilt vertellen?"
 msgid "List of recipient email address, comma separated."
 msgstr "Lijst met e-mailadressen van ontvangers, gescheiden door komma's."
 
+msgid "No participant has answered the debrief form yet."
+msgstr "Nog geen deelnemer heeft het nabesprekingsformulier ingevuld."
+
 msgid "Only some of the platform features are activated."
 msgstr "Slechts een deel van de functies van het platform is geactiveerd."
 
@@ -8166,6 +8199,9 @@ msgstr ""
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
+msgid "Review participant answers to the debrief questions"
+msgstr "De antwoorden van deelnemers op de nabesprekingsvragen bekijken"
+
 msgid "Select which of your characters you want to access:"
 msgstr "Selecteer welke van je personages je wilt openen:"
 
@@ -8200,6 +8236,9 @@ msgstr ""
 
 msgid "An assignment for this item and area already exists."
 msgstr "Er bestaat al een toewijzing voor dit item en deze zone."
+
+msgid "Answer questions about your experience at the event!"
+msgstr "Beantwoord vragen over je ervaring tijdens het evenement!"
 
 msgid "Check consistency of the participants' personal data"
 msgstr "Controleer de consistentie van de persoonsgegevens van de deelnemers"
@@ -8595,6 +8634,9 @@ msgstr ""
 
 msgid "Main color for text content throughout your event's pages"
 msgstr "Hoofdkleur voor tekstinhoud op alle pagina's van je evenement"
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr "Er zijn nog geen nabesprekingsvragen ingesteld voor dit evenement."
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Optioneel - Andere opties als vereisten, door komma's gescheiden"
@@ -9335,6 +9377,11 @@ msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties:"
+
+msgid "You must register for the event before answering these questions"
+msgstr ""
+"Je moet je voor het evenement registreren voordat je deze vragen kunt "
+"beantwoorden"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
@@ -10269,12 +10316,6 @@ msgid ""
 msgstr ""
 "Je moet minstens één type vaardigheid maken voordat je vaardigheden kunt "
 "maken"
-
-msgid ""
-"You must register for the event before answering the matchmaker questions"
-msgstr ""
-"Je moet je eerst aanmelden voor het evenement voordat je de vragen van de "
-"matchmaker kunt beantwoorden"
 
 #, python-format
 msgid ""
@@ -13730,6 +13771,13 @@ msgstr ""
 "de gebruiker ze betaalt in plaats van de organisatie?"
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+"Hiermee kunnen organisatoren aangepaste vragen opstellen die deelnemers na "
+"het evenement invullen, om hun feedback te verzamelen"
+
+msgid ""
 "No answer options have been defined yet. Use the button above to add an "
 "answer option for a workshop question."
 msgstr ""
@@ -15136,6 +15184,15 @@ msgstr ""
 "Kies uit de vervolgkeuzelijst de personages die je aan de gilde wilt "
 "toevoegen. Spelers kunnen ook zelf gildes aanmaken, personages uitnodigen en"
 " het lidmaatschap beheren via de evenementpagina."
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
+msgstr ""
+"Optioneel - Voor tekstvragen, maximum aantal tekens; voor meerkeuzevragen, "
+"maximum aantal opties; voor Likert-schaalvragen, maximumwaarde van de schaal"
+" (0 = geen limiet)"
 
 msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"

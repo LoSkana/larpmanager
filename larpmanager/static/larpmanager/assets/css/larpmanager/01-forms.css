@@ -15,6 +15,10 @@ form {
   margin: 0 auto 1em;
 }
 
+form.inline {
+  margin: 0;
+}
+
 .selector {
   width: 100% !important;
 }
@@ -422,6 +426,19 @@ input[type="checkbox"].checkbox_single {
 .reg-checkbox-class label,
 .reg-radio-class label {
   cursor: pointer;
+}
+
+.likert-radio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em 1.5em;
+}
+
+@media (max-width: 840px) {
+  .likert-radio {
+    flex-direction: column;
+    gap: 0.4em;
+  }
 }
 
 .opt-card-body {

@@ -167,6 +167,16 @@ def _add_registration_items(
                     active=active == "matchmaker",
                 )
             )
+        if "debrief" in features:
+            items.append(
+                _item(
+                    reverse("debrief", args=[slug]),
+                    "fa-solid fa-comment-dots",
+                    _("Debrief"),
+                    str(_("Answer questions about your experience at the event!")),
+                    active=active == "debrief",
+                )
+            )
     else:
         items.append(
             _item(

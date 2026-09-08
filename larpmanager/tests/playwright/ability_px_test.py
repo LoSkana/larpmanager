@@ -421,7 +421,8 @@ def award_auto_populate(page: Any, live_server: Any) -> None:
     """Test auto-populate award from run via Load participants button."""
     # Go to awards page and click Load participants
     go_to(page, live_server, "/test/manage/experience/awards/")
-    page.get_by_role("link", name="Load participants").click()
+    page.locator("summary", has_text="Load characters").click()
+    page.locator("details.button-dropdown a[href*='/awards/load/']").click()
     edit_iframe = get_modal_iframe(page)
 
     # Fill in award name and amount inside the modal

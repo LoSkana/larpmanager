@@ -56,6 +56,9 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
         "matchmaker_form": lambda: form_load(
             context, upload_form_data, is_registration=True, applicable=RegistrationQuestionApplicable.MATCHMAKER
         ),
+        "debrief_form": lambda: form_load(
+            context, upload_form_data, is_registration=True, applicable=RegistrationQuestionApplicable.DEBRIEF
+        ),
         "character_form": lambda: form_load(context, upload_form_data, is_registration=False),
         "registration": lambda: registrations_load(context, upload_form_data),
         "exp_abilitie": lambda: abilities_load(context, upload_form_data),

@@ -832,6 +832,9 @@ msgstr "Vytvořeno"
 msgid "Credits"
 msgstr "Kredity"
 
+msgid "Debrief"
+msgstr "Debrief"
+
 msgid "Decline"
 msgstr "Odmítnout"
 
@@ -2369,6 +2372,9 @@ msgstr "Název kreditů"
 msgid "Data sharing"
 msgstr "Sdílení dat"
 
+msgid "Debrief Form"
+msgstr "Formulář debriefingu"
+
 msgid "Description:"
 msgstr "Popis:"
 
@@ -2422,6 +2428,9 @@ msgstr "Právní upozornění"
 
 msgid "Legal notice"
 msgstr "Právní upozornění"
+
+msgid "Likert scale"
+msgstr "Likertova škála"
 
 msgid "Members list"
 msgstr "Seznam členů"
@@ -3206,6 +3215,9 @@ msgstr "Termín (datum)"
 msgid "Deadline (days)"
 msgstr "Termín (dny)"
 
+msgid "Debrief answers"
+msgstr "Odpovědi na debrief"
+
 msgid "Delegated users"
 msgstr "Delegovaní uživatelé"
 
@@ -3256,6 +3268,9 @@ msgstr "Typy inventáře"
 
 msgid "Invite declined"
 msgstr "Pozvánka byla odmítnuta"
+
+msgid "Load characters"
+msgstr "Načíst postavy"
 
 msgid "Manage it here!"
 msgstr "Spravuj ji zde!"
@@ -3792,6 +3807,9 @@ msgstr "Kontrola daňového kódu"
 msgid "Fixed instalments"
 msgstr "Pevné splátky"
 
+msgid "From participants"
+msgstr "Od účastníků"
+
 msgid "Generating Bundle"
 msgstr "Vytvoření balíčku"
 
@@ -3812,9 +3830,6 @@ msgstr "Interní stravování"
 
 msgid "Invalid selection"
 msgstr "Neplatný výběr"
-
-msgid "Load participants"
-msgstr "Načíst účastníky"
 
 msgid "Maximum available"
 msgstr "Maximální dostupný počet"
@@ -5135,6 +5150,9 @@ msgstr "Vytvořit další postavu"
 msgid "Create your organization"
 msgstr "Vytvoř svou organizaci"
 
+msgid "Debrief not yet compiled"
+msgstr "Debrief ještě nebyl sestaven"
+
 msgid "Disable character finder"
 msgstr "Zakázat vyhledávač postav"
 
@@ -5426,6 +5444,9 @@ msgstr "Zvol způsob platby:"
 msgid "City or place of the event"
 msgstr "Město nebo místo konání akce"
 
+msgid "Configure the debrief form"
+msgstr "Nastavit formulář debriefingu"
+
 msgid "Disable auto relationships"
 msgstr "Zakaž automatické vztahy"
 
@@ -5685,6 +5706,9 @@ msgstr "Zakaž schvalování na úrovni událostí"
 msgid "Enter your preferences here!"
 msgstr "Zde uveď své preference!"
 
+msgid "From checked-in participants"
+msgstr "Od odbavených účastníků"
+
 msgid "Go to organization dashboard"
 msgstr "Přejdi na řídicí panel organizace"
 
@@ -5694,9 +5718,6 @@ msgstr "Pozvánka zaslaná na %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Živý chat není nastaven."
-
-msgid "Load checked-in participants"
-msgstr "Načíst účastníky s potvrzeným check-inem"
 
 msgid "Manage modules for workshops"
 msgstr "Spravovat moduly pro workshopy"
@@ -6225,6 +6246,9 @@ msgstr "Zda byl tento token použit"
 
 msgid "Workshop question answer options"
 msgstr "Možnosti odpovědí na otázky v rámci workshopu"
+
+msgid "You can now set the debrief form"
+msgstr "Nyní můžeš nastavit formulář debriefingu"
 
 msgid "You can now set the vote options"
 msgstr "Nyní můžeš nastavit možnosti hlasování"
@@ -7037,6 +7061,9 @@ msgstr "Aktuální finanční zůstatek pro tuto akci"
 msgid "Enter precisely your field of experience"
 msgstr "Přesně zadej svou oblast zkušeností"
 
+msgid "From participants who filled the debrief"
+msgstr "Od účastníků, kteří vyplnili debrief"
+
 msgid "IP address from which the token was used"
 msgstr "IP adresa, ze které byl token použit"
 
@@ -7384,6 +7411,9 @@ msgstr "Volně uveď výši svého daru"
 
 msgid "Manage fields that track participants' data"
 msgstr "Spravovat pole sledující údaje účastníků"
+
+msgid "No debrief questions have been created yet."
+msgstr "Zatím nebyly vytvořeny žádné otázky pro debrief."
 
 msgid "No outflows recorded for the selected year."
 msgstr "Za vybraný rok nebyly zaznamenány žádné odtoky."
@@ -7979,6 +8009,9 @@ msgstr "Chceš nám ještě něco říct?"
 msgid "List of recipient email address, comma separated."
 msgstr "Seznam e-mailových adres příjemců oddělených čárkami."
 
+msgid "No participant has answered the debrief form yet."
+msgstr "Formulář debriefingu zatím nevyplnil žádný účastník."
+
 msgid "Only some of the platform features are activated."
 msgstr "Jsou aktivovány pouze některé funkce platformy."
 
@@ -8151,6 +8184,9 @@ msgstr "Je-li povoleno, nepoužívat frakce nadřazené akce."
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Připoj se k našemu Discordu a získej pomoc, nápady nebo nahlas chyby"
 
+msgid "Review participant answers to the debrief questions"
+msgstr "Prohlédni si odpovědi účastníků na otázky debriefingu"
+
 msgid "Select which of your characters you want to access:"
 msgstr "Vyber, ke které ze svých postav chceš získat přístup:"
 
@@ -8185,6 +8221,9 @@ msgstr ""
 
 msgid "An assignment for this item and area already exists."
 msgstr "Přiřazení pro tuto položku a oblast již existuje."
+
+msgid "Answer questions about your experience at the event!"
+msgstr "Odpověz na otázky o svých zkušenostech z akce!"
 
 msgid "Check consistency of the participants' personal data"
 msgstr "Zkontrolovat správnost osobních údajů účastníků"
@@ -8563,6 +8602,9 @@ msgstr "Je-li vybráno, pro každou akci se zobrazí seznam autorů."
 
 msgid "Main color for text content throughout your event's pages"
 msgstr "Hlavní barva pro textový obsah na stránkách tvé události"
+
+msgid "No debrief questions have been set up for this event yet."
+msgstr "Pro tuto akci zatím nebyly nastaveny žádné otázky pro debrief."
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Nepovinné – Další možnosti jako požadavky, oddělené čárkami"
@@ -9205,6 +9247,9 @@ msgstr "Upozornění: již existuje schválený člen se stejným jménem!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Můžeš také nahrát druhý soubor s možnostmi registrace:"
+
+msgid "You must register for the event before answering these questions"
+msgstr "Před zodpovězením těchto otázek se musíš na akci zaregistrovat"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Volitelné) Zda je schopnost viditelná pro uživatele: true nebo false"
@@ -9986,10 +10031,6 @@ msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
 "Před vytvořením schopností musíš vytvořit alespoň jeden typ schopnosti"
-
-msgid ""
-"You must register for the event before answering the matchmaker questions"
-msgstr "Musíš se zaregistrovat na akci, než odpovíš na otázky Matchmakeru"
 
 #, python-format
 msgid ""
@@ -13321,6 +13362,13 @@ msgstr ""
 "uživatel místo organizace?"
 
 msgid ""
+"Lets organizers define custom questions for participants to fill in after "
+"the event, to collect their feedback"
+msgstr ""
+"Umožňuje organizátorům definovat vlastní otázky, které účastníci vyplní po "
+"akci, aby se získala jejich zpětná vazba"
+
+msgid ""
 "No answer options have been defined yet. Use the button above to add an "
 "answer option for a workshop question."
 msgstr ""
@@ -14669,6 +14717,15 @@ msgstr ""
 "Z rozevíracího seznamu vyber postavy, které chceš přidat do cechu. Hráči si "
 "také mohou sami zakládat cechy, zvát do nich postavy a spravovat členství na"
 " stránce události."
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale (0 = no limit)"
+msgstr ""
+"Volitelné – u textových otázek maximální počet znaků; u otázek s více "
+"možnostmi maximální počet možností; u otázek s Likertovou škálou maximální "
+"hodnota škály (0 = bez omezení)"
 
 msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"

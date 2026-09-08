@@ -39,6 +39,7 @@ COPY_TARGETS: list[tuple[str, Any]] = [
     ("ticket", _("Registration Tickets")),
     ("question", _("Registration Form")),
     ("matchmaker_question", _("Matchmaker Form")),
+    ("debrief_question", _("Debrief Form")),
     ("discount", _("Discount")),
     ("quota", _("Registration Quota")),
     ("installment", _("Registration Installment")),
@@ -58,4 +59,5 @@ COPY_TARGETS: list[tuple[str, Any]] = [
 
 def get_copy_choices(features: Any) -> list[tuple[str, Any]]:
     """Return the element types available for copy, given the features of the event."""
-    return [(key, label) for key, label in COPY_TARGETS if key != "matchmaker_question" or "matchmaker" in features]
+    gated = {"matchmaker_question": "matchmaker", "debrief_question": "debrief"}
+    return [(key, label) for key, label in COPY_TARGETS if key not in gated or gated[key] in features]

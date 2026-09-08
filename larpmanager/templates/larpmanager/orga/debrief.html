@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Matchmaker answers" %} - {{ run.search | truncatechars:50 }}
+    {% trans "Debrief answers" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {{ page_info }}
@@ -9,13 +9,13 @@
 {% block content %}
     {% if not questions %}
         <p class="no-elements-available">
-            {% trans "No matchmaker questions have been created yet." %}
-            <a href="{% url 'orga_registration_form' run.get_slug "matchmaker" %}">{% trans "Configure the matchmaker form" %}</a>.
+            {% trans "No debrief questions have been created yet." %}
+            <a href="{% url 'orga_registration_form' run.get_slug "debrief" %}">{% trans "Configure the debrief form" %}</a>.
         </p>
     {% elif not rows %}
-        <p class="no-elements-available">{% trans "No participant has answered the matchmaker form yet." %}</p>
+        <p class="no-elements-available">{% trans "No participant has answered the debrief form yet." %}</p>
     {% else %}
-        <table id="matchmaker_answers" class="go_datatable writing">
+        <table id="debrief_answers" class="go_datatable writing">
             <thead>
                 <tr>
                     <th>{% trans "Participant" %}</th>
@@ -31,5 +31,6 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% include "elements/likert_charts.html" %}
     {% endif %}
 {% endblock content %}

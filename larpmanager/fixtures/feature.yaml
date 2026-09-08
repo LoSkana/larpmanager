@@ -196,6 +196,19 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: Debrief
+    descr: Lets organizers define custom questions for participants to fill in after the event, to collect their feedback
+    slug: debrief
+    overall: false
+    placeholder: false
+    order: 92
+    after_text: You can now set the debrief form
+    after_link: form/debrief/
+    hidden: false
+    module: event
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Help
     descr: Allows participants to submit questions, and organizers to review and organize
       them

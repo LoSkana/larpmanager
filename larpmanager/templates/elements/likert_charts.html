@@ -1,0 +1,32 @@
+{% load i18n %}
+{% if likert_charts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
+    {% for chart in likert_charts %}
+        <h3>{{ chart.question.name }}</h3>
+        <canvas id="likert_chart_{{ forloop.counter }}" width="400" height="200"></canvas>
+        <script>
+(function() {
+    var ctx = document.getElementById('likert_chart_{{ forloop.counter }}').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for _unused in chart.counts %}{% include "elements/comma.html" with separator="," %}"{{ forloop.counter }}"{% endfor %}],
+            datasets: [{
+                label: '{{ chart.question.name|escapejs }}',
+                data: [{% for count in chart.counts %}{% include "elements/comma.html" with separator="," %}{{ count }}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            responsive: false,
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+        }
+    });
+})();
+        </script>
+    {% endfor %}
+{% endif %}

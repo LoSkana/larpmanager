@@ -31,7 +31,6 @@ from larpmanager.views.orga import (
     experience as views_ox,
     form as views_of,
     inventory as views_ci,
-    matchmaker as views_omm,
     member as views_om,
     miscellanea as views_oms,
     pdf as views_op,
@@ -1493,8 +1492,13 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/manage/matchmaker/",
-        views_omm.orga_matchmaker_answers,
+        views_of.orga_matchmaker_answers,
         name="orga_matchmaker_answers",
+    ),
+    path(
+        "<slug:event_slug>/manage/debrief/",
+        views_of.orga_debrief_answers,
+        name="orga_debrief_answers",
     ),
     path(
         "<slug:event_slug>/manage/accounting/",

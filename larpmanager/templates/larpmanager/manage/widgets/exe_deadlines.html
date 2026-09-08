@@ -77,6 +77,14 @@
                     </th>
                 </tr>
             {% endif %}
+            {% if widgets.deadlines.debrief %}
+                <tr>
+                    <th>
+                        {% trans "Debrief not yet compiled" %}
+                        <td>{{ widgets.deadlines.debrief }}</td>
+                    </th>
+                </tr>
+            {% endif %}
         </table>
     </div>
 {% endif %}

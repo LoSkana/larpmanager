@@ -20,6 +20,24 @@
                 {{ extra_link_label_2 }}
             </a>
         {% endif %}
+        {% if extra_dropdown_label %}
+            <details class="button-dropdown">
+                <summary class="new button">
+                    {% if extra_dropdown_icon %}<i class="{{ extra_dropdown_icon }}"></i>{% endif %}
+                    {{ extra_dropdown_label }}
+                </summary>
+                <ul>
+                    {% for link in extra_dropdown_links %}
+                        <li>
+                            <a href="{{ link.url }}" class="{{ link.link_class }}">
+                                {% if link.icon %}<i class="{{ link.icon }}"></i>{% endif %}
+                                {{ link.label }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </details>
+        {% endif %}
         {% if upload %}
             <a class="new button no_v22"
                href="{% url 'orga_upload' run.get_slug upload %}">
