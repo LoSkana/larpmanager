@@ -694,10 +694,12 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         Exception: Any error during file processing is caught and displayed to user
 
     """
-    # Check user permissions and get event context. The matchmaker form reuses the
-    # registration form's permission, since matchmaker questions are RegistrationQuestion
-    # rows managed through the same "orga_registration_form" screen.
-    permission_type = "registration_form" if upload_type == "matchmaker_form" else upload_type
+    # Check user permissions and get event context
+    permission_types = {
+        "matchmaker_form": "matchmaker_answers",
+        "debrief_form": "debrief_answers",
+    }
+    permission_type = permission_types.get(upload_type, upload_type)
     context = check_event_context(request, event_slug, f"orga_{permission_type}")
     context["typ"] = upload_type.rstrip("s")
     context["name"] = context["typ"]
@@ -712,6 +714,8 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         # Prepare redirect URL for after processing
         if upload_type == "matchmaker_form":
             redr = reverse("orga_registration_form", args=[context["run"].get_slug(), "matchmaker"])
+        elif upload_type == "debrief_form":
+            redr = reverse("orga_debrief_answers", args=[context["run"].get_slug()])
         else:
             redr = reverse(f"orga_{upload_type}", args=[context["run"].get_slug()])
 
