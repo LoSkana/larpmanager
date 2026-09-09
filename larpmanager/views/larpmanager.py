@@ -1199,9 +1199,10 @@ def lm_newsletter(request: HttpRequest) -> Any:
     if show_non_active:
         statuses.append(NewsletterStatus.NON_ACTIVE)
 
-    context["newsletter_list"] = (
-        LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("email") if statuses else []
+    newsletter_list = (
+        list(LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("email")) if statuses else []
     )
+    context["newsletter_list"] = [entry for entry in newsletter_list if clean_newsletter_email(entry.email)]
     context["show_active"] = show_active
     context["show_non_active"] = show_non_active
     context["newsletter_statuses"] = NewsletterStatus.choices
