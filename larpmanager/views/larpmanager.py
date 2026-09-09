@@ -22,6 +22,7 @@ from __future__ import annotations
 import json
 import random
 import re
+import unicodedata
 from datetime import date, timedelta
 from typing import Any
 
@@ -1017,6 +1018,148 @@ def lm_list(request: HttpRequest) -> Any:
     return render(request, "larpmanager/larpmanager/list.html", context)
 
 
+# Common gTLDs seen in real addresses (any 2-letter label is accepted below as a
+# ccTLD, this list only covers non-2-letter TLDs)
+NEWSLETTER_KNOWN_GTLDS = {
+    "com",
+    "net",
+    "org",
+    "info",
+    "biz",
+    "edu",
+    "gov",
+    "mil",
+    "int",
+    "coop",
+    "name",
+    "pro",
+    "mobi",
+    "aero",
+    "museum",
+    "jobs",
+    "travel",
+    "asia",
+    "app",
+    "dev",
+    "io",
+    "me",
+    "tv",
+    "eu",
+    "xyz",
+    "online",
+    "site",
+    "club",
+    "shop",
+    "store",
+    "tech",
+    "email",
+    "cloud",
+    "live",
+    "studio",
+    "agency",
+    "events",
+    "games",
+    "group",
+    "guide",
+    "guru",
+    "house",
+    "media",
+    "news",
+    "social",
+    "software",
+    "solutions",
+    "systems",
+    "team",
+    "tools",
+    "world",
+    "zone",
+}
+
+# Decimal-dot obfuscated local part, e.g. "105.110.102...@nospam.com" (anti-scraper encoding)
+NEWSLETTER_DECIMAL_OBFUSCATION_RE = re.compile(r"^(\d{1,3}\.){4,}\d{1,3}$")
+
+NEWSLETTER_JUNK_DOMAINS = {"nospam.com", "example.com", "domain.com", "email.com", "test.com"}
+
+NEWSLETTER_ROLE_LOCALPARTS = {
+    "abuse",
+    "postmaster",
+    "mailer-daemon",
+    "noreply",
+    "no-reply",
+    "donotreply",
+    "do-not-reply",
+    "webmaster",
+    "hostmaster",
+}
+
+# Disposable/throwaway mail providers: real inbox, but not worth keeping on a newsletter list
+NEWSLETTER_DISPOSABLE_DOMAINS = {
+    "mailinator.com",
+    "guerrillamail.com",
+    "guerrillamail.info",
+    "10minutemail.com",
+    "yopmail.com",
+    "tempmail.com",
+    "temp-mail.org",
+    "throwawaymail.com",
+    "trashmail.com",
+    "getnada.com",
+    "sharklasers.com",
+    "dispostable.com",
+    "fakeinbox.com",
+    "maildrop.cc",
+}
+
+NEWSLETTER_EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}$")
+
+NEWSLETTER_CCTLD_LENGTH = 2
+NEWSLETTER_MAX_LOCAL_LENGTH = 64
+NEWSLETTER_MAX_DOMAIN_LENGTH = 253
+NEWSLETTER_MAX_ADDRESS_LENGTH = 254
+
+
+def _is_plausible_tld(domain: str) -> bool:
+    """Check the domain's trailing label looks like a real TLD, not a scraped URL glued on."""
+    tld = domain.rsplit(".", 1)[-1]
+    return tld.isalpha() and (len(tld) == NEWSLETTER_CCTLD_LENGTH or tld in NEWSLETTER_KNOWN_GTLDS)
+
+
+def clean_newsletter_email(raw_email: str) -> str | None:
+    """Recover a plausible real email from a raw scraped/pasted token, or None if unsalvageable.
+
+    Filters out common scraper junk: image filenames, decimal-obfuscated addresses,
+    URL-encoded prefixes, domains with a scraped URL path/query glued on, malformed
+    dot placement, oversized addresses, role/system mailboxes and disposable providers.
+    """
+    token = re.sub(r"%[0-9A-Fa-f]{2}", "", raw_email)
+    token = "".join(ch for ch in token if unicodedata.category(ch)[0] != "C")
+    token = token.strip().strip(",;").lower()
+
+    if not token or token.count("@") != 1:
+        return None
+
+    local, _, domain = token.partition("@")
+
+    is_valid = (
+        not any(c in token for c in "()[]{}<> \t")
+        and len(local) <= NEWSLETTER_MAX_LOCAL_LENGTH
+        and len(domain) <= NEWSLETTER_MAX_DOMAIN_LENGTH
+        and len(token) <= NEWSLETTER_MAX_ADDRESS_LENGTH
+        and not local.startswith(".")
+        and not local.endswith(".")
+        and ".." not in local
+        and not NEWSLETTER_DECIMAL_OBFUSCATION_RE.match(local)
+        and domain not in NEWSLETTER_JUNK_DOMAINS
+        and domain not in NEWSLETTER_DISPOSABLE_DOMAINS
+        and not any(kw in domain for kw in ("demo", "test"))
+        and NEWSLETTER_EMAIL_RE.match(token)
+        and _is_plausible_tld(domain)
+        and local not in NEWSLETTER_ROLE_LOCALPARTS
+    )
+
+    return token if is_valid else None
+
+
 @login_required
 def lm_newsletter(request: HttpRequest) -> Any:
     """Manage LarpManager newsletter recipients."""
@@ -1029,9 +1172,12 @@ def lm_newsletter(request: HttpRequest) -> Any:
             status_value = NewsletterStatus.NON_ACTIVE
         force_status = "force_status" in request.POST
         count = 0
+        skipped = 0
         for orig_email in re.split(r"[\s,;|]+", emails_text):
-            email = orig_email.strip().lower()
-            if not email or "@" not in email:
+            email = clean_newsletter_email(orig_email)
+            if not email:
+                if orig_email.strip():
+                    skipped += 1
                 continue
             obj, created = LarpManagerNewsletter.objects.get_or_create(
                 email=email,
@@ -1041,7 +1187,7 @@ def lm_newsletter(request: HttpRequest) -> Any:
                 obj.status = status_value
                 obj.save(update_fields=["status"])
             count += 1
-        messages.success(request, f"{count} emails updated")
+        messages.success(request, f"{count} emails updated, {skipped} invalid skipped")
         return redirect(request.path_info)
 
     show_active = request.GET.get("active", "1") == "1"
@@ -1249,7 +1395,7 @@ def lm_send(request: HttpRequest) -> Any:
             subj = request.POST["subject"]
             body = request.POST["body"]
             interval = int(request.POST.get("interval", 1))
-            send_mail_exec(players, subj, body, interval=interval)
+            send_mail_exec(players, subj, body, interval=interval, skip_limit=True)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:

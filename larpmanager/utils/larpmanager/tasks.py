@@ -270,7 +270,7 @@ def _create_bulk_recipients(
     return recipient_ids
 
 
-def _broadcast_size_allowed(total_recipients: int) -> bool:
+def _broadcast_size_allowed(total_recipients: int, *, skip_limit: bool = False) -> bool:
     """Check that a broadcast has recipients and stays within the configured limit.
 
     Opted out addresses are traced as skipped rows, so they count towards the size.
@@ -278,6 +278,9 @@ def _broadcast_size_allowed(total_recipients: int) -> bool:
     if not total_recipients:
         logger.info("Broadcast skipped: no recipient left")
         return False
+
+    if skip_limit:
+        return True
 
     max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
     if total_recipients > max_recipients:
@@ -307,6 +310,8 @@ def send_mail_exec(
     run_id: int | None = None,
     interval: int | None = None,
     opted_out: list | None = None,
+    *,
+    skip_limit: bool = False,
 ) -> None:
     """Send bulk emails to multiple recipients with batch delivery.
 
@@ -325,6 +330,7 @@ def send_mail_exec(
         run_id: Run ID for determining sender context (alternative to association_id)
         interval: Seconds to wait between each batch (defaults to MAIL_BATCH_INTERVAL)
         opted_out: Addresses already known to have opted out, excluded from recipient_list
+        skip_limit: Bypass MAIL_MAX_RECIPIENTS (only for trusted, already-gated callers)
 
     Returns:
         None
@@ -361,7 +367,7 @@ def send_mail_exec(
     # Parse symbol-separated email list
     recipients = split_recipients(recipient_list)
 
-    if not _broadcast_size_allowed(len(recipients) + len(opted_out or [])):
+    if not _broadcast_size_allowed(len(recipients) + len(opted_out or []), skip_limit=skip_limit):
         return
 
     # Notify administrators about bulk email operation, only when something is really sent
