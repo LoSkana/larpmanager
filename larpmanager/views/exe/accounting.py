@@ -582,6 +582,11 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     if not Registration.objects.filter(run__event__association_id=context["association_id"]).exists():
         context["hide_new"] = True
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("exe_payment_member_flags") if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals requiring confirmation
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -611,10 +616,6 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     if "vat" in context["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
-
-    # Show member status flags read-only, if the pseudo-feature is active for the association
-    show_flags_eye = member_flags_active(context["association_id"], context)
-    flags_url = reverse("exe_payment_member_flags") if show_flags_eye else None
 
     def _member_cell(row: AccountingItemPayment) -> str:
         if not row.member:
@@ -670,7 +671,8 @@ def exe_payment_member_flags(request: HttpRequest) -> JsonResponse:
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"k": 0})
 
-    return JsonResponse({"k": 1, "v": get_member_flags_html(member, context["association_id"])})
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required

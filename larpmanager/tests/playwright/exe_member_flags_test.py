@@ -19,17 +19,23 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """Test: Member status flags pseudo-feature.
+
 Verifies activation via config toggle, flag definition CRUD, the members-flags
 summary datatable with its edit modal, and the read-only flags popup shown in
-orga_registrations.
+orga_registrations, orga_payments and exe_payments.
 """
 
+from decimal import Decimal
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, login_orga, submit_confirm, submit_register
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.base import PaymentMethod
+from larpmanager.models.member import Member
+from larpmanager.models.registration import Registration
+from larpmanager.tests.utils import go_to, login_orga, orga_user, submit_confirm, submit_register
 
 pytestmark = pytest.mark.e2e
 
@@ -52,6 +58,8 @@ def test_exe_member_flags(pw_page: Any) -> None:
     check_summary_updated(page, live_server)
 
     check_registration_popup(page, live_server)
+
+    check_payments_flags(page, live_server)
 
 
 def enable_feature(page: Any, live_server: Any) -> None:
@@ -117,6 +125,45 @@ def check_registration_popup(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations/")
     page.locator("a.post_popup_member").first.click()
 
+    modal = page.locator("#lm-modal-content")
+    expect(modal).to_contain_text("Flags")
+    expect(modal).to_contain_text("Tesserato")
+    expect(modal.locator("table i.fa-check")).to_have_count(1)
+
+
+def check_payments_flags(page: Any, live_server: Any) -> None:
+    # Create a pending (submitted) payment invoice for the registered organizer,
+    # so a row with the flags eye icon shows up in both orga_payments and
+    # exe_payments "Payments pending approval" tables.
+    go_to(page, live_server, "/manage/features/payment/on")
+
+    member = Member.objects.get(email=orga_user)
+    registration = Registration.objects.get(member=member, run__event__slug="test")
+    method, _created = PaymentMethod.objects.get_or_create(
+        slug="test-flags-method",
+        defaults={"name": "Test method", "fields": ""},
+    )
+    PaymentInvoice.objects.create(
+        member=member,
+        association_id=registration.run.event.association_id,
+        method=method,
+        typ=PaymentType.REGISTRATION,
+        status=PaymentStatus.SUBMITTED,
+        mc_gross=Decimal("10.00"),
+        causal="Test flags payment",
+        cod="FLAGTEST1",
+        registration=registration,
+    )
+
+    go_to(page, live_server, "/test/manage/payments/")
+    page.locator(".member_flags_eye").first.click()
+    modal = page.locator("#lm-modal-content")
+    expect(modal).to_contain_text("Flags")
+    expect(modal).to_contain_text("Tesserato")
+    expect(modal.locator("table i.fa-check")).to_have_count(1)
+
+    go_to(page, live_server, "/manage/payments/")
+    page.locator(".member_flags_eye").first.click()
     modal = page.locator("#lm-modal-content")
     expect(modal).to_contain_text("Flags")
     expect(modal).to_contain_text("Tesserato")

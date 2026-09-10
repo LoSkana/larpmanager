@@ -431,6 +431,11 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization payments
     context = check_event_context(request, event_slug, "orga_payments")
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("orga_payment_member_flags", args=[event_slug]) if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals for this run
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -458,10 +463,6 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     if "vat" in context["features"]:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
-
-    # Show member status flags read-only, if the pseudo-feature is active for the association
-    show_flags_eye = member_flags_active(context["association_id"], context)
-    flags_url = reverse("orga_payment_member_flags", args=[event_slug]) if show_flags_eye else None
 
     def _member_cell(row: AccountingItemPayment) -> str:
         member = row.registration.member if row.registration else None
@@ -525,7 +526,8 @@ def orga_payment_member_flags(request: HttpRequest, event_slug: str) -> JsonResp
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"k": 0})
 
-    return JsonResponse({"k": 1, "v": get_member_flags_html(member, context["association_id"])})
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required
