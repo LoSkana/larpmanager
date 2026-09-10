@@ -155,16 +155,23 @@ def orga_ci_inventory_view(request: HttpRequest, event_slug: str, inventory_uuid
         messages.error(request, "You do not have access to this inventory.")
         return redirect("orga_ci_inventory", event_slug=event_slug)
 
+    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
+
     context["inventory"] = ci
     context["pool_balances_list"] = ci.get_pool_balances()
-    context["all_inventories"] = Inventory.objects.filter(event=context["event"]).order_by("number")
+
+    # Transfer target list: alphabetical for usability. Players only see inventories
+    # already assigned to a character (staff still see unassigned ones, to be able
+    # to assign resources to them).
+    all_inventories = Inventory.objects.filter(event=context["event"])
+    if not context["can_edit_from_npc"]:
+        all_inventories = all_inventories.filter(owners__isnull=False).distinct()
+    context["all_inventories"] = all_inventories.order_by("name")
 
     # All incoming + outgoing transfers
     context["transfers"] = InventoryTransfer.objects.filter(
         models.Q(source_inventory=ci) | models.Q(target_inventory=ci)
     ).select_related("source_inventory", "target_inventory", "pool_type", "actor")
-
-    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
 
     return render(request, "larpmanager/orga/ci/inventory.html", context)
 
