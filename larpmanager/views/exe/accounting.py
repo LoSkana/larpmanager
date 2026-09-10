@@ -22,6 +22,7 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -70,6 +71,12 @@ from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.security.confirm import confirm_post
+from larpmanager.utils.users.member_flags import (
+    get_member_flags_eye_html,
+    get_member_flags_html,
+    get_member_in_association,
+    member_flags_active,
+)
 from larpmanager.views.orga.accounting import payment_edit
 
 # Slug of permission / page for each invoice type
@@ -575,6 +582,11 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     if not Registration.objects.filter(run__event__association_id=context["association_id"]).exists():
         context["hide_new"] = True
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("exe_payment_member_flags") if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals requiring confirmation
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -605,6 +617,14 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    def _member_cell(row: AccountingItemPayment) -> str:
+        if not row.member:
+            return ""
+        cell = str(row.member)
+        if show_flags_eye:
+            cell += get_member_flags_eye_html(row.member.uuid, flags_url)
+        return cell
+
     # Configure pagination context with field definitions and data callbacks
     context.update(
         {
@@ -613,6 +633,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
             "fields": fields,  # Table column definitions
             # Callbacks for formatting display values in each column
             "callbacks": {
+                "member": _member_cell,
                 "run": lambda row: str(row.registration.run) if row.registration and row.registration.run else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
@@ -635,6 +656,23 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/payments.html",
         "exe_payments_edit",
     )
+
+
+@login_required
+def exe_payment_member_flags(request: HttpRequest) -> JsonResponse:
+    """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
+    context = check_association_context(request, "exe_payments")
+
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required

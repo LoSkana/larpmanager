@@ -55,6 +55,7 @@ from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.member import (
     Badge,
     Member,
+    MemberFlagDef,
     Membership,
     MembershipStatus,
     NewsletterChoices,
@@ -981,6 +982,18 @@ class ExeBadgeForm(BaseModelForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         self.configure_field_association("members", self.params["association_id"])
+
+
+class ExeMemberFlagDefForm(BaseModelForm):
+    """Form for ExeMemberFlagDef."""
+
+    page_title = _("User flag")
+
+    page_info = _("Manage status flags, editable from the user flags summary page")
+
+    class Meta:
+        model = MemberFlagDef
+        exclude = ()
 
 
 class ExeProfileForm(BaseModelForm):

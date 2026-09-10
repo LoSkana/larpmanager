@@ -514,6 +514,9 @@ msgstr "Διαχειριστές"
 msgid "Amount"
 msgstr "Ποσό"
 
+msgid "Annual"
+msgstr "Ετήσια"
+
 msgid "Answer"
 msgstr "Απάντηση"
 
@@ -1679,6 +1682,9 @@ msgstr "Ταμίας"
 msgid "Uploading"
 msgstr "Μεταφόρτωση"
 
+msgid "User flag"
+msgstr "Επισήμανση χρήστη"
+
 msgid "Warehouse"
 msgstr "Αποθήκη"
 
@@ -2003,6 +2009,9 @@ msgstr "Ημερομηνία χρήσης"
 msgid "User agent"
 msgstr "User agent"
 
+msgid "User flags"
+msgstr "Σημαίες χρήστη"
+
 msgid "Users data"
 msgstr "Δεδομένα χρηστών"
 
@@ -2125,6 +2134,9 @@ msgstr "Κείμενα event"
 
 msgid "Fiscal code"
 msgstr "ΑΦΜ"
+
+msgid "Flags types"
+msgstr "Τύποι σημαιών"
 
 msgid "Footer HTML"
 msgstr "HTML υποσέλιδου"
@@ -3010,6 +3022,9 @@ msgstr "Συνδρομή μέλους"
 msgid "Multiplication"
 msgstr "Πολλαπλασιασμός"
 
+msgid "No users found"
+msgstr "Δεν βρέθηκαν χρήστες"
+
 msgid "Obtain ability"
 msgstr "Απόκτηση ικανότητας"
 
@@ -3302,6 +3317,9 @@ msgstr "Κείμενο πολλών γραμμών"
 msgid "Multiple choice"
 msgstr "Πολλαπλές επιλογές"
 
+msgid "No users found."
+msgstr "Δεν βρέθηκαν χρήστες."
+
 msgid "Non-residential"
 msgstr "Χωρίς διαμονή"
 
@@ -3544,9 +3562,6 @@ msgstr "Λείπει ερώτηση"
 
 msgid "Multiple systems"
 msgstr "Πολλαπλά συστήματα"
-
-msgid "No members found"
-msgstr "Δεν βρέθηκαν μέλη"
 
 msgid "Number not found"
 msgstr "Δεν βρέθηκε αριθμός"
@@ -3851,6 +3866,9 @@ msgstr "Νέες εγγραφές"
 
 msgid "No communications"
 msgstr "Δεν υπάρχουν επικοινωνίες"
+
+msgid "No users assigned"
+msgstr "Δεν έχουν ανατεθεί χρήστες"
 
 msgid "One-Time Contents"
 msgstr "Περιεχόμενα μίας χρήσης"
@@ -4319,9 +4337,6 @@ msgstr "Δεν βρέθηκαν ικανότητες."
 msgid "No characters found"
 msgstr "Δεν βρέθηκαν χαρακτήρες"
 
-msgid "No members assigned"
-msgstr "Δεν έχουν ανατεθεί μέλη"
-
 msgid "Non-cumulative code"
 msgstr "Ο κωδικός δεν συνδυάζεται"
 
@@ -4591,6 +4606,9 @@ msgstr "Ώρα και ημερομηνία χρήσης"
 
 msgid "Treasury appointees."
 msgstr "Υπεύθυνοι ταμείου."
+
+msgid "Type to search users"
+msgstr "Πληκτρολόγησε για αναζήτηση χρηστών"
 
 msgid "Warehouse containers"
 msgstr "Δοχεία αποθήκης"
@@ -4970,9 +4988,6 @@ msgstr "Παρακολούθηση ορόσημων εκδήλωσης"
 
 msgid "Try it now with a demo"
 msgstr "Δοκίμασέ το τώρα με ένα demo"
-
-msgid "Type to search members"
-msgstr "Πληκτρολόγησε για αναζήτηση μελών"
 
 msgid "give them this address"
 msgstr "δώσε τους αυτή τη διεύθυνση"
@@ -6340,6 +6355,9 @@ msgstr "Σκηνικά: διαμόρφωση χώρου και υλικά"
 msgid "Set the registration opening date"
 msgstr "Όρισε την ημερομηνία ανοίγματος των εγγραφών"
 
+msgid "Short name shown as column header"
+msgstr "Σύντομο όνομα που εμφανίζεται ως κεφαλίδα στήλης"
+
 msgid "The event this content belongs to"
 msgstr "Η εκδήλωση στην οποία ανήκει αυτό το περιεχόμενο"
 
@@ -6617,6 +6635,9 @@ msgstr "Πόλη όπου γεννήθηκες (πλήρες όνομα)"
 msgid "Confirmation of registration request"
 msgstr "Επιβεβαίωση αιτήματος εγγραφής"
 
+msgid "Define custom status flags for users"
+msgstr "Όρισε προσαρμοσμένες σημαίες κατάστασης για χρήστες"
+
 msgid "Display all users data for insurance"
 msgstr "Εμφάνιση όλων των δεδομένων χρηστών για ασφάλιση"
 
@@ -6878,6 +6899,9 @@ msgstr "Εγγραφή για %(event)s από %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Μεταφορές: καύσιμα και διόδια"
 
+msgid "View and edit each user's status flags"
+msgstr "Δες και επεξεργάσου τις σημαίες κατάστασης κάθε χρήστη"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Επισκέψου τον οδηγό για να μάθεις τα βασικά"
 
@@ -6997,6 +7021,9 @@ msgstr "Ρύθμισε τη διαμόρφωση πόντων εμπειρίας
 
 msgid "Set up payment methods for participants"
 msgstr "Ρύθμισε τους τρόπους πληρωμής για τους συμμετέχοντες"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Εμφανίζεται ως επεξήγηση εργαλείου στην κεφαλίδα της στήλης"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Άθροισμα του κόστους εγγραφής, συνολικό ποσό προς πληρωμή"
@@ -9194,6 +9221,11 @@ msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 "Διαχείριση ετικετών Pool για ομαδοποίηση Pool στις απογραφές χαρακτήρων"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Διαχειρίσου τις επισημάνσεις κατάστασης, επεξεργάσιμες από τη σελίδα σύνοψης"
+" επισημάνσεων χρηστών"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr ""
 "Διαχειρίσου τις ετικέτες που μπορούν να εφαρμοστούν στις σχέσεις χαρακτήρων"
@@ -10564,6 +10596,12 @@ msgstr ""
 "αυτό το event."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Δεν έχουν δημιουργηθεί ακόμη σημαίες χρήστη. Χρησιμοποίησε το παραπάνω "
+"κουμπί για να προσθέσεις μια νέα."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Σε αυτή τη σελίδα μπορείς να φιλτράρεις χαρακτήρες και να δεις απευθείας τις"
@@ -10685,6 +10723,12 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Υπέροχα νέα! Το αίτημά σου να εγγραφείς στο <b>%(event)s</b> εγκρίθηκε."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Αν ενεργοποιηθεί, η σημαία επαναφέρεται κάθε ημερολογιακό έτος αντί να "
+"παραμένει μόνιμη"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -11231,6 +11275,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Σου ανατέθηκε ο χαρακτήρας <b>%(character)s</b> για το <b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"Δεν μπορεί να αλλάξει μετά τη δημιουργία· διέγραψε αυτό το flag και "
+"δημιούργησε ένα νέο."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
@@ -12666,6 +12717,14 @@ msgid ""
 msgstr ""
 "Ρύθμισε τροποποιητές κόστους που προσαρμόζουν τις τιμές ικανοτήτων βάσει "
 "προαπαιτούμενων ή πεδίων χαρακτήρα"
+
+msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Πίνακας δεδομένων με τους χρήστες και τις τιμές των σημαιών κατάστασής τους·"
+" κάνε κλικ στο εικονίδιο επεξεργασίας για να ενημερώσεις τις σημαίες ενός "
+"χρήστη."
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
@@ -14390,6 +14449,14 @@ msgid ""
 msgstr ""
 "Αν είναι επιλεγμένο, η εφαρμογή αυτού του tag σε μια σχέση το εφαρμόζει και "
 "στη σχέση του άλλου χαρακτήρα προς αυτόν"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Αν ενεργοποιηθεί, επιτρέπει τον ορισμό προσαρμοσμένων σημαιών κατάστασης για"
+" χρήστες και τις εμφανίζει στους διοργανωτές που διαχειρίζονται εγγραφές και"
+" πληρωμές."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

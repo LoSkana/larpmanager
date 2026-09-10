@@ -514,6 +514,9 @@ msgstr "Beheerders"
 msgid "Amount"
 msgstr "Som"
 
+msgid "Annual"
+msgstr "Jaarlijks"
+
 msgid "Answer"
 msgstr "Beantwoord"
 
@@ -1679,6 +1682,9 @@ msgstr "Penningmeester"
 msgid "Uploading"
 msgstr "Uploaden"
 
+msgid "User flag"
+msgstr "Gebruikersvlag"
+
 msgid "Warehouse"
 msgstr "Magazijn"
 
@@ -2003,6 +2009,9 @@ msgstr "Gebruiksdatum"
 msgid "User agent"
 msgstr "Gebruikersagent"
 
+msgid "User flags"
+msgstr "Gebruikersmarkeringen"
+
 msgid "Users data"
 msgstr "Gebruikersgegevens"
 
@@ -2125,6 +2134,9 @@ msgstr "Evenementteksten"
 
 msgid "Fiscal code"
 msgstr "Fiscaal nummer"
+
+msgid "Flags types"
+msgstr "Vlagtypen"
 
 msgid "Footer HTML"
 msgstr "HTML-voettekst"
@@ -3010,6 +3022,9 @@ msgstr "Ledencontributie"
 msgid "Multiplication"
 msgstr "Vermenigvuldiging"
 
+msgid "No users found"
+msgstr "Geen gebruikers gevonden"
+
 msgid "Obtain ability"
 msgstr "Vaardigheid verwerven"
 
@@ -3302,6 +3317,9 @@ msgstr "Meerregelige tekst"
 msgid "Multiple choice"
 msgstr "Meerkeuze"
 
+msgid "No users found."
+msgstr "Geen gebruikers gevonden."
+
 msgid "Non-residential"
 msgstr "Niet-residentieel"
 
@@ -3544,9 +3562,6 @@ msgstr "Ontbrekende vraag"
 
 msgid "Multiple systems"
 msgstr "Meerdere systemen"
-
-msgid "No members found"
-msgstr "Er zijn geen leden gevonden"
 
 msgid "Number not found"
 msgstr "Nummer niet gevonden"
@@ -3851,6 +3866,9 @@ msgstr "Nieuwe registraties"
 
 msgid "No communications"
 msgstr "Geen communicatie"
+
+msgid "No users assigned"
+msgstr "Geen gebruikers toegewezen"
 
 msgid "One-Time Contents"
 msgstr "Eenmalige inhoud"
@@ -4319,9 +4337,6 @@ msgstr "Er zijn geen vaardigheden gevonden."
 msgid "No characters found"
 msgstr "Er zijn geen personages gevonden"
 
-msgid "No members assigned"
-msgstr "Er zijn geen leden toegewezen"
-
 msgid "Non-cumulative code"
 msgstr "Niet-cumulatieve code"
 
@@ -4591,6 +4606,9 @@ msgstr "Datum en tijdstip van gebruik"
 
 msgid "Treasury appointees."
 msgstr "Financiële verantwoordelijken."
+
+msgid "Type to search users"
+msgstr "Typ om gebruikers te zoeken"
 
 msgid "Warehouse containers"
 msgstr "Magazijncontainers"
@@ -4970,9 +4988,6 @@ msgstr "Volg de mijlpalen van het evenement"
 
 msgid "Try it now with a demo"
 msgstr "Probeer het nu met een demo"
-
-msgid "Type to search members"
-msgstr "Typ hier om leden te zoeken"
 
 msgid "give them this address"
 msgstr "geef ze dit adres"
@@ -6341,6 +6356,9 @@ msgstr "Setontwerp: enscenering en materialen"
 msgid "Set the registration opening date"
 msgstr "Stel de openingsdatum van de registratie in"
 
+msgid "Short name shown as column header"
+msgstr "Korte naam die als kolomkop wordt weergegeven"
+
 msgid "The event this content belongs to"
 msgstr "Het evenement waartoe deze inhoud behoort"
 
@@ -6618,6 +6636,9 @@ msgstr "Plaats waar je geboren bent (volledige naam)"
 msgid "Confirmation of registration request"
 msgstr "Bevestiging van registratieaanvraag"
 
+msgid "Define custom status flags for users"
+msgstr "Definieer aangepaste statusmarkeringen voor gebruikers"
+
 msgid "Display all users data for insurance"
 msgstr "Toon alle gebruikersgegevens voor de verzekering"
 
@@ -6878,6 +6899,9 @@ msgstr "Aanmelding voor %(event)s door %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Vervoer: brandstof en snelwegtol"
 
+msgid "View and edit each user's status flags"
+msgstr "Bekijk en bewerk de statusmarkeringen van elke gebruiker"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Ga naar de tutorial om de basis te leren"
 
@@ -6997,6 +7021,9 @@ msgstr "Stel de configuratie van de ervaringspunten in"
 
 msgid "Set up payment methods for participants"
 msgstr "Betaalmethoden instellen voor deelnemers"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Weergegeven als tooltip bij de kolomkop"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Som van de inschrijvingskosten, totaal te betalen"
@@ -9147,6 +9174,11 @@ msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 "Beheer poollabels voor het groeperen van pools in personage-inventarissen"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Beheer statusvlaggen, bewerkbaar vanaf de overzichtspagina met "
+"gebruikersvlaggen"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr ""
 "Beheer de tags die op relaties tussen personages kunnen worden toegepast"
@@ -10483,6 +10515,12 @@ msgstr ""
 "evenement hebben voltooid."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Er zijn nog geen gebruikersmarkeringen aangemaakt. Gebruik de knop hierboven"
+" om een nieuwe toe te voegen."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Op deze pagina kun je de personages filteren en hun informatie direct "
@@ -10602,6 +10640,12 @@ msgid ""
 msgstr ""
 "Geweldig nieuws! Je aanvraag om je in te schrijven voor <b>%(event)s</b> is "
 "goedgekeurd."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Indien ingeschakeld, wordt de vlag elk kalenderjaar gereset in plaats van "
+"permanent te blijven"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -11139,6 +11183,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Je hebt het personage <b>%(character)s</b> gekregen voor <b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"Kan na het aanmaken niet meer worden gewijzigd; verwijder deze vlag en maak "
+"in plaats daarvan een nieuwe."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
@@ -12572,6 +12623,13 @@ msgid ""
 msgstr ""
 "Stel kostenmodificatoren in die de prijzen van vaardigheden aanpassen op "
 "basis van vereisten of karaktervelden"
+
+msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Datatabel met gebruikers en hun statusvlagwaarden; klik op het "
+"bewerkingspictogram om de vlaggen van een gebruiker bij te werken."
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
@@ -14289,6 +14347,14 @@ msgid ""
 msgstr ""
 "Als aangevinkt, wordt deze tag bij toepassing op een relatie ook toegepast "
 "op de relatie van het andere karakter terug naar dit karakter"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Indien ingeschakeld, kun je aangepaste statusmarkeringen voor gebruikers "
+"definiëren en worden ze getoond aan organisatoren die registraties en "
+"betalingen beheren."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

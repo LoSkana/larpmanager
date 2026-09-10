@@ -607,6 +607,13 @@ class ExeConfigForm(ConfigForm):
         field_help_text = _("If enabled, a user's public page shows a list of all events they have attended.")
         self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
 
+        field_label = _("User flags")
+        field_help_text = _(
+            "If enabled, allows defining custom status flags for users and shows "
+            "them to organizers handling registrations and payments."
+        )
+        self.add_configs("member_flags_active", ConfigType.BOOL, field_label, field_help_text)
+
         # Configure deadline management if feature is enabled
         if "deadlines" in self.params["features"]:
             self.set_section("deadlines", _("Deadline"))

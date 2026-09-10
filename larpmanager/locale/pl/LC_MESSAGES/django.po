@@ -514,6 +514,9 @@ msgstr "Administratorzy"
 msgid "Amount"
 msgstr "Kwota"
 
+msgid "Annual"
+msgstr "Roczna"
+
 msgid "Answer"
 msgstr "Odpowiedz"
 
@@ -1679,6 +1682,9 @@ msgstr "Skarbnik"
 msgid "Uploading"
 msgstr "Przesyłanie"
 
+msgid "User flag"
+msgstr "Flaga użytkownika"
+
 msgid "Warehouse"
 msgstr "Magazyn"
 
@@ -2003,6 +2009,9 @@ msgstr "Data użycia"
 msgid "User agent"
 msgstr "Agent użytkownika"
 
+msgid "User flags"
+msgstr "Flagi użytkowników"
+
 msgid "Users data"
 msgstr "Dane użytkowników"
 
@@ -2125,6 +2134,9 @@ msgstr "Teksty wydarzenia"
 
 msgid "Fiscal code"
 msgstr "Kod fiskalny"
+
+msgid "Flags types"
+msgstr "Typy flag"
 
 msgid "Footer HTML"
 msgstr "Kod HTML stopki"
@@ -3010,6 +3022,9 @@ msgstr "Opłata członkowska"
 msgid "Multiplication"
 msgstr "Mnożenie"
 
+msgid "No users found"
+msgstr "Nie znaleziono użytkowników"
+
 msgid "Obtain ability"
 msgstr "Uzyskaj zdolność"
 
@@ -3302,6 +3317,9 @@ msgstr "Tekst wielowierszowy"
 msgid "Multiple choice"
 msgstr "Wielokrotny wybór"
 
+msgid "No users found."
+msgstr "Nie znaleziono użytkowników."
+
 msgid "Non-residential"
 msgstr "Niemieszkalne"
 
@@ -3544,9 +3562,6 @@ msgstr "Brakujące pytanie"
 
 msgid "Multiple systems"
 msgstr "Wiele systemów"
-
-msgid "No members found"
-msgstr "Nie znaleziono żadnych członków"
 
 msgid "Number not found"
 msgstr "Nie znaleziono numeru"
@@ -3851,6 +3866,9 @@ msgstr "Nowe rejestracje"
 
 msgid "No communications"
 msgstr "Brak komunikatów"
+
+msgid "No users assigned"
+msgstr "Nie przypisano użytkowników"
 
 msgid "One-Time Contents"
 msgstr "Zawartości jednorazowe"
@@ -4319,9 +4337,6 @@ msgstr "Nie znaleziono żadnych umiejętności."
 msgid "No characters found"
 msgstr "Nie znaleziono żadnych postaci"
 
-msgid "No members assigned"
-msgstr "Nie przypisano żadnych członków"
-
 msgid "Non-cumulative code"
 msgstr "Kod, którego nie można łączyć"
 
@@ -4591,6 +4606,9 @@ msgstr "Data i godzina użycia"
 
 msgid "Treasury appointees."
 msgstr "Osoby odpowiedzialne za skarbiec."
+
+msgid "Type to search users"
+msgstr "Wpisz, aby wyszukać użytkowników"
 
 msgid "Warehouse containers"
 msgstr "Kontenery magazynowe"
@@ -4970,9 +4988,6 @@ msgstr "Śledź kamienie milowe wydarzenia"
 
 msgid "Try it now with a demo"
 msgstr "Wypróbuj to już teraz w wersji demo"
-
-msgid "Type to search members"
-msgstr "Wpisz, żeby wyszukać członków"
 
 msgid "give them this address"
 msgstr "podaj im ten adres"
@@ -6340,6 +6355,9 @@ msgstr "Scenografia: aranżacja i materiały"
 msgid "Set the registration opening date"
 msgstr "Ustaw datę otwarcia rejestracji"
 
+msgid "Short name shown as column header"
+msgstr "Krótka nazwa wyświetlana jako nagłówek kolumny"
+
 msgid "The event this content belongs to"
 msgstr "Wydarzenie, do którego należy ta zawartość"
 
@@ -6617,6 +6635,9 @@ msgstr "Miasto, w którym się urodziłeś(-aś) (pełna nazwa)"
 msgid "Confirmation of registration request"
 msgstr "Potwierdzenie wniosku o rejestrację"
 
+msgid "Define custom status flags for users"
+msgstr "Zdefiniuj niestandardowe flagi statusu użytkowników"
+
 msgid "Display all users data for insurance"
 msgstr "Wyświetl dane wszystkich użytkowników do celów ubezpieczeniowych"
 
@@ -6877,6 +6898,9 @@ msgstr "Rejestracja na %(event)s przez %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Transport: paliwo i opłaty drogowe"
 
+msgid "View and edit each user's status flags"
+msgstr "Wyświetlaj i edytuj flagi statusu każdego użytkownika"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Odwiedź samouczek, aby poznać podstawy"
 
@@ -6996,6 +7020,9 @@ msgstr "Ustaw konfigurację punktów doświadczenia"
 
 msgid "Set up payment methods for participants"
 msgstr "Skonfiguruj metody płatności dla uczestników"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Wyświetlane jako podpowiedź przy nagłówku kolumny"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Suma opłaty rejestracyjnej, całkowita kwota do zapłaty"
@@ -9114,6 +9141,11 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Zarządzaj etykietami Pools do grupowania Pools w inwentarzach postaci"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Zarządzaj flagami statusu, które można edytować na stronie podsumowania flag"
+" użytkowników"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr "Zarządzaj tagami, które można stosować w relacjach między postaciami"
 
@@ -10367,6 +10399,12 @@ msgstr ""
 "w ramach tego wydarzenia."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Nie utworzono jeszcze żadnych flag użytkowników. Użyj przycisku powyżej, aby"
+" dodać nową."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Na tej stronie możesz filtrować postacie i bezpośrednio przeglądać "
@@ -10484,6 +10522,12 @@ msgid ""
 msgstr ""
 "Świetna wiadomość! Twoja prośba o rejestrację na <b>%(event)s</b> została "
 "zatwierdzona."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Jeśli włączone, flaga jest resetowana co rok kalendarzowy, zamiast "
+"pozostawać na stałe"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -11010,6 +11054,12 @@ msgid ""
 msgstr ""
 "Przydzielono ci postać <b>%(character)s</b> na czas trwania "
 "<b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"Nie można zmienić po utworzeniu; zamiast tego usuń tę flagę i utwórz nową."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
@@ -12436,6 +12486,13 @@ msgid ""
 msgstr ""
 "Skonfiguruj modyfikatory kosztów, które dostosowują ceny umiejętności w "
 "oparciu o wymagania wstępne lub cechy postaci"
+
+msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Tabela danych użytkowników i wartości ich flag statusu; kliknij ikonę "
+"edycji, aby zaktualizować flagi użytkownika."
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
@@ -14150,6 +14207,13 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone, zastosowanie tego tagu do relacji zastosuje go również do "
 "relacji drugiej postaci wobec tej postaci"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Jeśli włączone, pozwala definiować niestandardowe flagi statusu użytkowników"
+" i pokazuje je organizatorom obsługującym rejestracje i płatności."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

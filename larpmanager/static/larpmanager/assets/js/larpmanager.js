@@ -564,6 +564,20 @@ function initPopups() {
     });
 
     post_popup();
+
+    // Read-only member status flags popup (orga_payments, exe_payments).
+    $(document).on('click', '.member_flags_eye', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('turl'),
+            method: 'POST',
+            data: { mid: $(this).attr('mid') },
+        }).done(function (res) {
+            if (res.k == 0) return;
+            window.openLmModal(res.v, 'popup');
+        });
+    });
 }
 
 // ========== Init: Table search ==========

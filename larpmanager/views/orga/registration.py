@@ -92,6 +92,7 @@ from larpmanager.utils.registrations.questions import (
     get_registration_choices_by_question,
 )
 from larpmanager.utils.security.confirm import confirm_post
+from larpmanager.utils.users.member_flags import get_member_flags_html, member_flags_active
 from larpmanager.views.orga.member import member_field_correct
 
 if TYPE_CHECKING:
@@ -1464,5 +1465,9 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
         # Only display fields with actual values
         if value:
             text += f"<p><b>{field_label}</b>: {value}</p>"
+
+    # Append member status flags, if the pseudo-feature is active for the association
+    if member_flags_active(context["association_id"], context):
+        text += get_member_flags_html(member, context["association_id"])
 
     return JsonResponse({"k": 1, "v": text})

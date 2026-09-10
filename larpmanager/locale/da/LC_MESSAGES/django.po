@@ -514,6 +514,9 @@ msgstr "Administratorer"
 msgid "Amount"
 msgstr "Beløb"
 
+msgid "Annual"
+msgstr "Årlig"
+
 msgid "Answer"
 msgstr "Svar"
 
@@ -1679,6 +1682,9 @@ msgstr "Kasserer"
 msgid "Uploading"
 msgstr "Uploader"
 
+msgid "User flag"
+msgstr "Brugerflag"
+
 msgid "Warehouse"
 msgstr "Lager"
 
@@ -2003,6 +2009,9 @@ msgstr "Anvendelsesdato"
 msgid "User agent"
 msgstr "Brugeragent"
 
+msgid "User flags"
+msgstr "Brugerflag"
+
 msgid "Users data"
 msgstr "Brugerdata"
 
@@ -2125,6 +2134,9 @@ msgstr "Eventtekster"
 
 msgid "Fiscal code"
 msgstr "Skatteidentifikationsnummer"
+
+msgid "Flags types"
+msgstr "Flagtyper"
 
 msgid "Footer HTML"
 msgstr "Footer-HTML"
@@ -3010,6 +3022,9 @@ msgstr "Medlemsgebyr"
 msgid "Multiplication"
 msgstr "Multiplikation"
 
+msgid "No users found"
+msgstr "Ingen brugere fundet"
+
 msgid "Obtain ability"
 msgstr "Få evne"
 
@@ -3302,6 +3317,9 @@ msgstr "Tekst på flere linjer"
 msgid "Multiple choice"
 msgstr "Flere valg"
 
+msgid "No users found."
+msgstr "Ingen brugere fundet."
+
 msgid "Non-residential"
 msgstr "Uden overnatning"
 
@@ -3544,9 +3562,6 @@ msgstr "Manglende spørgsmål"
 
 msgid "Multiple systems"
 msgstr "Flere systemer"
-
-msgid "No members found"
-msgstr "Ingen medlemmer fundet"
 
 msgid "Number not found"
 msgstr "Nummer ikke fundet"
@@ -3851,6 +3866,9 @@ msgstr "Nye tilmeldinger"
 
 msgid "No communications"
 msgstr "Ingen kommunikation"
+
+msgid "No users assigned"
+msgstr "Ingen brugere tildelt"
 
 msgid "One-Time Contents"
 msgstr "Engangsindhold"
@@ -4319,9 +4337,6 @@ msgstr "Ingen evner fundet."
 msgid "No characters found"
 msgstr "Ingen karakterer fundet"
 
-msgid "No members assigned"
-msgstr "Ingen medlemmer tildelt"
-
 msgid "Non-cumulative code"
 msgstr "Koden kan ikke kombineres"
 
@@ -4591,6 +4606,9 @@ msgstr "Tid og dato for brug"
 
 msgid "Treasury appointees."
 msgstr "Kasseansvarlige."
+
+msgid "Type to search users"
+msgstr "Skriv for at søge efter brugere"
 
 msgid "Warehouse containers"
 msgstr "Lagerbeholdere"
@@ -4970,9 +4988,6 @@ msgstr "Spor arrangementets milepæle"
 
 msgid "Try it now with a demo"
 msgstr "Prøv det nu med en demo"
-
-msgid "Type to search members"
-msgstr "Skriv for at søge efter medlemmer"
 
 msgid "give them this address"
 msgstr "giv dem denne adresse"
@@ -6340,6 +6355,9 @@ msgstr "Scenografi: opbygning og materialer"
 msgid "Set the registration opening date"
 msgstr "Angiv datoen for åbning af tilmelding"
 
+msgid "Short name shown as column header"
+msgstr "Kort navn vist som kolonneoverskrift"
+
 msgid "The event this content belongs to"
 msgstr "Eventet, dette indhold tilhører"
 
@@ -6617,6 +6635,9 @@ msgstr "Byen, hvor du blev født (fuldt navn)"
 msgid "Confirmation of registration request"
 msgstr "Bekræftelse af tilmeldingsanmodning"
 
+msgid "Define custom status flags for users"
+msgstr "Definér brugerdefinerede statusflag for brugere"
+
 msgid "Display all users data for insurance"
 msgstr "Vis alle brugerdata til forsikring"
 
@@ -6877,6 +6898,9 @@ msgstr "Tilmelding til %(event)s af %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Transport: brændstof og motorvejsafgifter"
 
+msgid "View and edit each user's status flags"
+msgstr "Se og redigér hver brugers statusflag"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besøg vejledningen for at lære det grundlæggende"
 
@@ -6996,6 +7020,9 @@ msgstr "Angiv konfigurationen for erfaringspoint"
 
 msgid "Set up payment methods for participants"
 msgstr "Opsæt betalingsmetoder for deltagere"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Vises som et værktøjstip på kolonneoverskriften"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Summen af tilmeldingsgebyret, samlet beløb der skal betales"
@@ -9050,6 +9077,10 @@ msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 "Administrer pool-etiketter til gruppering af pools i karakterinventarer"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Administrer statusflag, som kan redigeres fra oversigtssiden over brugerflag"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr "Administrer de tags, der kan anvendes på karakterrelationer"
 
@@ -10231,6 +10262,12 @@ msgstr ""
 "Ingen registrerede deltagere har endnu gennemført workshops for dette event."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Der er endnu ikke oprettet nogen brugerflag. Brug knappen ovenfor til at "
+"tilføje et nyt."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "På denne side kan du filtrere karakterer og se deres oplysninger direkte."
@@ -10347,6 +10384,12 @@ msgid ""
 msgstr ""
 "Gode nyheder! Din anmodning om at tilmelde dig <b>%(event)s</b> er blevet "
 "godkendt."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Hvis aktiveret nulstilles flaget hvert kalenderår i stedet for at forblive "
+"permanent"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -10861,6 +10904,12 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Du er blevet tildelt karakteren <b>%(character)s</b> til <b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"Kan ikke ændres efter oprettelse; slet dette flag, og opret et nyt i stedet."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
@@ -12284,6 +12333,13 @@ msgid ""
 msgstr ""
 "Konfigurér omkostningsmodifikatorer, der justerer evnepriser baseret på "
 "forudsætninger eller karakterfelter"
+
+msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Datatabel over brugere og deres statusflagværdier; klik på redigeringsikonet"
+" for at opdatere en brugers flag."
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
@@ -13986,6 +14042,13 @@ msgid ""
 msgstr ""
 "Hvis dette er markeret, vil anvendelse af dette tag på en relation også "
 "anvende det på den anden karakters relation tilbage mod denne karakter."
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Hvis aktiveret, kan du definere brugerdefinerede statusflag for brugere, og "
+"de vises til arrangører, der håndterer tilmeldinger og betalinger."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

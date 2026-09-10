@@ -27,7 +27,15 @@
                                 {% trans "Confirm" %}
                             </a>
                         </td>
-                        <td>{{ inv.member }}</td>
+                        <td>
+                            {{ inv.member }}
+                            {% if flags_url %}
+                                <a href="#"
+                                   class="member_flags_eye"
+                                   mid="{{ inv.member.uuid }}"
+                                   turl="{{ flags_url }}"><i class="fas fa-eye"></i></a>
+                            {% endif %}
+                        </td>
                         <td>{{ inv.method }}</td>
                         <td>{{ inv.mc_gross | format_decimal }}</td>
                         <td>{{ inv.causal }}</td>

@@ -20,7 +20,8 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -54,6 +55,12 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.users.member_flags import (
+    get_member_flags_eye_html,
+    get_member_flags_html,
+    get_member_in_association,
+    member_flags_active,
+)
 
 
 @login_required
@@ -424,6 +431,11 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization payments
     context = check_event_context(request, event_slug, "orga_payments")
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("orga_payment_member_flags", args=[event_slug]) if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals for this run
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -452,6 +464,15 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    def _member_cell(row: AccountingItemPayment) -> str:
+        member = row.registration.member if row.registration else None
+        if not member:
+            return ""
+        cell = str(member)
+        if show_flags_eye:
+            cell += get_member_flags_eye_html(member.uuid, flags_url)
+        return cell
+
     # Configure context with database relations and field callbacks
     context.update(
         {
@@ -461,9 +482,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
             "fields": fields,
             # Define callback functions for data formatting
             "callbacks": {
-                "member": lambda row: str(row.registration.member)
-                if row.registration and row.registration.member
-                else "",
+                "member": _member_cell,
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
@@ -492,6 +511,23 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/payments.html",
         "orga_payments_edit",
     )
+
+
+@login_required
+def orga_payment_member_flags(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
+    context = check_event_context(request, event_slug, "orga_payments")
+
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required

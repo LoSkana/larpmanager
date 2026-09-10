@@ -1,0 +1,19 @@
+{% load i18n show_tags %}
+<h2>{{ member.display_real }}</h2>
+<form id="member_flags_form">
+    <input type="hidden" name="mid" value="{{ member.uuid }}" />
+    <table>
+        {% for flag_def in flag_defs %}
+            <tr>
+                <td>{{ flag_def.name }}</td>
+                <td>
+                    <input type="checkbox"
+                           name="flag_{{ flag_def.id }}"
+                           value="1"
+                           {% if values|get:flag_def.id %}checked{% endif %} />
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    <button type="submit">{% trans "Save" %}</button>
+</form>

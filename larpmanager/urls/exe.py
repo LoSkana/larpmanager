@@ -198,6 +198,41 @@ urlpatterns = [
         name="exe_badges_toggle",
     ),
     path(
+        "manage/member_flags/",
+        views_em.exe_member_flags,
+        name="exe_member_flags",
+    ),
+    path(
+        "manage/member_flags/new/",
+        views_em.exe_member_flags_new,
+        name="exe_member_flags_new",
+    ),
+    path(
+        "manage/member_flags/<slug:memberflagdef_uuid>/edit/",
+        views_em.exe_member_flags_edit,
+        name="exe_member_flags_edit",
+    ),
+    path(
+        "manage/member_flags/<slug:memberflagdef_uuid>/delete/",
+        views_em.exe_member_flags_delete,
+        name="exe_member_flags_delete",
+    ),
+    path(
+        "manage/members_flags/",
+        views_em.exe_members_flags,
+        name="exe_members_flags",
+    ),
+    path(
+        "manage/members_flags/get/",
+        views_em.exe_members_flags_get,
+        name="exe_members_flags_get",
+    ),
+    path(
+        "manage/members_flags/save/",
+        views_em.exe_members_flags_save,
+        name="exe_members_flags_save",
+    ),
+    path(
         "manage/mail/send",
         views_em.exe_send_mail,
         name="exe_send_mail",
@@ -436,6 +471,11 @@ urlpatterns = [
         "manage/payments/<slug:payment_uuid>/delete/",
         views_ea.exe_payments_delete,
         name="exe_payments_delete",
+    ),
+    path(
+        "manage/payments/member_flags/",
+        views_ea.exe_payment_member_flags,
+        name="exe_payment_member_flags",
     ),
     path(
         "manage/invoices/<slug:invoice_uuid>/delete/",
