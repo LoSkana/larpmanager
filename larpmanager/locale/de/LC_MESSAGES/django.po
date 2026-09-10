@@ -10881,6 +10881,14 @@ msgstr ""
 "Wenn aktiviert, wird das automatische Speichern beim Bearbeiten von "
 "Textelementen deaktiviert."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Wenn du keine weiteren Mitteilungen von uns erhalten möchtest, %(link)s "
+"bitte."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Yksilöllinen koodi"
 
 msgid "Unsubscribe"
-msgstr "Poistu tilauksesta"
+msgstr "Peruuta tilaus"
 
 msgid "Where it is"
 msgstr "Missä se on"
@@ -10589,6 +10589,12 @@ msgid ""
 msgstr ""
 "Jos käytössä, automaattinen tallennus kirjoituselementtejä muokattaessa "
 "poistetaan käytöstä."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr "Jos et ole kiinnostunut saamaan meiltä lisäviestintää, %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

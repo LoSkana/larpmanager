@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Jedinečný kód"
 
 msgid "Unsubscribe"
-msgstr "Odhlásit se z odběru"
+msgstr "Odhlásit odběr"
 
 msgid "Where it is"
 msgstr "Kde se nachází"
@@ -10432,6 +10432,12 @@ msgid ""
 msgstr ""
 "Pokud je povoleno, automatické ukládání při úpravě textových prvků bude "
 "vypnuto."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr "Pokud nemáš zájem o další komunikaci od nás, prosím %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

@@ -95,7 +95,7 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
 
         // Printable and visibility fields
-        if (["s", "m", "t", "p", "e", "l", "c"].includes(selectedValue)) {
+        if (["s", "m", "t", "p", "e", "l", "c", "title"].includes(selectedValue)) {
             $('#id_printable_tr').fadeIn(speed);
             $('#id_visibility_tr').fadeIn(speed);
         } else {

@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Unikalny kod"
 
 msgid "Unsubscribe"
-msgstr "Zrezygnuj z subskrypcji"
+msgstr "Anuluj subskrypcję"
 
 msgid "Where it is"
 msgstr "Gdzie to jest"
@@ -10638,6 +10638,12 @@ msgid ""
 msgstr ""
 "Jeśli włączone, automatyczne zapisywanie podczas edycji elementów tekstowych"
 " będzie wyłączone."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr "Jeśli nie chcesz otrzymywać od nas dalszych wiadomości, %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

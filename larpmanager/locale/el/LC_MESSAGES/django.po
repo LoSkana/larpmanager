@@ -10850,6 +10850,13 @@ msgstr ""
 "Αν ενεργοποιηθεί, η αυτόματη αποθήκευση κατά την επεξεργασία στοιχείων "
 "συγγραφής θα απενεργοποιηθεί."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Αν δεν ενδιαφέρεσαι να λαμβάνεις άλλες επικοινωνίες από εμάς, %(link)s."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

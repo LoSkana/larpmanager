@@ -34,7 +34,8 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import validate_email
-from django.utils import timezone
+from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_event_association_id, get_run_association_id
@@ -462,7 +463,8 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 
         # Append unsubscribe footer, reusing the same link in the message headers
         unsubscribe_url = build_unsubscribe_url(association, email_recipient.recipient)
-        body += add_unsubscribe_body(unsubscribe_url)
+        with translation.override(email_recipient.language_code):
+            body += add_unsubscribe_body(unsubscribe_url)
 
         # RFC 8058 one-click is meant for bulk mail only: pressing the mail client button
         # on a receipt or a password reset must not silently drop the newsletter
@@ -791,8 +793,9 @@ def build_unsubscribe_url(association: Any, recipient_email: str = "", *, one_cl
 
 def add_unsubscribe_body(unsubscribe_url: str) -> str:
     """Add unsubscribe footer to email body."""
+    link = f"<a ses:no-track href='{unsubscribe_url}'>{_('unsubscribe')}</a>"
     html_footer = "<br /><br />-<br />"
-    html_footer += f"<a ses:no-track href='{unsubscribe_url}'>Unsubscribe</a>"
+    html_footer += _("If you are not interested in further communications from us, please %(link)s.") % {"link": link}
     return html_footer
 
 
