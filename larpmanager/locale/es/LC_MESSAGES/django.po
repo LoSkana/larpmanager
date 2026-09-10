@@ -3867,6 +3867,9 @@ msgstr "Nuevos registros"
 msgid "No communications"
 msgstr "Sin comunicaciones"
 
+msgid "No users assigned"
+msgstr "No hay usuarios asignados"
+
 msgid "One-Time Contents"
 msgstr "Contenidos de un solo uso"
 
@@ -4334,9 +4337,6 @@ msgstr "No se han encontrado habilidades."
 msgid "No characters found"
 msgstr "No se han encontrado personajes"
 
-msgid "No members assigned"
-msgstr "No hay miembros asignados"
-
 msgid "Non-cumulative code"
 msgstr "Código no acumulativo"
 
@@ -4606,6 +4606,9 @@ msgstr "Hora y fecha de uso"
 
 msgid "Treasury appointees."
 msgstr "Responsables de tesorería."
+
+msgid "Type to search users"
+msgstr "Escribe para buscar usuarios"
 
 msgid "Warehouse containers"
 msgstr "Contenedores de almacén"
@@ -4985,9 +4988,6 @@ msgstr "Seguir los hitos del evento"
 
 msgid "Try it now with a demo"
 msgstr "Pruébalo ya con una versión de demostración"
-
-msgid "Type to search members"
-msgstr "Escribe para buscar miembros"
 
 msgid "give them this address"
 msgstr "dales esta dirección"
@@ -11189,6 +11189,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Te han asignado el personaje <b>%(character)s</b> para <b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"No se puede cambiar después de crearlo; elimina este indicador y crea uno "
+"nuevo."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "

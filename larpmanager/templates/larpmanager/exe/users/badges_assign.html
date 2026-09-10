@@ -19,7 +19,7 @@
             </div>
             <div id="panels" class="casting-layout">
                 <div class="casting-panel">
-                    <h4>{% trans "Members" %}</h4>
+                    <h4>{% trans "Users" %}</h4>
                     <input type="text"
                            id="member-search"
                            class="casting-search"
@@ -93,7 +93,7 @@
         var assigned = assignments[current_badge];
 
         if (!search) {
-            list.innerHTML = '<div class="pref-empty"><i class="fas fa-search"></i> {% filter escapejs %}{% trans "Type to search members" %}{% endfilter %}</div>';
+            list.innerHTML = '<div class="pref-empty"><i class="fas fa-search"></i> {% filter escapejs %}{% trans "Type to search users" %}{% endfilter %}</div>';
             return;
         }
 
@@ -138,7 +138,7 @@
         document.getElementById('assigned-count').textContent = '(' + members.length + ')';
 
         if (members.length === 0) {
-            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No members assigned" %}{% endfilter %}</div>';
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No users assigned" %}{% endfilter %}</div>';
             return;
         }
 

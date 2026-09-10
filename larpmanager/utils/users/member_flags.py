@@ -19,15 +19,12 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
+from django.db import transaction
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import get_association_config, reset_element_configs, save_single_config
-from larpmanager.models.member import MemberConfig, MemberFlagDef
-
-if TYPE_CHECKING:
-    from larpmanager.models.member import Member
+from larpmanager.cache.config import get_association_config, reset_member_configs, save_single_config
+from larpmanager.models.member import Member, MemberConfig, MemberFlagDef, Membership
 
 
 def member_flags_active(association_id: int, context: dict | None = None) -> bool:
@@ -53,7 +50,7 @@ def get_member_flags_html(member: Member, association_id: int) -> str:
     rows = []
     for flag_def in flag_defs:
         icon = '<i class="fa-solid fa-check"></i>' if values[flag_def.id] else ""
-        rows.append(f"<tr><td>{flag_def.name}</td><td>{icon}</td></tr>")
+        rows.append(f"<tr><td>{escape(flag_def.name)}</td><td>{icon}</td></tr>")
 
     return f"<p><b>{_('Flags')}</b></p><table>{''.join(rows)}</table>"
 
@@ -73,8 +70,43 @@ def get_member_flag_values(member: Member, flag_defs: list[MemberFlagDef]) -> di
 def set_member_flag(member: Member, flag_def: MemberFlagDef, *, active: bool) -> None:
     """Set or clear a single member status flag, stored as a MemberConfig row."""
     config_name = flag_def.config_name()
-    if active:
-        save_single_config(member, config_name, "True")
-    else:
-        MemberConfig.objects.filter(member=member, name=config_name, deleted=None).delete()
-        reset_element_configs(member.id, "member")
+    with transaction.atomic():
+        Member.objects.select_for_update().get(pk=member.pk)
+        if active:
+            save_single_config(member, config_name, "True")
+        else:
+            MemberConfig.objects.filter(member=member, name=config_name, deleted=None).delete()
+            reset_member_configs(member.id)
+
+
+def set_member_flags(member: Member, flag_defs: list[MemberFlagDef], active_by_flag_id: dict[int, bool]) -> None:
+    """Set or clear a member's whole flag set in a single atomic operation."""
+    with transaction.atomic():
+        for flag_def in flag_defs:
+            set_member_flag(member, flag_def, active=active_by_flag_id.get(flag_def.id, False))
+
+
+def get_member_in_association(association_id: int, member_uuid: str) -> Member:
+    """Return the member with the given uuid, only if they have a membership in this association.
+
+    Raises Member.DoesNotExist otherwise, to prevent cross-association access to members via uuid.
+    """
+    try:
+        return (
+            Membership.objects.select_related("member")
+            .get(
+                association_id=association_id,
+                member__uuid=member_uuid,
+            )
+            .member
+        )
+    except Membership.DoesNotExist as exc:
+        raise Member.DoesNotExist from exc
+
+
+def get_member_flags_eye_html(member_uuid: str, turl: str) -> str:
+    """Build the read-only eye-icon link markup that opens the member status flags popup."""
+    return (
+        f" <a href='#' class='member_flags_eye' mid='{escape(member_uuid)}' turl='{escape(turl)}'>"
+        "<i class='fas fa-eye'></i></a>"
+    )

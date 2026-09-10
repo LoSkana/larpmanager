@@ -3867,6 +3867,9 @@ msgstr "Nye tilmeldinger"
 msgid "No communications"
 msgstr "Ingen kommunikation"
 
+msgid "No users assigned"
+msgstr "Ingen brugere tildelt"
+
 msgid "One-Time Contents"
 msgstr "Engangsindhold"
 
@@ -4334,9 +4337,6 @@ msgstr "Ingen evner fundet."
 msgid "No characters found"
 msgstr "Ingen karakterer fundet"
 
-msgid "No members assigned"
-msgstr "Ingen medlemmer tildelt"
-
 msgid "Non-cumulative code"
 msgstr "Koden kan ikke kombineres"
 
@@ -4606,6 +4606,9 @@ msgstr "Tid og dato for brug"
 
 msgid "Treasury appointees."
 msgstr "Kasseansvarlige."
+
+msgid "Type to search users"
+msgstr "Skriv for at søge efter brugere"
 
 msgid "Warehouse containers"
 msgstr "Lagerbeholdere"
@@ -4985,9 +4988,6 @@ msgstr "Spor arrangementets milepæle"
 
 msgid "Try it now with a demo"
 msgstr "Prøv det nu med en demo"
-
-msgid "Type to search members"
-msgstr "Skriv for at søge efter medlemmer"
 
 msgid "give them this address"
 msgstr "giv dem denne adresse"
@@ -10910,6 +10910,12 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Du er blevet tildelt karakteren <b>%(character)s</b> til <b>%(event)s</b>."
+
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+"Kan ikke ændres efter oprettelse; slet dette flag, og opret et nyt i stedet."
 
 msgid ""
 "If selected, participants must provide a receipt or invoice for manual "

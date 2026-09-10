@@ -724,6 +724,15 @@ class MemberFlagDef(UuidMixin, OrderMixin, BaseModel):
         help_text=_("If enabled, the flag resets every calendar year instead of staying permanent"),
     )
 
+    def clean(self) -> None:
+        """Forbid changing `annual` after creation, since it would orphan already-stored config values."""
+        if self.pk:
+            previous_annual = MemberFlagDef.objects.filter(pk=self.pk).values_list("annual", flat=True).first()
+            if previous_annual is not None and previous_annual != self.annual:
+                raise ValidationError(
+                    {"annual": _("Cannot be changed after creation; delete this flag and create a new one instead.")}
+                )
+
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Auto-generate a unique-per-association slug from the name on first save."""
         if not self.slug:
@@ -731,9 +740,7 @@ class MemberFlagDef(UuidMixin, OrderMixin, BaseModel):
             candidate = base_slug
             counter = 1
             while (
-                MemberFlagDef.objects.filter(association=self.association, slug=candidate, deleted=None)
-                .exclude(pk=self.pk)
-                .exists()
+                MemberFlagDef.objects.filter(association=self.association, slug=candidate).exclude(pk=self.pk).exists()
             ):
                 counter += 1
                 candidate = f"{base_slug}_{counter}"
@@ -741,10 +748,11 @@ class MemberFlagDef(UuidMixin, OrderMixin, BaseModel):
         super().save(*args, **kwargs)
 
     def config_name(self) -> str:
-        """Return the MemberConfig name for this flag in the current calendar year."""
+        """Return the MemberConfig name for this flag in the current calendar year, scoped to the association."""
+        name = f"flag_{self.association_id}_{self.slug}"
         if self.annual:
-            return f"{self.slug}_{timezone.now().year}"
-        return self.slug
+            return f"{name}_{timezone.now().year}"
+        return name
 
     def __str__(self) -> str:
         """Return string representation."""

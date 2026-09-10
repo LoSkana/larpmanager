@@ -4773,6 +4773,11 @@ msgid ""
 "If enabled, the flag resets every calendar year instead of staying permanent"
 msgstr ""
 
+msgid ""
+"Cannot be changed after creation; delete this flag and create a new one "
+"instead."
+msgstr ""
+
 msgid "Short name"
 msgstr ""
 
@@ -7235,7 +7240,7 @@ msgstr ""
 msgid "Select a badge above to manage its members."
 msgstr ""
 
-msgid "Type to search members"
+msgid "Type to search users"
 msgstr ""
 
 msgid "No users found"
@@ -7244,7 +7249,7 @@ msgstr ""
 msgid "Click to assign"
 msgstr ""
 
-msgid "No members assigned"
+msgid "No users assigned"
 msgstr ""
 
 msgid "Click to unassign"

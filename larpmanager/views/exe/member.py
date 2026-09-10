@@ -97,7 +97,8 @@ from larpmanager.utils.users.member import get_mail
 from larpmanager.utils.users.member_flags import (
     get_association_flag_defs,
     get_member_flag_values,
-    set_member_flag,
+    get_member_in_association,
+    set_member_flags,
 )
 from larpmanager.views.orga.member import send_mail_batch
 
@@ -1099,7 +1100,7 @@ def exe_members_flags_get(request: HttpRequest) -> JsonResponse:
     context = check_association_context(request, "exe_members_flags")
 
     try:
-        member = Member.objects.get(uuid=request.POST["mid"])
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"k": 0})
 
@@ -1120,14 +1121,13 @@ def exe_members_flags_save(request: HttpRequest) -> JsonResponse:
     context = check_association_context(request, "exe_members_flags")
 
     try:
-        member = Member.objects.get(uuid=request.POST["mid"])
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"k": 0})
 
-    flag_defs = get_association_flag_defs(context["association_id"])
-    for flag_def in flag_defs:
-        active = request.POST.get(f"flag_{flag_def.id}") == "1"
-        set_member_flag(member, flag_def, active=active)
+    flag_defs = list(get_association_flag_defs(context["association_id"]))
+    active_by_flag_id = {flag_def.id: request.POST.get(f"flag_{flag_def.id}") == "1" for flag_def in flag_defs}
+    set_member_flags(member, flag_defs, active_by_flag_id)
 
     return JsonResponse({"k": 1})
 

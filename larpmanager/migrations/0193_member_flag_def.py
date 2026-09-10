@@ -8,7 +8,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("larpmanager", "0192_member_birth_province"),
     ]
@@ -24,48 +23,107 @@ class Migration(migrations.Migration):
                 ("order", models.IntegerField(default=0)),
                 ("created", models.DateTimeField(default=django.utils.timezone.now, editable=False)),
                 ("updated", models.DateTimeField(auto_now=True)),
-                ("name", models.CharField(help_text="Short name shown as column header", max_length=100, verbose_name="Name")),
-                ("slug", models.SlugField(help_text="Used as the underlying member config name - auto-generated from the name", max_length=100, validators=[django.core.validators.RegexValidator("^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -.")])),
-                ("descr", models.CharField(blank=True, help_text="Shown as a tooltip on the column header", max_length=500, verbose_name="Description")),
-                ("annual", models.BooleanField(default=False, help_text="If enabled, the flag resets every calendar year instead of staying permanent", verbose_name="Annual")),
-                ("association", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name="member_flag_defs", to="larpmanager.association")),
+                (
+                    "name",
+                    models.CharField(
+                        help_text="Short name shown as column header", max_length=100, verbose_name="Name"
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(
+                        help_text="Used as the underlying member config name; auto-generated from the name",
+                        max_length=100,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                "^[0-9a-z_-]*$", "Only characters allowed are: 0-9, a-z, _, -."
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "descr",
+                    models.CharField(
+                        blank=True,
+                        help_text="Shown as a tooltip on the column header",
+                        max_length=500,
+                        verbose_name="Description",
+                    ),
+                ),
+                (
+                    "annual",
+                    models.BooleanField(
+                        default=False,
+                        help_text="If enabled, the flag resets every calendar year instead of staying permanent",
+                        verbose_name="Annual",
+                    ),
+                ),
+                (
+                    "association",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="member_flag_defs",
+                        to="larpmanager.association",
+                    ),
+                ),
             ],
             options={
                 "ordering": ["order"],
-                "constraints": [models.UniqueConstraint(fields=("association", "slug", "deleted"), name="unique_member_flag_def_with_optional"), models.UniqueConstraint(condition=models.Q(("deleted", None)), fields=("association", "slug"), name="unique_member_flag_def_without_optional")],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("association", "slug", "deleted"), name="unique_member_flag_def_with_optional"
+                    ),
+                    models.UniqueConstraint(
+                        condition=models.Q(("deleted", None)),
+                        fields=("association", "slug"),
+                        name="unique_member_flag_def_without_optional",
+                    ),
+                ],
             },
             bases=(model_clone.mixin.CloneMixin, models.Model),
         ),
         migrations.AlterField(
-            model_name='memberflagdef',
-            name='slug',
-            field=models.SlugField(help_text='Used as the underlying member config name; auto-generated from the name',
-                                   max_length=100, validators=[django.core.validators.RegexValidator('^[0-9a-z_-]*$',
-                                                                                                     'Only characters allowed are: 0-9, a-z, _, -.')]),
-        ),
-        migrations.AlterField(
-            model_name='registrationquestion',
-            name='applicable',
+            model_name="registrationquestion",
+            name="applicable",
             field=models.CharField(
-                choices=[('r', 'registration'), ('m', 'matchmaker'), ('q', 'request'), ('b', 'debrief')], default='r',
-                help_text='Select which form this question belongs to', max_length=1, verbose_name='Applicable'),
+                choices=[("r", "registration"), ("m", "matchmaker"), ("q", "request"), ("b", "debrief")],
+                default="r",
+                help_text="Select which form this question belongs to",
+                max_length=1,
+                verbose_name="Applicable",
+            ),
         ),
         migrations.AlterField(
-            model_name='registrationquestion',
-            name='max_length',
-            field=models.IntegerField(default=0,
-                                      help_text='Optional - For text questions, maximum number of characters; For multiple options, maximum number of options; For Likert scale questions, maximum value of the scale (0 = no limit)',
-                                      verbose_name='Maximum length'),
+            model_name="registrationquestion",
+            name="max_length",
+            field=models.IntegerField(
+                default=0,
+                help_text="Optional - For text questions, maximum number of characters; For multiple options, maximum number of options; For Likert scale questions, maximum value of the scale (0 = no limit)",
+                verbose_name="Maximum length",
+            ),
         ),
         migrations.AlterField(
-            model_name='registrationquestion',
-            name='typ',
-            field=models.CharField(choices=[('s', 'Single choice'), ('m', 'Multiple choice'), ('t', 'Single-line text'),
-                                            ('p', 'Multi-line text'), ('e', 'Advanced text editor'),
-                                            ('ticket', 'Ticket'), ('additional_tickets', 'Additional'),
-                                            ('pay_what_you_want', 'Pay what you want'),
-                                            ('reg_quotas', 'Payment Installments'), ('reg_surcharges', 'Surcharge'),
-                                            ('faction_preference', 'Faction preference'), ('l', 'Likert scale')],
-                                   default='s', help_text='Question type', max_length=50, verbose_name='Type'),
+            model_name="registrationquestion",
+            name="typ",
+            field=models.CharField(
+                choices=[
+                    ("s", "Single choice"),
+                    ("m", "Multiple choice"),
+                    ("t", "Single-line text"),
+                    ("p", "Multi-line text"),
+                    ("e", "Advanced text editor"),
+                    ("ticket", "Ticket"),
+                    ("additional_tickets", "Additional"),
+                    ("pay_what_you_want", "Pay what you want"),
+                    ("reg_quotas", "Payment Installments"),
+                    ("reg_surcharges", "Surcharge"),
+                    ("faction_preference", "Faction preference"),
+                    ("l", "Likert scale"),
+                ],
+                default="s",
+                help_text="Question type",
+                max_length=50,
+                verbose_name="Type",
+            ),
         ),
     ]

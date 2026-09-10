@@ -46,7 +46,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.member import LogOperationType, Member
+from larpmanager.models.member import LogOperationType
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
@@ -55,7 +55,12 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
-from larpmanager.utils.users.member_flags import get_member_flags_html, member_flags_active
+from larpmanager.utils.users.member_flags import (
+    get_member_flags_eye_html,
+    get_member_flags_html,
+    get_member_in_association,
+    member_flags_active,
+)
 
 
 @login_required
@@ -464,10 +469,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
             return ""
         cell = str(member)
         if show_flags_eye:
-            cell += (
-                f" <a href='#' class='member_flags_eye' mid='{member.uuid}' turl='{flags_url}'>"
-                "<i class='fas fa-eye'></i></a>"
-            )
+            cell += get_member_flags_eye_html(member.uuid, flags_url)
         return cell
 
     # Configure context with database relations and field callbacks
@@ -515,8 +517,11 @@ def orga_payment_member_flags(request: HttpRequest, event_slug: str) -> JsonResp
     """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
     context = check_event_context(request, event_slug, "orga_payments")
 
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
     try:
-        member = Member.objects.get(uuid=request.POST["mid"])
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"k": 0})
 
