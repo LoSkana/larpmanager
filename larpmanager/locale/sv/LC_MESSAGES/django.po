@@ -514,6 +514,9 @@ msgstr "Administratörer"
 msgid "Amount"
 msgstr "Summa"
 
+msgid "Annual"
+msgstr "Årlig"
+
 msgid "Answer"
 msgstr "Svara"
 
@@ -1679,6 +1682,9 @@ msgstr "Kassör"
 msgid "Uploading"
 msgstr "Laddar upp"
 
+msgid "User flag"
+msgstr "Användarflagga"
+
 msgid "Warehouse"
 msgstr "Lagerlokal"
 
@@ -2003,6 +2009,9 @@ msgstr "Användningsdatum"
 msgid "User agent"
 msgstr "Användaragent"
 
+msgid "User flags"
+msgstr "Användarflaggor"
+
 msgid "Users data"
 msgstr "Uppgifter om användare"
 
@@ -2125,6 +2134,9 @@ msgstr "Evenemangstexter"
 
 msgid "Fiscal code"
 msgstr "Skatteregistreringsnummer"
+
+msgid "Flags types"
+msgstr "Flaggtyper"
 
 msgid "Footer HTML"
 msgstr "HTML-kod för sidfoten"
@@ -3010,6 +3022,9 @@ msgstr "Medlemsavgift"
 msgid "Multiplication"
 msgstr "Multiplikation"
 
+msgid "No users found"
+msgstr "Inga användare hittades"
+
 msgid "Obtain ability"
 msgstr "Förvärva färdighet"
 
@@ -3302,6 +3317,9 @@ msgstr "Text på flera rader"
 msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
 
+msgid "No users found."
+msgstr "Inga användare hittades."
+
 msgid "Non-residential"
 msgstr "Icke-residentiell"
 
@@ -3544,9 +3562,6 @@ msgstr "Frågan saknas"
 
 msgid "Multiple systems"
 msgstr "Flera system"
-
-msgid "No members found"
-msgstr "Inga medlemmar hittades"
 
 msgid "Number not found"
 msgstr "Numret hittades inte"
@@ -6340,6 +6355,9 @@ msgstr "Scenografi: uppbyggnad och material"
 msgid "Set the registration opening date"
 msgstr "Fastställ datum för registreringens öppnande"
 
+msgid "Short name shown as column header"
+msgstr "Kort namn som visas som kolumnrubrik"
+
 msgid "The event this content belongs to"
 msgstr "Det evenemang som detta innehåll hör till"
 
@@ -6617,6 +6635,9 @@ msgstr "Stad där du föddes (fullständigt namn)"
 msgid "Confirmation of registration request"
 msgstr "Bekräftelse på begäran om registrering"
 
+msgid "Define custom status flags for users"
+msgstr "Definiera anpassade statusflaggor för användare"
+
 msgid "Display all users data for insurance"
 msgstr "Visa alla användaruppgifter för försäkring"
 
@@ -6877,6 +6898,9 @@ msgstr "Anmälan till %(event)s av %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Transport: bränsle och motorvägsavgifter"
 
+msgid "View and edit each user's status flags"
+msgstr "Visa och redigera varje användares statusflaggor"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besök handledningen för att lära dig grunderna"
 
@@ -6996,6 +7020,9 @@ msgstr "Ställ in konfigurationen för erfarenhetspoäng"
 
 msgid "Set up payment methods for participants"
 msgstr "Ställ in betalningsmetoder för deltagare"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Visas som ett verktygstips på kolumnrubriken"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Summan av anmälningsavgiften, totalt att betala"
@@ -9072,6 +9099,11 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Hantera pooletiketter för att gruppera pooler i karaktärsinventarier"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Hantera statusflaggor som kan redigeras från sammanfattningssidan för "
+"användarflaggor"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr "Hantera taggarna som kan användas för karaktärsrelationer"
 
@@ -9889,6 +9921,12 @@ msgstr ""
 "plattformskommunikation."
 
 msgid ""
+"Used as the underlying member config name; auto-generated from the name"
+msgstr ""
+"Används som underliggande konfigurationsnamn för medlemmen; genereras "
+"automatiskt från namnet"
+
+msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Du kan använda följande fält; de fylls i automatiskt:"
 
@@ -10282,6 +10320,12 @@ msgstr ""
 " detta evenemang."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Inga användarflaggor har skapats ännu. Använd knappen ovan för att lägga "
+"till en ny."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "På den här sidan kan du filtrera karaktärerna och visa deras information "
@@ -10397,6 +10441,12 @@ msgid ""
 msgstr ""
 "Fantastiska nyheter! Din ansökan om att anmäla dig till <b>%(event)s</b> har"
 " godkänts."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Om aktiverat återställs flaggan varje kalenderår i stället för att vara "
+"permanent"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -12341,6 +12391,13 @@ msgstr ""
 "förutsättningar eller karaktärsfält"
 
 msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Datatabell över användare och deras statusflaggvärden; klicka på "
+"redigeringsikonen för att uppdatera en användares flaggor."
+
+msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written:"
 msgstr ""
@@ -14047,6 +14104,13 @@ msgid ""
 msgstr ""
 "Om den är markerad används taggen på relationen även för den andra "
 "karaktärens relation tillbaka till denna"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Om aktiverat kan du definiera anpassade statusflaggor för användare och visa"
+" dem för arrangörer som hanterar anmälningar och betalningar."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

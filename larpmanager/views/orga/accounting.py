@@ -20,7 +20,8 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -45,7 +46,7 @@ from larpmanager.models.accounting import (
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.member import LogOperationType
+from larpmanager.models.member import LogOperationType, Member
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
@@ -54,6 +55,7 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.users.member_flags import get_member_flags_html, member_flags_active
 
 
 @login_required
@@ -452,6 +454,22 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("orga_payment_member_flags", args=[event_slug]) if show_flags_eye else None
+
+    def _member_cell(row: AccountingItemPayment) -> str:
+        member = row.registration.member if row.registration else None
+        if not member:
+            return ""
+        cell = str(member)
+        if show_flags_eye:
+            cell += (
+                f" <a href='#' class='member_flags_eye' mid='{member.uuid}' turl='{flags_url}'>"
+                "<i class='fas fa-eye'></i></a>"
+            )
+        return cell
+
     # Configure context with database relations and field callbacks
     context.update(
         {
@@ -461,9 +479,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
             "fields": fields,
             # Define callback functions for data formatting
             "callbacks": {
-                "member": lambda row: str(row.registration.member)
-                if row.registration and row.registration.member
-                else "",
+                "member": _member_cell,
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
@@ -492,6 +508,19 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/payments.html",
         "orga_payments_edit",
     )
+
+
+@login_required
+def orga_payment_member_flags(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
+    context = check_event_context(request, event_slug, "orga_payments")
+
+    try:
+        member = Member.objects.get(uuid=request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    return JsonResponse({"k": 1, "v": get_member_flags_html(member, context["association_id"])})
 
 
 @login_required

@@ -1653,6 +1653,19 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: User Status Flags
+    descr: Pseudo-feature activated by member_flags_active configuration
+    slug: member_status_flags
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: users
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Version Upgrade
     descr: Internal pseudo-feature for the platform version upgrade page
     slug: exe_version_upgrade

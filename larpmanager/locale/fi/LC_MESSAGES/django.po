@@ -514,6 +514,9 @@ msgstr "Ylläpitäjät"
 msgid "Amount"
 msgstr "Määrä"
 
+msgid "Annual"
+msgstr "Vuosittainen"
+
 msgid "Answer"
 msgstr "Vastaa"
 
@@ -1679,6 +1682,9 @@ msgstr "Rahastonhoitaja"
 msgid "Uploading"
 msgstr "Lataaminen"
 
+msgid "User flag"
+msgstr "Käyttäjälippu"
+
 msgid "Warehouse"
 msgstr "Varasto"
 
@@ -2003,6 +2009,9 @@ msgstr "Käyttöpäivä"
 msgid "User agent"
 msgstr "Käyttäjäagentti"
 
+msgid "User flags"
+msgstr "Käyttäjämerkinnät"
+
 msgid "Users data"
 msgstr "Käyttäjien tiedot"
 
@@ -2125,6 +2134,9 @@ msgstr "Tapahtuman tekstit"
 
 msgid "Fiscal code"
 msgstr "Verotunnus"
+
+msgid "Flags types"
+msgstr "Merkintätyypit"
 
 msgid "Footer HTML"
 msgstr "Alatunnisteen HTML-koodi"
@@ -3010,6 +3022,9 @@ msgstr "Jäsenmaksu"
 msgid "Multiplication"
 msgstr "Kertolasku"
 
+msgid "No users found"
+msgstr "Käyttäjiä ei löytynyt"
+
 msgid "Obtain ability"
 msgstr "Hanki taito"
 
@@ -3302,6 +3317,9 @@ msgstr "Monirivinen teksti"
 msgid "Multiple choice"
 msgstr "Monivalinta"
 
+msgid "No users found."
+msgstr "Käyttäjiä ei löytynyt."
+
 msgid "Non-residential"
 msgstr "Ei-majoituksellinen"
 
@@ -3544,9 +3562,6 @@ msgstr "Puuttuva kysymys"
 
 msgid "Multiple systems"
 msgstr "Useita järjestelmiä"
-
-msgid "No members found"
-msgstr "Jäseniä ei löytynyt"
 
 msgid "Number not found"
 msgstr "Numeroa ei löydy"
@@ -6340,6 +6355,9 @@ msgstr "Lavastus: somistus ja materiaalit"
 msgid "Set the registration opening date"
 msgstr "Aseta rekisteröinnin avaamispäivä"
 
+msgid "Short name shown as column header"
+msgstr "Sarakkeen otsikkona näkyvä lyhyt nimi"
+
 msgid "The event this content belongs to"
 msgstr "Tapahtuma, johon tämä sisältö kuuluu"
 
@@ -6617,6 +6635,9 @@ msgstr "Kaupunki, jossa synnyit (koko nimi)"
 msgid "Confirmation of registration request"
 msgstr "Ilmoittautumispyynnön vahvistus"
 
+msgid "Define custom status flags for users"
+msgstr "Määritä käyttäjille omia tilamerkintöjä"
+
 msgid "Display all users data for insurance"
 msgstr "Näytä kaikkien käyttäjien tiedot vakuutusta varten"
 
@@ -6877,6 +6898,9 @@ msgstr "%(event)s-tapahtumaan %(user)s:n ilmoittautuminen"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Kuljetus: polttoaine ja tienkäyttömaksut"
 
+msgid "View and edit each user's status flags"
+msgstr "Näytä ja muokkaa jokaisen käyttäjän tilamerkintöjä"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Vieraile opetusohjelmassa oppiaksesi perusteet"
 
@@ -6996,6 +7020,9 @@ msgstr "Aseta kokemuspisteiden asetukset"
 
 msgid "Set up payment methods for participants"
 msgstr "Määritä maksutavat osallistujille"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Näytetään työkaluvihjeenä sarakkeen otsikossa"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Ilmoittautumismaksun summa, maksettava kokonaismäärä"
@@ -9089,6 +9116,10 @@ msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua."
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Hallitse pool-tunnisteita poolien ryhmittelyyn hahmoinventaarioissa"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Hallitse tilalippuja, muokattavissa käyttäjälippujen yhteenvetosivulla"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr "Hallitse tunnisteita, joita voi lisätä hahmojen välisiin suhteisiin"
 
@@ -9923,6 +9954,12 @@ msgid ""
 msgstr "Tämä poistaa sinut kaikesta LarpManager-alustan viestinnästä."
 
 msgid ""
+"Used as the underlying member config name; auto-generated from the name"
+msgstr ""
+"Käytetään jäsenasetuksen pohjalla olevana nimenä; luodaan automaattisesti "
+"nimestä"
+
+msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Voit käyttää seuraavia kenttiä; ne täytetään automaattisesti:"
 
@@ -10326,6 +10363,12 @@ msgstr ""
 "tapahtumalle."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Käyttäjämerkintöjä ei ole vielä luotu. Lisää uusi käyttämällä yllä olevaa "
+"painiketta."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Tällä sivulla voit suodattaa hahmoja ja tarkastella suoraan niiden tietoja."
@@ -10438,6 +10481,12 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Hienoja uutisia! Pyyntösi ilmoittautua <b>%(event)s</b> on hyväksytty."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Jos käytössä, merkintä nollautuu joka kalenterivuosi sen sijaan, että se "
+"pysyisi pysyvänä"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -12351,6 +12400,13 @@ msgstr ""
 "ennakkoedellytysten tai hahmon ominaisuuksien perusteella"
 
 msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Käyttäjien ja heidän tilalippujensa arvojen tietotaulukko; päivitä käyttäjän"
+" liput napsauttamalla muokkauskuvaketta."
+
+msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written:"
 msgstr ""
@@ -14054,6 +14110,13 @@ msgid ""
 msgstr ""
 "Jos valittu, tämän tunnisteen lisääminen suhteeseen lisää sen myös toisen "
 "hahmon suhteeseen tätä hahmoa kohtaan"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Jos käytössä, voit määrittää käyttäjille omia tilamerkintöjä. Ne näkyvät "
+"ilmoittautumisia ja maksuja käsitteleville järjestäjille."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

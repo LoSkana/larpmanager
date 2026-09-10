@@ -48,7 +48,7 @@ from larpmanager.forms.event import (
     ExeTemplateForm,
     OrgaRunForm,
 )
-from larpmanager.forms.member import ExeBadgeForm, ExeProfileForm, ExeVolunteerRegistryForm
+from larpmanager.forms.member import ExeBadgeForm, ExeMemberFlagDefForm, ExeProfileForm, ExeVolunteerRegistryForm
 from larpmanager.forms.miscellanea import (
     ExeUrlShortnerForm,
 )
@@ -103,6 +103,7 @@ class ExeAction(str, Enum):
     # Member management
     VOLUNTEER_REGISTRY = ("exe_volunteer_registry", {"form": ExeVolunteerRegistryForm})
     BADGES = ("exe_badges", {"form": ExeBadgeForm})
+    MEMBER_FLAGS = ("exe_member_flags", {"form": ExeMemberFlagDefForm})
 
     # Warehouse management
     WAREHOUSE_CONTAINERS = ("exe_warehouse_containers", {"form": ExeWarehouseContainerForm})

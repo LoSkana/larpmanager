@@ -62,6 +62,8 @@ from larpmanager.models.member import (
     Badge,
     LogOperationType,
     Member,
+    MemberConfig,
+    MemberFlagDef,
     Membership,
     MembershipStatus,
     VolunteerRegistry,
@@ -92,6 +94,11 @@ from larpmanager.utils.io.pdf import (
 from larpmanager.utils.security.csv_validation import SanitizingCsvWriter
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
+from larpmanager.utils.users.member_flags import (
+    get_association_flag_defs,
+    get_member_flag_values,
+    set_member_flag,
+)
 from larpmanager.views.orga.member import send_mail_batch
 
 logger = logging.getLogger(__name__)
@@ -1002,6 +1009,127 @@ def exe_badges_toggle(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"res": "ok", "action": "added"})
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"res": "ko"})
+
+
+@login_required
+def exe_member_flags(request: HttpRequest) -> HttpResponse:
+    """Display and manage member status flag definitions."""
+    context = check_association_context(request, "exe_member_flags")
+
+    context["list"] = MemberFlagDef.objects.filter(association_id=context["association_id"], deleted=None).order_by(
+        "order",
+    )
+
+    return render(request, "larpmanager/exe/users/member_flags.html", context)
+
+
+@login_required
+def exe_member_flags_new(request: HttpRequest) -> HttpResponse:
+    """Create a new member status flag definition."""
+    return exe_new(request, ExeAction.MEMBER_FLAGS)
+
+
+@login_required
+def exe_member_flags_edit(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
+    """Edit a member status flag definition."""
+    return exe_edit(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
+
+
+@login_required
+def exe_member_flags_delete(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
+    """Delete a member status flag definition."""
+    return exe_delete(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
+
+
+@login_required
+def exe_members_flags(request: HttpRequest) -> HttpResponse:
+    """Display a datatable of association members with their status flag values.
+
+    Loads the value of every active flag for every eligible member with a single
+    query on MemberConfig, instead of one query per member.
+    """
+    context = check_association_context(request, "exe_members_flags")
+    context["page_info"] = _(
+        "Datatable of users and their status flag values; click the edit icon to update a user's flags."
+    )
+    association_id = context["association_id"]
+
+    flag_defs = list(get_association_flag_defs(association_id))
+    context["flag_defs"] = flag_defs
+
+    allowed_statuses = [
+        MembershipStatus.JOINED,
+        MembershipStatus.UPLOADED,
+        MembershipStatus.SUBMITTED,
+        MembershipStatus.ACCEPTED,
+    ]
+    memberships = (
+        Membership.objects.filter(association_id=association_id, status__in=allowed_statuses)
+        .select_related("member")
+        .order_by("member__surname", "member__name")
+    )
+    members = [membership.member for membership in memberships]
+
+    config_names = {flag_def.config_name(): flag_def.id for flag_def in flag_defs}
+    member_ids = [member.id for member in members]
+    set_pairs = MemberConfig.objects.filter(
+        member_id__in=member_ids,
+        name__in=config_names,
+        deleted=None,
+    ).values_list("member_id", "name")
+
+    flags_by_member: dict[int, set[int]] = defaultdict(set)
+    for member_id, name in set_pairs:
+        flags_by_member[member_id].add(config_names[name])
+
+    context["rows"] = [
+        {
+            "member": member,
+            "flags": [flag_def.id in flags_by_member[member.id] for flag_def in flag_defs],
+        }
+        for member in members
+    ]
+
+    return render(request, "larpmanager/exe/users/members_flags.html", context)
+
+
+@login_required
+def exe_members_flags_get(request: HttpRequest) -> JsonResponse:
+    """Return a member's current flag values as HTML for the edit modal (AJAX POST)."""
+    context = check_association_context(request, "exe_members_flags")
+
+    try:
+        member = Member.objects.get(uuid=request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    flag_defs = list(get_association_flag_defs(context["association_id"]))
+    values = get_member_flag_values(member, flag_defs)
+
+    context["member"] = member
+    context["flag_defs"] = flag_defs
+    context["values"] = values
+
+    html = render(request, "larpmanager/exe/users/members_flags_form.html", context).content.decode()
+    return JsonResponse({"k": 1, "v": html})
+
+
+@login_required
+def exe_members_flags_save(request: HttpRequest) -> JsonResponse:
+    """Save a member's flag values from the edit modal (AJAX POST)."""
+    context = check_association_context(request, "exe_members_flags")
+
+    try:
+        member = Member.objects.get(uuid=request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    flag_defs = get_association_flag_defs(context["association_id"])
+    for flag_def in flag_defs:
+        active = request.POST.get(f"flag_{flag_def.id}") == "1"
+        set_member_flag(member, flag_def, active=active)
+
+    return JsonResponse({"k": 1})
 
 
 @login_required

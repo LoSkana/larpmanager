@@ -514,6 +514,9 @@ msgstr "Administrátoři"
 msgid "Amount"
 msgstr "Součet"
 
+msgid "Annual"
+msgstr "Roční"
+
 msgid "Answer"
 msgstr "Odpověz"
 
@@ -1679,6 +1682,9 @@ msgstr "Pokladník"
 msgid "Uploading"
 msgstr "Nahrávání"
 
+msgid "User flag"
+msgstr "Příznak uživatele"
+
 msgid "Warehouse"
 msgstr "Sklad"
 
@@ -2003,6 +2009,9 @@ msgstr "Datum použití"
 msgid "User agent"
 msgstr "Uživatelský agent"
 
+msgid "User flags"
+msgstr "Příznaky uživatelů"
+
 msgid "Users data"
 msgstr "Údaje o uživatelích"
 
@@ -2125,6 +2134,9 @@ msgstr "Texty událostí"
 
 msgid "Fiscal code"
 msgstr "Daňové identifikační číslo"
+
+msgid "Flags types"
+msgstr "Typy příznaků"
 
 msgid "Footer HTML"
 msgstr "Zápatí HTML"
@@ -3010,6 +3022,9 @@ msgstr "Členský poplatek"
 msgid "Multiplication"
 msgstr "Násobení"
 
+msgid "No users found"
+msgstr "Nenalezeni žádní uživatelé"
+
 msgid "Obtain ability"
 msgstr "Získat dovednost"
 
@@ -3302,6 +3317,9 @@ msgstr "Víceřádkový text"
 msgid "Multiple choice"
 msgstr "Vícenásobná volba"
 
+msgid "No users found."
+msgstr "Nenalezeni žádní uživatelé."
+
 msgid "Non-residential"
 msgstr "Bez ubytování"
 
@@ -3544,9 +3562,6 @@ msgstr "Chybějící otázka"
 
 msgid "Multiple systems"
 msgstr "Více systémů"
-
-msgid "No members found"
-msgstr "Nebyli nalezeni žádní členové"
 
 msgid "Number not found"
 msgstr "Číslo nebylo nalezeno"
@@ -6340,6 +6355,9 @@ msgstr "Výprava: scénografie a materiály"
 msgid "Set the registration opening date"
 msgstr "Nastav datum zahájení registrace"
 
+msgid "Short name shown as column header"
+msgstr "Krátký název zobrazený jako záhlaví sloupce"
+
 msgid "The event this content belongs to"
 msgstr "Událost, ke které tento obsah patří"
 
@@ -6617,6 +6635,9 @@ msgstr "Město, kde ses narodil/a (celý název)"
 msgid "Confirmation of registration request"
 msgstr "Potvrzení žádosti o registraci"
 
+msgid "Define custom status flags for users"
+msgstr "Definovat vlastní příznaky stavu uživatelů"
+
 msgid "Display all users data for insurance"
 msgstr "Zobrazit údaje všech uživatelů pro pojištění"
 
@@ -6877,6 +6898,9 @@ msgstr "Registrace na %(event)s provedená %(user)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Doprava: palivo a dálniční poplatky"
 
+msgid "View and edit each user's status flags"
+msgstr "Zobrazit a upravit příznaky stavu každého uživatele"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Navštiv výukový program a nauč se základy"
 
@@ -6997,6 +7021,9 @@ msgstr "Nastav konfiguraci zkušenostních bodů"
 
 msgid "Set up payment methods for participants"
 msgstr "Nastav platební metody pro účastníky"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Zobrazuje se jako nápověda u záhlaví sloupce"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Součet registračního poplatku, celkem k úhradě"
@@ -9051,6 +9078,11 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Spravovat štítky poolů pro seskupování poolů v inventářích postav"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Spravovat příznaky stavu upravitelné na stránce se souhrnem příznaků "
+"uživatele"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr "Spravuj štítky, které lze přidávat ke vztahům postav"
 
@@ -9800,6 +9832,12 @@ msgid ""
 msgstr "Tím se odhlásíš z odběru všech sdělení platformy LarpManager."
 
 msgid ""
+"Used as the underlying member config name; auto-generated from the name"
+msgstr ""
+"Používá se jako interní název konfigurace člena; automaticky se vygeneruje z"
+" názvu"
+
+msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Můžeš použít následující pole; budou vyplněna automaticky:"
 
@@ -10180,6 +10218,12 @@ msgstr ""
 "této akce."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Zatím nebyly vytvořeny žádné příznaky uživatelů. Pomocí tlačítka výše přidej"
+" nový."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Na této stránce můžeš filtrovat postavy a přímo zobrazit jejich informace."
@@ -10283,6 +10327,12 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Skvělá zpráva! Tvoje žádost o registraci na <b>%(event)s</b> byla schválena."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Pokud je povoleno, příznak se každý kalendářní rok resetuje, místo aby "
+"zůstal trvalý"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -12173,6 +12223,13 @@ msgstr ""
 "předpokladů nebo vlastností postavy"
 
 msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Tabulka uživatelů a hodnot jejich stavových příznaků; klikni na ikonu úprav "
+"pro aktualizaci příznaků uživatele."
+
+msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written:"
 msgstr ""
@@ -13869,6 +13926,13 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, přidání tohoto štítku ke vztahu ho přidá také ke vztahu"
 " druhé postavy zpět k této postavě"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Pokud je povoleno, umožňuje definovat vlastní příznaky stavu uživatelů a "
+"zobrazuje je organizátorům, kteří spravují registrace a platby."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

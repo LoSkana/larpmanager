@@ -514,6 +514,9 @@ msgstr "Admins"
 msgid "Amount"
 msgstr "Summe"
 
+msgid "Annual"
+msgstr "Jährlich"
+
 msgid "Answer"
 msgstr "Antworten"
 
@@ -1679,6 +1682,9 @@ msgstr "Schatzmeister"
 msgid "Uploading"
 msgstr "Hochladen"
 
+msgid "User flag"
+msgstr "Benutzer-Markierung"
+
 msgid "Warehouse"
 msgstr "Lagerhaus"
 
@@ -2003,6 +2009,9 @@ msgstr "Verwendungsdatum"
 msgid "User agent"
 msgstr "Benutzer-Agent"
 
+msgid "User flags"
+msgstr "Benutzerkennzeichnungen"
+
 msgid "Users data"
 msgstr "Benutzerdaten"
 
@@ -2125,6 +2134,9 @@ msgstr "Veranstaltungstexte"
 
 msgid "Fiscal code"
 msgstr "Steueridentifikationsnummer"
+
+msgid "Flags types"
+msgstr "Flag-Typen"
 
 msgid "Footer HTML"
 msgstr "HTML-Fußzeile"
@@ -3010,6 +3022,9 @@ msgstr "Mitgliedsbeitrag"
 msgid "Multiplication"
 msgstr "Multiplikation"
 
+msgid "No users found"
+msgstr "Keine Benutzer gefunden"
+
 msgid "Obtain ability"
 msgstr "Fähigkeit erwerben"
 
@@ -3302,6 +3317,9 @@ msgstr "Mehrzeiliger Text"
 msgid "Multiple choice"
 msgstr "Mehrfachauswahl"
 
+msgid "No users found."
+msgstr "Keine Benutzer gefunden."
+
 msgid "Non-residential"
 msgstr "Ohne Übernachtung"
 
@@ -3544,9 +3562,6 @@ msgstr "Fehlende Frage"
 
 msgid "Multiple systems"
 msgstr "Mehrere Systeme"
-
-msgid "No members found"
-msgstr "Es wurden keine Mitglieder gefunden"
 
 msgid "Number not found"
 msgstr "Nummer nicht gefunden"
@@ -6340,6 +6355,9 @@ msgstr "Bühnenbild: Inszenierung und Materialien"
 msgid "Set the registration opening date"
 msgstr "Lege das Datum für die Öffnung der Registrierung fest"
 
+msgid "Short name shown as column header"
+msgstr "Kurzname, der als Spaltenüberschrift angezeigt wird"
+
 msgid "The event this content belongs to"
 msgstr "Das Ereignis, zu dem dieser Inhalt gehört"
 
@@ -6617,6 +6635,9 @@ msgstr "Stadt, in der du geboren wurdest (vollständiger Name)"
 msgid "Confirmation of registration request"
 msgstr "Bestätigung des Registrierungsantrags"
 
+msgid "Define custom status flags for users"
+msgstr "Benutzerdefinierte Statuskennzeichnungen für Benutzer festlegen"
+
 msgid "Display all users data for insurance"
 msgstr "Zeige alle Benutzerdaten für die Versicherung an"
 
@@ -6877,6 +6898,9 @@ msgstr "Anmeldung von %(user)s für %(event)s"
 msgid "Transportation: fuel and highway tolls"
 msgstr "Transport: Kraftstoff und Autobahnmaut"
 
+msgid "View and edit each user's status flags"
+msgstr "Statuskennzeichnungen jedes Benutzers anzeigen und bearbeiten"
+
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besuche das Tutorial, um die Grundlagen zu lernen"
 
@@ -6998,6 +7022,9 @@ msgstr "Lege die Konfiguration der Erfahrungspunkte fest"
 
 msgid "Set up payment methods for participants"
 msgstr "Zahlungsmöglichkeiten für Teilnehmer einrichten"
+
+msgid "Shown as a tooltip on the column header"
+msgstr "Wird als Tooltip in der Spaltenüberschrift angezeigt"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Summe der Anmeldegebühr, zu zahlender Gesamtbetrag"
@@ -9205,6 +9232,11 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Verwalte Pool-Labels zum Gruppieren von Pools in Charakterinventaren"
 
+msgid "Manage status flags, editable from the user flags summary page"
+msgstr ""
+"Status-Markierungen verwalten, die auf der Übersichtsseite der Benutzer-"
+"Markierungen bearbeitet werden können"
+
 msgid "Manage the tags that can be applied to character relationships"
 msgstr ""
 "Verwalte die Tags, die auf Charakterbeziehungen angewendet werden können"
@@ -10155,6 +10187,12 @@ msgstr ""
 "abgemeldet."
 
 msgid ""
+"Used as the underlying member config name; auto-generated from the name"
+msgstr ""
+"Wird als zugrunde liegender Konfigurationsname für Mitglieder verwendet; "
+"wird automatisch aus dem Namen generiert"
+
+msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr ""
 "Du kannst die folgenden Felder verwenden; sie werden automatisch ausgefüllt:"
@@ -10597,6 +10635,12 @@ msgstr ""
 " Veranstaltung absolviert."
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+"Es wurden noch keine Benutzerkennzeichnungen erstellt. Verwende die "
+"Schaltfläche oben, um eine neue hinzuzufügen."
+
+msgid ""
 "On this page you can filter characters and directly view their information."
 msgstr ""
 "Auf dieser Seite kannst du die Charaktere filtern und ihre Informationen "
@@ -10717,6 +10761,12 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Tolle Neuigkeiten! Deine Anmeldung für <b>%(event)s</b> wurde genehmigt."
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
+msgstr ""
+"Wenn aktiviert, wird das Flag jedes Kalenderjahr zurückgesetzt, statt "
+"dauerhaft bestehen zu bleiben"
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -12704,6 +12754,13 @@ msgstr ""
 "auf Voraussetzungen oder Charaktermerkmalen anpassen"
 
 msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
+msgstr ""
+"Tabelle der Benutzer und ihrer Status-Flag-Werte; klicke auf das Bearbeiten-"
+"Symbol, um die Flags eines Benutzers zu aktualisieren."
+
+msgid ""
 "Disable the system that finds the character number when a special reference "
 "symbol is written:"
 msgstr ""
@@ -14429,6 +14486,14 @@ msgid ""
 msgstr ""
 "Wenn aktiviert, wird dieser Tag beim Anwenden auf eine Beziehung auch auf "
 "die Beziehung des anderen Charakters zu diesem Charakter angewendet"
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+"Wenn aktiviert, können benutzerdefinierte Statuskennzeichnungen für Benutzer"
+" festgelegt werden und sie werden Organisatoren angezeigt, die Anmeldungen "
+"und Zahlungen bearbeiten."
 
 msgid ""
 "If you select one (or more) tickets, the question will only be shown to "

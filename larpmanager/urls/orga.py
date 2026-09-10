@@ -1561,6 +1561,11 @@ urlpatterns = [
         name="orga_payments_delete",
     ),
     path(
+        "<slug:event_slug>/manage/payments/member_flags/",
+        views_oa.orga_payment_member_flags,
+        name="orga_payment_member_flags",
+    ),
+    path(
         "<slug:event_slug>/manage/credits/",
         views_oa.orga_credits,
         name="orga_credits",

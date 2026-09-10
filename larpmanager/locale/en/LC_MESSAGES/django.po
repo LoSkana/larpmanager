@@ -544,6 +544,14 @@ msgid ""
 "attended."
 msgstr ""
 
+msgid "User flags"
+msgstr ""
+
+msgid ""
+"If enabled, allows defining custom status flags for users and shows them to "
+"organizers handling registrations and payments."
+msgstr ""
+
 msgid "Deadline"
 msgstr ""
 
@@ -2357,6 +2365,12 @@ msgstr ""
 msgid ""
 "Manage association badges: view, create, edit, and track how many members "
 "each badge has been assigned to"
+msgstr ""
+
+msgid "User flag"
+msgstr ""
+
+msgid "Manage status flags, editable from the user flags summary page"
 msgstr ""
 
 msgid ""
@@ -4741,6 +4755,22 @@ msgstr ""
 
 msgid ""
 "Choose how often you want to receive updates about events and activities"
+msgstr ""
+
+msgid "Short name shown as column header"
+msgstr ""
+
+msgid "Used as the underlying member config name; auto-generated from the name"
+msgstr ""
+
+msgid "Shown as a tooltip on the column header"
+msgstr ""
+
+msgid "Annual"
+msgstr ""
+
+msgid ""
+"If enabled, the flag resets every calendar year instead of staying permanent"
 msgstr ""
 
 msgid "Short name"
@@ -7208,7 +7238,7 @@ msgstr ""
 msgid "Type to search members"
 msgstr ""
 
-msgid "No members found"
+msgid "No users found"
 msgstr ""
 
 msgid "Click to assign"
@@ -7260,6 +7290,10 @@ msgid "Detail"
 msgstr ""
 
 msgid ""
+"No user flags have been created yet. Use the button above to add a new one."
+msgstr ""
+
+msgid ""
 "Track a member's full event registration history with payment status for "
 "each run"
 msgstr ""
@@ -7274,6 +7308,9 @@ msgid "Unpaid"
 msgstr ""
 
 msgid "This member has not registered for any events yet."
+msgstr ""
+
+msgid "No users found."
 msgstr ""
 
 msgid "Members list"
@@ -11185,6 +11222,15 @@ msgstr ""
 msgid "Manage badges and assign them to participants"
 msgstr ""
 
+msgid "Flags types"
+msgstr ""
+
+msgid "Define custom status flags for users"
+msgstr ""
+
+msgid "View and edit each user's status flags"
+msgstr ""
+
 msgid "Manage participant questions and answer them"
 msgstr ""
 
@@ -12819,6 +12865,11 @@ msgid "Profile updated"
 msgstr ""
 
 msgid "Membership fee of"
+msgstr ""
+
+msgid ""
+"Datatable of users and their status flag values; click the edit icon to "
+"update a user's flags."
 msgstr ""
 
 msgid "Answer submitted!"
