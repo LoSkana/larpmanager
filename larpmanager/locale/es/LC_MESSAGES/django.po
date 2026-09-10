@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Código único"
 
 msgid "Unsubscribe"
-msgstr "Anular suscripción"
+msgstr "Darse de baja"
 
 msgid "Where it is"
 msgstr "Dónde está"
@@ -10760,6 +10760,13 @@ msgid ""
 msgstr ""
 "Si está activado, se desactivará el guardado automático mientras editas "
 "elementos de escritura."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Si no te interesan más comunicaciones de nuestra parte, por favor %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

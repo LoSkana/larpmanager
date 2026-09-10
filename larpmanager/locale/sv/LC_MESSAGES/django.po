@@ -10558,6 +10558,14 @@ msgstr ""
 "Om det är aktiverat inaktiveras automatisk sparning medan du redigerar "
 "skrivelement."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Om du inte är intresserad av ytterligare kommunikation från oss, vänligen "
+"%(link)s."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

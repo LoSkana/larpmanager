@@ -10647,6 +10647,14 @@ msgstr ""
 "Se ativado, a gravação automática durante a edição de elementos de escrita "
 "será desativada."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Se não tiveres interesse em receber mais comunicações nossas, por favor "
+"%(link)s."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

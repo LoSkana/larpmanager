@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Unik kode"
 
 msgid "Unsubscribe"
-msgstr "Avslutt abonnementet"
+msgstr "Avslutt abonnement"
 
 msgid "Where it is"
 msgstr "Hvor det er"
@@ -10574,6 +10574,13 @@ msgid ""
 msgstr ""
 "Hvis aktivert, deaktiveres automatisk lagring mens du redigerer "
 "skriveelementer."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Hvis du ikke ønsker å motta flere henvendelser fra oss, vennligst %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

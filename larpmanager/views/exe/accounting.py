@@ -1213,7 +1213,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     # Handle file upload for payment verification
     if request.method == "POST":
         form = UploadElementsForm(request.POST, request.FILES, only_one=True)
-        if form.is_valid():
+        if form.is_valid() and "first" in request.FILES:
             # Process uploaded verification file and count verified payments
             counter = invoice_verify(context, request.FILES["first"])
             messages.success(request, _("Verified payments!") + " " + str(counter))

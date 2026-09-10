@@ -10769,6 +10769,14 @@ msgstr ""
 "Se abilitato, il salvataggio automatico durante la modifica degli elementi "
 "di scrittura verrà disabilitato."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Se non sei interessato/a a ricevere ulteriori comunicazioni da parte nostra,"
+" %(link)s."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

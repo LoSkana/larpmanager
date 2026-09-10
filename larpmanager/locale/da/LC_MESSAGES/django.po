@@ -10505,6 +10505,14 @@ msgstr ""
 "Hvis aktiveret, deaktiveres automatisk lagring under redigering af "
 "skriveelementer."
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr ""
+"Hvis du ikke er interesseret i yderligere kommunikation fra os, bedes du "
+"%(link)s."
+
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "
 "steps!"

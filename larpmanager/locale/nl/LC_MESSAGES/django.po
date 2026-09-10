@@ -2310,7 +2310,7 @@ msgid "Unique code"
 msgstr "Unieke code"
 
 msgid "Unsubscribe"
-msgstr "Afmelden"
+msgstr "Uitschrijven"
 
 msgid "Where it is"
 msgstr "Waar het is"
@@ -10764,6 +10764,12 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, wordt automatisch opslaan tijdens het bewerken van "
 "schrijfelementen uitgeschakeld."
+
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please "
+"%(link)s."
+msgstr "Als je geen verdere communicatie van ons wilt ontvangen, %(link)s."
 
 msgid ""
 "In this page you'll find a list of actions and suggestions on the next "

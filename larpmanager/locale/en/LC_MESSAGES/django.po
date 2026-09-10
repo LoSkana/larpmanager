@@ -12211,6 +12211,11 @@ msgid ""
 "English, or open a support ticket."
 msgstr ""
 
+#, python-format
+msgid ""
+"If you are not interested in further communications from us, please %(link)s."
+msgstr ""
+
 msgid "Event added to ILDB:"
 msgstr ""
 
