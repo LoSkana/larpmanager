@@ -993,7 +993,7 @@ class ExeMemberFlagDefForm(BaseModelForm):
 
     class Meta:
         model = MemberFlagDef
-        exclude = ("slug",)
+        exclude = ()
 
 
 class ExeProfileForm(BaseModelForm):

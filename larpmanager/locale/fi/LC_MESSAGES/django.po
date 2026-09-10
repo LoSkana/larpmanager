@@ -9954,12 +9954,6 @@ msgid ""
 msgstr "Tämä poistaa sinut kaikesta LarpManager-alustan viestinnästä."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Käytetään jäsenasetuksen pohjalla olevana nimenä; luodaan automaattisesti "
-"nimestä"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Voit käyttää seuraavia kenttiä; ne täytetään automaattisesti:"
 

@@ -9921,12 +9921,6 @@ msgstr ""
 "plattformskommunikation."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Används som underliggande konfigurationsnamn för medlemmen; genereras "
-"automatiskt från namnet"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Du kan använda följande fält; de fylls i automatiskt:"
 

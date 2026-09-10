@@ -10155,12 +10155,6 @@ msgstr ""
 "LarpManager."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Χρησιμοποιείται ως το βασικό όνομα ρυθμίσεων μέλους· δημιουργείται αυτόματα "
-"από το όνομα"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr ""
 "Μπορείς να χρησιμοποιήσεις τα παρακάτω πεδία· θα συμπληρωθούν αυτόματα:"

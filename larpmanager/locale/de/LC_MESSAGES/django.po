@@ -10187,12 +10187,6 @@ msgstr ""
 "abgemeldet."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Wird als zugrunde liegender Konfigurationsname für Mitglieder verwendet; "
-"wird automatisch aus dem Namen generiert"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr ""
 "Du kannst die folgenden Felder verwenden; sie werden automatisch ausgefüllt:"

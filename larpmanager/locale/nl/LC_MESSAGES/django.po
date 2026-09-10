@@ -10083,12 +10083,6 @@ msgstr ""
 "platform."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Gebruikt als onderliggende configuratienaam voor het lid; automatisch "
-"gegenereerd op basis van de naam"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Je kunt de volgende velden gebruiken; ze worden automatisch ingevuld:"
 

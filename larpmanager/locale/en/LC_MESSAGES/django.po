@@ -4760,9 +4760,6 @@ msgstr ""
 msgid "Short name shown as column header"
 msgstr ""
 
-msgid "Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-
 msgid "Shown as a tooltip on the column header"
 msgstr ""
 

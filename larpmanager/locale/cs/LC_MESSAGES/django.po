@@ -9832,12 +9832,6 @@ msgid ""
 msgstr "Tím se odhlásíš z odběru všech sdělení platformy LarpManager."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Používá se jako interní název konfigurace člena; automaticky se vygeneruje z"
-" názvu"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Můžeš použít následující pole; budou vyplněna automaticky:"
 

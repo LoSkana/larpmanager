@@ -9864,12 +9864,6 @@ msgid ""
 msgstr "Dette afmelder dig fra al kommunikation fra LarpManager-platformen."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Bruges som det underliggende navn på medlemskonfigurationen; genereres "
-"automatisk ud fra navnet"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Du kan bruge følgende felter; de udfyldes automatisk:"
 

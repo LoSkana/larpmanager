@@ -69,21 +69,28 @@ def get_member_flag_values(member: Member, flag_defs: list[MemberFlagDef]) -> di
 
 def set_member_flag(member: Member, flag_def: MemberFlagDef, *, active: bool) -> None:
     """Set or clear a single member status flag, stored as a MemberConfig row."""
-    config_name = flag_def.config_name()
     with transaction.atomic():
         Member.objects.select_for_update().get(pk=member.pk)
-        if active:
-            save_single_config(member, config_name, "True")
-        else:
-            MemberConfig.objects.filter(member=member, name=config_name, deleted=None).delete()
-            reset_member_configs(member.id)
+        _set_member_flag_config(member, flag_def, active=active)
+        reset_member_configs(member.id)
+
+
+def _set_member_flag_config(member: Member, flag_def: MemberFlagDef, *, active: bool) -> None:
+    """Create or delete the MemberConfig row backing a single flag, without locking or cache reset."""
+    config_name = flag_def.config_name()
+    if active:
+        save_single_config(member, config_name, "True")
+    else:
+        MemberConfig.objects.filter(member=member, name=config_name, deleted=None).delete()
 
 
 def set_member_flags(member: Member, flag_defs: list[MemberFlagDef], active_by_flag_id: dict[int, bool]) -> None:
-    """Set or clear a member's whole flag set in a single atomic operation."""
+    """Set or clear a member's whole flag set with a single lock, transaction and cache reset."""
     with transaction.atomic():
+        Member.objects.select_for_update().get(pk=member.pk)
         for flag_def in flag_defs:
-            set_member_flag(member, flag_def, active=active_by_flag_id.get(flag_def.id, False))
+            _set_member_flag_config(member, flag_def, active=active_by_flag_id.get(flag_def.id, False))
+        reset_member_configs(member.id)
 
 
 def get_member_in_association(association_id: int, member_uuid: str) -> Member:

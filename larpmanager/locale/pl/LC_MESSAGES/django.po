@@ -9992,12 +9992,6 @@ msgstr ""
 "LarpManager."
 
 msgid ""
-"Used as the underlying member config name; auto-generated from the name"
-msgstr ""
-"Używana jako bazowa nazwa konfiguracji członka; generowana automatycznie z "
-"nazwy"
-
-msgid ""
 "You can use the following fields; they will be filled in automatically:"
 msgstr "Możesz użyć następujących pól; zostaną wypełnione automatycznie:"
 

@@ -28,7 +28,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, Count, IntegerField, Value, When
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -98,6 +98,7 @@ from larpmanager.utils.users.member_flags import (
     get_association_flag_defs,
     get_member_flag_values,
     get_member_in_association,
+    member_flags_active,
     set_member_flags,
 )
 from larpmanager.views.orga.member import send_mail_batch
@@ -1016,6 +1017,8 @@ def exe_badges_toggle(request: HttpRequest) -> JsonResponse:
 def exe_member_flags(request: HttpRequest) -> HttpResponse:
     """Display and manage member status flag definitions."""
     context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
 
     context["list"] = MemberFlagDef.objects.filter(association_id=context["association_id"], deleted=None).order_by(
         "order",
@@ -1027,18 +1030,27 @@ def exe_member_flags(request: HttpRequest) -> HttpResponse:
 @login_required
 def exe_member_flags_new(request: HttpRequest) -> HttpResponse:
     """Create a new member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
     return exe_new(request, ExeAction.MEMBER_FLAGS)
 
 
 @login_required
 def exe_member_flags_edit(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
     """Edit a member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
     return exe_edit(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
 
 
 @login_required
 def exe_member_flags_delete(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
     """Delete a member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
     return exe_delete(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
 
 
@@ -1050,6 +1062,8 @@ def exe_members_flags(request: HttpRequest) -> HttpResponse:
     query on MemberConfig, instead of one query per member.
     """
     context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
     context["page_info"] = _(
         "Datatable of users and their status flag values; click the edit icon to update a user's flags."
     )
@@ -1098,6 +1112,8 @@ def exe_members_flags(request: HttpRequest) -> HttpResponse:
 def exe_members_flags_get(request: HttpRequest) -> JsonResponse:
     """Return a member's current flag values as HTML for the edit modal (AJAX POST)."""
     context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
 
     try:
         member = get_member_in_association(context["association_id"], request.POST["mid"])
@@ -1119,6 +1135,8 @@ def exe_members_flags_get(request: HttpRequest) -> JsonResponse:
 def exe_members_flags_save(request: HttpRequest) -> JsonResponse:
     """Save a member's flag values from the edit modal (AJAX POST)."""
     context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
 
     try:
         member = get_member_in_association(context["association_id"], request.POST["mid"])
