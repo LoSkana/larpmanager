@@ -1545,11 +1545,6 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
-msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-
 msgid "Guilds"
 msgstr ""
 

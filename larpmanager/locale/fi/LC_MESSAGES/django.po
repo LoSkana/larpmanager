@@ -12219,13 +12219,6 @@ msgstr ""
 " tärkeitä."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Jos tämä on käytössä, pelaajien hahmolomaketta ei tallenneta automaattisesti"
-" muokkauksen aikana."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""

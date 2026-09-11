@@ -12532,13 +12532,6 @@ msgstr ""
 "λιγότερο σημαντικές για τον χαρακτήρα."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Αν ενεργοποιηθεί, η φόρμα χαρακτήρα των παικτών δεν θα αποθηκεύεται αυτόματα"
-" κατά την επεξεργασία."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""

@@ -134,13 +134,11 @@ function setUpAutoSave(key) {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-    {% if auto_save %}
     if (edit_uuid) {
         $(function() {
             submitForm(true);
         });
     }
-    {% endif %}
 
     $(document).keydown(function(event) {
         if (event.ctrlKey && event.key === 's') {

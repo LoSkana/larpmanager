@@ -74,7 +74,6 @@ from larpmanager.utils.edit.autosave import (
     is_stale,
     pop_draft,
     save_draft_from_request,
-    set_auto_save,
 )
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
@@ -565,7 +564,6 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
         if get_event_config(context["event"].id, "custom_character_profile", context=context):
             context["avatar_form"] = AvatarForm()
 
-        set_auto_save(context, "user_character_disable_auto")
         return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
         msg = "not your char!"
@@ -825,7 +823,6 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
         return redirect("character_list", event_slug=event_slug)
 
     context["class_name"] = "character"
-    set_auto_save(context, "user_character_disable_auto")
     return character_form(request, context, event_slug, None, CharacterForm)
 
 
@@ -834,7 +831,6 @@ def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -
     """Handle user character editing form."""
     context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
-    set_auto_save(context, "user_character_disable_auto")
     return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 
@@ -1348,7 +1344,6 @@ def _character_relationship(
     if other_character_uuid:
         get_player_relationship(context, other_character_uuid)
 
-    set_auto_save(context)
     init_auto_save(context, context["relationship"])
     # a not-yet-created relationship is auto-saved only once a target character is chosen
     context["auto_save_required_field"] = "id_target"

@@ -12226,13 +12226,6 @@ msgstr ""
 " karakteren."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Hvis aktivert, lagres ikke karakterarket til spillerne automatisk mens du "
-"redigerer."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""

@@ -12569,13 +12569,6 @@ msgstr ""
 "Charakter weniger wichtig sind."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Wenn aktiviert, wird das Charakterformular der Spieler während der "
-"Bearbeitung nicht automatisch gespeichert."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""

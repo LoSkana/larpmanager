@@ -12542,13 +12542,6 @@ msgstr ""
 " le personnage."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Si cette option est activée, le formulaire de personnage des joueurs ne sera"
-" pas enregistré automatiquement pendant la modification."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""

@@ -12439,13 +12439,6 @@ msgstr ""
 "belangrijk zijn voor het personage."
 
 msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-"Als dit is ingeschakeld, wordt het karakterformulier van de spelers tijdens "
-"het bewerken niet automatisch opgeslagen."
-
-msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""
