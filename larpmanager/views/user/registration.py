@@ -79,6 +79,14 @@ from larpmanager.utils.core.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.core.headers import get_url, hdr
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    pop_draft,
+    save_draft_from_request,
+    set_auto_save,
+)
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.registrations.casting_status import casting_preferences_pending
@@ -400,22 +408,9 @@ def register(
     # Set up registration context for the current run
     registration = context.get("registration")
 
-    # Prevent new registrations or changes on concluded or cancelled runs: existing ones stay readable
-    concluded = current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]
-    if concluded and (not registration or request.method == "POST"):
-        msg = _("Registration closed") + " - "
-        if current_run.development == DevelopStatus.DONE:
-            msg += _("This event has concluded")
-        else:
-            msg += _("This event has been cancelled")
-        messages.warning(request, msg)
-        return redirect("event", event_slug=current_run.get_slug())
-    context["registration_readonly"] = concluded
-
-    # A pending signup request cannot be edited through the normal form: send back to its status page
-    if registration and registration.pending:
-        messages.info(request, _("Your signup request is awaiting organizer approval"))
-        return redirect("event", event_slug=current_run.get_slug())
+    closed_response = _register_closed_redirect(request, context, current_run, registration)
+    if closed_response is not None:
+        return closed_response
 
     # Apply ticket selection if provided, verifying it belongs to this event
     _apply_ticket(context, ticket_uuid, current_event.pk)
@@ -425,6 +420,10 @@ def register(
 
     # Prepare new registration or load existing one
     is_new_registration = _register_prepare(context, registration)
+
+    auto_save_response = _register_auto_save_setup(request, context, registration)
+    if auto_save_response is not None:
+        return auto_save_response
 
     # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
     if is_new_registration and not context.get("ticket"):
@@ -447,6 +446,7 @@ def register(
         form.sel_ticket_map(request.POST.get("ticket", ""))
         # Validate form and save registration if valid
         if form.is_valid():
+            draft_key = draft_element_key(context, "registration", registration)
             saved_registration = save_registration(
                 context,
                 form,
@@ -454,6 +454,7 @@ def register(
                 current_event,
                 registration,
             )
+            clear_draft(context["member"], draft_key)
             return registration_redirect(
                 request, context, saved_registration, current_run, is_new_registration=is_new_registration
             )
@@ -464,6 +465,63 @@ def register(
     # Prepare additional registration information and render page
     register_info(request, context, form, registration, discount_code)
     return render(request, "larpmanager/event/register.html", context)
+
+
+def _register_closed_redirect(
+    request: HttpRequest, context: dict, current_run: Run, registration: Registration | None
+) -> HttpResponse | None:
+    """Redirect away from the registration form when the run is closed or the request is a pending signup."""
+    # Prevent new registrations or changes on concluded or cancelled runs: existing ones stay readable
+    concluded = current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]
+    if concluded and (not registration or request.method == "POST"):
+        msg = _("Registration closed") + " - "
+        if current_run.development == DevelopStatus.DONE:
+            msg += _("This event has concluded")
+        else:
+            msg += _("This event has been cancelled")
+        messages.warning(request, msg)
+        return redirect("event", event_slug=current_run.get_slug())
+    context["registration_readonly"] = concluded
+
+    # A pending signup request cannot be edited through the normal form: send back to its status page
+    if registration and registration.pending:
+        messages.info(request, _("Your signup request is awaiting organizer approval"))
+        return redirect("event", event_slug=current_run.get_slug())
+
+    return None
+
+
+def _register_ajax(request: HttpRequest, context: dict, registration: Registration | None) -> JsonResponse:
+    """Stash the registration form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "registration", registration)
+
+
+def _register_auto_save_setup(
+    request: HttpRequest, context: dict, registration: Registration | None
+) -> HttpResponse | None:
+    """Wire auto-save for the registration form.
+
+    Returns the ajax draft response when this request is an auto-save call, otherwise seeds
+    a restored draft (if any) into the context and returns None.
+    """
+    set_auto_save(context, "registration_disable_auto")
+    init_auto_save(context, registration)
+    context["auto_save_form_id"] = "register_form"
+    # no field gates a not-yet-created registration: a ticket pick or an answered question is enough
+    context["auto_save_required_field"] = ""
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _register_ajax(request, context, registration)
+
+    if request.method == "GET" and context.get("auto_save"):
+        context["auto_save_draft"] = pop_draft(
+            context["member"],
+            draft_element_key(context, "registration", registration),
+            registration.updated if registration else None,
+        )
+
+    return None
 
 
 def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None:

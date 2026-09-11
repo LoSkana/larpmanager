@@ -4,22 +4,25 @@
 
 var lm_auto_save = {
     url: '{{ request.path }}',
+    form_id: '{{ auto_save_form_id|default:"main_form" }}',
     interval: 5 * 1000,
     timeout: 15 * 1000,
     // field that must be filled before a not-yet-created element is auto-saved for the first time;
     // empty when the form always edits an already existing element (no such gating needed)
-    required_field: '{{ auto_save_required_field|default:"id_name" }}',
-    stopped: false,
+    required_field: '{{ auto_save_required_field|default_if_none:"id_name" }}',
     running: false,
-    last_data: null,
-    last_error: null
+    last_data: null
 };
+
+function lmAutoSaveForm() {
+    return $('#' + lm_auto_save.form_id);
+}
 
 function lmAutoSaveData() {
     if (window.tinyMCE && typeof tinyMCE.triggerSave === 'function') {
         tinyMCE.triggerSave();
     }
-    return $('#main_form').serialize();
+    return lmAutoSaveForm().serialize();
 }
 
 function lmAutoSaveWarn(text) {
@@ -35,55 +38,8 @@ function lmAutoSaveWarn(text) {
     });
 }
 
-function lmAutoSaveEscape(text) {
-    return $('<div>').text(text).html();
-}
-
-function lmAutoSaveErrorText(errors) {
-    var lines = [];
-
-    $.each(errors, function(field, messages) {
-        // use the label shown on the page, so the player knows which answer to correct
-        var element = $('#lbl_id_' + field);
-        if (!element.length) element = $('label[for="id_' + field + '"]');
-        var label = $.trim(element.first().text()).replace(/[:*]\s*$/, '');
-
-        $.each(messages, function(index, entry) {
-            var message = typeof entry === 'string' ? entry : entry.message;
-            if (!message) return;
-            // the toast builds its list with string concat: escape, the messages quote user content
-            var line = label ? label + ': ' + message : message;
-            lines.push(lmAutoSaveEscape(line));
-        });
-    });
-
-    return lines;
-}
-
-function lmAutoSaveError(errors) {
-    var lines = lmAutoSaveErrorText(errors);
-    if (!lines.length) return;
-
-    // the same data is retried every interval: warn only when the problem changes
-    var signature = lines.join('|');
-    if (signature === lm_auto_save.last_error) return;
-    lm_auto_save.last_error = signature;
-
-    $.toast({
-        heading: '{% trans "Not saved" %}',
-        text: lines,
-        showHideTransition: 'slide',
-        icon: 'error',
-        position: 'mid-center',
-        textAlign: 'center',
-        allowToastClose: true,
-        hideAfter: false,
-        stack: 1
-    });
-}
-
 function lmAutoSaveSubmit() {
-    if (lm_auto_save.stopped || lm_auto_save.running) return;
+    if (lm_auto_save.running) return;
 
     var data = lmAutoSaveData();
 
@@ -96,35 +52,14 @@ function lmAutoSaveSubmit() {
 
     lm_auto_save.running = true;
 
+    // stashes a staging draft server-side (redis, keyed by user + element); never writes the real record
     $.ajax({
         type: "POST",
         url: lm_auto_save.url,
         data: data + "&ajax=1",
         timeout: lm_auto_save.timeout
-    }).done(function(msg) {
-        if (!msg || msg.res !== 'ok') {
-            if (msg && msg.stale) {
-                lm_auto_save.stopped = true;
-                lmAutoSaveWarn(msg.warn);
-            } else if (msg && msg.errors) {
-                lmAutoSaveError(msg.errors);
-                // rejected data is not saved: retry only once the player changes something
-                lm_auto_save.last_data = data;
-            }
-            return;
-        }
-
-        lm_auto_save.last_error = null;
+    }).done(function() {
         lm_auto_save.last_data = data;
-        $('#base_updated').val(msg.updated);
-
-        // the character has just been created: keep on saving on its edit page
-        if (msg.url) {
-            lm_auto_save.url = msg.url;
-            lm_auto_save.last_data = null;
-            window.history.replaceState(null, '', msg.url);
-            $('#main_form').attr('action', msg.url);
-        }
     }).fail(function() {
         lmAutoSaveWarn('{% trans "Network or server error" %}');
     }).always(function() {
@@ -132,13 +67,59 @@ function lmAutoSaveSubmit() {
     });
 }
 
+function lmAutoSaveRestoreDraft(draftData) {
+    var $form = lmAutoSaveForm();
+
+    // clear checkbox/radio state first: the draft only carries pairs for checked ones
+    $form.find('input:checkbox, input:radio').prop('checked', false);
+
+    $.each(draftData.split('&'), function(index, pair) {
+        if (!pair) return;
+        var parts = pair.split('=');
+        var name = decodeURIComponent(parts[0].replace(/\+/g, ' '));
+        var value = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
+        var $field = $form.find('[name="' + name + '"]');
+        if (!$field.length) return;
+
+        if ($field.is(':checkbox, :radio')) {
+            $field.filter('[value="' + value + '"]').prop('checked', true);
+        } else {
+            $field.val(value);
+        }
+        $field.trigger('change');
+    });
+
+    if (window.tinyMCE) {
+        $.each(tinyMCE.editors, function(index, editor) {
+            editor.load();
+        });
+    }
+
+    var $banner = $('<div class="auto-save-draft-banner">')
+        .append($('<span>').text('{% trans "An unsaved draft was restored. You can submit the form to confirm the changes, or reload the page to to discard them." %}'))
+        .append(
+            $('<a href="#" class="auto-save-draft-dismiss" title="' + '{% trans "Dismiss" %}' + '">')
+                .append($('<i class="fas fa-times">'))
+        );
+    $banner.find('.auto-save-draft-dismiss').on('click', function(event) {
+        event.preventDefault();
+        $banner.remove();
+    });
+    $('#banner').after($banner);
+}
+
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         // version stamp of the loaded element, to detect saves done from another window
-        $('#main_form').append(
+        lmAutoSaveForm().append(
             $('<input>').attr({type: 'hidden', name: 'base_updated', id: 'base_updated'})
                         .val('{{ base_updated }}')
         );
+
+        var draftData = '{{ auto_save_draft|default:""|escapejs }}';
+        if (draftData) {
+            lmAutoSaveRestoreDraft(draftData);
+        }
 
         lm_auto_save.last_data = lmAutoSaveData();
 

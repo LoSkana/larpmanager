@@ -77,7 +77,14 @@ from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
 from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs
 from larpmanager.utils.core.exceptions import HiddenError
-from larpmanager.utils.edit.autosave import init_auto_save, is_stale
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
 from larpmanager.utils.registrations.context import with_geo_configs_registrations
 from larpmanager.utils.registrations.status import registration_status
 
@@ -1305,7 +1312,12 @@ def _single_applicable_form_view(
 
     # Auto-save posts the whole form in background: answer in json, without redirect
     if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
-        return _single_applicable_form_ajax(request, context, registration, form_class)
+        return _single_applicable_form_ajax(request, context, feature_slug, registration)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(
+            context["member"], draft_element_key(context, feature_slug, registration), registration.updated
+        )
 
     if request.method == "POST":
         form = form_class(request.POST, request.FILES, instance=registration, context=context)
@@ -1313,6 +1325,7 @@ def _single_applicable_form_view(
             messages.error(request, SINGLE_APPLICABLE_FORM_STALE_MESSAGE)
         elif form.is_valid():
             form.save()
+            clear_draft(context["member"], draft_element_key(context, feature_slug, registration))
             messages.success(request, _("Answers saved!"))
             return redirect(feature_slug, event_slug=context["run"].get_slug())
     else:
@@ -1326,21 +1339,11 @@ def _single_applicable_form_view(
 def _single_applicable_form_ajax(
     request: HttpRequest,
     context: dict,
+    feature_slug: str,
     registration: Registration,
-    form_class: type[SingleApplicableRegistrationForm],
 ) -> JsonResponse:
-    """Save the form from the auto-save call, answering with the new version stamp."""
-    if is_stale(context, request, registration):
-        return JsonResponse({"res": "ko", "stale": True, "warn": str(SINGLE_APPLICABLE_FORM_STALE_MESSAGE)})
-
-    form = form_class(request.POST, request.FILES, instance=registration, context=context)
-    if not form.is_valid():
-        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
-
-    form.save()
-    registration.refresh_from_db(fields=["updated"])
-
-    return JsonResponse({"res": "ok", "updated": f"{registration.updated.timestamp():.6f}"})
+    """Stash the form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, feature_slug, registration)
 
 
 @login_required

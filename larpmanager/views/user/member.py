@@ -95,7 +95,14 @@ from larpmanager.models.writing import CharacterConfig
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
-from larpmanager.utils.edit.autosave import init_auto_save, is_stale
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -180,6 +187,8 @@ def language(request: HttpRequest) -> HttpResponse:
 
 def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
     """Perform profile save and checks for after-save redirects."""
+    clear_draft(member, draft_element_key(context, "profile", member))
+
     profile = form.save()
     save_log(context, Member, profile, profile.uuid)
 
@@ -227,24 +236,8 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
 
 
 def _profile_ajax(request: HttpRequest, context: dict, member: Member) -> JsonResponse:
-    """Save the profile form from the auto-save call, answering with the new version stamp.
-
-    (The profile picture is excluded)
-    """
-    if is_stale(context, request, member):
-        return JsonResponse({"res": "ko", "stale": True, "warn": str(PROFILE_STALE_MESSAGE)})
-
-    form = ProfileForm(request.POST, instance=member, context=context)
-    # the consent checkbox is not part of the saved profile, and must not block auto-save
-    # of the other fields until the player deliberately gives consent on full submit
-    form.fields.pop("share", None)
-    if not form.is_valid():
-        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
-
-    profile = form.save()
-    profile.refresh_from_db(fields=["updated"])
-
-    return JsonResponse({"res": "ok", "updated": f"{profile.updated.timestamp():.6f}"})
+    """Stash the profile form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "profile", member)
 
 
 @login_required
@@ -268,6 +261,9 @@ def profile(request: HttpRequest) -> Any:
     # Auto-save posts the whole form in background: answer in json, without redirect
     if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
         return _profile_ajax(request, context, member)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(member, draft_element_key(context, "profile", member), member.updated)
 
     # Handle POST request (form submission)
     if request.method == "POST":

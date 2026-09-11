@@ -45,7 +45,15 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.headers import hdr
-from larpmanager.utils.edit.autosave import init_auto_save, is_stale, set_auto_save
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+    set_auto_save,
+)
 from larpmanager.utils.registrations.characters import get_player_characters
 from larpmanager.utils.services.playing_filter import filter_playing_characters
 
@@ -304,6 +312,11 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
         return _guild_edit_ajax(request, context, guild_obj)
 
+    if request.method == "GET" and context.get("auto_save"):
+        context["auto_save_draft"] = pop_draft(
+            context["member"], draft_element_key(context, "guild", guild_obj), guild_obj.updated
+        )
+
     if request.method == "POST":
         # Keep the submitted data on screen, so the player can copy it before reloading
         form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
@@ -311,6 +324,7 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
             messages.error(request, GUILD_STALE_MESSAGE)
         elif form.is_valid():
             form.save()
+            clear_draft(context["member"], draft_element_key(context, "guild", guild_obj))
             messages.success(request, _("Guild updated!"))
             return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
     else:
@@ -322,18 +336,8 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
 
 
 def _guild_edit_ajax(request: HttpRequest, context: dict, guild_obj: Guild) -> JsonResponse:
-    """Save the guild form from the auto-save call, answering with the new version stamp."""
-    if is_stale(context, request, guild_obj):
-        return JsonResponse({"res": "ko", "stale": True, "warn": str(GUILD_STALE_MESSAGE)})
-
-    form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
-    if not form.is_valid():
-        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
-
-    form.save()
-    guild_obj.refresh_from_db(fields=["updated"])
-
-    return JsonResponse({"res": "ok", "updated": f"{guild_obj.updated.timestamp():.6f}"})
+    """Stash the guild form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "guild", guild_obj)
 
 
 @login_required
