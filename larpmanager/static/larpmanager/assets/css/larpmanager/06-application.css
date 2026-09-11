@@ -881,3 +881,29 @@ form .plot {
   background-color: rgba(var(--pri-rgb), 0.9);
   color: white;
 }
+
+/*** auto-save draft ***/
+
+.auto-save-draft-banner {
+  background: rgba(var(--ter-rgb), 0.15);
+  border: 1px solid rgba(var(--ter-rgb), 0.4);
+  border-radius: 0.3em;
+  display: inline-flex;
+  align-items: center;
+  gap: 1em;
+  font-style: italic;
+  margin: 0.5em 2em;
+  padding: 0.7em;
+}
+
+.auto-save-draft-dismiss {
+  flex-shrink: 0;
+  margin-left: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 100%;
+  padding: 0;
+  margin: 0;
+}

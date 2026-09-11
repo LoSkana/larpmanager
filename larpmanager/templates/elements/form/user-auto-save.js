@@ -96,7 +96,7 @@ function lmAutoSaveRestoreDraft(draftData) {
     }
 
     var $banner = $('<div class="auto-save-draft-banner">')
-        .append($('<span>').text('{% trans "An unsaved draft was restored. You can submit the form to confirm the changes, or reload the page to to discard them." %}'))
+        .append($('<span>').text('{% trans "An unsaved draft was restored. You can submit the form to confirm the changes, or reload the page to discard them." %}'))
         .append(
             $('<a href="#" class="auto-save-draft-dismiss" title="' + '{% trans "Dismiss" %}' + '">')
                 .append($('<i class="fas fa-times">'))
