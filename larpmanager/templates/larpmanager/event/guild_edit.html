@@ -28,3 +28,8 @@
         {% include "elements/form/main.html" %}
     </div>
 {% endblock content %}
+{% block js %}
+    {% if auto_save %}
+        {% include "elements/form/user-auto-save.js" %}
+    {% endif %}
+{% endblock js %}

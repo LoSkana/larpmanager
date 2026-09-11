@@ -144,6 +144,9 @@
                     {% endif %}
                 </div>
             </form>
+            {% if auto_save %}
+                {% include "elements/form/user-auto-save.js" %}
+            {% endif %}
         </div>
         {% include "elements/form/register-texts.html" %}
     {% endif %}

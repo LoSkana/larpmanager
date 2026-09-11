@@ -67,6 +67,15 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.core.guard import experience_recalc_deferred
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+    set_auto_save,
+)
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -101,12 +110,13 @@ from larpmanager.views.user.registration import init_form_submitted
 
 logger = logging.getLogger(__name__)
 
-# Tolerance in seconds when comparing the version stamp of the loaded form with the saved one,
-# to absorb the rounding of the stamp sent to the browser and back
-STALE_TOLERANCE = 0.001
-
 CHARACTER_STALE_MESSAGE = _(
     "This character was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
+
+RELATIONSHIP_STALE_MESSAGE = _(
+    "This relationship was modified in another window: your changes here have not been saved. "
     "Copy the text you want to keep, then reload the page.",
 )
 
@@ -362,15 +372,22 @@ def character_form(
 
     context["user_character_text"] = get_event_text(context["event"].id, EventTextType.USER_CHARACTER)
 
-    _init_auto_save(context, instance)
+    init_auto_save(context, instance)
 
     # Auto-save posts the whole form in background: answer in json, without redirect
     if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
-        return _character_form_ajax(request, context, event_slug, instance, form_class)
+        return _character_form_ajax(request, context, instance)
+
+    if request.method == "GET" and context.get("auto_save"):
+        context["auto_save_draft"] = pop_draft(
+            context["member"],
+            draft_element_key(context, "character", instance, request),
+            instance.updated if instance else None,
+        )
 
     # Refuse to save over changes done meanwhile from another window
-    is_stale = request.method == "POST" and _is_stale(context, request, instance)
-    if is_stale:
+    stale = request.method == "POST" and is_stale(context, request, instance)
+    if stale:
         messages.error(request, CHARACTER_STALE_MESSAGE)
         # Keep the submitted data on screen, so the player can copy it before reloading
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
@@ -381,7 +398,9 @@ def character_form(
             # Set appropriate success message based on operation type
             success_message = _("Information saved!") if instance else _("New character created!")
 
+            draft_key = draft_element_key(context, "character", instance, request)
             character, success_message = _save_character(context, form, success_message)
+            clear_draft(context["member"], draft_key)
 
             # Display success message to user
             if success_message:
@@ -416,85 +435,23 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _set_auto_save(context: dict) -> None:
-    """Activate the background auto-save of the character form, unless disabled for the event."""
-    context["auto_save"] = not get_event_config(
-        context["event"].id,
-        "user_character_disable_auto",
-        context=context,
-    )
-
-
-def _init_auto_save(context: dict, instance: Character | RegistrationCharacterRel | None) -> None:
-    """Set up auto-save context: activation flag and version stamp of the loaded element."""
-    if not context.get("auto_save"):
-        return
-
-    context["base_updated"] = ""
-    if instance is not None and instance.pk:
-        context["base_updated"] = f"{instance.updated.timestamp():.6f}"
-
-
-def _is_stale(context: dict, request: HttpRequest, instance: Character | RegistrationCharacterRel | None) -> bool:
-    """Check if the element was saved elsewhere after the form was loaded."""
-    if not context.get("auto_save") or instance is None or not instance.pk:
-        return False
-
-    posted = request.POST.get("base_updated")
-    if not posted:
-        return False
-
-    try:
-        base_updated = float(posted)
-    except ValueError:
-        return False
-
-    # The instance is loaded fresh in this request, so its stamp is the current one
-    return instance.updated.timestamp() - base_updated > STALE_TOLERANCE
-
-
 def _character_form_ajax(
     request: HttpRequest,
     context: dict,
-    event_slug: str,
     instance: Character | RegistrationCharacterRel | None,
-    form_class: type[BaseModelForm],
 ) -> JsonResponse:
-    """Save the character form from the auto-save call, answering with the new version stamp."""
-    if _is_stale(context, request, instance):
-        return JsonResponse({"res": "ko", "stale": True, "warn": str(CHARACTER_STALE_MESSAGE)})
-
-    # Create the character only once the player has given it a name
+    """Stash the character form as a staging draft, without touching the real record."""
+    # Wait for the player to give the character a name before drafting a not-yet-created one
     if instance is None and not request.POST.get("name", "").strip():
-        return JsonResponse({"res": "ko"})
+        return JsonResponse({"res": "ok"})
 
-    form = form_class(request.POST, request.FILES, instance=instance, context=context)
-    if not form.is_valid():
-        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
-
-    character, _message = _save_character(context, form, "", auto_save=True)
-
-    # Read back the stamp, so it matches the stored one even if the save triggered other updates
-    character.refresh_from_db(fields=["updated"])
-
-    result = {"res": "ok", "updated": f"{character.updated.timestamp():.6f}"}
-
-    # Point the following auto-saves to the edit page of the character just created
-    if instance is None:
-        result["url"] = reverse(
-            "character_edit",
-            kwargs={"event_slug": event_slug, "character_uuid": character.uuid},
-        )
-
-    return JsonResponse(result)
+    return save_draft_from_request(request, context, "character", instance)
 
 
 def _save_character(
     context: dict,
     form: CharacterForm,
     success_message: str,
-    *,
-    auto_save: bool = False,
 ) -> str:
     """Saves a character with retry behaviour."""
     # Retry logic to handle race conditions in character number assignment
@@ -509,10 +466,7 @@ def _save_character(
                     character.player = context["member"]
 
                 character = form.save()
-
-                # Assignment to the registration is done only on explicit confirmation
-                if not auto_save:
-                    check_assign_character(context)
+                check_assign_character(context)
             # Success - break out of retry loop
             break
         except IntegrityError as e:
@@ -613,6 +567,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
         if get_event_config(context["event"].id, "custom_character_profile", context=context):
             context["avatar_form"] = AvatarForm()
 
+        set_auto_save(context)
         return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
     except ObjectDoesNotExist as err:
         msg = "not your char!"
@@ -677,7 +632,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
         rgr.custom_profile = path
         rgr.save()
 
-    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"})
 
 
 @login_required
@@ -733,7 +688,9 @@ def character_profile_rotate(
             rgr.custom_profile = n_path
             rgr.save()
 
-        return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+        return JsonResponse(
+            {"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"}
+        )
     except (OSError, UnidentifiedImageError):
         logger.exception("Failed to rotate character profile image")
         return JsonResponse({"res": "ko"})
@@ -872,7 +829,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
         return redirect("character_list", event_slug=event_slug)
 
     context["class_name"] = "character"
-    _set_auto_save(context)
+    set_auto_save(context)
     return character_form(request, context, event_slug, None, CharacterForm)
 
 
@@ -881,7 +838,7 @@ def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -
     """Handle user character editing form."""
     context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
-    _set_auto_save(context)
+    set_auto_save(context)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 
@@ -1394,11 +1351,52 @@ def _character_relationship(
     context["relationship"] = None
     if other_character_uuid:
         get_player_relationship(context, other_character_uuid)
+
+    set_auto_save(context)
+    init_auto_save(context, context["relationship"])
+    # a not-yet-created relationship is auto-saved only once a target character is chosen
+    context["auto_save_required_field"] = "id_target"
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _character_relationship_ajax(request, context)
+
+    if request.method == "GET" and context.get("auto_save"):
+        relationship = context["relationship"]
+        context["auto_save_draft"] = pop_draft(
+            context["member"],
+            draft_element_key(context, "relationship", relationship, request),
+            relationship.updated if relationship else None,
+        )
+
+    # Refuse to save over changes done meanwhile from another window
+    if request.method == "POST" and is_stale(context, request, context["relationship"]):
+        messages.error(request, RELATIONSHIP_STALE_MESSAGE)
+        # Keep the submitted data on screen, so the player can copy it before reloading
+        context["form"] = PlayerRelationshipForm(
+            request.POST, request.FILES, instance=context["relationship"], context=context
+        )
+        context["num"] = other_character_uuid
+        return render(request, "larpmanager/member/edit.html", context)
+
+    relationship_key = draft_element_key(context, "relationship", context["relationship"], request)
     if user_edit(request, context, PlayerRelationshipForm, "relationship", other_character_uuid):
+        clear_draft(context["member"], relationship_key)
         return redirect(
             "character_relationships", event_slug=context["run"].get_slug(), character_uuid=context["char"]["uuid"]
         )
     return render(request, "larpmanager/member/edit.html", context)
+
+
+def _character_relationship_ajax(request: HttpRequest, context: dict) -> JsonResponse:
+    """Stash the relationship form as a staging draft, without touching the real record."""
+    relationship = context["relationship"]
+
+    # Wait for the player to choose a target character before drafting a not-yet-created relationship
+    if relationship is None and not request.POST.get("target", "").strip():
+        return JsonResponse({"res": "ok"})
+
+    return save_draft_from_request(request, context, "relationship", relationship)
 
 
 @login_required

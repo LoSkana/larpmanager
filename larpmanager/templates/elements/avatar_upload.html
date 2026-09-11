@@ -93,12 +93,15 @@
     var rotateRUrl = '{{ avatar_rotate_r_url }}';
     var confirmSel = '{{ avatar_confirm_selector|default:"input[type=submit]" }}';
 
-    function profileUpdate(src) {
+    function profileUpdate(src, baseUpdated) {
         var newUrl = src + '?_=' + (new Date()).getTime();
         $('#profile').attr('src', newUrl).removeClass('hide');
         $('#avatar_no_img').addClass('hide');
         $('#avatar_dropzone').addClass('has-image');
         $('#avatar_rotate_btns').removeClass('hide');
+        // the upload/rotate saved the member record outside the main form, bumping its version
+        // stamp: refresh it here so the later form submit isn't rejected as stale
+        if (baseUpdated) $('#base_updated').val(baseUpdated);
     }
 
     function doUpload(file) {
@@ -114,7 +117,7 @@
             processData: false,
             contentType: false,
             success: function (d) {
-                profileUpdate(d.src);
+                profileUpdate(d.src, d.base_updated);
                 $('#upload_spinner').addClass('hide');
                 $(confirmSel).prop('disabled', false);
             },
@@ -148,13 +151,13 @@
         $('#rotate_l_btn').on('click', function (e) {
             e.stopPropagation();
             $('#profile').attr('src', '');
-            $.ajax({ url: rotateLUrl, success: function (d) { profileUpdate(d.src); } });
+            $.ajax({ url: rotateLUrl, success: function (d) { profileUpdate(d.src, d.base_updated); } });
         });
 
         $('#rotate_r_btn').on('click', function (e) {
             e.stopPropagation();
             $('#profile').attr('src', '');
-            $.ajax({ url: rotateRUrl, success: function (d) { profileUpdate(d.src); } });
+            $.ajax({ url: rotateRUrl, success: function (d) { profileUpdate(d.src, d.base_updated); } });
         });
     });
 }());

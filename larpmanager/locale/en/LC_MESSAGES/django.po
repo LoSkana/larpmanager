@@ -1545,11 +1545,6 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
-msgid ""
-"If enabled, the character form of the players will not be saved "
-"automatically while editing."
-msgstr ""
-
 msgid "Guilds"
 msgstr ""
 
@@ -6250,9 +6245,6 @@ msgid "Character profile"
 msgstr ""
 
 msgid "Upload a photo of your character specifically for this event!"
-msgstr ""
-
-msgid "The form is auto-saved every 5 seconds."
 msgstr ""
 
 msgid "Your characters"
@@ -13156,6 +13148,11 @@ msgid ""
 "been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
+msgid ""
+"This relationship was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "Characters are not visible at the moment"
 msgstr ""
 
@@ -13241,10 +13238,20 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr ""
 
+msgid ""
+"These answers were modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "You must register for the event before answering these questions"
 msgstr ""
 
 msgid "Answers saved!"
+msgstr ""
+
+msgid ""
+"This guild was modified in another window: your changes here have not been "
+"saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "You need a character to create a guild"
@@ -13330,6 +13337,11 @@ msgid "Cannot demote the last admin of the guild"
 msgstr ""
 
 msgid "Member demoted!"
+msgstr ""
+
+msgid ""
+"Your profile was modified in another window: your changes here have not been "
+"saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "Personal data updated!"
@@ -13440,6 +13452,11 @@ msgid "Content unavailable"
 msgstr ""
 
 msgid "File not found"
+msgstr ""
+
+msgid ""
+"This registration was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "Pre-registrations saved!"

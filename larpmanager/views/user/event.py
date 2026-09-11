@@ -77,6 +77,14 @@ from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
 from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs
 from larpmanager.utils.core.exceptions import HiddenError
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
 from larpmanager.utils.registrations.context import with_geo_configs_registrations
 from larpmanager.utils.registrations.status import registration_status
 
@@ -1275,6 +1283,12 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     return JsonResponse(aux)
 
 
+SINGLE_APPLICABLE_FORM_STALE_MESSAGE = _(
+    "These answers were modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
+
+
 def _single_applicable_form_view(
     request: HttpRequest,
     event_slug: str,
@@ -1293,10 +1307,25 @@ def _single_applicable_form_view(
         messages.warning(request, _("You must register for the event before answering these questions"))
         return redirect("register", event_slug=context["run"].get_slug())
 
+    context["auto_save"] = 1
+    init_auto_save(context, registration)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _single_applicable_form_ajax(request, context, feature_slug, registration)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(
+            context["member"], draft_element_key(context, feature_slug, registration), registration.updated
+        )
+
     if request.method == "POST":
         form = form_class(request.POST, request.FILES, instance=registration, context=context)
-        if form.is_valid():
+        if is_stale(context, request, registration):
+            messages.error(request, SINGLE_APPLICABLE_FORM_STALE_MESSAGE)
+        elif form.is_valid():
             form.save()
+            clear_draft(context["member"], draft_element_key(context, feature_slug, registration))
             messages.success(request, _("Answers saved!"))
             return redirect(feature_slug, event_slug=context["run"].get_slug())
     else:
@@ -1305,6 +1334,16 @@ def _single_applicable_form_view(
     context["form"] = form
 
     return render(request, template, context)
+
+
+def _single_applicable_form_ajax(
+    request: HttpRequest,
+    context: dict,
+    feature_slug: str,
+    registration: Registration,
+) -> JsonResponse:
+    """Stash the form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, feature_slug, registration)
 
 
 @login_required

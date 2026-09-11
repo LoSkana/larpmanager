@@ -18,19 +18,26 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""Unit tests for the background auto-save of the player character form."""
+"""Unit tests for the background auto-save of the player character form.
+
+Auto-save stages the posted form as a redis draft and never touches the real record;
+the draft is only ever applied to the database when the player explicitly submits the form.
+"""
 
 import json
 from typing import Any
 
 import pytest
 from django.contrib.messages.storage.cookie import CookieStorage
+from django.contrib.sessions.middleware import SessionMiddleware
+from django.core.cache import cache
 from django.test import RequestFactory
 
 from larpmanager.forms.character import CharacterForm
 from larpmanager.models.form import QuestionApplicable, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.utils.edit.autosave import _draft_cache_key, draft_element_key
 from larpmanager.views.user.character import character_form, propose_character_for_approval
 
 
@@ -63,92 +70,56 @@ class TestCharacterAutoSave(BaseTestCase):
             status=CharacterStatus.CREATION,
         )
 
-    def _call(self, character: Character | None, post_data: dict) -> Any:
+    def _request(self, post_data: dict) -> Any:
         request = RequestFactory().post("/", post_data)
         request.user = self.get_user()
         request._messages = CookieStorage(request)  # noqa: SLF001  # no middleware in unit tests
-        return character_form(request, self._context(), self.get_event().slug, character, CharacterForm)
+        SessionMiddleware(lambda _req: None).process_request(request)
+        request.session.save()
+        return request
 
-    @staticmethod
-    def _loaded(character: Character) -> Character:
-        """Get the character as loaded by a single request, so each page has its own instance."""
-        return Character.objects.get(pk=character.pk)
+    def _call(self, character: Character | None, post_data: dict) -> tuple[Any, Any]:
+        request = self._request(post_data)
+        response = character_form(request, self._context(), self.get_event().slug, character, CharacterForm)
+        return request, response
 
-    @staticmethod
-    def _stamp(character: Character) -> str:
-        character.refresh_from_db()
-        return f"{character.updated.timestamp():.6f}"
-
-    def test_auto_save_stores_changes(self) -> None:
+    def test_auto_save_stages_draft_without_saving_the_record(self) -> None:
         character = self._character()
 
-        response = self._call(character, {"ajax": "1", "name": "Renamed", "base_updated": self._stamp(character)})
+        _request, response = self._call(character, {"ajax": "1", "name": "Renamed"})
 
         payload = json.loads(response.content)
         assert payload["res"] == "ok", payload
         character.refresh_from_db()
-        assert character.name == "Renamed"
-
-    def test_auto_save_refused_if_saved_elsewhere(self) -> None:
-        character = self._character()
-        stale_stamp = f"{character.updated.timestamp() - 60:.6f}"
-
-        response = self._call(character, {"ajax": "1", "name": "Renamed", "base_updated": stale_stamp})
-
-        payload = json.loads(response.content)
-        assert payload["res"] == "ko", payload
-        assert payload["stale"] is True
-        character.refresh_from_db()
         assert character.name == "Original"
 
-    def test_auto_save_of_two_pages_open_together(self) -> None:
-        character = self._character()
-        # both pages are loaded at the same moment, so they hold the same version stamp
-        page_stamp = self._stamp(character)
-
-        # the first page saves: it gets a new stamp, and keeps on saving with it
-        first = json.loads(
-            self._call(self._loaded(character), {"ajax": "1", "name": "First page", "base_updated": page_stamp}).content,
-        )
-        assert first["res"] == "ok", first
-
-        again = json.loads(
-            self._call(
-                self._loaded(character),
-                {"ajax": "1", "name": "First page again", "base_updated": first["updated"]},
-            ).content,
-        )
-        assert again["res"] == "ok", again
-
-        # the second page still holds the stamp of when it was loaded: it is refused
-        second = json.loads(
-            self._call(
-                self._loaded(character),
-                {"ajax": "1", "name": "Second page", "base_updated": page_stamp},
-            ).content,
-        )
-        assert second["res"] == "ko", second
-        assert second["stale"] is True
-        character.refresh_from_db()
-        assert character.name == "First page again"
+        draft = cache.get(_draft_cache_key(self.get_member(), draft_element_key(self._context(), "character", character)))
+        assert "name=Renamed" in draft["data"]
 
     def test_auto_save_skips_character_without_name(self) -> None:
         before = Character.objects.count()
 
-        response = self._call(None, {"ajax": "1", "name": "  "})
-
-        payload = json.loads(response.content)
-        assert payload["res"] == "ko", payload
-        assert Character.objects.count() == before
-
-    def test_auto_save_creates_named_character(self) -> None:
-        response = self._call(None, {"ajax": "1", "name": "Brand new"})
+        request, response = self._call(None, {"ajax": "1", "name": "  "})
 
         payload = json.loads(response.content)
         assert payload["res"] == "ok", payload
-        assert "url" in payload
-        character = Character.objects.get(name="Brand new")
-        assert character.player_id == self.get_member().id
+        assert Character.objects.count() == before
+
+        element_key = draft_element_key(self._context(), "character", None, request)
+        assert cache.get(_draft_cache_key(self.get_member(), element_key)) is None
+
+    def test_auto_save_stages_draft_for_not_yet_created_character(self) -> None:
+        before = Character.objects.count()
+
+        request, response = self._call(None, {"ajax": "1", "name": "Brand new"})
+
+        payload = json.loads(response.content)
+        assert payload["res"] == "ok", payload
+        assert Character.objects.count() == before
+
+        element_key = draft_element_key(self._context(), "character", None, request)
+        draft = cache.get(_draft_cache_key(self.get_member(), element_key))
+        assert "name=Brand+new" in draft["data"]
 
 
 @pytest.mark.django_db

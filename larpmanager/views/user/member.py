@@ -95,6 +95,14 @@ from larpmanager.models.writing import CharacterConfig
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -108,6 +116,11 @@ logger = logging.getLogger(__name__)
 
 # Lifetime of the signed unsubscribe token published in the List-Unsubscribe header
 UNSUBSCRIBE_TOKEN_MAX_AGE = 86400 * 100
+
+PROFILE_STALE_MESSAGE = _(
+    "Your profile was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
 
 
 def language(request: HttpRequest) -> HttpResponse:
@@ -174,6 +187,8 @@ def language(request: HttpRequest) -> HttpResponse:
 
 def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
     """Perform profile save and checks for after-save redirects."""
+    clear_draft(member, draft_element_key(context, "profile", member))
+
     profile = form.save()
     save_log(context, Member, profile, profile.uuid)
 
@@ -220,6 +235,11 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
     return redirect("home")
 
 
+def _profile_ajax(request: HttpRequest, context: dict, member: Member) -> JsonResponse:
+    """Stash the profile form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "profile", member)
+
+
 @login_required
 def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
@@ -235,10 +255,22 @@ def profile(request: HttpRequest) -> Any:
     member = context["member"]
     members_fields = context["members_fields"]
 
+    context["auto_save"] = 1
+    init_auto_save(context, member)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _profile_ajax(request, context, member)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(member, draft_element_key(context, "profile", member), member.updated)
+
     # Handle POST request (form submission)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=member, context=context)
-        if form.is_valid():
+        if is_stale(context, request, member):
+            messages.error(request, PROFILE_STALE_MESSAGE)
+        elif form.is_valid():
             return _save_profile(request, context, form, member)
 
     # Handle GET request (display form)
@@ -352,7 +384,13 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     path = default_storage.save(n_path, ContentFile(img_data))
     request.user.member.profile = path
     request.user.member.save()
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required
@@ -398,7 +436,13 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     request.user.member.save()
 
     # Return success response with thumbnail URL
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required

@@ -36,7 +36,7 @@
         <form action="{{ request.path }}"
               enctype="multipart/form-data"
               method="post"
-              id="profile_form">
+              id="main_form">
             {% csrf_token %}
             <div class="form_container">
                 <table>
@@ -59,12 +59,15 @@
                         </tr>
                     {% endif %}
                 </table>
-                <input type="submit" value="Submit">
+                <input id="form_submit" type="submit" value="Submit">
             </div>
         </form>
     </div>
 {% endblock content %}
 {% block js %}
+    {% if auto_save %}
+        {% include "elements/form/user-auto-save.js" %}
+    {% endif %}
     <script>
 {% if form.country_subdivisions_map %}
     var countrySubdivisions = {{ form.country_subdivisions_map | safe }};
@@ -111,7 +114,7 @@
             {% endif %}
 
             {% if 'profile' in form.mandatory %}
-                $('#profile_form').on('submit', function(e) {
+                $('#main_form').on('submit', function(e) {
                     $('#avatar_error').empty();
                     if ($('#profile').hasClass('hide')) {
                         e.preventDefault();
