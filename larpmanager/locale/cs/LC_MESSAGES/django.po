@@ -14342,6 +14342,13 @@ msgstr ""
 "členům týmu nebo účastníkům prostřednictvím tajných externích odkazů"
 
 msgid ""
+"These answers were modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Tyto odpovědi byly upraveny v jiném okně: tvoje změny zde nebyly uloženy. "
+"Zkopíruj text, který chceš zachovat, a potom stránku znovu načti."
+
+msgid ""
 "This character was modified in another window: your changes here have not "
 "been saved. Copy the text you want to keep, then reload the page."
 msgstr ""

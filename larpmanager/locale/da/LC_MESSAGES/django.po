@@ -14463,6 +14463,13 @@ msgstr ""
 "eksterne links"
 
 msgid ""
+"These answers were modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Disse svar blev ændret i et andet vindue: dine ændringer her er ikke blevet "
+"gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
+
+msgid ""
 "This character was modified in another window: your changes here have not "
 "been saved. Copy the text you want to keep, then reload the page."
 msgstr ""

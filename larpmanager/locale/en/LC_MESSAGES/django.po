@@ -13243,6 +13243,11 @@ msgstr ""
 msgid "You have granted data sharing with this organisation!"
 msgstr ""
 
+msgid ""
+"These answers were modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "You must register for the event before answering these questions"
 msgstr ""
 

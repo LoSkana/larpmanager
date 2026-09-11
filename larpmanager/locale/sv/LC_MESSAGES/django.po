@@ -14527,6 +14527,13 @@ msgstr ""
 "externa länkar"
 
 msgid ""
+"These answers were modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Dessa svar ändrades i ett annat fönster: dina ändringar här har inte "
+"sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
+
+msgid ""
 "This character was modified in another window: your changes here have not "
 "been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
