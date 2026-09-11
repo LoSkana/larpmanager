@@ -103,7 +103,7 @@ def draft_element_key(context: dict, kind: str, instance: BaseModel | None, requ
     """
     scope = context["event"].uuid if context.get("event") else context["uuid"]
     if instance is not None and instance.pk:
-        element_id = instance.uuid
+        element_id = getattr(instance, "uuid", instance.pk)
     elif request is not None and request.session.session_key:
         element_id = f"new:{request.session.session_key}"
     else:

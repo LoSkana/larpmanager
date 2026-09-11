@@ -632,7 +632,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
         rgr.custom_profile = path
         rgr.save()
 
-    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+    return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"})
 
 
 @login_required
@@ -688,7 +688,9 @@ def character_profile_rotate(
             rgr.custom_profile = n_path
             rgr.save()
 
-        return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url})
+        return JsonResponse(
+            {"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"}
+        )
     except (OSError, UnidentifiedImageError):
         logger.exception("Failed to rotate character profile image")
         return JsonResponse({"res": "ko"})

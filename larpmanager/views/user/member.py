@@ -384,7 +384,13 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     path = default_storage.save(n_path, ContentFile(img_data))
     request.user.member.profile = path
     request.user.member.save()
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required
@@ -430,7 +436,13 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
     request.user.member.save()
 
     # Return success response with thumbnail URL
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required
