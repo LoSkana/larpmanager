@@ -7486,6 +7486,9 @@ msgstr "Tällä tuotteella ei ole rajallista määrää varattavaksi."
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Lataa PDF-tiedosto tai kuva (JPG, PNG jne.)"
 
+msgid "User who used this token (if authenticated)"
+msgstr "Käyttäjä, joka käytti tätä tokenia (jos tunnistautunut)"
+
 msgid "Warning! Other users are editing this item."
 msgstr "Varoitus! Muut käyttäjät muokkaavat tätä kohdetta."
 
@@ -7665,9 +7668,6 @@ msgstr "Hallitse ilmoittautumiskysymyksiä ja -vaihtoehtoja"
 
 msgid "Manage users that you can act on their behalf"
 msgstr "Hallinnoi käyttäjiä, joiden puolesta voit toimia"
-
-msgid "Member who used this token (if authenticated)"
-msgstr "Jäsen, joka on käyttänyt tätä tunnusta (jos hänet on todennettu)"
 
 #, python-format
 msgid "Membership fee payment reminder for %(event)s"
@@ -8721,6 +8721,10 @@ msgstr "Tapahtuman pääkuva näkyy organisaatiosi kotisivulla"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Varmista, että sinulla on aikaa katsoa/kuunnella sisältöä nyt"
 
+msgid "Manage all token assignments issued to users across events"
+msgstr ""
+"Hallitse kaikkia käyttäjille eri tapahtumissa myönnettyjä token-määrityksiä"
+
 msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Hallitse sivuilla ja sähköposteissa näkyviä mukautettuja tekstikappaleita"
@@ -8790,6 +8794,11 @@ msgstr "En tiedä, mitä sanoa. En uskonut, että näin kävisi."
 
 msgid "If you have a discount code, enter it here and press enter."
 msgstr "Jos sinulla on alennuskoodi, kirjoita se tähän ja paina enteriä."
+
+msgid "Manage all credit assignments issued to users across events"
+msgstr ""
+"Hallitse kaikkia käyttäjille eri tapahtumissa myönnettyjä "
+"krediittimäärityksiä"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Hallitse tapahtuman asetuksia: nimi, kuvaus, päivämäärät ja tila"
@@ -8904,9 +8913,6 @@ msgstr "Jos valittu, kalenterissa näytetään linkki aiempiin tapahtumiin."
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Jos haluat ladata hakemuksen uuden skannauksen sen sijaan"
 
-msgid "Manage all token assignments issued to members across events"
-msgstr "Hallinnoi kaikkia jäsenille eri tapahtumissa myönnettyjä tokeneita"
-
 msgid "Manage character inventory types and their pool restrictions"
 msgstr "Hallitse hahmoinventaariotyyppejä ja niiden pool-rajoituksia"
 
@@ -9002,9 +9008,6 @@ msgstr "Jäsenkirjassa jäsenkorttisi numero on seuraava:"
 
 msgid "Link to an external website with additional event information"
 msgstr "Linkki ulkoiselle verkkosivustolle, jossa on lisätietoja tapahtumasta"
-
-msgid "Manage all credit assignments issued to members across events"
-msgstr "Hallinnoi kaikkia jäsenille eri tapahtumissa myönnettyjä krediittejä"
 
 msgid "Manage all payments received from participants for this event"
 msgstr "Hallinnoi kaikkia tapahtuman osallistujilta saatuja maksuja"

@@ -1029,7 +1029,7 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
         {
             "selrel": ("member",),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("operation_type", _("Operation")),
                 ("element_name", _("Element")),
                 ("info", _("Info")),

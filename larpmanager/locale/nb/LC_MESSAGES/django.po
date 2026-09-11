@@ -7487,6 +7487,9 @@ msgstr "Denne varen har ingen begrenset mengde å reservere."
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
 
+msgid "User who used this token (if authenticated)"
+msgstr "Bruker som brukte denne tokenen (hvis autentisert)"
+
 msgid "Warning! Other users are editing this item."
 msgstr "Advarsel! Andre brukere redigerer dette elementet."
 
@@ -7666,9 +7669,6 @@ msgstr "Administrer påmeldingsspørsmålene og alternativene"
 
 msgid "Manage users that you can act on their behalf"
 msgstr "Administrer brukere som du kan handle på vegne av"
-
-msgid "Member who used this token (if authenticated)"
-msgstr "Medlem som brukte dette tokenet (hvis autentisert)"
 
 #, python-format
 msgid "Membership fee payment reminder for %(event)s"
@@ -8715,6 +8715,11 @@ msgstr "Hovedbildet av arrangementet vises på organisasjonens hjemmeside"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Sørg for at du har tid til å se/lytte til innholdet nå"
 
+msgid "Manage all token assignments issued to users across events"
+msgstr ""
+"Administrer alle token-tildelinger gitt til brukere på tvers av "
+"arrangementer"
+
 msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Administrer egendefinerte tekstblokker som vises på sider og i e-poster"
@@ -8787,6 +8792,11 @@ msgstr "Jeg vet ikke hva jeg skal si. Jeg trodde aldri dette ville skje."
 msgid "If you have a discount code, enter it here and press enter."
 msgstr ""
 "Hvis du har en rabattkode, skriver du den inn her og trykker på Enter."
+
+msgid "Manage all credit assignments issued to users across events"
+msgstr ""
+"Administrer alle kredittildelinger gitt til brukere på tvers av "
+"arrangementer"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -8893,11 +8903,6 @@ msgstr "Hvis valgt, vises en lenke til tidligere arrangementer i kalenderen."
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Hvis du ønsker å laste opp en ny skanning av søknaden din i stedet"
 
-msgid "Manage all token assignments issued to members across events"
-msgstr ""
-"Administrer alle token-tildelinger gitt til medlemmer på tvers av "
-"arrangementer"
-
 msgid "Manage character inventory types and their pool restrictions"
 msgstr "Administrer karakterinventartyper og poolbegrensningene deres"
 
@@ -8998,11 +9003,6 @@ msgstr "I medlemsboken er nummeret på medlemskortet ditt:"
 msgid "Link to an external website with additional event information"
 msgstr ""
 "Lenke til et eksternt nettsted med ytterligere informasjon om arrangementet"
-
-msgid "Manage all credit assignments issued to members across events"
-msgstr ""
-"Administrer alle kredittildelinger gitt til medlemmer på tvers av "
-"arrangementer"
 
 msgid "Manage all payments received from participants for this event"
 msgstr "Administrer alle innbetalinger fra deltakerne til dette arrangementet"

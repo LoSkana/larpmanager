@@ -175,13 +175,13 @@ msgid ""
 "Browse all payment invoices and confirm submitted ones to update their status"
 msgstr ""
 
-msgid "Manage all credit assignments issued to members across events"
+msgid "Manage all credit assignments issued to users across events"
 msgstr ""
 
 msgid "Assignment"
 msgstr ""
 
-msgid "Manage all token assignments issued to members across events"
+msgid "Manage all token assignments issued to users across events"
 msgstr ""
 
 msgid "Review and approve expense claims submitted by collaborators"
@@ -5041,7 +5041,7 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-msgid "Member who used this token (if authenticated)"
+msgid "User who used this token (if authenticated)"
 msgstr ""
 
 msgid "IP address"

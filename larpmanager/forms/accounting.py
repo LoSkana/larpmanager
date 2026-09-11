@@ -359,7 +359,7 @@ class ExeInvoiceForm(BaseModelForm):
 class ExeCreditForm(BaseModelForm):
     """Form for ExeCredit."""
 
-    page_info = _("Manage all credit assignments issued to members across events")
+    page_info = _("Manage all credit assignments issued to users across events")
 
     class Meta:
         model = AccountingItemOther
@@ -390,7 +390,7 @@ class ExeCreditForm(BaseModelForm):
 class ExeTokenForm(BaseModelForm):
     """Form for ExeToken."""
 
-    page_info = _("Manage all token assignments issued to members across events")
+    page_info = _("Manage all token assignments issued to users across events")
 
     class Meta:
         model = AccountingItemOther

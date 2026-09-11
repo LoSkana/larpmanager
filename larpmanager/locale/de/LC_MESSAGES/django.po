@@ -7488,6 +7488,9 @@ msgstr "Dieser Artikel hat keine begrenzte Menge, die reserviert werden kann."
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Hochladen einer PDF-Datei oder eines Bildes (JPG, PNG, usw.)"
 
+msgid "User who used this token (if authenticated)"
+msgstr "Nutzer, der diesen Token verwendet hat (falls angemeldet)"
+
 msgid "Warning! Other users are editing this item."
 msgstr "Warnung! Dieser Artikel wird von anderen Benutzern bearbeitet."
 
@@ -7668,9 +7671,6 @@ msgstr "Verwalte die Anmeldefragen und Optionen"
 
 msgid "Manage users that you can act on their behalf"
 msgstr "Benutzer verwalten, für die du handeln kannst"
-
-msgid "Member who used this token (if authenticated)"
-msgstr "Mitglied, das dieses Token verwendet hat (falls authentifiziert)"
 
 #, python-format
 msgid "Membership fee payment reminder for %(event)s"
@@ -8784,6 +8784,11 @@ msgid "Make sure you have time to watch/listen to the content now"
 msgstr ""
 "Stelle sicher, dass du jetzt Zeit hast, dir die Inhalte anzusehen/anzuhören"
 
+msgid "Manage all token assignments issued to users across events"
+msgstr ""
+"Verwalte alle nutzerübergreifend über Events hinweg vergebenen Token-"
+"Zuweisungen"
+
 msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Verwalte benutzerdefinierte Textblöcke, die auf Seiten und in E-Mails "
@@ -8863,6 +8868,11 @@ msgstr ""
 
 msgid "If you have a discount code, enter it here and press enter."
 msgstr "Wenn du einen Rabattcode hast, gib ihn hier ein und drücke Enter."
+
+msgid "Manage all credit assignments issued to users across events"
+msgstr ""
+"Verwalte alle nutzerübergreifend über Events hinweg vergebenen Credit-"
+"Zuweisungen"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr ""
@@ -8987,11 +8997,6 @@ msgstr ""
 "Wenn du stattdessen einen neuen Scan deines Mitgliedsantrags hochladen "
 "möchtest"
 
-msgid "Manage all token assignments issued to members across events"
-msgstr ""
-"Verwalte alle Token-Zuweisungen, die Mitgliedern für verschiedene "
-"Veranstaltungen ausgestellt wurden"
-
 msgid "Manage character inventory types and their pool restrictions"
 msgstr "Verwalte Charakterinventartypen und ihre Poolbeschränkungen"
 
@@ -9103,11 +9108,6 @@ msgstr "Im Mitgliedsbuch lautet die Nummer deiner Mitgliedskarte:"
 msgid "Link to an external website with additional event information"
 msgstr ""
 "Link zu einer externen Website mit zusätzlichen Veranstaltungsinformationen"
-
-msgid "Manage all credit assignments issued to members across events"
-msgstr ""
-"Verwalte alle Kreditpunkte, die Mitgliedern bei verschiedenen "
-"Veranstaltungen gutgeschrieben wurden"
 
 msgid "Manage all payments received from participants for this event"
 msgstr ""
