@@ -85,6 +85,7 @@ from larpmanager.utils.edit.autosave import (
     init_auto_save,
     pop_draft,
     save_draft_from_request,
+    set_auto_save,
 )
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
@@ -503,6 +504,7 @@ def _register_auto_save_setup(
     Returns the ajax draft response when this request is an auto-save call, otherwise seeds
     a restored draft (if any) into the context and returns None.
     """
+    set_auto_save(context)
     init_auto_save(context, registration)
     context["auto_save_form_id"] = "register_form"
     # no field gates a not-yet-created registration: a ticket pick or an answered question is enough

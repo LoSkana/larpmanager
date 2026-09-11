@@ -26,6 +26,8 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.utils import timezone
 
+from larpmanager.cache.config import get_event_config
+
 if TYPE_CHECKING:
     from django.http import HttpRequest, QueryDict
 
@@ -41,6 +43,24 @@ DRAFT_TTL = 7 * 24 * 60 * 60
 
 # Control fields posted by the auto-save JS that must never be replayed verbatim on restore
 DRAFT_EXCLUDED_FIELDS = ("ajax", "csrfmiddlewaretoken", "base_updated")
+
+
+def set_auto_save(context: dict) -> None:
+    """Activate background auto-save for a player-facing form. Always on, backed by redis."""
+    context["auto_save"] = True
+
+
+def set_auto_save_writing(context: dict) -> None:
+    """Activate background auto-save for an organizer writing form.
+
+    On only when the working_ticket feature is active for the event and the
+    organizer has not turned it off via the writing_disable_auto config.
+    """
+    context["auto_save"] = "working_ticket" in context.get("features", ()) and not get_event_config(
+        context["event"].id,
+        "writing_disable_auto",
+        context=context,
+    )
 
 
 def init_auto_save(context: dict, instance: BaseModel | None) -> None:
@@ -77,7 +97,7 @@ def is_stale(context: dict, request: HttpRequest, instance: BaseModel | None) ->
 
 def draft_element_key(context: dict, kind: str, instance: BaseModel | None) -> str:
     """Build the staging key identifying an editable element, scoped by event when available."""
-    scope = context["event"].uuid if context.get("event") else context["association"].uuid
+    scope = context["event"].uuid if context.get("event") else context["uuid"]
     element_id = instance.uuid if instance is not None and instance.pk else "new"
     return f"{scope}:{kind}:{element_id}"
 

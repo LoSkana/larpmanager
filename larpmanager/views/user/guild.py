@@ -52,6 +52,7 @@ from larpmanager.utils.edit.autosave import (
     is_stale,
     pop_draft,
     save_draft_from_request,
+    set_auto_save,
 )
 from larpmanager.utils.registrations.characters import get_player_characters
 from larpmanager.utils.services.playing_filter import filter_playing_characters
@@ -304,6 +305,7 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
     _check_admin(context, guild_obj)
 
+    set_auto_save(context)
     init_auto_save(context, guild_obj)
 
     # Auto-save posts the whole form in background: answer in json, without redirect

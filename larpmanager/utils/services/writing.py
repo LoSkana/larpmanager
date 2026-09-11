@@ -65,6 +65,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.autosave import set_auto_save_writing
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
 from larpmanager.utils.services.bulk import (
@@ -502,6 +503,8 @@ def _prepare_writing_list(context: dict) -> None:
         question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
         if question_field_list:
             context["default_fields"] = json.dumps(question_field_list)
+
+    set_auto_save_writing(context)
 
     context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", context=context)
 
