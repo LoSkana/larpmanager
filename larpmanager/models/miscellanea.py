@@ -1084,7 +1084,7 @@ class OneTimeAccessToken(UuidMixin, BaseModel):
         null=True,
         related_name="used_onetime_tokens",
         verbose_name=_("User"),
-        help_text=_("Member who used this token (if authenticated)"),
+        help_text=_("User who used this token (if authenticated)"),
     )
 
     ip_address = models.GenericIPAddressField(

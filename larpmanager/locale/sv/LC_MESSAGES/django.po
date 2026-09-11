@@ -7486,6 +7486,9 @@ msgstr "Denna artikel har ingen begränsad kvantitet att reservera."
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Ladda upp en PDF-fil eller bild (JPG, PNG, etc.)"
 
+msgid "User who used this token (if authenticated)"
+msgstr "Användare som använde denna token (om autentiserad)"
+
 msgid "Warning! Other users are editing this item."
 msgstr "Varning! Andra användare redigerar detta objekt."
 
@@ -7665,9 +7668,6 @@ msgstr "Hantera anmälningsfrågor och alternativ"
 
 msgid "Manage users that you can act on their behalf"
 msgstr "Hantera användare som du kan agera å deras vägnar"
-
-msgid "Member who used this token (if authenticated)"
-msgstr "Medlem som använde denna token (om medlemmen är autentiserad)"
 
 #, python-format
 msgid "Membership fee payment reminder for %(event)s"
@@ -8712,6 +8712,10 @@ msgstr "Huvudbild för evenemanget som visas på din organisations hemsida"
 msgid "Make sure you have time to watch/listen to the content now"
 msgstr "Se till att du har tid att titta/lyssna på innehållet nu"
 
+msgid "Manage all token assignments issued to users across events"
+msgstr ""
+"Hantera alla token-assignments som utfärdats till användare i olika event"
+
 msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Hantera anpassade textblock som visas på sidor och i e-postmeddelanden"
@@ -8781,6 +8785,10 @@ msgstr ""
 
 msgid "If you have a discount code, enter it here and press enter."
 msgstr "Om du har en rabattkod anger du den här och trycker på Enter."
+
+msgid "Manage all credit assignments issued to users across events"
+msgstr ""
+"Hantera alla kredit-assignments som utfärdats till användare i olika event"
 
 msgid "Manage the event settings: name, description, dates, status"
 msgstr "Hantera evenemangsinställningarna: namn, beskrivning, datum, status"
@@ -8890,11 +8898,6 @@ msgstr "Om valt visas en länk till tidigare evenemang i kalendern."
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Om du vill ladda upp en ny skanning av din ansökan istället"
 
-msgid "Manage all token assignments issued to members across events"
-msgstr ""
-"Hantera alla tilldelningar av token som utfärdats till medlemmar vid olika "
-"evenemang"
-
 msgid "Manage character inventory types and their pool restrictions"
 msgstr "Hantera karaktärsinventarietyper och deras poolbegränsningar"
 
@@ -8991,11 +8994,6 @@ msgstr "I medlemsboken är numret på ditt medlemskort:"
 msgid "Link to an external website with additional event information"
 msgstr ""
 "Länk till en extern webbplats med ytterligare information om evenemanget"
-
-msgid "Manage all credit assignments issued to members across events"
-msgstr ""
-"Hantera alla kredittilldelningar som utfärdats till medlemmar vid olika "
-"evenemang"
 
 msgid "Manage all payments received from participants for this event"
 msgstr ""

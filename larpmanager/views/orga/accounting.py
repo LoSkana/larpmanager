@@ -284,7 +284,7 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
             "subtype": "tokens",  # Mark as token management subtype
             # Define table columns with localized headers for the token list
             "fields": [
-                ("member", _("Member")),  # Token holder/user
+                ("member", _("User")),  # Token holder/user
                 ("run", _("Event")),  # Associated event run
                 ("descr", _("Description")),  # Token description/purpose
                 ("value", _("Value")),  # Token monetary value
@@ -348,7 +348,7 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
             "subtype": "credits",  # Accounting item subtype identifier
             # Define display fields with their localized labels
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -449,7 +449,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Define base table fields for payment display
     fields = [
-        ("member", _("Member")),
+        ("member", _("User")),
         ("method", _("Method")),
         ("type", _("Type")),
         ("status", _("Status")),
@@ -778,7 +778,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
         {
             "selrel": ("run", "run__event"),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("type", _("Type")),
                 ("action", _("Action")),
                 ("run", _("Event")),

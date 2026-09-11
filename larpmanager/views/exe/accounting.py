@@ -283,7 +283,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
     context.update(
         {
             "fields": [
-                ("member", _("Member")),  # Donation maker
+                ("member", _("User")),  # Donation maker
                 ("descr", _("Description")),  # Donation description/purpose
                 ("value", _("Value")),  # Monetary amount
                 ("created", _("Date")),  # When donation was created
@@ -345,7 +345,7 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
             "subtype": "credits",
             # Define table columns for credits display
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -412,7 +412,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
             "subtype": "tokens",
             # Define table columns with localized headers
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -474,7 +474,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
             "selrel": ("run", "run__event"),
             # Define table columns with display names
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("type", _("Type")),
                 ("action", _("Action")),
                 ("run", _("Event")),
@@ -600,7 +600,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
     # Define base fields to display in payments table
     fields = [
-        ("member", _("Member")),
+        ("member", _("User")),
         ("method", _("Method")),
         ("type", _("Type")),
         ("status", _("Status")),
@@ -830,7 +830,7 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
         {
             "fields": [
                 ("details", _("General information")),
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("value", _("Total required")),
                 ("credits", _("Remaining credits")),
                 ("status", _("Status")),

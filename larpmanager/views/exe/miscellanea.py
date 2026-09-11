@@ -223,7 +223,7 @@ def exe_log(request: HttpRequest) -> HttpResponse:
         {
             "selrel": ("member", "run__event"),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("operation_type", _("Operation")),
                 ("element_name", _("Element")),
                 ("info", _("Info")),
