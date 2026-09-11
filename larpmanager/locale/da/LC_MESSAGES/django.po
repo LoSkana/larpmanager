@@ -14543,6 +14543,13 @@ msgstr ""
 " for at deltage i events og organisationens møder."
 
 msgid ""
+"This registration was modified in another window: your changes here have not"
+" been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Denne tilmelding blev ændret i et andet vindue: Dine ændringer her er ikke "
+"blevet gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
+
+msgid ""
 "This relationship was modified in another window: your changes here have not"
 " been saved. Copy the text you want to keep, then reload the page."
 msgstr ""

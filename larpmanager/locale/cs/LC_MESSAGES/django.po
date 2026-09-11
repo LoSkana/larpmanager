@@ -14422,6 +14422,13 @@ msgstr ""
 "pro účast na akcích a schůzích organizace."
 
 msgid ""
+"This registration was modified in another window: your changes here have not"
+" been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Tato registrace byla upravena v jiném okně: tvoje změny zde nebyly uloženy. "
+"Zkopíruj text, který chceš zachovat, a potom stránku znovu načti."
+
+msgid ""
 "This relationship was modified in another window: your changes here have not"
 " been saved. Copy the text you want to keep, then reload the page."
 msgstr ""

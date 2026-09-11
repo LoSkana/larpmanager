@@ -13454,6 +13454,11 @@ msgstr ""
 msgid "File not found"
 msgstr ""
 
+msgid ""
+"This registration was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "Pre-registrations saved!"
 msgstr ""
 

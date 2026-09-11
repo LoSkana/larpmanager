@@ -83,6 +83,7 @@ from larpmanager.utils.edit.autosave import (
     clear_draft,
     draft_element_key,
     init_auto_save,
+    is_stale,
     pop_draft,
     save_draft_from_request,
     set_auto_save,
@@ -100,6 +101,11 @@ from larpmanager.utils.registrations.signals import get_reduced_available_count
 from larpmanager.utils.registrations.status import _set_membership_context
 
 logger = logging.getLogger(__name__)
+
+REGISTRATION_STALE_MESSAGE = _(
+    "This registration was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
 
 
 def _save_pre_registration(context: dict, form: PreRegistrationForm) -> None:
@@ -444,9 +450,11 @@ def register(
     if request.method == "POST":
         form = RegistrationForm(request.POST, context=context, instance=registration)
         form.sel_ticket_map(request.POST.get("ticket", ""))
+        if is_stale(context, request, registration):
+            messages.error(request, REGISTRATION_STALE_MESSAGE)
         # Validate form and save registration if valid
-        if form.is_valid():
-            draft_key = draft_element_key(context, "registration", registration)
+        elif form.is_valid():
+            draft_key = draft_element_key(context, "registration", registration, request)
             saved_registration = save_registration(
                 context,
                 form,
@@ -517,7 +525,7 @@ def _register_auto_save_setup(
     if request.method == "GET" and context.get("auto_save"):
         context["auto_save_draft"] = pop_draft(
             context["member"],
-            draft_element_key(context, "registration", registration),
+            draft_element_key(context, "registration", registration, request),
             registration.updated if registration else None,
         )
 

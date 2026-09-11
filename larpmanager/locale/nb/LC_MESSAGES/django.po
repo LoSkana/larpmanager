@@ -14635,6 +14635,13 @@ msgstr ""
 "er nødvendig for å kunne delta på arrangementer og organisasjonens møter."
 
 msgid ""
+"This registration was modified in another window: your changes here have not"
+" been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Denne registreringen ble endret i et annet vindu: endringene dine her er "
+"ikke lagret. Kopier teksten du vil beholde, og last deretter siden på nytt."
+
+msgid ""
 "This relationship was modified in another window: your changes here have not"
 " been saved. Copy the text you want to keep, then reload the page."
 msgstr ""

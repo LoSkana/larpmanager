@@ -380,7 +380,9 @@ def character_form(
 
     if request.method == "GET" and context.get("auto_save"):
         context["auto_save_draft"] = pop_draft(
-            context["member"], draft_element_key(context, "character", instance), instance.updated if instance else None
+            context["member"],
+            draft_element_key(context, "character", instance, request),
+            instance.updated if instance else None,
         )
 
     # Refuse to save over changes done meanwhile from another window
@@ -396,7 +398,7 @@ def character_form(
             # Set appropriate success message based on operation type
             success_message = _("Information saved!") if instance else _("New character created!")
 
-            draft_key = draft_element_key(context, "character", instance)
+            draft_key = draft_element_key(context, "character", instance, request)
             character, success_message = _save_character(context, form, success_message)
             clear_draft(context["member"], draft_key)
 
@@ -1361,7 +1363,7 @@ def _character_relationship(
         relationship = context["relationship"]
         context["auto_save_draft"] = pop_draft(
             context["member"],
-            draft_element_key(context, "relationship", relationship),
+            draft_element_key(context, "relationship", relationship, request),
             relationship.updated if relationship else None,
         )
 
@@ -1375,7 +1377,7 @@ def _character_relationship(
         context["num"] = other_character_uuid
         return render(request, "larpmanager/member/edit.html", context)
 
-    relationship_key = draft_element_key(context, "relationship", context["relationship"])
+    relationship_key = draft_element_key(context, "relationship", context["relationship"], request)
     if user_edit(request, context, PlayerRelationshipForm, "relationship", other_character_uuid):
         clear_draft(context["member"], relationship_key)
         return redirect(

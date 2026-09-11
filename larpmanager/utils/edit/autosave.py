@@ -95,10 +95,19 @@ def is_stale(context: dict, request: HttpRequest, instance: BaseModel | None) ->
     return instance.updated.timestamp() - base_updated > STALE_TOLERANCE
 
 
-def draft_element_key(context: dict, kind: str, instance: BaseModel | None) -> str:
-    """Build the staging key identifying an editable element, scoped by event when available."""
+def draft_element_key(context: dict, kind: str, instance: BaseModel | None, request: HttpRequest | None = None) -> str:
+    """Build the staging key identifying an editable element, scoped by event when available.
+
+    For an instance not yet created, the key is additionally scoped by browser session, so
+    drafts of unrelated new elements (e.g. two different new characters) never collide.
+    """
     scope = context["event"].uuid if context.get("event") else context["uuid"]
-    element_id = instance.uuid if instance is not None and instance.pk else "new"
+    if instance is not None and instance.pk:
+        element_id = instance.uuid
+    elif request is not None and request.session.session_key:
+        element_id = f"new:{request.session.session_key}"
+    else:
+        element_id = "new"
     return f"{scope}:{kind}:{element_id}"
 
 
@@ -134,7 +143,7 @@ def save_draft_from_request(request: HttpRequest, context: dict, kind: str, inst
     Shared body of every auto-save ajax endpoint: builds the element key, stashes the draft,
     and answers with the same trivial payload (the real record is never validated nor saved).
     """
-    element_key = draft_element_key(context, kind, instance)
+    element_key = draft_element_key(context, kind, instance, request)
     save_draft(context["member"], element_key, draft_data_from_post(request.POST))
     return JsonResponse({"res": "ok"})
 
