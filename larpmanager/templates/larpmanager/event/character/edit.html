@@ -32,9 +32,6 @@
             <hr />
         {% endif %}
         {% include "elements/form/main.html" %}
-        {% if auto_save %}
-            <p>{% trans "The form is auto-saved every 5 seconds." %}</p>
-        {% endif %}
     </div>
 {% endblock content %}
 {% block js %}

@@ -22,7 +22,7 @@ from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -45,8 +45,14 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.headers import hdr
+from larpmanager.utils.edit.autosave import init_auto_save, is_stale, set_auto_save
 from larpmanager.utils.registrations.characters import get_player_characters
 from larpmanager.utils.services.playing_filter import filter_playing_characters
+
+GUILD_STALE_MESSAGE = _(
+    "This guild was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
 
 
 def _get_my_character_ids(context: dict) -> list[int]:
@@ -291,9 +297,19 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
     _check_admin(context, guild_obj)
 
+    set_auto_save(context)
+    init_auto_save(context, guild_obj)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _guild_edit_ajax(request, context, guild_obj)
+
     if request.method == "POST":
+        # Keep the submitted data on screen, so the player can copy it before reloading
         form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
-        if form.is_valid():
+        if is_stale(context, request, guild_obj):
+            messages.error(request, GUILD_STALE_MESSAGE)
+        elif form.is_valid():
             form.save()
             messages.success(request, _("Guild updated!"))
             return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
@@ -303,6 +319,21 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     context["guild"] = guild_obj
     context["form"] = form
     return render(request, "larpmanager/event/guild_edit.html", context)
+
+
+def _guild_edit_ajax(request: HttpRequest, context: dict, guild_obj: Guild) -> JsonResponse:
+    """Save the guild form from the auto-save call, answering with the new version stamp."""
+    if is_stale(context, request, guild_obj):
+        return JsonResponse({"res": "ko", "stale": True, "warn": str(GUILD_STALE_MESSAGE)})
+
+    form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
+    if not form.is_valid():
+        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
+
+    form.save()
+    guild_obj.refresh_from_db(fields=["updated"])
+
+    return JsonResponse({"res": "ok", "updated": f"{guild_obj.updated.timestamp():.6f}"})
 
 
 @login_required

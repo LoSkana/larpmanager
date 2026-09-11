@@ -6252,9 +6252,6 @@ msgstr ""
 msgid "Upload a photo of your character specifically for this event!"
 msgstr ""
 
-msgid "The form is auto-saved every 5 seconds."
-msgstr ""
-
 msgid "Your characters"
 msgstr ""
 
@@ -13156,6 +13153,11 @@ msgid ""
 "been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
+msgid ""
+"This relationship was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "Characters are not visible at the moment"
 msgstr ""
 
@@ -13247,6 +13249,11 @@ msgstr ""
 msgid "Answers saved!"
 msgstr ""
 
+msgid ""
+"This guild was modified in another window: your changes here have not been "
+"saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+
 msgid "You need a character to create a guild"
 msgstr ""
 
@@ -13330,6 +13337,11 @@ msgid "Cannot demote the last admin of the guild"
 msgstr ""
 
 msgid "Member demoted!"
+msgstr ""
+
+msgid ""
+"Your profile was modified in another window: your changes here have not been "
+"saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "Personal data updated!"

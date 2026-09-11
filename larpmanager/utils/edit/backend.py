@@ -54,6 +54,7 @@ from larpmanager.models.writing import (
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
+from larpmanager.utils.edit.autosave import set_auto_save
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -664,7 +665,7 @@ def backend_edit(
 
         # Set auto-save behavior based on event configuration
         if "event" in context:
-            context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
+            set_auto_save(context)
             context["download"] = 1
 
             # Set up character finder functionality

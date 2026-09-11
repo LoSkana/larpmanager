@@ -6,6 +6,9 @@ var lm_auto_save = {
     url: '{{ request.path }}',
     interval: 5 * 1000,
     timeout: 15 * 1000,
+    // field that must be filled before a not-yet-created element is auto-saved for the first time;
+    // empty when the form always edits an already existing element (no such gating needed)
+    required_field: '{{ auto_save_required_field|default:"id_name" }}',
     stopped: false,
     running: false,
     last_data: null,
@@ -17,14 +20,6 @@ function lmAutoSaveData() {
         tinyMCE.triggerSave();
     }
     return $('#main_form').serialize();
-}
-
-function lmAutoSaveFlash() {
-    var submit = $('#form_submit');
-    submit.addClass('auto_saved');
-    setTimeout(function() {
-        submit.removeClass('auto_saved');
-    }, 1000);
 }
 
 function lmAutoSaveWarn(text) {
@@ -95,8 +90,9 @@ function lmAutoSaveSubmit() {
     // nothing changed since the last save
     if (data === lm_auto_save.last_data) return;
 
-    // a new character is created only once it has a name
-    if (!$('#base_updated').val() && !$.trim($('#id_name').val()).length) return;
+    // a not-yet-created element is auto-saved only once its required field is filled
+    if (!$('#base_updated').val() && lm_auto_save.required_field
+        && !$.trim($('#' + lm_auto_save.required_field).val()).length) return;
 
     lm_auto_save.running = true;
 
@@ -129,8 +125,6 @@ function lmAutoSaveSubmit() {
             window.history.replaceState(null, '', msg.url);
             $('#main_form').attr('action', msg.url);
         }
-
-        lmAutoSaveFlash();
     }).fail(function() {
         lmAutoSaveWarn('{% trans "Network or server error" %}');
     }).always(function() {
