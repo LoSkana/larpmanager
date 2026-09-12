@@ -5693,6 +5693,9 @@ msgstr "Anmeldungen für die Warteliste jederzeit erlauben"
 msgid "Authenticator device removed"
 msgstr "Authentifizierungsgerät entfernt"
 
+msgid "Automatic faction assignment"
+msgstr "Automatische Fraktionszuweisung"
+
 #, python-format
 msgid "Bring a friend to %(event)s!"
 msgstr "Bring einen Freund zu %(event)s mit!"
@@ -15302,6 +15305,15 @@ msgstr ""
 "Indem du dich für diese Veranstaltung anmeldest, gibst du uns die Erlaubnis,"
 " deine auf unserer Plattform gespeicherten Daten an die Organisatoren der "
 "Veranstaltung weiterzugeben."
+
+msgid ""
+"If enabled, when a character has no primary faction yet, it is automatically"
+" assigned to a visible faction whose name matches one of the character's "
+"chosen options."
+msgstr ""
+"Wenn aktiviert, wird einem Charakter, der noch keine primäre Fraktion hat, "
+"automatisch eine sichtbare Fraktion zugewiesen, deren Name einer der vom "
+"Charakter gewählten Optionen entspricht."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "

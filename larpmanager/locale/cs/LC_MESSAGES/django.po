@@ -5693,6 +5693,9 @@ msgstr "Umožni registraci do rezervy kdykoli"
 msgid "Authenticator device removed"
 msgstr "Autentizační zařízení bylo odstraněno"
 
+msgid "Automatic faction assignment"
+msgstr "Automatické přiřazení frakce"
+
 #, python-format
 msgid "Bring a friend to %(event)s!"
 msgstr "Přiveď na %(event)s kamaráda!"
@@ -14680,6 +14683,15 @@ msgid ""
 msgstr ""
 "Tím, že se zaregistruješ na tuto událost, nám dáváš souhlas ke sdílení tvých"
 " údajů uložených na naší platformě s organizátory akce."
+
+msgid ""
+"If enabled, when a character has no primary faction yet, it is automatically"
+" assigned to a visible faction whose name matches one of the character's "
+"chosen options."
+msgstr ""
+"Pokud je povoleno, postava, která ještě nemá primární frakci, je automaticky"
+" přiřazena k viditelné frakci, jejíž název odpovídá jedné z možností "
+"zvolených pro postavu."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "
