@@ -5693,6 +5693,9 @@ msgstr "Consenti l'iscrizione in riserva in qualsiasi momento"
 msgid "Authenticator device removed"
 msgstr "Dispositivo di autenticazione rimosso"
 
+msgid "Automatic faction assignment"
+msgstr "Assegnazione automatica della fazione"
+
 #, python-format
 msgid "Bring a friend to %(event)s!"
 msgstr "Porta un amico a %(event)s!"
@@ -15155,6 +15158,15 @@ msgstr ""
 "Procedendo con la tua iscrizione a questo evento, ci stai dando la tua "
 "autorizzazione a condividere con gli organizzatori dello stesso i tuoi dati "
 "salvati sulla nostra piattaforma."
+
+msgid ""
+"If enabled, when a character has no primary faction yet, it is automatically"
+" assigned to a visible faction whose name matches one of the character's "
+"chosen options."
+msgstr ""
+"Se abilitata, quando un personaggio non ha ancora una fazione principale, "
+"viene assegnato automaticamente a una fazione visibile il cui nome "
+"corrisponde a una delle opzioni scelte dal personaggio."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "

@@ -930,6 +930,20 @@ class OrgaConfigForm(ConfigForm):
             character_approval_help_text,
         )
 
+        # Automatic faction assignment configuration, only relevant if the faction feature is active
+        if "faction" in self.params["features"]:
+            auto_faction_label = _("Automatic faction assignment")
+            auto_faction_help_text = _(
+                "If enabled, when a character has no primary faction yet, it is automatically assigned to a "
+                "visible faction whose name matches one of the character's chosen options.",
+            )
+            self.add_configs(
+                "user_character_auto_faction",
+                ConfigType.BOOL,
+                auto_faction_label,
+                auto_faction_help_text,
+            )
+
     def set_config_guild(self) -> None:
         """Configure guild-related form fields for event settings."""
         if "guild" not in self.params["features"]:

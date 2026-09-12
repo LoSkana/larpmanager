@@ -5693,6 +5693,9 @@ msgstr "Tillat påmelding til reservelisten når som helst"
 msgid "Authenticator device removed"
 msgstr "Autentiseringsenhet fjernet"
 
+msgid "Automatic faction assignment"
+msgstr "Automatisk fraksjonstildeling"
+
 #, python-format
 msgid "Bring a friend to %(event)s!"
 msgstr "Ta med en venn til %(event)s!"
@@ -14902,6 +14905,15 @@ msgstr ""
 "Ved å fortsette med påmeldingen til dette arrangementet gir du oss "
 "tillatelse til å dele opplysningene dine som er lagret på plattformen vår, "
 "med arrangørene av arrangementet."
+
+msgid ""
+"If enabled, when a character has no primary faction yet, it is automatically"
+" assigned to a visible faction whose name matches one of the character's "
+"chosen options."
+msgstr ""
+"Hvis aktivert, blir en karakter som ennå ikke har en primær fraksjon, "
+"automatisk tildelt en synlig fraksjon hvis navn samsvarer med et av "
+"karakterens valgte alternativer."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "

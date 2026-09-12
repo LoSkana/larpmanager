@@ -343,7 +343,11 @@ from larpmanager.utils.services.association import (
     generate_association_encryption_key,
     prepare_association_skin_features,
 )
-from larpmanager.utils.services.character import count_distinct_text_links, update_character_referenced_chars_background
+from larpmanager.utils.services.character import (
+    auto_assign_character_faction,
+    count_distinct_text_links,
+    update_character_referenced_chars_background,
+)
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     create_default_event_setup,
@@ -788,6 +792,9 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
 
     # Update visible factions
     update_visible_factions(instance.event_id)
+
+    # Auto-assign character to a matching faction if it has no primary faction yet
+    auto_assign_character_faction(instance)
 
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)

@@ -29,6 +29,7 @@ from django.http import Http404
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_systems
+from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
@@ -48,6 +49,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    Faction,
     FactionType,
     Guild,
     GuildMembershipStatus,
@@ -937,3 +939,38 @@ def update_character_referenced_chars(character_id: int) -> None:
 def update_character_referenced_chars_background(character_id: int) -> None:
     """Compute and persist auto Relationships for characters referenced in a character's content."""
     update_character_referenced_chars(character_id)
+
+
+def auto_assign_character_faction(character: Character) -> None:
+    """Auto-assign a character to a faction matching one of its chosen options.
+
+    Runs only when the user_character and faction features and the
+    user_character_auto_faction config are enabled. Skips characters that
+    already have a primary faction; assigns the first visible faction (by
+    order) whose name matches one of the character's chosen option names.
+    """
+    event_id = character.event_id
+    features = get_event_features(event_id)
+    if "user_character" not in features or "faction" not in features:
+        return
+
+    if not get_event_config(event_id, "user_character_auto_faction"):
+        return
+
+    if character.factions_list.filter(typ=FactionType.PRIM).exists():
+        return
+
+    option_names = WritingChoice.objects.filter(
+        element_id=character.id,
+        question__event_id=event_id,
+        question__applicable=QuestionApplicable.CHARACTER,
+    ).values_list("option__name", flat=True)
+    if not option_names:
+        return
+
+    faction_event_id = get_event_class_parent(event_id, "faction")
+    faction = (
+        Faction.objects.filter(event_id=faction_event_id, hide=False, name__in=option_names).order_by("order").first()
+    )
+    if faction:
+        character.factions_list.add(faction)

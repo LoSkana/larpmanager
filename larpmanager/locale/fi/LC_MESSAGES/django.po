@@ -5693,6 +5693,9 @@ msgstr "Salli varasijalle ilmoittautuminen milloin tahansa"
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"
 
+msgid "Automatic faction assignment"
+msgstr "Automaattinen ryhmän määritys"
+
 #, python-format
 msgid "Bring a friend to %(event)s!"
 msgstr "Tuo ystävä tapahtumaan %(event)s!"
@@ -14895,6 +14898,15 @@ msgid ""
 msgstr ""
 "Jatkamalla ilmoittautumistasi tähän tapahtumaan annat meille luvan jakaa "
 "alustallemme tallennetut tietosi tapahtuman järjestäjien kanssa."
+
+msgid ""
+"If enabled, when a character has no primary faction yet, it is automatically"
+" assigned to a visible faction whose name matches one of the character's "
+"chosen options."
+msgstr ""
+"Jos käytössä, hahmolle, jolla ei vielä ole ensisijaista ryhmää, määritetään "
+"automaattisesti näkyvä ryhmä, jonka nimi vastaa jotakin hahmon valitsemista "
+"vaihtoehdoista."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "
