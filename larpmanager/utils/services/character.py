@@ -49,6 +49,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    CharacterStatus,
     Faction,
     FactionType,
     Guild,
@@ -945,9 +946,10 @@ def auto_assign_character_faction(character: Character) -> None:
     """Auto-assign a character to a faction matching one of its chosen options.
 
     Runs only when the user_character and faction features and the
-    user_character_auto_faction config are enabled. Skips characters that
-    already have a primary faction; assigns the first visible faction (by
-    order) whose name matches one of the character's chosen option names.
+    user_character_auto_faction config are enabled. If character approval is
+    enabled, only runs for approved characters. Skips characters that already
+    have a primary faction; assigns the first visible faction (by order)
+    whose name matches one of the character's chosen option names.
     """
     event_id = character.event_id
     features = get_event_features(event_id)
@@ -955,6 +957,9 @@ def auto_assign_character_faction(character: Character) -> None:
         return
 
     if not get_event_config(event_id, "user_character_auto_faction"):
+        return
+
+    if get_event_config(event_id, "user_character_approval") and character.status != CharacterStatus.APPROVED:
         return
 
     if character.factions_list.filter(typ=FactionType.PRIM).exists():
