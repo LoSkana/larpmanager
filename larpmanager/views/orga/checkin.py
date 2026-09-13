@@ -190,4 +190,5 @@ def orga_checkin_scan(request: HttpRequest, event_slug: str) -> JsonResponse:
             check_in.checked_in_by = request.user.member
             check_in.save()
 
-    return JsonResponse({"res": "ok", "row": _registration_row(registration)})
+    writing_number = get_event_config(context["event"].id, "writing_number", context=context)
+    return JsonResponse({"res": "ok", "row": _registration_row(registration, writing_number=writing_number)})

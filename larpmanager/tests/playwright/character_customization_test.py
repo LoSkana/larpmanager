@@ -32,6 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (submit_register,
+                                     char_dual_pick,
                                      expect_normalized,
                                      go_to,
                                      load_image_hidden,
@@ -60,6 +61,9 @@ def test_character_customization(pw_page: Any) -> None:
 
     # Verify field visibility
     verify_field_visibility(page, live_server)
+
+    # Check-in the registered character, then award it XP
+    verify_checkin_and_award_xp(page, live_server)
 
 
 def activate_customization(page: Any, live_server: Any) -> None:
@@ -197,6 +201,40 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
     # Organizers should be able to see both public and private
     expect_normalized(page, page.locator("body"), "This is my public character description")
     expect_normalized(page, page.locator("body"), "This is my private character note")
+
+
+def verify_checkin_and_award_xp(page: Any, live_server: Any) -> None:
+    """Check in the registered character via the orga check-in page, then award it XP."""
+    # verify_field_visibility ends logged in as orga
+    go_to(page, live_server, "/test/manage/features/checkin/on")
+    go_to(page, live_server, "/test/manage/features/experience/on")
+
+    # Check-in page shows the single registration, not yet checked in
+    go_to(page, live_server, "/test/manage/checkin/")
+    expect_normalized(page, page.locator("body"), "Check-in")
+    row = page.locator("#checkin_table tbody tr")
+    expect(row).to_have_count(1)
+    expect(row).to_contain_text("User Test")
+    expect(row).to_contain_text("Test Character")
+    expect(row.locator(".checkin-present")).to_have_text("No")
+
+    # Manually sign in (no camera in tests)
+    row.locator(".checkin-signin-btn").click()
+    page.locator("#checkin_signin_confirm").click()
+    expect(row.locator(".checkin-present")).to_have_text("Yes")
+    expect(page.locator("#checkin_summary_present")).to_have_text("1")
+
+    # Award XP to the checked-in character
+    go_to(page, live_server, "/test/manage/experience/awards/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("checkin award")
+    edit_iframe.locator("#id_amount").fill("5")
+    char_dual_pick(edit_iframe, "te", "Test Character")
+    save_modal(page, edit_iframe)
+
+    expect_normalized(page, page.locator('[id="u1"]'), "5 Test Character")
 
 
 def verify_characters_shortcut(page: Any, live_server: Any) -> None:
