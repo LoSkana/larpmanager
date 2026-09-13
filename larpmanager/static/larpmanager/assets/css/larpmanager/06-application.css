@@ -491,6 +491,14 @@ form .plot {
   opacity: 0.4;
 }
 
+.checkin-qr {
+  text-align: center;
+}
+
+.checkin-qr img {
+  max-width: 200px;
+}
+
 .reg_profile {
   width: 8em;
 }

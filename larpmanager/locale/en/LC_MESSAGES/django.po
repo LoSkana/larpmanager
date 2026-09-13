@@ -6342,6 +6342,9 @@ msgstr ""
 msgid "Discover the details of this event"
 msgstr ""
 
+msgid "Check-in QR code"
+msgstr ""
+
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, expected within %(days)s days"
 msgstr ""

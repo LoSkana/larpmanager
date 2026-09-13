@@ -461,10 +461,14 @@ def registration_payments_status(registration: Registration) -> None:
 
     """
     registration.payment_status = ""
-    if registration.tot_iscr > 0:
-        if registration.tot_payed == registration.tot_iscr:
-            registration.payment_status = "c"
-        elif registration.tot_payed == 0:
+    remaining_balance = registration.tot_iscr - registration.tot_payed
+    if (
+        registration.tot_iscr <= 0
+        or -conf_settings.MAX_ROUNDING_TOLERANCE < remaining_balance <= conf_settings.MAX_ROUNDING_TOLERANCE
+    ):
+        registration.payment_status = "c"
+    elif registration.tot_iscr > 0:
+        if registration.tot_payed == 0:
             registration.payment_status = "n"
         elif registration.tot_payed < registration.tot_iscr:
             registration.payment_status = "p"

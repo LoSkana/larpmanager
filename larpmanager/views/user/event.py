@@ -85,7 +85,7 @@ from larpmanager.utils.edit.autosave import (
     pop_draft,
     save_draft_from_request,
 )
-from larpmanager.utils.registrations.context import with_geo_configs_registrations
+from larpmanager.utils.registrations.context import get_checkin_qr_url, with_geo_configs_registrations
 from larpmanager.utils.registrations.status import registration_status
 
 
@@ -855,6 +855,9 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     set_sold_tickets(context)
+
+    if context["registration"] and "checkin" in context["features"]:
+        context["checkin_qr_url"] = get_checkin_qr_url(context["registration"])
 
     return render(request, "larpmanager/event/event.html", context)
 
