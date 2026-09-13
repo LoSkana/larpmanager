@@ -102,10 +102,18 @@ class Inventory(UuidMixin, BaseConceptModel):
         Pool types with no label are grouped together under a group with
         label=None (rendered as "Other" by the template).
         """
+        entries = self.get_pool_balances()
+        labels_by_pool_type = {
+            pool_type.id: list(pool_type.labels.all())
+            for pool_type in PoolType.objects.filter(id__in=[entry["type"].id for entry in entries]).prefetch_related(
+                "labels"
+            )
+        }
+
         groups: dict[int, dict[str, Any]] = {}
         unlabeled: list[dict[str, Any]] = []
-        for entry in self.get_pool_balances():
-            labels = list(entry["type"].labels.all())
+        for entry in entries:
+            labels = labels_by_pool_type[entry["type"].id]
             if not labels:
                 unlabeled.append(entry)
                 continue
