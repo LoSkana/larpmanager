@@ -13733,6 +13733,13 @@ msgstr ""
 " aby projevili svůj zájem a byli informováni, až se registrace otevře"
 
 msgid ""
+"Your membership fee for this year is already included in a pending event "
+"registration payment, awaiting verification"
+msgstr ""
+"Tvůj členský poplatek za tento rok je již zahrnut v platbě za čekající "
+"registraci na akci, která čeká na ověření"
+
+msgid ""
 "No items will be modified. Either no items have been assigned quantities, or"
 " all assignments have a quantity of zero."
 msgstr ""

@@ -31,6 +31,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from larpmanager.accounting.registration import registration_payments_status
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.form import BaseQuestionType
@@ -51,10 +52,16 @@ def _resolve_registration(run_id: int, registration_uuid: str) -> Registration:
     )
 
 
-def _registration_row(registration: Registration) -> dict:
+def _registration_row(registration: Registration, *, writing_number: bool) -> dict:
     """Build the JSON-serializable row used by the check-in list and chart."""
     registration_payments_status(registration)
-    characters = ", ".join(rel.character.name for rel in registration.rcrs.select_related("character"))
+    character_labels = []
+    for rel in registration.rcrs.select_related("character"):
+        label = rel.character.name
+        if writing_number:
+            label = f"#{rel.character.number} {label}"
+        character_labels.append(label)
+    characters = ", ".join(character_labels)
     check_in = getattr(registration, "check_in", None)
     # select_related bypasses the safedelete manager's filtering, so a soft-deleted
     # CheckIn (e.g. removed from the admin) would otherwise still read as present.
@@ -84,7 +91,8 @@ def orga_checkin(request: HttpRequest, event_slug: str) -> HttpResponse:
         .select_related("member", "check_in")
         .prefetch_related("rcrs__character")
     )
-    rows = [_registration_row(registration) for registration in registrations]
+    writing_number = get_event_config(context["event"].id, "writing_number", context=context)
+    rows = [_registration_row(registration, writing_number) for registration in registrations]
 
     context["checkin_data"] = json.dumps(rows)
     return render(request, "larpmanager/orga/checkin.html", context)

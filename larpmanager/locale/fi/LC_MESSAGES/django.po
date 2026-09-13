@@ -13919,6 +13919,13 @@ msgstr ""
 "ilmoituksen, kun ilmoittautuminen avautuu"
 
 msgid ""
+"Your membership fee for this year is already included in a pending event "
+"registration payment, awaiting verification"
+msgstr ""
+"Tämän vuoden jäsenmaksusi sisältyy jo odottavaan tapahtumailmoittautumisen "
+"maksuun, joka odottaa vahvistusta"
+
+msgid ""
 "No items will be modified. Either no items have been assigned quantities, or"
 " all assignments have a quantity of zero."
 msgstr ""

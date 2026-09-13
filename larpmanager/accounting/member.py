@@ -359,6 +359,12 @@ def set_membership_fee_pending(member_id: int, association_id: int, year: int, r
     return created or obj.value == str(registration_id)
 
 
+def is_membership_fee_reserved(association_id: int, member_id: int, year: int) -> bool:
+    """Return True if a registration invoice already reserves this year's membership fee for the member."""
+    config_name = membership_fee_pending_config_name(association_id, year)
+    return MemberConfig.objects.filter(member_id=member_id, name=config_name, deleted__isnull=True).exists()
+
+
 def get_membership_fee_for_reg(
     association_id: int,
     member_id: int,

@@ -13854,6 +13854,13 @@ msgstr ""
 "vise interesse og få besked, når registreringerne åbner"
 
 msgid ""
+"Your membership fee for this year is already included in a pending event "
+"registration payment, awaiting verification"
+msgstr ""
+"Dit medlemskontingent for i år er allerede inkluderet i en afventende "
+"betaling for eventtilmelding, som venter på bekræftelse"
+
+msgid ""
 "No items will be modified. Either no items have been assigned quantities, or"
 " all assignments have a quantity of zero."
 msgstr ""
