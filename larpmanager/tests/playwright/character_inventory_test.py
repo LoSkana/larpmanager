@@ -330,6 +330,11 @@ def character_inventory_verify_user(page: Any) -> None:
     hide_empty.click()
     expect(junk_row).to_be_visible()
 
+    totals = page.locator(".inventory-totals")
+    expect(totals).to_contain_text("Credits: 1")
+    expect(totals).to_contain_text("Common Plastics: 0")
+    expect(totals).to_contain_text("Minor RND Secret: 0")
+
     crafting_card.get_by_role("link", name="View Details").click()
     pool_names = [n for n in page.locator("h2:has-text('Currencies') + table tr td:first-child").all_text_contents() if n != "Name"]
     assert "Common Plastics" in pool_names, "Expected Common Plastics in crafting inventory (user view)"

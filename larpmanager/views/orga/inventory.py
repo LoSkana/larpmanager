@@ -157,6 +157,10 @@ def orga_ci_inventory_view(request: HttpRequest, event_slug: str, inventory_uuid
 
     context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
 
+    # Only mark this page as "manage" (loading select2 assets, admin nav) for staff.
+    if context["can_edit_from_npc"]:
+        context["manage"] = 1
+
     context["inventory"] = ci
     context["pool_balances_list"] = ci.get_pool_balances()
 

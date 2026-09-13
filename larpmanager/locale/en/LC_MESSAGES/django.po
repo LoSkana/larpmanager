@@ -5898,6 +5898,9 @@ msgstr ""
 msgid "Hide empty"
 msgstr ""
 
+msgid "Totals"
+msgstr ""
+
 msgid "View Details"
 msgstr ""
 

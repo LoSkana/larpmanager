@@ -85,7 +85,8 @@
                                    min="1"
                                    max="{{ entry.balance.amount }}"
                                    class="ci-amount-input">
-                            <select name="target_inventory" class="ci-target-select">
+                            <select name="target_inventory"
+                                    class="ci-target-select select2-transfer-target">
                                 <option value="">NPC</option>
                                 {% for inv in all_inventories %}
                                     {% if inv.id != inventory.id %}<option value="{{ inv.uuid }}">{{ inv.name }}</option>{% endif %}
@@ -163,3 +164,11 @@
         </tbody>
     </table>
 {% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $('.select2-transfer-target').select2({ width: 'resolve' });
+    });
+    </script>
+{% endblock js %}

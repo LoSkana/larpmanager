@@ -5,6 +5,16 @@
         <p>
             <a href="#" class="my_toggle" tog="sheet-zero-balance">{% trans "Hide empty" %}</a>
         </p>
+        {% if sheet_inventory_totals %}
+            <div class="inventory-totals">
+                <h4>{% trans "Totals" %}</h4>
+                <ul class="pool-balances">
+                    {% for total in sheet_inventory_totals %}
+                        <li {% if not total.amount %}class="sheet-zero-balance"{% endif %}>{{ total.type.name }}: {{ total.amount }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <div class="inventory-cards">
             {% for inventory in sheet_inventory %}
                 <div class="inventory-card">
