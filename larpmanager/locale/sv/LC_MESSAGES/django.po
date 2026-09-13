@@ -2387,9 +2387,6 @@ msgstr "Formuläravsnitt"
 msgid "Full payment"
 msgstr "Full betalning"
 
-msgid "Guild invite"
-msgstr "Inbjudan till gillet"
-
 msgid "House number"
 msgstr "Husnummer"
 
@@ -4117,9 +4114,6 @@ msgstr "Registreringsmejl"
 
 msgid "Registrations open"
 msgstr "Registreringar öppna"
-
-msgid "Removed from guild"
-msgstr "Utväxlad ur guilden"
 
 msgid "Request submitted:"
 msgstr "Begäran inlämnad:"
@@ -9094,6 +9088,10 @@ msgstr ""
 
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr "Använd bankuppgifterna nedan för att göra överföringen från din bank."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Visa saldon och överföringshistoriken för den här karaktärens inventarie"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning:"

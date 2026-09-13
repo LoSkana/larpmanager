@@ -2387,9 +2387,6 @@ msgstr "Abschnitt Formular"
 msgid "Full payment"
 msgstr "Vollständige Bezahlung"
 
-msgid "Guild invite"
-msgstr "Gilden-Einladung"
-
 msgid "House number"
 msgstr "Hausnummer"
 
@@ -4117,9 +4114,6 @@ msgstr "Anmelde-E-Mail"
 
 msgid "Registrations open"
 msgstr "Anmeldungen geöffnet"
-
-msgid "Removed from guild"
-msgstr "Aus der Gilde ausgeschlossen"
 
 msgid "Request submitted:"
 msgstr "Anfrage eingereicht:"
@@ -9252,6 +9246,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Verwende die unten stehenden Bankdaten, um die Überweisung von deiner Bank "
 "aus zu tätigen."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Zeige Guthaben und Überweisungsverlauf für dieses Charakterinventar an"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr ""

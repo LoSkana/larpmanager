@@ -23,6 +23,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.models.inventory import Inventory, InventoryTransfer, InventoryType, PoolLabel, PoolType
@@ -160,6 +161,7 @@ def orga_ci_inventory_view(request: HttpRequest, event_slug: str, inventory_uuid
     # Only mark this page as "manage" (loading select2 assets, admin nav) for staff.
     if context["can_edit_from_npc"]:
         context["manage"] = 1
+        context["page_info"] = _("View balances and transfer history for this character inventory")
 
     context["inventory"] = ci
     context["pool_balances_list"] = ci.get_pool_balances()

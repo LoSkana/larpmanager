@@ -2387,9 +2387,6 @@ msgstr "Secção do formulário"
 msgid "Full payment"
 msgstr "Pagamento integral"
 
-msgid "Guild invite"
-msgstr "Convite para a guilda"
-
 msgid "House number"
 msgstr "Número da porta"
 
@@ -4117,9 +4114,6 @@ msgstr "E-mail de inscrição"
 
 msgid "Registrations open"
 msgstr "Inscrições abertas"
-
-msgid "Removed from guild"
-msgstr "Expulso da guilda"
 
 msgid "Request submitted:"
 msgstr "Pedido enviado:"
@@ -9114,6 +9108,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Usa os dados bancários abaixo para efetuar a transferência a partir do teu "
 "banco."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Ver saldos e histórico de transferências deste inventário de personagem"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Pedimos-te que pagues o montante solicitado para a próxima prestação:"

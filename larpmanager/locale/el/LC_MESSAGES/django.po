@@ -2387,9 +2387,6 @@ msgstr "Ενότητα φόρμας"
 msgid "Full payment"
 msgstr "Πλήρης πληρωμή"
 
-msgid "Guild invite"
-msgstr "Πρόσκληση σε γκίλντα"
-
 msgid "House number"
 msgstr "Αριθμός κατοικίας"
 
@@ -4117,9 +4114,6 @@ msgstr "Email εγγραφής"
 
 msgid "Registrations open"
 msgstr "Οι εγγραφές είναι ανοιχτές"
-
-msgid "Removed from guild"
-msgstr "Αποβλήθηκε από τη συντεχνία"
 
 msgid "Request submitted:"
 msgstr "Υποβλήθηκε αίτημα:"
@@ -9241,6 +9235,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Χρησιμοποίησε τα παρακάτω τραπεζικά στοιχεία για να κάνεις τη μεταφορά από "
 "την τράπεζά σου."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Δες τα υπόλοιπα και το ιστορικό μεταφορών για το απόθεμα αυτού του χαρακτήρα"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Σου ζητάμε να πληρώσεις το ποσό που απαιτείται για την επόμενη δόση:"

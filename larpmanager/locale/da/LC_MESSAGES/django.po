@@ -2387,9 +2387,6 @@ msgstr "Formularafsnit"
 msgid "Full payment"
 msgstr "Fuld betaling"
 
-msgid "Guild invite"
-msgstr "Invitation til et guild"
-
 msgid "House number"
 msgstr "Husnummer"
 
@@ -4117,9 +4114,6 @@ msgstr "E-mail om tilmelding"
 
 msgid "Registrations open"
 msgstr "Tilmeldinger åbne"
-
-msgid "Removed from guild"
-msgstr "Fjernet fra guilden"
 
 msgid "Request submitted:"
 msgstr "Anmodning indsendt:"
@@ -9071,6 +9065,11 @@ msgstr ""
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Brug bankoplysningerne nedenfor til at foretage overførslen fra din bank."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Se saldi e cronologia dei trasferimenti per questo inventario del "
+"personaggio"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Vi beder dig betale det beløb, der er anmodet om for næste rate:"

@@ -2387,9 +2387,6 @@ msgstr "Sekce formuláře"
 msgid "Full payment"
 msgstr "Úplná platba"
 
-msgid "Guild invite"
-msgstr "Pozvánka do cechu"
-
 msgid "House number"
 msgstr "Číslo domu"
 
@@ -4117,9 +4114,6 @@ msgstr "Registrační e-mail"
 
 msgid "Registrations open"
 msgstr "Registrace jsou otevřeny"
-
-msgid "Removed from guild"
-msgstr "Vyloučen z cechu"
 
 msgid "Request submitted:"
 msgstr "Odeslana žádost:"
@@ -9075,6 +9069,9 @@ msgstr "Nahraj fotografii nebo sken dokladu totožnosti (PDF nebo obrázek)"
 
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr "Pro převod z tvé banky použij níže uvedené bankovní údaje."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Zobraz zůstatky a historii převodů pro inventář této postavy"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Prosíme tě, abys zaplatil/a požadovanou částku na další splátku:"

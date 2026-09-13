@@ -2387,9 +2387,6 @@ msgstr "Formulier sectie"
 msgid "Full payment"
 msgstr "Volledige betaling"
 
-msgid "Guild invite"
-msgstr "Uitnodiging voor de gilde"
-
 msgid "House number"
 msgstr "Huisnummer"
 
@@ -4117,9 +4114,6 @@ msgstr "Registratie-e-mail"
 
 msgid "Registrations open"
 msgstr "Registraties geopend"
-
-msgid "Removed from guild"
-msgstr "Uit het gilde gezet"
 
 msgid "Request submitted:"
 msgstr "Ingediend verzoek:"
@@ -9186,6 +9180,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Gebruik de onderstaande bankgegevens om de overschrijving van je bank uit te"
 " voeren."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Bekijk saldi en overdrachtsgeschiedenis voor deze personage-inventaris"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr ""

@@ -2387,9 +2387,6 @@ msgstr "Skjemadelen"
 msgid "Full payment"
 msgstr "Full betaling"
 
-msgid "Guild invite"
-msgstr "Invitasjon til klan"
-
 msgid "House number"
 msgstr "Husnummer"
 
@@ -4117,9 +4114,6 @@ msgstr "Registrerings-e-post"
 
 msgid "Registrations open"
 msgstr "Registreringene er åpne"
-
-msgid "Removed from guild"
-msgstr "Fjernet fra klanen"
 
 msgid "Request submitted:"
 msgstr "Innsendt forespørsel:"
@@ -9114,6 +9108,9 @@ msgstr ""
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Bruk bankopplysningene nedenfor for å foreta overføringen fra banken din."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Se saldoer og overføringshistorikk for dette karakterinventaret"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Vi ber deg om å betale det beløpet vi ber om for neste avdrag:"

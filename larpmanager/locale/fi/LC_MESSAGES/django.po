@@ -2387,9 +2387,6 @@ msgstr "Lomake-osio"
 msgid "Full payment"
 msgstr "Koko maksu"
 
-msgid "Guild invite"
-msgstr "Killan kutsu"
-
 msgid "House number"
 msgstr "Talon numero"
 
@@ -4117,9 +4114,6 @@ msgstr "Ilmoittautumissähköposti"
 
 msgid "Registrations open"
 msgstr "Ilmoittautuminen avoinna"
-
-msgid "Removed from guild"
-msgstr "Poistettu kilta"
 
 msgid "Request submitted:"
 msgstr "Jätetty pyyntö:"
@@ -9121,6 +9115,9 @@ msgstr ""
 
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr "Käytä alla olevia pankkitietoja tehdäksesi siirron pankistasi."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Näytä tämän hahmon varaston saldot ja siirtohistoria"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Pyydämme sinua maksamaan pyydetyn summan seuraavaa maksuerää varten:"

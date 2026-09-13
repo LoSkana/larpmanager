@@ -86,9 +86,6 @@ msgstr ""
 msgid "Free donation"
 msgstr ""
 
-msgid "Available"
-msgstr ""
-
 msgid "Registrations on external link"
 msgstr ""
 
@@ -917,6 +914,9 @@ msgstr ""
 msgid "You have exceeded the maximum text length"
 msgstr ""
 
+msgid "Available"
+msgstr ""
+
 msgid "Option no longer available"
 msgstr ""
 
@@ -1132,9 +1132,9 @@ msgid "Patron / Reduced"
 msgstr ""
 
 msgid ""
-"The ratio between reduced and patron tickets, multiplied by 10. Example: 10 "
-"-> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for 1 "
-"patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+"The ratio between reduced and patron tickets, multiplied by 10. Example: 10 -"
+"> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for 1 patron "
+"ticket. 5 -> 1 reduced ticket for 2 patron tickets"
 msgstr ""
 
 msgid "Allow reserve signup anytime"
@@ -12838,6 +12838,9 @@ msgstr ""
 msgid "Participation in"
 msgstr ""
 
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+
 msgid "Photos and videos successfully uploaded!"
 msgstr ""
 
@@ -13111,9 +13114,6 @@ msgstr ""
 msgid "This character is already a member or has a pending invite"
 msgstr ""
 
-msgid "Guild invite"
-msgstr ""
-
 #, python-format
 msgid ""
 "You have been invited to join the guild %(guild)s with your character "
@@ -13154,9 +13154,6 @@ msgid "Invite declined"
 msgstr ""
 
 msgid "Cannot kick the last admin of the guild"
-msgstr ""
-
-msgid "Removed from guild"
 msgstr ""
 
 #, python-format
