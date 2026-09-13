@@ -22,7 +22,7 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -756,7 +756,15 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
         raise Http404(msg)
 
     # Persist changes to database
-    context["el"].save()
+    try:
+        context["el"].save()
+    except ValidationError as exc:
+        error_message = "; ".join(exc.messages)
+        if is_frame:
+            context["error_message"] = error_message
+            return render(request, "elements/dashboard/approve_confirm.html", context)
+        messages.error(request, error_message)
+        return redirect(page)
 
     # Show success message and redirect to the page listing invoices of that type
     messages.success(request, _("Element approved!"))

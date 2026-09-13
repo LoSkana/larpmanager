@@ -9023,6 +9023,10 @@ msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr "Μέγιστος αριθμός αποδεκτών μελών ανά guild (0 = χωρίς όριο)."
 
 #, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr "Η συνδρομή για το %(year)s έχει ήδη καταχωριστεί για αυτόν τον χρήστη"
+
+#, python-format
 msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr ""
 "Επόμενη πληρωμή: %(quota)s%(currency)s έχει καθυστερήσει κατά %(days)s "

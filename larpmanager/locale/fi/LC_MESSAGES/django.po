@@ -8938,6 +8938,10 @@ msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr "Hyväksyttyjen jäsenten enimmäismäärä kiltaa kohden (0 = ei rajaa)."
 
 #, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr "Jäsenmaksu vuodelle %(year)s on jo rekisteröity tälle käyttäjälle"
+
+#, python-format
 msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr "Seuraava maksu: %(quota)s%(currency)s, %(days)s päivää erääntynyt"
 

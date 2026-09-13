@@ -8912,6 +8912,11 @@ msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr "Maximální počet přijatých členů na gildu (0 = bez limitu)."
 
 #, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr ""
+"Členský poplatek za %(year)s je pro tohoto uživatele již zaregistrován"
+
+#, python-format
 msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr "Příští splátka: %(quota)s%(currency)s, splatná již %(days)s dní"
 

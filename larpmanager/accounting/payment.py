@@ -28,7 +28,7 @@ import re
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
@@ -576,9 +576,21 @@ def _process_membership(invoice: PaymentInvoice) -> None:
         if AccountingItemMembership.objects.filter(inv=invoice).exists():
             return
 
+        year = timezone.now().year
+
+        # Reject if member already has an active membership item for this year
+        if AccountingItemMembership.objects.filter(
+            member_id=invoice.member_id,
+            association_id=invoice.association_id,
+            year=year,
+            deleted__isnull=True,
+        ).exists():
+            msg = _("Membership fee for %(year)s already registered for this user") % {"year": year}
+            raise ValidationError(msg)
+
         # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
-        accounting_item.year = timezone.now().year
+        accounting_item.year = year
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross

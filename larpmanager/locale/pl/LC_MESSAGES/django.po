@@ -8959,6 +8959,11 @@ msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr "Maksymalna liczba zaakceptowanych członków gildii (0 = bez limitu)."
 
 #, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr ""
+"Opłata członkowska za %(year)s jest już zarejestrowana dla tego użytkownika"
+
+#, python-format
 msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr "Następna płatność: %(quota)s%(currency)s zaległa od %(days)s dni"
 

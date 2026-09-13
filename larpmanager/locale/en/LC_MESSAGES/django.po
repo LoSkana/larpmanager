@@ -80,6 +80,10 @@ msgstr ""
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr ""
 
+#, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr ""
+
 msgid "Freely indicate the amount of your donation"
 msgstr ""
 
