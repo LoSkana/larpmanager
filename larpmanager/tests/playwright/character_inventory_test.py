@@ -28,6 +28,7 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
     submit_register, char_dual_pick, \
@@ -50,6 +51,8 @@ def test_character_inventory(pw_page: Any) -> None:
     character_inventory_types(live_server, page)
 
     character_inventory_pools(live_server, page)
+
+    character_inventory_dropdown_order_and_visibility(live_server, page)
 
     character_inventory_verify_staff(live_server, page)
 
@@ -185,6 +188,28 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_inventory_type").select_option(label="Secrets Type")
     save_modal(page, edit_iframe)
 
+    # check that name sorts alphabetically before every other
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("AAA Vault")
+    save_modal(page, edit_iframe)
+
+
+def character_inventory_dropdown_order_and_visibility(live_server: Any, page: Any) -> None:
+    go_to(page, live_server, "/test/manage/ci/inventory/")
+    page.get_by_role("row", name="Test Character's Bank").locator(".fa-solid.fa-book-open").click()
+
+    options = page.locator("select[name='target_inventory']").first.locator("option").all_text_contents()
+
+    assert options[0] == "NPC", f"Expected placeholder NPC option first, got {options}"
+    assert options[1] == "AAA Vault", f"Transfer list is not alphabetically sorted: {options}"
+
+    rest = options[1:]
+    assert rest == sorted(rest), f"Transfer target list is not alphabetically sorted: {rest}"
+
+    go_to(page, live_server, "/test/manage/quick/")
+
 
 def character_inventory_verify_staff(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/ci/inventory/")
@@ -196,6 +221,13 @@ def character_inventory_verify_staff(live_server: Any, page: Any) -> None:
     assert "Credits" not in pool_names, "Credits should not appear in crafting inventory"
     assert "Junk" not in pool_names, "Junk should not appear in crafting inventory"
     assert "Minor RND Secret" not in pool_names, "Minor RND Secret should not appear in crafting inventory"
+
+    zero_row = page.locator("tr.ci-zero-balance", has_text="Common Plastics")
+    expect(zero_row).to_be_visible()
+    page.get_by_role("link", name="Hide empty").click()
+    expect(zero_row).to_be_hidden()
+    page.get_by_role("link", name="Hide empty").click()
+    expect(zero_row).to_be_visible()
 
     go_to(page, live_server, "/test/manage/ci/inventory/")
 
@@ -249,6 +281,13 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.locator(".inventory-card").filter(has_text="Test Character's Bank").get_by_role("link",
                                                                                          name="View Details").click()
+
+    player_options = page.locator("select[name='target_inventory']").first.locator("option").all_text_contents()
+    assert "AAA Vault" not in player_options, "Unassigned inventory leaked into player transfer dropdown"
+    assert player_options.count("NPC") == 1, "Only the off-books NPC placeholder should remain, not the real NPC inventory"
+    assert "Test Character's Crafting Inventory" in player_options
+    assert "Test Character's Secrets" in player_options
+
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_role("spinbutton").click()
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_role("spinbutton").fill("2")
     page.get_by_role("row", name="Credits 3 NPC Transfer").get_by_placeholder("Reason").click()
@@ -270,7 +309,33 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
 
 
 def character_inventory_verify_user(page: Any) -> None:
-    page.locator(".inventory-card").filter(has_text="Test Character's Crafting Inventory").get_by_role("link", name="View Details").click()
+    crafting_card = page.locator(".inventory-card").filter(has_text="Test Character's Crafting Inventory")
+    crafting_group = crafting_card.locator("ul.pool-balances")
+    expect(crafting_group).to_be_hidden()
+    crafting_card.get_by_role("link", name="Crafting").click()
+    expect(crafting_group).to_be_visible()
+    expect(crafting_group).to_contain_text("Common Plastics")
+
+    bank_card = page.locator(".inventory-card").filter(has_text="Test Character's Bank")
+    bank_card.get_by_role("link", name="Other").click()
+    junk_row = bank_card.locator("li", has_text="Junk")
+    credits_row = bank_card.locator("li", has_text="Credits")
+    expect(junk_row).to_be_visible()
+    expect(credits_row).to_be_visible()
+
+    hide_empty = page.locator(".character-inventories").get_by_role("link", name="Hide empty")
+    hide_empty.click()
+    expect(junk_row).to_be_hidden()
+    expect(credits_row).to_be_visible()
+    hide_empty.click()
+    expect(junk_row).to_be_visible()
+
+    totals = page.locator(".inventory-totals")
+    expect(totals).to_contain_text("Credits: 1")
+    expect(totals).to_contain_text("Common Plastics: 0")
+    expect(totals).to_contain_text("Minor RND Secret: 0")
+
+    crafting_card.get_by_role("link", name="View Details").click()
     pool_names = [n for n in page.locator("h2:has-text('Currencies') + table tr td:first-child").all_text_contents() if n != "Name"]
     assert "Common Plastics" in pool_names, "Expected Common Plastics in crafting inventory (user view)"
     assert "Credits" not in pool_names, "Credits should not appear in crafting inventory (user view)"

@@ -449,6 +449,23 @@ class Character(Writing):
             queryset = queryset.filter(plot__event=get_event_class_parent(event_id, "plot"))
         return queryset.order_by("order")
 
+    def get_total_pool_balances(self) -> list[dict[str, Any]]:
+        """Return the running total of each pool type across all owned inventories.
+
+        Only sums balances for pool types that are actually displayed on at least one
+        of the character's inventories (i.e. respects each inventory's InventoryType/
+        label restrictions), so the total always matches what adding up the visible
+        inventory cards by hand would give. A stray balance sitting on an inventory
+        that no longer shows that pool type is intentionally not counted.
+        """
+        totals: dict[int, dict[str, Any]] = {}
+        for inventory in self.inventory.all():
+            for entry in inventory.get_pool_balances():
+                pool_type = entry["type"]
+                total = totals.setdefault(pool_type.id, {"type": pool_type, "amount": 0})
+                total["amount"] += entry["balance"].amount
+        return sorted(totals.values(), key=lambda t: t["type"].number)
+
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
         """Extend Writing CSV example with player assignment column."""

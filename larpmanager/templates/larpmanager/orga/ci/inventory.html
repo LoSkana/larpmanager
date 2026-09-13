@@ -57,6 +57,9 @@
             text-align: center;
         }
     </style>
+    <p>
+        <a href="#" class="my_toggle" tog="ci-zero-balance">{% trans "Hide empty" %}</a>
+    </p>
     <h2>{% trans "Currencies & Materials" %}</h2>
     <table class="mob ">
         <tr>
@@ -66,7 +69,7 @@
             <th>{% trans "Add" %}</th>
         </tr>
         {% for entry in pool_balances_list %}
-            <tr>
+            <tr {% if not entry.balance.amount %}class="ci-zero-balance"{% endif %}>
                 <td>{{ entry.type.name }}</td>
                 <td>{{ entry.balance.amount }}</td>
                 <td class="ci-transfer-cell">
@@ -82,7 +85,8 @@
                                    min="1"
                                    max="{{ entry.balance.amount }}"
                                    class="ci-amount-input">
-                            <select name="target_inventory" class="ci-target-select">
+                            <select name="target_inventory"
+                                    class="ci-target-select select2-transfer-target">
                                 <option value="">NPC</option>
                                 {% for inv in all_inventories %}
                                     {% if inv.id != inventory.id %}<option value="{{ inv.uuid }}">{{ inv.name }}</option>{% endif %}
@@ -160,3 +164,11 @@
         </tbody>
     </table>
 {% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+        $('.select2-transfer-target').select2({ width: 'resolve' });
+    });
+    </script>
+{% endblock js %}

@@ -733,6 +733,9 @@ msgstr "Gettoni"
 msgid "Total:"
 msgstr "Totale:"
 
+msgid "Totals"
+msgstr "Totali"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Prima pagina"
 msgid "Guild logo"
 msgstr "Logo della gilda"
 
+msgid "Hide empty"
+msgstr "Nascondi quelli vuoti"
+
 msgid "Historical"
 msgstr "Storico"
 
@@ -2413,6 +2419,9 @@ msgstr "Sezione modulo"
 
 msgid "Full payment"
 msgstr "Pagamento completo"
+
+msgid "Guild invite"
+msgstr "Invito alla gilda"
 
 msgid "House number"
 msgstr "Numero civico"
@@ -3831,6 +3840,9 @@ msgstr "Creazione del pacchetto"
 msgid "Give a new answer"
 msgstr "Dai una nuova risposta"
 
+msgid "Hide descriptions"
+msgstr "Nascondi le descrizioni"
+
 msgid "ID document photo"
 msgstr "Foto del documento d'identità"
 
@@ -4162,6 +4174,9 @@ msgstr "Email di registrazione"
 
 msgid "Registrations open"
 msgstr "Le iscrizioni sono aperte"
+
+msgid "Removed from guild"
+msgstr "Espulso dalla gilda"
 
 msgid "Request submitted:"
 msgstr "Richiesta inviata:"

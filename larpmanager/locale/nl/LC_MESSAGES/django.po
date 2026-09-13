@@ -733,6 +733,9 @@ msgstr "Penningen"
 msgid "Total:"
 msgstr "Totaal:"
 
+msgid "Totals"
+msgstr "Totalen"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Eerste pagina"
 msgid "Guild logo"
 msgstr "Gildelogo"
 
+msgid "Hide empty"
+msgstr "Lege verbergen"
+
 msgid "Historical"
 msgstr "Historisch"
 
@@ -2413,6 +2419,9 @@ msgstr "Formulier sectie"
 
 msgid "Full payment"
 msgstr "Volledige betaling"
+
+msgid "Guild invite"
+msgstr "Uitnodiging voor de gilde"
 
 msgid "House number"
 msgstr "Huisnummer"
@@ -3831,6 +3840,9 @@ msgstr "Bundel wordt gegenereerd"
 msgid "Give a new answer"
 msgstr "Geef een nieuw antwoord"
 
+msgid "Hide descriptions"
+msgstr "Beschrijvingen verbergen"
+
 msgid "ID document photo"
 msgstr "Foto ID-document"
 
@@ -4162,6 +4174,9 @@ msgstr "Registratie-e-mail"
 
 msgid "Registrations open"
 msgstr "Registraties geopend"
+
+msgid "Removed from guild"
+msgstr "Uit het gilde gezet"
 
 msgid "Request submitted:"
 msgstr "Ingediend verzoek:"

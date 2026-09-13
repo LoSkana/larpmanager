@@ -733,6 +733,9 @@ msgstr "Wertmarken"
 msgid "Total:"
 msgstr "Gesamtbetrag:"
 
+msgid "Totals"
+msgstr "Gesamtzahlen"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Erste Seite"
 msgid "Guild logo"
 msgstr "Gildenlogo"
 
+msgid "Hide empty"
+msgstr "Leere ausblenden"
+
 msgid "Historical"
 msgstr "Historisch"
 
@@ -2413,6 +2419,9 @@ msgstr "Abschnitt Formular"
 
 msgid "Full payment"
 msgstr "Vollständige Bezahlung"
+
+msgid "Guild invite"
+msgstr "Gilden-Einladung"
 
 msgid "House number"
 msgstr "Hausnummer"
@@ -3831,6 +3840,9 @@ msgstr "Bundle wird erstellt"
 msgid "Give a new answer"
 msgstr "Eine neue Antwort geben"
 
+msgid "Hide descriptions"
+msgstr "Beschreibungen ausblenden"
+
 msgid "ID document photo"
 msgstr "Ausweisdokument-Foto"
 
@@ -4162,6 +4174,9 @@ msgstr "Anmelde-E-Mail"
 
 msgid "Registrations open"
 msgstr "Anmeldungen geöffnet"
+
+msgid "Removed from guild"
+msgstr "Aus der Gilde ausgeschlossen"
 
 msgid "Request submitted:"
 msgstr "Anfrage eingereicht:"

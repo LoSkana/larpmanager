@@ -733,6 +733,9 @@ msgstr "Tokens"
 msgid "Total:"
 msgstr "Totalt:"
 
+msgid "Totals"
+msgstr "Totalsummor"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Första sidan"
 msgid "Guild logo"
 msgstr "Gillets logotyp"
 
+msgid "Hide empty"
+msgstr "Dölj tomma"
+
 msgid "Historical"
 msgstr "Historisk"
 
@@ -2413,6 +2419,9 @@ msgstr "Formuläravsnitt"
 
 msgid "Full payment"
 msgstr "Full betalning"
+
+msgid "Guild invite"
+msgstr "Inbjudan till gillet"
 
 msgid "House number"
 msgstr "Husnummer"
@@ -3831,6 +3840,9 @@ msgstr "Skapar paket"
 msgid "Give a new answer"
 msgstr "Ge ett nytt svar"
 
+msgid "Hide descriptions"
+msgstr "Dölj beskrivningar"
+
 msgid "ID document photo"
 msgstr "Foto av ID-handling"
 
@@ -4162,6 +4174,9 @@ msgstr "Registreringsmejl"
 
 msgid "Registrations open"
 msgstr "Registreringar öppna"
+
+msgid "Removed from guild"
+msgstr "Utväxlad ur guilden"
 
 msgid "Request submitted:"
 msgstr "Begäran inlämnad:"

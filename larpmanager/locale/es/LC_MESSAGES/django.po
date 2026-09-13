@@ -733,6 +733,9 @@ msgstr "Fichas"
 msgid "Total:"
 msgstr "Total:"
 
+msgid "Totals"
+msgstr "Totales"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Primera página"
 msgid "Guild logo"
 msgstr "Logotipo del gremio"
 
+msgid "Hide empty"
+msgstr "Ocultar los campos vacíos"
+
 msgid "Historical"
 msgstr "Histórico"
 
@@ -2413,6 +2419,9 @@ msgstr "Sección de formulario"
 
 msgid "Full payment"
 msgstr "Pago completo"
+
+msgid "Guild invite"
+msgstr "Invitación al gremio"
 
 msgid "House number"
 msgstr "Número de casa"
@@ -3831,6 +3840,9 @@ msgstr "Generando paquete"
 msgid "Give a new answer"
 msgstr "Dar una nueva respuesta"
 
+msgid "Hide descriptions"
+msgstr "Ocultar descripciones"
+
 msgid "ID document photo"
 msgstr "Foto del documento de identidad"
 
@@ -4162,6 +4174,9 @@ msgstr "Correo electrónico de registro"
 
 msgid "Registrations open"
 msgstr "Inscripciones abiertas"
+
+msgid "Removed from guild"
+msgstr "Expulsado del gremio"
 
 msgid "Request submitted:"
 msgstr "Petición enviada:"

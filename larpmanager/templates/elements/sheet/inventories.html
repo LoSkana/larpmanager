@@ -2,13 +2,41 @@
 {% if sheet_inventory %}
     <div class="character-inventories">
         <h1 class="c">{% trans "Inventories" %}</h1>
+        <p>
+            <a href="#" class="my_toggle" tog="sheet-zero-balance">{% trans "Hide empty" %}</a>
+        </p>
+        {% if sheet_inventory_totals %}
+            <div class="inventory-totals">
+                <h4>{% trans "Totals" %}</h4>
+                <ul class="pool-balances">
+                    {% for total in sheet_inventory_totals %}
+                        <li {% if not total.amount %}class="sheet-zero-balance"{% endif %}>{{ total.type.name }}: {{ total.amount }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
         <div class="inventory-cards">
             {% for inventory in sheet_inventory %}
                 <div class="inventory-card">
                     <h4>{{ inventory.name }}</h4>
-                    <ul class="pool-balances">
-                        {% for pb in inventory.get_pool_balances %}<li>{{ pb.type.name }}: {{ pb.balance.amount }}</li>{% endfor %}
-                    </ul>
+                    {% for group in inventory.get_pool_balances_by_label %}
+                        <a href="#"
+                           class="my_toggle"
+                           tog="inv-{{ inventory.id }}-lbl-{{ group.label.id|default:"other" }}">
+                            {% if group.label %}
+                                {{ group.label.name }}
+                            {% else %}
+                                {% trans "Other" %}
+                            {% endif %}
+                        </a>
+                        <ul class="pool-balances hide inv-{{ inventory.id }}-lbl-{{ group.label.id|default:"other" }}">
+                            {% for pb in group.entries %}
+                                <li {% if not pb.balance.amount %}class="sheet-zero-balance"{% endif %}>
+                                    {{ pb.type.name }}: {{ pb.balance.amount }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endfor %}
                     <a href="{% url 'orga_ci_inventory_view' run.get_slug inventory.uuid %}"
                        class="btn">{% trans "View Details" %}</a>
                 </div>

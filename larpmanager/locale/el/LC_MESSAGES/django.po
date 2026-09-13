@@ -733,6 +733,9 @@ msgstr "Μάρκες"
 msgid "Total:"
 msgstr "Σύνολο:"
 
+msgid "Totals"
+msgstr "Σύνολα"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Πρώτη σελίδα"
 msgid "Guild logo"
 msgstr "Λογότυπο συντεχνίας"
 
+msgid "Hide empty"
+msgstr "Απόκρυψη κενών"
+
 msgid "Historical"
 msgstr "Ιστορικό"
 
@@ -2413,6 +2419,9 @@ msgstr "Ενότητα φόρμας"
 
 msgid "Full payment"
 msgstr "Πλήρης πληρωμή"
+
+msgid "Guild invite"
+msgstr "Πρόσκληση σε γκίλντα"
 
 msgid "House number"
 msgstr "Αριθμός κατοικίας"
@@ -3831,6 +3840,9 @@ msgstr "Δημιουργία πακέτου"
 msgid "Give a new answer"
 msgstr "Δώσε νέα απάντηση"
 
+msgid "Hide descriptions"
+msgstr "Απόκρυψη περιγραφών"
+
 msgid "ID document photo"
 msgstr "Φωτογραφία εγγράφου ταυτότητας"
 
@@ -4162,6 +4174,9 @@ msgstr "Email εγγραφής"
 
 msgid "Registrations open"
 msgstr "Οι εγγραφές είναι ανοιχτές"
+
+msgid "Removed from guild"
+msgstr "Αποβλήθηκε από τη συντεχνία"
 
 msgid "Request submitted:"
 msgstr "Υποβλήθηκε αίτημα:"

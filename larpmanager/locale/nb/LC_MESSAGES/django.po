@@ -733,6 +733,9 @@ msgstr "Tokens"
 msgid "Total:"
 msgstr "Totalsum:"
 
+msgid "Totals"
+msgstr "Totalsummer"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Første side"
 msgid "Guild logo"
 msgstr "Gildelogo"
 
+msgid "Hide empty"
+msgstr "Skjul tomme"
+
 msgid "Historical"
 msgstr "Historisk"
 
@@ -2413,6 +2419,9 @@ msgstr "Skjemadelen"
 
 msgid "Full payment"
 msgstr "Full betaling"
+
+msgid "Guild invite"
+msgstr "Invitasjon til klan"
 
 msgid "House number"
 msgstr "Husnummer"
@@ -3831,6 +3840,9 @@ msgstr "Oppretter pakke"
 msgid "Give a new answer"
 msgstr "Gi et nytt svar"
 
+msgid "Hide descriptions"
+msgstr "Skjul beskrivelser"
+
 msgid "ID document photo"
 msgstr "Foto av ID-dokument"
 
@@ -4162,6 +4174,9 @@ msgstr "Registrerings-e-post"
 
 msgid "Registrations open"
 msgstr "Registreringene er åpne"
+
+msgid "Removed from guild"
+msgstr "Fjernet fra klanen"
 
 msgid "Request submitted:"
 msgstr "Innsendt forespørsel:"

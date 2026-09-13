@@ -733,6 +733,9 @@ msgstr "Žetony"
 msgid "Total:"
 msgstr "Celkem:"
 
+msgid "Totals"
+msgstr "Součty"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "První stránka"
 msgid "Guild logo"
 msgstr "Logo cechu"
 
+msgid "Hide empty"
+msgstr "Skrýt prázdné"
+
 msgid "Historical"
 msgstr "Historické"
 
@@ -2413,6 +2419,9 @@ msgstr "Sekce formuláře"
 
 msgid "Full payment"
 msgstr "Úplná platba"
+
+msgid "Guild invite"
+msgstr "Pozvánka do cechu"
 
 msgid "House number"
 msgstr "Číslo domu"
@@ -3831,6 +3840,9 @@ msgstr "Vytvoření balíčku"
 msgid "Give a new answer"
 msgstr "Dej novou odpověď"
 
+msgid "Hide descriptions"
+msgstr "Skrýt popisy"
+
 msgid "ID document photo"
 msgstr "Fotografie dokladu totožnosti"
 
@@ -4162,6 +4174,9 @@ msgstr "Registrační e-mail"
 
 msgid "Registrations open"
 msgstr "Registrace jsou otevřeny"
+
+msgid "Removed from guild"
+msgstr "Vyloučen z cechu"
 
 msgid "Request submitted:"
 msgstr "Odeslana žádost:"

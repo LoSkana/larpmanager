@@ -733,6 +733,9 @@ msgstr "Jetons"
 msgid "Total:"
 msgstr "Total:"
 
+msgid "Totals"
+msgstr "Totaux"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Première page"
 msgid "Guild logo"
 msgstr "Logo de la guilde"
 
+msgid "Hide empty"
+msgstr "Masquer les champs vides"
+
 msgid "Historical"
 msgstr "Historique"
 
@@ -2413,6 +2419,9 @@ msgstr "Section du formulaire"
 
 msgid "Full payment"
 msgstr "Paiement intégral"
+
+msgid "Guild invite"
+msgstr "Invitation à rejoindre une guilde"
 
 msgid "House number"
 msgstr "Numéro de maison"
@@ -3831,6 +3840,9 @@ msgstr "Création d'un bundle"
 msgid "Give a new answer"
 msgstr "Donner une nouvelle réponse"
 
+msgid "Hide descriptions"
+msgstr "Masquer les descriptions"
+
 msgid "ID document photo"
 msgstr "Photo de la pièce d'identité"
 
@@ -4162,6 +4174,9 @@ msgstr "E-mail d'inscription"
 
 msgid "Registrations open"
 msgstr "Les inscriptions sont ouvertes"
+
+msgid "Removed from guild"
+msgstr "Exclu de la guilde"
 
 msgid "Request submitted:"
 msgstr "Demande soumise :"

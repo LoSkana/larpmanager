@@ -733,6 +733,9 @@ msgstr "Merkit"
 msgid "Total:"
 msgstr "Yhteensä:"
 
+msgid "Totals"
+msgstr "Yhteensä"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1826,6 +1829,9 @@ msgstr "Ensimmäinen sivu"
 msgid "Guild logo"
 msgstr "Killan logo"
 
+msgid "Hide empty"
+msgstr "Piilota tyhjät"
+
 msgid "Historical"
 msgstr "Historiallinen"
 
@@ -2413,6 +2419,9 @@ msgstr "Lomake-osio"
 
 msgid "Full payment"
 msgstr "Koko maksu"
+
+msgid "Guild invite"
+msgstr "Killan kutsu"
 
 msgid "House number"
 msgstr "Talon numero"
@@ -3831,6 +3840,9 @@ msgstr "Paketin luominen"
 msgid "Give a new answer"
 msgstr "Anna uusi vastaus"
 
+msgid "Hide descriptions"
+msgstr "Piilota kuvaukset"
+
 msgid "ID document photo"
 msgstr "Henkilöllisyystodistuksen valokuva"
 
@@ -4162,6 +4174,9 @@ msgstr "Ilmoittautumissähköposti"
 
 msgid "Registrations open"
 msgstr "Ilmoittautuminen avoinna"
+
+msgid "Removed from guild"
+msgstr "Poistettu kilta"
 
 msgid "Request submitted:"
 msgstr "Jätetty pyyntö:"
