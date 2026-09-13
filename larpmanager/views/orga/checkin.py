@@ -92,7 +92,7 @@ def orga_checkin(request: HttpRequest, event_slug: str) -> HttpResponse:
         .prefetch_related("rcrs__character")
     )
     writing_number = get_event_config(context["event"].id, "writing_number", context=context)
-    rows = [_registration_row(registration, writing_number) for registration in registrations]
+    rows = [_registration_row(registration, writing_number=writing_number) for registration in registrations]
 
     context["checkin_data"] = json.dumps(rows)
     return render(request, "larpmanager/orga/checkin.html", context)
