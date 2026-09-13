@@ -9023,6 +9023,10 @@ msgstr ""
 "Maximale Anzahl angenommener Mitglieder pro Gilde (0 = keine Begrenzung)."
 
 #, python-format
+msgid "Membership fee for %(year)s already registered for this user"
+msgstr "Mitgliedsbeitrag für %(year)s für diesen Benutzer bereits registriert"
+
+#, python-format
 msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr ""
 "Nächste Zahlung: %(quota)s %(currency)s, seit %(days)s Tagen überfällig"
