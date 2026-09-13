@@ -14266,6 +14266,13 @@ msgstr ""
 "inscriptions seront ouvertes"
 
 msgid ""
+"Your membership fee for this year is already included in a pending event "
+"registration payment, awaiting verification"
+msgstr ""
+"Ta cotisation pour cette année est déjà incluse dans un paiement "
+"d’inscription à un événement en attente de vérification"
+
+msgid ""
 "No items will be modified. Either no items have been assigned quantities, or"
 " all assignments have a quantity of zero."
 msgstr ""

@@ -39,7 +39,7 @@ from larpmanager.accounting.gateway.redsys import redsys_webhook
 from larpmanager.accounting.gateway.satispay import satispay_webhook
 from larpmanager.accounting.gateway.stripe import stripe_webhook
 from larpmanager.accounting.gateway.sumup import sumup_webhook
-from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
+from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting, is_membership_fee_reserved
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
@@ -581,6 +581,17 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         return redirect("accounting")
     except ObjectDoesNotExist as e:
         logger.debug("Membership fee not found for member=%s, year=%s: %s", context["member"].id, year, e)
+
+    # Block if a registration invoice already bundles and reserves this year's fee (pending verification)
+    if is_membership_fee_reserved(context["association_id"], context["member"].id, year):
+        messages.warning(
+            request,
+            _(
+                "Your membership fee for this year is already included in a pending event registration payment, "
+                "awaiting verification"
+            ),
+        )
+        return redirect("accounting")
 
     # Set up context variables for template rendering
     context["year"] = year

@@ -13113,6 +13113,11 @@ msgstr ""
 msgid "You have already paid this year's membership fee"
 msgstr ""
 
+msgid ""
+"Your membership fee for this year is already included in a pending event "
+"registration payment, awaiting verification"
+msgstr ""
+
 msgid "The collection has been activated!"
 msgstr ""
 
