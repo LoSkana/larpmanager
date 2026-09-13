@@ -733,6 +733,9 @@ msgstr "Μάρκες"
 msgid "Total:"
 msgstr "Σύνολο:"
 
+msgid "Totals"
+msgstr "Σύνολα"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Πρώτη σελίδα"
 
 msgid "Guild logo"
 msgstr "Λογότυπο συντεχνίας"
+
+msgid "Hide empty"
+msgstr "Απόκρυψη κενών"
 
 msgid "Historical"
 msgstr "Ιστορικό"
@@ -3830,6 +3836,9 @@ msgstr "Δημιουργία πακέτου"
 
 msgid "Give a new answer"
 msgstr "Δώσε νέα απάντηση"
+
+msgid "Hide descriptions"
+msgstr "Απόκρυψη περιγραφών"
 
 msgid "ID document photo"
 msgstr "Φωτογραφία εγγράφου ταυτότητας"
@@ -9357,6 +9366,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Χρησιμοποίησε τα παρακάτω τραπεζικά στοιχεία για να κάνεις τη μεταφορά από "
 "την τράπεζά σου."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Δες τα υπόλοιπα και το ιστορικό μεταφορών για το απόθεμα αυτού του χαρακτήρα"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Σου ζητάμε να πληρώσεις το ποσό που απαιτείται για την επόμενη δόση:"

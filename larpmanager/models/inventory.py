@@ -95,6 +95,36 @@ class Inventory(UuidMixin, BaseConceptModel):
             pool_balances.append({"type": pool_type, "balance": balance})
         return pool_balances
 
+    def get_pool_balances_by_label(self) -> list[dict[str, Any]]:
+        """Return pool balances grouped by PoolLabel, for collapsible display.
+
+        A pool type belonging to several labels is listed under each of them.
+        Pool types with no label are grouped together under a group with
+        label=None (rendered as "Other" by the template).
+        """
+        entries = self.get_pool_balances()
+        labels_by_pool_type = {
+            pool_type.id: list(pool_type.labels.all())
+            for pool_type in PoolType.objects.filter(id__in=[entry["type"].id for entry in entries]).prefetch_related(
+                "labels"
+            )
+        }
+
+        groups: dict[int, dict[str, Any]] = {}
+        unlabeled: list[dict[str, Any]] = []
+        for entry in entries:
+            labels = labels_by_pool_type[entry["type"].id]
+            if not labels:
+                unlabeled.append(entry)
+                continue
+            for label in labels:
+                groups.setdefault(label.id, {"label": label, "entries": []})
+                groups[label.id]["entries"].append(entry)
+        result = sorted(groups.values(), key=lambda g: g["label"].number)
+        if unlabeled:
+            result.append({"label": None, "entries": unlabeled})
+        return result
+
 
 class PoolLabel(UuidMixin, BaseConceptModel):
     """Label for grouping pool types within a character inventory view.

@@ -292,6 +292,7 @@ def get_character_sheet_inventory(context: dict) -> None:
         return
 
     context["sheet_inventory"] = context["character"].inventory.all()
+    context["sheet_inventory_totals"] = context["character"].get_total_pool_balances()
 
 
 def get_character_sheet_exp(context: dict) -> None:

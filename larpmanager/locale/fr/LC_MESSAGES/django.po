@@ -733,6 +733,9 @@ msgstr "Jetons"
 msgid "Total:"
 msgstr "Total:"
 
+msgid "Totals"
+msgstr "Totaux"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Première page"
 
 msgid "Guild logo"
 msgstr "Logo de la guilde"
+
+msgid "Hide empty"
+msgstr "Masquer les champs vides"
 
 msgid "Historical"
 msgstr "Historique"
@@ -3830,6 +3836,9 @@ msgstr "Création d'un bundle"
 
 msgid "Give a new answer"
 msgstr "Donner une nouvelle réponse"
+
+msgid "Hide descriptions"
+msgstr "Masquer les descriptions"
 
 msgid "ID document photo"
 msgstr "Photo de la pièce d'identité"
@@ -9369,6 +9378,11 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Utilise les coordonnées bancaires ci-dessous pour effectuer le virement "
 "depuis ta banque."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Consulte les soldes et l’historique des transferts de l’inventaire de ce "
+"personnage"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr ""

@@ -733,6 +733,9 @@ msgstr "Fichas"
 msgid "Total:"
 msgstr "Total:"
 
+msgid "Totals"
+msgstr "Totales"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Primera página"
 
 msgid "Guild logo"
 msgstr "Logotipo del gremio"
+
+msgid "Hide empty"
+msgstr "Ocultar los campos vacíos"
 
 msgid "Historical"
 msgstr "Histórico"
@@ -3830,6 +3836,9 @@ msgstr "Generando paquete"
 
 msgid "Give a new answer"
 msgstr "Dar una nueva respuesta"
+
+msgid "Hide descriptions"
+msgstr "Ocultar descripciones"
 
 msgid "ID document photo"
 msgstr "Foto del documento de identidad"
@@ -9309,6 +9318,11 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Utiliza los siguientes datos bancarios para realizar la transferencia desde "
 "tu banco."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Consulta los saldos y el historial de transferencias del inventario de este "
+"personaje"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Te pedimos que abones el importe solicitado para la siguiente cuota:"

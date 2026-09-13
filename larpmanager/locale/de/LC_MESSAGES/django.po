@@ -733,6 +733,9 @@ msgstr "Wertmarken"
 msgid "Total:"
 msgstr "Gesamtbetrag:"
 
+msgid "Totals"
+msgstr "Gesamtzahlen"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Erste Seite"
 
 msgid "Guild logo"
 msgstr "Gildenlogo"
+
+msgid "Hide empty"
+msgstr "Leere ausblenden"
 
 msgid "Historical"
 msgstr "Historisch"
@@ -3830,6 +3836,9 @@ msgstr "Bundle wird erstellt"
 
 msgid "Give a new answer"
 msgstr "Eine neue Antwort geben"
+
+msgid "Hide descriptions"
+msgstr "Beschreibungen ausblenden"
 
 msgid "ID document photo"
 msgstr "Ausweisdokument-Foto"
@@ -9369,6 +9378,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Verwende die unten stehenden Bankdaten, um die Überweisung von deiner Bank "
 "aus zu tätigen."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Zeige Guthaben und Überweisungsverlauf für dieses Charakterinventar an"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr ""

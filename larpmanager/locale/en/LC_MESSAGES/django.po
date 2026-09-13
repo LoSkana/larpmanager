@@ -5940,6 +5940,9 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
+msgid "Hide descriptions"
+msgstr ""
+
 msgid "Remove"
 msgstr ""
 
@@ -5950,6 +5953,12 @@ msgid "Player:"
 msgstr ""
 
 msgid "Factions:"
+msgstr ""
+
+msgid "Hide empty"
+msgstr ""
+
+msgid "Totals"
 msgstr ""
 
 msgid "View Details"
@@ -12999,6 +13008,9 @@ msgid "From participants who filled the debrief"
 msgstr ""
 
 msgid "Participation in"
+msgstr ""
+
+msgid "View balances and transfer history for this character inventory"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded!"

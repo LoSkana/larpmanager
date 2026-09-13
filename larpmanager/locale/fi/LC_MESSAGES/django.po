@@ -733,6 +733,9 @@ msgstr "Merkit"
 msgid "Total:"
 msgstr "Yhteensä:"
 
+msgid "Totals"
+msgstr "Yhteensä"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Ensimmäinen sivu"
 
 msgid "Guild logo"
 msgstr "Killan logo"
+
+msgid "Hide empty"
+msgstr "Piilota tyhjät"
 
 msgid "Historical"
 msgstr "Historiallinen"
@@ -3830,6 +3836,9 @@ msgstr "Paketin luominen"
 
 msgid "Give a new answer"
 msgstr "Anna uusi vastaus"
+
+msgid "Hide descriptions"
+msgstr "Piilota kuvaukset"
 
 msgid "ID document photo"
 msgstr "Henkilöllisyystodistuksen valokuva"
@@ -9238,6 +9247,9 @@ msgstr ""
 
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr "Käytä alla olevia pankkitietoja tehdäksesi siirron pankistasi."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Näytä tämän hahmon varaston saldot ja siirtohistoria"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Pyydämme sinua maksamaan pyydetyn summan seuraavaa maksuerää varten:"

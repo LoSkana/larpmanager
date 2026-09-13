@@ -733,6 +733,9 @@ msgstr "Gettoni"
 msgid "Total:"
 msgstr "Totale:"
 
+msgid "Totals"
+msgstr "Totali"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Prima pagina"
 
 msgid "Guild logo"
 msgstr "Logo della gilda"
+
+msgid "Hide empty"
+msgstr "Nascondi quelli vuoti"
 
 msgid "Historical"
 msgstr "Storico"
@@ -3830,6 +3836,9 @@ msgstr "Creazione del pacchetto"
 
 msgid "Give a new answer"
 msgstr "Dai una nuova risposta"
+
+msgid "Hide descriptions"
+msgstr "Nascondi le descrizioni"
 
 msgid "ID document photo"
 msgstr "Foto del documento d'identità"
@@ -9307,6 +9316,11 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Utilizza le coordinate bancarie qui sotto per effettuare il bonifico dalla "
 "tua banca."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Visualizza i saldi e la cronologia dei trasferimenti dell'inventario di "
+"questo personaggio"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Ti chiediamo di pagare l'importo richiesto per la rata successiva:"

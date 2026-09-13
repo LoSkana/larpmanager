@@ -733,6 +733,9 @@ msgstr "Tokens"
 msgid "Total:"
 msgstr "Totalsum:"
 
+msgid "Totals"
+msgstr "Totalsummer"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Første side"
 
 msgid "Guild logo"
 msgstr "Gildelogo"
+
+msgid "Hide empty"
+msgstr "Skjul tomme"
 
 msgid "Historical"
 msgstr "Historisk"
@@ -3830,6 +3836,9 @@ msgstr "Oppretter pakke"
 
 msgid "Give a new answer"
 msgstr "Gi et nytt svar"
+
+msgid "Hide descriptions"
+msgstr "Skjul beskrivelser"
 
 msgid "ID document photo"
 msgstr "Foto av ID-dokument"
@@ -9229,6 +9238,9 @@ msgstr ""
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Bruk bankopplysningene nedenfor for å foreta overføringen fra banken din."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Se saldoer og overføringshistorikk for dette karakterinventaret"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Vi ber deg om å betale det beløpet vi ber om for neste avdrag:"

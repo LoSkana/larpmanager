@@ -733,6 +733,9 @@ msgstr "Żetony"
 msgid "Total:"
 msgstr "Łącznie:"
 
+msgid "Totals"
+msgstr "Suma"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Pierwsza strona"
 
 msgid "Guild logo"
 msgstr "Logo gildii"
+
+msgid "Hide empty"
+msgstr "Ukryj puste"
 
 msgid "Historical"
 msgstr "Historyczny"
@@ -3830,6 +3836,9 @@ msgstr "Tworzenie pakietu"
 
 msgid "Give a new answer"
 msgstr "Podaj nową odpowiedź"
+
+msgid "Hide descriptions"
+msgstr "Ukryj opisy"
 
 msgid "ID document photo"
 msgstr "Zdjęcie dokumentu tożsamości"
@@ -9260,6 +9269,9 @@ msgstr "Prześlij zdjęcie lub skan dokumentu tożsamości (PDF lub obraz)"
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Użyj poniższych danych bankowych, aby dokonać przelewu ze swojego banku."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr "Zobacz salda i historię transferów dla ekwipunku tej postaci"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Prosimy o zapłatę żądanej kwoty za kolejną ratę:"

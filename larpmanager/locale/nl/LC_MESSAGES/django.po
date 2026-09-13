@@ -733,6 +733,9 @@ msgstr "Penningen"
 msgid "Total:"
 msgstr "Totaal:"
 
+msgid "Totals"
+msgstr "Totalen"
+
 msgid "Traits"
 msgstr "Traits"
 
@@ -1825,6 +1828,9 @@ msgstr "Eerste pagina"
 
 msgid "Guild logo"
 msgstr "Gildelogo"
+
+msgid "Hide empty"
+msgstr "Lege verbergen"
 
 msgid "Historical"
 msgstr "Historisch"
@@ -3830,6 +3836,9 @@ msgstr "Bundel wordt gegenereerd"
 
 msgid "Give a new answer"
 msgstr "Geef een nieuw antwoord"
+
+msgid "Hide descriptions"
+msgstr "Beschrijvingen verbergen"
 
 msgid "ID document photo"
 msgstr "Foto ID-document"
@@ -9303,6 +9312,10 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 "Gebruik de onderstaande bankgegevens om de overschrijving van je bank uit te"
 " voeren."
+
+msgid "View balances and transfer history for this character inventory"
+msgstr ""
+"Bekijk saldi en overdrachtsgeschiedenis voor deze personage-inventaris"
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr ""

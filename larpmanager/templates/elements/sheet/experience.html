@@ -24,6 +24,9 @@
     {% endif %}
     {% if sheet_abilities %}
         <h2 class="c title">{% trans "Abilities" %}</h2>
+        <p>
+            <a href="#" class="my_toggle" tog="ability-desc">{% trans "Hide descriptions" %}</a>
+        </p>
         <table class="mob abilities">
             {% for typ, ls in sheet_abilities.items %}
                 <tr>
@@ -49,7 +52,7 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.get_description %}{{ el.get_description | safe }}{% endif %}
+                            {% if el.get_description %}<span class="ability-desc">{{ el.get_description | safe }}</span>{% endif %}
                         </td>
                     </tr>
                 {% endfor %}

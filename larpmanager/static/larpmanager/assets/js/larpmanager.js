@@ -1037,7 +1037,10 @@ function data_tables() {
         var no_buttons = $table.attr('no_buttons') !== undefined;
         // opt-in: keep export buttons also on short tables, that would otherwise get the minimal layout
         var force_buttons = !no_buttons && $table.attr('force_buttons') !== undefined;
+        // opt-in: add a global text search box, for tables where per-column searchDropdown isn't enough
+        var show_search = $table.attr('show_search') !== undefined;
         var export_buttons = { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] };
+        var search_top_start = show_search ? 'search' : null;
 
         var dtConfig = {
             scrollX: true,
@@ -1046,9 +1049,9 @@ function data_tables() {
             paging: full_layout,
             layout: full_layout
                 ? (no_buttons
-                    ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
-                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
-                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null,
+                    ? { topStart: search_top_start, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                    : { topStart: search_top_start, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
+                : { topStart: search_top_start, topEnd: null, bottomStart: null, bottomEnd: null,
                     bottom2: force_buttons ? export_buttons : null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
