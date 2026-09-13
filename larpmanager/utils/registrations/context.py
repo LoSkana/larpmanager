@@ -68,6 +68,12 @@ def get_checkin_qr_path(registration: Registration) -> str:
     return str(path)
 
 
+def get_checkin_qr_url(registration: Registration) -> str:
+    """Return the public media URL for the registration's check-in QR code PNG, generating it if missing."""
+    get_checkin_qr_path(registration)
+    return f"{settings.MEDIA_URL}checkin_qr/{registration.uuid}.png"
+
+
 def _register_prepare(context: dict, registration: Any) -> Any:
     """Prepare registration context with payment information and locks.
 

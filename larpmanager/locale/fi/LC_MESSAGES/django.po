@@ -3497,6 +3497,9 @@ msgstr "Hahmon konfigurointi"
 msgid "Character review"
 msgstr "Hahmon tarkastelu"
 
+msgid "Check-in QR code"
+msgstr "Check-in QR-koodi"
+
 msgid "Current quantity"
 msgstr "Nykyinen määrä"
 

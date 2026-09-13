@@ -37,6 +37,11 @@
                         {% if run_status.details %}<p>{{ run_status.details }}</p>{% endif %}
                         {% if run_status.details_characters and effective_version < 22 %}<p>{{ run_status.details_characters }}</p>{% endif %}
                     </p>
+                    {% if checkin_qr_url %}
+                        <div class="checkin-qr">
+                            <img src="{{ checkin_qr_url }}" alt="{% trans "Check-in QR code" %}" />
+                        </div>
+                    {% endif %}
                 </div>
                 {% if run_status.character_links %}
                     <div class="event-card event-card-char">

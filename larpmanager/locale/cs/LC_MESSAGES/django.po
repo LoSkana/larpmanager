@@ -3497,6 +3497,9 @@ msgstr "Konfigurace postavy"
 msgid "Character review"
 msgstr "Recenze postavy"
 
+msgid "Check-in QR code"
+msgstr "QR kód pro check-in"
+
 msgid "Current quantity"
 msgstr "Aktuální množství"
 

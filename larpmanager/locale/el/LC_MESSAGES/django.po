@@ -3497,6 +3497,9 @@ msgstr "Ρυθμίσεις χαρακτήρα"
 msgid "Character review"
 msgstr "Έλεγχος χαρακτήρα"
 
+msgid "Check-in QR code"
+msgstr "Κωδικός QR check-in"
+
 msgid "Current quantity"
 msgstr "Τρέχουσα ποσότητα"
 

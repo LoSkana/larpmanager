@@ -3497,6 +3497,9 @@ msgstr "Karakterkonfiguration"
 msgid "Character review"
 msgstr "Karaktergennemgang"
 
+msgid "Check-in QR code"
+msgstr "Check-in QR-kode"
+
 msgid "Current quantity"
 msgstr "Nuværende antal"
 

@@ -3497,6 +3497,9 @@ msgstr "Configuración del personaje"
 msgid "Character review"
 msgstr "Revisión de personaje"
 
+msgid "Check-in QR code"
+msgstr "Código QR de registro"
+
 msgid "Current quantity"
 msgstr "Cantidad actual"
 
