@@ -59,13 +59,13 @@ def feature_fields(page: Any) -> None:
 
     # reorder test
     sidebar(page, "Sheet")
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private")
     drag_reorder(
         page,
         page.locator('tr[id="u3"] td.reorder-handle'),
         page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Text Sheet Private Presentation Presentation Public")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
@@ -75,7 +75,7 @@ def feature_fields(page: Any) -> None:
 
     # check
     sidebar(page, "Sheet")
-    expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Text Sheet Private Presentation Presentation Public Title Title Hidden")
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").first.click()
@@ -89,7 +89,7 @@ def feature_fields(page: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Cover Cover Hidden",
+        "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Cover Cover Hidden",
     )
 
 
@@ -106,7 +106,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden"
+        page.locator("#one"), "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Hide Hide Hidden"
     )
 
     # set experience point
@@ -136,7 +136,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden comp Computed Private",
+        "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Hide Hide Hidden comp Computed Private",
     )
 
     # remove experience
@@ -147,7 +147,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden"
+        page.locator("#one"), "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Hide Hide Hidden"
     )
 
     feature_file(page, live_server)
@@ -177,7 +177,7 @@ def feature_file(page: Any, live_server: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden Handout File Private",
+        "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Hide Hide Hidden Handout File Private",
     )
 
     # open the character form, upload a file as the answer, and check it round-trips
@@ -219,18 +219,18 @@ def form_other_writing(page: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden Handout File Private "
+        "Name Name Public Text Sheet Private Presentation Presentation Public Assigned Assignment Hidden Hide Hide Hidden Handout File Private "
         "Faction Factions Hidden",
     )
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Concept Presentation Text Sheet")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Concept Presentation Public Text Sheet Private")
     page.get_by_role("link", name="Faction", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private")
     page.locator("#one").get_by_role("link", name="Quest").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private")
     page.get_by_role("link", name="Trait", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private")
