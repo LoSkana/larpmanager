@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING, Any
 from allauth.utils import get_request_param
 from django import template
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.files.storage import default_storage
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
@@ -38,7 +39,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import _format_decimal
 from larpmanager.models.casting import Trait
-from larpmanager.models.utils import get_option_form_text
+from larpmanager.models.utils import display_filename, get_option_form_text
 from larpmanager.models.writing import Character, FactionType, get_event_elements
 from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.core.headers import get_url
@@ -904,6 +905,22 @@ def remove(value: Any, args: Any) -> Any:
     args = args.replace("_", " ")
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
     return txt.strip()
+
+
+@register.filter
+def storage_url(path: Any) -> Any:
+    """Template filter to resolve a stored file path to its downloadable URL."""
+    if not path:
+        return ""
+    return default_storage.url(path)
+
+
+@register.filter
+def storage_filename(path: Any) -> Any:
+    """Template filter to extract the display filename from a stored file path."""
+    if not path:
+        return ""
+    return display_filename(path)
 
 
 @register.simple_tag

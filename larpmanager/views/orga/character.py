@@ -25,10 +25,12 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
 from django.db.models import Max, Prefetch
 from django.db.models.functions import Length, Substr
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -52,7 +54,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.member import Member
-from larpmanager.models.utils import strip_tags
+from larpmanager.models.utils import display_filename, strip_tags
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -334,38 +336,78 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
 
     # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        # Build choice options dictionary
-        cho = {}
-        for opt in get_event_elements(event.id, WritingOption, context=context).filter(question=question):
-            cho[opt.id] = opt.name
-
-        # Process choices and group by element UUID
-        for el in (
-            WritingChoice.objects.filter(question=question, element_id__in=element_ids)
-            .select_related("option")
-            .order_by("option__order")
-        ):
-            element_uuid = str(element_mapping[el.element_id])
-            if element_uuid not in res:
-                res[element_uuid] = []
-            res[element_uuid].append(cho[el.option_id])
+        _orga_writing_choices(context, element_ids, element_mapping, event, question, res)
 
     # Handle text and computed questions
     elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED]:
-        # Query answers with text truncation for preview
-        que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
-        que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("element_id", "short_text")
+        _orga_writing_answers(element_ids, element_mapping, max_length, popup, question, res)
 
-        # Process each answer and mark long texts for popup display
-        for el in que:
-            answer = el["short_text"]
-            element_uuid = str(element_mapping[el["element_id"]])
-            if len(answer) == max_length:
-                popup.append(element_uuid)
-            res[element_uuid] = answer
+    # Handle file questions: render a download link from the stored storage path
+    elif question.typ == WritingQuestionType.FILE:
+        _orga_writing_files(element_ids, element_mapping, question, res)
 
     return JsonResponse({"res": res, "popup": popup, "q_uuid": str(question.uuid)})
+
+
+def _orga_writing_files(
+    element_ids: list[int], element_mapping: dict[int, str], question: WritingQuestion, res: dict[str, str]
+) -> None:
+    """Populate res with download links for file-type writing answers, keyed by element uuid."""
+    que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids).values("element_id", "text")
+    for el in que:
+        if not el["text"]:
+            continue
+        element_uuid = str(element_mapping[el["element_id"]])
+        res[element_uuid] = format_html(
+            '<a href="{}" target="_blank">{}</a>', default_storage.url(el["text"]), display_filename(el["text"])
+        )
+
+
+def _orga_writing_answers(
+    element_ids: list[int],
+    element_mapping: dict[int, str],
+    max_length: int,
+    popup: list[str],
+    question: WritingQuestion,
+    res: dict[str, str],
+) -> None:
+    """Populate res with truncated text answers, keyed by element uuid, marking long ones for popup display."""
+    # Query answers with text truncation for preview
+    que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
+    que = que.annotate(short_text=Substr("text", 1, max_length))
+    que = que.values("element_id", "short_text")
+    # Process each answer and mark long texts for popup display
+    for el in que:
+        answer = el["short_text"]
+        element_uuid = str(element_mapping[el["element_id"]])
+        if len(answer) == max_length:
+            popup.append(element_uuid)
+        res[element_uuid] = answer
+
+
+def _orga_writing_choices(
+    context: dict[str, Any],
+    element_ids: list[int],
+    element_mapping: dict[int, str],
+    event: Event,
+    question: WritingQuestion,
+    res: dict[str, list[str]],
+) -> None:
+    """Populate res with lists of chosen option names, keyed by element uuid, ordered by option order."""
+    # Build choice options dictionary
+    cho = {}
+    for opt in get_event_elements(event.id, WritingOption, context=context).filter(question=question):
+        cho[opt.id] = opt.name
+    # Process choices and group by element UUID
+    for el in (
+        WritingChoice.objects.filter(question=question, element_id__in=element_ids)
+        .select_related("option")
+        .order_by("option__order")
+    ):
+        element_uuid = str(element_mapping[el.element_id])
+        if element_uuid not in res:
+            res[element_uuid] = []
+        res[element_uuid].append(cho[el.option_id])
 
 
 @login_required

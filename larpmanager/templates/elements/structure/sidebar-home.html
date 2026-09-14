@@ -2,9 +2,9 @@
 <div id="sidebar" class="only_v22 topbar">
     <div class="inner new-menu">
         {% include "elements/structure/sidebar-header.html" %}
-        <div class="sidebar-section">
-            {% for item in profile_nav_items %}
-                {% if item.home %}
+        {% if profile_home_nav_items %}
+            <div class="sidebar-section">
+                {% for item in profile_home_nav_items %}
                     <span class="sidebar-link-wrap">
                         <a class="sidebar-link{% if item.active %} select{% endif %}"
                            href="{{ item.url }}">
@@ -12,9 +12,9 @@
                             <span>{{ item.label }}</span>
                         </a>
                     </span>
-                {% endif %}
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% if not user.is_authenticated %}
             {% include "elements/structure/sidebar-anon.html" %}
         {% endif %}

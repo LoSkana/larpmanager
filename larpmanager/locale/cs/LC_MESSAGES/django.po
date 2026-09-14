@@ -11690,6 +11690,13 @@ msgstr ""
 "veřejného API?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Povolí typ otázky „file“, který hráčům umožní stáhnout soubor nahraný "
+"organizátorem."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""
