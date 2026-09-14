@@ -377,6 +377,7 @@ def get_membership_fee_for_reg(
      - membership_fee_separated is False
      - the event is not in a past year
      - the member has not already paid the membership fee
+     - the member has no wire-transfer membership invoice pending staff approval
      - the signup is not gifted (redeem_code)
      - no other registration's invoice already reserves the fee for the same year.
     """
@@ -387,21 +388,33 @@ def get_membership_fee_for_reg(
         or redeem_code
     ):
         return 0
+
     current_year = timezone.now().year
     event_year = run.start.year
     if event_year < current_year:
         return 0
+
     fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
         return 0
+
     already_paid = AccountingItemMembership.objects.filter(
         member_id=member_id,
         association_id=association_id,
         year=event_year,
         deleted__isnull=True,
     ).exists()
-    if already_paid:
+
+    pending_wire = PaymentInvoice.objects.filter(
+        member_id=member_id,
+        association_id=association_id,
+        typ=PaymentType.MEMBERSHIP,
+        status=PaymentStatus.SUBMITTED,
+    ).exists()
+
+    if already_paid or pending_wire:
         return 0
+
     # If another registration's invoice already includes the fee, don't bundle again
     config_name = membership_fee_pending_config_name(association_id, event_year)
     qs = MemberConfig.objects.filter(member_id=member_id, name=config_name, deleted__isnull=True)
@@ -409,4 +422,5 @@ def get_membership_fee_for_reg(
         qs = qs.exclude(value=str(registration.id))
     if qs.exists():
         return 0
+
     return fee
