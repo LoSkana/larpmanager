@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from axes.utils import reset as axes_reset
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -149,8 +150,9 @@ class MyPasswordResetConfirmView(AssocVersionMixin, PasswordResetConfirmView):
         """Handle valid password reset form submission.
 
         Processes a valid password reset confirmation form by calling the parent
-        implementation and then clearing any pending password reset tokens for
-        all memberships associated with the user.
+        implementation, clearing the axes lockout/failed-attempt record for the
+        user, and clearing any pending password reset tokens for all memberships
+        associated with the user.
 
         Args:
             form: Valid password reset confirmation form containing the user
@@ -163,6 +165,9 @@ class MyPasswordResetConfirmView(AssocVersionMixin, PasswordResetConfirmView):
         """
         # Call parent form_valid to handle the actual password reset
         response = super().form_valid(form)
+
+        # Clear axes lockout/failed-attempt records now that the password is known-good again
+        axes_reset(username=form.user.get_username())
 
         # Find all memberships for this user that have pending password reset tokens
         for membership in (
