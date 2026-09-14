@@ -711,6 +711,10 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
+        config_label = _("File")
+        config_help_text = _("Enables question type 'file', letting players download a file uploaded by the organizer.")
+        self.add_configs("writing_file", ConfigType.BOOL, config_label, config_help_text)
+
         config_label = _("Hide")
         config_help_text = _("Enables the 'hide' field, which hides a writing element from participants.")
         self.add_configs("writing_hide", ConfigType.BOOL, config_label, config_help_text)

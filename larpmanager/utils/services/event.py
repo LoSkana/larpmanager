@@ -282,8 +282,9 @@ def save_event_character_form(features: dict, instance: object) -> None:
         WritingQuestionType.SHEET: ("Text", QuestionStatus.OPTIONAL, QuestionVisibility.PRIVATE, 50000, 3),
     }
 
-    # Get basic custom question types from the system
-    custom_tps = BaseQuestionType.get_basic_types()
+    # Get basic custom question types from the system - 'file' is organizer-repeatable
+    # like the basic types, not an auto-managed singleton field like title/cover/hide
+    custom_tps = BaseQuestionType.get_basic_types() | {WritingQuestionType.FILE}
 
     # Initialize character form questions with both custom and default types
     _init_character_form_questions(custom_tps, def_tps, features, instance)

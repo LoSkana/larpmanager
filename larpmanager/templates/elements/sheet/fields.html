@@ -11,5 +11,16 @@
                 {% endif %}
             {% endif %}
         {% endwith %}
+    {% elif question.typ == 'file' %}
+        {% with char.fields|get:idx as field %}
+            {% if field %}
+                {% if screen or question.printable %}
+                    <div class="go-inline">
+                        <span class="hide-screen">|</span>
+                        <b>{{ question.name }}:&nbsp;</b><a href="{{ field|storage_url }}" target="_blank">{{ field|storage_filename }}</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+        {% endwith %}
     {% endif %}
 {% endfor %}

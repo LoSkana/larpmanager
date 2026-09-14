@@ -11871,6 +11871,13 @@ msgstr ""
 "julkisen API:n kautta?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Ottaa käyttöön kysymystyypin ”file”, jonka avulla pelaajat voivat ladata "
+"järjestäjän lähettämän tiedoston."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

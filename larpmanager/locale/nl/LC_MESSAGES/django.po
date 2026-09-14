@@ -12087,6 +12087,13 @@ msgstr ""
 "externe sites?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Schakelt vraagtype 'file' in, zodat spelers een bestand kunnen downloaden "
+"dat door de organisator is geüpload."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

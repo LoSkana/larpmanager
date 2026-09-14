@@ -12181,6 +12181,13 @@ msgstr ""
 "ιστότοπους μέσω δημόσιου API;"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Ενεργοποιεί τον τύπο ερώτησης «file», επιτρέποντας στους παίκτες να "
+"κατεβάσουν ένα αρχείο που ανέβασε ο διοργανωτής."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

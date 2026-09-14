@@ -11949,6 +11949,13 @@ msgstr ""
 "przez publiczne API?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Włącza typ pytania „file”, umożliwiając graczom pobranie pliku przesłanego "
+"przez organizatora."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

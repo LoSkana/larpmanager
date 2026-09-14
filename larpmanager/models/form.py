@@ -94,6 +94,7 @@ WritingQuestionType = extend_textchoices(
         ("FACTIONS", "faction", _("Factions")),
         ("TITLE", "title", _("Title")),
         ("MIRROR", "mirror", _("Mirror")),
+        ("FILE", "file", _("File")),
         ("HIDE", "hide", _("Hide")),
         ("LOCKED", "locked", _("Locked")),
         ("PROGRESS", "progress", _("Progress")),

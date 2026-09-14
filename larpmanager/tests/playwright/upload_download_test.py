@@ -319,32 +319,32 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
+        "Name Name Public Presentation Presentation Public Text Sheet Private Faction Factions Hidden bibi baba Multiple choice Searchable huhu trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+        page, page.locator("#one"), "Name Name Public Concept Presentation Public Text Sheet Private wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+        page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private baba bebe Multi-line text Private"
     )
     page.get_by_role("link", name="Quest", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
+        "Name Name Public Presentation Presentation Public Text Sheet Private asd kloi Advanced text editor Public",
     )
     page.get_by_role("link", name="Trait", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr | tttttt",
+        "Name Name Public Presentation Presentation Public Text Sheet Private poi rweerw Single choice Public rrrrrr tttttt",
     )
 
 def get_path(file: Any) -> Any:

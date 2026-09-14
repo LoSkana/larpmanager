@@ -125,6 +125,7 @@ def get_writing_element_fields_batch(
             BaseQuestionType.PARAGRAPH,
             BaseQuestionType.EDITOR,
             WritingQuestionType.COMPUTED,
+            WritingQuestionType.FILE,
         ],
     ).select_related("question")
     for element_id, question_uuid, text in text_answers_query.values_list("element_id", "question__uuid", "text"):

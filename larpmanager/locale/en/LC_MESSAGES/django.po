@@ -1319,6 +1319,14 @@ msgid ""
 "character is assigned to a participant."
 msgstr ""
 
+msgid "File"
+msgstr ""
+
+msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+
 msgid "Hide"
 msgstr ""
 
@@ -9341,9 +9349,6 @@ msgstr ""
 
 msgid ""
 "No milestones defined yet. Use the button above to add the first milestone."
-msgstr ""
-
-msgid "File"
 msgstr ""
 
 msgid "Content Type"

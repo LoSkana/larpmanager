@@ -25,6 +25,7 @@ import json
 import logging
 import os
 import random
+import re
 import secrets
 import string
 from decimal import Decimal
@@ -56,6 +57,19 @@ logger = logging.getLogger(__name__)
 def generate_id(id_length: Any) -> Any:
     """Generate a cryptographically secure random alphanumeric ID string."""
     return "".join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
+
+
+_UPLOAD_ID_PREFIX = re.compile(r"^[a-z0-9]{16}_")
+
+
+def display_filename(stored_path: str) -> str:
+    """Return the original filename for a stored path, stripping the random id prefix.
+
+    Uploaded files are stored as "<16-char generate_id>_<original filename>" to avoid
+    collisions; this strips that prefix back off for display to the user.
+    """
+    name = Path(stored_path).name
+    return _UPLOAD_ID_PREFIX.sub("", name)
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:

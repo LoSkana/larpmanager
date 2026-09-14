@@ -12216,6 +12216,13 @@ msgstr ""
 "Websites sichtbar machen?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Aktiviert den Fragetyp „Datei“, mit dem Spieler eine vom Organisator "
+"hochgeladene Datei herunterladen können."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

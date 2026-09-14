@@ -30,6 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import TextChoices
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -60,12 +61,14 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.utils import (
     decimal_to_str,
+    display_filename,
     generate_id,
     get_attr,
     get_option_form_text as util_get_option_form_text,
     strip_tags,
 )
 from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
+from larpmanager.utils.security.file_validation import normalize_filename
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -1088,6 +1091,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         elif question["typ"] == BaseQuestionType.EDITOR:
             self.init_editor(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
+        # Handle file upload fields
+        elif question["typ"] == WritingQuestionType.FILE:
+            self.init_file(field_key, question, is_required=is_required, is_field_active=is_field_active)
+
         # Handle faction preference drag-reorder fields
         elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
             self.init_faction_preference(field_key, question, is_required=is_required)
@@ -1187,6 +1194,42 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Add field to show_link list for frontend handling only if active
         if is_field_active:
             self.show_link.append(f"id_{field_key}")
+
+    def init_file(self, field_key: str, question: dict, *, is_required: bool, is_field_active: bool = True) -> None:
+        """Initialize a file upload field for a form question.
+
+        The uploaded file is stored on the default storage and its path kept in the
+        answer's text field.
+
+        Args:
+            field_key: The field key/name to use in the form
+            question: Question dict containing field configuration
+            is_required: Whether the field is required
+            is_field_active: Whether the field should be editable (if False, shows as read-only)
+
+        """
+        help_text = question["description"]
+        if question["id"] in self.answers and self.answers[question["id"]].text:
+            path = self.answers[question["id"]].text
+            help_text = format_html(
+                '{} <a href="{}" target="_blank">{}</a>',
+                help_text,
+                default_storage.url(path),
+                display_filename(path),
+            )
+
+        widget = forms.ClearableFileInput() if is_field_active else ReadOnlyWidget()
+
+        self.fields[field_key] = forms.FileField(
+            required=is_required,
+            widget=widget,
+            label=question["name"],
+            help_text=help_text,
+        )
+
+        # Fall back to the stored path when no new file is submitted
+        if question["id"] in self.answers:
+            self.initial[field_key] = self.answers[question["id"]].text
 
     def init_paragraph(
         self, field_key: str, question_config: dict, *, is_required: bool, is_field_active: bool = True
@@ -1501,6 +1544,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.save_registration_single(instance, oid, question)
             elif question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
                 self.save_registration_text(instance, oid, question)
+            elif question["typ"] == WritingQuestionType.FILE:
+                self.save_registration_file(instance, oid, question)
             elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
                 self.save_registration_faction_preference(instance, oid, question)
             elif question["typ"] == RegistrationQuestionType.LIKERT:
@@ -1569,6 +1614,38 @@ class BaseRegistrationForm(BaseModelFormRun):
             self.answer_class.objects.get_or_create(
                 **{"question_id": question_id, self.instance_key: instance.id},
                 defaults={"text": value},
+            )
+
+    def save_registration_file(self, instance: Any, value: Any, question: dict) -> None:
+        """Save or update a file answer for a writing question.
+
+        Args:
+            instance: The writing element instance to attach the answer to.
+            value: An uploaded file to store, the previous stored path when
+                unchanged, or a falsy value when nothing has ever been uploaded.
+            question: The question dict being answered.
+
+        """
+        # Nothing to do: no new upload and no previous value to keep
+        if not value:
+            return
+
+        question_id = question["id"]
+
+        # Unchanged: the value is just the previously stored path, echoed back by the field
+        if isinstance(value, str):
+            return
+
+        # New upload: store the file and keep its path in the answer text
+        path = default_storage.save(f"writing_answer/{generate_id(16)}_{normalize_filename(value.name)}", value)
+
+        if question_id in self.answers:
+            self.answers[question_id].text = path
+            self.answers[question_id].save()
+        else:
+            self.answer_class.objects.get_or_create(
+                **{"question_id": question_id, self.instance_key: instance.id},
+                defaults={"text": path},
             )
 
     def save_registration_single(self, instance: Any, option_uuid: str | None, question: dict) -> None:

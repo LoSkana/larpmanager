@@ -12099,6 +12099,13 @@ msgstr ""
 "pubblica?"
 
 msgid ""
+"Enables question type 'file', letting players download a file uploaded by "
+"the organizer."
+msgstr ""
+"Abilita il tipo di domanda 'file', permettendo ai giocatori di scaricare un "
+"file caricato dall'organizzatore."
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""

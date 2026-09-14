@@ -96,11 +96,14 @@ window.addEventListener('DOMContentLoaded', function() {
             already.push('{{ key }}');
         {% endfor %}
 
-        document.getElementById('main_form').addEventListener('submit', function(e) {
-            {% if not TINYMCE_DISABLED %}
-            tinymce.triggerSave();
-            {% endif %}
-        });
+        var mainForm = document.getElementById('main_form');
+        if (mainForm) {
+            mainForm.addEventListener('submit', function(e) {
+                {% if not TINYMCE_DISABLED %}
+                tinymce.triggerSave();
+                {% endif %}
+            });
+        }
 
         // add new
         $('#new_rel_select').on('select2:select select2:unselect change', function(e) {

@@ -72,6 +72,7 @@ def cache_association(request: HttpRequest) -> dict:
     profile_items = build_profile_nav_items(request)
     home_items = build_profile_home_nav_items(request)
     context["profile_nav_items"] = profile_items + home_items
+    context["profile_home_nav_items"] = home_items
     context["is_profile_page"] = any(item["active"] for item in profile_items)
 
     context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
