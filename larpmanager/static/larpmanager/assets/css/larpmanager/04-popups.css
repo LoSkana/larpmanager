@@ -351,10 +351,10 @@ div.ui-lm_tooltip {
 
 #lm-modal-content {
   height: 100%;
+  overflow-y: auto;
 }
 
 #lm-modal,
-#lm-modal-content,
 .frame-container {
   overflow: hidden;
 }
