@@ -7730,6 +7730,9 @@ msgstr "Τώρα μπορείς να ορίσεις τις ενότητες τη
 msgid "keep the auto-generated value or customize it"
 msgstr "κράτησε την αυτόματα δημιουργημένη τιμή ή προσάρμοσέ τη"
 
+msgid "Add at least one option for this question type"
+msgstr "Πρόσθεσε τουλάχιστον μία επιλογή για αυτόν τον τύπο ερώτησης"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Ποσό της επόμενης απαιτούμενης δόσης πληρωμής"
 
@@ -10033,11 +10036,6 @@ msgstr ""
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Θα εφαρμοστούν αυτόματα όταν εγγραφείς σε νέα εκδήλωση."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Αυτός ο κωδικός έκπτωσης χρησιμοποιείται ήδη σε μία ή περισσότερες από τις "
-"επιλεγμένες σειρές"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Προβολή λεπτομερούς αρχείου δραστηριότητας όλων των αλλαγών που έγιναν για "
@@ -10536,6 +10534,12 @@ msgid ""
 msgstr ""
 "Η προσαρμοσμένη μετάφραση που θα αντικαταστήσει την προεπιλεγμένη για αυτόν "
 "τον οργανισμό"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Αυτός ο κωδικός έκπτωσης χρησιμοποιείται ήδη σε μία ή περισσότερες από τις "
+"επιλεγμένες συνεδρίες"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

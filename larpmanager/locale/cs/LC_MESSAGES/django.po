@@ -7726,6 +7726,9 @@ msgstr "Nyní můžeš definovat sekce registračního formuláře"
 msgid "keep the auto-generated value or customize it"
 msgstr "ponechat automaticky generovanou hodnotu nebo ji přizpůsobit"
 
+msgid "Add at least one option for this question type"
+msgstr "Přidej alespoň jednu možnost pro tento typ otázky"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Výše další požadované splátky"
 
@@ -9735,9 +9738,6 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Tyto údaje se automaticky použijí při registraci na novou akci."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr "Tento slevový kód již byl použit v jednom nebo více vybraných bězích"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Zobrazit podrobný protokol aktivit všech změn provedených pro tuto konkrétní"
@@ -10159,6 +10159,10 @@ msgstr ""
 msgid ""
 "The custom translation that will replace the default for this organization"
 msgstr "Vlastní překlad, který nahradí výchozí překlad pro tuto organizaci"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr "Tento slevový kód už je použitý v jedné nebo více vybraných relacích"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

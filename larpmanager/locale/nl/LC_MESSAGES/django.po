@@ -7730,6 +7730,9 @@ msgstr "Je kunt nu secties van het registratieformulier definiëren"
 msgid "keep the auto-generated value or customize it"
 msgstr "de automatisch gegenereerde waarde behouden of aanpassen"
 
+msgid "Add at least one option for this question type"
+msgstr "Voeg minstens één optie toe voor dit vraagtype"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Vereist bedrag van de volgende betalingstermijn"
 
@@ -9968,10 +9971,6 @@ msgstr ""
 "Deze worden automatisch toegepast als je je aanmeldt voor een nieuw "
 "evenement."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Deze kortingscode is al gebruikt in een of meer van de geselecteerde series"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Bekijk een gedetailleerd activiteitenlogboek van alle wijzigingen die voor "
@@ -10457,6 +10456,12 @@ msgid ""
 "The custom translation that will replace the default for this organization"
 msgstr ""
 "De aangepaste vertaling die de standaard zal vervangen voor deze organisatie"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Deze kortingscode wordt al gebruikt in een of meer van de geselecteerde "
+"sessies"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

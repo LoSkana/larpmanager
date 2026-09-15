@@ -7725,6 +7725,9 @@ msgstr "Du kan nu definere afsnit i tilmeldingsformularen"
 msgid "keep the auto-generated value or customize it"
 msgstr "behold den automatisk genererede værdi, eller tilpas den"
 
+msgid "Add at least one option for this question type"
+msgstr "Tilføj mindst én mulighed for denne spørgsmålstype"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Beløb for den næste påkrævede betalingsrate"
 
@@ -9763,10 +9766,6 @@ msgstr "Den originale engelske tekst, som den vises i koden (msgid i gettext)"
 msgid "These will be automatically applied when you register for a new event."
 msgstr "De bliver automatisk anvendt, når du tilmelder dig et nyt event."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Denne rabatkode bruges allerede i en eller flere af de valgte afviklinger"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Se detaljeret aktivitetslog over alle ændringer foretaget for dette "
@@ -10212,6 +10211,11 @@ msgid ""
 "The custom translation that will replace the default for this organization"
 msgstr ""
 "Den tilpassede oversættelse, der erstatter standarden for denne organisation"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Denne rabatkode er allerede brugt i en eller flere af de valgte sessioner"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

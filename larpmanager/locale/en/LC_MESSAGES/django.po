@@ -203,6 +203,9 @@ msgstr ""
 msgid "Configure event discounts, discount types, values, and promo codes."
 msgstr ""
 
+msgid "Sessions"
+msgstr ""
+
 msgid "The sessions for which the discount is available"
 msgstr ""
 
@@ -3669,9 +3672,6 @@ msgstr ""
 msgid "Select the sessions for which the discount is active"
 msgstr ""
 
-msgid "Sessions"
-msgstr ""
-
 msgid "The discount value; it will be deducted from the total registration fee"
 msgstr ""
 
@@ -3699,7 +3699,8 @@ msgid ""
 "be used by already registered participants."
 msgstr ""
 
-msgid "This discount code is already used in one or more of the selected runs"
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
 msgstr ""
 
 msgid "Open"
@@ -5914,6 +5915,9 @@ msgid "Payments pending approval"
 msgstr ""
 
 msgid "Reference"
+msgstr ""
+
+msgid "Add at least one option for this question type"
 msgstr ""
 
 msgid "Total registration fee:"

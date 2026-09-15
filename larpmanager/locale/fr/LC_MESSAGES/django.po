@@ -7735,6 +7735,9 @@ msgstr "Tu peux désormais définir les sections du formulaire d’inscription"
 msgid "keep the auto-generated value or customize it"
 msgstr "conserver la valeur générée automatiquement ou la personnaliser"
 
+msgid "Add at least one option for this question type"
+msgstr "Ajoute au moins une option pour ce type de question"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Montant de la prochaine tranche de paiement requise"
 
@@ -10040,11 +10043,6 @@ msgstr ""
 "Ces paramètres seront automatiquement appliqués quand tu t'inscriras à un "
 "nouvel événement."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Ce code de réduction a déjà été utilisé dans une ou plusieurs des sessions "
-"sélectionnées"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Affiche le journal d’activité détaillé de toutes les modifications apportées"
@@ -10548,6 +10546,12 @@ msgid ""
 msgstr ""
 "La traduction personnalisée qui remplacera la traduction par défaut pour "
 "cette organisation"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Ce code de réduction est déjà utilisé dans une ou plusieurs des sessions "
+"sélectionnées"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."
