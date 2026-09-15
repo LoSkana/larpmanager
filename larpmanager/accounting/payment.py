@@ -326,6 +326,24 @@ def update_invoice_gross_fee(
     return amount
 
 
+def _apply_custom_iban(context: dict) -> None:
+    """Override the wire transfer IBAN with the event specific one, if configured."""
+    event_id = None
+    if "registration" in context:
+        event_id = context["registration"].run.event_id
+    elif "run" in context:
+        event_id = context["run"].event_id
+    elif "event" in context:
+        event_id = context["event"].id
+
+    if not event_id:
+        return
+
+    custom_iban = get_event_config(event_id, "payment_custom_iban", context=context)
+    if custom_iban:
+        context["wire_iban"] = custom_iban
+
+
 def _prepare_gateway_form(
     request: HttpRequest,
     context: dict,
@@ -439,6 +457,7 @@ def get_payment_form(
 
     # Update payment context and invoice data with current details
     update_payment_details(context)
+    _apply_custom_iban(context)
     set_data_invoice(context, invoice, form, association_id)
 
     # Calculate final amount including fees and update invoice
