@@ -271,6 +271,11 @@ nav#sidebar-nav {
   margin-left: 0.5ch;
 }
 
+#sidebar .new-menu > .sidebar-link-wrap:first-child {
+  height: var(--topbar-height);
+  flex-shrink: 0;
+}
+
 .sidebar-link,
 .explain-icon {
   display: inline-block;
@@ -529,6 +534,7 @@ nav#sidebar-nav {
    --------------------------------------------------------------------------- */
 
 .new_v22 #sidebar .inner {
+  padding-top: 0em;
   padding-bottom: 0.5em;
   display: flex;
   flex-direction: column;
