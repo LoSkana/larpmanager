@@ -7728,6 +7728,9 @@ msgstr "Ora puoi definire le sezioni del modulo di iscrizione"
 msgid "keep the auto-generated value or customize it"
 msgstr "mantenere il valore autogenerato o personalizzarlo"
 
+msgid "Add at least one option for this question type"
+msgstr "Aggiungi almeno un'opzione per questo tipo di domanda"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Importo della prossima rata richiesta"
 
@@ -9963,11 +9966,6 @@ msgstr ""
 "Questi verranno applicati automaticamente quando ti iscrivi a un nuovo "
 "evento."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Questo codice sconto è già stato utilizzato in una o più delle serie "
-"selezionate"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Visualizza il registro dettagliato delle attività di tutte le modifiche "
@@ -10458,6 +10456,12 @@ msgid ""
 msgstr ""
 "La traduzione personalizzata che sostituirà quella predefinita per questa "
 "organizzazione"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Questo codice sconto è già stato usato in una o più delle sessioni "
+"selezionate"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

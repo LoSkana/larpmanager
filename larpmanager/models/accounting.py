@@ -669,7 +669,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
             )
             if conflict:
                 raise ValidationError(
-                    {"cod": _("This discount code is already used in one or more of the selected runs")}
+                    {"cod": _("This discount code is already used in one or more of the selected sessions")}
                 )
 
 

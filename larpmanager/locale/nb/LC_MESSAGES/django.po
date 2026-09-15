@@ -7726,6 +7726,9 @@ msgstr "Du kan nå definere seksjoner i registreringsskjemaet"
 msgid "keep the auto-generated value or customize it"
 msgstr "beholde den autogenererte verdien eller tilpasse den"
 
+msgid "Add at least one option for this question type"
+msgstr "Legg til minst ett alternativ for denne spørsmålstypen"
+
 msgid "Amount of the next payment instalment required"
 msgstr "Beløpet på neste betalingsrate som kreves"
 
@@ -9829,10 +9832,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Disse vil bli brukt automatisk når du melder deg på et nytt arrangement."
 
-msgid "This discount code is already used in one or more of the selected runs"
-msgstr ""
-"Denne rabattkoden er allerede brukt i en eller flere av de valgte kjøringene"
-
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 "Se detaljert aktivitetslogg over alle endringer som er gjort for dette "
@@ -10286,6 +10285,11 @@ msgid ""
 msgstr ""
 "Den egendefinerte oversettelsen som skal erstatte standardoversettelsen for "
 "denne organisasjonen"
+
+msgid ""
+"This discount code is already used in one or more of the selected sessions"
+msgstr ""
+"Denne rabattkoden er allerede brukt i én eller flere av de valgte øktene"
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association."

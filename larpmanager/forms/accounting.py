@@ -544,6 +544,7 @@ class OrgaDiscountForm(BaseModelForm):
             choices=choices,
             widget=widget,
             required=False,
+            label=_("Sessions"),
             help_text=_("The sessions for which the discount is available"),
         )
 
