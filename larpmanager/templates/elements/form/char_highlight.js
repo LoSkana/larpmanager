@@ -9,7 +9,7 @@ function openQtip(pageX, pageY, x, y, content) {
     $('#qtip-cursor-helper').qtip({
         content: { text: content },
         style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow'
+            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
         }, show: {
             ready: true,
             effect: function(offset) {
