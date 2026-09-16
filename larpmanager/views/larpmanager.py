@@ -668,17 +668,17 @@ def _launch_demo(request: HttpRequest) -> Any:
 
 
 def get_started(request: HttpRequest) -> Any:
-    """Show the entry funnel: start a pre-populated demo or create a real association.
+    """Show the entry funnel: start a pre-populated demo, or a link to create a real association.
 
     The primary call to action is launching a demo instance cloned from a
-    demo type's template association; creating an empty real association
-    is offered as a secondary path.
+    demo type's template association; creating an empty real association is
+    offered as a secondary path, handled by the dedicated `get_started_real` view.
 
     Args:
         request: Django HTTP request object
 
     Returns:
-        HttpResponse: Rendered get started page or redirect after creation
+        HttpResponse: Rendered get started page
 
     """
     context = get_lm_contact(request)
@@ -689,24 +689,51 @@ def get_started(request: HttpRequest) -> Any:
     if request.method == "POST" and request.POST.get("demo_uuid"):
         return _launch_demo(request)
 
-    # Secondary path: create a real empty association (requires login)
-    if request.user.is_authenticated:
-        joined_association = _join_form(context, request)
-        if joined_association:
-            # send message
-            messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
-            # send email
-            if request.association["skin_id"] == 1:
-                join_email(joined_association)
-            # redirect
-            return redirect("after_login", subdomain=joined_association.slug, path="manage")
+    demo_types = LarpManagerDemoType.objects.filter(active=True).order_by("order")
+    if not demo_types.exists():
+        # Nothing to demo: skip straight to creating a real association
+        return redirect("get_started_real")
 
+    if request.user.is_authenticated:
         # Retrive personal registration, managed events / orgas (if the user is looking for that)
         get_personal_area(context)
 
-    context["demo_types"] = LarpManagerDemoType.objects.filter(active=True).order_by("order")
+    context["demo_types"] = demo_types
     context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/landing/get_started.html", context)
+
+
+@login_required
+def get_started_real(request: HttpRequest) -> Any:
+    """Show the form to create a new (empty) real association.
+
+    Split out of `get_started` so login can be enforced with the standard
+    `login_required` redirect, which round-trips the user straight back to
+    this page (no anchor/scroll workaround needed).
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered form page, or redirect after creation
+
+    """
+    context = get_lm_contact(request)
+    if "red" in context:
+        return redirect(context["red"])
+
+    joined_association = _join_form(context, request)
+    if joined_association:
+        # send message
+        messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
+        # send email
+        if request.association["skin_id"] == 1:
+            join_email(joined_association)
+        # redirect
+        return redirect("after_login", subdomain=joined_association.slug, path="manage")
+
+    context["texts"] = get_larpmanager_texts()
+    return render(request, "larpmanager/landing/get_started_real.html", context)
 
 
 def _join_form(context: dict, request: HttpRequest) -> Association | None:
@@ -1501,7 +1528,7 @@ def lm_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
         delete_run_task(str(run.uuid))
         return redirect("lm_events_delete_wait", run_uuid=run_uuid)
 
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["run"] = run
     context["registration_count"] = registration_count
     return render(request, "larpmanager/larpmanager/delete_event.html", context)
@@ -1512,7 +1539,7 @@ def lm_events_delete_wait(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Poll until the run is gone, then confirm deletion."""
     check_lm_admin(request)
     deleted = not Run.objects.filter(uuid=run_uuid).exists()
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["deleted"] = deleted
     context["label"] = f"Run {run_uuid}"
     context["cancel_url"] = reverse("lm_list")
@@ -1524,7 +1551,7 @@ def lm_clean_wait(request: HttpRequest, association_slug: str) -> HttpResponse:
     """Poll until the association is gone, then confirm deletion."""
     check_lm_admin(request)
     deleted = not Association.objects.filter(slug=association_slug).exists()
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["deleted"] = deleted
     context["label"] = f"Association {association_slug}"
     context["cancel_url"] = reverse("lm_list")

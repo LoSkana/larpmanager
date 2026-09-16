@@ -6431,9 +6431,6 @@ msgstr "Udfyld eventets forberedelsesspørgsmål!"
 msgid "Gift a registration to your friend"
 msgstr "Giv en registrering til din ven"
 
-msgid "Log in to create your organization"
-msgstr "Log ind for at oprette din organisation"
-
 msgid "Manage all handouts for this event"
 msgstr "Administrer alle handouts for dette event"
 

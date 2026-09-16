@@ -6432,9 +6432,6 @@ msgstr "Vul de voorbereidende vragen voor het evenement in!"
 msgid "Gift a registration to your friend"
 msgstr "Geef een inschrijving cadeau aan je vriend(in)"
 
-msgid "Log in to create your organization"
-msgstr "Log in om je organisatie aan te maken"
-
 msgid "Manage all handouts for this event"
 msgstr "Beheer alle hand-outs voor dit evenement"
 

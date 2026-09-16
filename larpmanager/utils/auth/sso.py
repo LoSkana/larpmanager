@@ -47,6 +47,16 @@ SSO_SLUG_MAX_AGE = 600
 # enough for a slow mobile hop, short enough to stay a single-use handoff
 SESSION_TOKEN_TTL = 300
 
+# Session key holding (next_url, timestamp) of the last login/signup entry point
+# visited, used as a fallback when a user abandons that attempt (e.g. to register
+# through a different entry point) and the query parameter is lost by the time
+# they actually complete authentication
+PENDING_AUTH_NEXT_URL_SESSION_KEY = "pending_auth_next_url"
+
+# Discard the stashed next url after this many seconds, so an abandoned login or
+# signup cannot redirect a later, unrelated one to a stale destination
+PENDING_AUTH_NEXT_URL_MAX_AGE = SSO_SLUG_MAX_AGE
+
 _AFTER_LOGIN_RE = re.compile(r"/after_login/(?P<slug>[-\w]+)/")
 
 
@@ -87,3 +97,29 @@ def pop_login_slug(request: HttpRequest) -> str | None:
         return None
 
     return slug
+
+
+def stash_pending_next_url(request: HttpRequest, next_url: str) -> None:
+    """Remember the 'next' url the current login/signup attempt started with."""
+    request.session[PENDING_AUTH_NEXT_URL_SESSION_KEY] = [next_url, time.time()]
+
+
+def pop_pending_next_url(request: HttpRequest) -> str | None:
+    """Return and clear the stashed 'next' url, ignoring stale entries."""
+    session = getattr(request, "session", None)
+    if session is None:
+        return None
+
+    stashed = session.pop(PENDING_AUTH_NEXT_URL_SESSION_KEY, None)
+    if not stashed:
+        return None
+
+    try:
+        next_url, stashed_at = stashed
+    except (TypeError, ValueError):
+        return None
+
+    if time.time() - stashed_at > PENDING_AUTH_NEXT_URL_MAX_AGE:
+        return None
+
+    return next_url

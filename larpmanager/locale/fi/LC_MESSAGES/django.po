@@ -6431,9 +6431,6 @@ msgstr "Täytä tapahtuman valmistelukysymykset!"
 msgid "Gift a registration to your friend"
 msgstr "Lahjoita rekisteröityminen ystävällesi"
 
-msgid "Log in to create your organization"
-msgstr "Kirjaudu sisään luodaksesi organisaatiosi"
-
 msgid "Manage all handouts for this event"
 msgstr "Hallinnoi kaikkia tämän tapahtuman handouteja"
 

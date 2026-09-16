@@ -6431,9 +6431,6 @@ msgstr "Συμπλήρωσε τις ερωτήσεις προετοιμασία�
 msgid "Gift a registration to your friend"
 msgstr "Κάνε δώρο μια εγγραφή σε έναν φίλο σου"
 
-msgid "Log in to create your organization"
-msgstr "Συνδέσου για να δημιουργήσεις τον οργανισμό σου"
-
 msgid "Manage all handouts for this event"
 msgstr "Διαχειρίσου όλα τα Handout για αυτή την εκδήλωση"
 

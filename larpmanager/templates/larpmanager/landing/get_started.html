@@ -61,38 +61,11 @@
                 </dialog>
             </div>
             <div class="get-started-divider">
-                <a href="#get-started-real"
-                   class="get-started-skip"
-                   onclick="document.getElementById('get-started-real').classList.remove('hide');">
-                    {% trans "Skip the demo, create your own organization" %} <i class="fa-solid fa-arrow-down"></i>
+                <a href="{% url 'get_started_real' %}" class="get-started-skip">
+                    {% trans "Skip the demo, create your own organization" %} <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         {% endif %}
-        <div id="get-started-real" class="{% if demo_types %}hide{% endif %}">
-            <h2>{% trans "Create your organization" %}</h2>
-            <div class="about-prose landing-prose">{{ texts.join_content | safe }}</div>
-            {% if request.user.is_authenticated %}
-                <form class="contact-form"
-                      action="{% url 'get_started' %}"
-                      enctype="multipart/form-data"
-                      method="post">
-                    {% csrf_token %}
-                    <table>
-                        {{ form.as_div }}
-                    </table>
-                    <input class="btn btn-primary"
-                           type="submit"
-                           id="id_submit"
-                           value="{% trans "Submit" %}">
-                </form>
-            {% else %}
-                <p>
-                    <a class="btn btn-primary"
-                       href="{% url 'login' %}?next={% url 'get_started' %}">{% trans "Log in to create your organization" %}</a>
-                </p>
-            {% endif %}
-            <div class="contact-alt">{{ texts.desktop_recommendation | safe }}</div>
-        </div>
     </div>
 {% endblock landing_content %}
 {% block landing_final %}
