@@ -1682,6 +1682,9 @@ msgstr "Käännä"
 msgid "Treasurer"
 msgstr "Rahastonhoitaja"
 
+msgid "Tutorials"
+msgstr "Oppaat"
+
 msgid "Uploading"
 msgstr "Lataaminen"
 
@@ -5152,6 +5155,9 @@ msgstr "Kirjoita järjestäjille"
 
 msgid "(Optional) Display order"
 msgstr "(Valinnainen) Näyttöjärjestys"
+
+msgid "Already have an account?"
+msgstr "Onko sinulla jo tili?"
 
 msgid "Association Translations"
 msgstr "Yhdistyksen käännökset"

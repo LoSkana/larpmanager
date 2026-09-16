@@ -175,7 +175,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
         edit_iframe.locator("#one"),
-        "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
+        "Registration Member (*) Admin Test - orga@test.it Admin Test - orga@test.it",
     )
     save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")

@@ -78,19 +78,6 @@ window.closeLmModal = function() {
     if (dialog && dialog.open) dialog.close();
 };
 
-// Close the modal when clicking the backdrop (outside the dialog bounds).
-(function() {
-    const dialog = document.getElementById('lm-modal');
-    if (!dialog) return;
-    dialog.addEventListener('click', function(e) {
-        const rect = dialog.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            window.closeLmModal();
-        }
-    });
-})();
-
 /**
  * Open a dialog modal with an iframe and a close button
  * @param {string} iframeUrl - The URL to load in the iframe

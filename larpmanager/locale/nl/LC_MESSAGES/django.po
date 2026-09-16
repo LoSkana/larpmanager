@@ -1682,6 +1682,9 @@ msgstr "Vertaal"
 msgid "Treasurer"
 msgstr "Penningmeester"
 
+msgid "Tutorials"
+msgstr "Tutorials"
+
 msgid "Uploading"
 msgstr "Uploaden"
 
@@ -5152,6 +5155,9 @@ msgstr "Schrijf naar de organisatoren"
 
 msgid "(Optional) Display order"
 msgstr "(Optioneel) Weergavevolgorde"
+
+msgid "Already have an account?"
+msgstr "Heb je al een account?"
 
 msgid "Association Translations"
 msgstr "Vertalingen van de vereniging"

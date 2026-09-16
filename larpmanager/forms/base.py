@@ -211,6 +211,12 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         self.multiples = {}
         self.unavail = {}
         self.max_lengths = {}
+        self._has_mandatory = False
+
+    @property
+    def has_mandatory(self) -> bool:
+        """Whether any visible field is required, for the "(*) fields are required" note."""
+        return self._has_mandatory or any(f.required for f in self.fields.values())
 
     def handle_automatic(self) -> None:
         """Handle automatic fields, that should be automatically populated."""
@@ -987,7 +993,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Mark mandatory fields with visual indicator and track for validation
         if question["status"] == QuestionStatus.MANDATORY:
             self.fields[field_key].label += " (*)"
-            self.has_mandatory = True
+            self._has_mandatory = True
             self.mandatory.append("id_" + field_key)
 
         # Set basic type flag for template rendering logic

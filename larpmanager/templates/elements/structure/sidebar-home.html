@@ -7,7 +7,8 @@
                 {% for item in profile_home_nav_items %}
                     <span class="sidebar-link-wrap">
                         <a class="sidebar-link{% if item.active %} select{% endif %}"
-                           href="{{ item.url }}">
+                           href="{{ item.url }}"
+                           title="{{ item.label }}">
                             {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
                             <span>{{ item.label }}</span>
                         </a>

@@ -1682,6 +1682,9 @@ msgstr "Traduzir"
 msgid "Treasurer"
 msgstr "Tesoureiro"
 
+msgid "Tutorials"
+msgstr "Tutoriais"
+
 msgid "Uploading"
 msgstr "A carregar"
 
@@ -5152,6 +5155,9 @@ msgstr "Escreve aos organizadores"
 
 msgid "(Optional) Display order"
 msgstr "(Opcional) Ordem de apresentação"
+
+msgid "Already have an account?"
+msgstr "Já tem conta?"
 
 msgid "Association Translations"
 msgstr "Traduções da associação"

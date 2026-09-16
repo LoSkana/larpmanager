@@ -5368,6 +5368,9 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Already have an account?"
+msgstr ""
+
 msgid "Click or drag photo here (maximum 10 MB)"
 msgstr ""
 
@@ -6070,6 +6073,9 @@ msgid "Access the organization dashboard"
 msgstr ""
 
 msgid "Role:"
+msgstr ""
+
+msgid "Tutorials"
 msgstr ""
 
 msgid "Hi"

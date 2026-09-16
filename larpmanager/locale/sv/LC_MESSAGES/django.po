@@ -1682,6 +1682,9 @@ msgstr "Översätt"
 msgid "Treasurer"
 msgstr "Kassör"
 
+msgid "Tutorials"
+msgstr "Guider"
+
 msgid "Uploading"
 msgstr "Laddar upp"
 
@@ -5152,6 +5155,9 @@ msgstr "Skriv till arrangörerna"
 
 msgid "(Optional) Display order"
 msgstr "(Valfritt) Visningsordning"
+
+msgid "Already have an account?"
+msgstr "Har du redan ett konto?"
 
 msgid "Association Translations"
 msgstr "Föreningens översättningar"

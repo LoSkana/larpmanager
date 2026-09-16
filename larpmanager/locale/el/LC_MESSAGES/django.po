@@ -1682,6 +1682,9 @@ msgstr "Μετάφραση"
 msgid "Treasurer"
 msgstr "Ταμίας"
 
+msgid "Tutorials"
+msgstr "Οδηγοί"
+
 msgid "Uploading"
 msgstr "Μεταφόρτωση"
 
@@ -5152,6 +5155,9 @@ msgstr "Γράψε στους διοργανωτές"
 
 msgid "(Optional) Display order"
 msgstr "(Προαιρετικό) Σειρά εμφάνισης"
+
+msgid "Already have an account?"
+msgstr "Έχεις ήδη λογαριασμό;"
 
 msgid "Association Translations"
 msgstr "Μεταφράσεις συλλόγου"

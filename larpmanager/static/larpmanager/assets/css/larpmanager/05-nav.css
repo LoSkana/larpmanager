@@ -169,3 +169,8 @@
     margin: 2em 0 0 0;
   }
 }
+
+.login_link {
+  text-align: center;
+  margin-top: 1em;
+}
