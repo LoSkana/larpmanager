@@ -665,7 +665,7 @@ class OrgaConfigForm(ConfigForm):
         Sets up configuration fields for character form behavior including
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
-        if "character" in self.params.get("features"):
+        if "character" not in self.params.get("features"):
             return
 
         self.set_section("char_form", _("Character Sheet"))
