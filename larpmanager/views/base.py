@@ -34,12 +34,13 @@ from django.core.files.storage import default_storage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
-from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, session_token_key
+from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, session_token_key
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.query import query_index
@@ -73,6 +74,28 @@ class MyLoginView(AssocVersionMixin, LoginView):
 
     template_name = "registration/login.html"
     authentication_form = MyAuthForm
+
+    def get_success_url(self) -> str:
+        """Get post-login redirect, falling back to the 'next' stashed at login entry.
+
+        The query string 'next' can be lost if the user abandons this attempt
+        (e.g. to register through a different entry point) and comes back to
+        log in without it. SocialLoginTargetMiddleware stashes it as a fallback.
+        """
+        if self.request.GET.get("next") or self.request.POST.get("next"):
+            return super().get_success_url()
+        next_url = pop_pending_next_url(self.request)
+        if next_url and self.get_redirect_url_valid(next_url):
+            return next_url
+        return super().get_success_url()
+
+    def get_redirect_url_valid(self, next_url: str) -> bool:
+        """Check that a stashed 'next' url is safe to redirect to."""
+        return url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
 
     def form_valid(self, authentication_form: Form) -> HttpResponse:
         """Handle valid login form submission."""
