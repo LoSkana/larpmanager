@@ -34,6 +34,10 @@ SOCIAL_LOGIN_SUFFIX = "/login/"
 # stashed 'next' url. Other /accounts/ pages (password reset, logout, email
 # management, ...) can carry an unrelated 'next' and must not hijack it.
 LOGIN_SIGNUP_ENTRY_SUFFIXES = ("/login/", "/signup/")
+# The site's own credential login/signup pages (MyLoginView, registration),
+# served outside /accounts/, need the same 'next' stashing so a lost
+# query param can still be recovered after OTP or a re-entered attempt.
+LOGIN_SIGNUP_ENTRY_PATHS = ("/login/", "/signup/", "/register/")
 
 
 class SocialLoginTargetMiddleware:
@@ -54,11 +58,13 @@ class SocialLoginTargetMiddleware:
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Stash the target subdomain slug / redirect destination when auth starts."""
         path = request.path
-        if path.startswith(SOCIAL_LOGIN_PREFIX) and path.endswith(LOGIN_SIGNUP_ENTRY_SUFFIXES):
+        is_social_entry = path.startswith(SOCIAL_LOGIN_PREFIX) and path.endswith(LOGIN_SIGNUP_ENTRY_SUFFIXES)
+        is_credential_entry = path in LOGIN_SIGNUP_ENTRY_PATHS
+        if is_social_entry or is_credential_entry:
             next_url = request.GET.get("next") or request.POST.get("next")
             if next_url:
                 stash_pending_next_url(request, next_url)
-            if path.endswith(SOCIAL_LOGIN_SUFFIX):
+            if is_social_entry and path.endswith(SOCIAL_LOGIN_SUFFIX):
                 slug = extract_after_login_slug(next_url)
                 if slug:
                     stash_login_slug(request, slug)
