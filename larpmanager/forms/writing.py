@@ -64,7 +64,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.core.validators import FileTypeValidator
-from larpmanager.utils.services.character import _get_character_cache_id
+from larpmanager.utils.services.character import _get_character_cache_id, auto_assign_character_faction
 from larpmanager.utils.services.experience import calculate_character_experience_points
 
 
@@ -274,6 +274,10 @@ class BaseWritingForm(BaseRegistrationForm):
         # Recompute the character experience point now that questions are saved
         if commit and isinstance(instance, Character):
             calculate_character_experience_points(instance)
+
+        # Auto-assign faction now that choice options are saved
+        if commit and isinstance(instance, Character):
+            auto_assign_character_faction(instance)
 
         return instance
 
