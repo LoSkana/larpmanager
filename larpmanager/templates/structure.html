@@ -94,6 +94,17 @@
             <!-- Page Wrapper -->
             <div id="page-wrapper"
                  class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
+                <script>
+                    (function() {
+                        try {
+                            if (localStorage.getItem('sidebarCollapsed') === '1') {
+                                document.getElementById('sidebar').classList.add('sidebar-collapsed');
+                                document.getElementById('page-wrapper').classList.add('sidebar-collapsed');
+                                document.body.classList.add('sidebar-collapsed');
+                            }
+                        } catch (e) {}
+                    })();
+                </script>
                 {% block main %}
                 {% endblock main %}
             </div>
