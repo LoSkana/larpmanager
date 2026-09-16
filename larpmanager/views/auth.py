@@ -34,6 +34,7 @@ from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.utils.auth.sso import pop_pending_next_url
 from larpmanager.views.base import AssocVersionMixin
 
 if TYPE_CHECKING:
@@ -121,9 +122,14 @@ class MyRegistrationView(AssocVersionMixin, RegistrationView):
         return new_user
 
     def get_success_url(self, user: Member | None = None) -> str:  # noqa: ARG002
-        """Get URL to redirect to after successful registration."""
+        """Get URL to redirect to after successful registration.
+
+        Falls back to the 'next' stashed at signup entry (see
+        SocialLoginTargetMiddleware) when the live query/POST param is lost,
+        e.g. the user reloads the signup page after a form error.
+        """
         # Check for 'next' parameter in POST data first, then GET data
-        next_url = self.request.POST.get("next") or self.request.GET.get("next")
+        next_url = self.request.POST.get("next") or self.request.GET.get("next") or pop_pending_next_url(self.request)
 
         # Validate the next_url for security to prevent open redirect attacks
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):

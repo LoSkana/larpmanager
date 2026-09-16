@@ -171,6 +171,9 @@
         {% compress js %}
             <script defer src="{% static 'larpmanager/landing/landing.js' %}"></script>
         {% endcompress %}
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+                crossorigin="anonymous"></script>
         {% block js2 %}
         {% endblock js2 %}
     </body>

@@ -1419,6 +1419,25 @@ body.landing .contact-form table th {
   padding-right: 0.9rem;
 }
 
+body.landing .contact-form .password-field-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+body.landing .contact-form .password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+body.landing .contact-form .password-toggle-icon:hover {
+  opacity: 1;
+}
+
 body.landing .contact-form .allauth_signin {
   text-align: center;
   margin-bottom: 1.2rem;
