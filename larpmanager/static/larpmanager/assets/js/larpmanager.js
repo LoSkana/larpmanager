@@ -68,7 +68,12 @@ window.jump_to = function(target) {
 window.openLmModal = function(content, cssClass) {
     const dialog = document.getElementById('lm-modal');
     dialog.className = cssClass || 'popup';
-    document.getElementById('lm-modal-content').innerHTML = content;
+    document.getElementById('lm-modal-content').innerHTML =
+        '<button class="modal-close-btn">&times;</button>' + content;
+    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.closeLmModal();
+    });
     dialog.showModal();
 };
 
@@ -89,7 +94,6 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
     const frame = `
         <div class="frame-container">
-            <button class="modal-close-btn">&times;</button>
             <div class="frame-loading" style="display:none;"></div>
             <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
         </div>
@@ -151,11 +155,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     }
     window.addEventListener('message', onIframeMessage);
 
-    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.closeLmModal();
-        restoreTitle();
-    });
+    dialog.addEventListener('close', restoreTitle, { once: true });
 
     dialog.addEventListener('close', function() {
         window.removeEventListener('message', onIframeMessage);

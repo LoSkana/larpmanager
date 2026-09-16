@@ -346,6 +346,7 @@ div.ui-lm_tooltip {
 }
 
 #lm-modal {
+  position: relative;
   padding: 1em;
 }
 
