@@ -6431,9 +6431,6 @@ msgstr "Rellena las preguntas preparatorias del evento!"
 msgid "Gift a registration to your friend"
 msgstr "Regala una inscripción a tu amigo"
 
-msgid "Log in to create your organization"
-msgstr "Inicia sesión para crear tu organización"
-
 msgid "Manage all handouts for this event"
 msgstr "Gestiona todos los handouts de este evento"
 

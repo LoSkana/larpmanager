@@ -7864,9 +7864,6 @@ msgstr ""
 msgid "Create your organization"
 msgstr ""
 
-msgid "Log in to create your organization"
-msgstr ""
-
 msgid "Partners"
 msgstr ""
 

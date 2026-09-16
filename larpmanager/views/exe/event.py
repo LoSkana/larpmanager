@@ -49,6 +49,7 @@ from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
+from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_form, exe_new
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -321,7 +322,7 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     run = context["el"]
 
     # Create support ticket with run information
-    delete_url = request.build_absolute_uri(reverse("lm_events_delete", args=[run.uuid]))
+    delete_url = get_url(reverse("lm_events_delete", args=[run.uuid]))
     ticket_content = f"""
         Deletion request for run:\n\n
         UUID: {run.uuid}\n

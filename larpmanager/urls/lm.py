@@ -35,6 +35,11 @@ urlpatterns = [
         name="get_started",
     ),
     path(
+        "get-started-real/",
+        views_lm.get_started_real,
+        name="get_started_real",
+    ),
+    path(
         "join/",
         RedirectView.as_view(pattern_name="get_started", permanent=True),
         name="join",

@@ -30,7 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from larpmanager.utils.auth.sso import pop_login_slug
+from larpmanager.utils.auth.sso import pop_login_slug, pop_pending_next_url
 
 if TYPE_CHECKING:
     from allauth.socialaccount.models import SocialLogin
@@ -58,7 +58,11 @@ def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None
         str: Redirect URL path, or None to use default behavior
 
     """
-    next_url = request.GET.get("next") or request.POST.get("next")
+    # Prefer the current request's 'next' param; fall back to the one stashed by
+    # SocialLoginTargetMiddleware when this login/signup attempt began, in case
+    # it was lost along the way. That fallback is dropped once read, and ignored
+    # if stale (see PENDING_AUTH_NEXT_URL_MAX_AGE).
+    next_url = request.GET.get("next") or request.POST.get("next") or pop_pending_next_url(request)
 
     if next_url:
         # Validate the next URL for security

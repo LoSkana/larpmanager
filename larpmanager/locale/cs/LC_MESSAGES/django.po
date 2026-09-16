@@ -6431,9 +6431,6 @@ msgstr "Vyplň přípravné otázky k události!"
 msgid "Gift a registration to your friend"
 msgstr "Daruj registraci svému příteli"
 
-msgid "Log in to create your organization"
-msgstr "Přihlas se a vytvoř svou organizaci"
-
 msgid "Manage all handouts for this event"
 msgstr "Spravovat všechny Handouty k této akci"
 

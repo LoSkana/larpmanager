@@ -108,6 +108,23 @@ window.addEventListener('DOMContentLoaded', function () {
                     updateSlugPreview(autoSlug);
                 }
             });
+
+            // Block whitespace-only (or blank-looking) organization names
+            var associationForm = nameInput.closest('form');
+            if (associationForm) {
+                associationForm.addEventListener('submit', function (event) {
+                    if (nameInput.value.trim() === '' || slugInput.value.trim() === '') {
+                        event.preventDefault();
+                        nameInput.setCustomValidity('This field cannot be empty or contain only spaces');
+                        nameInput.reportValidity();
+                    } else {
+                        nameInput.setCustomValidity('');
+                    }
+                });
+                nameInput.addEventListener('input', function () {
+                    nameInput.setCustomValidity('');
+                });
+            }
         }
     }
 
