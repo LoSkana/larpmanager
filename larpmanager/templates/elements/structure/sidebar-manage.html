@@ -107,14 +107,18 @@
                     {% if run %}
                         <div class="sidebar-section">
                             <span class="sidebar-link-wrap">
-                                <a class="sidebar-link" href="{% url 'manage' run.get_slug %}">
+                                <a class="sidebar-link"
+                                   href="{% url 'manage' run.get_slug %}"
+                                   title="Dashboard">
                                     <i class="fa-solid fa-gauge"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </span>
                             {% if not lite_mode and not demo %}
                                 <span class="sidebar-link-wrap">
-                                    <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">
+                                    <a class="sidebar-link"
+                                       href="{% url 'orga_preferences' run.get_slug %}"
+                                       title="{% trans "Preferences" %}">
                                         <i class="fa-solid fa-sliders"></i>
                                         <span>{% trans "Preferences" %}</span>
                                     </a>
@@ -129,7 +133,8 @@
                                             <span class="sidebar-link-wrap">
                                                 <a id="{{ ap.slug }}"
                                                    class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
-                                                   href="{% url ap.slug run.get_slug %}">
+                                                   href="{% url ap.slug run.get_slug %}"
+                                                   title="{% trans ap.name %}">
                                                     <i class="fa-solid fa-{{ ap.icon }}"></i>
                                                     <span>{% trans ap.name %}</span>
                                                     {% with badge=sidebar_badges|get:ap.slug %}
@@ -145,14 +150,16 @@
                     {% else %}
                         <div class="sidebar-section">
                             <span class="sidebar-link-wrap">
-                                <a class="sidebar-link" href="{% url 'manage' %}">
+                                <a class="sidebar-link" href="{% url 'manage' %}" title="Dashboard">
                                     <i class="fa-solid fa-gauge"></i>
                                     <span>Dashboard</span>
                                 </a>
                             </span>
                             {% if not lite_mode %}
                                 <span class="sidebar-link-wrap">
-                                    <a class="sidebar-link" href="{% url 'exe_preferences' %}">
+                                    <a class="sidebar-link"
+                                       href="{% url 'exe_preferences' %}"
+                                       title="{% trans "Preferences" %}">
                                         <i class="fa-solid fa-sliders"></i>
                                         <span>{% trans "Preferences" %}</span>
                                     </a>
@@ -167,7 +174,8 @@
                                             <span class="sidebar-link-wrap">
                                                 <a id="{{ ap.slug }}"
                                                    class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
-                                                   href="{% url ap.slug %}">
+                                                   href="{% url ap.slug %}"
+                                                   title="{% trans ap.name %}">
                                                     <i class="fa-solid fa-{{ ap.icon }}"></i>
                                                     <span>{% trans ap.name %}</span>
                                                     {% with badge=sidebar_badges|get:ap.slug %}
@@ -198,7 +206,8 @@
                                 <a href="https://discord.gg/C4KuyQbuft"
                                    class="sidebar-link"
                                    target="_blank"
-                                   rel="noopener noreferrer">
+                                   rel="noopener noreferrer"
+                                   title="Discord">
                                     <i class="fa-brands fa-discord"></i>
                                     <span>Discord</span>
                                 </a>
@@ -206,7 +215,8 @@
                             <span class="sidebar-link-wrap">
                                 <a href="{% url 'guides' %}"
                                    class="sidebar-link popup-iframe-link"
-                                   data-iframe-url="{% url 'guides' %}?in_iframe=1">
+                                   data-iframe-url="{% url 'guides' %}?in_iframe=1"
+                                   title="Guides">
                                     <i class="fa-solid fa-book-open"></i>
                                     <span>Guides</span>
                                 </a>
@@ -215,7 +225,8 @@
                         <span class="sidebar-link-wrap">
                             <a href="{% url 'tutorials' %}"
                                class="sidebar-link popup-iframe-link"
-                               data-iframe-url="{% url 'tutorials' %}?in_iframe=1">
+                               data-iframe-url="{% url 'tutorials' %}?in_iframe=1"
+                               title="{% trans "Tutorials" %}">
                                 <i class="fa-solid fa-graduation-cap"></i>
                                 <span>Tutorials</span>
                             </a>

@@ -1682,6 +1682,9 @@ msgstr "Přeložit"
 msgid "Treasurer"
 msgstr "Pokladník"
 
+msgid "Tutorials"
+msgstr "Návody"
+
 msgid "Uploading"
 msgstr "Nahrávání"
 
@@ -5152,6 +5155,9 @@ msgstr "Napiš organizátorům"
 
 msgid "(Optional) Display order"
 msgstr "(Volitelné) Pořadí zobrazení"
+
+msgid "Already have an account?"
+msgstr "Už máš účet?"
 
 msgid "Association Translations"
 msgstr "Překlady asociace"
