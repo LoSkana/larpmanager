@@ -8878,9 +8878,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Legger til en side der du kan definere kortere URL-er for lange lenker"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Obs: skjemaet inneholder feil i følgende felt."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Obs: skjemaet inneholder feil i følgende felt:"
 

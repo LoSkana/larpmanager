@@ -8961,9 +8961,6 @@ msgstr ""
 "Προσθέτει μια σελίδα όπου μπορείς να ορίσεις συντομότερα URL για μεγάλους "
 "συνδέσμους"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Προσοχή: η φόρμα περιέχει σφάλματα στα ακόλουθα πεδία."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Προσοχή: η φόρμα περιέχει σφάλματα στα ακόλουθα πεδία:"
 

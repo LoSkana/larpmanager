@@ -8863,9 +8863,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Přidá stránku, kde můžeš definovat kratší adresy URL pro dlouhé odkazy"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Pozor: formulář obsahuje chyby v následujících polích."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Pozor: formulář obsahuje chyby v následujících polích:"
 
