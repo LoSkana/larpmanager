@@ -8921,9 +8921,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Voegt een pagina toe waar je kortere URL's kunt definiëren voor lange links"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Let op: het formulier bevat fouten in de volgende velden."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Let op: het formulier bevat fouten in de volgende velden:"
 

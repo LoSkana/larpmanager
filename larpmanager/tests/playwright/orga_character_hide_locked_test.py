@@ -63,7 +63,7 @@ def test_orga_character_hide_locked(pw_page: Any) -> None:  # noqa: D103
 
     # Enable writing_hide and writing_locked configs
     go_to(page, live_server, "test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_writing_hide").check()
     page.locator("#id_writing_locked").check()
     submit_confirm(page)

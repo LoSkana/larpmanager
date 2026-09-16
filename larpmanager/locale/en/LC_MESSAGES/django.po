@@ -10398,9 +10398,6 @@ msgid ""
 "organization?"
 msgstr ""
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr ""
-
 msgid "Please correct the error below."
 msgstr ""
 

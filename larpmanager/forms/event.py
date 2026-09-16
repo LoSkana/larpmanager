@@ -665,37 +665,28 @@ class OrgaConfigForm(ConfigForm):
         Sets up configuration fields for character form behavior including
         visibility options, maximum selections, ticket requirements, and dependencies.
         """
-        if "character" in self.params.get("features"):
-            self.set_section("char_form", _("Character Sheet"))
-
-            label = _("Hide not available")
-            help_text = _(
-                "If enabled, options no longer available in the form are hidden, instead of being displayed disabled.",
-            )
-            self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, label, help_text)
-
-            label = _("Maximum available")
-            help_text = _("If enabled, an option can be chosen a maximum number of times.")
-            self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
-
-            label = _("Ticket selection")
-            help_text = _("If enabled, allows an option to be visible only to participants with a selected ticket.")
-            self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
-
-            label = _("Requirements")
-            help_text = _("If enabled, allows an option to be visible only if other options are selected.")
-            self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
-
-    def set_config_writing(self) -> None:
-        """Configure writing system settings for events.
-
-        Sets up background writing features, character story elements,
-        and writing deadline configurations for character development.
-        """
         if "character" not in self.params.get("features"):
             return
 
-        self.set_section("writing", _("Characters"))
+        self.set_section("char_form", _("Character Sheet"))
+
+        label = _("Hide not available")
+        help_text = _(
+            "If enabled, options no longer available in the form are hidden, instead of being displayed disabled.",
+        )
+        self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, label, help_text)
+
+        label = _("Maximum available")
+        help_text = _("If enabled, an option can be chosen a maximum number of times.")
+        self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
+
+        label = _("Ticket selection")
+        help_text = _("If enabled, allows an option to be visible only to participants with a selected ticket.")
+        self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
+
+        label = _("Requirements")
+        help_text = _("If enabled, allows an option to be visible only if other options are selected.")
+        self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
         config_label = _("Title")
         config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name.")
@@ -731,6 +722,17 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
 
+    def set_config_writing(self) -> None:
+        """Configure writing system settings for events.
+
+        Sets up background writing features, character story elements,
+        and writing deadline configurations for character development.
+        """
+        if "character" not in self.params.get("features"):
+            return
+
+        self.set_section("writing", _("Characters"))
+
         config_label = _("Field visibility")
         config_help_text = _(
             "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time.",
@@ -743,10 +745,6 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("character_play_max", ConfigType.INT, config_label, config_help_text)
 
-        self._set_config_writing_behavior()
-
-    def _set_config_writing_behavior(self) -> None:
-        """Configure writing behavior options (editor, tools, access)."""
         config_label = _("Disable character finder")
         config_help_text = (
             _("Disable the system that finds the character number when a special reference symbol is written:")

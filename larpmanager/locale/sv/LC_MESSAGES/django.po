@@ -8871,9 +8871,6 @@ msgstr ""
 "Lägger till en sida där du kan definiera kortare webbadresser för långa "
 "länkar"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Observera: formuläret innehåller fel i följande fält."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Observera: formuläret innehåller fel i följande fält:"
 

@@ -8934,9 +8934,6 @@ msgstr ""
 "Aggiunge una pagina in cui è possibile definire URL più brevi per i "
 "collegamenti lunghi"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Attenzione: il modulo contiene errori nei seguenti campi."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Attenzione: il modulo contiene errori nei seguenti campi:"
 

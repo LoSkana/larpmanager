@@ -8863,9 +8863,6 @@ msgstr "Gå til administrationspanelet <a href= %(url)s'>herfra</a>!"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr "Tilføjer en side, hvor du kan definere kortere URL'er til lange links"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Bemærk: Formularen indeholder fejl i følgende felter."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Bemærk: formularen indeholder fejl i følgende felter:"
 

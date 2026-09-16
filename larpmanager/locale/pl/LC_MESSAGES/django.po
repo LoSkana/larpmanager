@@ -8903,9 +8903,6 @@ msgstr ""
 "Dodaje stronę, na której można zdefiniować krótsze adresy URL dla długich "
 "linków"
 
-msgid "Attention: the form contains errors in the following fields."
-msgstr "Uwaga: formularz zawiera błędy w następujących polach."
-
 msgid "Attention: the form contains errors in the following fields:"
 msgstr "Uwaga: formularz zawiera błędy w następujących polach:"
 
