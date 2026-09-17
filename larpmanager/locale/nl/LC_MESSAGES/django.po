@@ -11259,6 +11259,13 @@ msgstr ""
 "deel je je personages daarmee"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Het afbeeldingsbestand lijkt beschadigd of ongeldig. Probeer een andere "
+"foto."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

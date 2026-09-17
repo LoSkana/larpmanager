@@ -11350,6 +11350,13 @@ msgstr ""
 "χαρακτήρες σου μαζί της"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Το αρχείο εικόνας φαίνεται κατεστραμμένο ή μη έγκυρο. Δοκίμασε διαφορετική "
+"φωτογραφία."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

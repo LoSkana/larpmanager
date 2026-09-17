@@ -10892,6 +10892,13 @@ msgid ""
 msgstr "Výběrem události se připojíš k její kampani a sdílíš s ní své postavy"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Zdá se, že soubor s obrázkem je poškozený nebo neplatný. Zkuste prosím jinou"
+" fotku."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

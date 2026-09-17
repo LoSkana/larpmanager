@@ -117,9 +117,13 @@
             processData: false,
             contentType: false,
             success: function (d) {
-                profileUpdate(d.src, d.base_updated);
                 $('#upload_spinner').addClass('hide');
                 $(confirmSel).prop('disabled', false);
+                if (d.res !== 'ok') {
+                    if (!window.lmTesting) alert(d.error || '{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
+                    return;
+                }
+                profileUpdate(d.src, d.base_updated);
             },
             error: function () {
                 $('#upload_spinner').addClass('hide');

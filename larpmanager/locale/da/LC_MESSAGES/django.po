@@ -10982,6 +10982,13 @@ msgstr ""
 "karakterer med den"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Billedfilen ser ud til at være ødelagt eller ugyldig. Prøv venligst et andet"
+" billede."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

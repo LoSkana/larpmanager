@@ -11382,6 +11382,13 @@ msgstr ""
 "und teilst deine Charaktere mit ihr"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Die Bilddatei scheint beschädigt oder ungültig zu sein. Bitte versuch es mit"
+" einem anderen Foto."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""
