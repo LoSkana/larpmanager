@@ -376,8 +376,13 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     try:
         img_data = normalize_profile_image(img.read())
     except (OSError, UnidentifiedImageError, ValueError):
-        logger.exception("Failed to normalize profile image")
-        return JsonResponse({"res": "ko"})
+        logger.exception("Failed to normalize profile image for member %s", request.user.member.pk)
+        return JsonResponse(
+            {
+                "res": "ko",
+                "error": str(_("The image file appears to be corrupted or invalid. Please try a different photo.")),
+            },
+        )
 
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.jpg"
 

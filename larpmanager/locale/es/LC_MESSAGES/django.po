@@ -11259,6 +11259,12 @@ msgstr ""
 "con ella"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"La imagen parece estar corrupta o no ser válida. Prueba con otra foto."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

@@ -11052,6 +11052,12 @@ msgstr ""
 "arrangementet og deler karakterene dine med den"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Bildfilen ser ut til å være skadet eller ugyldig. Prøv et annet bilde."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

@@ -11125,6 +11125,12 @@ msgstr ""
 "swoje postacie"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Plik obrazu wygląda na uszkodzony lub nieprawidłowy. Spróbuj innego zdjęcia."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

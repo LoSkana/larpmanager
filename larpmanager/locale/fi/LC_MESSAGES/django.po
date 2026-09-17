@@ -11057,6 +11057,12 @@ msgstr ""
 "Kun valitset tapahtuman, liityt sen kampanjaan ja jaat hahmosi sen kanssa"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"Kuvatiedosto vaikuttaa vioittuneelta tai virheelliseltä. Kokeile eri kuvaa."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

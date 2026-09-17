@@ -11271,6 +11271,11 @@ msgstr ""
 "personaggi con essa"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr "L'immagine sembra corrotta o non valida. Prova con un'altra foto."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

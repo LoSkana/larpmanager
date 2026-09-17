@@ -11141,6 +11141,13 @@ msgstr ""
 "tuas personagens com ela"
 
 msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+"O arquivo de imagem parece estar corrompido ou inválido. Tenta uma foto "
+"diferente."
+
+msgid ""
 "This content can only be accessed once. Please read carefully before "
 "proceeding:"
 msgstr ""

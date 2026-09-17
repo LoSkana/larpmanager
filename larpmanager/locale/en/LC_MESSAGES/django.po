@@ -13398,6 +13398,11 @@ msgstr ""
 msgid "You are now using the latest interface version."
 msgstr ""
 
+msgid ""
+"The image file appears to be corrupted or invalid. Please try a different "
+"photo."
+msgstr ""
+
 msgid "Data share removed successfully!"
 msgstr ""
 
