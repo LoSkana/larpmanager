@@ -28,7 +28,6 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.casting import Casting
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
-from larpmanager.models.writing import CharacterStatus
 from larpmanager.utils.core.common import feature_visible
 from larpmanager.utils.registrations.availability import get_character_options_availability
 from larpmanager.utils.registrations.characters import (
@@ -132,11 +131,6 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
     # Use custom name if provided
     if character_rel.custom_name:
         character_name = character_rel.custom_name
-
-    # Add approval status if character approval is enabled and not approved
-    approval_required = get_event_config(run.event_id, "user_character_approval", context=context)
-    if approval_required and character_rel.character.status != CharacterStatus.APPROVED:
-        character_name += f" ({_(character_rel.character.get_status_display())})"
 
     # Create clickable link for character
     character_links = [
