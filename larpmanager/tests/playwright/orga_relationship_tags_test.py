@@ -181,20 +181,20 @@ def create_relationship_with_tag(live_server: Any, page: Any) -> None:
 
 
 def _tag_stat_cell(page: Any, row_uuid: str, tag_name: str) -> str:
-    """Read the per-tag stats column value for a character row (column found by header text)."""
+    """Read the per-tag stats column value for a character row, via the DataTables column
+    API (not raw header DOM matching): scrollX keeps a cloned header in the DOM, so matching
+    by header/row child count is unreliable once columns are toggled."""
     return page.evaluate(
         """([rowUuid, tagName]) => {
-            const row = document.getElementById(rowUuid);
-            const cells = row.querySelectorAll('td');
-            const headerRows = Array.from(document.querySelectorAll('table.writing_list thead tr'));
-            const headerRow = headerRows.find(tr => tr.children.length === cells.length);
-            if (!headerRow) return null;
-            const colIndex = Array.from(headerRow.children).findIndex(th => {
-                const title = th.querySelector('.dt-column-title') || th;
-                return title.textContent.trim() === tagName;
+            const table = document.querySelector('table.writing_list[id]');
+            const dt = new DataTable(table);
+            let colIndex = -1;
+            dt.columns().every(function (idx) {
+                const title = this.header().querySelector('.dt-column-title') || this.header();
+                if (title.textContent.trim() === tagName) colIndex = idx;
             });
-            const cell = cells[colIndex];
-            return cell ? cell.textContent.trim() : null;
+            if (colIndex === -1) return null;
+            return dt.cell('#' + rowUuid, colIndex).node().textContent.trim();
         }""",
         [row_uuid, tag_name],
     )
