@@ -527,14 +527,16 @@ def _build_character_relations(char: Character) -> dict[str, Any]:
     return relationships_rels
 
 
-def _build_relationship_tag_counts(char: Character) -> dict[str, int]:
-    """Count, per relationship tag, how many of this character's direct relationships carry it."""
-    character_relationships = Relationship.objects.filter(deleted=None, source=char).prefetch_related("tags")
-    counts: dict[str, int] = {}
+def _build_relationship_tag_counts(char: Character) -> dict[str, dict[str, Any]]:
+    """Build, per relationship tag, the list (and count) of characters this character carries it with."""
+    character_relationships = (
+        Relationship.objects.filter(deleted=None, source=char).select_related("target").prefetch_related("tags")
+    )
+    tag_targets: dict[str, list] = {}
     for relationship in character_relationships:
         for tag in relationship.tags.all():
-            counts[tag.uuid] = counts.get(tag.uuid, 0) + 1
-    return counts
+            tag_targets.setdefault(tag.uuid, []).append((relationship.target.uuid, relationship.target.name))
+    return {tag_uuid: build_relationship_dict(targets) for tag_uuid, targets in tag_targets.items()}
 
 
 def get_event_char_rels(char: Character, features: dict[str, Any], event_id: int) -> dict[str, Any]:
