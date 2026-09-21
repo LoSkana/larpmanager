@@ -969,6 +969,11 @@ function data_tables() {
 
     window.datatables = window.datatables || {};
 
+    // when the page already offers an explicit CSV export button (see elements/table/header.html),
+    // drop the redundant 'csv' DataTables export button to avoid duplicate export options
+    var has_explicit_export = document.querySelector('.orga-buttons a[href*="/export/"]') !== null;
+    var dt_export_buttons = has_explicit_export ? ['copy', 'excel', 'pdf', 'print'] : ['copy', 'csv', 'excel', 'pdf', 'print'];
+
     $('table.go_datatable').each(function() {
         const $table = $(this);
 
@@ -1026,7 +1031,7 @@ function data_tables() {
         var force_buttons = !no_buttons && $table.attr('force_buttons') !== undefined;
         // opt-in: add a global text search box, for tables where per-column searchDropdown isn't enough
         var show_search = $table.attr('show_search') !== undefined;
-        var export_buttons = { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] };
+        var export_buttons = { buttons: dt_export_buttons };
         var search_top_start = show_search ? 'search' : null;
 
         var dtConfig = {
@@ -1207,7 +1212,7 @@ function data_tables() {
                 { searchable: false, targets: disable_sort_columns },
                 { columnControl: [], targets: disable_sort_columns }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: dt_export_buttons } },
             /*
             initComplete: function () {
                 this.api()
