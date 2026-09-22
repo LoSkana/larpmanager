@@ -189,7 +189,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(edit_iframe.locator('input[name="que_u6"]:checked')).to_have_value("u2")
     expect(edit_iframe.locator('input[name="que_u8"]:checked')).to_have_value("u7")
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u4"), "short text")
-    edit_iframe.get_by_role("cell", name="long text").dblclick()
+    edit_iframe.get_by_role("rowheader", name="long text").dblclick()
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u5"), "long text")
     expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()

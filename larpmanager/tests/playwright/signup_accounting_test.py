@@ -179,7 +179,7 @@ def pay(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "100")
     expect_normalized(page, page.locator("#one"), "48")
     expect_normalized(page, page.locator("#one"), "52")
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
@@ -262,7 +262,7 @@ def signup_pay(live_server: Any, page: Any) -> None:
     # check pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
     expect_normalized(page, page.locator("#one"), "100")

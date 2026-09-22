@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # create branch
-git checkout -B deps/uv-upgrade
+git checkout -B "deps/uv-upgrade-$(date +%Y%m%d)"
 
 # Install uv if not present
 if ! command -v uv &> /dev/null; then
@@ -15,19 +15,24 @@ rm -rf .test_venv
 uv venv .test_venv
 . .test_venv/bin/activate
 
+# drop exact pins so the resolver is free to pick latest versions
+cp pyproject.toml pyproject.toml.bak
+sed -i -E 's/==[^"]*"/"/g' pyproject.toml
+
 # baseline install
 uv pip install -r pyproject.toml
 
 # upgrade all packages to latest versions
 uv pip install --upgrade -r pyproject.toml
 
-# Generate updated pyproject.toml with new versions
+# restore original file, then write back the newly resolved versions as pins
+mv pyproject.toml.bak pyproject.toml
 uv pip freeze | grep -v '^-e' | while read line; do
   pkg=$(echo "$line" | cut -d'=' -f1)
   ver=$(echo "$line" | cut -d'=' -f3)
   if [ -n "$pkg" ] && [ -n "$ver" ]; then
-    # Update version in pyproject.toml
-    sed -i "s|\"$pkg==.*\"|\"$pkg==$ver\"|g" pyproject.toml
+    # Update version in pyproject.toml, preserving extras like "qrcode[pil]"
+    sed -i -E "s|\"$pkg(\[[^]]*\])?==[^\"]*\"|\"$pkg\1==$ver\"|g" pyproject.toml
   fi
 done
 

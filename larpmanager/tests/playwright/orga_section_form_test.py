@@ -292,13 +292,13 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check does not show on new sign up
     go_to(page, live_server, "/test/register")
-    expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
+    expect(page.get_by_role("rowheader", name="faaaaacc")).not_to_be_visible()
     page.locator('label[for="id_ticket_0"]').click()
     submit_register(page)
 
     # check does not show on sign up
     go_to(page, live_server, "/test/register")
-    expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
+    expect(page.get_by_role("rowheader", name="faaaaacc")).not_to_be_visible()
 
     # assign character
     go_to(page, live_server, "/test/manage/")
@@ -316,7 +316,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     sidebar(page, "Your registration")
     # the registration already exists: unselected tickets start collapsed
     expand_options(page)
-    expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
+    expect(page.get_by_role("rowheader", name="faaaaacc")).to_be_visible()
     # the show/hide options link sits between the tickets and the question description
     expect_normalized(page, page.locator("#register_form"), "ticket (*) standard depends")
     expect_normalized(page, page.locator("#register_form"),
