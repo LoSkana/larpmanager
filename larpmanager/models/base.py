@@ -461,7 +461,7 @@ class Config(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     def __str__(self) -> str:
         """Return string representation."""

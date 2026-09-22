@@ -4895,6 +4895,10 @@ msgstr "Přejdi na casting pro:"
 msgid "How can we contact you"
 msgstr "Jak tě můžeme kontaktovat"
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr "Neplatné CSS: %(error)s"
+
 msgid "Invalid request method"
 msgstr "Neplatná metoda požadavku"
 
@@ -5061,6 +5065,10 @@ msgstr "Postupuj podle následujících kroků:"
 
 msgid "Includes membership fee"
 msgstr "Včetně členského příspěvku"
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr "Neplatné HTML: %(error)s"
 
 msgid "Join the collection for"
 msgstr "Zúčastni se sbírky pro"

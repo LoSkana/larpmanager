@@ -482,7 +482,7 @@ class MemberConfig(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 

@@ -387,7 +387,7 @@ class EventConfig(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="configs")
 
@@ -740,7 +740,7 @@ class RunConfig(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="configs")
 

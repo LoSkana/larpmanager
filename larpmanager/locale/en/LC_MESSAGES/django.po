@@ -2630,6 +2630,14 @@ msgstr ""
 msgid "Select the new event"
 msgstr ""
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr ""
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr ""
+
 msgid "Manage all warehouse items, their containers, tags, and quantities"
 msgstr ""
 

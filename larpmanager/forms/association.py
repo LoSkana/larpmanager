@@ -40,6 +40,7 @@ from larpmanager.forms.utils import (
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
+    validate_css,
 )
 from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
 from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
@@ -331,6 +332,7 @@ class ExeAppearanceForm(BaseModelCssForm):
             "Freely insert CSS commands, they will be reported in all pages  in the space of "
             "your Organization. In this way you can customize freely the appearance.",
         ),
+        validators=[validate_css],
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
