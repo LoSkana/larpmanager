@@ -32,7 +32,10 @@ from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
+from lxml import etree
 from tinymce.widgets import TinyMCE
+from xhtml2pdf.w3c.css import CSSBuilder
+from xhtml2pdf.w3c.cssParser import CSSParseError, CSSParser
 
 from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_event_config
@@ -69,6 +72,29 @@ if TYPE_CHECKING:
 # defer script loaded by form
 
 css_delimeter = "/*@#§*/"
+
+
+def validate_css(value: str) -> None:
+    """Reject invalid CSS (use xhtml2pdf's parser)."""
+    if not value:
+        return
+
+    try:
+        CSSParser(CSSBuilder(mediumSet=["all", "print", "pdf"])).parse(value)
+    except CSSParseError as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+
+
+def validate_html(value: str) -> None:
+    """Reject structurally broken HTML fragments (mismatched/unclosed tags) that would break PDF layout."""
+    if not value:
+        return
+
+    parser = etree.HTMLParser(recover=True)
+    etree.fromstring(f"<div>{value}</div>", parser=parser)
+    errors = [str(err) for err in parser.error_log if err.level_name in ("ERROR", "FATAL")]
+    if errors:
+        raise forms.ValidationError(_("Invalid HTML: %(error)s") % {"error": errors[0]})
 
 
 def render_js(cls: Any) -> list[str]:

@@ -4895,6 +4895,10 @@ msgstr "Μετάβαση στο Casting για:"
 msgid "How can we contact you"
 msgstr "Πώς μπορούμε να επικοινωνήσουμε μαζί σου"
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr "Μη έγκυρο CSS: %(error)s"
+
 msgid "Invalid request method"
 msgstr "Μη έγκυρη μέθοδος αιτήματος"
 
@@ -5061,6 +5065,10 @@ msgstr "Ακολούθησε τα παρακάτω βήματα:"
 
 msgid "Includes membership fee"
 msgstr "Περιλαμβάνει τη συνδρομή μέλους"
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr "Μη έγκυρο HTML: %(error)s"
 
 msgid "Join the collection for"
 msgstr "Συμμετείχε στη συλλογή για"
