@@ -21,7 +21,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, HttpRequest, HttpResponse
+from django.http import FileResponse, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -76,13 +76,20 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Handle form submission for PDF configuration updates
     if request.method == "POST":
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=context["event"])
+        # The settings are saved on every change, to try the generation right away
+        autosave = request.headers.get("x-requested-with") == "XMLHttpRequest"
 
         # Validate and save form data, then redirect to prevent resubmission
         if form.is_valid():
             form.save()
             save_log(context, Event, context["event"], context["event"].uuid)
+            if autosave:
+                return JsonResponse({"res": "ok"})
             messages.success(request, _("Updated!"))
             return redirect(request.path_info)
+
+        if autosave:
+            return JsonResponse({"res": "ko", "errors": form.errors}, status=400)
     else:
         # Initialize form with current event data for GET requests
         form = EventCharactersPdfForm(instance=context["event"])

@@ -423,6 +423,9 @@ msgstr "Rôles"
 msgid "Rules"
 msgstr "Règles"
 
+msgid "Saved"
+msgstr "Enregistré"
+
 msgid "Sheet"
 msgstr "Fiche"
 
@@ -699,6 +702,9 @@ msgstr "Révision"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Enregistrement en cours"
 
 msgid "Search"
 msgstr "Chercher"
@@ -1682,6 +1688,9 @@ msgstr "Symétrique"
 msgid "Text font"
 msgstr "Police du texte"
 
+msgid "Text size"
+msgstr "Taille du texte"
+
 msgid "Tolerance"
 msgstr "Tolérance"
 
@@ -2017,6 +2026,9 @@ msgstr "Couleur du texte"
 
 msgid "Title font"
 msgstr "Police des titres"
+
+msgid "Title size"
+msgstr "Taille des titres"
 
 msgid "To be done"
 msgstr "À faire"
@@ -3415,6 +3427,9 @@ msgstr "Billet sélectionné"
 
 msgid "Send invitation"
 msgstr "Envoyer l'invitation"
+
+msgid "Separator color"
+msgstr "Couleur des séparateurs"
 
 msgid "Show sold count"
 msgstr "Afficher le nombre vendu"
@@ -5692,6 +5707,9 @@ msgstr "Aucune adresse n’a été désabonnée"
 
 msgid "No inventory transfers yet."
 msgstr "Pas encore de transferts."
+
+msgid "Not saved, check the fields"
+msgstr "Non enregistré, vérifie les champs"
 
 msgid "Opted out of communications"
 msgstr "A refusé les communications"
@@ -9724,6 +9742,11 @@ msgstr ""
 "Sélectionne les types d'éléments d'écriture auxquels cette question "
 "s'applique"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr ""
+"Taille de tout le reste du texte, en pourcentage (100 correspond à la taille"
+" standard)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Soumets une nouvelle demande de remboursement de frais personnels pour cet "
@@ -11598,6 +11621,13 @@ msgstr ""
 "l'élément suivant"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Couleur des lignes sous l'en-tête, au-dessus du pied de page et entre les "
+"sections."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12667,6 +12697,13 @@ msgid ""
 msgstr ""
 "Note que les capacités existantes portant le même nom seront remplacées par "
 "les données importées."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Taille du nom du personnage et des titres, en pourcentage (100 correspond à "
+"la taille standard)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

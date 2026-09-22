@@ -423,6 +423,9 @@ msgstr "Roller"
 msgid "Rules"
 msgstr "Regler"
 
+msgid "Saved"
+msgstr "Sparat"
+
 msgid "Sheet"
 msgstr "Ark"
 
@@ -699,6 +702,9 @@ msgstr "Granskning"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Sparar"
 
 msgid "Search"
 msgstr "Sök"
@@ -1682,6 +1688,9 @@ msgstr "Symmetrisk"
 msgid "Text font"
 msgstr "Textteckensnitt"
 
+msgid "Text size"
+msgstr "Textstorlek"
+
 msgid "Tolerance"
 msgstr "Tolerans"
 
@@ -2017,6 +2026,9 @@ msgstr "Textfärg"
 
 msgid "Title font"
 msgstr "Rubrikteckensnitt"
+
+msgid "Title size"
+msgstr "Rubrikstorlek"
 
 msgid "To be done"
 msgstr "Att göra"
@@ -3415,6 +3427,9 @@ msgstr "Vald biljett"
 
 msgid "Send invitation"
 msgstr "Skicka inbjudan"
+
+msgid "Separator color"
+msgstr "Avgränsarfärg"
 
 msgid "Show sold count"
 msgstr "Visa antal sålda"
@@ -5692,6 +5707,9 @@ msgstr "Ingen adress avprenumererades"
 
 msgid "No inventory transfers yet."
 msgstr "Inga överföringar ännu."
+
+msgid "Not saved, check the fields"
+msgstr "Inte sparat, kontrollera fälten"
 
 msgid "Opted out of communications"
 msgstr "Har tackat nej till kommunikation"
@@ -9537,6 +9555,9 @@ msgstr "Nästa betalning: %(quota)s%(currency)s, förväntas inom %(days)s dagar
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Välj de typer av skrivmoment som den här frågan gäller"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr "Storlek på all övrig text, i procent (100 är standardstorleken)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Skicka in en ny ansökan om ersättning för personliga utgifter för detta "
@@ -11267,6 +11288,12 @@ msgstr ""
 "element"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Färg på linjerna under sidhuvudet, ovanför sidfoten och mellan sektionerna."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12328,6 +12355,13 @@ msgid ""
 msgstr ""
 "Observera att befintliga förmågor med samma namn kommer att skrivas över med"
 " den uppladdade datan."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Storlek på karaktärens namn och på rubrikerna, i procent (100 är "
+"standardstorleken)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

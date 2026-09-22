@@ -423,6 +423,9 @@ msgstr "Roolit"
 msgid "Rules"
 msgstr "Säännöt"
 
+msgid "Saved"
+msgstr "Tallennettu"
+
 msgid "Sheet"
 msgstr "Hahmolomake"
 
@@ -699,6 +702,9 @@ msgstr "Tarkistus"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Tallennetaan"
 
 msgid "Search"
 msgstr "Etsi"
@@ -1682,6 +1688,9 @@ msgstr "Symmetrinen"
 msgid "Text font"
 msgstr "Tekstin fontti"
 
+msgid "Text size"
+msgstr "Tekstin koko"
+
 msgid "Tolerance"
 msgstr "Toleranssi"
 
@@ -2017,6 +2026,9 @@ msgstr "Tekstin väri"
 
 msgid "Title font"
 msgstr "Otsikon fontti"
+
+msgid "Title size"
+msgstr "Otsikoiden koko"
 
 msgid "To be done"
 msgstr "Vielä tekemättä"
@@ -3415,6 +3427,9 @@ msgstr "Valittu lippu"
 
 msgid "Send invitation"
 msgstr "Lähetä kutsu"
+
+msgid "Separator color"
+msgstr "Erotinviivojen väri"
 
 msgid "Show sold count"
 msgstr "Näytä myyty määrä"
@@ -5692,6 +5707,9 @@ msgstr "Yhtään osoitetta ei poistettu tilauksesta"
 
 msgid "No inventory transfers yet."
 msgstr "Ei vielä siirtoja."
+
+msgid "Not saved, check the fields"
+msgstr "Ei tallennettu, tarkista kentät"
 
 msgid "Opted out of communications"
 msgstr "Viestinnästä kieltäytynyt"
@@ -9570,6 +9588,9 @@ msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 "Valitse, minkä tyyppisiin kirjallisiin elementteihin tämä kysymys soveltuu"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr "Muun tekstin koko prosentteina (100 on normaali koko)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Lähetä uusi henkilökohtaisten kulujen korvaushakemus tälle tapahtumalle"
@@ -11290,6 +11311,13 @@ msgstr ""
 " seuraavaa kohdetta"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Ylätunnisteen alla, alatunnisteen yllä ja osioiden välissä olevien viivojen "
+"väri."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12341,6 +12369,11 @@ msgid ""
 msgstr ""
 "Huomaa, että olemassa olevat samannimiset taidot korvataan ladatuilla "
 "tiedoilla."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr "Hahmon nimen ja otsikoiden koko prosentteina (100 on normaali koko)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

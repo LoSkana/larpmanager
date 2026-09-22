@@ -190,6 +190,21 @@ class EventCharactersPdfForm(ConfigForm):
             extra_data={"validators": [FileTypeValidator(PDF_FONT_TYPES)]},
         )
 
+        # Sizes of the text, in percent of the standard one
+        self.add_configs(
+            "pdf_size_title",
+            ConfigType.INT,
+            _("Title size"),
+            _("Size of the name of the character, and of the titles, in percent (100 is the standard size)."),
+        )
+
+        self.add_configs(
+            "pdf_size_text",
+            ConfigType.INT,
+            _("Text size"),
+            _("Size of all the other text, in percent (100 is the standard size)."),
+        )
+
         # Colors of the various elements of the sheet
         self.add_configs(
             "pdf_color_title",
@@ -217,6 +232,13 @@ class EventCharactersPdfForm(ConfigForm):
             ConfigType.COLOR,
             _("Highlight color"),
             _("Color of the text in bold."),
+        )
+
+        self.add_configs(
+            "pdf_color_border",
+            ConfigType.COLOR,
+            _("Separator color"),
+            _("Color of the lines under the header, over the footer, and separating the sections."),
         )
 
         # Free CSS code, applied after all the other options, to customize anything else

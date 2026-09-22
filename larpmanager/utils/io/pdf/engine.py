@@ -26,6 +26,7 @@ import re
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote
 
 from django.conf import settings as conf_settings
 from django.core.files.storage import default_storage
@@ -38,7 +39,9 @@ from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageDraw
 from reportlab.lib import pagesizes
 from xhtml2pdf import pisa
+from xhtml2pdf.config.resources import ResourceAccessPolicy
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.miscellanea import Util
 from larpmanager.utils.core.common import get_now
@@ -72,6 +75,9 @@ PDF_CONFIGS = [
     "pdf_color_text",
     "pdf_color_link",
     "pdf_color_bold",
+    "pdf_color_border",
+    "pdf_size_title",
+    "pdf_size_text",
 ]
 
 
@@ -145,6 +151,10 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
     m_url = conf_settings.MEDIA_URL
     m_root = conf_settings.MEDIA_ROOT
 
+    # The URL is quoted, the file name is not: a file uploaded with a space in the
+    # name arrives here as "%20" and would never be found on the filesystem
+    uri = unquote(uri)
+
     # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
         root = Path(m_root)
@@ -167,6 +177,15 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
         return ""
 
     return str(resolved)
+
+
+def _resource_policy() -> ResourceAccessPolicy:
+    """Return the xhtml2pdf policy allowing local reads of media and static files.
+
+    The default policy confines local reads to the working directory, which
+    blocks the uploaded fonts and backgrounds served from the media root.
+    """
+    return ResourceAccessPolicy(extra_roots=(Path(conf_settings.MEDIA_ROOT), Path(conf_settings.STATIC_ROOT)))
 
 
 _REL_IMAGE_SIZE = 400
@@ -230,11 +249,23 @@ _PDF_TEXT_SELECTORS = "html, body, div, p, span, td, th, li"
 _PDF_LINK_SELECTORS = "a"
 _PDF_BOLD_SELECTORS = "b, strong"
 
+# Default size of the text in the generated sheets, in points
+_PDF_BASE_SIZE = 10
+
+# Default size of each title element, as a ratio of the size of the text
+_PDF_TITLE_SCALES = {
+    "#char_name, h1": 1.385,
+    "#char_title, h2": 1.231,
+    ".head, h3": 1.08,
+    "h4, h5, h6": 1.0,
+}
+
 # Points in a centimeter, to convert the margin set in the event configuration
 _PDF_CM = 28.3465
 
-# Vertical space reserved for the header and the footer bands, in points
-_PDF_BAND_HEIGHT = 34
+# Vertical space reserved for the header and the footer bands, in points: the content
+# is drawn at the top of the band, so anything more is left empty under the footer
+_PDF_BAND_HEIGHT = 24
 
 # Space left between the header / footer bands and the content of the page, in points
 _PDF_BAND_GAP = 6
@@ -248,19 +279,31 @@ _PDF_HEADER_HTML = (
     '<td class="pdf-center">{character}</td><td class="pdf-right">{event}</td></tr></table>'
 )
 
-# Content of the automatic footer: event name and page numbers
+# Content of the automatic footer: event name, links of the event and page numbers
 _PDF_FOOTER_HTML = (
-    '<table class="pdf-band"><tr><td class="pdf-left">{event}</td>'
+    '<table class="pdf-band"><tr><td class="pdf-left">{event}</td>{links}'
     '<td class="pdf-right"><pdf:pagenumber> / <pdf:pagecount></td></tr></table>'
 )
 
-# Styling of the automatic header and footer bands
+# Content of the footer when only the links of the event are shown
+_PDF_LINKS_HTML = '<table class="pdf-band"><tr>{links}</tr></table>'
+
+# Color of the separator lines, when the event does not set one: the default of <hr>
+_PDF_BORDER_DEFAULT = "#000000"
+
+# Colors accepted as separator: written in the HTML of every <hr>, so nothing else is allowed
+_PDF_COLOR_RE = re.compile(r"^#[0-9A-Fa-f]{3,8}$")
+
+# Styling of the automatic header and footer bands: their separator line is drawn over
+# the whole width of the frame, so the band is kept inside the margin of the page.
 _PDF_BAND_CSS = (
-    "#header_content, #footer_content { font-size: 80%; }\n"
-    ".pdf-band { width: 100%; }\n"
-    ".pdf-band td.pdf-left { text-align: left; }\n"
-    ".pdf-band td.pdf-center { text-align: center; }\n"
-    ".pdf-band td.pdf-right { text-align: right; }\n"
+    "#header_content, #footer_content {{ font-size: 80%; }}\n"
+    "#header_content {{ border-bottom: 1px solid {border}; padding-bottom: 4pt; }}\n"
+    "#footer_content {{ border-top: 1px solid {border}; padding-top: 4pt; }}\n"
+    ".pdf-band {{ width: 100%; }}\n"
+    ".pdf-band td.pdf-left {{ text-align: left; }}\n"
+    ".pdf-band td.pdf-center {{ text-align: center; }}\n"
+    ".pdf-band td.pdf-right {{ text-align: right; }}\n"
 )
 
 
@@ -273,18 +316,27 @@ def _pdf_margin(value: str) -> float:
     return margin * _PDF_CM
 
 
-def _pdf_frames(configs: dict, width: float, height: float, margin: float) -> dict[str, str]:
+def _pdf_geometry(configs: dict) -> tuple[float, float, float]:
+    """Return the size of the page and its margin, in points.
+
+    The margin is kept sane, so that a large value on a small page still leaves room.
+    """
+    width, height = _PDF_PAGE_SIZES.get(configs.get("pdf_page_size") or "", pagesizes.A4)
+    margin = min(_pdf_margin(configs.get("pdf_margin")), width / 4, height / 4)
+    return width, height, margin
+
+
+def _pdf_frames(bands: dict, width: float, height: float, margin: float) -> dict[str, str]:
     """Build the frame declarations of the @page rule, by frame name.
 
-    The content frame shrinks to leave room for the header and footer bands,
-    that are placed inside the top and bottom margin of the page.
+    The content frame shrinks to leave room for the header and footer bands, that
+    are placed inside the top and bottom margin of the page. The bands keep the
+    width of the content: xhtml2pdf draws their separator line over the whole
+    width of the frame, whatever element the border is declared on.
     """
-    # Keep the margin sane, so that a large value on a small page still leaves room
-    margin = min(margin, width / 4, height / 4)
-
     inner_width = width - 2 * margin
-    top = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if configs.get("pdf_header") else 0)
-    bottom = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if configs.get("pdf_footer") else 0)
+    top = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if bands.get("header") else 0)
+    bottom = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if bands.get("footer") else 0)
 
     frames = {
         "content_frame": (
@@ -293,13 +345,13 @@ def _pdf_frames(configs: dict, width: float, height: float, margin: float) -> di
         ),
     }
 
-    if configs.get("pdf_header"):
+    if bands.get("header"):
         frames["header_frame"] = (
             f"@frame header_frame {{ -pdf-frame-content: header_content; left: {margin:g}pt; "
             f"top: {margin:g}pt; width: {inner_width:g}pt; height: {_PDF_BAND_HEIGHT:g}pt; }}"
         )
 
-    if configs.get("pdf_footer"):
+    if bands.get("footer"):
         frames["footer_frame"] = (
             f"@frame footer_frame {{ -pdf-frame-content: footer_content; left: {margin:g}pt; "
             f"top: {height - margin - _PDF_BAND_HEIGHT:g}pt; "
@@ -309,15 +361,28 @@ def _pdf_frames(configs: dict, width: float, height: float, margin: float) -> di
     return frames
 
 
-def _pdf_page_rule(configs: dict, page_css: str) -> str:
+def _page_rule_end(page_css: str, start: int) -> int | None:
+    """Return the position of the brace closing the @page rule opened at start."""
+    depth = 1
+    for index in range(start, len(page_css)):
+        if page_css[index] == "{":
+            depth += 1
+        elif page_css[index] == "}":
+            depth -= 1
+            if depth == 0:
+                return index
+    return None
+
+
+def _pdf_page_rule(configs: dict, page_css: str, bands: dict) -> str:
     """Build the @page rule with size, background and frames, merged with the custom CSS.
 
     When the custom CSS declares its own @page rule, the generated declarations are
-    added inside it, skipping the ones already written by hand: a second @page rule
-    would replace the first one entirely.
+    added inside it: a second @page rule would replace the first one entirely. The
+    frames are appended at the end of the rule, so that the ones written by hand come
+    first and keep the priority over the generated ones.
     """
-    width, height = _PDF_PAGE_SIZES.get(configs.get("pdf_page_size") or "", pagesizes.A4)
-    margin = _pdf_margin(configs.get("pdf_margin"))
+    width, height, margin = _pdf_geometry(configs)
 
     declarations = []
     if not re.search(r"(?<![\w-])size\s*:", page_css):
@@ -331,19 +396,25 @@ def _pdf_page_rule(configs: dict, page_css: str) -> str:
             f"background-object-position: 0pt 0pt;",
         )
 
-    # Skip the frames already declared by hand, to avoid duplicated frame names
-    for frame_name, frame_rule in _pdf_frames(configs, width, height, margin).items():
-        if frame_name not in page_css:
-            declarations.append(frame_rule)
-
-    generated = " ".join(declarations)
+    frames = list(_pdf_frames(bands, width, height, margin).values())
 
     # Add the declarations to the custom @page rule, if there is one
     match = re.search(r"@page[^{]*\{", page_css)
-    if match:
-        return page_css[: match.end()] + " " + generated + " " + page_css[match.end() :]
+    end = _page_rule_end(page_css, match.end()) if match else None
+    if match and end is not None:
+        return (
+            page_css[: match.end()]
+            + " "
+            + " ".join(declarations)
+            + " "
+            + page_css[match.end() : end].strip()
+            + " "
+            + " ".join(frames)
+            + " "
+            + page_css[end:]
+        )
 
-    return "@page { " + generated + " }\n" + page_css
+    return "@page { " + " ".join(declarations + frames) + " }\n" + page_css
 
 
 def _pdf_fonts_css(configs: dict) -> str:
@@ -364,6 +435,36 @@ def _pdf_fonts_css(configs: dict) -> str:
     return css
 
 
+def _pdf_size(value: Any) -> float | None:
+    """Return the size ratio from the config value, in percent, when it is usable."""
+    try:
+        percent = float(value)
+    except (TypeError, ValueError):
+        return None
+    return percent / 100 if percent > 0 else None
+
+
+def _pdf_sizes_css(configs: dict) -> str:
+    """Build the font size rules for the sizes set in the event configuration.
+
+    The sizes are written in points: a percentage would be applied again by every
+    nested element, so the text of a deep sheet would grow out of the page.
+    """
+    css = ""
+
+    text = _pdf_size(configs.get("pdf_size_text"))
+    if text:
+        css += f"{_PDF_TEXT_SELECTORS} {{ font-size: {_PDF_BASE_SIZE * text:g}pt; }}\n"
+
+    # The titles follow the size of the text, unless they are given one of their own
+    title = _pdf_size(configs.get("pdf_size_title")) or text
+    if title:
+        for selectors, scale in _PDF_TITLE_SCALES.items():
+            css += f"{selectors} {{ font-size: {_PDF_BASE_SIZE * scale * title:g}pt; }}\n"
+
+    return css
+
+
 def _pdf_colors_css(configs: dict) -> str:
     """Build the color rules for the colors set in the event configuration."""
     css = ""
@@ -379,6 +480,35 @@ def _pdf_colors_css(configs: dict) -> str:
     return css
 
 
+def _pdf_border(configs: dict) -> str:
+    """Return the color of the separator lines set in the event configuration."""
+    color = (configs.get("pdf_color_border") or "").strip()
+    return color if _PDF_COLOR_RE.match(color) else _PDF_BORDER_DEFAULT
+
+
+def _pdf_links(context: dict) -> str:
+    """Build the footer cells with the links to the gallery, the website and the event buttons."""
+    if context.get("light_pdf"):
+        return ""
+
+    links = []
+
+    run = context.get("run")
+    main_domain = (context.get("association") or {}).get("main_domain")
+    if run and main_domain:
+        basic = get_run_basic_cache(run.id, context=context)
+        gallery = f"https://{basic['association_slug']}.{main_domain}/{basic['slug']}/{basic['number']}"
+        links.append((_("Gallery"), gallery))
+
+    website = getattr(context.get("event"), "website", "")
+    if website:
+        links.append((_("Website"), website))
+
+    links += [(button[0], button[2]) for button in context.get("buttons", [])]
+
+    return "".join(f'<td class="pdf-center"><a href="{escape(url)}">{escape(name)}</a></td>' for name, url in links)
+
+
 def _pdf_bands(context: dict, configs: dict) -> None:
     """Add to the context the content of the automatic header and footer."""
     sheet_char = context.get("sheet_char") or {}
@@ -392,9 +522,12 @@ def _pdf_bands(context: dict, configs: dict) -> None:
             event=event_name,
         )
 
+    links = _pdf_links(context)
     context["footer_content"] = ""
     if configs.get("pdf_footer"):
-        context["footer_content"] = _PDF_FOOTER_HTML.format(event=event_name)
+        context["footer_content"] = _PDF_FOOTER_HTML.format(event=event_name, links=links)
+    elif links:
+        context["footer_content"] = _PDF_LINKS_HTML.format(links=links)
 
 
 def _add_pdf_style(context: dict) -> None:
@@ -408,13 +541,16 @@ def _add_pdf_style(context: dict) -> None:
     }
 
     _pdf_bands(context, configs)
+    bands = {"header": bool(context["header_content"]), "footer": bool(context["footer_content"])}
+
+    context["pdf_border"] = _pdf_border(configs)
 
     page_css = configs.get("page_css") or ""
-    style = _pdf_fonts_css(configs) + _pdf_colors_css(configs)
-    if configs.get("pdf_header") or configs.get("pdf_footer"):
-        style += _PDF_BAND_CSS
+    style = _pdf_fonts_css(configs) + _pdf_sizes_css(configs) + _pdf_colors_css(configs)
+    if bands["header"] or bands["footer"]:
+        style += _PDF_BAND_CSS.format(border=context["pdf_border"])
 
-    context["page_css"] = style + _pdf_page_rule(configs, page_css)
+    context["page_css"] = style + _pdf_page_rule(configs, page_css, bands)
 
 
 def add_pdf_instructions(context: dict) -> None:
@@ -490,10 +626,20 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         html_content,
     )
 
+    # xhtml2pdf draws every <hr> with the color attribute, ignoring the CSS rules
+    border = context.get("pdf_border")
+    if border and border != _PDF_BORDER_DEFAULT:
+        html_content = re.sub(r"<hr\b(?![^>]*\bcolor=)", f'<hr color="{border}"', html_content)
+
     # Generate PDF file from rendered HTML
     with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
-        pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
+        pdf_result = pisa.CreatePDF(
+            html_content,
+            dest=pdf_file,
+            link_callback=link_callback,
+            resource_policy=_resource_policy(),
+        )
 
         # Check for PDF generation errors; log details, don't leak rendered HTML
         if pdf_result.err:

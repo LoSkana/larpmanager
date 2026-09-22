@@ -423,6 +423,9 @@ msgstr "Rollen"
 msgid "Rules"
 msgstr "Regels"
 
+msgid "Saved"
+msgstr "Opgeslagen"
+
 msgid "Sheet"
 msgstr "Blad"
 
@@ -699,6 +702,9 @@ msgstr "Beoordeling"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Opslaan..."
 
 msgid "Search"
 msgstr "Zoeken"
@@ -1682,6 +1688,9 @@ msgstr "Symmetrisch"
 msgid "Text font"
 msgstr "Tekstlettertype"
 
+msgid "Text size"
+msgstr "Tekstgrootte"
+
 msgid "Tolerance"
 msgstr "Tolerantie"
 
@@ -2017,6 +2026,9 @@ msgstr "Kleur tekst"
 
 msgid "Title font"
 msgstr "Titellettertype"
+
+msgid "Title size"
+msgstr "Titelgrootte"
 
 msgid "To be done"
 msgstr "Nog te doen"
@@ -3415,6 +3427,9 @@ msgstr "Geselecteerd ticket"
 
 msgid "Send invitation"
 msgstr "Uitnodiging versturen"
+
+msgid "Separator color"
+msgstr "Kleur scheidingslijnen"
 
 msgid "Show sold count"
 msgstr "Verkocht aantal tonen"
@@ -5692,6 +5707,9 @@ msgstr "Er is geen adres uitgeschreven"
 
 msgid "No inventory transfers yet."
 msgstr "Nog geen transfers."
+
+msgid "Not saved, check the fields"
+msgstr "Niet opgeslagen, controleer de velden"
 
 msgid "Opted out of communications"
 msgstr "Je hebt je afgemeld voor communicatie"
@@ -9663,6 +9681,10 @@ msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 "Selecteer de soorten schrijfelementen waarop deze vraag van toepassing is"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr ""
+"Grootte van alle overige tekst, in procenten (100 is de standaardgrootte)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Dien een nieuwe aanvraag in voor de vergoeding van persoonlijke onkosten "
@@ -11504,6 +11526,13 @@ msgstr ""
 "wilt bewerken"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Kleur van de lijnen onder de koptekst, boven de voettekst en tussen de "
+"secties."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12572,6 +12601,13 @@ msgid ""
 msgstr ""
 "Merk op dat bestaande vaardigheden met dezelfde naam worden overschreven met"
 " de geüploade gegevens."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Grootte van de naam van het personage en van de titels, in procenten (100 is"
+" de standaardgrootte)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

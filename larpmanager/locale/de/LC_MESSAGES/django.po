@@ -423,6 +423,9 @@ msgstr "Rollen"
 msgid "Rules"
 msgstr "Regeln"
 
+msgid "Saved"
+msgstr "Gespeichert"
+
 msgid "Sheet"
 msgstr "Blatt"
 
@@ -699,6 +702,9 @@ msgstr "Überprüfung"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Speichern..."
 
 msgid "Search"
 msgstr "Suche"
@@ -1682,6 +1688,9 @@ msgstr "Symmetrisch"
 msgid "Text font"
 msgstr "Textschrift"
 
+msgid "Text size"
+msgstr "Textgröße"
+
 msgid "Tolerance"
 msgstr "Toleranz"
 
@@ -2017,6 +2026,9 @@ msgstr "Textfarbe"
 
 msgid "Title font"
 msgstr "Titelschrift"
+
+msgid "Title size"
+msgstr "Titelgröße"
 
 msgid "To be done"
 msgstr "Zu erledigen"
@@ -3415,6 +3427,9 @@ msgstr "Ausgewähltes Ticket"
 
 msgid "Send invitation"
 msgstr "Einladung senden"
+
+msgid "Separator color"
+msgstr "Farbe der Trennlinien"
 
 msgid "Show sold count"
 msgstr "Verkaufszahl anzeigen"
@@ -5692,6 +5707,9 @@ msgstr "Keine Adresse wurde abgemeldet"
 
 msgid "No inventory transfers yet."
 msgstr "Noch keine Transfers."
+
+msgid "Not saved, check the fields"
+msgstr "Nicht gespeichert, überprüfe die Felder"
 
 msgid "Opted out of communications"
 msgstr "Von der Kommunikation abgemeldet"
@@ -9743,6 +9761,9 @@ msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 "Wähle die Arten von Schriftelementen aus, auf die diese Frage zutrifft"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr "Größe des restlichen Texts in Prozent (100 ist die Standardgröße)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Reiche einen neuen Antrag auf Erstattung persönlicher Ausgaben für diese "
@@ -11625,6 +11646,13 @@ msgstr ""
 "bearbeiten möchtest"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Farbe der Linien unter der Kopfzeile, über der Fußzeile und zwischen den "
+"Abschnitten."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12696,6 +12724,13 @@ msgid ""
 msgstr ""
 "Beachte, dass bestehende Fähigkeiten mit demselben Namen mit den "
 "hochgeladenen Daten überschrieben werden."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Größe des Charakternamens und der Titel in Prozent (100 ist die "
+"Standardgröße)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

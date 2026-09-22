@@ -423,6 +423,9 @@ msgstr "Role"
 msgid "Rules"
 msgstr "Pravidla"
 
+msgid "Saved"
+msgstr "Uloženo"
+
 msgid "Sheet"
 msgstr "List"
 
@@ -699,6 +702,9 @@ msgstr "Přezkoumání"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Ukládání"
 
 msgid "Search"
 msgstr "Hledat"
@@ -1682,6 +1688,9 @@ msgstr "Symetrický"
 msgid "Text font"
 msgstr "Font textu"
 
+msgid "Text size"
+msgstr "Velikost textu"
+
 msgid "Tolerance"
 msgstr "Tolerance"
 
@@ -2017,6 +2026,9 @@ msgstr "Barva textu"
 
 msgid "Title font"
 msgstr "Font titulků"
+
+msgid "Title size"
+msgstr "Velikost nadpisů"
 
 msgid "To be done"
 msgstr "Ke splnění"
@@ -3415,6 +3427,9 @@ msgstr "Vybraná vstupenka"
 
 msgid "Send invitation"
 msgstr "Odeslat pozvánku"
+
+msgid "Separator color"
+msgstr "Barva oddělovačů"
 
 msgid "Show sold count"
 msgstr "Zobrazit počet prodaných"
@@ -5692,6 +5707,9 @@ msgstr "Žádná adresa nebyla odhlášena"
 
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
+
+msgid "Not saved, check the fields"
+msgstr "Neuloženo, zkontroluj pole"
 
 msgid "Opted out of communications"
 msgstr "Odhlásil(a) ses z komunikace"
@@ -9495,6 +9513,11 @@ msgstr "Příští platba: %(quota)s%(currency)s, očekává se do %(days)s dnů
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Vyber typy prvků psaní, kterých se tato otázka týká"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr ""
+"Velikost veškerého ostatního textu v procentech (100 je standardní "
+"velikost)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Podat novou žádost o proplacení osobních výdajů v souvislosti s touto akcí"
@@ -11125,6 +11148,11 @@ msgid ""
 msgstr "Pokud chceš po odeslání formuláře upravit další prvek, klikni zde"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr "Barva čar pod záhlavím, nad zápatím a mezi sekcemi."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12160,6 +12188,12 @@ msgid ""
 msgstr ""
 "Všimni si, že existující schopnosti se stejným názvem budou přepsány "
 "nahranými daty."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Velikost jména postavy a nadpisů v procentech (100 je standardní velikost)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
