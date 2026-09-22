@@ -9584,6 +9584,10 @@ msgstr ""
 "Indien ingeschakeld, worden er geen credits gebruikt in de inschrijvingen "
 "voor dit evenement."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Ongeldige CSS: onverwachte '}' die een blok sluit dat nooit geopend is."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Geeft medewerkers toegang tot de Safety-informatie die deelnemers hebben "

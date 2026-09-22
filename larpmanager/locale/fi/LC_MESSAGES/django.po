@@ -9494,6 +9494,10 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Jos käytössä, tämän tapahtuman ilmoittautumisissa ei käytetä krediittejä."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Virheellinen CSS: odottamaton '}' sulkee lohkon, jota ei ole koskaan avattu."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr "Henkilöstö pääsee käsiksi osallistujien toimittamiin Safety-tietoihin"
 

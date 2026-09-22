@@ -74,16 +74,50 @@ if TYPE_CHECKING:
 css_delimeter = "/*@#§*/"
 
 
+def _find_stray_closing_brace(value: str) -> bool:
+    """Return True if the CSS has a '}' with no matching '{', ignoring comments and strings."""
+    depth = 0
+    index = 0
+    length = len(value)
+    while index < length:
+        char = value[index]
+        if char == "/" and value.startswith("/*", index):
+            end = value.find("*/", index + 2)
+            index = length if end == -1 else end + 2
+            continue
+        if char in {'"', "'"}:
+            index += 1
+            while index < length and value[index] != char:
+                # a backslash escapes the next character, quote included
+                index += 2 if value[index] == "\\" else 1
+            index += 1
+            continue
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth < 0:
+                return True
+        index += 1
+    return False
+
+
 def validate_css(value: str) -> None:
-    """Reject invalid CSS (use xhtml2pdf's own parser, since PDF-specific at-rules like @frame need its context)."""
+    """Reject invalid CSS (use xhtml2pdf's own parser, which understands PDF at-rules like @page/@frame)."""
     if not value:
         return
 
-    context = pisaContext()
+    # xhtml2pdf's parser loops forever on a '}' that closes nothing, so reject those first
+    if _find_stray_closing_brace(value):
+        raise forms.ValidationError(_("Invalid CSS: unexpected '}' closing a block that was never opened."))
+
+    context = pisaContext("")
     context.parseCSS()
     try:
         context.cssParser.parse(value)
     except CSSParseError as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+    except Exception as exc:
         raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
 
 

@@ -9644,6 +9644,10 @@ msgstr ""
 "Αν ενεργοποιηθεί, δεν θα χρησιμοποιούνται credits στις εγγραφές αυτού του "
 "event."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Μη έγκυρο CSS: μη αναμενόμενο '}' που κλείνει ένα μπλοκ που δεν άνοιξε ποτέ."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Επιτρέπει στο προσωπικό να έχει πρόσβαση στις πληροφορίες Safety που "

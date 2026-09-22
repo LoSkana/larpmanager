@@ -9665,6 +9665,11 @@ msgstr ""
 "Wenn aktiviert, werden bei den Anmeldungen zu diesem Event keine Credits "
 "verwendet."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Ungültiges CSS: unerwartete '}' schliesst einen Block, der nie geöffnet "
+"wurde."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Ermöglicht dem Personal den Zugriff auf die von den Teilnehmern "
