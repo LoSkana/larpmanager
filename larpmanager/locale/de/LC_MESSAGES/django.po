@@ -592,6 +592,9 @@ msgstr "Leitfaden:"
 msgid "Guilds"
 msgstr "Gilden"
 
+msgid "Header"
+msgstr "Kopfzeile"
+
 msgid "Hidden"
 msgstr "Versteckt"
 
@@ -609,6 +612,9 @@ msgstr "Beigetreten"
 
 msgid "Labels"
 msgstr "Etiketten"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Geladen"
@@ -1565,6 +1571,9 @@ msgstr "Operation"
 msgid "Organizer"
 msgstr "Veranstalter"
 
+msgid "Page size"
+msgstr "Seitengroesse"
+
 msgid "Payments:"
 msgstr "Zahlungen:"
 
@@ -1669,6 +1678,9 @@ msgstr "Aufpreis"
 
 msgid "Symmetric"
 msgstr "Symmetrisch"
+
+msgid "Text font"
+msgstr "Textschrift"
 
 msgid "Tolerance"
 msgstr "Toleranz"
@@ -2003,6 +2015,9 @@ msgstr "Zuschläge"
 msgid "Text color"
 msgstr "Textfarbe"
 
+msgid "Title font"
+msgstr "Titelschrift"
+
 msgid "To be done"
 msgstr "Zu erledigen"
 
@@ -2147,17 +2162,11 @@ msgstr "Steueridentifikationsnummer"
 msgid "Flags types"
 msgstr "Flag-Typen"
 
-msgid "Footer HTML"
-msgstr "HTML-Fußzeile"
-
 msgid "Gallery Pdf"
 msgstr "PDF-Galerie"
 
 msgid "Guild cover"
 msgstr "Gilden-Cover"
-
-msgid "Header HTML"
-msgstr "HTML-Kopfzeile"
 
 msgid "In Progress"
 msgstr "In Arbeit"
@@ -2212,6 +2221,9 @@ msgstr "Nicht gescannt"
 
 msgid "Outstanding"
 msgstr "Ausstehend"
+
+msgid "Page margin"
+msgstr "Seitenrand"
 
 msgid "Participant"
 msgstr "Teilnehmer"
@@ -2309,6 +2321,9 @@ msgstr "Vorschläge"
 msgid "Ticket list"
 msgstr "Ticket-Liste"
 
+msgid "Title color"
+msgstr "Titelfarbe"
+
 msgid "Total costs"
 msgstr "Gesamtkosten"
 
@@ -2341,6 +2356,12 @@ msgstr "Deine Veranstaltungen"
 
 msgid "collections"
 msgstr "Geldsammlungen"
+
+msgid "A4 landscape"
+msgstr "A4 quer"
+
+msgid "A5 landscape"
+msgstr "A5 quer"
 
 msgid "Ability type"
 msgstr "Art der Fertigkeit"
@@ -3560,6 +3581,9 @@ msgstr "Senden in Intervallen"
 msgid "Item assignments"
 msgstr "Artikelzuweisungen"
 
+msgid "Letter landscape"
+msgstr "Letter quer"
+
 msgid "Lite Mode active"
 msgstr "Lite-Modus aktiv"
 
@@ -4288,6 +4312,9 @@ msgstr "Zugewiesene Charaktere"
 
 msgid "Characters shortcut"
 msgstr "Verknüpfung zu Charakteren"
+
+msgid "Color of the links."
+msgstr "Farbe der Links."
 
 msgid "Confirm Unsubscribe"
 msgstr "Abmeldung bestätigen"
@@ -5485,6 +5512,9 @@ msgstr "Wähle das Zahlungsmittel:"
 msgid "City or place of the event"
 msgstr "Stadt oder Ort der Veranstaltung"
 
+msgid "Color of the text in bold."
+msgstr "Farbe des fetten Textes."
+
 msgid "Configure the debrief form"
 msgstr "Debriefing-Formular konfigurieren"
 
@@ -5729,6 +5759,9 @@ msgstr "Bring einen Freund zu %(event)s mit!"
 msgid "Characters not participating"
 msgstr "Nicht teilnehmend"
 
+msgid "Color of all the other text."
+msgstr "Farbe des gesamten übrigen Textes."
+
 msgid "Cover photo fo the character"
 msgstr "Coverbild des Charakters"
 
@@ -5896,12 +5929,6 @@ msgstr "Öffnung der Registrierungen nicht festgelegt"
 msgid "Result of the bulk email send"
 msgstr "Ergebnis des Massen-E-Mail-Versands"
 
-msgid "The HTML code for the footer."
-msgstr "Der HTML-Code für die Fußzeile."
-
-msgid "The HTML code for the header."
-msgstr "Der HTML-Code für die Kopfzeile."
-
 msgid "The date when this event ends"
 msgstr "Das Datum, an dem dieses Ereignis endet"
 
@@ -5964,6 +5991,9 @@ msgstr "Dauer: %(duration)s Sekunden"
 
 msgid "Enter your level of experience"
 msgstr "Gib dein Erfahrungsniveau ein"
+
+msgid "Format of the generated pages."
+msgstr "Format der erzeugten Seiten."
 
 msgid "If selected, members can vote."
 msgstr "Wenn ausgewählt, können Mitglieder abstimmen."
@@ -7686,6 +7716,9 @@ msgstr "Gib ein, wie die Ausgaben im Budget zugeordnet werden"
 msgid "Extra price applied when this quota is active"
 msgstr "Aufpreis, wenn diese Quote aktiv ist"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Gib eine Anzahl von Zentimetern ein, zum Beispiel 2 oder 1.5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Verwalte Badges und weise sie Teilnehmenden zu"
 
@@ -7760,6 +7793,9 @@ msgstr "Stornierung bei fehlendem Jahresbeitrag"
 msgid "Complete the checklist to unlock all features:"
 msgstr ""
 "Fülle die Checkliste aus, um alle Funktionen der Plattform freizuschalten:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr "Schriftdatei (TTF) für den gesamten übrigen Text."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hinweis: Die richtigen Antworten auf diese Frage sind"
@@ -8481,6 +8517,9 @@ msgstr ""
 "Ein einprägsamer kurzer Satz oder Slogan zur Beschreibung deiner "
 "Veranstaltung"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Farbe des Namens des Charakters und der Titel."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Konfiguriere mindestens eine Zahlungsmethode für Teilnehmer"
 
@@ -8788,6 +8827,9 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 "Kontaktiere die Organisatoren, wenn du später einen neuen Zugangslink "
 "benötigst"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr "Freier Rand an jeder Seite der Seite, in Zentimetern."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
@@ -9255,6 +9297,10 @@ msgid "If you encounter any issues, please contact us for assistance."
 msgstr ""
 "Sollten Probleme auftreten, wende dich bitte an uns, damit wir dir helfen "
 "können."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr ""
+"Bild, das als Hintergrund eingesetzt wird und die ganze Seite ausfüllt."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Verwalte Pool-Labels zum Gruppieren von Pools in Charakterinventaren"
@@ -10191,6 +10237,10 @@ msgstr ""
 "Auswahlmöglichkeiten."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr "Zeige unten auf jeder Seite den Namen des Events und die Seitenzahl."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr "Der Rabattwert; er wird von der gesamten Anmeldegebühr abgezogen"
 
@@ -10279,6 +10329,10 @@ msgid ""
 msgstr ""
 "Bearbeite die Daten, den Status und die Anmeldeeinstellungen für diese "
 "Veranstaltungssitzung"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr "Schriftdatei (TTF) für den Namen des Charakters und für die Titel."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -12378,6 +12432,13 @@ msgid ""
 msgstr ""
 "Bitte sei vorsichtig, wenn du diese Schritte ausführst - andernfalls wird "
 "deine Zahlung nicht bearbeitet!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Zeige oben auf jeder Seite den Namen der Organisation, des Charakters und "
+"des Events."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

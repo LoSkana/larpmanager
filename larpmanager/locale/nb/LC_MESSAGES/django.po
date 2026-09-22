@@ -592,6 +592,9 @@ msgstr "Veiledning:"
 msgid "Guilds"
 msgstr "Gilder"
 
+msgid "Header"
+msgstr "Topptekst"
+
 msgid "Hidden"
 msgstr "Skjult"
 
@@ -609,6 +612,9 @@ msgstr "Ble med"
 
 msgid "Labels"
 msgstr "Etiketter"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Lastet"
@@ -1565,6 +1571,9 @@ msgstr "Operasjon"
 msgid "Organizer"
 msgstr "Arrangør"
 
+msgid "Page size"
+msgstr "Sidestørrelse"
+
 msgid "Payments:"
 msgstr "Betalinger:"
 
@@ -1669,6 +1678,9 @@ msgstr "Tilleggsavgift"
 
 msgid "Symmetric"
 msgstr "Symmetrisk"
+
+msgid "Text font"
+msgstr "Tekstfont"
 
 msgid "Tolerance"
 msgstr "Toleranse"
@@ -2003,6 +2015,9 @@ msgstr "Tilleggsavgifter"
 msgid "Text color"
 msgstr "Tekstfarge"
 
+msgid "Title font"
+msgstr "Tittelfont"
+
 msgid "To be done"
 msgstr "Skal fullføres"
 
@@ -2147,17 +2162,11 @@ msgstr "Skatteidentifikasjonsnummer"
 msgid "Flags types"
 msgstr "Flaggtyper"
 
-msgid "Footer HTML"
-msgstr "HTML-fottekst"
-
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
 msgid "Guild cover"
 msgstr "Gildeomslag"
-
-msgid "Header HTML"
-msgstr "HTML-overskrift"
 
 msgid "In Progress"
 msgstr "Pågående"
@@ -2212,6 +2221,9 @@ msgstr "Ikke skannet"
 
 msgid "Outstanding"
 msgstr "Utestående"
+
+msgid "Page margin"
+msgstr "Sidemarg"
 
 msgid "Participant"
 msgstr "Deltaker"
@@ -2309,6 +2321,9 @@ msgstr "Forslag"
 msgid "Ticket list"
 msgstr "Billettliste"
 
+msgid "Title color"
+msgstr "Tittelfarge"
+
 msgid "Total costs"
 msgstr "Totale kostnader"
 
@@ -2341,6 +2356,12 @@ msgstr "Dine arrangementer"
 
 msgid "collections"
 msgstr "innsamlinger"
+
+msgid "A4 landscape"
+msgstr "A4 liggende"
+
+msgid "A5 landscape"
+msgstr "A5 liggende"
 
 msgid "Ability type"
 msgstr "Ferdighetstype"
@@ -3560,6 +3581,9 @@ msgstr "Intervallsending"
 msgid "Item assignments"
 msgstr "Tildeling av varer"
 
+msgid "Letter landscape"
+msgstr "Letter liggende"
+
 msgid "Lite Mode active"
 msgstr "Lite-modus aktiv"
 
@@ -4288,6 +4312,9 @@ msgstr "Tildelte karakterer"
 
 msgid "Characters shortcut"
 msgstr "Snarvei for karakterer"
+
+msgid "Color of the links."
+msgstr "Farge på lenkene."
 
 msgid "Confirm Unsubscribe"
 msgstr "Bekreft avmelding"
@@ -5485,6 +5512,9 @@ msgstr "Velg betalingsmåte:"
 msgid "City or place of the event"
 msgstr "By eller sted for arrangementet"
 
+msgid "Color of the text in bold."
+msgstr "Farge på tekst i fet skrift."
+
 msgid "Configure the debrief form"
 msgstr "Konfigurer debriefskjemaet"
 
@@ -5729,6 +5759,9 @@ msgstr "Ta med en venn til %(event)s!"
 msgid "Characters not participating"
 msgstr "Karakterer som ikke deltar"
 
+msgid "Color of all the other text."
+msgstr "Farge på all annen tekst."
+
 msgid "Cover photo fo the character"
 msgstr "Forsidebilde av karakteren"
 
@@ -5896,12 +5929,6 @@ msgstr "Registreringsåpning ikke satt"
 msgid "Result of the bulk email send"
 msgstr "Resultat av masseutsendelsen av e-post"
 
-msgid "The HTML code for the footer."
-msgstr "HTML-koden for bunnteksten."
-
-msgid "The HTML code for the header."
-msgstr "HTML-koden for toppteksten."
-
 msgid "The date when this event ends"
 msgstr "Datoen da denne hendelsen avsluttes"
 
@@ -5964,6 +5991,9 @@ msgstr "Varighet: %(duration)s sekunder"
 
 msgid "Enter your level of experience"
 msgstr "Oppgi erfaringsnivået ditt"
+
+msgid "Format of the generated pages."
+msgstr "Format på sidene som genereres."
 
 msgid "If selected, members can vote."
 msgstr "Hvis valgt, kan medlemmer stemme."
@@ -7684,6 +7714,9 @@ msgstr "Angi hvordan utgiftene fordeles i budsjettet"
 msgid "Extra price applied when this quota is active"
 msgstr "Ekstra pris gjelder når denne kvoten er aktiv"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Skriv inn antall centimeter, for eksempel 2 eller 1,5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Administrer badges og tildel dem til deltakere"
 
@@ -7757,6 +7790,9 @@ msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 
 msgid "Complete the checklist to unlock all features:"
 msgstr "Fullfør sjekklisten for å låse opp alle funksjoner:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr "Fontfil (TTF) som brukes på all annen tekst."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De riktige svarene på dette spørsmålet er"
@@ -8442,6 +8478,9 @@ msgid "A catchy short phrase or slogan to describe your event"
 msgstr ""
 "En fengende kort setning eller et slagord for å beskrive arrangementet ditt"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Farge på navnet til karakteren og på titlene."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Konfigurer minst én betalingsmetode for deltakerne"
 
@@ -8725,6 +8764,9 @@ msgstr ""
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Kontakt arrangørene hvis du trenger en ny tilgangslink senere"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr "Tomrom som blir igjen på hver side av siden, i centimeter."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr "Feil ved opplasting av bilde. Prøv på nytt, eller bruk en mindre fil."
@@ -9132,6 +9174,9 @@ msgstr "Hvis aktivert, vises spillerens navn ved siden av karakteren."
 msgid "If you encounter any issues, please contact us for assistance."
 msgstr ""
 "Hvis du støter på problemer, kan du gjerne kontakte oss for å få hjelp."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr "Bilde som brukes som bakgrunn, utvidet til å dekke hele siden."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
@@ -9946,6 +9991,10 @@ msgstr ""
 "Velg et gyldig valg. Dette valget er ikke et av de tilgjengelige valgene."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr "Vis navnet på arrangementet og sidetallet nederst på hver side."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr "Rabattverdien; den trekkes fra den totale påmeldingsavgiften"
 
@@ -10025,6 +10074,10 @@ msgid ""
 msgstr ""
 "Rediger datoene, statusen og registreringsinnstillingene for denne "
 "arrangementsøkten"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr "Fontfil (TTF) som brukes på navnet til karakteren og på titlene."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -12033,6 +12086,13 @@ msgid ""
 msgstr ""
 "Vær forsiktig når du utfører disse trinnene - ellers vil betalingen din ikke"
 " bli behandlet!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Vis navnet på organisasjonen, karakteren og arrangementet øverst på hver "
+"side."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

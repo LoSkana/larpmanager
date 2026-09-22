@@ -592,6 +592,9 @@ msgstr "Opas:"
 msgid "Guilds"
 msgstr "Killat"
 
+msgid "Header"
+msgstr "Ylatunniste"
+
 msgid "Hidden"
 msgstr "Piilotettu"
 
@@ -609,6 +612,9 @@ msgstr "Liittynyt"
 
 msgid "Labels"
 msgstr "Tunnisteet"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Ladattu"
@@ -1565,6 +1571,9 @@ msgstr "Operaatio"
 msgid "Organizer"
 msgstr "Järjestäjä"
 
+msgid "Page size"
+msgstr "Sivukoko"
+
 msgid "Payments:"
 msgstr "Maksut:"
 
@@ -1669,6 +1678,9 @@ msgstr "Lisämaksu"
 
 msgid "Symmetric"
 msgstr "Symmetrinen"
+
+msgid "Text font"
+msgstr "Tekstin fontti"
 
 msgid "Tolerance"
 msgstr "Toleranssi"
@@ -2003,6 +2015,9 @@ msgstr "Lisämaksut"
 msgid "Text color"
 msgstr "Tekstin väri"
 
+msgid "Title font"
+msgstr "Otsikon fontti"
+
 msgid "To be done"
 msgstr "Vielä tekemättä"
 
@@ -2147,17 +2162,11 @@ msgstr "Verotunnus"
 msgid "Flags types"
 msgstr "Merkintätyypit"
 
-msgid "Footer HTML"
-msgstr "Alatunnisteen HTML-koodi"
-
 msgid "Gallery Pdf"
 msgstr "Galleria Pdf"
 
 msgid "Guild cover"
 msgstr "Killan kansikuva"
-
-msgid "Header HTML"
-msgstr "HTML-otsikko"
 
 msgid "In Progress"
 msgstr "Käynnissä"
@@ -2212,6 +2221,9 @@ msgstr "Ei skannattu"
 
 msgid "Outstanding"
 msgstr "Puuttuu"
+
+msgid "Page margin"
+msgstr "Sivun marginaali"
 
 msgid "Participant"
 msgstr "Osallistuja"
@@ -2309,6 +2321,9 @@ msgstr "Ehdotukset"
 msgid "Ticket list"
 msgstr "Lippuluettelo"
 
+msgid "Title color"
+msgstr "Otsikon vari"
+
 msgid "Total costs"
 msgstr "Kustannukset yhteensä"
 
@@ -2341,6 +2356,12 @@ msgstr "Tapahtumasi"
 
 msgid "collections"
 msgstr "keräykset"
+
+msgid "A4 landscape"
+msgstr "A4 vaaka"
+
+msgid "A5 landscape"
+msgstr "A5 vaaka"
 
 msgid "Ability type"
 msgstr "Taidon tyyppi"
@@ -3560,6 +3581,9 @@ msgstr "Intervallilähetys"
 msgid "Item assignments"
 msgstr "Kohteiden määritykset"
 
+msgid "Letter landscape"
+msgstr "Letter vaaka"
+
 msgid "Lite Mode active"
 msgstr "Lite-tila aktiivinen"
 
@@ -4288,6 +4312,9 @@ msgstr "Määritetyt hahmot"
 
 msgid "Characters shortcut"
 msgstr "Hahmojen pikavalinta"
+
+msgid "Color of the links."
+msgstr "Linkkien vari."
 
 msgid "Confirm Unsubscribe"
 msgstr "Vahvista tilauksen peruuttaminen"
@@ -5485,6 +5512,9 @@ msgstr "Valitse maksutapa:"
 msgid "City or place of the event"
 msgstr "Tapahtuman kaupunki tai paikka"
 
+msgid "Color of the text in bold."
+msgstr "Lihavoidun tekstin vari."
+
 msgid "Configure the debrief form"
 msgstr "Määritä jälkipuintilomake"
 
@@ -5729,6 +5759,9 @@ msgstr "Tuo ystävä tapahtumaan %(event)s!"
 msgid "Characters not participating"
 msgstr "Eivät osallistu"
 
+msgid "Color of all the other text."
+msgstr "Kaiken muun tekstin vari."
+
 msgid "Cover photo fo the character"
 msgstr "Hahmon kansikuva"
 
@@ -5896,12 +5929,6 @@ msgstr "Ilmoittautumisen avauspäivää ei ole määritetty"
 msgid "Result of the bulk email send"
 msgstr "Massapostituksen tulos"
 
-msgid "The HTML code for the footer."
-msgstr "Alatunnisteen HTML-koodi."
-
-msgid "The HTML code for the header."
-msgstr "Otsakkeen HTML-koodi."
-
 msgid "The date when this event ends"
 msgstr "Päivämäärä, jolloin tämä tapahtuma päättyy"
 
@@ -5964,6 +5991,9 @@ msgstr "Kesto: %(duration)s sekuntia"
 
 msgid "Enter your level of experience"
 msgstr "Anna kokemustasosi"
+
+msgid "Format of the generated pages."
+msgstr "Luotujen sivujen muoto."
 
 msgid "If selected, members can vote."
 msgstr "Jos valittu, jäsenet voivat äänestää."
@@ -7683,6 +7713,9 @@ msgstr "Syötä, miten menot kohdennetaan budjetissa"
 msgid "Extra price applied when this quota is active"
 msgstr "Lisähintaa sovelletaan, kun tämä kiintiö on aktiivinen"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Syota senttimetrien maara, kuten 2 tai 1.5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Hallitse badgeja ja myönnä niitä osallistujille"
 
@@ -7756,6 +7789,9 @@ msgstr "Peruuttaminen puuttuvan vuosittaisen jäsenmaksun vuoksi"
 
 msgid "Complete the checklist to unlock all features:"
 msgstr "Täytä tarkistuslista avataksesi kaikki ominaisuudet:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr "Fonttitiedosto (TTF), jota kaytetaan kaikkeen muuhun tekstiin."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
@@ -8446,6 +8482,9 @@ msgstr "(Valinnainen) Edellytettyjen kykyjen nimet pilkulla eroteltuina"
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Tarttuva lyhyt lause tai iskulause, joka kuvaa tapahtumaasi"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Hahmon nimen ja otsikoiden vari."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Määritä vähintään yksi maksutapa osallistujille"
 
@@ -8729,6 +8768,9 @@ msgstr "Voit kopioida minkä tahansa elementin suoraan toisesta tapahtumasta"
 
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Ota yhteyttä järjestäjiin, jos tarvitset uuden linkin myöhemmin"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr "Sivun jokaiselle sivulle jaava tyhja tila senttimetreina."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
@@ -9142,6 +9184,9 @@ msgstr "Jos käytössä, pelaajan nimi näytetään hänen hahmonsa vieressä."
 
 msgid "If you encounter any issues, please contact us for assistance."
 msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr "Kuva, jota kaytetaan taustana ja joka laajennetaan koko sivulle."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Hallitse pool-tunnisteita poolien ryhmittelyyn hahmoinventaarioissa"
@@ -9965,6 +10010,10 @@ msgstr ""
 " vaihtoehdoista."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr "Nayta jokaisen sivun alareunassa tapahtuman nimi ja sivunumero."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr "Alennuksen arvo; se vähennetään rekisteröintimaksun kokonaismäärästä"
 
@@ -10043,6 +10092,10 @@ msgid ""
 msgstr ""
 "Muokkaa tämän tapahtuman istunnon päivämääriä, tilaa ja "
 "rekisteröintiasetuksia"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr "Fonttitiedosto (TTF), jota kaytetaan hahmon nimeen ja otsikoihin."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -12027,6 +12080,12 @@ msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed!"
 msgstr "Suorita nämä vaiheet huolellisesti - muutoin maksuasi ei käsitellä!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Nayta jokaisen sivun ylareunassa organisaation, hahmon ja tapahtuman nimi."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

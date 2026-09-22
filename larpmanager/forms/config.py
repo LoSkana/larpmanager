@@ -24,13 +24,17 @@ from abc import abstractmethod
 from enum import IntEnum
 from typing import TYPE_CHECKING, Any
 
+from colorfield.forms import ColorField as ColorFormField
 from django import forms
+from django.core.files.storage import default_storage
 from django.forms import Textarea
-from django.utils.html import escape, format_html_join
+from django.utils.html import escape, format_html, format_html_join
 
 from larpmanager.cache.config import reset_element_configs, save_all_element_configs
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import AssociationMemberS2WidgetMulti, CSRFTinyMCE, get_members_queryset
+from larpmanager.models.utils import display_filename, generate_id
+from larpmanager.utils.security import normalize_filename
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -47,6 +51,8 @@ class ConfigType(IntEnum):
     MEMBERS = 6
     MULTI_BOOL = 7
     CHOICE = 8
+    FILE = 9
+    COLOR = 10
 
 
 class MultiCheckboxWidget(forms.CheckboxSelectMultiple):
@@ -269,6 +275,10 @@ class ConfigForm(BaseModelForm):
         if field_value is None:
             return
 
+        if field_definition["type"] == ConfigType.FILE:
+            result_dict[field_key] = self._store_config_file(field_value)
+            return
+
         if field_definition["type"] == ConfigType.MEMBERS:
             field_value = ",".join([str(member.id) for member in field_value])
         else:
@@ -276,6 +286,32 @@ class ConfigForm(BaseModelForm):
             field_value = field_value.replace(r"//", r"/")
 
         result_dict[field_key] = field_value
+
+    @staticmethod
+    def _store_config_file(field_value: Any) -> str:
+        """Store an uploaded config file and return its storage path.
+
+        Args:
+            field_value: Uploaded file, the previously stored path when unchanged,
+                or a falsy value when the file was cleared.
+
+        Returns:
+            Storage path of the file, empty string when cleared.
+
+        """
+        # File cleared by the user
+        if not field_value:
+            return ""
+
+        # Unchanged: the field echoed back the stored path
+        if isinstance(field_value, str):
+            return field_value
+
+        # New upload: save it on the default storage
+        return default_storage.save(
+            f"element_config/{generate_id(16)}_{normalize_filename(field_value.name)}",
+            field_value,
+        )
 
     @staticmethod
     def _get_form_field(field_type: ConfigType, label: str, help_text: str, extra: Any = None) -> forms.Field | None:
@@ -343,6 +379,16 @@ class ConfigForm(BaseModelForm):
                 required=False,
                 help_text=help_text,
             ),
+            # File upload field, whose storage path is kept in the config value
+            ConfigType.FILE: lambda: forms.FileField(
+                label=label,
+                help_text=help_text,
+                required=False,
+                widget=forms.ClearableFileInput(),
+                validators=extra.get("validators", []) if isinstance(extra, dict) else [],
+            ),
+            # Color picker field, empty when no color is chosen
+            ConfigType.COLOR: lambda: ColorFormField(label=label, help_text=help_text, required=False),
             # Dropdown select field for single choice from a list
             ConfigType.CHOICE: lambda: forms.ChoiceField(
                 label=label,
@@ -387,12 +433,28 @@ class ConfigForm(BaseModelForm):
         extra_config = (
             config["extra"]
             if field_type
-            in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR, ConfigType.CHOICE, ConfigType.TEXTAREA]
+            in [
+                ConfigType.MEMBERS,
+                ConfigType.MULTI_BOOL,
+                ConfigType.CHAR,
+                ConfigType.CHOICE,
+                ConfigType.TEXTAREA,
+                ConfigType.FILE,
+            ]
             else None
         )
 
         # Create and add the form field
         self.fields[field_key] = self._get_form_field(field_type, config["label"], config["help_text"], extra_config)
+
+        # Show a link to the currently stored file
+        if field_type == ConfigType.FILE and initial_value:
+            self.fields[field_key].help_text = format_html(
+                '{} <a href="{}" target="_blank">{}</a>',
+                config["help_text"],
+                default_storage.url(initial_value),
+                display_filename(initial_value),
+            )
 
         # Configure widget for MEMBERS field type
         if field_type == ConfigType.MEMBERS:

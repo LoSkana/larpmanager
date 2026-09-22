@@ -25,6 +25,7 @@ from typing import Any, ClassVar
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
@@ -55,7 +56,6 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
     validate_css,
-    validate_html,
 )
 from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.access import EventPermission, EventRole, RoleInvite
@@ -84,6 +84,7 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.copy_class import copy_class
+from larpmanager.utils.core.validators import FileTypeValidator
 from larpmanager.utils.publication.ildb import (
     PromotionAccommodation,
     PromotionAccommodationType,
@@ -116,47 +117,115 @@ class EventCharactersPdfForm(ConfigForm):
     def set_configs(self) -> None:
         """Configure PDF-related settings for the application.
 
-        Sets up the PDF configuration section and adds various configuration
-        options including CSS styling, header content, and footer content
-        for PDF generation and customization.
-
-        This method creates a dedicated PDF configuration section and populates
-        it with three main configuration options:
-        - CSS styling for PDF appearance customization
-        - Header HTML content for PDF documents
-        - Footer HTML content for PDF documents
+        Sets up the PDF configuration section with the page layout options
+        (size, margins, header and footer), the uploads of background image
+        and fonts, the colors of the text, and as last option the free CSS
+        code to customize anything else.
         """
+        from larpmanager.utils.io.pdf.engine import PDF_FONT_TYPES, PDF_PAGE_SIZE_CHOICES  # noqa: PLC0415
+
         # Set up the main PDF configuration section
         self.set_section("pdf", "PDF")
 
-        # Add CSS configuration for PDF styling
-        # This allows users to customize the visual appearance of generated PDFs
+        # Page format of the generated sheets
+        self.add_configs(
+            "pdf_page_size",
+            ConfigType.CHOICE,
+            _("Page size"),
+            _("Format of the generated pages."),
+            extra_data=PDF_PAGE_SIZE_CHOICES,
+        )
+
+        # Page margin, in centimeters
+        self.add_configs(
+            "pdf_margin",
+            ConfigType.CHAR,
+            _("Page margin"),
+            _("Empty space left on each side of the page, in centimeters."),
+            extra_data=[RegexValidator(r"^\d{1,2}(\.\d{1,2})?$", _("Insert a number of centimeters, like 2 or 1.5"))],
+        )
+
+        # Automatic header, with organization, character and event name
+        self.add_configs(
+            "pdf_header",
+            ConfigType.BOOL,
+            _("Header"),
+            _("Show on top of each page the name of the organization, of the character and of the event."),
+        )
+
+        # Automatic footer, with event name and page numbers
+        self.add_configs(
+            "pdf_footer",
+            ConfigType.BOOL,
+            _("Footer"),
+            _("Show on bottom of each page the name of the event, and the page number."),
+        )
+
+        # Background image, stretched over the whole page of every sheet
+        self.add_configs(
+            "pdf_background",
+            ConfigType.FILE,
+            _("Background image"),
+            _("Image applied as background, expanded to cover the whole page."),
+            extra_data={
+                "validators": [FileTypeValidator(["image/jpeg", "image/png", "image/gif", "image/webp"])],
+            },
+        )
+
+        # Font applied to the titles
+        self.add_configs(
+            "pdf_font_title",
+            ConfigType.FILE,
+            _("Title font"),
+            _("Font file (TTF) applied to the name of the character, and to the titles."),
+            extra_data={"validators": [FileTypeValidator(PDF_FONT_TYPES)]},
+        )
+
+        # Font applied to the text
+        self.add_configs(
+            "pdf_font_text",
+            ConfigType.FILE,
+            _("Text font"),
+            _("Font file (TTF) applied to all the other text."),
+            extra_data={"validators": [FileTypeValidator(PDF_FONT_TYPES)]},
+        )
+
+        # Colors of the various elements of the sheet
+        self.add_configs(
+            "pdf_color_title",
+            ConfigType.COLOR,
+            _("Title color"),
+            _("Color of the name of the character, and of the titles."),
+        )
+
+        self.add_configs(
+            "pdf_color_text",
+            ConfigType.COLOR,
+            _("Text color"),
+            _("Color of all the other text."),
+        )
+
+        self.add_configs(
+            "pdf_color_link",
+            ConfigType.COLOR,
+            _("Link color"),
+            _("Color of the links."),
+        )
+
+        self.add_configs(
+            "pdf_color_bold",
+            ConfigType.COLOR,
+            _("Highlight color"),
+            _("Color of the text in bold."),
+        )
+
+        # Free CSS code, applied after all the other options, to customize anything else
         self.add_configs(
             "page_css",
             ConfigType.TEXTAREA,
             "CSS",
             _("The CSS code to customize PDF printing."),
             extra_data={"max_length": 50000, "validators": [validate_css]},
-        )
-
-        # Add header content configuration
-        # Users can define custom HTML content to appear at the top of each PDF page
-        self.add_configs(
-            "header_content",
-            ConfigType.TEXTAREA,
-            _("Header HTML"),
-            _("The HTML code for the header."),
-            extra_data={"max_length": 50000, "validators": [validate_html]},
-        )
-
-        # Add footer content configuration
-        # Users can define custom HTML content to appear at the bottom of each PDF page
-        self.add_configs(
-            "footer_content",
-            ConfigType.TEXTAREA,
-            _("Footer HTML"),
-            _("The HTML code for the footer."),
-            extra_data={"max_length": 50000, "validators": [validate_html]},
         )
 
 

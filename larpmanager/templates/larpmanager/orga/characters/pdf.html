@@ -30,7 +30,7 @@
             </tr>
         </table>
         <h2>{% trans "Try the sheet generation" %}</h2>
-        <table class="mob ">
+        <table class="mob">
             <tr>
                 <td>
                     <select id="char">
@@ -69,22 +69,41 @@
             <a href="#" class="my_toggle" tog='info'>{% trans "Template instructions" %}</a>
         </h2>
         <div class="hide info">
-            <table class="mob ">
+            <table class="mob">
                 <tr>
-                    <th>Default settings</th>
+                    <th>Page layout</th>
                     <td>
-                        Place inside the field "PAGE CSS" the following code:
+                        Choose the format in the field "PAGE SIZE", and the empty space left on each side in "PAGE MARGIN" (in centimeters). Nothing else is needed: the layout of the sheets is built automatically from these options.
                         <br />
                         <hr />
-                        <span class="code">@page { size: "A4"; @frame content_frame { margin: 2cm; } }</span>
+                        If you prefer to define it yourself, write your own rule in the field "CSS":
+                        <br />
                         <hr />
-                        This code will command the generated PDF to be of size A4, with a page margin of 2cm (if you wish you can change this settings, of course).
+                        <span class="code">@page { size: A4; @frame content_frame { margin: 2cm; } }</span>
+                        <hr />
+                        What you write by hand always wins: the options above are applied only for what your own rule does not define.
+                    </td>
+                </tr>
+                <tr>
+                    <th>Header and footer</th>
+                    <td>
+                        Activate "HEADER" to show on top of each page the name of the organization, the name of the character, and the name of the event. Activate "FOOTER" to show on the bottom the name of the event, and the number of the page. The space for them is reserved automatically, and the text of the sheet is moved down (or up) accordingly.
+                        <hr />
+                        If you want a different content, write your own frames in the field "CSS", pointing them to your own elements:
+                        <br />
+                        <hr />
+                        <span class="code">@page { [... other stuff ...] @frame header_frame { -pdf-frame-content: header_content; top: 1cm; } }</span>
+                        <hr />
+                        (Please note that this command needs to be inside the @page part! You can use "&lt;pdf:pagenumber&gt;" and "&lt;pdf:pagecount&gt;" for the page numbers)
                     </td>
                 </tr>
                 <tr>
                     <th>Page background</th>
                     <td>
-                        Make sure your image has size compatible with the chosen page size (for example ratio 1:1.414 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        Upload the image in the field "BACKGROUND IMAGE". It will be applied automatically to every page of the generated sheets, expanded to cover the whole page (for the best result, use an image with the same ratio of the chosen page size, for example 1:1.414 for A4).
+                        <br />
+                        <hr />
+                        If instead you want to control it yourself, upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "CSS":
                         <br />
                         <hr />
                         <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
@@ -98,82 +117,26 @@
                         <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
                         <br />
                         <br />
-                        Then upload the font on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        Upload the font file in the field "TITLE FONT" to apply it to the name of the character and to the titles, and in the field "TEXT FONT" to apply it to all the other text.
+                        <br />
+                        <hr />
+                        If instead you want to apply it only to some elements, upload the font on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "CSS":
                         <br />
                         <hr />
                         <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }
                             <br />
                         #char_name { font-family: '#name#'; }</span>
                         <hr />
-                        (Change #name# with something appropriate! Commong tags: #char_name for the character name, #char_title for the character title, h2 for the paragraph titles)
+                        (Change #name# with something appropriate! Common tags: #char_name for the character name, #char_title for the character title, h2 for the paragraph titles)
                     </td>
                 </tr>
                 <tr>
-                    <th>Header</th>
+                    <th>Colors</th>
                     <td>
-                        Upload the HTML code that will go in the header in the field "HEADER CONTENT" (if you wish to use images, remmber to upload them on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, and to refer to them with the internal link). Then place the following in the "PAGE CSS":
+                        Choose them in the fields "TITLE COLOR" (name of the character and titles), "TEXT COLOR" (all the other text), "LINK COLOR" and "HIGHLIGHT COLOR" (text in bold). Leave a field empty to keep the standard color.
                         <br />
                         <hr />
-                        <span class="code">@page { [... other stuff ...] @frame header_frame { -pdf-frame-content: header_content; top: 1cm; } }</span>
-                        <hr />
-                        (Please note that this command needs to be inside the @page part!)
-                        <br />
-                        This code will generate a header directly on top of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Footer</th>
-                    <td>
-                        Upload the HTML code that will go in the header in the field "HEADER CONTENT". Note that you can use "&lt;pdf:pagenumber&gt;" and "&lt;pdf:pagecount&gt;" for the page numbers. Then place the following in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">@page { [... other stuff ...] @frame footer_frame { -pdf-frame-content: footer_content; top: 28.5cm;  } }</span>
-                        <hr />
-                        (Please note that this command needs to be inside the @page part!)
-                        <br />
-                        This code will generate a header directly on bottom of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Special codes</th>
-                    <td>
-                        These codes are available to be put in the header / footer:
-                        <br />
-                        "&lt;pdf:pagenumber&gt;" -> page number
-                        <br />
-                        "&lt;pdf:pagecount&gt;" -> page count
-                        <br />
-                        "&lt;pdf:number&gt;" -> character number
-                        <br />
-                        "&lt;pdf:name&gt;" -> character name
-                        <br />
-                        "&lt;pdf:title&gt;" -> character title
-                        <br />
-                        "&lt;pdf:organization&gt;" -> organization name
-                        <br />
-                        "&lt;pdf:event&gt;" -> event name
-                    </td>
-                </tr>
-                <tr>
-                    <th>Header / Footer content</th>
-                    <td>
-                        Example of text to put in either the header or the footer:
-                        <br />
-                        <hr />
-                        <span class="code">
-                            &lt;table&gt;
-                            &lt;tr&gt;
-                            &lt;td&gt;&lt;pdf:organization&gt;&lt;/td&gt;
-                            &lt;td&gt;&lt;pdf:name&gt;&lt;/td&gt;
-                            &lt;td&gt;&lt;pdf:event&gt;&lt;/td&gt;
-                            &lt;/tr&gt;
-                        &lt;/table&gt;</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Links</th>
-                    <td>
-                        Format them in the "PAGE CSS":
+                        For anything else, write it in the "CSS":
                         <br />
                         <hr />
                         <span class="code">a { color: #desiredcolor; }</span>
@@ -191,13 +154,15 @@
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="{% trans "Confirm" %}">
-            <br />
-            <br />
-            <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+            <div class="form_container auto_resize">
+                <table class="mob">
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Confirm" %}">
+                <br />
+                <br />
+                <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+            </div>
         </form>
     </div>
 {% endblock content %}
