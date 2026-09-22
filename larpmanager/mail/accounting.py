@@ -494,7 +494,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection) 
         my_send_mail(subject, email_body, instance.collection.organizer, instance.collection)
 
 
-def notify_invoice_check(inv: PaymentInvoice) -> None:
+def notify_invoice_check(inv: PaymentInvoice, *, reminder: bool = False) -> None:
     """Send invoice check notifications to appropriate recipients.
 
     This function handles sending email notifications for invoice checks based on
@@ -503,6 +503,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     Args:
         inv: Invoice object to send notifications for. Must have association_id, typ, and registration attributes.
+        reminder: True when called from the periodic reminder task, gated by its own config.
 
     Returns:
         None
@@ -512,32 +513,36 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     if not get_association_config(inv.association_id, "mail_payment"):
         return
 
+    # Reminders for invoices still awaiting approval have their own opt-in toggle
+    if reminder and not get_association_config(inv.association_id, "mail_payment_reminder"):
+        return
+
     # Get organization features to determine notification recipients
     features = get_association_features(inv.association_id)
-
-    # Build list of members to notify
-    members_to_notify = []
 
     if inv.typ != PaymentType.REGISTRATION or not inv.registration_id:
         # For other invoice types send to main organization email
         notify_organization_exe(inv.association, inv, notification_type=NotificationType.INVOICE_APPROVAL_EXE)
         return
 
-    members_to_notify = list(get_event_organizers(inv.registration.run_id))
     run = inv.registration.run
 
-    # If treasurer feature is enabled, add treasurer appointees to the notification list
+    # If treasurer appointees are configured, notify them instead of the event organizers
+    treasurer_ids = []
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
         treasurer_list = get_association_config(inv.association_id, "treasurer_appointees")
         treasurer_ids = [x for x in treasurer_list.split(",") if x.strip()]
-        query = Membership.objects.filter(
-            association_id=inv.association_id, member_id__in=treasurer_ids
-        ).select_related("member")
-        for membership in query:
-            # Avoid duplicates if treasurer is also an organizer
-            if membership.member not in members_to_notify:
-                members_to_notify.append(membership.member)
+
+    if treasurer_ids:
+        members_to_notify = [
+            membership.member
+            for membership in Membership.objects.filter(
+                association_id=inv.association_id, member_id__in=treasurer_ids
+            ).select_related("member")
+        ]
+    else:
+        members_to_notify = list(get_event_organizers(inv.registration.run_id))
 
     # Send notification to each member in the list
     for member in members_to_notify:

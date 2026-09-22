@@ -5901,6 +5901,9 @@ msgstr "PDF-regenerering har startet!"
 msgid "Payment awaiting verification"
 msgstr "Betaling venter på bekreftelse"
 
+msgid "Payments to approve reminders"
+msgstr "Påminnelser om betalinger som venter på godkjenning"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Personlig kode: <b>%(cod)s</b>"
@@ -11787,6 +11790,13 @@ msgid ""
 msgstr ""
 "Hvis aktivert, vises ikke karakterene for dem som ikke er logget inn i "
 "systemet."
+
+msgid ""
+"If selected, send a reminder email to organizers for payments still awaiting"
+" approval."
+msgstr ""
+"Hvis valgt, sendes en påminnelse på e-post til arrangørene om betalinger som"
+" fortsatt venter på godkjenning."
 
 msgid ""
 "If you are absolutely certain that you want to delete this item, click on "

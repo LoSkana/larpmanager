@@ -5901,6 +5901,9 @@ msgstr "La rigenerazione del PDF è iniziata!"
 msgid "Payment awaiting verification"
 msgstr "Pagamento in attesa di verifica"
 
+msgid "Payments to approve reminders"
+msgstr "Promemoria pagamenti da approvare"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Codice personale: <b>%(cod)s</b>"
@@ -12009,6 +12012,13 @@ msgid ""
 msgstr ""
 "Se abilitato, i personaggi non verranno mostrati a chi non ha effettuato "
 "l'accesso al sistema."
+
+msgid ""
+"If selected, send a reminder email to organizers for payments still awaiting"
+" approval."
+msgstr ""
+"Se selezionato, invia agli organizzatori un'email di promemoria per i "
+"pagamenti ancora in attesa di approvazione."
 
 msgid ""
 "If you are absolutely certain that you want to delete this item, click on "
