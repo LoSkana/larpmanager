@@ -34,8 +34,8 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from lxml import etree
 from tinymce.widgets import TinyMCE
-from xhtml2pdf.w3c.css import CSSBuilder
-from xhtml2pdf.w3c.cssParser import CSSParseError, CSSParser
+from xhtml2pdf.context import pisaContext
+from xhtml2pdf.w3c.cssParser import CSSParseError
 
 from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_event_config
@@ -75,12 +75,14 @@ css_delimeter = "/*@#§*/"
 
 
 def validate_css(value: str) -> None:
-    """Reject invalid CSS (use xhtml2pdf's parser)."""
+    """Reject invalid CSS (use xhtml2pdf's own parser, since PDF-specific at-rules like @frame need its context)."""
     if not value:
         return
 
+    context = pisaContext()
+    context.parseCSS()
     try:
-        CSSParser(CSSBuilder(mediumSet=["all", "print", "pdf"])).parse(value)
+        context.cssParser.parse(value)
     except CSSParseError as exc:
         raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
 

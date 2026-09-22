@@ -21,7 +21,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404, HttpRequest, HttpResponse
+from django.http import FileResponse, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -31,7 +31,7 @@ from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Faction, Handout, get_event_elements
+from larpmanager.models.writing import Character, Faction, FactionType, Handout, get_event_elements
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
@@ -336,7 +336,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
 
     Raises:
         PermissionDenied: If user lacks orga_characters_pdf permission
-        Http404: If faction with the specified number doesn't exist or isn't in cache
+        Http404: If faction with the specified uuid doesn't exist for the event
 
     """
     # Verify organizer permissions for PDF generation
@@ -344,18 +344,23 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
 
     # Load faction data into context by faction number
     get_element(context, faction_uuid, "faction", Faction)
+    faction_obj = context["faction"]
 
-    # Load all event cache data for faction sheet rendering
+    # Load all event cache data for faction sheet rendering (character list)
     get_event_cache_all(context)
 
-    for faction in context["factions"].values():
-        if faction.get("uuid", "") == faction_uuid:
-            context["sheet_faction"] = faction
-
-    if "sheet_faction" not in context:
-        # Faction number not found in cache
-        msg = "Faction does not exist"
-        raise Http404(msg)
+    # Build sheet data directly from the faction instance
+    sheet_faction = faction_obj.show_red()
+    characters = []
+    if faction_obj.typ == FactionType.SECRET:
+        member_numbers = set(faction_obj.characters.values_list("number", flat=True))
+        characters = [number for number in context["chars"] if number in member_numbers]
+    else:
+        for character_number, character_data in context["chars"].items():
+            if faction_obj.number in character_data.get("factions", []):
+                characters.append(character_number)
+    sheet_faction["characters"] = characters
+    context["sheet_faction"] = sheet_faction
 
     # Load custom faction fields configured for this event
     # Only visible fields are included in the PDF
