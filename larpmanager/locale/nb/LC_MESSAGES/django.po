@@ -4895,6 +4895,10 @@ msgstr "Gå til casting for:"
 msgid "How can we contact you"
 msgstr "Hvordan kan vi kontakte deg"
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr "Ugyldig CSS: %(error)s"
+
 msgid "Invalid request method"
 msgstr "Ugyldig forespørselsmetode"
 
@@ -5061,6 +5065,10 @@ msgstr "Følg trinnene nedenfor:"
 
 msgid "Includes membership fee"
 msgstr "Inkluderer medlemsavgift"
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr "Ugyldig HTML: %(error)s"
 
 msgid "Join the collection for"
 msgstr "Delta i innsamlingen for"

@@ -318,11 +318,14 @@ class ConfigForm(BaseModelForm):
             # Numeric input field with integer validation
             ConfigType.INT: lambda: forms.IntegerField(label=label, help_text=help_text, required=False),
             # Multi-line text area for longer text content
+            # `extra` is either a plain max_length int, or a dict {"max_length": int, "validators": [...]}
             ConfigType.TEXTAREA: lambda: forms.CharField(
                 label=label,
                 widget=Textarea(attrs={"rows": 5}),
                 help_text=help_text,
                 required=False,
+                max_length=extra.get("max_length") if isinstance(extra, dict) else extra,
+                validators=extra.get("validators", []) if isinstance(extra, dict) else [],
             ),
             # Multi-select field for choosing association members
             ConfigType.MEMBERS: lambda: forms.ModelMultipleChoiceField(
@@ -383,7 +386,8 @@ class ConfigForm(BaseModelForm):
         field_type = config["type"]
         extra_config = (
             config["extra"]
-            if field_type in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR, ConfigType.CHOICE]
+            if field_type
+            in [ConfigType.MEMBERS, ConfigType.MULTI_BOOL, ConfigType.CHAR, ConfigType.CHOICE, ConfigType.TEXTAREA]
             else None
         )
 

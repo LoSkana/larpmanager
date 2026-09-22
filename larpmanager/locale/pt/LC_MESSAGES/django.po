@@ -4895,6 +4895,10 @@ msgstr "Ir para o Casting de:"
 msgid "How can we contact you"
 msgstr "Como podemos contactar-te"
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr "CSS inválido: %(error)s"
+
 msgid "Invalid request method"
 msgstr "Método de pedido inválido"
 
@@ -5061,6 +5065,10 @@ msgstr "Segue os passos abaixo:"
 
 msgid "Includes membership fee"
 msgstr "Inclui quota de membro"
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr "HTML inválido: %(error)s"
 
 msgid "Join the collection for"
 msgstr "Participa na coleta para"
