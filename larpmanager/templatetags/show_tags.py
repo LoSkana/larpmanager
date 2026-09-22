@@ -908,11 +908,20 @@ def remove(value: Any, args: Any) -> Any:
 
 
 @register.filter
-def storage_url(path: Any) -> Any:
-    """Template filter to resolve a stored file path to its downloadable URL."""
+def storage_url(path: Any, obj: object = None) -> Any:
+    """Template filter to resolve a stored file path to its downloadable URL.
+
+    Storage backends serving files from a relative path (e.g. local filesystem)
+    return a domain-less URL, which only works embedded in the page it was
+    rendered on. Passing obj (an Association, or anything carrying one) makes
+    the URL absolute, so it also works out of that context, e.g. in a PDF.
+    """
     if not path:
         return ""
-    return default_storage.url(path)
+    url = default_storage.url(path)
+    if obj and not url.startswith(("http://", "https://")):
+        url = get_url(url.lstrip("/"), obj)
+    return url
 
 
 @register.filter

@@ -17,7 +17,7 @@
                 {% if screen or question.printable %}
                     <div class="go-inline">
                         <span class="hide-screen">|</span>
-                        <b>{{ question.name }}:&nbsp;</b><a href="{{ field|storage_url }}" target="_blank">{{ field|storage_filename }}</a>
+                        <b>{{ question.name }}:&nbsp;</b><a href="{{ field|storage_url:event }}" target="_blank">{{ field|storage_filename }}</a>
                     </div>
                 {% endif %}
             {% endif %}
