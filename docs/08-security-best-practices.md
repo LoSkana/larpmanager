@@ -36,6 +36,7 @@ All models that need to be referenced in URLs or frontend code must inherit from
 ```python
 from larpmanager.models.base import BaseModel, UuidMixin
 
+
 class MyModel(UuidMixin, BaseModel):
     name = models.CharField(max_length=100)
     # ... other fields
@@ -56,7 +57,8 @@ The mixin automatically adds:
 **Bad - Using ID:**
 ```python
 # urls.py
-path('event/<int:event_id>/', views.event_detail, name='event_detail')
+path("event/<int:event_id>/", views.event_detail, name="event_detail")
+
 
 # views.py
 def event_detail(request, event_id):
@@ -66,10 +68,11 @@ def event_detail(request, event_id):
 **Good - Using UUID with ownership validation:**
 ```python
 # urls.py
-path('event/<str:event_uuid>/', views.event_detail, name='event_detail')
+path("event/<str:event_uuid>/", views.event_detail, name="event_detail")
 
 # views.py
 from larpmanager.utils.core.common import get_element_event
+
 
 def event_detail(request, context, event_uuid):
     # Automatically validates association/event ownership
@@ -156,6 +159,7 @@ const registrationUuids = [
 ```python
 from larpmanager.utils.core.common import get_element_event
 
+
 def my_view(request, context, object_uuid):
     # get_element_event automatically checks association_id and event ownership
     obj = get_element_event(context, object_uuid, MyModel)
@@ -170,9 +174,10 @@ def my_view(request, context, object_uuid):
 ```python
 from larpmanager.utils.core.common import get_element
 
+
 def my_view(request, context, object_uuid):
     # Adds the object to context with automatic ownership validation
-    get_element(context, object_uuid, 'my_object', MyModel)
+    get_element(context, object_uuid, "my_object", MyModel)
     # Now available as context['my_object']
 ```
 

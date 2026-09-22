@@ -160,18 +160,11 @@ def event_character_gallery(request, event_slug):
     """Public character gallery - requires "character_gallery" feature."""
     # Get context and verify "character_gallery" feature is enabled
     # If feature is not enabled, this will raise FeatureError automatically
-    context = get_event_context(
-        request,
-        event_slug,
-        feature_slug="character_gallery"
-    )
+    context = get_event_context(request, event_slug, feature_slug="character_gallery")
 
     # If we get here, the feature is enabled - no need to check again
     # Load published characters
-    context["characters"] = Character.objects.filter(
-        event=context["event"],
-        published=True
-    )
+    context["characters"] = Character.objects.filter(event=context["event"], published=True)
 
     return render(request, "event_gallery.html", context)
 ```
@@ -303,9 +296,7 @@ def exe_membership(request):
     # context["manage"] == 1
 
     # Get memberships for this organization
-    memberships = Membership.objects.filter(
-        association_id=context["association_id"]
-    )
+    memberships = Membership.objects.filter(association_id=context["association_id"])
     context["memberships"] = memberships
 
     return render(request, "exe/membership.html", context)
@@ -417,17 +408,12 @@ When you call `check_event_context(request, event_slug, permission_slug="orga_ch
 
 1. **Get user's roles for this event:**
    ```python
-   user_roles = EventRole.objects.filter(
-       event__slug=event_slug,
-       members=request.user.member
-   )
+   user_roles = EventRole.objects.filter(event__slug=event_slug, members=request.user.member)
    ```
 
 2. **Get permissions from those roles:**
    ```python
-   user_permissions = EventPermission.objects.filter(
-       roles__in=user_roles
-   )
+   user_permissions = EventPermission.objects.filter(roles__in=user_roles)
    ```
 
 3. **Check if required permission is in user's permissions:**
@@ -465,16 +451,10 @@ When creating a role:
 **Example role setup:**
 ```python
 # Create a "Story Team" role for an event
-story_role = EventRole.objects.create(
-    event=event,
-    name="Story Team",
-    number=2
-)
+story_role = EventRole.objects.create(event=event, name="Story Team", number=2)
 
 # Assign permissions
-story_permissions = EventPermission.objects.filter(
-    slug__in=["orga_characters", "orga_plots", "orga_casting"]
-)
+story_permissions = EventPermission.objects.filter(slug__in=["orga_characters", "orga_plots", "orga_casting"])
 story_role.permissions.set(story_permissions)
 
 # Add members
@@ -504,9 +484,7 @@ def orga_characters(request, event_slug):
     context = check_event_context(request, event_slug, permission_slug="orga_characters")
 
     # Load characters for this event
-    context["characters"] = Character.objects.filter(
-        event=context["event"]
-    ).order_by("name")
+    context["characters"] = Character.objects.filter(event=context["event"]).order_by("name")
 
     # Render template with context
     return render(request, "orga/characters.html", context)
@@ -531,9 +509,9 @@ def exe_membership(request):
     context = check_association_context(request, permission_slug="exe_membership")
 
     # Load memberships for this organization
-    context["memberships"] = Membership.objects.filter(
-        association_id=context["association_id"]
-    ).select_related("member")
+    context["memberships"] = Membership.objects.filter(association_id=context["association_id"]).select_related(
+        "member"
+    )
 
     # Render template with context
     return render(request, "exe/membership.html", context)
@@ -554,17 +532,10 @@ def event_character_gallery(request, event_slug):
     """
     # Get event context and verify feature is enabled
     # Raises FeatureError if "character_gallery" is not enabled
-    context = get_event_context(
-        request,
-        event_slug,
-        feature_slug="character_gallery"
-    )
+    context = get_event_context(request, event_slug, feature_slug="character_gallery")
 
     # If we get here, feature is enabled - load published characters
-    context["characters"] = Character.objects.filter(
-        event=context["event"],
-        published=True
-    )
+    context["characters"] = Character.objects.filter(event=context["event"], published=True)
 
     return render(request, "user/character_gallery.html", context)
 ```
@@ -584,17 +555,10 @@ def orga_character_detail(request, event_slug, character_id):
     Requires: orga_characters OR orga_casting permission
     """
     # Check if user has either permission
-    context = check_event_context(
-        request,
-        event_slug,
-        permission_slug=["orga_characters", "orga_casting"]
-    )
+    context = check_event_context(request, event_slug, permission_slug=["orga_characters", "orga_casting"])
 
     # Load character
-    character = Character.objects.get(
-        id=character_id,
-        event=context["event"]
-    )
+    character = Character.objects.get(id=character_id, event=context["event"])
     context["character"] = character
 
     return render(request, "orga/character_detail.html", context)
@@ -642,6 +606,7 @@ context = {"event": Event.objects.get(slug=event_slug)}
 ✅ **Add `@login_required` decorator for protected views:**
 ```python
 from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def orga_characters(request, event_slug):

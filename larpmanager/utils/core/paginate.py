@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 import logging
@@ -446,13 +466,17 @@ def _prepare_data_json(
         "run": lambda model_object: str(model_object.run) if model_object.run else "",
         "descr": lambda model_object: str(model_object.descr),
         # Convert decimal values to int if they're whole numbers, otherwise keep as string
-        "value": lambda model_object: int(model_object.value)
-        if model_object.value == model_object.value.to_integral()
-        else str(model_object.value),
+        "value": lambda model_object: (
+            int(model_object.value)
+            if model_object.value == model_object.value.to_integral()
+            else str(model_object.value)
+        ),
         "details": lambda model_object: str(model_object.details),
-        "credits": lambda model_object: int(model_object.credits)
-        if model_object.credits == model_object.credits.to_integral()
-        else str(model_object.credits),
+        "credits": lambda model_object: (
+            int(model_object.credits)
+            if model_object.credits == model_object.credits.to_integral()
+            else str(model_object.credits)
+        ),
         "info": lambda model_object: str(model_object.info) if model_object.info else "",
         "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
         "vat_options": lambda model_object: round(float(model_object.vat_options), 2),

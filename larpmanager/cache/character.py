@@ -335,13 +335,23 @@ def _process_faction_cache(faction: Faction, result: dict) -> None:
     # Get faction display data
     faction_data = faction.show_red()
     faction_data["characters"] = []
-    # Find characters belonging to this faction
-    for character_number, character_data in result["chars"].items():
-        if character_data["hide"]:
-            continue
+    # Secret factions are excluded from the per-character cached list (see
+    # Character.show_factions), so fall back to the direct m2m for those only
+    if faction.typ == FactionType.SECRET:
+        member_numbers = set(faction.characters.values_list("number", flat=True))
+        for character_number, character_data in result["chars"].items():
+            if character_data["hide"]:
+                continue
 
-        if faction_data["number"] in character_data["factions"]:
-            faction_data["characters"].append(character_number)
+            if character_number in member_numbers:
+                faction_data["characters"].append(character_number)
+    else:
+        for character_number, character_data in result["chars"].items():
+            if character_data["hide"]:
+                continue
+
+            if faction.number in character_data.get("factions", []):
+                faction_data["characters"].append(character_number)
 
     # Skip factions with no characters
     if not faction_data["characters"]:

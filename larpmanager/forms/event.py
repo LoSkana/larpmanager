@@ -54,6 +54,8 @@ from larpmanager.forms.utils import (
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
+    validate_css,
+    validate_html,
 )
 from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.access import EventPermission, EventRole, RoleInvite
@@ -129,15 +131,33 @@ class EventCharactersPdfForm(ConfigForm):
 
         # Add CSS configuration for PDF styling
         # This allows users to customize the visual appearance of generated PDFs
-        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("The CSS code to customize PDF printing."))
+        self.add_configs(
+            "page_css",
+            ConfigType.TEXTAREA,
+            "CSS",
+            _("The CSS code to customize PDF printing."),
+            extra_data={"max_length": 50000, "validators": [validate_css]},
+        )
 
         # Add header content configuration
         # Users can define custom HTML content to appear at the top of each PDF page
-        self.add_configs("header_content", ConfigType.TEXTAREA, _("Header HTML"), _("The HTML code for the header."))
+        self.add_configs(
+            "header_content",
+            ConfigType.TEXTAREA,
+            _("Header HTML"),
+            _("The HTML code for the header."),
+            extra_data={"max_length": 50000, "validators": [validate_html]},
+        )
 
         # Add footer content configuration
         # Users can define custom HTML content to appear at the bottom of each PDF page
-        self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("The HTML code for the footer."))
+        self.add_configs(
+            "footer_content",
+            ConfigType.TEXTAREA,
+            _("Footer HTML"),
+            _("The HTML code for the footer."),
+            extra_data={"max_length": 50000, "validators": [validate_html]},
+        )
 
 
 class OrgaEventForm(BaseModelForm):
@@ -1209,6 +1229,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
         widget=Textarea(attrs={"rows": 15}),
         required=False,
         help_text=_("These CSS commands will be carried over to all pages in your Association space"),
+        validators=[validate_css],
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

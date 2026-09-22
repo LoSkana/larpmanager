@@ -32,7 +32,10 @@ from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
+from lxml import etree
 from tinymce.widgets import TinyMCE
+from xhtml2pdf.context import pisaContext
+from xhtml2pdf.w3c.cssParser import CSSParseError
 
 from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_event_config
@@ -69,6 +72,65 @@ if TYPE_CHECKING:
 # defer script loaded by form
 
 css_delimeter = "/*@#§*/"
+
+
+def _find_stray_closing_brace(value: str) -> bool:
+    """Return True if the CSS has a '}' with no matching '{', ignoring comments and strings."""
+    depth = 0
+    index = 0
+    length = len(value)
+    while index < length:
+        char = value[index]
+        if char == "/" and value.startswith("/*", index):
+            end = value.find("*/", index + 2)
+            index = length if end == -1 else end + 2
+            continue
+        if char in {'"', "'"}:
+            index += 1
+            while index < length and value[index] != char:
+                # a backslash escapes the next character, quote included
+                index += 2 if value[index] == "\\" else 1
+            index += 1
+            continue
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth < 0:
+                return True
+        index += 1
+    return False
+
+
+def validate_css(value: str) -> None:
+    """Reject invalid CSS (use xhtml2pdf's own parser, which understands PDF at-rules like @page/@frame)."""
+    if not value:
+        return
+
+    # xhtml2pdf's parser loops forever on a '}' that closes nothing, so reject those first
+    if _find_stray_closing_brace(value):
+        raise forms.ValidationError(_("Invalid CSS: unexpected '}' closing a block that was never opened."))
+
+    context = pisaContext("")
+    context.parseCSS()
+    try:
+        context.cssParser.parse(value)
+    except CSSParseError as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+    except Exception as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+
+
+def validate_html(value: str) -> None:
+    """Reject structurally broken HTML fragments (mismatched/unclosed tags) that would break PDF layout."""
+    if not value:
+        return
+
+    parser = etree.HTMLParser(recover=True)
+    etree.fromstring(f"<div>{value}</div>", parser=parser)
+    errors = [str(err) for err in parser.error_log if err.level_name in ("ERROR", "FATAL")]
+    if errors:
+        raise forms.ValidationError(_("Invalid HTML: %(error)s") % {"error": errors[0]})
 
 
 def render_js(cls: Any) -> list[str]:

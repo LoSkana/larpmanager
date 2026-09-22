@@ -4895,6 +4895,10 @@ msgstr "Przejdź do castingu dla:"
 msgid "How can we contact you"
 msgstr "Jak możemy się z tobą skontaktować"
 
+#, python-format
+msgid "Invalid CSS: %(error)s"
+msgstr "Nieprawidłowy CSS: %(error)s"
+
 msgid "Invalid request method"
 msgstr "Nieprawidłowa metoda żądania"
 
@@ -5061,6 +5065,10 @@ msgstr "Wykonaj poniższe czynności:"
 
 msgid "Includes membership fee"
 msgstr "Obejmuje opłatę członkowską"
+
+#, python-format
+msgid "Invalid HTML: %(error)s"
+msgstr "Nieprawidłowy HTML: %(error)s"
 
 msgid "Join the collection for"
 msgstr "Dołącz do zbiórki na"
@@ -9518,6 +9526,11 @@ msgstr ""
 
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr "Jeśli włączone, kredyty nie będą używane we wpisach tego wydarzenia."
+
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Nieprawidłowy CSS: nieoczekiwany znak '}' zamykający blok, który nigdy nie "
+"został otwarty."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""

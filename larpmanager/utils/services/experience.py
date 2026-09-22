@@ -898,9 +898,9 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
         Operation.ADDITION: lambda current_value, rule_amount: current_value + rule_amount,
         Operation.SUBTRACTION: lambda current_value, rule_amount: current_value - rule_amount,
         Operation.MULTIPLICATION: lambda current_value, rule_amount: current_value * rule_amount,
-        Operation.DIVISION: lambda current_value, rule_amount: current_value / rule_amount
-        if rule_amount != 0
-        else current_value,
+        Operation.DIVISION: lambda current_value, rule_amount: (
+            current_value / rule_amount if rule_amount != 0 else current_value
+        ),
     }
 
     # Apply each rule to update the corresponding computed field value

@@ -476,12 +476,12 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.subj,
             body,
             email_recipient.recipient,
-            email_content.association_id,
-            email_content.run_id,
-            email_content.reply_to,
-            email_content.attachment_path,
-            email_content.attachment_name,
-            header_url,
+            association_id=email_content.association_id,
+            run_id=email_content.run_id,
+            reply_to=email_content.reply_to,
+            attachment_path=email_content.attachment_path,
+            attachment_name=email_content.attachment_name,
+            unsubscribe_url=header_url,
             one_click=email_content.bulk,
         )
 
@@ -509,13 +509,13 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
     subj: str,
     body: str,
     m_email: str,
+    *,
     association_id: int | None = None,
     run_id: int | None = None,
     reply_to: str | None = None,
     attachment_path: str | None = None,
     attachment_name: str | None = None,
     unsubscribe_url: str | None = None,
-    *,
     one_click: bool = False,
 ) -> None:
     """Send email with association/event-specific configuration.
