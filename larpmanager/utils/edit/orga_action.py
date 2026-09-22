@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
@@ -166,7 +166,7 @@ def validate_payments(request: HttpRequest, context: dict, event_slug: str) -> N
         raise RedirectError(msg, args=[event_slug])
 
 
-class OrgaAction(str, Enum):
+class OrgaAction(StrEnum):
     """Enum for organization action types used in edit/create/delete operations."""
 
     def __new__(cls, value: str, config: dict[str, Any]) -> Any:

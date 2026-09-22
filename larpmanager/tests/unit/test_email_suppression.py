@@ -511,7 +511,7 @@ class TestSuppressionOnSend(BaseTestCase):
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
             my_send_mail_bkg.task_function(recipient.pk)
             mock_send.assert_called_once()
-            unsubscribe_url = mock_send.call_args[0][8]
+            unsubscribe_url = mock_send.call_args[1]["unsubscribe_url"]
             assert "unsubscribe/" in unsubscribe_url
             # A transactional mail must never advertise one-click
             assert "unsubscribe-one-click/" not in unsubscribe_url
@@ -530,7 +530,7 @@ class TestSuppressionOnSend(BaseTestCase):
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
             my_send_mail_bkg.task_function(recipient.pk)
             mock_send.assert_called_once()
-            assert "unsubscribe-one-click/" in mock_send.call_args[0][8]
+            assert "unsubscribe-one-click/" in mock_send.call_args[1]["unsubscribe_url"]
             assert mock_send.call_args[1]["one_click"]
 
 

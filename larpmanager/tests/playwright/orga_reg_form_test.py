@@ -207,9 +207,10 @@ def check_reserve(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
-          - cell "Ticket (*)"
+          - rowheader "Ticket (*)"
           - cell "Standard 5€ sadsadsadsa Your registration ticket2":
             - radio "Standard 5€ sadsadsadsa" [checked]
+            - text: Standard 5€ sadsadsadsa Your registration ticket2
         """
     )
 

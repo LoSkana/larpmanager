@@ -140,53 +140,43 @@
         }
     </style>
     <link rel="preload"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+          href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"
           as="style"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+              href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
     </noscript>
     <link rel="preload"
-          href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css"
+          href="{% static 'node_modules/qtip2/dist/jquery.qtip.min.css' %}"
           as="style"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css">
+              href="{% static 'node_modules/qtip2/dist/jquery.qtip.min.css' %}">
     </noscript>
     <link rel="preload"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css"
+          href="{% static 'node_modules/jquery-datetimepicker/jquery.datetimepicker.css' %}"
           as="style"
           onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
         <link rel="stylesheet"
-              href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css">
+              href="{% static 'node_modules/jquery-datetimepicker/jquery.datetimepicker.css' %}">
     </noscript>
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css"
-          integrity="sha512-8D+M+7Y6jVsEa7RD6Kv/Z7EImSpNpQllgaEIQAtqHcI0H6F4iZknRj0Nx1DCdB+TwBaS+702BGWYC0Ze2hpExQ=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer" />
+          href="{% static 'node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" />
     <link rel="stylesheet"
-          href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
+          href="{% static 'node_modules/datatables.net-dt/css/dataTables.dataTables.min.css' %}" />
 {% endblock css-req %}
 {% block js-req %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+    <script src="{% static 'node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js' %}"
             defer></script>
     <script id='qtip'
-            src="https://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"
+            src="{% static 'node_modules/qtip2/dist/jquery.qtip.min.js' %}"
             defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"
-            integrity="sha512-zlWWyZq71UMApAjih4WkaRpikgY9Bz1oXIW5G0fED4vk14JjGlQ1UmkGM392jEULP8jbNMiwLWdM8Z87Hu88Fw=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
+    <script src="{% static 'node_modules/jquery-toast-plugin/dist/jquery.toast.min.js' %}"
             defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-            defer></script>
+    <script src="{% static 'node_modules/moment/min/moment.min.js' %}" defer></script>
     {% if hotjar_siteid %}
         <!-- Hotjar -->
         <script>

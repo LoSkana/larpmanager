@@ -1,5 +1,5 @@
 {% extends "utils.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}
     {% trans "Accounting - History" %} - {% trans "Organization" %}
 {% endblock title %}
@@ -12,96 +12,85 @@
     <i>({% trans "Operating margin, taking into account the budgets of completed events, minus credits or tokens issued." %})</i>
     <br />
     <br />
-    <div id="globalSumContainer" class="accounting_record"></div>
+    <canvas id="globalSumContainer" class="accounting_record"></canvas>
     <h2>{% trans "Overall balance" %}</h2>
     <br />
     <i>({% trans "Net financial availability, held in the organization's bank and financial accounts." %})</i>
     <br />
     <br />
-    <div id="bankSumContainer" class="accounting_record"></div>
+    <canvas id="bankSumContainer" class="accounting_record"></canvas>
 {% endblock content %}
 {% block js %}
-    <script type="text/javascript"
-            src="https://cdn.canvasjs.com/jquery.canvasjs.stock.min.js"
-            defer></script>
+    <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
+    <script src="{% static 'node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js' %}"></script>
+    <script src="{% static 'node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js' %}"></script>
     <script type="text/javascript">
-function stockChartOptions(dataPoints) {
+function balanceChartOptions(label) {
   return {
-    theme: "dark2",
-    exportEnabled: true,
-    charts: [{
-      axisX: {
-        crosshair: {
-          enabled: true,
-          snapToDataPoint: true,
-          valueFormatString: "DD MMM YYYY"
+    type: "line",
+    data: { datasets: [{
+      label: label,
+      data: [],
+      fill: true,
+      tension: 0.2,
+      borderWidth: 2,
+      pointRadius: 0
+    }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        x: {
+          type: "time",
+          time: { unit: "day", tooltipFormat: "dd MMM yyyy" },
+          min: new Date({{ start|date:"U" }} * 1000),
+          max: new Date({{ end|date:"U" }} * 1000)
+        },
+        y: {
+          ticks: {
+            callback: function (value) { return "{{ currency_symbol }}" + value.toLocaleString(); }
+          }
         }
       },
-      axisY: {
-        prefix: "{{ currency_symbol }}",
-        crosshair: {
-          enabled: true,
-          valueFormatString: "{{ currency_symbol }}#,###"
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) { return "{{ currency_symbol }}" + ctx.parsed.y.toLocaleString(); }
+          }
+        },
+        zoom: {
+          zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "x" },
+          pan: { enabled: true, mode: "x" }
         }
-      },
-      toolTip: {
-        shared: true
-      },
-      data: [{
-        type: "splineArea",
-        yValueFormatString: "{{ currency_symbol }}#,###.##",
-        dataPoints: dataPoints
-      }]
-    }],
-    navigator: {
-      axisX: {
-        labelFontColor: "#F5F5F5",
-        labelFontFamily: "Trebuchet MS"
-      },
-      slider: {
-        minimum: new Date({{ start|date:"U" }} * 1000),
-        maximum: new Date({{ end|date:"U" }} * 1000)
       }
     }
   };
 }
 
+var globalDataPoints = [
+{% for el in list %}
+  {% include "elements/comma.html" with separator="," %}
+  {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.global_sum }}') }
+{% endfor %}
+];
 
-  var globalDataPoints = [
-  {% for el in list %}
-    {% include "elements/comma.html" with separator="," %}
-    {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.global_sum }}') }
-  {% endfor %}
-  ];
-
-  var bankDataPoints = [
-  {% for el in list %}
-    {% include "elements/comma.html" with separator="," %}
-    {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.bank_sum }}') }
-  {% endfor %}
-  ];
+var bankDataPoints = [
+{% for el in list %}
+  {% include "elements/comma.html" with separator="," %}
+  {x: new Date({{ el.created | date:"U" }} * 1000), y: parseFloat('{{ el.bank_sum }}') }
+{% endfor %}
+];
 
 document.addEventListener("DOMContentLoaded", function () {
-  var globalChart = new CanvasJS.StockChart(
-    "globalSumContainer",
-    stockChartOptions(globalDataPoints)
-  );
+  var globalOpts = balanceChartOptions("{% trans "Global balance" %}");
+  globalOpts.data.datasets[0].data = globalDataPoints;
+  new Chart(document.getElementById("globalSumContainer"), globalOpts);
 
-  var bankChart = new CanvasJS.StockChart(
-    "bankSumContainer",
-    stockChartOptions(bankDataPoints)
-  );
-
-    setTimeout(function() {
-        globalChart.render();
-        bankChart.render();
-    }, 1000);
-
-  window.addEventListener("resize", function () {
-    globalChart.render();
-    bankChart.render();
-  });
-
+  var bankOpts = balanceChartOptions("{% trans "Overall balance" %}");
+  bankOpts.data.datasets[0].data = bankDataPoints;
+  new Chart(document.getElementById("bankSumContainer"), bankOpts);
 });
     </script>
 {% endblock js %}

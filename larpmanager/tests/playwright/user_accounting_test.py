@@ -96,7 +96,7 @@ def donation(page: Any, live_server: Any) -> None:
     page.locator("#id_amount").fill("10")
     page.locator("#id_amount").press("Tab")
     page.locator("#id_descr").fill("test donation")
-    page.get_by_role("cell", name="test wire").click()
+    page.get_by_role("columnheader", name="test wire").click()
     submit(page)
 
     load_image(page, "#id_invoice")
@@ -154,7 +154,7 @@ def membership_fees(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/accounting")
     expect_normalized(page, page.locator("#one"), "Payment membership fee")
     page.get_by_role("link", name="Pay the annual fee").click()
-    page.get_by_role("cell", name="test wire").click()
+    page.get_by_role("columnheader", name="test wire").click()
     submit(page)
 
     expect_normalized(page, page.locator("#one"), "15")
@@ -188,7 +188,7 @@ def collections(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Link to participate in").click()
     page.locator("#id_amount").click()
     page.locator("#id_amount").fill("20")
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     submit(page)
 
     expect_normalized(page, page.locator("#one"), "20")

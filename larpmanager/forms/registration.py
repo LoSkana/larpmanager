@@ -1477,7 +1477,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
                 return False
 
             # check the feature is active
-            if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
+            if choice[0] != "ticket" and choice[0] not in self.params["features"]:
                 return False
 
         return True

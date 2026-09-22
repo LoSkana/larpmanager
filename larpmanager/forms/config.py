@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from abc import abstractmethod
@@ -279,7 +299,7 @@ class ConfigForm(BaseModelForm):
         field_type_to_form_field = {
             # Basic text input field for short strings, with optional validators from extra
             ConfigType.CHAR: lambda: forms.CharField(
-                label=label, help_text=help_text, required=False, validators=extra if extra else []
+                label=label, help_text=help_text, required=False, validators=extra or []
             ),
             # Checkbox field with custom styling for boolean values
             ConfigType.BOOL: lambda: forms.BooleanField(

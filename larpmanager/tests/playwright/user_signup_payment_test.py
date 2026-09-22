@@ -112,7 +112,7 @@ def signup(page: Any, live_server: Any) -> None:
     # pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
 

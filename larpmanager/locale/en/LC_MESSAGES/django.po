@@ -2630,6 +2630,9 @@ msgstr ""
 msgid "Select the new event"
 msgstr ""
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+
 #, python-format
 msgid "Invalid CSS: %(error)s"
 msgstr ""

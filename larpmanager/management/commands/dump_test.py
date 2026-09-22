@@ -150,11 +150,13 @@ class Command(BaseCommand):
         clean_cmd = [
             "sed",
             "-i",
-            r"/^--/d;"
-            r"/^SET /d;"
-            r"/^\\restrict/d;"
-            r"/^\\unrestrict/d;"
-            r"/^COMMENT ON SCHEMA public/d",
+            (
+                r"/^--/d;"
+                r"/^SET /d;"
+                r"/^\\restrict/d;"
+                r"/^\\unrestrict/d;"
+                r"/^COMMENT ON SCHEMA public/d"
+            ),
             str(sql_file),
         ]
         subprocess.run(clean_cmd, check=True, env=env)  # noqa: S603

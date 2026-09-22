@@ -1139,7 +1139,7 @@ def _get_question_update(context: dict, element: Any) -> str:
 
     """
     # Handle cover question type - return image thumbnail HTML
-    if context["question"].typ in [WritingQuestionType.COVER]:
+    if context["question"].typ == WritingQuestionType.COVER:
         return f"""
                 <a href="{element.thumb.url}">
                     <img src="{element.thumb.url}"

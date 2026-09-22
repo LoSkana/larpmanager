@@ -105,7 +105,7 @@ class WritingForm(BaseModelForm):
 
         if WritingQuestionType.PROGRESS in question_types:
             run_event = self.params.get("run").event
-            progress_event = run_event.parent if run_event.parent else run_event
+            progress_event = run_event.parent or run_event
             self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event).order_by("order")
             self.fields["progress"].to_field_name = "uuid"
             if self.instance.pk and self.instance.progress_id:

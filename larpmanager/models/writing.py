@@ -325,7 +325,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval") and self.status not in [CharacterStatus.APPROVED]:
+        if get_event_config(self.event_id, "user_character_approval") and self.status != CharacterStatus.APPROVED:
             js["hide"] = True
 
         js["locked"] = self.locked

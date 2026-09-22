@@ -9426,6 +9426,10 @@ msgstr ""
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr "Je-li povoleno, v registracích této akce se nebudou používat kredity."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr ""
+"Neplatné CSS: neočekávaná '}' uzavírá blok, který nebyl nikdy otevřen."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Umožňuje pracovníkům přístup k informacím o Safety poskytnutým účastníky"

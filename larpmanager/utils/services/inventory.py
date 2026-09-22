@@ -1,4 +1,5 @@
 # LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
 #
 # This file is part of LarpManager and is dual-licensed:
 #
@@ -16,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

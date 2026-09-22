@@ -57,12 +57,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap"
               rel="stylesheet">
         <link rel="preload"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+              href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"
               as="style"
               onload="this.onload=null;this.rel='stylesheet'">
         <noscript>
             <link rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+                  href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
         </noscript>
         <style>
             @font-face {
@@ -171,9 +171,7 @@
         {% compress js %}
             <script defer src="{% static 'larpmanager/landing/landing.js' %}"></script>
         {% endcompress %}
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-                crossorigin="anonymous"></script>
+        <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
         {% block js2 %}
         {% endblock js2 %}
     </body>

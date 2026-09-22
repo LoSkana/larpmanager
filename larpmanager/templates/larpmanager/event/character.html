@@ -85,7 +85,7 @@ window.addEventListener('DOMContentLoaded', function() {
     quickbar.hidden = false;
 });
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js">});</script>
+    <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     {% if pref %}
         <script>
 function go_chart() {

@@ -9587,6 +9587,9 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Si se activa, no se usarán créditos en las inscripciones de este evento."
 
+msgid "Invalid CSS: unexpected '}' closing a block that was never opened."
+msgstr "CSS no valido: '}' inesperado cerrando un bloque que nunca se abrio."
+
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Permite al personal acceder a la información de Safety enviada por los "

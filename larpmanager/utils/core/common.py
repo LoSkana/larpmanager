@@ -520,7 +520,7 @@ def get_payment_methods_ids(context: dict) -> set[int]:
 
 def detect_delimiter(content: str) -> str:
     """Detect CSV delimiter from content header line."""
-    header_line = content.split("\n")[0]
+    header_line = content.split("\n", maxsplit=1)[0]
     for delimiter in ["\t", ";", ","]:
         if delimiter in header_line:
             return delimiter

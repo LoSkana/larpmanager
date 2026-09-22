@@ -259,7 +259,7 @@ def deadlines_membership(
         return
 
     # Skip further checks if membership is submitted (in review)
-    if membership.status in [MembershipStatus.SUBMITTED]:
+    if membership.status == MembershipStatus.SUBMITTED:
         return
 
     # Determine if fee checking is required (not LAOG event and current year)

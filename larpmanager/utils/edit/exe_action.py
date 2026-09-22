@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from larpmanager.forms.accounting import (
@@ -60,7 +60,7 @@ from larpmanager.forms.warehouse import (
 )
 
 
-class ExeAction(str, Enum):
+class ExeAction(StrEnum):
     """Enum for executive action types used in edit/create/delete operations.
 
     Each enum member has a string value (the permission string) and a config attribute

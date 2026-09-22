@@ -269,7 +269,7 @@ Feature.objects.create(
     module=FeatureModule.objects.get(slug="writing"),
     order=1,
     after_link="orga_characters",
-    after_text="Now you can create characters"
+    after_text="Now you can create characters",
 )
 ```
 
@@ -294,7 +294,7 @@ def orga_characters(request, event_slug):
     characters = Character.objects.filter(event=context["event"])
     context["characters"] = characters
 
-    return render(request, 'orga/characters.html', context)
+    return render(request, "orga/characters.html", context)
 ```
 
 **For organization-wide features (overall=True):**
@@ -314,7 +314,7 @@ def exe_members(request):
     members = Member.objects.filter(association_id=context["association_id"])
     context["members"] = members
 
-    return render(request, 'exe/members.html', context)
+    return render(request, "exe/members.html", context)
 ```
 
 **Important:** Always use the appropriate context helper function:
@@ -337,7 +337,7 @@ EventPermission.objects.create(
     feature=Feature.objects.get(slug="character"),
     module=PermissionModule.objects.get(slug="writing"),
     number=11,  # Order in sidebar
-    config="writing"
+    config="writing",
 )
 ```
 
@@ -351,7 +351,7 @@ AssociationPermission.objects.create(
     feature=Feature.objects.get(slug="exe_association"),
     module=PermissionModule.objects.get(slug="organization"),
     number=2,  # Order in sidebar
-    config="interface"
+    config="interface",
 )
 ```
 
@@ -361,10 +361,10 @@ Add URL patterns for your views in `larpmanager/urls.py`:
 
 ```python
 # Event-specific URL (includes event_slug)
-path('<slug:event_slug>/characters/', orga_characters, name='orga_characters'),
+(path("<slug:event_slug>/characters/", orga_characters, name="orga_characters"),)
 
 # Organization-wide URL (no event_slug)
-path('exe/association/', exe_association, name='exe_association'),
+(path("exe/association/", exe_association, name="exe_association"),)
 ```
 
 #### 6. Export Fixtures
@@ -473,7 +473,7 @@ feature = Feature.objects.create(
     module=FeatureModule.objects.get(slug="writing"),
     order=250,
     after_link="orga_character_diary",
-    after_text="Now you can enable character diaries for this event"
+    after_text="Now you can enable character diaries for this event",
 )
 
 # 2. Create the permission (sidebar link)
@@ -483,7 +483,7 @@ EventPermission.objects.create(
     descr="Manage character diary settings",
     feature=feature,
     module=PermissionModule.objects.get(slug="writing"),
-    number=260
+    number=260,
 )
 
 # 3. Don't forget to run: python manage.py export_features
