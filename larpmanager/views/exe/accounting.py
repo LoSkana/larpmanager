@@ -488,9 +488,11 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approve button only for non-approved expenses
-                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
-                if not el.is_approved
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
+                    if not el.is_approved
+                    else ""
+                ),
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
@@ -640,9 +642,11 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
-                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
-                else "",
+                "receipt": lambda el: (
+                    f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                    if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                    else ""
+                ),
             },
             "delete_view": "exe_payments_delete",
         },
@@ -849,9 +853,11 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
                 # Display human-readable status text
                 "status": lambda el: el.get_status_display(),
                 # Show action button only for unpaid refunds
-                "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.uuid])}'>{done}</a>"
-                if el.status != RefundStatus.PAYED
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('exe_refunds_confirm', args=[el.uuid])}'>{done}</a>"
+                    if el.status != RefundStatus.PAYED
+                    else ""
+                ),
             },
             "delete_view": "exe_refunds_delete",
         },

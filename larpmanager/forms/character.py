@@ -835,8 +835,9 @@ class OrgaCharacterForm(CharacterForm):
 
         sorted_relationships = sorted(
             self.params["relationships"].items(),
-            key=lambda character_entry: len(character_entry[1].get("direct", ""))
-            + len(character_entry[1].get("inverse", "")),
+            key=lambda character_entry: (
+                len(character_entry[1].get("direct", "")) + len(character_entry[1].get("inverse", ""))
+            ),
             reverse=True,
         )
         context["relationships"] = dict(sorted_relationships)

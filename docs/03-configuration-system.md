@@ -166,6 +166,7 @@ runtime (e.g. `f"casting_{priority_key}"` where `priority_key` is a variable).
 ```python
 from larpmanager.cache.config import get_event_config
 
+
 def orga_characters(request, event_slug):
     context = check_event_context(request, event_slug, permission_slug="orga_characters")
 
@@ -217,6 +218,7 @@ def get_association_config(
 ```python
 from larpmanager.cache.config import get_association_config
 
+
 def exe_members(request):
     context = check_association_context(request, permission_slug="exe_members")
 
@@ -255,20 +257,14 @@ def get_element_config(
 ```python
 from larpmanager.cache.config import get_element_config
 
+
 def character_detail(request, character_id):
     character = Character.objects.get(id=character_id)
 
     # Get character-specific setting
-    show_secrets = get_element_config(
-        character,
-        "show_secrets_to_player",
-        False
-    )
+    show_secrets = get_element_config(character, "show_secrets_to_player", False)
 
-    context = {
-        "character": character,
-        "show_secrets": show_secrets
-    }
+    context = {"character": character, "show_secrets": show_secrets}
     return render(request, "character_detail.html", context)
 ```
 
@@ -317,10 +313,10 @@ def set_configs(self) -> None:
 
     # Add configuration field
     self.add_configs(
-        "config_name",           # Configuration key (stored in database)
-        ConfigType.BOOL,         # Field type
-        _("Field Label"),        # User-visible label
-        _("Help text")           # Help text explaining the setting
+        "config_name",  # Configuration key (stored in database)
+        ConfigType.BOOL,  # Field type
+        _("Field Label"),  # User-visible label
+        _("Help text"),  # Help text explaining the setting
     )
 ```
 
@@ -343,6 +339,7 @@ Available in `ConfigType` enum:
 ```python
 # In larpmanager/forms/event.py
 
+
 class OrgaConfigForm(ConfigForm):
     # ... existing code ...
 
@@ -357,7 +354,7 @@ class OrgaConfigForm(ConfigForm):
             "character_require_backstory",
             ConfigType.BOOL,
             _("Require backstory"),
-            _("If checked: players must write a backstory for their character")
+            _("If checked: players must write a backstory for their character"),
         )
 
         # Add text config
@@ -365,7 +362,7 @@ class OrgaConfigForm(ConfigForm):
             "character_backstory_min_words",
             ConfigType.TEXT,
             _("Minimum backstory words"),
-            _("Minimum number of words required in character backstory")
+            _("Minimum number of words required in character backstory"),
         )
 
         # Add select config
@@ -377,8 +374,8 @@ class OrgaConfigForm(ConfigForm):
             choices=[
                 ("auto", _("Automatic approval")),
                 ("manual", _("Manual approval required")),
-                ("none", _("No approval needed"))
-            ]
+                ("none", _("No approval needed")),
+            ],
         )
 ```
 
@@ -462,7 +459,7 @@ self.add_configs(
     "mail_cc",
     ConfigType.BOOL,
     _("Carbon copy"),
-    _("If checked: Sends the main mail a copy of all mails sent to participants")
+    _("If checked: Sends the main mail a copy of all mails sent to participants"),
 )
 
 # Bad - unclear what it does
@@ -521,6 +518,7 @@ participants = Registration.objects.filter(run__event_id=event_id).count()
 ```python
 # In larpmanager/forms/event.py - OrgaConfigForm
 
+
 def set_configs(self) -> None:
     # ... existing sections ...
 
@@ -531,7 +529,7 @@ def set_configs(self) -> None:
         "character_require_backstory",
         ConfigType.BOOL,
         _("Require backstory"),
-        _("If checked: players must provide a backstory for their character")
+        _("If checked: players must provide a backstory for their character"),
     )
 
     # Add text field for minimum words
@@ -539,7 +537,7 @@ def set_configs(self) -> None:
         "character_backstory_min_words",
         ConfigType.TEXT,
         _("Minimum backstory words"),
-        _("Minimum number of words required (leave empty for no minimum)")
+        _("Minimum number of words required (leave empty for no minimum)"),
     )
 ```
 
@@ -549,23 +547,14 @@ def set_configs(self) -> None:
 # In a character creation view
 from larpmanager.cache.config import get_event_config
 
+
 def character_create(request, event_slug):
     context = get_event_context(request, event_slug)
 
     # Read configuration
-    require_backstory = get_event_config(
-        context["event"].id,
-        "character_require_backstory",
-        False,
-        context
-    )
+    require_backstory = get_event_config(context["event"].id, "character_require_backstory", False, context)
 
-    min_words = get_event_config(
-        context["event"].id,
-        "character_backstory_min_words",
-        None,
-        context
-    )
+    min_words = get_event_config(context["event"].id, "character_backstory_min_words", None, context)
 
     # Apply validation
     if require_backstory:
@@ -612,6 +601,7 @@ def character_create(request, event_slug):
 ```python
 # In larpmanager/forms/association.py - ExeConfigForm
 
+
 def set_config_members(self) -> None:
     """Configure member-related settings."""
     self.set_section("members", _("Members"))
@@ -621,7 +611,7 @@ def set_config_members(self) -> None:
         "members_show_birthdate",
         ConfigType.BOOL,
         _("Show birthdates"),
-        _("If checked: display member birthdates in the member list")
+        _("If checked: display member birthdates in the member list"),
     )
 ```
 
@@ -632,6 +622,7 @@ def set_config_members(self) -> None:
 
 from larpmanager.cache.config import get_association_config
 
+
 @login_required
 def exe_members(request):
     context = check_association_context(request, permission_slug="exe_members")
@@ -641,13 +632,11 @@ def exe_members(request):
         context["association_id"],
         "members_show_birthdate",
         True,  # Default to showing
-        context
+        context,
     )
 
     # Get members
-    members = Member.objects.filter(
-        association_id=context["association_id"]
-    )
+    members = Member.objects.filter(association_id=context["association_id"])
 
     context["members"] = members
     context["show_birthdate"] = show_birthdate
@@ -689,6 +678,7 @@ def exe_members(request):
 ```python
 # In larpmanager/forms/event.py - OrgaConfigForm
 
+
 def set_configs(self) -> None:
     # ... existing configurations ...
 
@@ -700,14 +690,14 @@ def set_configs(self) -> None:
             "assignment_deadline",
             ConfigType.DATETIME,
             _("Assignment deadline"),
-            _("Players must accept their character by this date/time")
+            _("Players must accept their character by this date/time"),
         )
 
         self.add_configs(
             "assignment_auto_reject",
             ConfigType.BOOL,
             _("Auto-reject after deadline"),
-            _("If checked: automatically reject unaccepted characters after deadline")
+            _("If checked: automatically reject unaccepted characters after deadline"),
         )
 ```
 

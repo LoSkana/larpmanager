@@ -466,13 +466,17 @@ def _prepare_data_json(
         "run": lambda model_object: str(model_object.run) if model_object.run else "",
         "descr": lambda model_object: str(model_object.descr),
         # Convert decimal values to int if they're whole numbers, otherwise keep as string
-        "value": lambda model_object: int(model_object.value)
-        if model_object.value == model_object.value.to_integral()
-        else str(model_object.value),
+        "value": lambda model_object: (
+            int(model_object.value)
+            if model_object.value == model_object.value.to_integral()
+            else str(model_object.value)
+        ),
         "details": lambda model_object: str(model_object.details),
-        "credits": lambda model_object: int(model_object.credits)
-        if model_object.credits == model_object.credits.to_integral()
-        else str(model_object.credits),
+        "credits": lambda model_object: (
+            int(model_object.credits)
+            if model_object.credits == model_object.credits.to_integral()
+            else str(model_object.credits)
+        ),
         "info": lambda model_object: str(model_object.info) if model_object.info else "",
         "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
         "vat_options": lambda model_object: round(float(model_object.vat_options), 2),

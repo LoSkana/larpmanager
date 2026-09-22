@@ -488,9 +488,11 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
-                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
-                else "",
+                "receipt": lambda el: (
+                    f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                    if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                    else ""
+                ),
             },
             "delete_view": "orga_payments_delete",
             # DB paths for callback fields, enabling sort and search on these columns
@@ -792,9 +794,11 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Generate download link for expense statement documents
                 "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
-                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
-                if not el.is_approved and not context["disable_approval"]
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
+                    if not el.is_approved and not context["disable_approval"]
+                    else ""
+                ),
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
             },
