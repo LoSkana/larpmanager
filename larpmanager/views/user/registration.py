@@ -443,7 +443,7 @@ def register(
 
     # Verify user membership status and permissions
     current_membership = context["membership"]
-    if current_membership.status in [MembershipStatus.REWOKED]:
+    if current_membership.status == MembershipStatus.REWOKED:
         raise RewokedMembershipError
 
     # Process form submission or display registration form

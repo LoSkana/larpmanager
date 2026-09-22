@@ -279,7 +279,7 @@ class ConfigForm(BaseModelForm):
         field_type_to_form_field = {
             # Basic text input field for short strings, with optional validators from extra
             ConfigType.CHAR: lambda: forms.CharField(
-                label=label, help_text=help_text, required=False, validators=extra if extra else []
+                label=label, help_text=help_text, required=False, validators=extra or []
             ),
             # Checkbox field with custom styling for boolean values
             ConfigType.BOOL: lambda: forms.BooleanField(

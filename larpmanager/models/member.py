@@ -931,7 +931,7 @@ class NotificationQueue(BaseModel):
 
     def __str__(self) -> str:
         """String representation for notification in queue."""
-        member_str = self.member if self.member else "main_mail"
+        member_str = self.member or "main_mail"
         if self.run:
             return f"{self.run.search} - {member_str} - {self.get_notification_type_display()}"
         return f"{self.association.name} - {member_str} - {self.get_notification_type_display()}"

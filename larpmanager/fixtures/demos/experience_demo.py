@@ -265,40 +265,50 @@ def _build_characters(event: Event, opt: dict[str, Any]) -> dict[str, Character]
         opt["race_dwarf"],
         opt["class_fighter"],
         "<p>A dwarven shield-bearer of the Ashen Company, sworn to hold the line.</p>",
-        "<p>Your clan cast you out for a duel you did not start. Sera knows the "
-        "truth of what happened, and you are not sure whether to trust her with it.</p>",
+        (
+            "<p>Your clan cast you out for a duel you did not start. Sera knows the "
+            "truth of what happened, and you are not sure whether to trust her with it.</p>"
+        ),
     )
     sera = make_character(
         "Sera Nightblade",
         opt["race_human"],
         opt["class_rogue"],
         "<p>A sharp-tongued rogue of the Ashen Company, loyal to no cause but coin.</p>",
-        "<p>You witnessed the duel that got Bram exiled from his clan, and you have "
-        "kept the secret only because it is worth more unspoken than sold.</p>",
+        (
+            "<p>You witnessed the duel that got Bram exiled from his clan, and you have "
+            "kept the secret only because it is worth more unspoken than sold.</p>"
+        ),
     )
     elowen = make_character(
         "Elowen Starweaver",
         opt["race_elf"],
         opt["class_mage"],
         "<p>An elven mage of the Ashen Company, chasing a ritual her order forbade.</p>",
-        "<p>You are pursuing forbidden ritual knowledge your order stripped from its "
-        "archives. Grom's people are rumored to guard the last surviving copy.</p>",
+        (
+            "<p>You are pursuing forbidden ritual knowledge your order stripped from its "
+            "archives. Grom's people are rumored to guard the last surviving copy.</p>"
+        ),
     )
     grom = make_character(
         "Grom Stonehide",
         opt["race_dwarf"],
         opt["class_fighter"],
         "<p>A dwarven veteran of Hollow Road, guarding secrets older than the company.</p>",
-        "<p>Your hold keeps the last copy of a ritual text the elves have hunted for "
-        "generations. You have not decided whether Elowen deserves to know it exists.</p>",
+        (
+            "<p>Your hold keeps the last copy of a ritual text the elves have hunted for "
+            "generations. You have not decided whether Elowen deserves to know it exists.</p>"
+        ),
     )
     finn = make_character(
         "Finn Quickstep",
         opt["race_human"],
         opt["class_rogue"],
         "<p>A quick-fingered scout of Hollow Road, always first through the door.</p>",
-        "<p>You have been skimming a cut off every job Hollow Road runs, and Grom is "
-        "starting to notice the numbers do not add up.</p>",
+        (
+            "<p>You have been skimming a cut off every job Hollow Road runs, and Grom is "
+            "starting to notice the numbers do not add up.</p>"
+        ),
     )
 
     ashen_company = Faction.objects.create(event=event, name="The Ashen Company")
@@ -377,15 +387,19 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "experience-demo-modifiers",
             "orga_exp_modifiers",
             "Modifiers",
-            "<p>Here we add some rules to make abilities easier to get for a race, or difficult "
-            "(or even blocked) for another, by changing their cost.</p>",
+            (
+                "<p>Here we add some rules to make abilities easier to get for a race, or difficult "
+                "(or even blocked) for another, by changing their cost.</p>"
+            ),
         ),
         (
             "experience-demo-criterions",
             "orga_exp_criterions",
             "Criteria",
-            "<p>Criteria grant bonus experience points to characters that match a condition, "
-            "for example extra points for a specific race.</p>",
+            (
+                "<p>Criteria grant bonus experience points to characters that match a condition, "
+                "for example extra points for a specific race.</p>"
+            ),
         ),
         (
             "experience-demo-rules",
@@ -397,8 +411,10 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "experience-demo-deliveries",
             "orga_exp_deliveries",
             "Deliveries",
-            "<p>Deliveries award extra experience points directly to specific characters, "
-            "for example as a story reward.</p>",
+            (
+                "<p>Deliveries award extra experience points directly to specific characters, "
+                "for example as a story reward.</p>"
+            ),
         ),
     ]
     for key, view_name, title, content in hints:

@@ -472,7 +472,7 @@ def get_event_config(
         from larpmanager.cache.basic import _get_event_parent_id  # noqa: PLC0415
 
         parent_id = _get_event_parent_id(event_id, context)
-        lookup_id = parent_id if parent_id else event_id
+        lookup_id = parent_id or event_id
 
     return _get_cached_config(lookup_id, "event", config_name, context=context, bypass_cache=bypass_cache)
 

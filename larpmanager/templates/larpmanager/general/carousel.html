@@ -9,7 +9,7 @@
 {% endblock robots %}
 {% block media %}
     <link rel="stylesheet"
-          href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+          href="{% static 'node_modules/flickity/dist/flickity.min.css' %}">
 {% endblock media %}
 {% block wrapper %}
     <div id="bgk"></div>
@@ -38,7 +38,8 @@
 {% endblock wrapper %}
 {% block js2 %}
     <!-- JavaScript -->
-    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer></script>
+    <script src="{% static 'node_modules/flickity/dist/flickity.pkgd.min.js' %}"
+            defer></script>
     {{ json|json_script:"carousel-data" }}
     <script>
 const base_url = "{% url 'event_register' '0' %}";

@@ -182,7 +182,7 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     # Handle membership feature requirements and status checks
     if "membership" in features:
         # Check for revoked membership status and raise error
-        if user_membership.status in [MembershipStatus.REWOKED]:
+        if user_membership.status == MembershipStatus.REWOKED:
             raise RewokedMembershipError
 
         # Handle incomplete membership applications (empty, joined, uploaded)
@@ -201,7 +201,7 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
             return
 
         # Handle pending membership approval (submitted but not approved)
-        if user_membership.status in [MembershipStatus.SUBMITTED]:
+        if user_membership.status == MembershipStatus.SUBMITTED:
             run_status["text"] = registration_text
             run_status["status_type"] = "pending"
             run_status["action"] = {
@@ -510,7 +510,7 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
 
     if member:
         membership = context["membership"]
-        if membership.status in [MembershipStatus.REWOKED]:
+        if membership.status == MembershipStatus.REWOKED:
             return run_status
 
         if registration:

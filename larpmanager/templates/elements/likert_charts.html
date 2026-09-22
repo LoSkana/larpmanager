@@ -1,6 +1,6 @@
-{% load i18n %}
+{% load i18n static %}
 {% if likert_charts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js"></script>
+    <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     {% for chart in likert_charts %}
         <h3>{{ chart.question.name }}</h3>
         <canvas id="likert_chart_{{ forloop.counter }}" width="400" height="200"></canvas>

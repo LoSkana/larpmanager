@@ -97,47 +97,63 @@ def _build_characters(event: Event, progress: dict[str, ProgressStep]) -> dict[s
     updates = {
         "kade": (
             f"<p>Rising executive at Zenith Dynamics, torn between duty and the black-market debt he owes #{n['dice']}.</p>",
-            f"<p>You clawed your way into the executive tier three years ago. #{n['rin']} is your most trusted "
-            f"head of security, but you have never told her about the fixer you turned to when the launch "
-            f"almost failed: #{n['dice']}. You suspect #{n['priya']} knows more about the Ghost Chorus signal "
-            "than she admits.</p>",
+            (
+                f"<p>You clawed your way into the executive tier three years ago. #{n['rin']} is your most trusted "
+                f"head of security, but you have never told her about the fixer you turned to when the launch "
+                f"almost failed: #{n['dice']}. You suspect #{n['priya']} knows more about the Ghost Chorus signal "
+                "than she admits.</p>"
+            ),
         ),
         "rin": (
             f"<p>Head of security at Zenith Dynamics, secretly feeding intel to the Undercroft through #{n['silas']}.</p>",
-            f"<p>Your loyalty to #{n['kade']} is genuine, but the Undercroft pays in chrome and clean idents "
-            f"for what you overhear. #{n['silas']} is your handler. If #{n['kade']} ever finds out, it "
-            "ends both your careers.</p>",
+            (
+                f"<p>Your loyalty to #{n['kade']} is genuine, but the Undercroft pays in chrome and clean idents "
+                f"for what you overhear. #{n['silas']} is your handler. If #{n['kade']} ever finds out, it "
+                "ends both your careers.</p>"
+            ),
         ),
         "vex": (
             "<p>A Zenith netrunner obsessed with the deep archive layers nobody else dares to walk.</p>",
-            f"<p>You are the ghost behind #{n['priya']}'s public face inside the Ghost Chorus. "
-            f"You and #{n['kade']} grew up jacked into the same arcade net, and you dread what he "
-            "will think if he ever learns what the Chorus wants from Zenith's core.</p>",
+            (
+                f"<p>You are the ghost behind #{n['priya']}'s public face inside the Ghost Chorus. "
+                f"You and #{n['kade']} grew up jacked into the same arcade net, and you dread what he "
+                "will think if he ever learns what the Chorus wants from Zenith's core.</p>"
+            ),
         ),
         "juno": (
             "<p>Boss of the Undercroft, blunt, practical, allergic to corporate badges.</p>",
-            f"<p>You despise Zenith Dynamics' grip on the city's data lanes. #{n['dice']} runs grey-market "
-            f"chips for you, and #{n['moth']} is the only Zenith contact you half-trust.</p>",
+            (
+                f"<p>You despise Zenith Dynamics' grip on the city's data lanes. #{n['dice']} runs grey-market "
+                f"chips for you, and #{n['moth']} is the only Zenith contact you half-trust.</p>"
+            ),
         ),
         "dice": (
             "<p>An Undercroft fixer with a foot in every faction's business.</p>",
-            f"<p>You lent #{n['kade']} the clean capital that saved his launch, at a price he does not yet "
-            f"know the full cost of. #{n['juno']} thinks you work only for the Undercroft; #{n['moth']} suspects otherwise.</p>",
+            (
+                f"<p>You lent #{n['kade']} the clean capital that saved his launch, at a price he does not yet "
+                f"know the full cost of. #{n['juno']} thinks you work only for the Undercroft; #{n['moth']} suspects otherwise.</p>"
+            ),
         ),
         "moth": (
             "<p>A young Zenith runner, eager to prove her worth on the net.</p>",
-            f"<p>You work for Zenith Dynamics but grew up in the Undercroft, and #{n['juno']} still treats "
-            f"you like family. You do not yet know #{n['rin']}'s secret, but you are close to finding out.</p>",
+            (
+                f"<p>You work for Zenith Dynamics but grew up in the Undercroft, and #{n['juno']} still treats "
+                f"you like family. You do not yet know #{n['rin']}'s secret, but you are close to finding out.</p>"
+            ),
         ),
         "silas": (
             "<p>An Undercroft fixer who trades in secrets as much as in black-clinic chrome.</p>",
-            f"<p>You run #{n['rin']} as an asset inside Zenith Dynamics. You also quietly watch "
-            f"#{n['priya']}, whose Ghost Chorus dealings could be worth even more than corporate secrets.</p>",
+            (
+                f"<p>You run #{n['rin']} as an asset inside Zenith Dynamics. You also quietly watch "
+                f"#{n['priya']}, whose Ghost Chorus dealings could be worth even more than corporate secrets.</p>"
+            ),
         ),
         "priya": (
             "<p>A Zenith liaison with a reputation for going dark at odd hours.</p>",
-            f"<p>In public you are #{n['kade']}'s liaison. Inside the Ghost Chorus, you speak for it, "
-            f"with #{n['vex']} as your unseen ghost. #{n['silas']} is starting to ask too many questions.</p>",
+            (
+                f"<p>In public you are #{n['kade']}'s liaison. Inside the Ghost Chorus, you speak for it, "
+                f"with #{n['vex']} as your unseen ghost. #{n['silas']} is starting to ask too many questions.</p>"
+            ),
         ),
     }
     for key, (teaser, text) in updates.items():

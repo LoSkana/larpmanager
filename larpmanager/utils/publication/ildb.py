@@ -178,7 +178,7 @@ def _sync_run(run: Run, ctx: IldbCtx) -> None:
     ]
     missing = [f for f in required if f not in payload]
     if missing:
-        logger.exception("ILDB: skipping run %s - missing required fields: %s", run.search, missing)
+        logger.error("ILDB: skipping run %s - missing required fields: %s", run.search, missing)
         return
 
     ctx.ildb_event_id = _find_event_id(run, ctx)
@@ -362,7 +362,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     lon = get_element_config(event, "pub_lon").strip()
     location = f"{lat},{lon}" if lat and lon else None
 
-    locandina = event.cover if event.cover else None
+    locandina = event.cover or None
 
     payload = {
         "nome": run.search,

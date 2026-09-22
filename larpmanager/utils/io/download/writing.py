@@ -359,7 +359,7 @@ def _row_header(  # noqa: C901, PLR0912
         row_values.append(el.number)
 
     # Add participant and email columns for registrations
-    if model in ["registration"]:
+    if model == "registration":
         # Add participant display name
         header_columns.append("Participant")
         display_name = ""
@@ -567,7 +567,7 @@ def _writing_field(context: dict, field_name: str, field_names: list, field_valu
         return
 
     # Check if title field is enabled in features
-    if field_name in ["title"] and field_name not in context["features"]:
+    if field_name == "title" and field_name not in context["features"]:
         return
 
     # Handle faction field processing

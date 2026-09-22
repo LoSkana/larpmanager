@@ -199,7 +199,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "event_slug": run.event.slug,
             "number": run.number,
             "label": str(run),
-            "start_date": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
+            "start_date": (run.start or datetime.max.replace(tzinfo=UTC).date()),
             "cover_url": run.get_cover_url(),
         }
 

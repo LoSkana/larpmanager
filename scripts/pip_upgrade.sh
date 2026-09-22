@@ -46,6 +46,16 @@ export POSTGRES_DB=larpmanager_test
 export CI=true
 export DB_HOST=localhost
 
+# npm dependencies (larpmanager/static/package.json) are not auto-upgraded here:
+# several packages (the datatables.net-* family in particular) are pinned to
+# versions that must stay in lockstep with each other's peer dependencies, so
+# bumping them needs a manual look rather than a blind `npm update`.
+# To upgrade: edit larpmanager/static/package.json by hand, then run
+# `npm install` (or `npm outdated` first to see what's behind) inside
+# larpmanager/static, and re-check the datatables.net-* set together.
+echo "MANUAL STEP: review/upgrade npm packages in larpmanager/static/package.json (see comment above), then run 'npm install' there."
+(cd larpmanager/static && npm install && npm update)
+
 python manage.py compilemessages
 python manage.py collectstatic --noinput
 python manage.py compress

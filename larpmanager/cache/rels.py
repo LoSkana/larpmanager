@@ -489,7 +489,7 @@ def _build_faction_relations(char: Character, event_id: int) -> dict[str, Any]:
     Returns:
         Dictionary with faction relationship data
     """
-    cache_event_id = event_id if event_id else char.event_id
+    cache_event_id = event_id or char.event_id
     if get_event_config(cache_event_id, "campaign_faction_indep"):
         # Use the cache event for independent faction lookup
         faction_event_id = cache_event_id
