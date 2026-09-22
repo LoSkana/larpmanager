@@ -5901,6 +5901,9 @@ msgstr "Rozpoczęto ponowne generowanie PDF!"
 msgid "Payment awaiting verification"
 msgstr "Płatność oczekuje na weryfikację"
 
+msgid "Payments to approve reminders"
+msgstr "Przypomnienia o płatnościach do zatwierdzenia"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Kod osobisty: <b>%(cod)s</b>"
@@ -11862,6 +11865,13 @@ msgid ""
 msgstr ""
 "Jeśli włączone, postacie nie będą wyświetlane osobom niezalogowanym do "
 "systemu."
+
+msgid ""
+"If selected, send a reminder email to organizers for payments still awaiting"
+" approval."
+msgstr ""
+"Jeśli zaznaczysz tę opcję, organizatorzy dostaną e-mail z przypomnieniem o "
+"płatnościach, które wciąż czekają na zatwierdzenie."
 
 msgid ""
 "If you are absolutely certain that you want to delete this item, click on "

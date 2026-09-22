@@ -484,6 +484,14 @@ msgstr ""
 msgid "If selected, send organizers an email for each payment received."
 msgstr ""
 
+msgid "Payments to approve reminders"
+msgstr ""
+
+msgid ""
+"If selected, send a reminder email to organizers for payments still awaiting "
+"approval."
+msgstr ""
+
 msgid "Customised mail server"
 msgstr ""
 

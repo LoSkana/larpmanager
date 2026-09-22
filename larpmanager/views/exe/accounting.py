@@ -62,13 +62,14 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
+from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get
+from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.utils.users.member_flags import (
@@ -555,6 +556,7 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
     # Mark expense as approved and save changes
     exp.is_approved = True
     exp.save()
+    save_log(context, AccountingItemExpense, exp, exp.uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to expenses list
     messages.success(request, _("Request approved"))
@@ -769,6 +771,7 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
             return render(request, "elements/dashboard/approve_confirm.html", context)
         messages.error(request, error_message)
         return redirect(page)
+    save_log(context, PaymentInvoice, context["el"], context["el"].uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to the page listing invoices of that type
     messages.success(request, _("Element approved!"))

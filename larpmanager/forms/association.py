@@ -525,6 +525,13 @@ class ExeConfigForm(ConfigForm):
         payment_received_help_text = _("If selected, send organizers an email for each payment received.")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
 
+        # Configure payment approval reminder toggle
+        payment_reminder_label = _("Payments to approve reminders")
+        payment_reminder_help_text = _(
+            "If selected, send a reminder email to organizers for payments still awaiting approval."
+        )
+        self.add_configs("mail_payment_reminder", ConfigType.BOOL, payment_reminder_label, payment_reminder_help_text)
+
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
             empty_help_text = ""

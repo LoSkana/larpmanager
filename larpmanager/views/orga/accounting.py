@@ -219,6 +219,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
     # Save the updated invoice status
     context["el"].save()
+    save_log(context, PaymentInvoice, context["el"], context["el"].uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved!"))
@@ -884,6 +885,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     # Update expense approval status and save to database
     exp.is_approved = True
     exp.save()
+    save_log(context, AccountingItemExpense, exp, exp.uuid, operation_type=LogOperationType.UPDATE)
 
     # Display success message and redirect to expenses list
     messages.success(request, _("Request approved"))

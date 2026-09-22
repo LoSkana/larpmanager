@@ -5901,6 +5901,9 @@ msgstr "Regenerování PDF bylo spuštěno!"
 msgid "Payment awaiting verification"
 msgstr "Platba čeká na ověření"
 
+msgid "Payments to approve reminders"
+msgstr "Připomínky plateb ke schválení"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Osobní kód: <b>%(cod)s</b>"
@@ -11608,6 +11611,13 @@ msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "
 "the system."
 msgstr "Je-li povoleno, postavy se nezobrazí nepřihlášeným uživatelům."
+
+msgid ""
+"If selected, send a reminder email to organizers for payments still awaiting"
+" approval."
+msgstr ""
+"Pokud je zaškrtnuto, pošle organizátorům e-mail s připomínkou plateb, které "
+"stále čekají na schválení."
 
 msgid ""
 "If you are absolutely certain that you want to delete this item, click on "

@@ -628,7 +628,7 @@ class Command(BaseCommand):
         # Notify payment invoices not approved
         for payment_invoice in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
-                notify_invoice_check(payment_invoice)
+                notify_invoice_check(payment_invoice, reminder=True)
             except ObjectDoesNotExist:
                 payment_invoice.delete()
             except Exception as exception:  # noqa: BLE001 - Batch operation must continue and notify admins on any error
