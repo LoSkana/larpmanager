@@ -28,11 +28,15 @@ from pathlib import Path
 from typing import Any
 
 from django.conf import settings as conf_settings
+from django.core.files.storage import default_storage
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Engine
 from django.template.loader import get_template
+from django.utils.html import escape
+from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageDraw
+from reportlab.lib import pagesizes
 from xhtml2pdf import pisa
 
 from larpmanager.cache.config import get_event_config
@@ -54,9 +58,26 @@ def fix_filename(filename: Any) -> Any:
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
 
 
+# All the configuration names defining the styling of the generated sheets
+PDF_CONFIGS = [
+    "page_css",
+    "pdf_page_size",
+    "pdf_margin",
+    "pdf_header",
+    "pdf_footer",
+    "pdf_background",
+    "pdf_font_title",
+    "pdf_font_text",
+    "pdf_color_title",
+    "pdf_color_text",
+    "pdf_color_link",
+    "pdf_color_bold",
+]
+
+
 def has_pdf_customization(event_id: int) -> bool:
     """Return True if event has any custom PDF styling configured."""
-    for key in ["page_css", "header_content", "footer_content"]:
+    for key in PDF_CONFIGS:
         value = get_event_config(event_id, key)
         if value and str(value).strip():
             return True
@@ -177,12 +198,231 @@ def _round_image_data_uri(url: str, radius: int = _REL_IMAGE_SIZE // 6) -> str |
         return None
 
 
+# Mime types accepted for the font files uploaded in the event configuration
+PDF_FONT_TYPES = ["font/ttf", "font/otf", "font/sfnt", "application/x-font-ttf"]
+
+# Page formats available for the sheets, as (config value, label) choices
+PDF_PAGE_SIZE_CHOICES = [
+    ("", "A4"),
+    ("a4_landscape", _("A4 landscape")),
+    ("a5", "A5"),
+    ("a5_landscape", _("A5 landscape")),
+    ("letter", _("Letter")),
+    ("letter_landscape", _("Letter landscape")),
+]
+
+# Page dimensions in points, for each available page format
+_PDF_PAGE_SIZES = {
+    "": pagesizes.A4,
+    "a4_landscape": pagesizes.landscape(pagesizes.A4),
+    "a5": pagesizes.A5,
+    "a5_landscape": pagesizes.landscape(pagesizes.A5),
+    "letter": pagesizes.LETTER,
+    "letter_landscape": pagesizes.landscape(pagesizes.LETTER),
+}
+
+# Font family names used for the fonts uploaded in the event configuration
+_PDF_FONT_NAMES = {"pdf_font_title": "lm_title_font", "pdf_font_text": "lm_text_font"}
+
+# Selectors receiving each customizable element: xhtml2pdf does not inherit styles reliably
+_PDF_TITLE_SELECTORS = "#char_name, #char_title, .head, h1, h2, h3, h4, h5, h6"
+_PDF_TEXT_SELECTORS = "html, body, div, p, span, td, th, li"
+_PDF_LINK_SELECTORS = "a"
+_PDF_BOLD_SELECTORS = "b, strong"
+
+# Points in a centimeter, to convert the margin set in the event configuration
+_PDF_CM = 28.3465
+
+# Vertical space reserved for the header and the footer bands, in points
+_PDF_BAND_HEIGHT = 34
+
+# Space left between the header / footer bands and the content of the page, in points
+_PDF_BAND_GAP = 6
+
+# Default page margin, in centimeters
+_PDF_DEFAULT_MARGIN = 2.0
+
+# Content of the automatic header: organization, character and event name
+_PDF_HEADER_HTML = (
+    '<table class="pdf-band"><tr><td class="pdf-left">{organization}</td>'
+    '<td class="pdf-center">{character}</td><td class="pdf-right">{event}</td></tr></table>'
+)
+
+# Content of the automatic footer: event name and page numbers
+_PDF_FOOTER_HTML = (
+    '<table class="pdf-band"><tr><td class="pdf-left">{event}</td>'
+    '<td class="pdf-right"><pdf:pagenumber> / <pdf:pagecount></td></tr></table>'
+)
+
+# Styling of the automatic header and footer bands
+_PDF_BAND_CSS = (
+    "#header_content, #footer_content { font-size: 80%; }\n"
+    ".pdf-band { width: 100%; }\n"
+    ".pdf-band td.pdf-left { text-align: left; }\n"
+    ".pdf-band td.pdf-center { text-align: center; }\n"
+    ".pdf-band td.pdf-right { text-align: right; }\n"
+)
+
+
+def _pdf_margin(value: str) -> float:
+    """Return the page margin in points from the config value, in centimeters."""
+    try:
+        margin = float(value)
+    except (TypeError, ValueError):
+        margin = _PDF_DEFAULT_MARGIN
+    return margin * _PDF_CM
+
+
+def _pdf_frames(configs: dict, width: float, height: float, margin: float) -> dict[str, str]:
+    """Build the frame declarations of the @page rule, by frame name.
+
+    The content frame shrinks to leave room for the header and footer bands,
+    that are placed inside the top and bottom margin of the page.
+    """
+    # Keep the margin sane, so that a large value on a small page still leaves room
+    margin = min(margin, width / 4, height / 4)
+
+    inner_width = width - 2 * margin
+    top = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if configs.get("pdf_header") else 0)
+    bottom = margin + (_PDF_BAND_HEIGHT + _PDF_BAND_GAP if configs.get("pdf_footer") else 0)
+
+    frames = {
+        "content_frame": (
+            f"@frame content_frame {{ left: {margin:g}pt; top: {top:g}pt; "
+            f"width: {inner_width:g}pt; height: {height - top - bottom:g}pt; }}"
+        ),
+    }
+
+    if configs.get("pdf_header"):
+        frames["header_frame"] = (
+            f"@frame header_frame {{ -pdf-frame-content: header_content; left: {margin:g}pt; "
+            f"top: {margin:g}pt; width: {inner_width:g}pt; height: {_PDF_BAND_HEIGHT:g}pt; }}"
+        )
+
+    if configs.get("pdf_footer"):
+        frames["footer_frame"] = (
+            f"@frame footer_frame {{ -pdf-frame-content: footer_content; left: {margin:g}pt; "
+            f"top: {height - margin - _PDF_BAND_HEIGHT:g}pt; "
+            f"width: {inner_width:g}pt; height: {_PDF_BAND_HEIGHT:g}pt; }}"
+        )
+
+    return frames
+
+
+def _pdf_page_rule(configs: dict, page_css: str) -> str:
+    """Build the @page rule with size, background and frames, merged with the custom CSS.
+
+    When the custom CSS declares its own @page rule, the generated declarations are
+    added inside it, skipping the ones already written by hand: a second @page rule
+    would replace the first one entirely.
+    """
+    width, height = _PDF_PAGE_SIZES.get(configs.get("pdf_page_size") or "", pagesizes.A4)
+    margin = _pdf_margin(configs.get("pdf_margin"))
+
+    declarations = []
+    if not re.search(r"(?<![\w-])size\s*:", page_css):
+        declarations.append(f"size: {width:g}pt {height:g}pt;")
+
+    background = configs.get("pdf_background")
+    if background:
+        declarations.append(
+            f"background-image: url('{default_storage.url(background)}'); "
+            f"background-width: {width:g}pt; background-height: {height:g}pt; "
+            f"background-object-position: 0pt 0pt;",
+        )
+
+    # Skip the frames already declared by hand, to avoid duplicated frame names
+    for frame_name, frame_rule in _pdf_frames(configs, width, height, margin).items():
+        if frame_name not in page_css:
+            declarations.append(frame_rule)
+
+    generated = " ".join(declarations)
+
+    # Add the declarations to the custom @page rule, if there is one
+    match = re.search(r"@page[^{]*\{", page_css)
+    if match:
+        return page_css[: match.end()] + " " + generated + " " + page_css[match.end() :]
+
+    return "@page { " + generated + " }\n" + page_css
+
+
+def _pdf_fonts_css(configs: dict) -> str:
+    """Build the @font-face rules for the fonts uploaded in the event configuration."""
+    css = ""
+    for config_name, selectors in (
+        ("pdf_font_title", _PDF_TITLE_SELECTORS),
+        ("pdf_font_text", _PDF_TEXT_SELECTORS),
+    ):
+        font_path = configs.get(config_name)
+        if not font_path:
+            continue
+        font_name = _PDF_FONT_NAMES[config_name]
+        css += (
+            f"@font-face {{ font-family: '{font_name}'; src: url('{default_storage.url(font_path)}'); }}\n"
+            f"{selectors} {{ font-family: '{font_name}'; }}\n"
+        )
+    return css
+
+
+def _pdf_colors_css(configs: dict) -> str:
+    """Build the color rules for the colors set in the event configuration."""
+    css = ""
+    for config_name, selectors in (
+        ("pdf_color_text", _PDF_TEXT_SELECTORS),
+        ("pdf_color_title", _PDF_TITLE_SELECTORS),
+        ("pdf_color_link", _PDF_LINK_SELECTORS),
+        ("pdf_color_bold", _PDF_BOLD_SELECTORS),
+    ):
+        color = configs.get(config_name)
+        if color:
+            css += f"{selectors} {{ color: {color}; }}\n"
+    return css
+
+
+def _pdf_bands(context: dict, configs: dict) -> None:
+    """Add to the context the content of the automatic header and footer."""
+    sheet_char = context.get("sheet_char") or {}
+    event_name = escape(context["event"].name)
+
+    context["header_content"] = ""
+    if configs.get("pdf_header"):
+        context["header_content"] = _PDF_HEADER_HTML.format(
+            organization=escape(context["event"].association.name),
+            character=escape(sheet_char.get("name", "")),
+            event=event_name,
+        )
+
+    context["footer_content"] = ""
+    if configs.get("pdf_footer"):
+        context["footer_content"] = _PDF_FOOTER_HTML.format(event=event_name)
+
+
+def _add_pdf_style(context: dict) -> None:
+    """Add to the context the PDF styling built from the event configuration.
+
+    The generated rules are placed before the custom CSS code, so that it keeps
+    the last word on every element.
+    """
+    configs = {
+        name: get_event_config(context["event"].id, name, context=context, bypass_cache=True) for name in PDF_CONFIGS
+    }
+
+    _pdf_bands(context, configs)
+
+    page_css = configs.get("page_css") or ""
+    style = _pdf_fonts_css(configs) + _pdf_colors_css(configs)
+    if configs.get("pdf_header") or configs.get("pdf_footer"):
+        style += _PDF_BAND_CSS
+
+    context["page_css"] = style + _pdf_page_rule(configs, page_css)
+
+
 def add_pdf_instructions(context: dict) -> None:
     """Add PDF generation instructions to template context.
 
-    Processes template variables and utility codes for PDF headers,
-    footers, and CSS styling. Updates the context dictionary in-place
-    with processed PDF styling and content instructions.
+    Builds the styling of the sheet from the PDF options of the event, and the
+    content of the automatic header and footer. Updates the context dictionary
+    in-place.
 
     Args:
         context: Template context dictionary containing event and character data.
@@ -193,49 +433,18 @@ def add_pdf_instructions(context: dict) -> None:
 
     Side Effects:
         - Updates context with 'page_css', 'header_content', 'footer_content' keys
-        - Replaces template variables with actual values
         - Replaces utility codes with URLs
 
     """
-    # Extract PDF configuration from event settings
-    for instruction_key in ["page_css", "header_content", "footer_content"]:
-        context[instruction_key] = get_event_config(
-            context["event"].id,
-            instruction_key,
-            context=context,
-            bypass_cache=True,
-        )
+    # Build the styling and the header / footer content from the event configuration
+    _add_pdf_style(context)
 
-    # Build replacement codes dictionary with event and character data
-    replacement_codes = {
-        "<pdf:organization>": context["event"].association.name,
-        "<pdf:event>": context["event"].name,
-    }
-
-    # Add character-specific replacement codes
-    for character_field in ["number", "name", "title"]:
-        replacement_codes[f"<pdf:{character_field}>"] = str(context["sheet_char"][character_field])
-
-    # Replace character info placeholders in header and footer content
-    for section_key in ["header_content", "footer_content"]:
-        if section_key not in context:
-            continue
-        # Apply all code replacements to current section
-        for placeholder, value in replacement_codes.items():
-            if placeholder not in context[section_key]:
-                continue
-            context[section_key] = context[section_key].replace(placeholder, value)
-
-    # Replace utility codes with actual URLs in all PDF sections
-    for section_key in ["header_content", "footer_content", "page_css"]:
-        if section_key not in context:
-            continue
-        # Find all utility codes in format #code# and replace with URLs
-        for utility_code_match in re.findall(r"(#[\w-]+#)", context[section_key]):
-            utility_code = utility_code_match.replace("#", "")
-            util = get_object_or_404(Util, cod=utility_code)
-            context[section_key] = context[section_key].replace(utility_code_match, util.util.url)
-        logger.debug("Processed PDF context for key '%s': %s characters", section_key, len(context[section_key]))
+    # Find all utility codes in format #code# in the custom CSS, and replace with URLs
+    for utility_code_match in re.findall(r"(#[\w-]+#)", context["page_css"]):
+        utility_code = utility_code_match.replace("#", "")
+        util = get_object_or_404(Util, cod=utility_code)
+        context["page_css"] = context["page_css"].replace(utility_code_match, util.util.url)
+    logger.debug("Processed PDF css: %s characters", len(context["page_css"]))
 
 
 def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: bool = False) -> None:

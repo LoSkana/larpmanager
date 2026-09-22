@@ -592,6 +592,9 @@ msgstr "Gids:"
 msgid "Guilds"
 msgstr "Gilden"
 
+msgid "Header"
+msgstr "Koptekst"
+
 msgid "Hidden"
 msgstr "Verborgen"
 
@@ -609,6 +612,9 @@ msgstr "Aangesloten"
 
 msgid "Labels"
 msgstr "Labels"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Geladen"
@@ -1565,6 +1571,9 @@ msgstr "Operatie"
 msgid "Organizer"
 msgstr "Organisator"
 
+msgid "Page size"
+msgstr "Paginaformaat"
+
 msgid "Payments:"
 msgstr "Betalingen:"
 
@@ -1669,6 +1678,9 @@ msgstr "Toeslag"
 
 msgid "Symmetric"
 msgstr "Symmetrisch"
+
+msgid "Text font"
+msgstr "Tekstlettertype"
 
 msgid "Tolerance"
 msgstr "Tolerantie"
@@ -2003,6 +2015,9 @@ msgstr "Toeslagen"
 msgid "Text color"
 msgstr "Kleur tekst"
 
+msgid "Title font"
+msgstr "Titellettertype"
+
 msgid "To be done"
 msgstr "Nog te doen"
 
@@ -2147,17 +2162,11 @@ msgstr "Fiscaal nummer"
 msgid "Flags types"
 msgstr "Vlagtypen"
 
-msgid "Footer HTML"
-msgstr "HTML-voettekst"
-
 msgid "Gallery Pdf"
 msgstr "PDF-galerij"
 
 msgid "Guild cover"
 msgstr "Omslag van gilde"
-
-msgid "Header HTML"
-msgstr "HTML-koptekst"
 
 msgid "In Progress"
 msgstr "In uitvoering"
@@ -2212,6 +2221,9 @@ msgstr "Niet gescand"
 
 msgid "Outstanding"
 msgstr "Openstaand"
+
+msgid "Page margin"
+msgstr "Paginamarge"
 
 msgid "Participant"
 msgstr "Deelnemer"
@@ -2309,6 +2321,9 @@ msgstr "Suggesties"
 msgid "Ticket list"
 msgstr "Ticketlijst"
 
+msgid "Title color"
+msgstr "Titelkleur"
+
 msgid "Total costs"
 msgstr "Totale kosten"
 
@@ -2341,6 +2356,12 @@ msgstr "Je evenementen"
 
 msgid "collections"
 msgstr "inzamelingen"
+
+msgid "A4 landscape"
+msgstr "A4 liggend"
+
+msgid "A5 landscape"
+msgstr "A5 liggend"
 
 msgid "Ability type"
 msgstr "Type vaardigheid"
@@ -3560,6 +3581,9 @@ msgstr "Verzendinterval"
 msgid "Item assignments"
 msgstr "Objecttoewijzingen"
 
+msgid "Letter landscape"
+msgstr "Letter liggend"
+
 msgid "Lite Mode active"
 msgstr "Lite-modus actief"
 
@@ -4288,6 +4312,9 @@ msgstr "Toegewezen personages"
 
 msgid "Characters shortcut"
 msgstr "Snelkoppeling naar personages"
+
+msgid "Color of the links."
+msgstr "Kleur van de links."
 
 msgid "Confirm Unsubscribe"
 msgstr "Uitschrijven bevestigen"
@@ -5485,6 +5512,9 @@ msgstr "Kies het betaalmiddel:"
 msgid "City or place of the event"
 msgstr "Stad of plaats van het evenement"
 
+msgid "Color of the text in bold."
+msgstr "Kleur van de vetgedrukte tekst."
+
 msgid "Configure the debrief form"
 msgstr "Het nabesprekingsformulier configureren"
 
@@ -5729,6 +5759,9 @@ msgstr "Neem een vriend(in) mee naar %(event)s!"
 msgid "Characters not participating"
 msgstr "Personages die niet deelnemen"
 
+msgid "Color of all the other text."
+msgstr "Kleur van alle andere tekst."
+
 msgid "Cover photo fo the character"
 msgstr "Omslagfoto van het personage"
 
@@ -5896,12 +5929,6 @@ msgstr "Opening van de inschrijvingen niet ingesteld"
 msgid "Result of the bulk email send"
 msgstr "Resultaat van de massale e-mailverzending"
 
-msgid "The HTML code for the footer."
-msgstr "De HTML-code voor de voettekst."
-
-msgid "The HTML code for the header."
-msgstr "De HTML-code voor de koptekst."
-
 msgid "The date when this event ends"
 msgstr "De datum waarop dit evenement eindigt"
 
@@ -5964,6 +5991,9 @@ msgstr "Duur: %(duration)s seconden"
 
 msgid "Enter your level of experience"
 msgstr "Vul je ervaringsniveau in"
+
+msgid "Format of the generated pages."
+msgstr "Formaat van de gegenereerde pagina's."
 
 msgid "If selected, members can vote."
 msgstr "Indien geselecteerd, kunnen leden stemmen."
@@ -7688,6 +7718,9 @@ msgstr "Voer in hoe de uitgaven in de begroting worden toegewezen"
 msgid "Extra price applied when this quota is active"
 msgstr "Extra prijs toegepast wanneer dit quotum actief is"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Vul een aantal centimeters in, zoals 2 of 1,5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Beheer badges en wijs ze toe aan deelnemers"
 
@@ -7762,6 +7795,9 @@ msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 msgid "Complete the checklist to unlock all features:"
 msgstr ""
 "Voltooi de checklist om alle functies van het platform te ontgrendelen:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr "Lettertypebestand (TTF) dat wordt toegepast op alle andere tekst."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
@@ -8459,6 +8495,9 @@ msgstr "(Optioneel) Namen van voorvereiste vermogens, door komma's gescheiden"
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Een pakkende korte zin of slogan om je evenement te beschrijven"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Kleur van de naam van het personage en van de titels."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Ten minste één betalingsmethode configureren voor deelnemers"
 
@@ -8758,6 +8797,10 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 "Neem contact op met de organisatoren als je later een nieuwe toegangslink "
 "nodig hebt"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr ""
+"Lege ruimte die aan elke kant van de pagina overblijft, in centimeters."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
@@ -9197,6 +9240,11 @@ msgstr ""
 msgid "If you encounter any issues, please contact us for assistance."
 msgstr ""
 "Mocht je problemen ondervinden, neem dan contact met ons op voor hulp."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr ""
+"Afbeelding die als achtergrond wordt gebruikt, uitgerekt om de hele pagina "
+"te bedekken."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
@@ -10090,6 +10138,11 @@ msgstr ""
 "keuzes."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr ""
+"Toon onderaan elke pagina de naam van het evenement en het paginanummer."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr ""
 "De kortingswaarde; deze wordt afgetrokken van de totale inschrijfkosten"
@@ -10173,6 +10226,12 @@ msgid ""
 msgstr ""
 "Bewerk de data, status en registratie-instellingen voor deze "
 "evenementensessie"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr ""
+"Lettertypebestand (TTF) dat wordt toegepast op de naam van het personage en "
+"op de titels."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -12249,6 +12308,13 @@ msgid ""
 msgstr ""
 "Wees voorzichtig bij het uitvoeren van deze stappen - anders wordt je "
 "betaling niet verwerkt!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Toon bovenaan elke pagina de naam van de organisatie, van het personage en "
+"van het evenement."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

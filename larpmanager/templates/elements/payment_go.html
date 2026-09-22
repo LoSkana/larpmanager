@@ -97,7 +97,7 @@
           method="post"
           class="accounting_submit">
         {% csrf_token %}
-        <table class="mob ">
+        <table class="mob">
             {{ any_form.as_table }}
         </table>
         <input type="submit" value="{% trans "Submit" %}">

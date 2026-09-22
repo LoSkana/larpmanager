@@ -592,6 +592,9 @@ msgstr "Οδηγός:"
 msgid "Guilds"
 msgstr "Συντεχνίες"
 
+msgid "Header"
+msgstr "Κεφαλίδα"
+
 msgid "Hidden"
 msgstr "Κρυφό"
 
@@ -609,6 +612,9 @@ msgstr "Εγγράφηκε"
 
 msgid "Labels"
 msgstr "Ετικέτες"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Φορτωμένο"
@@ -1565,6 +1571,9 @@ msgstr "Λειτουργία"
 msgid "Organizer"
 msgstr "Διοργανωτής"
 
+msgid "Page size"
+msgstr "Μέγεθος σελίδας"
+
 msgid "Payments:"
 msgstr "Πληρωμές:"
 
@@ -1669,6 +1678,9 @@ msgstr "Προσαύξηση"
 
 msgid "Symmetric"
 msgstr "Συμμετρικό"
+
+msgid "Text font"
+msgstr "Γραμματοσειρά κειμένου"
 
 msgid "Tolerance"
 msgstr "Ανοχή"
@@ -2003,6 +2015,9 @@ msgstr "Προσαυξήσεις"
 msgid "Text color"
 msgstr "Χρώμα κειμένου"
 
+msgid "Title font"
+msgstr "Γραμματοσειρά τίτλου"
+
 msgid "To be done"
 msgstr "Προς ολοκλήρωση"
 
@@ -2147,17 +2162,11 @@ msgstr "ΑΦΜ"
 msgid "Flags types"
 msgstr "Τύποι σημαιών"
 
-msgid "Footer HTML"
-msgstr "HTML υποσέλιδου"
-
 msgid "Gallery Pdf"
 msgstr "Gallery PDF"
 
 msgid "Guild cover"
 msgstr "Εξώφυλλο συντεχνίας"
-
-msgid "Header HTML"
-msgstr "HTML κεφαλίδας"
 
 msgid "In Progress"
 msgstr "Σε εξέλιξη"
@@ -2212,6 +2221,9 @@ msgstr "Non scansionato"
 
 msgid "Outstanding"
 msgstr "In sospeso"
+
+msgid "Page margin"
+msgstr "Περιθώριο σελίδας"
 
 msgid "Participant"
 msgstr "Συμμετέχων"
@@ -2309,6 +2321,9 @@ msgstr "Προτάσεις"
 msgid "Ticket list"
 msgstr "Λίστα εισιτηρίων"
 
+msgid "Title color"
+msgstr "Χρώμα τίτλου"
+
 msgid "Total costs"
 msgstr "Συνολικά έξοδα"
 
@@ -2341,6 +2356,12 @@ msgstr "Τα Events σου"
 
 msgid "collections"
 msgstr "έρανοι"
+
+msgid "A4 landscape"
+msgstr "A4 οριζόντιο"
+
+msgid "A5 landscape"
+msgstr "A5 οριζόντιο"
 
 msgid "Ability type"
 msgstr "Τύπος ικανότητας"
@@ -3560,6 +3581,9 @@ msgstr "Διάστημα αποστολής"
 msgid "Item assignments"
 msgstr "Αναθέσεις αντικειμένων"
 
+msgid "Letter landscape"
+msgstr "Letter οριζόντιο"
+
 msgid "Lite Mode active"
 msgstr "Η απλή λειτουργία είναι ενεργή"
 
@@ -4288,6 +4312,9 @@ msgstr "Χαρακτήρες που έχουν ανατεθεί"
 
 msgid "Characters shortcut"
 msgstr "Συντόμευση χαρακτήρων"
+
+msgid "Color of the links."
+msgstr "Χρώμα των συνδέσμων."
 
 msgid "Confirm Unsubscribe"
 msgstr "Επιβεβαίωση κατάργησης εγγραφής"
@@ -5485,6 +5512,9 @@ msgstr "Επίλεξε μέθοδο πληρωμής:"
 msgid "City or place of the event"
 msgstr "Πόλη ή τόπος του event"
 
+msgid "Color of the text in bold."
+msgstr "Χρώμα του κειμένου σε έντονη γραφή."
+
 msgid "Configure the debrief form"
 msgstr "Ρύθμιση της φόρμας απολογισμού"
 
@@ -5729,6 +5759,9 @@ msgstr "Φέρε έναν φίλο στο %(event)s!"
 msgid "Characters not participating"
 msgstr "Χαρακτήρες που δεν συμμετέχουν"
 
+msgid "Color of all the other text."
+msgstr "Χρώμα όλου του υπόλοιπου κειμένου."
+
 msgid "Cover photo fo the character"
 msgstr "Φωτογραφία εξωφύλλου του χαρακτήρα"
 
@@ -5896,12 +5929,6 @@ msgstr "Δεν έχει οριστεί άνοιγμα εγγραφών"
 msgid "Result of the bulk email send"
 msgstr "Αποτέλεσμα μαζικής αποστολής email"
 
-msgid "The HTML code for the footer."
-msgstr "Ο κώδικας HTML για το υποσέλιδο."
-
-msgid "The HTML code for the header."
-msgstr "Ο κώδικας HTML για την κεφαλίδα."
-
 msgid "The date when this event ends"
 msgstr "Η ημερομηνία λήξης αυτής της εκδήλωσης"
 
@@ -5964,6 +5991,9 @@ msgstr "Διάρκεια: %(duration)s δευτερόλεπτα"
 
 msgid "Enter your level of experience"
 msgstr "Εισήγαγε το επίπεδο εμπειρίας σου"
+
+msgid "Format of the generated pages."
+msgstr "Μορφή των σελίδων που δημιουργούνται."
 
 msgid "If selected, members can vote."
 msgstr "Αν επιλεγεί, τα μέλη μπορούν να ψηφίσουν."
@@ -7688,6 +7718,9 @@ msgstr "Εισήγαγε πώς κατανέμονται οι δαπάνες σ�
 msgid "Extra price applied when this quota is active"
 msgstr "Επιπλέον τιμή που εφαρμόζεται όταν αυτή η ποσόστωση είναι ενεργή"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Βάλε έναν αριθμό εκατοστών, όπως 2 ή 1.5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Διαχείριση Badges και ανάθεσή τους σε συμμετέχοντες"
 
@@ -7761,6 +7794,10 @@ msgstr "Ακύρωση λόγω μη καταβολής της ετήσιας σ
 
 msgid "Complete the checklist to unlock all features:"
 msgstr "Ολοκλήρωσε τη λίστα ελέγχου για να ξεκλειδώσεις όλες τις λειτουργίες:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr ""
+"Αρχείο γραμματοσειράς (TTF) που εφαρμόζεται σε όλο το υπόλοιπο κείμενο."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Υπόδειξη: Οι σωστές απαντήσεις σε αυτή την ερώτηση είναι"
@@ -8477,6 +8514,9 @@ msgstr ""
 "Μια σύντομη, πιασάρικη φράση ή ένα σλόγκαν για την περιγραφή της εκδήλωσής "
 "σου"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Χρώμα του ονόματος του χαρακτήρα και των τίτλων."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Ρύθμισε τουλάχιστον μία μέθοδο πληρωμής για τους συμμετέχοντες"
 
@@ -8791,6 +8831,9 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 "Επικοινώνησε με τους διοργανωτές αν χρειαστείς νέο σύνδεσμο πρόσβασης "
 "αργότερα"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr "Κενός χώρος που μένει σε κάθε πλευρά της σελίδας, σε εκατοστά."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
@@ -9243,6 +9286,10 @@ msgstr ""
 msgid "If you encounter any issues, please contact us for assistance."
 msgstr ""
 "Αν αντιμετωπίσεις οποιοδήποτε πρόβλημα, επικοινώνησε μαζί μας για βοήθεια."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr ""
+"Εικόνα που εφαρμόζεται ως φόντο, μεγεθυμένη ώστε να καλύπτει όλη τη σελίδα."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
@@ -10159,6 +10206,11 @@ msgstr ""
 "επιλογές."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr ""
+"Δείξε στο κάτω μέρος κάθε σελίδας το όνομα του event και τον αριθμό σελίδας."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr "Η αξία της έκπτωσης· θα αφαιρεθεί από το συνολικό κόστος εγγραφής"
 
@@ -10247,6 +10299,12 @@ msgid ""
 msgstr ""
 "Επεξεργάσου τις ημερομηνίες, την κατάσταση και τις ρυθμίσεις εγγραφής αυτής "
 "της συνεδρίας εκδήλωσης"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr ""
+"Αρχείο γραμματοσειράς (TTF) που εφαρμόζεται στο όνομα του χαρακτήρα και "
+"στους τίτλους."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -12342,6 +12400,13 @@ msgid ""
 msgstr ""
 "Πρόσεξε να εκτελέσεις αυτά τα βήματα - αλλιώς η πληρωμή σου δεν θα "
 "διεκπεραιωθεί!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Δείξε στην κορυφή κάθε σελίδας το όνομα του οργανισμού, του χαρακτήρα και "
+"του event."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

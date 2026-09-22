@@ -592,6 +592,9 @@ msgstr "Průvodce:"
 msgid "Guilds"
 msgstr "Cechy"
 
+msgid "Header"
+msgstr "Záhlaví"
+
 msgid "Hidden"
 msgstr "Skryté"
 
@@ -609,6 +612,9 @@ msgstr "Připojen"
 
 msgid "Labels"
 msgstr "Štítky"
+
+msgid "Letter"
+msgstr "Letter"
 
 msgid "Loaded"
 msgstr "Načteno"
@@ -1565,6 +1571,9 @@ msgstr "Operace"
 msgid "Organizer"
 msgstr "Organizátor"
 
+msgid "Page size"
+msgstr "Velikost stránky"
+
 msgid "Payments:"
 msgstr "Platby:"
 
@@ -1669,6 +1678,9 @@ msgstr "Příplatek"
 
 msgid "Symmetric"
 msgstr "Symetrický"
+
+msgid "Text font"
+msgstr "Font textu"
 
 msgid "Tolerance"
 msgstr "Tolerance"
@@ -2003,6 +2015,9 @@ msgstr "Příplatky"
 msgid "Text color"
 msgstr "Barva textu"
 
+msgid "Title font"
+msgstr "Font titulků"
+
 msgid "To be done"
 msgstr "Ke splnění"
 
@@ -2147,17 +2162,11 @@ msgstr "Daňové identifikační číslo"
 msgid "Flags types"
 msgstr "Typy příznaků"
 
-msgid "Footer HTML"
-msgstr "Zápatí HTML"
-
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
 msgid "Guild cover"
 msgstr "Obálka cechu"
-
-msgid "Header HTML"
-msgstr "Záhlaví HTML"
 
 msgid "In Progress"
 msgstr "Probíhá"
@@ -2212,6 +2221,9 @@ msgstr "Nenaskenováno"
 
 msgid "Outstanding"
 msgstr "Chybějící"
+
+msgid "Page margin"
+msgstr "Okraj stránky"
 
 msgid "Participant"
 msgstr "Účastník"
@@ -2309,6 +2321,9 @@ msgstr "Návrhy"
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
 
+msgid "Title color"
+msgstr "Barva titulků"
+
 msgid "Total costs"
 msgstr "Celkové náklady"
 
@@ -2341,6 +2356,12 @@ msgstr "Tvé události"
 
 msgid "collections"
 msgstr "sbírky"
+
+msgid "A4 landscape"
+msgstr "A4 na šířku"
+
+msgid "A5 landscape"
+msgstr "A5 na šířku"
 
 msgid "Ability type"
 msgstr "Typ dovednosti"
@@ -3560,6 +3581,9 @@ msgstr "Intervalové odesílání"
 msgid "Item assignments"
 msgstr "Přiřazení položek"
 
+msgid "Letter landscape"
+msgstr "Letter na šířku"
+
 msgid "Lite Mode active"
 msgstr "Režim Lite je aktivní"
 
@@ -4288,6 +4312,9 @@ msgstr "Přidělené postavy"
 
 msgid "Characters shortcut"
 msgstr "Zkratka postav"
+
+msgid "Color of the links."
+msgstr "Barva odkazů."
 
 msgid "Confirm Unsubscribe"
 msgstr "Potvrzení odhlášení"
@@ -5485,6 +5512,9 @@ msgstr "Zvol způsob platby:"
 msgid "City or place of the event"
 msgstr "Město nebo místo konání akce"
 
+msgid "Color of the text in bold."
+msgstr "Barva textu tučně."
+
 msgid "Configure the debrief form"
 msgstr "Nastavit formulář debriefingu"
 
@@ -5729,6 +5759,9 @@ msgstr "Přiveď na %(event)s kamaráda!"
 msgid "Characters not participating"
 msgstr "Neúčastní se"
 
+msgid "Color of all the other text."
+msgstr "Barva všeho ostatního textu."
+
 msgid "Cover photo fo the character"
 msgstr "Titulní fotografie postavy"
 
@@ -5896,12 +5929,6 @@ msgstr "Otevření registrací není nastaveno"
 msgid "Result of the bulk email send"
 msgstr "Výsledek hromadného rozesílání e-mailů"
 
-msgid "The HTML code for the footer."
-msgstr "HTML kód pro zápatí."
-
-msgid "The HTML code for the header."
-msgstr "HTML kód pro záhlaví."
-
 msgid "The date when this event ends"
 msgstr "Datum ukončení této události"
 
@@ -5964,6 +5991,9 @@ msgstr "Doba trvání: %(duration)s sekund"
 
 msgid "Enter your level of experience"
 msgstr "Zadej svou úroveň zkušeností"
+
+msgid "Format of the generated pages."
+msgstr "Formát generovaných stránek."
 
 msgid "If selected, members can vote."
 msgstr "Je-li vybráno, členové mohou hlasovat."
@@ -7684,6 +7714,9 @@ msgstr "Zadej, jak jsou výdaje rozděleny v rozpočtu"
 msgid "Extra price applied when this quota is active"
 msgstr "Cena navíc se použije, když je tato kvóta aktivní"
 
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr "Zadej počet centimetrů, například 2 nebo 1.5"
+
 msgid "Manage badges and assign them to participants"
 msgstr "Spravovat badges a přidělovat je účastníkům"
 
@@ -7757,6 +7790,9 @@ msgstr "Zrušení z důvodu nezaplacení ročního členského příspěvku"
 
 msgid "Complete the checklist to unlock all features:"
 msgstr "Dokončením kontrolního seznamu odemkneš všechny funkce platformy:"
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr "Soubor s fontem (TTF) použitý pro všechen ostatní text."
 
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
@@ -8441,6 +8477,9 @@ msgstr ""
 msgid "A catchy short phrase or slogan to describe your event"
 msgstr "Krátká chytlavá fráze nebo slogan popisující tvou událost"
 
+msgid "Color of the name of the character, and of the titles."
+msgstr "Barva jména postavy a titulků."
+
 msgid "Configure at least one payment method for participants"
 msgstr "Konfigurace alespoň jedné platební metody pro účastníky"
 
@@ -8718,6 +8757,9 @@ msgstr "Umožňuje zkopírovat libovolný prvek přímo z jiné události"
 msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 "Pokud budeš později potřebovat nový přístupový odkaz, kontaktuj organizátory"
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr "Prázdný prostor po obou stranách stránky, v centimetrech."
 
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
@@ -9101,6 +9143,9 @@ msgid "If you encounter any issues, please contact us for assistance."
 msgstr ""
 "Pokud narazíš na nějaké potíže, obrať se prosím na nás a my ti rádi "
 "pomůžeme."
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr "Obrázek použitý jako pozadí, roztažený na celou stránku."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Spravovat štítky poolů pro seskupování poolů v inventářích postav"
@@ -9843,6 +9888,10 @@ msgid ""
 msgstr "Vyber platnou volbu. Tato volba není jednou z dostupných možností."
 
 msgid ""
+"Show on bottom of each page the name of the event, and the page number."
+msgstr "Zobrazit v dolní části každé stránky název eventu a číslo stránky."
+
+msgid ""
 "The discount value; it will be deducted from the total registration fee"
 msgstr "Hodnota slevy; bude odečtena z celkového registračního poplatku"
 
@@ -9908,6 +9957,10 @@ msgstr "Stáhni si seznam postav se fotografiemi profilu hráčů!"
 msgid ""
 "Edit the dates, status, and registration settings for this event session"
 msgstr "Uprav data, stav a nastavení registrace pro tuto relaci akce"
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr "Soubor s fontem (TTF) použitý pro jméno postavy a pro titulky."
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -11850,6 +11903,12 @@ msgid ""
 msgstr ""
 "Při provádění těchto kroků buď opatrný/á - jinak nebude tvoje platba "
 "zpracována!"
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+"Zobrazit v horní části každé stránky název organizace, postavy a eventu."
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "

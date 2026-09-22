@@ -1006,19 +1006,79 @@ msgstr ""
 msgid "Writing options"
 msgstr ""
 
+msgid "Page size"
+msgstr ""
+
+msgid "Format of the generated pages."
+msgstr ""
+
+msgid "Page margin"
+msgstr ""
+
+msgid "Empty space left on each side of the page, in centimeters."
+msgstr ""
+
+msgid "Insert a number of centimeters, like 2 or 1.5"
+msgstr ""
+
+msgid "Header"
+msgstr ""
+
+msgid ""
+"Show on top of each page the name of the organization, of the character and "
+"of the event."
+msgstr ""
+
+msgid "Footer"
+msgstr ""
+
+msgid "Show on bottom of each page the name of the event, and the page number."
+msgstr ""
+
+msgid "Background image"
+msgstr ""
+
+msgid "Image applied as background, expanded to cover the whole page."
+msgstr ""
+
+msgid "Title font"
+msgstr ""
+
+msgid ""
+"Font file (TTF) applied to the name of the character, and to the titles."
+msgstr ""
+
+msgid "Text font"
+msgstr ""
+
+msgid "Font file (TTF) applied to all the other text."
+msgstr ""
+
+msgid "Title color"
+msgstr ""
+
+msgid "Color of the name of the character, and of the titles."
+msgstr ""
+
+msgid "Text color"
+msgstr ""
+
+msgid "Color of all the other text."
+msgstr ""
+
+msgid "Link color"
+msgstr ""
+
+msgid "Color of the links."
+msgstr ""
+
+msgid "Highlight color"
+msgstr ""
+
+msgid "Color of the text in bold."
+msgstr ""
+
 msgid "The CSS code to customize PDF printing."
-msgstr ""
-
-msgid "Header HTML"
-msgstr ""
-
-msgid "The HTML code for the header."
-msgstr ""
-
-msgid "Footer HTML"
-msgstr ""
-
-msgid "The HTML code for the footer."
 msgstr ""
 
 msgid "Event"
@@ -3819,27 +3879,15 @@ msgid ""
 "branding (TTF, OTF, or WOFF formats)"
 msgstr ""
 
-msgid "Background image"
-msgstr ""
-
 msgid ""
 "Background image displayed across all pages of your organization - use a "
 "subtle pattern or texture for best results"
 msgstr ""
 
-msgid "Text color"
-msgstr ""
-
 msgid "Main color for text content throughout your organization's pages"
 msgstr ""
 
-msgid "Highlight color"
-msgstr ""
-
 msgid "Color used to highlight important text"
-msgstr ""
-
-msgid "Link color"
 msgstr ""
 
 msgid "Color for clickable links and interactive elements"
@@ -3867,9 +3915,6 @@ msgid "Association Statute"
 msgstr ""
 
 msgid "Legal notice"
-msgstr ""
-
-msgid "Footer"
 msgstr ""
 
 msgid "Terms and Conditions"
@@ -12258,6 +12303,18 @@ msgid "Failed to add profiles"
 msgstr ""
 
 msgid "Failed to add gallery"
+msgstr ""
+
+msgid "A4 landscape"
+msgstr ""
+
+msgid "A5 landscape"
+msgstr ""
+
+msgid "Letter"
+msgstr ""
+
+msgid "Letter landscape"
 msgstr ""
 
 #, python-format
