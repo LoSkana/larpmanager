@@ -25,7 +25,7 @@
     "moment": "2.x",
     "pdfmake": "0.2.x",
     "qtip2": "3.x",
-    "tinymce": "7.x",
-    "tinymce-i18n": "25.x"
+    "tinymce": "8.x",
+    "tinymce-i18n": "26.x"
   }
 }
