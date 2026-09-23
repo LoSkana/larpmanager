@@ -128,12 +128,12 @@ def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
 
         line_items = session.line_items
         # Validate that line items exist
-        if not line_items.get("data") or len(line_items["data"]) == 0:
+        if not line_items.data:
             logger.error("Stripe session %s has no line items", session.id)
             return False
 
         # assume only one
-        first_line_item = line_items["data"][0]
+        first_line_item = line_items.data[0]
         price_id = first_line_item["price"]["id"]
 
         # Get invoice to verify amount and currency
