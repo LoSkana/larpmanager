@@ -7174,9 +7174,6 @@ msgstr "Als de optie niet wordt gevonden, wordt deze overgeslagen"
 msgid "If selected, publish registered players."
 msgstr "Indien geselecteerd, publiceer ingeschreven spelers."
 
-msgid "If you need help, remember to check out:"
-msgstr "Als je hulp nodig hebt, ga dan naar:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Als je niet langer wilt deelnemen, kun je"
 
@@ -8306,9 +8303,6 @@ msgstr ""
 "Indien ingeschakeld, gebruik de facties van het bovenliggende evenement "
 "niet."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "De antwoorden van deelnemers op de nabesprekingsvragen bekijken"
 
@@ -8317,9 +8311,6 @@ msgstr "Selecteer welke van je personages je wilt openen:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "Geselecteerd evenement behoort niet tot deze organisatie"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Korte gidsen om te leren hoe het systeem werkt"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Of de factie door deelnemers kan worden geselecteerd"
@@ -11983,13 +11974,6 @@ msgstr ""
 "beschrijvingen hieronder:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"De zijbalk voor snelle toegang staat links (tik op mobiel op het pictogram "
-"linksonder om hem te openen)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -12002,13 +11986,6 @@ msgid ""
 msgstr ""
 "Dit zijn inschrijvingen van gedelegeerde accounts waarvoor je een betaling "
 "moet doen."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Tip: Zet deze pagina vast in je browser voor snellere toegang tot je "
-"organisatie en evenementen!"
 
 #, python-format
 msgid ""
@@ -14672,13 +14649,6 @@ msgstr ""
 "alsjeblieft NIET vóór de akte waarop ze betrekking heeft!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Je kunt het systeem nu vrij verkennen. Hieronder vind je enkele suggesties "
-"over wat je nu zou kunnen doen om alles goed in te stellen!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15357,15 +15327,6 @@ msgstr ""
 "Maakt beveiligde streaming van video/audio-inhoud mogelijk via eenmalige "
 "toegangstokens. Elk token kan maar één keer worden gebruikt en houdt bij "
 "wie, wanneer en waar toegang heeft gehad tot de inhoud"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Bovenaan vind je snelkoppelingen naar het dashboard van deze organisatie en,"
-" zodra je ze hebt aangemaakt, naar het dashboard van elk actief evenement "
-"(tik op mobiel op het pictogram rechtsonder om het te openen)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

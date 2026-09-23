@@ -7174,9 +7174,6 @@ msgstr "Αν δεν βρεθεί, η επιλογή θα παραλειφθεί"
 msgid "If selected, publish registered players."
 msgstr "Αν επιλεγεί, δημοσιεύονται οι εγγεγραμμένοι παίκτες."
 
-msgid "If you need help, remember to check out:"
-msgstr "Αν χρειάζεσαι βοήθεια, θυμήσου να δεις:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Αν δεν επιθυμείς πλέον να συμμετάσχεις, μπορείς να"
 
@@ -8317,9 +8314,6 @@ msgid "If enabled, do not use the parent event's factions."
 msgstr ""
 "Αν ενεργοποιηθεί, δεν χρησιμοποιεί τις παρατάξεις της γονικής εκδήλωσης."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Μπες στο Discord μας για βοήθεια, ιδέες ή για να αναφέρεις σφάλματα"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Δες τις απαντήσεις των συμμετεχόντων στις ερωτήσεις απολογισμού"
 
@@ -8328,9 +8322,6 @@ msgstr "Επίλεξε σε ποιον από τους χαρακτήρες σο
 
 msgid "Selected event does not belong to this organization"
 msgstr "Η επιλεγμένη εκδήλωση δεν ανήκει σε αυτόν τον οργανισμό"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Σύντομοι οδηγοί για να μάθεις πώς λειτουργεί το σύστημα"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Αν η παράταξη μπορεί να επιλεγεί από συμμετέχοντες"
@@ -12077,13 +12068,6 @@ msgstr ""
 " περιγραφές παρακάτω:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"Η πλαϊνή γραμμή γρήγορης πρόσβασης βρίσκεται στα αριστερά (σε κινητό, πάτησε"
-" το εικονίδιο κάτω αριστερά για να την ανοίξεις)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -12096,13 +12080,6 @@ msgid ""
 msgstr ""
 "Αυτές είναι εγγραφές από εξουσιοδοτημένους λογαριασμούς για τις οποίες "
 "πρέπει να κάνεις πληρωμή."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Συμβουλή: Καρφίτσωσε αυτή τη σελίδα στον browser σου για γρηγορότερη "
-"πρόσβαση στον οργανισμό και τα event σου!"
 
 #, python-format
 msgid ""
@@ -14772,13 +14749,6 @@ msgstr ""
 "πράξη. ΜΗΝ τις διαβάσεις πριν από την πράξη στην οποία αναφέρονται!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Τώρα μπορείς να εξερευνήσεις ελεύθερα το σύστημα. Παρακάτω θα βρεις μερικές "
-"προτάσεις για όσα μπορείς να κάνεις τώρα, ώστε να ρυθμίσεις τα πάντα σωστά!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15461,15 +15431,6 @@ msgstr ""
 "Ενεργοποιεί ασφαλές streaming περιεχομένου βίντεο/ήχου μέσω tokens μίας "
 "χρήσης. Κάθε token μπορεί να χρησιμοποιηθεί μόνο μία φορά και καταγράφει "
 "ποιος απέκτησε πρόσβαση στο περιεχόμενο, πότε και από πού"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Στην κορυφή θα βρεις συντομεύσεις για το dashboard αυτού του οργανισμού και "
-"για το dashboard κάθε ενεργού event μόλις τα δημιουργήσεις (σε κινητό, "
-"πάτησε το εικονίδιο κάτω δεξιά για να το ανοίξεις)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

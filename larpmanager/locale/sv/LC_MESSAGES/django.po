@@ -7173,9 +7173,6 @@ msgstr "Om alternativet inte hittas kommer det att hoppas över"
 msgid "If selected, publish registered players."
 msgstr "Om valt publiceras registrerade spelare."
 
-msgid "If you need help, remember to check out:"
-msgstr "Om du behöver hjälp, kom ihåg att kolla in:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Om du inte längre vill delta kan du"
 
@@ -8294,9 +8291,6 @@ msgstr "Om aktiverat visas genvägar automatiskt på mobilen."
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Om aktiverat används inte det överordnade evenemangets fraktioner."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera buggar"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Granska deltagarnas svar på debriefingfrågorna"
 
@@ -8305,9 +8299,6 @@ msgstr "Välj vilken av dina karaktärer du vill ha tillgång till:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "Vald händelse tillhör inte denna organisation"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Korta guider som hjälper dig att lära dig hur systemet fungerar"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Om fraktionen kan väljas av deltagarna"
@@ -11740,13 +11731,6 @@ msgstr ""
 "nedan:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"Snabbåtkomstsidofältet finns till vänster (på mobilen, tryck på ikonen "
-"längst ned till vänster för att öppna det)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -11758,13 +11742,6 @@ msgid ""
 " payment."
 msgstr ""
 "Det här är anmälningar från delegerade konton som du behöver betala för."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Tips: Fäst den här sidan i din webbläsare för snabbare åtkomst till din "
-"organisation och dina evenemang!"
 
 #, python-format
 msgid ""
@@ -14412,13 +14389,6 @@ msgstr ""
 "före den akt som den gäller!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Du kan nu fritt utforska systemet. Nedan hittar du några förslag på vad du "
-"kan göra nu för att ställa allt tillrätta på bästa sätt!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15072,15 +15042,6 @@ msgstr ""
 "Möjliggör säker streaming av video- och ljudinnehåll via engångstoken. Varje"
 " token kan bara användas en gång och spårar vem som har fått tillgång till "
 "innehållet, när och varifrån"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Längst upp hittar du genvägar till den här organisationens kontrollpanel och"
-" till kontrollpanelen för varje aktivt event när du har skapat dem (på "
-"mobilen, tryck på ikonen längst ned till höger för att öppna den)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

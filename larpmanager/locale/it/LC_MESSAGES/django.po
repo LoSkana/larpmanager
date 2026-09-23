@@ -7173,9 +7173,6 @@ msgstr "Se non viene trovata, l'opzione è ignorata"
 msgid "If selected, publish registered players."
 msgstr "Se selezionato, pubblica i giocatori registrati."
 
-msgid "If you need help, remember to check out:"
-msgstr "Se hai bisogno di aiuto, ricordati di consultare:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Se non desideri più partecipare, puoi"
 
@@ -8306,10 +8303,6 @@ msgstr "Se abilitato, mostra automaticamente le scorciatoie su mobile."
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Se abilitato, non usare le fazioni dell'evento padre."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Unisciti al nostro Discord per ricevere aiuto, idee o per segnalare bug"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Rivedi le risposte dei partecipanti alle domande di debrief"
 
@@ -8318,9 +8311,6 @@ msgstr "Seleziona quale dei tuoi personaggi vuoi usare:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "L'evento selezionato non appartiene a questa organizzazione"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Brevi guide per aiutarti ad imparare il funzionamento del sistema"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Se la fazione può essere selezionata dai partecipanti"
@@ -11987,13 +11977,6 @@ msgstr ""
 "descrizioni seguenti:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"La barra laterale di accesso rapido è a sinistra (su mobile, tocca l'icona "
-"in basso a sinistra per aprirla)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -12006,13 +11989,6 @@ msgid ""
 msgstr ""
 "Queste sono iscrizioni di account delegati per cui devi effettuare un "
 "pagamento."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Suggerimento: Appunta questa pagina sul tuo browser per accedere più "
-"rapidamente all'organizzazione e agli eventi!"
 
 #, python-format
 msgid ""
@@ -14669,14 +14645,6 @@ msgstr ""
 "NON leggerle prima dell'atto a cui si riferiscono!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Ora puoi esplorare liberamente il sistema. Di seguito troverai alcuni "
-"suggerimenti su ciò che potresti fare ora per configurare tutto in modo "
-"ottimale!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15357,15 +15325,6 @@ msgstr ""
 "Consente lo streaming sicuro di contenuti video/audio tramite token di "
 "accesso unico. Ogni token può essere utilizzato una sola volta e tiene "
 "traccia di chi ha avuto accesso ai contenuti, quando e da dove"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"In alto trovi le scorciatoie alla dashboard di questa organizzazione e a "
-"quella di ogni evento attivo, una volta creati (su mobile, tocca l'icona in "
-"basso a destra per aprirla)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
