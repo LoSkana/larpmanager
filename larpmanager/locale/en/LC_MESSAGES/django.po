@@ -7973,36 +7973,6 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each "
-"active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-
-msgid ""
-"You can now freely explore the system. You'll find below some suggestions on "
-"what you could do now to set up everything nicely!"
-msgstr ""
-
-msgid "If you need help, remember to check out:"
-msgstr ""
-
-msgid "Short guides to help you learn how the system works"
-msgstr ""
-
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-
 msgid "Welcome to the dashboard of your organization!"
 msgstr ""
 

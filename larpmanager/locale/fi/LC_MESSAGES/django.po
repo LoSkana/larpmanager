@@ -7173,9 +7173,6 @@ msgstr "Jos vaihtoehtoa ei löydy, se ohitetaan"
 msgid "If selected, publish registered players."
 msgstr "Jos valittu, julkaise ilmoittautuneet pelaajat."
 
-msgid "If you need help, remember to check out:"
-msgstr "Jos tarvitset apua, muista tarkistaa:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Jos haluat perua osallistumisesi voit"
 
@@ -8292,10 +8289,6 @@ msgstr "Jos käytössä, näytä pikavalinnat automaattisesti mobiilissa."
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Jos käytössä, älä käytä päätapahtuman ryhmittymiä."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Tarkastele osallistujien vastauksia jälkipuintikysymyksiin"
 
@@ -8304,9 +8297,6 @@ msgstr "Valitse, mitä hahmoa haluat käyttää:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "Valittu tapahtuma ei kuulu tähän organisaatioon"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Lyhyet oppaat, joiden avulla opit, miten järjestelmä toimii"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Voivatko osallistujat valita fraktion"
@@ -11761,13 +11751,6 @@ msgstr ""
 "olevat kuvaukset:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"Pikakäyttösivupalkki on vasemmalla (mobiilissa napauta vasemman alakulman "
-"kuvaketta avataksesi sen)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -11780,13 +11763,6 @@ msgid ""
 msgstr ""
 "Nämä ovat valtuutettujen tilien ilmoittautumisia, joista sinun täytyy tehdä "
 "maksu."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Vinkki: Kiinnitä tämä sivu selaimeesi, jotta pääset nopeammin organisaatioon"
-" ja tapahtumiin!"
 
 #, python-format
 msgid ""
@@ -14423,13 +14399,6 @@ msgstr ""
 "ennen näytöstä, johon ne viittaavat!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Voit nyt tutkia järjestelmää vapaasti. Seuraavassa on joitakin ehdotuksia "
-"siitä, mitä voit tehdä nyt, jotta kaikki asetukset olisivat kunnossa!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15091,15 +15060,6 @@ msgstr ""
 "Mahdollistaa videon/audiosisällön turvallisen suoratoiston "
 "kertakäyttötunnusten avulla. Kutakin tokenia voidaan käyttää vain kerran, ja"
 " sen avulla seurataan, kuka on käyttänyt sisältöä, milloin ja mistä"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Ylhäältä löydät pikavalinnat tämän organisaation hallintapaneeliin ja "
-"jokaisen aktiivisen tapahtuman hallintapaneeliin, kun olet luonut ne "
-"(mobiilissa napauta oikean alakulman kuvaketta avataksesi sen)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

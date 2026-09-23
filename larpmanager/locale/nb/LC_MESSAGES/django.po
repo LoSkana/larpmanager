@@ -7174,9 +7174,6 @@ msgstr "Hvis alternativet ikke blir funnet, hoppes det over"
 msgid "If selected, publish registered players."
 msgstr "Hvis valgt, publiser registrerte spillere."
 
-msgid "If you need help, remember to check out:"
-msgstr "Hvis du trenger hjelp, husk å sjekke ut:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Hvis du ikke lenger ønsker å delta, kan du"
 
@@ -8291,9 +8288,6 @@ msgid "If enabled, do not use the parent event's factions."
 msgstr ""
 "Hvis aktivert, ikke bruk fraksjonene til det overordnede arrangementet."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Se gjennom deltakernes svar på debriefspørsmålene"
 
@@ -8302,10 +8296,6 @@ msgstr "Velg hvilken av karakterene dine du vil ha tilgang til:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "Valgt arrangement tilhører ikke denne organisasjonen"
-
-msgid "Short guides to help you learn how the system works"
-msgstr ""
-"Korte veiledninger som hjelper deg med å lære hvordan systemet fungerer"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Om fraksjonen kan velges av deltakerne"
@@ -11764,13 +11754,6 @@ msgstr ""
 "nedenfor:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"Hurtigtilgangssidefeltet er til venstre (på mobil, trykk på ikonet nederst "
-"til venstre for å åpne det)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -11781,13 +11764,6 @@ msgid ""
 "These are registrations from delegated accounts for which you need to make a"
 " payment."
 msgstr "Dette er påmeldinger fra delegerte kontoer som du må betale for."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Tips! Fest denne siden til nettleseren din for å få raskere tilgang til "
-"organisasjonen og arrangementene dine!"
 
 #, python-format
 msgid ""
@@ -14433,13 +14409,6 @@ msgstr ""
 "IKKE les den før akten den gjelder!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Du kan nå utforske systemet fritt. Nedenfor finner du noen forslag til hva "
-"du kan gjøre nå for å få alt på plass!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15097,15 +15066,6 @@ msgstr ""
 "Muliggjør sikker strømming av video-/lydinnhold via engangstokener. Hvert "
 "token kan bare brukes én gang, og sporer hvem som har fått tilgang til "
 "innholdet, når og fra hvor"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Øverst finner du snarveier til denne organisasjonens kontrollpanel og til "
-"kontrollpanelet for hvert aktive arrangement når du har opprettet dem (på "
-"mobil, trykk på ikonet nederst til høyre for å åpne det)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

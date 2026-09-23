@@ -101,12 +101,12 @@ def join_email(association: Any) -> None:
         my_send_mail(welcome_subject, welcome_body, executive_member)
 
         activate(executive_member.language)
-        feedback_subject = "We'd love your feedback on LarpManager"
+        feedback_subject = "Need any help with LarpManager?"
         feedback_body = render_to_string(
             "mails/help_association.html",
             {"member": executive_member, "association": association},
         )
-        feedback_delay_seconds = 3600 * 24 * 2
+        feedback_delay_seconds = 3600 * 24 * 4
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 

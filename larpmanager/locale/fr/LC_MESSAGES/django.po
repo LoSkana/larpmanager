@@ -7173,9 +7173,6 @@ msgstr "Si elle n'est pas trouvée, l'option sera ignorée"
 msgid "If selected, publish registered players."
 msgstr "Si sélectionné, publie les joueurs inscrits."
 
-msgid "If you need help, remember to check out:"
-msgstr "Si tu as besoin d'aide, n'oublie pas de consulter:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Si tu ne souhaites plus participer, tu peux"
 
@@ -8317,11 +8314,6 @@ msgstr "Si activé, affiche automatiquement les raccourcis sur mobile."
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Si activé, n'utilise pas les factions de l'événement parent."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr ""
-"Rejoins notre Discord pour obtenir de l'aide, des idées ou pour signaler des"
-" bugs"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Consulter les réponses des participants aux questions de débriefing"
 
@@ -8330,10 +8322,6 @@ msgstr "Sélectionne lequel de tes personnages tu souhaites utiliser:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "L'événement sélectionné n'appartient pas à cette organisation"
-
-msgid "Short guides to help you learn how the system works"
-msgstr ""
-"Des guides succincts pour t'aider à comprendre le fonctionnement du système"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Si la faction peut être sélectionnée par les participants"
@@ -12080,13 +12068,6 @@ msgstr ""
 "descriptions ci-dessous:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"La barre latérale d’accès rapide se trouve à gauche (sur mobile, appuie sur "
-"l’icône en bas à gauche pour l’ouvrir)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -12099,13 +12080,6 @@ msgid ""
 msgstr ""
 "Voici les inscriptions provenant de comptes délégués pour lesquelles tu dois"
 " effectuer un paiement."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Conseil : Épingle cette page dans ton navigateur pour accéder plus "
-"rapidement à ton organisation et à tes événements !"
 
 #, python-format
 msgid ""
@@ -14784,14 +14758,6 @@ msgstr ""
 "acte. Merci de NE PAS les lire avant l’acte auquel elles se rapportent !"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Tu peux maintenant explorer librement le système. Tu trouveras ci-dessous "
-"quelques suggestions sur ce que tu peux faire maintenant pour tout mettre en"
-" place correctement!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -15483,16 +15449,6 @@ msgstr ""
 "Permet la diffusion sécurisée de contenus vidéo/audio par le biais de jetons"
 " d'accès à usage unique. Chaque jeton ne peut être utilisé qu'une seule fois"
 " et permet de savoir qui a accédé au contenu, quand et d'où"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"En haut, tu trouveras des raccourcis vers le tableau de bord de cette "
-"organisation et vers le tableau de bord de chaque événement actif une fois "
-"que tu les auras créés (sur mobile, appuie sur l’icône en bas à droite pour "
-"l’ouvrir)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

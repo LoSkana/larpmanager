@@ -7174,9 +7174,6 @@ msgstr "Pokud není nalezena, možnost se přeskočí"
 msgid "If selected, publish registered players."
 msgstr "Je-li vybráno, zveřejnit registrované hráče."
 
-msgid "If you need help, remember to check out:"
-msgstr "Pokud potřebuješ pomoc, nezapomeň se podívat na:"
-
 msgid "If you no longer wish to attend, you can"
 msgstr "Pokud si již nepřeješ účastnit se, můžeš"
 
@@ -8291,9 +8288,6 @@ msgstr "Je-li povoleno, automaticky zobrazovat zkratky na mobilu."
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Je-li povoleno, nepoužívat frakce nadřazené akce."
 
-msgid "Join our Discord for help, ideas, or to report bugs"
-msgstr "Připoj se k našemu Discordu a získej pomoc, nápady nebo nahlas chyby"
-
 msgid "Review participant answers to the debrief questions"
 msgstr "Prohlédni si odpovědi účastníků na otázky debriefingu"
 
@@ -8302,9 +8296,6 @@ msgstr "Vyber, ke které ze svých postav chceš získat přístup:"
 
 msgid "Selected event does not belong to this organization"
 msgstr "Vybraná událost nepatří do této organizace"
-
-msgid "Short guides to help you learn how the system works"
-msgstr "Krátké průvodce, které ti pomohou naučit se, jak systém funguje"
 
 msgid "Whether the faction can be selected by participants"
 msgstr "Zda si účastníci mohou vybrat frakci"
@@ -11589,13 +11580,6 @@ msgid ""
 msgstr "První řádek souboru musí obsahovat názvy sloupců, viz popisy níže:"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
-"open it)."
-msgstr ""
-"Panel rychlého přístupu je vlevo (na mobilu ho otevřeš klepnutím na ikonu "
-"vlevo dole)."
-
-msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
 "underscores."
 msgstr ""
@@ -11607,13 +11591,6 @@ msgid ""
 " payment."
 msgstr ""
 "Toto jsou registrace z delegovaných účtů, za které musíš provést platbu."
-
-msgid ""
-"Tip: Pin this page to your browser for faster access to your organization "
-"and events!"
-msgstr ""
-"Tip: Připni si tuto stránku do prohlížeče pro rychlejší přístup k organizaci"
-" a událostem!"
 
 #, python-format
 msgid ""
@@ -14233,13 +14210,6 @@ msgstr ""
 "NEČTI je před dějstvím, ke kterému se vztahují!"
 
 msgid ""
-"You can now freely explore the system. You'll find below some suggestions on"
-" what you could do now to set up everything nicely!"
-msgstr ""
-"Nyní můžeš systém volně prozkoumávat. Níže najdeš několik návrhů, co bys "
-"nyní mohl udělat, abys vše pěkně nastavil!"
-
-msgid ""
 "The event is in preparation: hidden from the homepage and calendar, only "
 "staff and already registered participants can access it"
 msgstr ""
@@ -14878,15 +14848,6 @@ msgstr ""
 "Umožňuje zabezpečené streamování video/audio obsahu prostřednictvím "
 "jednorázových přístupových tokenů. Každý token lze použít pouze jednou a "
 "sleduje, kdo, kdy a odkud k obsahu přistupoval"
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you created them (on mobile, tap bottom-right "
-"icon to open it)."
-msgstr ""
-"Nahoře najdeš zástupce na nástěnku této organizace a na nástěnku každé "
-"aktivní akce, jakmile ji vytvoříš (na mobilu ji otevřeš klepnutím na ikonu "
-"vpravo dole)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
