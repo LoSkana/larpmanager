@@ -85,7 +85,7 @@ def test_upload_download(pw_page: Any) -> None:
 def criterions_deliveries(page: Any) -> None:
     # enable criteria
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_criterions").check()
     submit_confirm(page)
 
@@ -128,7 +128,7 @@ def abilities(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_user").check()
     submit_confirm(page)
 
@@ -332,7 +332,7 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private baba bebe Multi-line text Private"
     )
-    page.get_by_role("link", name="Quest", exact=True).click()
+    page.locator("#one").get_by_role("link", name="Quest", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,

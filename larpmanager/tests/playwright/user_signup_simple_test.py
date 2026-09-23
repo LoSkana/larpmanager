@@ -115,7 +115,7 @@ def help_questions(live_server: Any, page: Any) -> None:
 def pre_register(live_server: Any, page: Any) -> None:
     # Set email send
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Email notifications")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()

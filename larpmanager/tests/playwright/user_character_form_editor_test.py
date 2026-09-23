@@ -75,11 +75,11 @@ def prepare(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_max").check()
     page.locator("#id_character_form_wri_que_requirements").check()
     submit_confirm(page)
@@ -513,7 +513,7 @@ def orga_gated_collapse(page: Any, live_server: Any) -> None:
     """
     # the questions have few options: lower the threshold, so the collapse link is rendered
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Display\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
     page.locator("#id_collapse_options_min").fill("2")
     submit_confirm(page)
 

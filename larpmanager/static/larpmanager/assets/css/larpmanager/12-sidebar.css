@@ -314,9 +314,8 @@ nav#sidebar-nav {
 }
 
 #sidebar .new-menu .lm {
-  padding: 0.2em 0;
   margin: 0;
-  padding-bottom: 0.5em;
+  padding: 0.15em 0.45em;
 }
 
 #sidebar .new-menu .sidebar-footer,
@@ -575,8 +574,8 @@ nav#sidebar-nav {
 }
 
 .sidebar-logo {
-  width: 1.4em;
-  height: 1.4em;
+  width: 1.1em;
+  height: 1.1em;
   object-fit: contain;
   flex-shrink: 0;
 }
