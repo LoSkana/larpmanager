@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.base import Config
@@ -314,7 +315,11 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
 
     # Create new configuration records for names not already present
     for name in incoming_names - set(existing_configs.keys()):
-        obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        try:
+            with transaction.atomic():
+                obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        except IntegrityError:
+            obj.configs.model.objects.filter(**{fk_field: obj, "name": name}).update(value=dct[name])
 
 
 def save_single_config(obj: object, name: str, value: any) -> None:
