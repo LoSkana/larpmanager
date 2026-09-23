@@ -216,7 +216,7 @@ def signups(page: Any, live_server: Any) -> None:
 def casting(page: Any, live_server: Any) -> None:
     # config casting
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Casting ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Casting")).click()
     page.get_by_text("Maximum number of preferences").click()
     page.locator("#id_casting_max").click()
     page.locator("#id_casting_max").fill("3")

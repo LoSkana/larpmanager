@@ -67,7 +67,7 @@ def test_permanence_form(pw_page: Any) -> None:
 def check_orga_visibility(page: Any) -> None:
     sidebar(page, "Event")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
     sidebar(page, "Event")
@@ -123,13 +123,13 @@ def check_orga_features(page: Any) -> None:
 
 def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Display ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
     page.locator("#id_show_shortcuts_mobile").check()
     page.locator("#id_show_limitations").check()
     submit_confirm(page)
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
-    page.get_by_role("link", name=re.compile(r"^Display ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
     expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
     expect(page.locator("#id_show_limitations")).to_be_checked()
@@ -171,13 +171,13 @@ def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
 
 def check_exe_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Interface ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Interface")).click()
     page.locator("#id_calendar_past_events").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
     sidebar(page, "Configuration")
-    page.get_by_role("link", name=re.compile(r"^Interface ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Interface")).click()
     expect(page.locator("#id_calendar_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()
@@ -243,18 +243,18 @@ def _campaign_config_permanence(page: Any, live_server: Any) -> None:
 
     # Set config on child: check gallery_hide_login
     go_to(page, live_server, "/childcampaign/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     page.locator("#id_gallery_hide_login").check()
     submit_confirm(page)
 
     # Verify config still visible on child (reads from parent)
     go_to(page, live_server, "/childcampaign/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
 
     # Verify config visible on parent (saved to parent)
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
 
     # Enable Discount feature on child

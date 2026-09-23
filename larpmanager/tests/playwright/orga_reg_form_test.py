@@ -217,7 +217,7 @@ def check_reserve(page: Any, live_server: Any) -> None:
     # enable config
     go_to(page, live_server, "test/manage")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Reserve ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Reserve")).click()
     page.locator("#id_filler_always").check()
     submit_confirm(page)
 

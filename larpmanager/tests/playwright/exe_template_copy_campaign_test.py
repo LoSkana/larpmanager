@@ -71,7 +71,7 @@ def template(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     page.locator("#one").get_by_role("link", name="Configuration").click()
     config_iframe = get_modal_iframe(page)
-    config_iframe.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    config_iframe.get_by_role("link", name=re.compile(r"^Gallery")).click()
     config_iframe.locator("#id_gallery_hide_signup").check()
     config_iframe.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)).click(force=True)
     page.locator("#lm-modal").wait_for(state="hidden")
@@ -96,7 +96,7 @@ def template(live_server: Any, page: Any) -> None:
     expect_normalized(page, row, "Texts")
     # check configuration
     go_to(page, live_server, "/fromtemplate/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     expect(page.locator("#id_gallery_hide_signup")).to_be_checked()
     # check features
     go_to(page, live_server, "/fromtemplate/manage/features")
@@ -112,9 +112,9 @@ def setup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/features/character/on")
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     page.locator("#id_gallery_hide_login").check()
-    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_start").click()
     page.locator("#id_exp_start").fill("10")
 
@@ -197,9 +197,9 @@ def copy(live_server: Any, page: Any) -> None:
     expect_normalized(page, row, "Appearance (Navigation), Writing (Factions) ")
 
     go_to(page, live_server, "/copy/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Gallery")).click()
     expect(page.locator("#id_gallery_hide_login")).to_be_checked()
-    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     expect(page.locator("#id_exp_start")).to_have_value("10")
 
     go_to(page, live_server, "/copy/manage/characters/")

@@ -82,7 +82,7 @@ def configure_customization_fields(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
 
     # Navigate to character customization section
-    page.get_by_role("link", name=re.compile(r"^Character customisation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character customisation")).click()
 
     # Enable all custom character fields
     page.locator("#id_custom_character_name").check()
