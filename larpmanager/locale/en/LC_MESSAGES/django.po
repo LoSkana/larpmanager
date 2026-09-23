@@ -1062,6 +1062,20 @@ msgstr ""
 msgid "Font file (TTF) applied to all the other text."
 msgstr ""
 
+msgid "Title size"
+msgstr ""
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the "
+"standard size)."
+msgstr ""
+
+msgid "Text size"
+msgstr ""
+
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr ""
+
 msgid "Title color"
 msgstr ""
 
@@ -1084,6 +1098,14 @@ msgid "Highlight color"
 msgstr ""
 
 msgid "Color of the text in bold."
+msgstr ""
+
+msgid "Separator color"
+msgstr ""
+
+msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
 msgstr ""
 
 msgid "The CSS code to customize PDF printing."
@@ -9114,6 +9136,15 @@ msgid "download"
 msgstr ""
 
 msgid "Regenerate (recreates all pdf: slow)"
+msgstr ""
+
+msgid "Saving"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Not saved, check the fields"
 msgstr ""
 
 msgid "Pdf bulk"

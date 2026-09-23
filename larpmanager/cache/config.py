@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.base import Config
@@ -105,6 +106,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "page_css": "",
     "pdf_background": "",
     "pdf_color_bold": "",
+    "pdf_color_border": "",
     "pdf_color_link": "",
     "pdf_color_text": "",
     "pdf_color_title": "",
@@ -112,6 +114,8 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "pdf_font_title": "",
     "pdf_margin": "",
     "pdf_page_size": "",
+    "pdf_size_text": "",
+    "pdf_size_title": "",
     "pay_what_you_want_descr": _("Freely indicate the amount of your donation"),
     "pay_what_you_want_label": _("Free donation"),
     "payment_alert": 30,
@@ -311,7 +315,11 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
 
     # Create new configuration records for names not already present
     for name in incoming_names - set(existing_configs.keys()):
-        obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        try:
+            with transaction.atomic():
+                obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        except IntegrityError:
+            obj.configs.model.objects.filter(**{fk_field: obj, "name": name}).update(value=dct[name])
 
 
 def save_single_config(obj: object, name: str, value: any) -> None:

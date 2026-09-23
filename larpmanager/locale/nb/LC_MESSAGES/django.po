@@ -423,6 +423,9 @@ msgstr "Roller"
 msgid "Rules"
 msgstr "Regler"
 
+msgid "Saved"
+msgstr "Lagret"
+
 msgid "Sheet"
 msgstr "Ark"
 
@@ -699,6 +702,9 @@ msgstr "Gjennomgang"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Lagrer"
 
 msgid "Search"
 msgstr "Søk"
@@ -1682,6 +1688,9 @@ msgstr "Symmetrisk"
 msgid "Text font"
 msgstr "Tekstfont"
 
+msgid "Text size"
+msgstr "Tekststørrelse"
+
 msgid "Tolerance"
 msgstr "Toleranse"
 
@@ -2017,6 +2026,9 @@ msgstr "Tekstfarge"
 
 msgid "Title font"
 msgstr "Tittelfont"
+
+msgid "Title size"
+msgstr "Tittelstørrelse"
 
 msgid "To be done"
 msgstr "Skal fullføres"
@@ -3415,6 +3427,9 @@ msgstr "Valgt billett"
 
 msgid "Send invitation"
 msgstr "Send invitasjon"
+
+msgid "Separator color"
+msgstr "Farge på skillelinjer"
 
 msgid "Show sold count"
 msgstr "Vis antall solgte"
@@ -5692,6 +5707,9 @@ msgstr "Ingen adresse ble avmeldt"
 
 msgid "No inventory transfers yet."
 msgstr "Ingen inventaroverføringer ennå."
+
+msgid "Not saved, check the fields"
+msgstr "Ikke lagret, sjekk feltene"
 
 msgid "Opted out of communications"
 msgstr "Har reservert seg mot kommunikasjon"
@@ -9559,6 +9577,9 @@ msgstr "Neste betaling: %(quota)s%(currency)s, forventes innen %(days)s dager"
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Velg hvilke typer skriveelementer dette spørsmålet gjelder"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr "Størrelse på all annen tekst, i prosent (100 er standardstørrelsen)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Send inn en ny søknad om refusjon av personlige utgifter for dette "
@@ -11293,6 +11314,12 @@ msgstr ""
 "skjemaet"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Farge på linjene under toppteksten, over bunnteksten og mellom seksjonene."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12358,6 +12385,12 @@ msgid ""
 msgstr ""
 "Merk at eksisterende evner med samme navn vil bli overskrevet med de "
 "opplastede dataene."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Størrelse på rollenavnet og titlene, i prosent (100 er standardstørrelsen)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

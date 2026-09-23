@@ -119,7 +119,6 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
 
         # Add relationship text and calculate font size based on content length
         relationship_entry["text"] = relationship_text_mapping[character_uuid]
-        relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
         context["rel"].append(relationship_entry)
 
 

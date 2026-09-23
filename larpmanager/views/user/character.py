@@ -1334,8 +1334,6 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
 
         # Add relationship text and calculate dynamic font size
         show["text"] = text
-        # Font size decreases as text length increases (min ~80%, max 100%)
-        show["font_size"] = int(100 - ((len(text) / 50) * 4))
         context["rel"].append(show)
 
     return render(request, "larpmanager/event/character/relationships.html", context)

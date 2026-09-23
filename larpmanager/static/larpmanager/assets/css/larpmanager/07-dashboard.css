@@ -133,6 +133,11 @@
   font-style: italic;
 }
 
+#pdf_autosave {
+  margin-left: 1em;
+  font-style: italic;
+}
+
 #reading .post_popup {
   display: none;
 }

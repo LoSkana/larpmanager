@@ -423,6 +423,9 @@ msgstr "Ρόλοι"
 msgid "Rules"
 msgstr "Κανόνες"
 
+msgid "Saved"
+msgstr "Αποθηκεύτηκε"
+
 msgid "Sheet"
 msgstr "Φύλλο"
 
@@ -699,6 +702,9 @@ msgstr "Έλεγχος"
 
 msgid "Safety"
 msgstr "Safety"
+
+msgid "Saving"
+msgstr "Αποθήκευση"
 
 msgid "Search"
 msgstr "Αναζήτηση"
@@ -1682,6 +1688,9 @@ msgstr "Συμμετρικό"
 msgid "Text font"
 msgstr "Γραμματοσειρά κειμένου"
 
+msgid "Text size"
+msgstr "Μέγεθος κειμένου"
+
 msgid "Tolerance"
 msgstr "Ανοχή"
 
@@ -2017,6 +2026,9 @@ msgstr "Χρώμα κειμένου"
 
 msgid "Title font"
 msgstr "Γραμματοσειρά τίτλου"
+
+msgid "Title size"
+msgstr "Μέγεθος τίτλων"
 
 msgid "To be done"
 msgstr "Προς ολοκλήρωση"
@@ -3415,6 +3427,9 @@ msgstr "Επιλεγμένο εισιτήριο"
 
 msgid "Send invitation"
 msgstr "Αποστολή πρόσκλησης"
+
+msgid "Separator color"
+msgstr "Χρώμα διαχωριστικού"
 
 msgid "Show sold count"
 msgstr "Εμφάνιση αριθμού πωλήσεων"
@@ -5692,6 +5707,9 @@ msgstr "Δεν έγινε διαγραφή καμίας διεύθυνσης"
 
 msgid "No inventory transfers yet."
 msgstr "Δεν υπάρχουν ακόμη μεταφορές αποθέματος."
+
+msgid "Not saved, check the fields"
+msgstr "Δεν αποθηκεύτηκε, έλεγξε τα πεδία"
 
 msgid "Opted out of communications"
 msgstr "Έχει επιλέξει να μη λαμβάνει επικοινωνίες"
@@ -9728,6 +9746,11 @@ msgstr ""
 "Επίλεξε τους τύπους στοιχείων γραφής στους οποίους εφαρμόζεται αυτή η "
 "ερώτηση"
 
+msgid "Size of all the other text, in percent (100 is the standard size)."
+msgstr ""
+"Μέγεθος όλου του υπόλοιπου κειμένου, σε ποσοστό (100 είναι το κανονικό "
+"μέγεθος)."
+
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 "Υπόβαλε νέο αίτημα αποζημίωσης προσωπικών εξόδων για αυτή την εκδήλωση"
@@ -11599,6 +11622,13 @@ msgstr ""
 "επόμενο στοιχείο"
 
 msgid ""
+"Color of the lines under the header, over the footer, and separating the "
+"sections."
+msgstr ""
+"Χρώμα των γραμμών κάτω από την κεφαλίδα, πάνω από το υποσέλιδο και ανάμεσα "
+"στις ενότητες."
+
+msgid ""
 "Enables management of expenses paid using the organization's financial "
 "instruments"
 msgstr ""
@@ -12672,6 +12702,13 @@ msgid ""
 msgstr ""
 "Σημείωσε ότι οι υπάρχουσες ικανότητες με το ίδιο όνομα θα αντικατασταθούν "
 "από τα ανεβασμένα δεδομένα."
+
+msgid ""
+"Size of the name of the character, and of the titles, in percent (100 is the"
+" standard size)."
+msgstr ""
+"Μέγεθος του ονόματος του χαρακτήρα και των τίτλων, σε ποσοστό (100 είναι το "
+"κανονικό μέγεθος)."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "

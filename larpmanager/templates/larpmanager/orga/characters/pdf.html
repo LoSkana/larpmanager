@@ -159,6 +159,7 @@
                     {{ form.as_table }}
                 </table>
                 <input type="submit" value="{% trans "Confirm" %}">
+                <span id="pdf_autosave"></span>
                 <br />
                 <br />
                 <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
@@ -177,6 +178,27 @@ $('#char').change(function() {
         $(this).attr('href', href.replace('0/pdf', id + '/pdf' ));
     });
     old = id;
+  });
+
+// Save every change right away, so the generation can be tried without confirming
+$('#sheet_pdf form').on('change', ':input', function() {
+    var form = $('#sheet_pdf form');
+    var status = $('#pdf_autosave');
+    status.text('{% trans "Saving" %}...');
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: new FormData(form[0]),
+        processData: false,
+        contentType: false,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        success: function() {
+            status.text('{% trans "Saved" %}');
+        },
+        error: function() {
+            status.text('{% trans "Not saved, check the fields" %}');
+        }
+    });
   });
 });
 });
