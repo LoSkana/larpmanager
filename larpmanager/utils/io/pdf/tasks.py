@@ -23,13 +23,17 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import Http404, HttpRequest, HttpResponse
 
 from larpmanager.cache.association import get_cache_association
-from larpmanager.models.writing import Character, Handout, get_event_elements
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.writing import get_writing_element_fields
+from larpmanager.models.form import QuestionApplicable
+from larpmanager.models.writing import Character, Faction, FactionType, Handout, get_event_elements
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_handout
+from larpmanager.utils.core.common import get_element, get_handout
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.io.pdf.sheets import (
     print_character,
     print_character_friendly,
+    print_faction,
     print_gallery,
     print_handout,
     print_profiles,
@@ -88,6 +92,54 @@ def print_character_bkg(association_slug: str, event_slug: str, character_uuid: 
         return
     context = get_event_context(request, event_slug, check_visibility=False)
     print_character_go(context, character_uuid)
+
+
+def print_faction_go(context: dict, faction_uuid: str) -> None:
+    """Print faction sheet, handling missing faction gracefully."""
+    try:
+        get_element(context, faction_uuid, "faction", Faction)
+        faction_obj = context["faction"]
+        get_event_cache_all(context)
+
+        # Build sheet data directly from the faction instance (show_complete adds "text")
+        sheet_faction = faction_obj.show_complete()
+        characters = []
+        if faction_obj.typ == FactionType.SECRET:
+            member_numbers = set(faction_obj.characters.values_list("number", flat=True))
+            characters = [number for number in context["chars"] if number in member_numbers]
+        else:
+            for character_number, character_data in context["chars"].items():
+                if faction_obj.number in character_data.get("factions", []):
+                    characters.append(character_number)
+        sheet_faction["characters"] = characters
+        context["sheet_faction"] = sheet_faction
+
+        # Load all faction fields for this event, bypassing visibility filtering so the
+        # organizer sheet prints every answer, not just the ones visible to players
+        context["show_all"] = True
+        context["fact"] = get_writing_element_fields(
+            context,
+            "faction",
+            QuestionApplicable.FACTION,
+            context["faction"].id,
+            only_visible=False,
+        )
+
+        print_faction(context, force=True)
+    except Http404:
+        pass
+    except NotFoundError:
+        pass
+
+
+@background_auto(queue="pdf", skip_duplicates=True)
+def print_faction_bkg(association_slug: str, event_slug: str, faction_uuid: str) -> None:
+    """Print faction background for a given association, event slug, and faction."""
+    request = get_fake_request(association_slug)
+    if request is None:
+        return
+    context = get_event_context(request, event_slug, check_visibility=False)
+    print_faction_go(context, faction_uuid)
 
 
 @background_auto(queue="pdf", skip_duplicates=True)

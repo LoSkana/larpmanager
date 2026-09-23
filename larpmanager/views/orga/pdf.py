@@ -45,6 +45,7 @@ from larpmanager.utils.io.pdf import (
     print_character_bkg,
     print_character_friendly,
     print_faction,
+    print_faction_bkg,
     print_gallery,
     print_profiles,
 )
@@ -162,7 +163,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
 
 @login_required
 def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Regenerate PDF files for all characters in future event runs.
+    """Regenerate PDF files for all characters and factions in future event runs.
 
     Args:
         request: HTTP request object
@@ -175,14 +176,17 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for PDF operations
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
-    # Get all characters associated with the event
+    # Get all characters and factions associated with the event
     chs = get_event_elements(context["event"].id, Character, context=context)
+    facs = get_event_elements(context["event"].id, Faction, context=context)
 
     # Iterate through all future runs of the event
     for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):
-        # Generate PDF for each character in each run
+        # Generate PDF for each character and faction in each run
         for ch in chs:
             print_character_bkg(context["event"].association.slug, run.get_slug(), ch.uuid)
+        for fac in facs:
+            print_faction_bkg(context["event"].association.slug, run.get_slug(), fac.uuid)
 
     # Show success message and redirect
     messages.success(request, _("PDF regeneration has started!"))
@@ -357,7 +361,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
     get_event_cache_all(context)
 
     # Build sheet data directly from the faction instance
-    sheet_faction = faction_obj.show_red()
+    sheet_faction = faction_obj.show_complete()
     characters = []
     if faction_obj.typ == FactionType.SECRET:
         member_numbers = set(faction_obj.characters.values_list("number", flat=True))
@@ -369,14 +373,14 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
     sheet_faction["characters"] = characters
     context["sheet_faction"] = sheet_faction
 
-    # Load custom faction fields configured for this event
-    # Only visible fields are included in the PDF
+    # Load all faction fields for this event, bypassing visibility filtering
+    context["show_all"] = True
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
         context["faction"].id,
-        only_visible=True,
+        only_visible=False,
     )
 
     # Generate and return the faction sheet PDF (force=True for fresh generation)
