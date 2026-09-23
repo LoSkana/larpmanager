@@ -85,7 +85,7 @@ def test_upload_download(pw_page: Any) -> None:
 def criterions_deliveries(page: Any) -> None:
     # enable criteria
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_criterions").check()
     submit_confirm(page)
 
@@ -128,7 +128,7 @@ def abilities(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_user").check()
     submit_confirm(page)
 

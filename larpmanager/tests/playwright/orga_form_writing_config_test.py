@@ -69,7 +69,7 @@ def feature_fields(page: Any) -> None:
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_writing_title").check()
     submit_confirm(page)
 
@@ -79,7 +79,7 @@ def feature_fields(page: Any) -> None:
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_writing_title").uncheck()
     page.locator("#id_writing_cover").check()
     page.locator("#id_writing_assigned").check()
@@ -96,7 +96,7 @@ def feature_fields(page: Any) -> None:
 def feature_fields2(page: Any, live_server: Any) -> None:
     # add config hide, assigned
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_writing_assigned").uncheck()
     page.locator("#id_writing_cover").uncheck()
     page.locator("#id_writing_hide").check()
@@ -115,7 +115,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_rules").check()
     submit_confirm(page)
 
@@ -156,7 +156,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
 def feature_file(page: Any, live_server: Any) -> None:
     # enable config gating the 'file' question type
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_writing_file").check()
     submit_confirm(page)
 

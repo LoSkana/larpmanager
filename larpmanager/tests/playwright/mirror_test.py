@@ -47,7 +47,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
     # show chars
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 
@@ -64,7 +64,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
     # activate mirror
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Casting")).click()
     page.locator("#id_casting_mirror").check()
     submit_confirm(page)
 
@@ -87,7 +87,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
 def casting(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Casting ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Casting")).click()
     page.locator("#id_casting_characters").click()
     page.locator("#id_casting_characters").fill("1")
     page.locator("#id_casting_min").click()
