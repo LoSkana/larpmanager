@@ -332,7 +332,7 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private baba bebe Multi-line text Private"
     )
-    page.get_by_role("link", name="Quest", exact=True).click()
+    page.locator("#one").get_by_role("link", name="Quest", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
