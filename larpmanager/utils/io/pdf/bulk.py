@@ -245,18 +245,19 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
                 # Verify faction exists in cache
                 if faction.number in context["factions"]:
-                    context["sheet_faction"] = context["factions"][faction.number]
+                    context["sheet_faction"] = {**context["factions"][faction.number], "text": faction.text}
                 else:
                     # Skip if faction not found in cache
                     continue
 
-                # Load custom faction fields for the sheet
+                # Load all faction fields for this event, bypassing visibility checks
+                context["show_all"] = True
                 context["fact"] = get_writing_element_fields(
                     context,
                     "faction",
                     QuestionApplicable.FACTION,
                     context["faction"].id,
-                    only_visible=True,
+                    only_visible=False,
                 )
 
                 filepath = context["faction"].get_sheet_filepath(context["run"])

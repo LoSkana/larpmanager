@@ -143,6 +143,22 @@ def print_character_friendly(context: dict, *, force: bool = False) -> HttpRespo
     return return_pdf(file_path, f"{context['character'].name} - " + _("Lightweight"))
 
 
+def _process_faction_char_images(context: dict) -> None:
+    """Build rounded avatar data URIs for a faction's characters, for pdf sheet display."""
+    blank_avatar_url = conf_settings.STATIC_URL + "larpmanager/assets/blank-avatar.png"
+    blank_avatar_uri = _round_image_data_uri(blank_avatar_url)
+    chars_cache = context.get("chars", {})
+    char_images = {}
+    for character_number in context["sheet_faction"].get("characters", []):
+        char_data = chars_cache.get(character_number)
+        if not char_data:
+            continue
+        url = char_data.get("player_prof") or blank_avatar_url
+        char_images[character_number] = _round_image_data_uri(url) or blank_avatar_uri
+    # Store on a fresh dict entry, never mutate the shared event cache
+    context["sheet_faction"] = {**context["sheet_faction"], "char_images": char_images}
+
+
 def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
     """Generate and return a faction sheet PDF with optional force regeneration.
 
@@ -176,6 +192,7 @@ def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Generate PDF if forced or if file needs reprinting (outdated/missing)
     if force or reprint(file_path):
+        _process_faction_char_images(context)
         xhtml_pdf(context, "pdf/sheets/faction.html", file_path)
 
     # Return the PDF file as HTTP response with faction name in filename
