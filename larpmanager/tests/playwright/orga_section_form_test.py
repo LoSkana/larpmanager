@@ -110,8 +110,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Check signup
     go_to(page, live_server, "/test/register")
 
-    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
-    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Needs")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Preferences")).click()
 
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Needs What you need sleep sleeeep Preferences What you prefer Food fooood")
@@ -131,8 +131,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
-    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Needs")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Preferences")).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Preferences What you prefer Food fooood Needs What you need sleep sleeeep")
@@ -140,7 +140,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Activate ticket selection / allowed selection
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Configuration")
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#id_registration_reg_que_allowed").check()
     page.locator("#id_registration_reg_que_tickets").check()
     page.get_by_role("button", name="Confirm").click()
@@ -166,7 +166,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register/")
 
     # whole section not visible
-    expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).not_to_be_visible()
+    expect(page.locator("#register_form").get_by_role("link", name=re.compile(r"^Preferences"))).not_to_be_visible()
     expect(page.get_by_role("cell", name="fooood")).not_to_be_visible()
     expect(page.get_by_text("What you prefer Food fooood")).not_to_be_visible()
 
@@ -174,8 +174,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator('label[for="id_ticket_1"]').click()
 
     # section and field are visible
-    expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).to_be_visible()
-    page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
+    expect(page.locator("#register_form").get_by_role("link", name=re.compile(r"^Preferences"))).to_be_visible()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Preferences")).click()
     expect(page.get_by_role("cell", name="fooood")).to_be_visible()
     expect(page.get_by_text("What you prefer Food fooood")).to_be_visible()
 
@@ -183,7 +183,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("textbox", name="Food").click()
     page.get_by_role("textbox", name="Food").fill("SADSA")
-    page.get_by_role("link", name=re.compile(r"^Needs ")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Needs")).click()
     page.get_by_role("textbox", name="sleep").click()
     page.get_by_role("textbox", name="sleep").fill("WWWW")
     page.get_by_role("button", name="Continue").click()
@@ -240,7 +240,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
-    expect(edit_iframe.get_by_role("link", name=re.compile(r"^Needs "))).not_to_be_visible()
+    expect(edit_iframe.get_by_role("link", name=re.compile(r"^Needs"))).not_to_be_visible()
     expect(edit_iframe.get_by_role("cell", name="sleeeep")).not_to_be_visible()
     expect(edit_iframe.get_by_text("What you need sleep sleeeep")).not_to_be_visible()
 
@@ -248,14 +248,14 @@ def test_orga_section_form(pw_page: Any) -> None:
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Configuration")
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#id_registration_reg_que_tickets").check()
     page.locator("#id_registration_reg_que_allowed").uncheck()
     page.locator("#id_registration_reg_que_tickets").uncheck()
     page.get_by_role("button", name="Confirm").click()
 
     sidebar(page, "Configuration")
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#id_registration_reg_que_faction").check()
     page.get_by_role("button", name="Confirm").click()
 
@@ -305,7 +305,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("link", name=re.compile(r"^Character ")).click()
+    edit_iframe.get_by_role("link", name=re.compile(r"^Character")).click()
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()

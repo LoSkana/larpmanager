@@ -58,7 +58,7 @@ def test_relationship_tags(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Relationships")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Relationships")).click()
     page.locator("#id_writing_relationship_tags").check()
     submit_confirm(page)
 

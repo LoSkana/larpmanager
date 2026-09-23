@@ -121,7 +121,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
 
     # Enable the "Unimportant" writing config
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_unimportant").check()
     submit_confirm(page)
 

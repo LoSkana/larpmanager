@@ -58,7 +58,7 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_reading").check()
     submit_confirm(page)
 

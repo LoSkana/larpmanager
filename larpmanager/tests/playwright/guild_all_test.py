@@ -82,7 +82,7 @@ def test_guild_all(pw_page: Any) -> None:
 
     # Let the player play both of the owned characters, so both are assigned on registration
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_character_play_max").fill("2")
     submit_confirm(page)
 

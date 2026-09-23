@@ -133,7 +133,7 @@ def test_orga_manage_widgets_deadlines_user_character(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("2")
     submit_confirm(page)

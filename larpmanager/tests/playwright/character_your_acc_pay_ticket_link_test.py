@@ -70,7 +70,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     # Setup NPC ticket
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Tickets ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Tickets")).click()
     page.locator("#id_ticket_npc").check()
     submit_confirm(page)
 
@@ -330,7 +330,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # set independ factions, check
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Campaign ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Campaign")).click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
     sidebar(page, "Factions")
