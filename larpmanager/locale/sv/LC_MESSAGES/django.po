@@ -2441,9 +2441,6 @@ msgstr "Dolt evenemang"
 msgid "Exit Preview"
 msgstr "Avsluta förhandsgranskning"
 
-msgid "Experimental"
-msgstr "Experimentell"
-
 msgid "Faction list"
 msgstr "Lista över fraktioner"
 

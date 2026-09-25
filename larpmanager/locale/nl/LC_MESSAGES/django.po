@@ -2441,9 +2441,6 @@ msgstr "Evenement verborgen"
 msgid "Exit Preview"
 msgstr "Voorbeeld verlaten"
 
-msgid "Experimental"
-msgstr "Experimenteel"
-
 msgid "Faction list"
 msgstr "Factielijst"
 

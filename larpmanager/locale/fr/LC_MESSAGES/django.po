@@ -2441,9 +2441,6 @@ msgstr "Événement caché"
 msgid "Exit Preview"
 msgstr "Quitter l'aperçu"
 
-msgid "Experimental"
-msgstr "Expérimental"
-
 msgid "Faction list"
 msgstr "Liste des factions"
 
