@@ -9054,6 +9054,11 @@ msgstr ""
 msgid "Assigned outside expressed preferences"
 msgstr ""
 
+msgid ""
+"No valid assignment exists with the current constraints: check the included "
+"participants and the available characters, then run the algorithm again"
+msgstr ""
+
 msgid "Configure form:"
 msgstr ""
 
