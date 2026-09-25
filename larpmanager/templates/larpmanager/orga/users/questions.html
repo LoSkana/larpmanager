@@ -38,7 +38,8 @@
                         <a href="{% url 'orga_questions_answer' run.get_slug el.member.uuid %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'orga_questions_close' run.get_slug el.member.uuid %}">{% trans "Close" %}</a>
+                        <a href="{% url 'orga_questions_close' run.get_slug el.member.uuid %}"
+                           class="frame-confirm">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}

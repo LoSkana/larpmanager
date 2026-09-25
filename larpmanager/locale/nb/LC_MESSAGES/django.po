@@ -2441,9 +2441,6 @@ msgstr "Arrangement skjult"
 msgid "Exit Preview"
 msgstr "Avslutt forhåndsvisning"
 
-msgid "Experimental"
-msgstr "Eksperimentell"
-
 msgid "Faction list"
 msgstr "Liste over fraksjoner"
 
