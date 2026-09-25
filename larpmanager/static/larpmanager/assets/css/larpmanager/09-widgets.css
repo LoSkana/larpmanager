@@ -148,6 +148,11 @@
   height: 100%;
 }
 
+.slider .flickity-cell {
+  position: absolute;
+  left: 0;
+}
+
 /*** COVER ***/
 
 #aspect-ratio {

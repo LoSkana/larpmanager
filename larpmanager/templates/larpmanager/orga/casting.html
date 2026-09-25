@@ -117,7 +117,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script src="{% static "node_modules/javascript-lp-solver/prod/solver.js" %}"></script>
+    <script src="{% static "node_modules/javascript-lp-solver/dist/solver.global.js" %}"></script>
     <script>
 window['num_pref'] = {{ num_choices }};
 window['choices'] = {{ choices | safe }};
