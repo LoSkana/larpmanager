@@ -2441,9 +2441,6 @@ msgstr "Event skjult"
 msgid "Exit Preview"
 msgstr "Afslut forhåndsvisning"
 
-msgid "Experimental"
-msgstr "Eksperimentel"
-
 msgid "Faction list"
 msgstr "Fraktionsliste"
 

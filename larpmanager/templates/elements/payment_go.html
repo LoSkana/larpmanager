@@ -48,47 +48,6 @@
         {{ paypal_form.render }}
     </div>
 {% endif %}
-{% if method == 'paypal-old' %}
-    <script src="{% static 'node_modules/@paypal/paypal-js/dist/iife/paypal-js.min.js' %}"></script>
-    <div id="smart-button-container">
-        <div id="paypal-buttons"></div>
-    </div>
-    <script>
-    window.paypalLoadScript({
-        "client-id": "{{ paypal_business }}",
-        currency: "{{ payment_currency }}"
-    }).then((paypal) => {
-        paypal.Buttons({
-            createOrder: function(data, actions) {
-                // Set up the transaction
-                return actions.order.create({
-                    purchase_units: [{
-                        "amount": {
-                            "value": '{{ invoice.mc_gross | format_decimal }}'
-                        },
-                        "description": '{{ invoice.causal }}',
-                        "custom_id": '{{ invoice.cod }}'
-                    }]
-                });
-            },
-            onApprove: async function (data, actions) {
-                // console.log(data);
-                // console.log(data.orderID);
-                return actions.order.capture().then(function (details) {
-                    // Payment confirmation happens server-side via the PayPal
-                    // IPN handler; here we only send the user to the wait page
-                    location.href = '{% url "accounting_wait" %}';
-                    });
-                }
-            }).render("#paypal-buttons");
-    });
-    </script>
-    <br />
-    <h3>
-        <a href="#" class="my_toggle" tog='paypal2'>{% trans "Experimental" %}</a>
-    </h3>
-    <div class="paypal2 hide"></div>
-{% endif %}
 {% if method == 'any' %}
     <p>
         {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}

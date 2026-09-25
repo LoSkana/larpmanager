@@ -2441,9 +2441,6 @@ msgstr "Κρυφό event"
 msgid "Exit Preview"
 msgstr "Έξοδος από προεπισκόπηση"
 
-msgid "Experimental"
-msgstr "Πειραματικό"
-
 msgid "Faction list"
 msgstr "Λίστα φατριών"
 

@@ -5937,9 +5937,6 @@ msgstr ""
 msgid "Follow the link below to complete your payment on the PayPal platform."
 msgstr ""
 
-msgid "Experimental"
-msgstr ""
-
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "
 "submit the form, otherwise your payment will not be processed!"

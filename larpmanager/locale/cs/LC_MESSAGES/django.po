@@ -2441,9 +2441,6 @@ msgstr "Skrytá událost"
 msgid "Exit Preview"
 msgstr "Ukončit náhled"
 
-msgid "Experimental"
-msgstr "Experimentální"
-
 msgid "Faction list"
 msgstr "Seznam frakcí"
 
