@@ -65,7 +65,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "collapse_options_min": 5,
     "credits_name": None,
     "deadline_days": 0,
-    "deadlines_tolerance": "30",
+    "deadline_tolerance": "30",
     "einvoice_aliquotaiva": "",
     "einvoice_cap": None,
     "einvoice_codicedestinatario": None,

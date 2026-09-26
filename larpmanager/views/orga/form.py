@@ -195,6 +195,12 @@ def orga_registration_form(request: HttpRequest, event_slug: str, registration_t
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(context)
 
+    # Debrief and matchmaker questions are not answered when registering
+    if context["typ"] == "debrief":
+        context["page_info"] = _("Manage the questions participants answer after the event, to give their feedback")
+    elif context["typ"] == "matchmaker":
+        context["page_info"] = _("Manage the questions participants answer on the characters they would like to play")
+
     # Configure context for template rendering
     context["upload"] = f"{context['typ']}_form"
     context["download"] = 1

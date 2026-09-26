@@ -423,11 +423,8 @@ def shuttle_new(request: HttpRequest) -> Any:
             return redirect("shuttle")
     else:
         form = ShuttleServiceForm(request=request, context=context)
-    return render(
-        request,
-        "larpmanager/general/writing.html",
-        {"form": form, "name": _("New shuttle request")},
-    )
+    context.update({"form": form, "name": _("New shuttle request")})
+    return render(request, "larpmanager/general/edit.html", context)
 
 
 @login_required
@@ -453,11 +450,8 @@ def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
             return redirect("shuttle")
     else:
         form = ShuttleServiceEditForm(instance=shuttle, request=request, context=context)
-    return render(
-        request,
-        "larpmanager/general/writing.html",
-        {"form": form, "name": _("Modify shuttle request")},
-    )
+    context.update({"form": form, "name": _("Modify shuttle request")})
+    return render(request, "larpmanager/general/edit.html", context)
 
 
 _ALLOWED_ALGORITHMS = {"HS256", "HS384", "HS512"}

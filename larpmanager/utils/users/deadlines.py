@@ -113,7 +113,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
 
     # Get tolerance setting
     association_id = get_run_association_id(runs[0].id)
-    tolerance = int(get_association_config(association_id, "deadlines_tolerance"))
+    tolerance = int(get_association_config(association_id, "deadline_tolerance"))
 
     # Check membership feature
     now = timezone.now()
