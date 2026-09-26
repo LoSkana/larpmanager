@@ -5907,6 +5907,9 @@ msgstr "Rozumím – Přejít k obsahu"
 msgid "Membership Application Status"
 msgstr "Stav žádosti o členství"
 
+msgid "Membership fee reminder email"
+msgstr "Připomínka členského příspěvku e-mailem"
+
 msgid "Name of the experience system"
 msgstr "Název systému zkušeností"
 
@@ -10950,6 +10953,13 @@ msgstr ""
 "automaticky změní)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Spravuj otázky, na které účastníci odpovídají po akci, aby ti dali zpětnou "
+"vazbu"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11178,6 +11188,13 @@ msgid ""
 msgstr ""
 "Spravuj šablony rozvržení CSS, které určují vizuální formátování tištěných "
 "Handouts"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Spravuj otázky, na které účastníci odpovídají ohledně postav, které by "
+"chtěli hrát"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "

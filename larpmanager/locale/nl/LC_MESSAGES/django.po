@@ -5907,6 +5907,9 @@ msgstr "Ik begrijp het - Inhoud openen"
 msgid "Membership Application Status"
 msgstr "Status van de lidmaatschapsaanvraag"
 
+msgid "Membership fee reminder email"
+msgstr "E-mail met herinnering voor lidmaatschapsbijdrage"
+
 msgid "Name of the experience system"
 msgstr "Naam van het ervaringssysteem"
 
@@ -11319,6 +11322,13 @@ msgstr ""
 "wordt automatisch aangepast)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Beheer de vragen die deelnemers na het evenement beantwoorden om hun "
+"feedback te geven"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11560,6 +11570,13 @@ msgid ""
 msgstr ""
 "Beheer CSS-lay-outsjablonen die de visuele opmaak van gedrukte Handouts "
 "bepalen"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Beheer de vragen die deelnemers beantwoorden over de personages die ze graag"
+" willen spelen"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "

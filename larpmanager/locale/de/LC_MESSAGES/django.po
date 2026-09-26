@@ -5907,6 +5907,9 @@ msgstr "Ich verstehe - Inhalt aufrufen"
 msgid "Membership Application Status"
 msgstr "Status des Mitgliedsantrags"
 
+msgid "Membership fee reminder email"
+msgstr "Erinnerungs-E-Mail zum Mitgliedsbeitrag"
+
 msgid "Name of the experience system"
 msgstr "Name des Erfahrungssystems"
 
@@ -11432,6 +11435,13 @@ msgstr ""
 "automatisch angepasst)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Verwalte die Fragen, die die Teilnehmenden nach dem Event beantworten, um "
+"ihr Feedback zu geben"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11676,6 +11686,13 @@ msgid ""
 msgstr ""
 "Verwalte CSS-Layoutvorlagen, die die visuelle Gestaltung von gedruckten "
 "Handouts steuern"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Verwalte die Fragen, die die Teilnehmenden zu den Charakteren beantworten, "
+"die sie gerne spielen möchten"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "

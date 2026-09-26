@@ -810,8 +810,10 @@ class OrgaSpeedLarpForm(WritingForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize writing element form."""
+        """Initialize writing element form, limiting the assigned staff to the run staff."""
         super().__init__(*args, **kwargs)
+        self.configure_field_run("assigned", self.params.get("run"))
+        self.fields["assigned"].required = False
 
 
 class OrgaRelationshipTagForm(BaseModelForm):
