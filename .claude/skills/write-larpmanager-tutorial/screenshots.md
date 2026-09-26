@@ -69,7 +69,7 @@ before them names the field instead):
 | 2 | `manage/texts/` > New | Text form: Text, Type, Language |
 | 3 | `manage/config/interface/` | Interface section checkboxes |
 
-## 40 advanced-features (deleted: images moved to create-organization and manage-events)
+## 40 advanced-features (tutorial removed: images used by create-organization and manage-events)
 
 | # | Page | Crop / what it shows |
 |---|---|---|
@@ -369,7 +369,7 @@ editor screenshots (hover popup, character finder, highlighted reference; former
 | # | Page | Crop / what it shows |
 |---|---|---|
 | 1 | `manage/config/deadlines/` | Deadline section: Tolerance, Frequency |
-| 2 | `event/manage/deadlines/` | Deadlines table with one row (missing payment) |
+| 2 | `event/manage/deadlines/` | Deadlines table: cancellation for missing payment, membership overdue, delay in payment |
 | 3 | `manage/config/remind/` | Reminder section: Frequency, Holidays |
 | 4 | `manage/texts/` > New | Text form with Type select opened on "Reminder payment" |
 

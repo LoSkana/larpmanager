@@ -56,8 +56,10 @@ def test_registrations(browser_type, live_server) -> None:
     page = sh.goto(sh.page(ORGA), "test/manage/cancellations/")
     sh.shot(3, [banner(page), content(page)], "Cancelled registrations")
 
+    Run.objects.filter(pk=base["run"].pk).update(registration_status="p")
+    refresh()
     page = sh.goto(sh.page(ORGA), "test/manage/event/?frame=1")
-    sh.shot(5, row(page, "id_form2-registration_status"), "Registration status options")
+    sh.shot(5, row(page, "id_form2-registration_status"), "Registration status set to pre-registration")
 
     Run.objects.filter(pk=base["run"].pk).update(registration_status="c", registration_secret="ember2027")
     refresh()

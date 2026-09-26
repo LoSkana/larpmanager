@@ -40,7 +40,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.miscellanea import HelpQuestion
-from larpmanager.models.registration import CheckIn
+from larpmanager.models.registration import CheckIn, Registration
 
 pytestmark = pytest.mark.e2e
 
@@ -168,8 +168,11 @@ def test_quests(browser_type, live_server) -> None:
 
 def test_deadlines(browser_type, live_server) -> None:
     sh = Shooter(browser_type, live_server, 250, "deadlines")
-    _world(sh, "deadlines", "remind", "membership")
+    _base, _characters, registrations = _world(sh, "deadlines", "remind", "membership", "payment")
     Membership.objects.filter(member__user__username=UNASSIGNED).update(status="e")
+    # One payment a few days late, one beyond the default 30 days tolerance
+    Registration.objects.filter(pk=registrations[0].pk).update(quota=80, deadline=-5)
+    Registration.objects.filter(pk=registrations[1].pk).update(quota=120, deadline=-45)
     refresh()
 
     page = sh.goto(sh.page(ORGA), "manage/config/deadlines/")
