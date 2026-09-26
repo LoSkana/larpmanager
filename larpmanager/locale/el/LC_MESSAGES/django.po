@@ -5904,6 +5904,9 @@ msgstr "Κατανοώ - Πρόσβαση στο περιεχόμενο"
 msgid "Membership Application Status"
 msgstr "Κατάσταση αίτησης εγγραφής μέλους"
 
+msgid "Membership fee reminder email"
+msgstr "Email υπενθύμισης για τη συνδρομή μέλους"
+
 msgid "Name of the experience system"
 msgstr "Όνομα του συστήματος εμπειρίας"
 
@@ -11406,6 +11409,13 @@ msgstr ""
 "αλλάξει μέγεθος αυτόματα)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Διαχειρίσου τις ερωτήσεις που απαντούν οι συμμετέχοντες μετά την εκδήλωση, "
+"για να δώσουν τα σχόλιά τους"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11650,6 +11660,13 @@ msgid ""
 msgstr ""
 "Διαχειρίσου πρότυπα διάταξης CSS που ελέγχουν την οπτική μορφοποίηση των "
 "εκτυπωμένων handouts"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Διαχειρίσου τις ερωτήσεις που απαντούν οι συμμετέχοντες για τους χαρακτήρες "
+"που θα ήθελαν να παίξουν"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "

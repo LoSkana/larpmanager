@@ -391,7 +391,7 @@ class AssociationTextType(models.TextChoices):
     PRIVACY = "y", _("Privacy")
 
     REMINDER_MEMBERSHIP = "rm", _("Membership request reminder email")
-    REMINDER_MEMBERSHIP_FEE = "rf", _("Membership request reminder email")
+    REMINDER_MEMBERSHIP_FEE = "rf", _("Membership fee reminder email")
     REMINDER_PAY = "rp", _("Payment reminder email")
     REMINDER_PROFILE = "rr", _("Profile completion reminder email")
     REMINDER_CHARACTER = "rc", _("Character creation reminder email")

@@ -5904,6 +5904,9 @@ msgstr "Jag förstår - Få tillgång till innehåll"
 msgid "Membership Application Status"
 msgstr "Status för medlemsansökan"
 
+msgid "Membership fee reminder email"
+msgstr "E-postpåminnelse om medlemsavgift"
+
 msgid "Name of the experience system"
 msgstr "Namn på erfarenhetssystemet"
 
@@ -11080,6 +11083,13 @@ msgstr ""
 "storleksändras automatiskt)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Hantera frågorna som deltagarna svarar på efter eventet, för att ge sin "
+"feedback"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11318,6 +11328,13 @@ msgid ""
 msgstr ""
 "Hantera CSS-layoutmallar som styr den visuella formateringen av utskrivna "
 "handouts"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Hantera frågorna som deltagarna svarar på om karaktärerna de skulle vilja "
+"spela"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "

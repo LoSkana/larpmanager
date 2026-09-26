@@ -165,11 +165,11 @@ def _get_my_guild_ids(context: dict, my_character_ids: list[int] | None = None) 
 
 
 def _guild_max_number(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_number", context=context)
+    return int(get_event_config(context["event"].id, "guild_max_number", context=context))
 
 
 def _guild_max_members(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_members", context=context)
+    return int(get_event_config(context["event"].id, "guild_max_members", context=context))
 
 
 @login_required

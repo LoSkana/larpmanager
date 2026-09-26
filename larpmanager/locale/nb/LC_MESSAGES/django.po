@@ -5904,6 +5904,9 @@ msgstr "Jeg forstår - Få tilgang til innhold"
 msgid "Membership Application Status"
 msgstr "Status på medlemssøknaden"
 
+msgid "Membership fee reminder email"
+msgstr "E-post med påminnelse om medlemsavgift"
+
 msgid "Name of the experience system"
 msgstr "Navnet på erfaringssystemet"
 
@@ -11100,6 +11103,13 @@ msgstr ""
 " endres automatisk)"
 
 msgid ""
+"Manage the questions participants answer after the event, to give their "
+"feedback"
+msgstr ""
+"Administrer spørsmålene deltakerne svarer på etter arrangementet for å gi "
+"tilbakemelding"
+
+msgid ""
 "No albums created yet. Add an album to organize and share photos for this "
 "event."
 msgstr ""
@@ -11340,6 +11350,13 @@ msgid ""
 msgstr ""
 "Administrer CSS-oppsettmaler som styrer den visuelle utformingen av "
 "utskrevne Handouts"
+
+msgid ""
+"Manage the questions participants answer on the characters they would like "
+"to play"
+msgstr ""
+"Administrer spørsmålene deltakerne svarer på om karakterene de ønsker å "
+"spille"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "
