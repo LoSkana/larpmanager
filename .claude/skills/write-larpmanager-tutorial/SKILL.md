@@ -1,6 +1,6 @@
 ---
 name: write-larpmanager-tutorial
-description: Use when writing or editing tutorials for the LarpManager platform. Covers the HTML content format, URL conventions, writing style, and section structure used across all 26 existing tutorials.
+description: Use when writing or editing tutorials for the LarpManager platform. Covers the HTML content format, URL conventions, writing style, and section structure, and link text rules ("Event > Page" / "Organization > Page") used across the existing tutorials.
 ---
 
 # Writing LarpManager Tutorials
@@ -56,23 +56,53 @@ When writing a new tutorial, use placeholder `[SCREENSHOT: description]` instead
 <p>Set the <strong>Max Participants</strong> field to 0 for unlimited.</p>
 ```
 
-**Cross-tutorial links**:
-```html
-<a href="https://larpmanager.com/tutorials/<slug>/" target="_blank" rel="noopener"><em><strong>Tutorial Name</strong></em></a>
-```
+## Links
+
+Every page can live in either the **event** dashboard or the **organization** dashboard, so link text must always state the scope first. All links are absolute (`https://...`), end with `/`, use `target="_blank" rel="noopener"`, and wrap the text in `<strong>`.
+
+### Link text rules
+
+| Link to | Text inside the link | Example sentence |
+|---|---|---|
+| Event page | `Event &gt; <sidebar label>` | `go to <a ...><strong>Event &gt; Discounts</strong></a> and click "New".` |
+| Organization page | `Organization &gt; <sidebar label>` | `go to <a ...><strong>Organization &gt; Roles</strong></a>.` |
+| Event config section | `Event &gt; Configuration &gt; <section label>` | `In <a ...><strong>Event &gt; Configuration &gt; Experience points</strong></a>, enable ...` |
+| Org config section | `Organization &gt; Configuration &gt; <section label>` | `In <a ...><strong>Organization &gt; Configuration &gt; VAT</strong></a>, set ...` |
+| Dashboard home | `Event &gt; Dashboard` / `Organization &gt; Dashboard` | `from <a ...><strong>Event &gt; Dashboard</strong></a>.` |
+| Feature activation | exact feature name only | `activate the <a ...><strong>Discount</strong></a> feature.` |
+| Other tutorial | tutorial name, `<em><strong>` | `see the <a ...><em><strong>Character Sheet</strong></em></a> tutorial.` |
+| Section of a tutorial | the `<h2>` text, `<em><strong>` | `see <a ...><em><strong>Player Selection</strong></em></a> below.` |
+
+- **Labels must match the UI exactly**:
+  - Sidebar labels: the `name` of `EventPermission`/`AssociationPermission` in `larpmanager/fixtures/event_permission.yaml` / `association_permission.yaml` (e.g. `orga_sensitive` is "Users", `exe_membership` is "Members").
+  - Feature names: `name` in `larpmanager/fixtures/feature.yaml` (e.g. "Casting algorithm", "Verification payments", "Organizational fee").
+  - Config sections: second argument of `set_section()` in `larpmanager/forms/event.py` / `association.py`, and the URL uses its first argument (e.g. `config/experience/`, not `config/px`).
+- **Only the destination goes inside the link**: "go to", "the", "page", "panel", "First", "activate", "feature" and trailing punctuation (`.`, `,`, `:`) stay outside. No leading/trailing spaces inside the link.
+- **When the same page exists in both scopes, name both explicitly**: `from <a>Event &gt; Tokens</a> (event expenses) or from <a>Organization &gt; Tokens</a> (organizational expenses)`.
+- **Never** use vague text ("see this section", "detailed here", "set the configurations", "Configuration" alone), bare URLs as link text, "X panel"/"X page" labels, possessives ("Organization's Text"), or `Event / X` slash style.
+- A feature-activation link points to `.../features/<slug>/on/`; if the sentence refers to the tutorial instead, link the tutorial separately: `If the <a>Casting algorithm</a> feature is active (see the <a><em><strong>Casting</strong></em></a> tutorial), ...`.
+- `&gt;` is the separator (ASCII); do not use icons or non-ASCII arrows.
 
 ## URL Conventions
 
 | Purpose | Pattern |
 |---|---|
-| Activate event feature | `https://larpmanager.com/redirect/event/manage/features/<slug>/on/` |
-| Activate org feature | `https://larpmanager.com/redirect/manage/features/<slug>/on/` |
-| Event management page | `https://larpmanager.com/redirect/event/manage/<section>` |
-| Event config section | `https://larpmanager.com/redirect/event/manage/config/<slug>` |
-| Org management page | `https://larpmanager.com/redirect/manage/<section>` |
+| Activate event feature (`overall: false`) | `https://larpmanager.com/redirect/event/manage/features/<slug>/on/` |
+| Activate org feature (`overall: true`) | `https://larpmanager.com/redirect/manage/features/<slug>/on/` |
+| Event dashboard | `https://larpmanager.com/redirect/event/manage/` |
+| Event management page | `https://larpmanager.com/redirect/event/manage/<path>/` |
+| Event config section | `https://larpmanager.com/redirect/event/manage/config/<section>/` |
+| Org dashboard | `https://larpmanager.com/redirect/manage/` |
+| Org management page | `https://larpmanager.com/redirect/manage/<path>/` |
+| Org config section | `https://larpmanager.com/redirect/manage/config/<section>/` |
 | Tutorial link | `https://larpmanager.com/tutorials/<slug>/` |
+| Tutorial section | `https://larpmanager.com/tutorials/<slug>/#<slugified h2 text>` |
 
-All management links use `target="_blank" rel="noopener"`.
+- Event pages are always `redirect/event/manage/...`, never `redirect/manage/event/...`.
+- Feature scope decides the activation URL: check `overall` in `feature.yaml`.
+- `<path>` must match a URL in `larpmanager/urls/orga.py` (without the `<slug:event_slug>/` prefix) or `larpmanager/urls/exe.py`. Verify, e.g.: awards are `experience/awards/`, navigation is `buttons/`, the sheet is `writing/form/`, uploaded expenses are `upload_expenses/`.
+- Tutorial section anchors are generated client-side from `<h2>` text (lowercase, spaces to `-`, symbols removed); the target `<h2>` must exist.
+- Never link a test/staging instance (e.g. `test.larpmanager.com`) or use relative hrefs.
 
 ## Writing Style
 
@@ -87,8 +117,8 @@ All management links use `target="_blank" rel="noopener"`.
 
 ```html
 <h2>Sub-Feature Name</h2>
-<p><em>One-line description of what this does.</em> To use it, <a href="https://larpmanager.com/redirect/event/manage/features/<slug>/on/">activate the "<Feature>" feature</a>.</p>
-<p>Go to the <a href="https://larpmanager.com/redirect/event/manage/<page>"><Page> panel</a> and click "Add" to create a new entry.</p>
+<p><em>One-line description of what this does.</em> To use it, activate the <a href="https://larpmanager.com/redirect/event/manage/features/<slug>/on/" target="_blank" rel="noopener"><strong><Feature name></strong></a> feature.</p>
+<p>Go to <a href="https://larpmanager.com/redirect/event/manage/<path>/" target="_blank" rel="noopener"><strong>Event &gt; <Sidebar label></strong></a> and click "Add" to create a new entry.</p>
 <p>[SCREENSHOT: panel overview]</p>
 <p>Define the following values:</p>
 <p><strong>Field Name</strong>: What it does.<br><strong>Other Field</strong>: What it does.</p>
@@ -114,3 +144,13 @@ When a feature changes what players see during signup or on their profile, alway
 - Using "the system" for every subject — prefer "LarpManager" or direct "you"
 - Skipping the feature activation link — every optional sub-feature must show how to enable it
 - Long paragraphs — each paragraph should cover a single action or concept
+- Link text that hides the scope, or does not match the sidebar/feature/section name (see **Links**)
+- Leftover editor attributes (`data-start`, `data-end`, `data-is-last-node`, ...) from pasted content
+
+## Before Finishing
+
+Check every link in the tutorial:
+1. Scope prefix present (`Event &gt;` / `Organization &gt;`) for management and config links.
+2. Label matches the fixture/form name exactly.
+3. The target resolves: strip `https://larpmanager.com/redirect/`, and for `event/...` prefix an event slug, then resolve it against the Django URLconf.
+4. Feature activation URL scope matches the feature's `overall` flag.

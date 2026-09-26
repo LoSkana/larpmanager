@@ -14650,6 +14650,13 @@ msgstr ""
 "vstupenky, takže je místo organizace uhradí účastník."
 
 msgid ""
+"No valid assignment exists with the current constraints: check the included "
+"participants and the available characters, then run the algorithm again"
+msgstr ""
+"Žádné platné přiřazení neexistuje s aktuálními omezeními: zkontroluj "
+"zahrnuté účastníky a dostupné postavy, pak spusť algoritmus znovu"
+
+msgid ""
 "To add a registration to a participant, they must have consented to share "
 "their data with your organization; otherwise, their entry will be skipped."
 msgstr ""

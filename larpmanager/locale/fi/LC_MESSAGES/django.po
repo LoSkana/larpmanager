@@ -14858,6 +14858,13 @@ msgstr ""
 " hintaan, jolloin osallistuja maksaa ne organisaation sijaan."
 
 msgid ""
+"No valid assignment exists with the current constraints: check the included "
+"participants and the available characters, then run the algorithm again"
+msgstr ""
+"Nykyisillä rajoituksilla ei löydy kelvollista jakoa: tarkista mukana olevat "
+"osallistujat ja käytettävissä olevat hahmot, ja aja algoritmi uudelleen"
+
+msgid ""
 "To add a registration to a participant, they must have consented to share "
 "their data with your organization; otherwise, their entry will be skipped."
 msgstr ""

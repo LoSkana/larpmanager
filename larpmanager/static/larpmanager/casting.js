@@ -467,6 +467,20 @@ function exec_assigner() {
 
         // Solve the optimization problem using simplex algorithm
         var results = solver.Solve(model);
+
+        // Infeasible model: the returned variables are meaningless, so discard any
+        // previous results and block the upload
+        if (!results['feasible']) {
+            $('.sel').removeClass('sel');
+            $('#res').val('');
+            $('#assegnazioni').empty();
+            $('#not_assigned_after').empty();
+            $('#risultati').empty().append($('<p>').text(trads['nf']));
+            $('#load').hide();
+            if (dtTable) dtTable.rows().invalidate().draw(false);
+            return;
+        }
+
         // Process and display results
 
         // Counter for statistics: how many players got each preference level
@@ -565,13 +579,6 @@ function exec_assigner() {
 
         // Notify DataTable that cell content has changed
         if (dtTable) dtTable.rows().invalidate().draw(false);
-
-        // Check if solution is feasible (all constraints satisfied)
-        if (!results['feasible']) {
-            debug("WARNING - PROBLEM NOT FEASIBLE");
-            $('#load').hide();
-        } else
-            $('#load').show();
 
     }
 

@@ -14773,6 +14773,13 @@ msgstr ""
 "billetprisen, så deltageren betaler dem i stedet for organisationen."
 
 msgid ""
+"No valid assignment exists with the current constraints: check the included "
+"participants and the available characters, then run the algorithm again"
+msgstr ""
+"Ingen gyldig tildeling findes med de nuværende begrænsninger: tjek "
+"deltagerne og de tilgængelige karakterer, og kør algoritmen igen"
+
+msgid ""
 "To add a registration to a participant, they must have consented to share "
 "their data with your organization; otherwise, their entry will be skipped."
 msgstr ""
