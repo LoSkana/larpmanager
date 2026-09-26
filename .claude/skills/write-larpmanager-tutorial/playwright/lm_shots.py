@@ -61,8 +61,8 @@ EXTRA_PLAYERS = [
     ("Paolo", "Greco", NEWCOMER),
 ]
 
-ASSOCIATION_NAME = "Silver Lantern"
-EVENT_NAME = "The Ember Crown"
+ASSOCIATION_NAME = "Test Organization"
+EVENT_NAME = "Test Event"
 EVENT_START = date(2027, 6, 18)
 EVENT_END = date(2027, 6, 20)
 

@@ -173,7 +173,7 @@ def test_payments(browser_type, live_server) -> None:
     page.locator("label", has_text="Wire").first.click()
     wire = section(page, "wire")
     inputs = wire[1].locator("input[type=text], input:not([type])")
-    for idx, value in enumerate(["Bank transfer", "", "Silver Lantern", "IT60X0542811101000000123456", "BPMOIT22XXX"]):
+    for idx, value in enumerate(["Bank transfer", "", "Test Organization", "IT60X0542811101000000123456", "BPMOIT22XXX"]):
         if value and idx < inputs.count():
             inputs.nth(idx).fill(value)
     sh.shot(2, wire, "Wire transfer settings")
