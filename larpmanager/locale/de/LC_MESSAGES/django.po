@@ -2654,9 +2654,6 @@ msgstr "Auswahl des Alters"
 msgid "Apply Upgrade"
 msgstr "Upgrade anwenden"
 
-msgid "Are you sure?"
-msgstr "Bist du sicher?"
-
 msgid "Assign Badges"
 msgstr "Badges zuweisen"
 
@@ -4722,9 +4719,6 @@ msgstr "Vollständiger Bogen (Test)"
 msgid "Complete your profile"
 msgstr "Vervollständige dein Profil"
 
-msgid "Confirm your choices?"
-msgstr "Bestätige deine Auswahl?"
-
 msgid "Create your character"
 msgstr "Erstelle deinen Charakter"
 
@@ -5733,6 +5727,9 @@ msgstr "Dynamische Raten einrichten"
 msgid "Set up registration tickets"
 msgstr "Registrierungstickets einrichten"
 
+msgid "Submit this refund request?"
+msgstr "Diese Rückerstattungsanfrage absenden?"
+
 msgid "Ticket name (keep it short)"
 msgstr "Ticketname (kurz halten)"
 
@@ -5825,6 +5822,9 @@ msgstr "Meine ausstehenden Einladungen zur Gilde"
 
 msgid "Name of badge to be awarded."
 msgstr "Name des zu verleihenden Badges."
+
+msgid "Obtain the selected ability?"
+msgstr "Die ausgewählte Fähigkeit erwerben?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6373,6 +6373,9 @@ msgstr "Zugriff auf das Dashboard der Organisation"
 msgid "Character creation reminder email"
 msgstr "Erinnerungs-E-Mail zur Charaktererstellung"
 
+msgid "Confirm your casting preferences?"
+msgstr "Deine Casting-Präferenzen bestätigen?"
+
 msgid "Days available cannot be negative"
 msgstr "Verfügbare Tage können nicht negativ sein"
 
@@ -6852,6 +6855,9 @@ msgstr "Wenn aktiviert, ist die Ticketstufe „Team“ erlaubt."
 
 msgid "Indicates the details of the request:"
 msgstr "Gibt die Einzelheiten der Anfrage an:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Diese Rückerstattung an den Teilnehmer auszahlen?"
 
 msgid "Manage all quest types for this event"
 msgstr "Alle Questtypen für dieses Event verwalten"
@@ -7947,6 +7953,9 @@ msgstr "Die Anmeldung von %(member)s wurde nach %(event)s kopiert"
 
 msgid "Review participants' safety-related information"
 msgstr "Safety-relevante Informationen der Teilnehmenden prüfen"
+
+msgid "Send this email to all the selected recipients?"
+msgstr "Diese E-Mail an alle ausgewählten Empfänger senden?"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Zeigt den berechneten Steuerbetrag für jede Zahlung an"
@@ -9469,6 +9478,10 @@ msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr ""
 "Bist du sicher, dass du die <strong>%(email)s</strong> abbestellen willst?"
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr ""
+"Die Collection schließen? Danach sind keine weiteren Beiträge mehr möglich."
+
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
 "Möchtest du, dass Nutzer Events erst nach einem Genehmigungsprozess "
@@ -10145,6 +10158,11 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Diese werden automatisch angewendet, wenn du dich für eine neue "
 "Veranstaltung anmeldest."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr ""
+"Dieses Archiv hochladen? Die enthaltenen Fotos und Videos werden zum Album "
+"hinzugefügt."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""

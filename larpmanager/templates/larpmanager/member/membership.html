@@ -51,7 +51,8 @@
             <p>{% trans "Upload scans of both your signed request and your document (image or PDF format):" %}</p>
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"
-                  method="post">
+                  method="post"
+                  data-confirm="{% trans "Did you check the required data properly?" %}">
                 {% csrf_token %}
                 <table class="mob">
                     {{ form.as_table }}
@@ -65,7 +66,8 @@
             </p>
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"
-                  method="post">
+                  method="post"
+                  data-confirm="{% trans "Did you check the required data properly?" %}">
                 {% csrf_token %}
                 <hr />
                 {% if '.pdf' in doc_path %}
@@ -145,13 +147,3 @@
         {% endif %}
     </div>
 {% endblock content %}
-{% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-$(function() {
-    $('form').on('submit', function() {
-        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Did you check the required data properly?" %}{% endfilter %}');
-    });
-});
-});
-    </script>
-{% endblock js %}

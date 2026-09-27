@@ -81,7 +81,7 @@
         {% csrf_token %}
         <button type="submit"
                 class="btn btn-danger"
-                onclick="return confirm('Permanently delete {{ assoc.name }}?')">Delete association</button>
+                data-confirm="Permanently delete {{ assoc.name }}?">Delete association</button>
         <a href="{% url 'lm_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
 {% endblock content %}

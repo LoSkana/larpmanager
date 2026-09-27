@@ -2654,9 +2654,6 @@ msgstr "Leeftijdselectie"
 msgid "Apply Upgrade"
 msgstr "Upgrade toepassen"
 
-msgid "Are you sure?"
-msgstr "Weet je zeker?"
-
 msgid "Assign Badges"
 msgstr "Badges toewijzen"
 
@@ -4722,9 +4719,6 @@ msgstr "Volledig karakterblad (Test)"
 msgid "Complete your profile"
 msgstr "Maak je profiel compleet"
 
-msgid "Confirm your choices?"
-msgstr "Bevestig je keuzes?"
-
 msgid "Create your character"
 msgstr "Creëer je personage"
 
@@ -5733,6 +5727,9 @@ msgstr "Dynamische afbetalingen instellen"
 msgid "Set up registration tickets"
 msgstr "Registratietickets instellen"
 
+msgid "Submit this refund request?"
+msgstr "Dit terugbetalingsverzoek indienen?"
+
 msgid "Ticket name (keep it short)"
 msgstr "Ticketnaam (houd het kort)"
 
@@ -5825,6 +5822,9 @@ msgstr "Mijn openstaande gilde-uitnodigingen"
 
 msgid "Name of badge to be awarded."
 msgstr "Naam van de toe te kennen badge."
+
+msgid "Obtain the selected ability?"
+msgstr "De geselecteerde vaardigheid verkrijgen?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6373,6 +6373,9 @@ msgstr "Ga naar het organisatiedashboard"
 msgid "Character creation reminder email"
 msgstr "E-mailherinnering voor het aanmaken van een personage"
 
+msgid "Confirm your casting preferences?"
+msgstr "Je casting-voorkeuren bevestigen?"
+
 msgid "Days available cannot be negative"
 msgstr "Beschikbare dagen kunnen niet negatief zijn"
 
@@ -6853,6 +6856,9 @@ msgstr "Indien ingeschakeld, sta ticketniveau: Staf toe."
 
 msgid "Indicates the details of the request:"
 msgstr "Geeft de details van de aanvraag aan:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Deze terugbetaling aan de deelnemer uitvoeren?"
 
 msgid "Manage all quest types for this event"
 msgstr "Beheer alle questtypes voor dit evenement"
@@ -7950,6 +7956,9 @@ msgstr "De aanmelding voor %(member)s is naar %(event)s gekopieerd"
 
 msgid "Review participants' safety-related information"
 msgstr "Bekijk Safety-gerelateerde informatie van deelnemers"
+
+msgid "Send this email to all the selected recipients?"
+msgstr "Deze e-mail naar alle geselecteerde ontvangers sturen?"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Toont het berekende belastingbedrag op elke betaling"
@@ -9406,6 +9415,9 @@ msgstr "Je moet minstens één Quest maken voordat je Traits kunt maken"
 msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr "Weet je zeker dat je <strong>%(email)s</strong> wilt uitschrijven?"
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr "De collection sluiten? Daarna kan niemand meer bijdragen."
+
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
 "Wil je dat gebruikers alleen na een goedkeuringsproces aan evenementen "
@@ -10051,6 +10063,11 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Deze worden automatisch toegepast als je je aanmeldt voor een nieuw "
 "evenement."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr ""
+"Dit archief uploaden? De foto's en video's erin worden aan het album "
+"toegevoegd."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""

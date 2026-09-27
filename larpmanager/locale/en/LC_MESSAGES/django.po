@@ -5490,7 +5490,7 @@ msgstr ""
 msgid "View the complete list of our events!"
 msgstr ""
 
-msgid "Are you sure?"
+msgid "Obtain the selected ability?"
 msgstr ""
 
 msgid "All"
@@ -6299,7 +6299,7 @@ msgstr ""
 msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr ""
 
-msgid "Confirm your choices?"
+msgid "Confirm your casting preferences?"
 msgstr ""
 
 msgid "No characters found"
@@ -7593,7 +7593,7 @@ msgstr ""
 msgid "Send a bulk email to event's participants"
 msgstr ""
 
-msgid "Are you really sure?"
+msgid "Send this email to all the selected recipients?"
 msgstr ""
 
 msgid "Result of the bulk email send"
@@ -8384,6 +8384,9 @@ msgid ""
 "redemption code will be generated, to be given to the recipient:"
 msgstr ""
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr ""
+
 msgid "Close the collection"
 msgstr ""
 
@@ -8602,6 +8605,9 @@ msgid ""
 "format):"
 msgstr ""
 
+msgid "Did you check the required data properly?"
+msgstr ""
+
 msgid "Confirmation of registration request"
 msgstr ""
 
@@ -8674,9 +8680,6 @@ msgstr ""
 msgid ""
 "The payment of your membership fee for this year has NOT been received: it "
 "is required to take part in events and the organization's meetings."
-msgstr ""
-
-msgid "Did you check the required data properly?"
 msgstr ""
 
 msgid "Manage which organizations can access your personal data"
@@ -8897,6 +8900,9 @@ msgstr ""
 msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 
+msgid "Issue this refund to the participant?"
+msgstr ""
+
 msgid "Cancellations"
 msgstr ""
 
@@ -8939,6 +8945,9 @@ msgstr ""
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 
+msgid "Submit this refund request?"
+msgstr ""
+
 msgid "Track all external income entries recorded for this event"
 msgstr ""
 
@@ -8965,6 +8974,9 @@ msgstr ""
 msgid ""
 "Select a zip file for upload. Directories will become albums, photos and the "
 "videos inside will be placed in the corresponding albums."
+msgstr ""
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
 msgstr ""
 
 msgid "Event navigation"
@@ -10457,6 +10469,9 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
+msgstr ""
+
+msgid "Are you really sure?"
 msgstr ""
 
 #, python-format

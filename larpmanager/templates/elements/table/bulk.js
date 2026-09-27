@@ -26,8 +26,10 @@ window.addEventListener('DOMContentLoaded', function() {
 
 $("#main_bulk #exec").on("click", function(e) {
   e.preventDefault();
+  window.lmConfirm("{% filter escapejs %}{% trans "Apply this operation to the selected elements?" %}{% endfilter %}", run_bulk);
+});
 
-    if (!window.lmTesting && !confirm("Confirm? Are you sure, like, really sure?")) return;
+function run_bulk() {
 
   // get operation
   var operation = $("#main_bulk #operation").val();
@@ -72,7 +74,7 @@ $("#main_bulk #exec").on("click", function(e) {
       console.error("Error", xhr.status, xhr.responseText);
     }
   });
-});
+}
 
 
     });

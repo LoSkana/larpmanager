@@ -233,7 +233,9 @@ window['icon_texts'] = {
 
     });
         </script>
-        <dialog id="lm-modal">
+        <dialog id="lm-modal"
+                data-confirm-label="{% trans "Confirm" %}"
+                data-cancel-label="{% trans "Cancel" %}">
             <div id="lm-modal-content"></div>
         </dialog>
         {% if staging %}

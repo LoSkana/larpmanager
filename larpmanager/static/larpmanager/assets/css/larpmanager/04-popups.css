@@ -190,6 +190,7 @@ div.ui-lm_tooltip {
 .popup_tutorial,
 .popup_dashboard,
 .popup_delete,
+.popup_confirm,
 .popup_edit {
   border-radius: 2em;
   background-color: var(--sec-clr);
@@ -720,4 +721,31 @@ dialog::backdrop {
 
 #chat-widget-input {
   flex: 1;
+}
+
+.popup_confirm {
+  width: fit-content;
+  min-width: 300px;
+  max-width: 40em;
+  height: fit-content;
+}
+
+.popup_confirm .confirm-dialog {
+  padding: 1.5em 1em 1em 1em;
+}
+
+.popup_confirm .confirm-message {
+  margin-bottom: 1.5em;
+}
+
+.popup_confirm .form-actions {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+}
+
+@media (max-width: 840px) {
+  .popup_confirm {
+    max-width: 90vw;
+  }
 }

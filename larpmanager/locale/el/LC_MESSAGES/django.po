@@ -2654,9 +2654,6 @@ msgstr "Επιλογή ηλικίας"
 msgid "Apply Upgrade"
 msgstr "Εφαρμογή αναβάθμισης"
 
-msgid "Are you sure?"
-msgstr "Είσαι σίγουρος;"
-
 msgid "Assign Badges"
 msgstr "Ανάθεση Badges"
 
@@ -4722,9 +4719,6 @@ msgstr "Πλήρες φύλλο (Δοκιμή)"
 msgid "Complete your profile"
 msgstr "Ολοκλήρωσε το προφίλ σου"
 
-msgid "Confirm your choices?"
-msgstr "Επιβεβαιώνεις τις επιλογές σου;"
-
 msgid "Create your character"
 msgstr "Δημιούργησε τον χαρακτήρα σου"
 
@@ -5733,6 +5727,9 @@ msgstr "Ρύθμισε τις δυναμικές δόσεις"
 msgid "Set up registration tickets"
 msgstr "Ρύθμισε τα εισιτήρια εγγραφής"
 
+msgid "Submit this refund request?"
+msgstr "Να υποβάλεις αυτό το αίτημα επιστροφής χρημάτων;"
+
 msgid "Ticket name (keep it short)"
 msgstr "Όνομα εισιτηρίου (κράτησέ το σύντομο)"
 
@@ -5825,6 +5822,9 @@ msgstr "Οι εκκρεμείς προσκλήσεις μου σε συντεχ�
 
 msgid "Name of badge to be awarded."
 msgstr "Όνομα του badge που θα απονεμηθεί."
+
+msgid "Obtain the selected ability?"
+msgstr "Να αποκτήσεις την επιλεγμένη ικανότητα;"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6373,6 +6373,9 @@ msgstr "Πρόσβαση στον πίνακα ελέγχου του οργαν�
 msgid "Character creation reminder email"
 msgstr "Email υπενθύμισης δημιουργίας χαρακτήρα"
 
+msgid "Confirm your casting preferences?"
+msgstr "Επιβεβαιώνεις τις προτιμήσεις σου για το casting;"
+
 msgid "Days available cannot be negative"
 msgstr "Οι διαθέσιμες ημέρες δεν μπορούν να είναι αρνητικές"
 
@@ -6853,6 +6856,9 @@ msgstr "Αν ενεργοποιηθεί, επιτρέπει βαθμίδα ει�
 
 msgid "Indicates the details of the request:"
 msgstr "Ανέφερε τις λεπτομέρειες του αιτήματος:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Να γίνει αυτή η επιστροφή χρημάτων στον συμμετέχοντα;"
 
 msgid "Manage all quest types for this event"
 msgstr "Διαχειρίσου όλους τους τύπους Quest για αυτή την εκδήλωση"
@@ -7950,6 +7956,9 @@ msgstr "Η εγγραφή του/της %(member)s αντιγράφηκε στη
 
 msgid "Review participants' safety-related information"
 msgstr "Έλεγχος πληροφοριών συμμετεχόντων σχετικών με την Safety"
+
+msgid "Send this email to all the selected recipients?"
+msgstr "Να σταλεί αυτό το email σε όλους τους επιλεγμένους παραλήπτες;"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Εμφανίζει το υπολογισμένο ποσό φόρου σε κάθε πληρωμή"
@@ -9463,6 +9472,9 @@ msgstr ""
 "Είσαι σίγουρος ότι θέλεις να καταργήσεις την εγγραφή του "
 "<strong>%(email)s</strong>;"
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Να κλείσει η συλλογή; Δεν θα είναι δυνατές άλλες συνεισφορές."
+
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
 "Θέλεις οι χρήστες να συμμετέχουν σε εκδηλώσεις μόνο μετά από διαδικασία "
@@ -10116,6 +10128,11 @@ msgstr ""
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Θα εφαρμοστούν αυτόματα όταν εγγραφείς σε νέα εκδήλωση."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr ""
+"Να ανεβάσεις αυτό το αρχείο; Οι φωτογραφίες και τα βίντεό του θα προστεθούν "
+"στο άλμπουμ."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""

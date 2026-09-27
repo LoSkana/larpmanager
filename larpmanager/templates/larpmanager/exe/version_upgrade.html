@@ -57,7 +57,7 @@
                         <input type="hidden" name="target_version" value="{{ version.number }}">
                         <button type="submit"
                                 class="button button-upgrade"
-                                onclick="return confirm('{% trans "Apply the upgrade to the entire organization?" %}')">
+                                data-confirm="{% trans "Apply the upgrade to the entire organization?" %}">
                             <i class="fa-solid fa-arrow-up"></i> {% trans "Apply Upgrade" %}
                         </button>
                     </form>

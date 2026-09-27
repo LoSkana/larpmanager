@@ -83,6 +83,64 @@ window.closeLmModal = function() {
     if (dialog && dialog.open) dialog.close();
 };
 
+// Ask confirmation in the shared modal, calling onConfirm if accepted.
+window.lmConfirm = function(message, onConfirm) {
+    // deferred so callers can resubmit forms outside the submit event
+    if (window.lmTesting) {
+        setTimeout(onConfirm, 0);
+        return;
+    }
+    const dialog = document.getElementById('lm-modal');
+    window.openLmModal(
+        '<div class="confirm-dialog"><p class="confirm-message"></p><div class="form-actions">' +
+        '<button type="button" class="btn-save confirm-ok"></button>' +
+        '<button type="button" class="btn-cancel confirm-cancel"></button></div></div>',
+        'popup_confirm'
+    );
+    dialog.querySelector('.confirm-message').textContent = message;
+    const okButton = dialog.querySelector('.confirm-ok');
+    okButton.textContent = dialog.dataset.confirmLabel;
+    dialog.querySelector('.confirm-cancel').textContent = dialog.dataset.cancelLabel;
+    okButton.addEventListener('click', function() {
+        window.closeLmModal();
+        onConfirm();
+    });
+    dialog.querySelector('.confirm-cancel').addEventListener('click', window.closeLmModal);
+    okButton.focus();
+};
+
+// Links, buttons and forms with data-confirm ask confirmation before proceeding.
+$(document).on('click', 'a[data-confirm], button[data-confirm], input[data-confirm]', function(e) {
+    const el = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (el.dataset.confirmed) {
+        delete el.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.lmConfirm(el.dataset.confirm, function() {
+        el.dataset.confirmed = '1';
+        el.click();
+    });
+});
+
+$(document).on('submit', 'form[data-confirm]', function(e) {
+    const form = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (form.dataset.confirmed) {
+        delete form.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const submitter = e.originalEvent ? e.originalEvent.submitter : null;
+    window.lmConfirm(form.dataset.confirm, function() {
+        form.dataset.confirmed = '1';
+        form.requestSubmit(submitter);
+    });
+});
+
 /**
  * Open a dialog modal with an iframe and a close button
  * @param {string} iframeUrl - The URL to load in the iframe

@@ -2654,9 +2654,6 @@ msgstr "Iän valinta"
 msgid "Apply Upgrade"
 msgstr "Käytä päivitystä"
 
-msgid "Are you sure?"
-msgstr "Oletko varma?"
-
 msgid "Assign Badges"
 msgstr "Myönnä Badges"
 
@@ -4722,9 +4719,6 @@ msgstr "Täydellinen lomake (Testi)"
 msgid "Complete your profile"
 msgstr "Täydennä profiiliasi"
 
-msgid "Confirm your choices?"
-msgstr "Vahvista valintasi?"
-
 msgid "Create your character"
 msgstr "Luo hahmosi"
 
@@ -5733,6 +5727,9 @@ msgstr "Määritä dynaamiset erät"
 msgid "Set up registration tickets"
 msgstr "Määritä rekisteröintiliput"
 
+msgid "Submit this refund request?"
+msgstr "Lähetetäänkö tämä palautuspyyntö?"
+
 msgid "Ticket name (keep it short)"
 msgstr "Lipun nimi (pidä se lyhyenä)"
 
@@ -5825,6 +5822,9 @@ msgstr "Omat odottavat kutsuni kiltaan"
 
 msgid "Name of badge to be awarded."
 msgstr "Myönnettävän Badgen nimi."
+
+msgid "Obtain the selected ability?"
+msgstr "Hankitaanko valittu kyky?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6373,6 +6373,9 @@ msgstr "Pääsy organisaation kojelautaan"
 msgid "Character creation reminder email"
 msgstr "Hahmonluonnin muistutussähköposti"
 
+msgid "Confirm your casting preferences?"
+msgstr "Vahvistetaanko casting-toiveesi?"
+
 msgid "Days available cannot be negative"
 msgstr "Käytettävissä olevat päivät eivät voi olla negatiivisia"
 
@@ -6852,6 +6855,9 @@ msgstr "Jos käytössä, salli lipputaso: Staff."
 
 msgid "Indicates the details of the request:"
 msgstr "Ilmoittaa pyynnön yksityiskohdat:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Maksetaanko tämä palautus osallistujalle?"
 
 msgid "Manage all quest types for this event"
 msgstr "Hallinnoi kaikkia tämän tapahtuman Quest-tyyppejä"
@@ -7943,6 +7949,9 @@ msgstr "%(member)s:n ilmoittautuminen on kopioitu %(event)s:iin"
 
 msgid "Review participants' safety-related information"
 msgstr "Tarkista osallistujien Safety-tiedot"
+
+msgid "Send this email to all the selected recipients?"
+msgstr "Lähetetäänkö tämä sähköposti kaikille valituille vastaanottajille?"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Näyttää kunkin maksun lasketun veron määrän"
@@ -9337,6 +9346,9 @@ msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr ""
 "Oletko varma, että haluat peruuttaa <strong>%(email)s</strong>-tilauksen?"
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Suljetaanko keräys? Uusia osuuksia ei voi enää maksaa."
+
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
 "Haluatko, että käyttäjät voivat liittyä tapahtumiin vasta "
@@ -9924,6 +9936,9 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Nämä asetukset otetaan käyttöön automaattisesti, kun ilmoittaudut uuteen "
 "tapahtumaan."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr "Ladataanko tämä arkisto? Sen kuvat ja videot lisätään albumiin."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
