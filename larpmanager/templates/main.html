@@ -241,17 +241,8 @@
         {% endif %}
 
         {% if form.errors %}
-            txt = '{% filter escapejs %}{% trans "Attention: the form contains errors in the following fields:" %}{% endfilter %}';
-            fls = []
-            {% for field in form.visible_fields %}
-                {% if field.errors %}
-                    fls.push('{{ field.label }}');
-                {% endif %}
-            {% endfor %}
-            // console.log(fls);
-
             $.toast({
-                text: txt + fls.join(', '),
+                text: '{% filter escapejs %}{% trans "Attention: the form contains errors, please correct them." %}{% endfilter %}',
                 showHideTransition: 'slide',
                 icon: 'error',
                 position: 'top-center',

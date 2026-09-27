@@ -4454,9 +4454,6 @@ msgstr "Alle afdrukbare bladen"
 msgid "Annual fiscal report"
 msgstr "Jaarlijks fiscaal verslag"
 
-msgid "Are you really sure?"
-msgstr "Weet je het echt zeker?"
-
 msgid "Available characters"
 msgstr "Beschikbare personages"
 
@@ -8720,6 +8717,12 @@ msgstr "Je moet minstens één ticket voor deze termijn selecteren"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Bekijk je personageprofiel <a href='%(url)s'>hier</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Let op: het formulier bevat fouten, corrigeer ze."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Let op: het formulier bevat fouten, corrigeer ze:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Beschikbaar kredietsaldo voor betalingen en aankopen voor evenementen"
 
@@ -8995,9 +8998,6 @@ msgstr "Ga naar het beheerpaneel <a href='%(url)s'>van hier</a>!"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Voegt een pagina toe waar je kortere URL's kunt definiëren voor lange links"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Let op: het formulier bevat fouten in de volgende velden:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"

@@ -4454,9 +4454,6 @@ msgstr "Toutes les fiches à imprimer"
 msgid "Annual fiscal report"
 msgstr "Rapport fiscal annuel"
 
-msgid "Are you really sure?"
-msgstr "Tu es vraiment sûr?"
-
 msgid "Available characters"
 msgstr "Personnages disponibles"
 
@@ -8751,6 +8748,12 @@ msgstr "Tu dois sélectionner au moins un billet pour cette tranche"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Accède au profil de ton personnage <a href='%(url)s'>ici</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Attention : le formulaire contient des erreurs, corrige-les."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Attention : le formulaire contient des erreurs, corrige-les :"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr ""
 "Solde créditeur disponible pour les paiements et les achats liés à un "
@@ -9043,10 +9046,6 @@ msgstr "Accède au panneau de gestion <a href='%(url)s'>à partir d'ici</a> !"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Ajoute une page où tu peux définir des URL plus courtes pour les liens longs"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr ""
-"Attention : le formulaire contient des erreurs dans les champs suivants :"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"

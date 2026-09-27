@@ -26,8 +26,6 @@
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
-        $('#main_form').attr('data-confirm', '{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
-
         $('option:selected').each(function(){
             $(this).prop('selected',true);
         });

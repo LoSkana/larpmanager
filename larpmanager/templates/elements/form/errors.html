@@ -1,9 +1,21 @@
 {% load i18n tz show_tags static %}
 {% if form.errors %}
-    <p class="form_error">
-        {% trans "Attention: the form contains errors in the following fields:" %}&nbsp;
-        {% for field in form.visible_fields %}
-            {% if field.errors %}{{ field.label }}&nbsp;{% endif %}
-        {% endfor %}
-    </p>
+    <div class="form_error">
+        <p>{% trans "Attention: the form contains errors, please correct them:" %}</p>
+        <ul>
+            {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            {% for field in form.hidden_fields %}
+                {% for error in field.errors %}<li>{{ field.label|striptags }}: {{ error }}</li>{% endfor %}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+                {% if field.errors %}
+                    <li>
+                        <a href="#{{ field.auto_id }}_tr"
+                           class="form-error-link"
+                           data-field="{{ field.auto_id }}">{{ field.label|striptags }}</a>: {{ field.errors|join:" " }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
 {% endif %}

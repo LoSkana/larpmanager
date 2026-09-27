@@ -4454,9 +4454,6 @@ msgstr "Kaikki tulostettavat arkit"
 msgid "Annual fiscal report"
 msgstr "Vuosittainen tilinpäätös"
 
-msgid "Are you really sure?"
-msgstr "Oletko todella varma?"
-
 msgid "Available characters"
 msgstr "Käytettävissä olevat hahmot"
 
@@ -8700,6 +8697,12 @@ msgstr "Sinun on valittava vähintään yksi lippu tätä erää varten"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Voit avata hahmoprofiilisi <a href='%(url)s'>täältä</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Huomio: lomakkeessa on virheitä, korjaa ne."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Huomio: lomakkeessa on virheitä, korjaa ne:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Käytettävissä oleva luottosaldo tapahtumien maksuja ja ostoja varten"
 
@@ -8954,9 +8957,6 @@ msgstr "Pääset hallintapaneeliin <a href='%(url)s'>täältä</a>!"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Lisää sivun, jossa voit määrittää lyhyemmät URL-osoitteet pitkille linkeille"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Huomio: lomakkeessa on virheitä seuraavissa kentissä:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"

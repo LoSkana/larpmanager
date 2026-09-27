@@ -5718,7 +5718,7 @@ msgstr ""
 msgid "Confirmation delete"
 msgstr ""
 
-msgid "Attention: the form contains errors in the following fields:"
+msgid "Attention: the form contains errors, please correct them:"
 msgstr ""
 
 msgid "These fields are required"
@@ -10471,9 +10471,6 @@ msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
 msgstr ""
 
-msgid "Are you really sure?"
-msgstr ""
-
 #, python-format
 msgid "You are exploring the \"%(name)s\" demo."
 msgstr ""
@@ -10487,6 +10484,9 @@ msgstr ""
 msgid ""
 "Would you like to try other demos, or are you ready to create your "
 "organization?"
+msgstr ""
+
+msgid "Attention: the form contains errors, please correct them."
 msgstr ""
 
 msgid "Please correct the error below."

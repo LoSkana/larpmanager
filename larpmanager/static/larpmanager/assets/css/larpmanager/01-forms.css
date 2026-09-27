@@ -277,6 +277,15 @@ input[type="checkbox"].checkbox_single {
   font-style: italic;
 }
 
+.form_error ul {
+  margin: 0.5em 0 0 1.5em;
+}
+
+.form_error a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .mandatory-error .form-error {
   color: var(--ter-clr);
 }

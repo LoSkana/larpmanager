@@ -83,6 +83,25 @@ window.closeLmModal = function() {
     if (dialog && dialog.open) dialog.close();
 };
 
+// Open the collapsed sections containing a form field and scroll to it.
+window.show_form_field = function(fieldId) {
+    const row = $('#' + fieldId + '_tr');
+    if (!row.length) return;
+    row.parents('.form_container.hide').removeClass('hide').show();
+    window.jump_to(row);
+};
+
+// Error summary links jump to their field, and the first one is shown on load.
+$(document).on('click', '.form-error-link', function(e) {
+    e.preventDefault();
+    window.show_form_field($(this).data('field'));
+});
+
+$(function() {
+    const firstError = $('.form-error-link').first();
+    if (firstError.length) window.show_form_field(firstError.data('field'));
+});
+
 // Ask confirmation in the shared modal, calling onConfirm if accepted.
 window.lmConfirm = function(message, onConfirm) {
     // deferred so callers can resubmit forms outside the submit event

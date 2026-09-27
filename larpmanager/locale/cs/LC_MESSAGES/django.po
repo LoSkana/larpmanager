@@ -4454,9 +4454,6 @@ msgstr "Všechny listy k vytištění"
 msgid "Annual fiscal report"
 msgstr "Výroční finanční zpráva"
 
-msgid "Are you really sure?"
-msgstr "Jsi si opravdu jistý?"
-
 msgid "Available characters"
 msgstr "Dostupné postavy"
 
@@ -8690,6 +8687,12 @@ msgstr "Pro tuto splátku musíš vybrat alespoň jednu vstupenku"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Profil své postavy si můžeš zobrazit <a href='%(url)s'>zde</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Pozor: formulář obsahuje chyby, oprav je prosím."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Pozor: formulář obsahuje chyby, oprav je prosím:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Dostupný zůstatek kreditu pro platby za události a nákupy"
 
@@ -8936,9 +8939,6 @@ msgstr "Do panelu správy se dostaneš <a href='%(url)s'>zde</a>!"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Přidá stránku, kde můžeš definovat kratší adresy URL pro dlouhé odkazy"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Pozor: formulář obsahuje chyby v následujících polích:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"

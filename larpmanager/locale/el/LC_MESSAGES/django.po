@@ -4454,9 +4454,6 @@ msgstr "Όλα τα εκτυπώσιμα φύλλα"
 msgid "Annual fiscal report"
 msgstr "Ετήσια φορολογική έκθεση"
 
-msgid "Are you really sure?"
-msgstr "Είσαι πραγματικά σίγουρος;"
-
 msgid "Available characters"
 msgstr "Διαθέσιμοι χαρακτήρες"
 
@@ -8751,6 +8748,12 @@ msgstr "Πρέπει να επιλέξεις τουλάχιστον ένα ει�
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Πρόσβαση στο προφίλ του χαρακτήρα σου <a href='%(url)s'>εδώ</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Προσοχή: η φόρμα περιέχει σφάλματα, διόρθωσέ τα."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Προσοχή: η φόρμα περιέχει σφάλματα, διόρθωσέ τα:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Διαθέσιμο υπόλοιπο πίστωσης για πληρωμές και αγορές εκδηλώσεων"
 
@@ -9035,9 +9038,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Προσθέτει μια σελίδα όπου μπορείς να ορίσεις συντομότερα URL για μεγάλους "
 "συνδέσμους"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Προσοχή: η φόρμα περιέχει σφάλματα στα ακόλουθα πεδία:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"

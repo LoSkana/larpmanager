@@ -4454,9 +4454,6 @@ msgstr "Alla utskrivbara blad"
 msgid "Annual fiscal report"
 msgstr "Årsredovisning"
 
-msgid "Are you really sure?"
-msgstr "Är du verkligen säker?"
-
 msgid "Available characters"
 msgstr "Tillgängliga karaktärer"
 
@@ -8692,6 +8689,12 @@ msgstr "Du måste välja minst en biljett för denna delbetalning"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Gå till din karaktärsprofil <a href='%(url)s'>här</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Obs: formuläret innehåller fel, rätta dem."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Obs: formuläret innehåller fel, rätta dem:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Tillgängligt kreditsaldo för evenemangsbetalningar och inköp"
 
@@ -8944,9 +8947,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Lägger till en sida där du kan definiera kortare webbadresser för långa "
 "länkar"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Observera: formuläret innehåller fel i följande fält:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"
