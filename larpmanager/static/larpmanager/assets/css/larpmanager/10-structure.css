@@ -308,6 +308,14 @@ body.error-page #main {
   color: black;
 }
 
+body.error-page .error-actions {
+  margin-top: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5em;
+  justify-content: center;
+}
+
 body.error-page .container {
   width: 30em;
   margin: 0 auto;

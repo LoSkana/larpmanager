@@ -121,6 +121,18 @@ window['icon_texts'] = {
     'down': '{% filter escapejs %}{% trans "Move down" %}{% endfilter %}',
     'delete': '{% filter escapejs %}{% trans "Delete" %}{% endfilter %}',
 }
+
+window['dt_language'] = {
+    'emptyTable': '{% filter escapejs %}{% trans "Nothing here yet." %}{% endfilter %}',
+    'zeroRecords': '{% filter escapejs %}{% trans "No results match your search." %}{% endfilter %}',
+    'info': '{% filter escapejs %}{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}{% endfilter %}',
+    'infoEmpty': '{% filter escapejs %}{% trans "No entries" %}{% endfilter %}',
+    'infoFiltered': '{% filter escapejs %}{% trans "(filtered from _MAX_ total entries)" %}{% endfilter %}',
+    'lengthMenu': '{% filter escapejs %}{% trans "_MENU_ entries per page" %}{% endfilter %}',
+    'search': '{% filter escapejs %}{% trans "Search:" %}{% endfilter %}',
+    'loadingRecords': '{% filter escapejs %}{% trans "Loading..." %}{% endfilter %}',
+    'processing': '{% filter escapejs %}{% trans "Loading..." %}{% endfilter %}',
+}
         </script>
         <!-- Scripts -->
         {% block js-req %}

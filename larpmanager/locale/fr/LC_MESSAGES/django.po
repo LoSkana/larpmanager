@@ -1006,6 +1006,9 @@ msgstr "Réserve"
 msgid "Restore"
 msgstr "Restaurer"
 
+msgid "Search:"
+msgstr "Rechercher :"
+
 msgid "Section"
 msgstr "Section"
 
@@ -1918,6 +1921,9 @@ msgstr "Prochain quota"
 
 msgid "No changes"
 msgstr "Pas de changement"
+
+msgid "No entries"
+msgstr "Aucune entrée"
 
 msgid "No faction"
 msgstr "Aucune faction"
@@ -3073,6 +3079,9 @@ msgstr "Dépenses totales"
 msgid "PDF generation"
 msgstr "Génération PDF"
 
+msgid "Page not found"
+msgstr "Page introuvable"
+
 msgid "Password reset"
 msgstr "Réinitialisation du mot de passe"
 
@@ -3918,6 +3927,9 @@ msgstr "Aucune communication"
 msgid "No users assigned"
 msgstr "Aucun utilisateur attribué"
 
+msgid "Nothing here yet."
+msgstr "Rien ici pour l'instant."
+
 msgid "One-Time Contents"
 msgstr "Contenus ponctuels"
 
@@ -3944,6 +3956,9 @@ msgstr "Paiements reçus"
 
 msgid "Payments received"
 msgstr "Paiements reçus"
+
+msgid "Permission denied"
+msgstr "Accès refusé"
 
 msgid "Played characters"
 msgstr "Personnages joués"
@@ -4357,6 +4372,9 @@ msgstr "Configuration de l'événement"
 
 msgid "General information"
 msgstr "Informations générales"
+
+msgid "Go to the home page"
+msgstr "Aller à la page d'accueil"
 
 msgid "History preferences"
 msgstr "Historique des préférences"
@@ -5191,6 +5209,9 @@ msgstr "Bienvenue à LarpManager!"
 msgid "Write to the organizers"
 msgstr "Écrire aux organisateurs"
 
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ entrées par page"
+
 msgid "(Optional) Display order"
 msgstr "(Facultatif) Ordre d'affichage"
 
@@ -5669,6 +5690,9 @@ msgstr "Cuisine : nourriture et vaisselle"
 msgid "Loading performed, see logs"
 msgstr "Chargement effectué, voir les journaux"
 
+msgid "Log in to access this page."
+msgstr "Connecte-toi pour accéder à cette page."
+
 msgid "Manage experience modifiers"
 msgstr "Gère les modificateurs d’expérience"
 
@@ -5906,6 +5930,9 @@ msgstr "E-mail de rappel de cotisation"
 
 msgid "Name of the experience system"
 msgstr "Nom du système d'expérience"
+
+msgid "No results match your search."
+msgstr "Aucun résultat ne correspond à ta recherche."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Opération : ADD, SUB, MUL, DIV"
@@ -6606,6 +6633,9 @@ msgstr "(Facultatif) Coût (0 = attribution automatique)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Facultatif) Description du billet"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrées parmi _MAX_ entrées au total)"
 
 msgid "Choose individual features yourself"
 msgstr "Choisis toi-même les fonctionnalités individuelles"
@@ -7544,6 +7574,9 @@ msgstr "On a reçu une demande d'inscription pour %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Sélectionne un badge ci-dessus pour gérer ses membres."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Affichage de _START_ à _END_ sur _TOTAL_ entrées"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Passer la démo et créer ta propre organisation"
 
@@ -7898,6 +7931,9 @@ msgstr "Tu peux désormais ajouter des conteneurs et des articles d’entrepôt"
 
 msgid "You can now select which tickets can be gifted"
 msgstr "Tu peux désormais sélectionner quels billets peuvent être offerts"
+
+msgid "You don't have permission to access this page."
+msgstr "Tu n'as pas l'autorisation d'accéder à cette page."
 
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
@@ -9365,6 +9401,9 @@ msgstr "Voici les ateliers que tu dois suivre avant de pouvoir jouer."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pour confirmer ton inscription, paie le montant indiqué."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Désolé, on n'a pas trouvé la page que tu cherchais..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Tu as été désabonné de la lettre d'information de cette organisation"
 
@@ -10023,6 +10062,11 @@ msgstr ""
 
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Document émis par la banque comme preuve du virement (au format PDF)"
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Le lien est peut-être obsolète, ou la page a peut-être été déplacée ou "
+"supprimée."
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
@@ -15182,6 +15226,15 @@ msgstr ""
 "Cette relation a été modifiée dans une autre fenêtre : tes modifications ici"
 " n’ont pas été enregistrées. Copie le texte que tu veux conserver, puis "
 "recharge la page."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Tu es connecté en tant que %(name)s. Si tu devrais y avoir accès, demande à "
+"un organisateur de t'attribuer le rôle requis, ou connecte-toi avec un autre"
+" compte."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

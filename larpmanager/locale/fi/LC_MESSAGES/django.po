@@ -1006,6 +1006,9 @@ msgstr "Varaus"
 msgid "Restore"
 msgstr "Palauta"
 
+msgid "Search:"
+msgstr "Hae:"
+
 msgid "Section"
 msgstr "Osio"
 
@@ -1918,6 +1921,9 @@ msgstr "Seuraava erä"
 
 msgid "No changes"
 msgstr "Ei muutoksia"
+
+msgid "No entries"
+msgstr "Ei merkintöjä"
 
 msgid "No faction"
 msgstr "Ei fraktiota"
@@ -3073,6 +3079,9 @@ msgstr "Ulosvirtaukset yhteensä"
 msgid "PDF generation"
 msgstr "PDF-tuotanto"
 
+msgid "Page not found"
+msgstr "Sivua ei löytynyt"
+
 msgid "Password reset"
 msgstr "Salasanan palautus"
 
@@ -3918,6 +3927,9 @@ msgstr "Ei viestejä"
 msgid "No users assigned"
 msgstr "Ei liitettyjä käyttäjiä"
 
+msgid "Nothing here yet."
+msgstr "Täällä ei ole vielä mitään."
+
 msgid "One-Time Contents"
 msgstr "Kertaluonteiset sisällöt"
 
@@ -3944,6 +3956,9 @@ msgstr "Saadut maksut"
 
 msgid "Payments received"
 msgstr "Saadut maksut"
+
+msgid "Permission denied"
+msgstr "Pääsy estetty"
 
 msgid "Played characters"
 msgstr "Pelatut hahmot"
@@ -4357,6 +4372,9 @@ msgstr "Tapahtuman konfigurointi"
 
 msgid "General information"
 msgstr "Yleiset tiedot"
+
+msgid "Go to the home page"
+msgstr "Siirry etusivulle"
 
 msgid "History preferences"
 msgstr "Mieltymysten historia"
@@ -5191,6 +5209,9 @@ msgstr "Tervetuloa LarpManageriin!"
 msgid "Write to the organizers"
 msgstr "Kirjoita järjestäjille"
 
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ merkintää sivulla"
+
 msgid "(Optional) Display order"
 msgstr "(Valinnainen) Näyttöjärjestys"
 
@@ -5669,6 +5690,9 @@ msgstr "Keittiö: ruoka ja astiat"
 msgid "Loading performed, see logs"
 msgstr "Lataus suoritettu, katso lokitiedot"
 
+msgid "Log in to access this page."
+msgstr "Kirjaudu sisään nähdäksesi tämän sivun."
+
 msgid "Manage experience modifiers"
 msgstr "Hallitse kokemusmuokkaajia"
 
@@ -5906,6 +5930,9 @@ msgstr "Jäsenmaksun muistutussähköposti"
 
 msgid "Name of the experience system"
 msgstr "Kokemusjärjestelmän nimi"
+
+msgid "No results match your search."
+msgstr "Hakuasi vastaavia tuloksia ei löytynyt."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operaatio: ADD, SUB, MUL, DIV"
@@ -6606,6 +6633,9 @@ msgstr "(Valinnainen) Kustannukset (0 = automaattisesti määritetty)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valinnainen) Lipun kuvaus"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(suodatettu yhteensä _MAX_ merkinnästä)"
 
 msgid "Choose individual features yourself"
 msgstr "Valitse yksittäiset ominaisuudet itse"
@@ -7536,6 +7566,9 @@ msgstr "Ilmoittautumispyyntö tapahtumaan %(event)s on vastaanotettu"
 msgid "Select a badge above to manage its members."
 msgstr "Valitse yllä oleva badge hallitaksesi sen jäseniä."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Näytetään _START_-_END_, yhteensä _TOTAL_ merkintää"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Ohita demo ja luo oma organisaatiosi"
 
@@ -7886,6 +7919,9 @@ msgstr "Voit nyt lisätä varastokontteja ja -esineitä"
 
 msgid "You can now select which tickets can be gifted"
 msgstr "Voit nyt valita, mitkä liput voidaan antaa lahjaksi"
+
+msgid "You don't have permission to access this page."
+msgstr "Sinulla ei ole oikeutta tälle sivulle."
 
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
@@ -9248,6 +9284,9 @@ msgstr "Nämä työpajat sinun on suoritettava ennen kuin voit pelata."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Vahvistaaksesi ilmoittautumisesi maksa ilmoitetun summan."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Pahoittelut, emme löytäneet etsimääsi sivua..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Sinut on poistettu tämän organisaation uutiskirjeestä"
 
@@ -9841,6 +9880,10 @@ msgstr ""
 
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Pankin antama lausunto tilisiirron todisteeksi (PDF-tiedostona)"
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Linkki voi olla vanhentunut, tai sivu on ehkä siirretty tai poistettu."
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
@@ -14805,6 +14848,14 @@ msgstr ""
 "Tätä suhdetta muokattiin toisessa ikkunassa: täällä tekemäsi muutokset eivät"
 " ole tallentuneet. Kopioi teksti, jonka haluat säilyttää, ja lataa sitten "
 "sivu uudelleen."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Olet kirjautunut käyttäjänä %(name)s. Jos sinulla pitäisi olla pääsy, pyydä "
+"järjestäjää antamaan sinulle tarvittava rooli tai kirjaudu toisella tilillä."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

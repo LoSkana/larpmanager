@@ -1136,6 +1136,7 @@ function data_tables() {
         var search_top_start = show_search ? 'search' : null;
 
         var dtConfig = {
+            language: window.dt_language || {},
             scrollX: true,
             responsive: window.enviro === 'prod',
             stateSave: false,
@@ -1291,6 +1292,7 @@ function data_tables() {
         });
 
         const table = new DataTable('#' + tableId, {
+            language: window.dt_language || {},
             lengthMenu: [[25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,

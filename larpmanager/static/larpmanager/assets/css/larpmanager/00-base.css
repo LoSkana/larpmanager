@@ -220,10 +220,6 @@ i.fas {
   cursor: not-allowed;
 }
 
-.exception-404 {
-  display: none;
-}
-
 .gtagmanager {
   display: none;
   visibility: hidden;

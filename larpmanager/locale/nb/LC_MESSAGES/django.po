@@ -1006,6 +1006,9 @@ msgstr "Reserve"
 msgid "Restore"
 msgstr "Gjenopprett"
 
+msgid "Search:"
+msgstr "Søk:"
+
 msgid "Section"
 msgstr "Seksjon"
 
@@ -1918,6 +1921,9 @@ msgstr "Neste avdrag"
 
 msgid "No changes"
 msgstr "Ingen endringer"
+
+msgid "No entries"
+msgstr "Ingen oppføringer"
 
 msgid "No faction"
 msgstr "Ingen fraksjon"
@@ -3073,6 +3079,9 @@ msgstr "Totale kostnader"
 msgid "PDF generation"
 msgstr "PDF-generering"
 
+msgid "Page not found"
+msgstr "Siden ble ikke funnet"
+
 msgid "Password reset"
 msgstr "Tilbakestilling av passord"
 
@@ -3918,6 +3927,9 @@ msgstr "Ingen kommunikasjon"
 msgid "No users assigned"
 msgstr "Ingen brukere er tildelt"
 
+msgid "Nothing here yet."
+msgstr "Ingenting her ennå."
+
 msgid "One-Time Contents"
 msgstr "Engangsinnhold"
 
@@ -3944,6 +3956,9 @@ msgstr "Mottatte betalinger"
 
 msgid "Payments received"
 msgstr "Mottatte betalinger"
+
+msgid "Permission denied"
+msgstr "Ingen tilgang"
 
 msgid "Played characters"
 msgstr "Spilte karakterer"
@@ -4357,6 +4372,9 @@ msgstr "Konfigurasjon av arrangement"
 
 msgid "General information"
 msgstr "Generell informasjon"
+
+msgid "Go to the home page"
+msgstr "Gå til forsiden"
 
 msgid "History preferences"
 msgstr "Historikk over preferanser"
@@ -5191,6 +5209,9 @@ msgstr "Velkommen til LarpManager!"
 msgid "Write to the organizers"
 msgstr "Skriv til arrangørene"
 
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ oppføringer per side"
+
 msgid "(Optional) Display order"
 msgstr "(Valgfritt) Visningsrekkefølge"
 
@@ -5669,6 +5690,9 @@ msgstr "Kjøkken: mat og servise"
 msgid "Loading performed, see logs"
 msgstr "Lasting utført, se logger"
 
+msgid "Log in to access this page."
+msgstr "Logg inn for å få tilgang til denne siden."
+
 msgid "Manage experience modifiers"
 msgstr "Administrer erfaringsmodifikatorer"
 
@@ -5906,6 +5930,9 @@ msgstr "E-post med påminnelse om medlemsavgift"
 
 msgid "Name of the experience system"
 msgstr "Navnet på erfaringssystemet"
+
+msgid "No results match your search."
+msgstr "Ingen resultater samsvarer med søket ditt."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operasjon: ADD, SUB, MUL, DIV"
@@ -6606,6 +6633,9 @@ msgstr "(Valgfritt) Kostnad (0 = automatisk tildelt)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfritt) Billettens beskrivelse"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrert fra totalt _MAX_ oppføringer)"
 
 msgid "Choose individual features yourself"
 msgstr "Velg individuelle funksjoner selv"
@@ -7537,6 +7567,9 @@ msgstr "Det er mottatt en registreringsforespørsel for %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Velg en badge ovenfor for å administrere medlemmene i den."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Viser _START_ til _END_ av _TOTAL_ oppføringer"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Hopp over demoen, opprett din egen organisasjon"
 
@@ -7887,6 +7920,9 @@ msgstr "Du kan nå legge til lagerbeholdere og -varer"
 
 msgid "You can now select which tickets can be gifted"
 msgstr "Du kan nå velge hvilke billetter som kan gis bort"
+
+msgid "You don't have permission to access this page."
+msgstr "Du har ikke tilgang til denne siden."
 
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
@@ -9238,6 +9274,9 @@ msgstr "Dette er verkstedene du må fullføre før du kan spille."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "For å bekrefte påmeldingen må du betale det angitte beløpet."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Beklager, vi fant ikke siden du lette etter..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Du har blitt avregistrert fra denne organisasjonens nyhetsbrev"
 
@@ -9827,6 +9866,10 @@ msgstr ""
 
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Erklæring utstedt av banken som bevis på overføringen (som PDF-fil)"
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Lenken kan være utdatert, eller siden kan ha blitt flyttet eller slettet."
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
@@ -14810,6 +14853,14 @@ msgid ""
 msgstr ""
 "Dette forholdet ble endret i et annet vindu: endringene dine her er ikke "
 "lagret. Kopier teksten du vil beholde, og last deretter siden på nytt."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Du er logget inn som %(name)s. Hvis du skal ha tilgang, be en arrangør om å "
+"gi deg den nødvendige rollen, eller logg inn med en annen konto."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

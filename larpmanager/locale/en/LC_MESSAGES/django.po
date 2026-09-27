@@ -5408,6 +5408,30 @@ msgid ""
 "character's relationship back towards this one"
 msgstr ""
 
+msgid "Permission denied"
+msgstr ""
+
+msgid "You don't have permission to access this page."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+
+msgid "Log in to access this page."
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr ""
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+
 msgid "Activation failed"
 msgstr ""
 
@@ -5668,6 +5692,9 @@ msgid "Don't open automatically again"
 msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "Go to the home page"
 msgstr ""
 
 msgid "Enter an element name to insert its reference code"
@@ -10535,6 +10562,27 @@ msgid "Move up"
 msgstr ""
 
 msgid "Move down"
+msgstr ""
+
+msgid "Nothing here yet."
+msgstr ""
+
+msgid "No results match your search."
+msgstr ""
+
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr ""
+
+msgid "No entries"
+msgstr ""
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr ""
+
+msgid "_MENU_ entries per page"
+msgstr ""
+
+msgid "Search:"
 msgstr ""
 
 msgid "Writing"

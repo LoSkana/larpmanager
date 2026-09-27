@@ -4,11 +4,12 @@
     error-page
 {% endblock body_class %}
 {% block title %}
-    404 - Page not found
+    404 - {% trans "Page not found" %}
 {% endblock title %}
 {% block nav %}
 {% endblock nav %}
 {% block content %}
-    <h2>We're sorry, we couldn't find the page you were looking for...</h2>
-    {% if exception %}<span class="exception-404">{{ exception }}</span>{% endif %}
+    <h2>{% trans "We're sorry, we couldn't find the page you were looking for..." %}</h2>
+    <p>{% trans "The link may be outdated, or the page may have been moved or deleted." %}</p>
+    {% include "elements/error_actions.html" %}
 {% endblock content %}

@@ -1006,6 +1006,9 @@ msgstr "Rezerva"
 msgid "Restore"
 msgstr "Obnovení"
 
+msgid "Search:"
+msgstr "Hledat:"
+
 msgid "Section"
 msgstr "Sekce"
 
@@ -1918,6 +1921,9 @@ msgstr "Další kvóta"
 
 msgid "No changes"
 msgstr "Žádné změny"
+
+msgid "No entries"
+msgstr "Žádné záznamy"
 
 msgid "No faction"
 msgstr "Žádná frakce"
@@ -3073,6 +3079,9 @@ msgstr "Celkové výdaje"
 msgid "PDF generation"
 msgstr "Generace PDF"
 
+msgid "Page not found"
+msgstr "Stránka nenalezena"
+
 msgid "Password reset"
 msgstr "Reset hesla"
 
@@ -3918,6 +3927,9 @@ msgstr "Žádná komunikace"
 msgid "No users assigned"
 msgstr "Nejsou přiřazeni žádní uživatelé"
 
+msgid "Nothing here yet."
+msgstr "Zatím tu nic není."
+
 msgid "One-Time Contents"
 msgstr "Jednorázové obsahy"
 
@@ -3944,6 +3956,9 @@ msgstr "Přijaté platby"
 
 msgid "Payments received"
 msgstr "Přijaté platby"
+
+msgid "Permission denied"
+msgstr "Přístup odepřen"
 
 msgid "Played characters"
 msgstr "Hrané postavy"
@@ -4357,6 +4372,9 @@ msgstr "Konfigurace události"
 
 msgid "General information"
 msgstr "Obecné informace"
+
+msgid "Go to the home page"
+msgstr "Přejít na domovskou stránku"
 
 msgid "History preferences"
 msgstr "Historie předvoleb"
@@ -5191,6 +5209,9 @@ msgstr "Vítej v LarpManageru!"
 msgid "Write to the organizers"
 msgstr "Napiš organizátorům"
 
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ záznamů na stránku"
+
 msgid "(Optional) Display order"
 msgstr "(Volitelné) Pořadí zobrazení"
 
@@ -5669,6 +5690,9 @@ msgstr "Kuchyně: jídlo a nádobí"
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
 
+msgid "Log in to access this page."
+msgstr "Pro přístup na tuto stránku se přihlas."
+
 msgid "Manage experience modifiers"
 msgstr "Spravovat modifikátory zkušeností"
 
@@ -5906,6 +5930,9 @@ msgstr "Připomínka členského příspěvku e-mailem"
 
 msgid "Name of the experience system"
 msgstr "Název systému zkušeností"
+
+msgid "No results match your search."
+msgstr "Tvému hledání neodpovídají žádné výsledky."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
@@ -6606,6 +6633,9 @@ msgstr "(Nepovinné) Náklady (0 = automaticky přiřazeno)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis lístku"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrováno z celkem _MAX_ záznamů)"
 
 msgid "Choose individual features yourself"
 msgstr "Vyber si jednotlivé funkce sám/sama"
@@ -7537,6 +7567,9 @@ msgstr "Byla přijata žádost o registraci na %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Vyber badge výše a spravuj jeho členy."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Zobrazeno _START_ až _END_ z _TOTAL_ záznamů"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Přeskočit ukázku a vytvořit vlastní organizaci"
 
@@ -7887,6 +7920,9 @@ msgstr "Nyní můžeš přidávat skladové kontejnery a položky"
 
 msgid "You can now select which tickets can be gifted"
 msgstr "Nyní můžeš vybrat, které vstupenky lze darovat"
+
+msgid "You don't have permission to access this page."
+msgstr "Nemáš oprávnění k přístupu na tuto stránku."
 
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
@@ -9207,6 +9243,9 @@ msgstr "Tyto semináře musíš dokončit, abys mohl/a hrát."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pro potvrzení registrace prosím zaplať uvedenou částku."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Je nám líto, ale stránku, kterou hledáš, jsme nenašli..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Byl/a jsi odhlášen/a z odběru newsletteru této organizace"
 
@@ -9745,6 +9784,9 @@ msgstr ""
 
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Potvrzení vydané bankou jako doklad o převodu (ve formátu PDF)"
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr "Odkaz může být zastaralý, nebo byla stránka přesunuta či smazána."
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr "Chceš-li nahrát vztahy, přidej druhý soubor s následujícími sloupci"
@@ -14599,6 +14641,14 @@ msgid ""
 msgstr ""
 "Tento vztah byl změněn v jiném okně: tvoje změny zde nebyly uloženy. "
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Aktuálně používáš účet %(name)s. Pokud máš mít přístup, požádej organizátora"
+" o přidělení potřebné role, nebo se přihlas jiným účtem."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

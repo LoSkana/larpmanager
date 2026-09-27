@@ -1006,6 +1006,9 @@ msgstr "Επιλαχών"
 msgid "Restore"
 msgstr "Επαναφορά"
 
+msgid "Search:"
+msgstr "Αναζήτηση:"
+
 msgid "Section"
 msgstr "Ενότητα"
 
@@ -1918,6 +1921,9 @@ msgstr "Επόμενη δόση"
 
 msgid "No changes"
 msgstr "Καμία αλλαγή"
+
+msgid "No entries"
+msgstr "Δεν υπάρχουν εγγραφές"
 
 msgid "No faction"
 msgstr "Χωρίς παράταξη"
@@ -3073,6 +3079,9 @@ msgstr "Σύνολο εκροών"
 msgid "PDF generation"
 msgstr "Δημιουργία PDF"
 
+msgid "Page not found"
+msgstr "Η σελίδα δεν βρέθηκε"
+
 msgid "Password reset"
 msgstr "Επαναφορά κωδικού"
 
@@ -3918,6 +3927,9 @@ msgstr "Δεν υπάρχουν επικοινωνίες"
 msgid "No users assigned"
 msgstr "Δεν έχουν ανατεθεί χρήστες"
 
+msgid "Nothing here yet."
+msgstr "Δεν υπάρχει τίποτα εδώ ακόμα."
+
 msgid "One-Time Contents"
 msgstr "Περιεχόμενα μίας χρήσης"
 
@@ -3944,6 +3956,9 @@ msgstr "Πληρωμές που ελήφθησαν"
 
 msgid "Payments received"
 msgstr "Ληφθείσες πληρωμές"
+
+msgid "Permission denied"
+msgstr "Δεν επιτρέπεται η πρόσβαση"
 
 msgid "Played characters"
 msgstr "Χαρακτήρες που έχεις παίξει"
@@ -4357,6 +4372,9 @@ msgstr "Ρυθμίσεις event"
 
 msgid "General information"
 msgstr "Γενικές πληροφορίες"
+
+msgid "Go to the home page"
+msgstr "Πήγαινε στην αρχική σελίδα"
 
 msgid "History preferences"
 msgstr "Ιστορικό προτιμήσεων"
@@ -5191,6 +5209,9 @@ msgstr "Καλώς ήρθες στο LarpManager!"
 msgid "Write to the organizers"
 msgstr "Γράψε στους διοργανωτές"
 
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ εγγραφές ανά σελίδα"
+
 msgid "(Optional) Display order"
 msgstr "(Προαιρετικό) Σειρά εμφάνισης"
 
@@ -5669,6 +5690,9 @@ msgstr "Κουζίνα: τρόφιμα και επιτραπέζια σκεύη"
 msgid "Loading performed, see logs"
 msgstr "Η φόρτωση ολοκληρώθηκε, δες τα αρχεία καταγραφής"
 
+msgid "Log in to access this page."
+msgstr "Συνδέσου για να δεις αυτή τη σελίδα."
+
 msgid "Manage experience modifiers"
 msgstr "Διαχείριση τροποποιητών εμπειρίας"
 
@@ -5906,6 +5930,9 @@ msgstr "Email υπενθύμισης για τη συνδρομή μέλους"
 
 msgid "Name of the experience system"
 msgstr "Όνομα του συστήματος εμπειρίας"
+
+msgid "No results match your search."
+msgstr "Κανένα αποτέλεσμα δεν ταιριάζει με την αναζήτησή σου."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Ενέργεια: ADD, SUB, MUL, DIV"
@@ -6606,6 +6633,9 @@ msgstr "(Προαιρετικό) Κόστος (0 = ανατίθεται αυτό
 
 msgid "(Optional) The ticket's description"
 msgstr "(Προαιρετικό) Η περιγραφή του εισιτηρίου"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(φιλτραρισμένες από _MAX_ συνολικές εγγραφές)"
 
 msgid "Choose individual features yourself"
 msgstr "Επίλεξε εσύ μεμονωμένα τα χαρακτηριστικά"
@@ -7538,6 +7568,9 @@ msgstr "Λήφθηκε αίτημα εγγραφής για %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Επίλεξε ένα Badge παραπάνω για να διαχειριστείς τα μέλη του."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Εμφάνιση _START_ έως _END_ από _TOTAL_ εγγραφές"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Παράλειψε το demo, δημιούργησε τον δικό σου οργανισμό"
 
@@ -7893,6 +7926,9 @@ msgstr "Τώρα μπορείς να προσθέσεις δοχεία και α
 
 msgid "You can now select which tickets can be gifted"
 msgstr "Τώρα μπορείς να επιλέξεις ποια εισιτήρια μπορούν να δοθούν ως δώρο"
+
+msgid "You don't have permission to access this page."
+msgstr "Δεν έχεις άδεια πρόσβασης σε αυτή τη σελίδα."
 
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
@@ -9358,6 +9394,9 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Για να επιβεβαιώσεις την εγγραφή σου, πλήρωσε το ποσό που αναφέρεται."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Λυπούμαστε, δεν βρήκαμε τη σελίδα που έψαχνες..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr ""
 "Η εγγραφή σου στο ενημερωτικό δελτίο αυτού του οργανισμού έχει ακυρωθεί"
@@ -10030,6 +10069,11 @@ msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr ""
 "Έγγραφο που εκδίδεται από την τράπεζα ως αποδεικτικό της μεταφοράς (σε "
 "αρχείο PDF)"
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Ο σύνδεσμος μπορεί να είναι παλιός ή η σελίδα μπορεί να έχει μετακινηθεί ή "
+"διαγραφεί."
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
@@ -15169,6 +15213,15 @@ msgstr ""
 "Αυτή η σχέση τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν έχουν "
 "αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά ανανέωσε "
 "τη σελίδα."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Έχεις συνδεθεί ως %(name)s. Αν πιστεύεις ότι πρέπει να έχεις πρόσβαση, ζήτα "
+"από έναν διοργανωτή να σου δώσει τον απαιτούμενο ρόλο ή συνδέσου με άλλο "
+"λογαριασμό."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "
