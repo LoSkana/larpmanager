@@ -29,7 +29,7 @@ from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers_by_event
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.headers import get_association_url, get_url, hdr_run
+from larpmanager.utils.core.headers import get_association_url, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
@@ -297,8 +297,9 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     email_body += "<br /><br />" + _("Without payment of this fee, event participation is not permitted.")
 
     # Provide payment link and support information
-    membership_url = get_url("accounting_membership")
-    email_body += get_payment_info(get_run_association_id(registration.run_id), membership_url)
+    association_id = get_run_association_id(registration.run_id)
+    membership_url = get_association_url("accounting/membership", association_id)
+    email_body += get_payment_info(association_id, membership_url)
 
     return email_body
 
