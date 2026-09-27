@@ -9970,6 +9970,11 @@ msgstr ""
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Je gebruiker heeft niet de vereiste rechten om deze pagina te openen."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"De geselecteerde personages aan deelnemers toewijzen? Dit kan niet ongedaan "
+"worden gemaakt."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Magazijnartikelen per stuk toewijzen aan een of meer zones van het evenement"

@@ -9962,6 +9962,11 @@ msgid "Your user does not have the required permissions to access this page."
 msgstr ""
 "Tu usuario no tiene los permisos necesarios para acceder a esta página."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"¿Asignar los personajes seleccionados a los participantes? Esta acción no se"
+" puede deshacer."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Asigna los artículos de almacén a una o varias zonas del evento, uno por uno"

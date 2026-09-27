@@ -9772,6 +9772,11 @@ msgstr ""
 "Din bruger har ikke de nødvendige tilladelser til at få adgang til denne "
 "side."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Vil du tildele de valgte karakterer til deltagerne? Dette kan ikke "
+"fortrydes."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Tildel lagergenstande til et eller flere områder i eventet, én genstand ad "

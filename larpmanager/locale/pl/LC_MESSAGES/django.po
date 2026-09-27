@@ -9884,6 +9884,9 @@ msgstr "Osiągnięto maksymalną liczbę postaci, które można utworzyć"
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Użytkownik nie ma wymaganych uprawnień dostępu do tej strony."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr "Przypisać wybrane postacie uczestnikom? Tego nie da się cofnąć."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Przypisz pozycje magazynowe do jednego lub kilku obszarów imprezy, po jednej"

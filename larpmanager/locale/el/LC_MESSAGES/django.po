@@ -10038,6 +10038,11 @@ msgstr ""
 "Ο χρήστης σου δεν έχει τα απαιτούμενα δικαιώματα για πρόσβαση σε αυτή τη "
 "σελίδα."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Να αναθέσεις τους επιλεγμένους χαρακτήρες στους συμμετέχοντες; Αυτή η "
+"ενέργεια δεν αναιρείται."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Ανάθεσε αντικείμενα αποθήκης σε μία ή περισσότερες περιοχές του event, ένα "

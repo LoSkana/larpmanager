@@ -9748,6 +9748,9 @@ msgstr "Dosáhl/a jsi maximálního počtu postav, které lze vytvořit"
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Tvůj uživatel nemá potřebná oprávnění pro přístup na tuto stránku."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr "Přiřadit vybrané postavy účastníkům? Tuto akci nelze vrátit zpět."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Přiřaď skladové položky k jedné nebo více zónám akce, a to po jednotlivých "

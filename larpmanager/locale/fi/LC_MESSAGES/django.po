@@ -9847,6 +9847,9 @@ msgstr "Olet saavuttanut luotavien hahmojen enimmäismäärän"
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Käyttäjälläsi ei ole tarvittavia oikeuksia tälle sivulle pääsyyn."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr "Määritetäänkö valitut hahmot osallistujille? Tätä ei voi perua."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Määritä varastotuotteet tapahtuman yhdelle tai useammalle alueelle tuote "

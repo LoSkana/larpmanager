@@ -215,12 +215,13 @@
         {% if messages %}
             {% for message in messages %}
                 $.toast({
-                    text: '{{ message }}',
+                    text: '{% filter escapejs %}{{ message }}{% endfilter %}',
                     showHideTransition: 'slide',
-                    icon: '{{ message.tags }}',
+                    icon: '{{ message.level_tag }}',
                     position: 'top-center',
                     textAlign: 'center',
-                    hideAfter: 5000   // in milli seconds
+                    // errors stay until closed, others hide after 5 seconds
+                    hideAfter: {% if message.level_tag == "error" %}false{% else %}5000{% endif %}
                 });
             {% endfor %}
         {% endif %}

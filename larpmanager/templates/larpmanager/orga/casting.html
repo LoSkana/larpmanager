@@ -103,7 +103,7 @@
                     <input type="submit"
                            id="go"
                            name="submit"
-                           onclick="return window.lmTesting ? true : confirm('Are you sure? There's no coming back!')"
+                           onclick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Assign the selected characters to participants? This cannot be undone." %}{% endfilter %}')"
                            value="{% trans "Upload" %}" />
                     <p>
                         {% trans "Assign selected characters to participants." %}

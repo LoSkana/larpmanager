@@ -9812,6 +9812,10 @@ msgstr ""
 "Din användare har inte de behörigheter som krävs för att komma åt den här "
 "sidan."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Tilldela de valda karaktärerna till deltagarna? Det här går inte att ångra."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Tilldela lagerartiklar till ett eller flera områden inom evenemanget, "

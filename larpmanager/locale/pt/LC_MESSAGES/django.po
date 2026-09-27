@@ -9860,6 +9860,11 @@ msgstr ""
 "O teu utilizador não tem as permissões necessárias para aceder a esta "
 "página."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Atribuir as personagens selecionadas aos participantes? Isto não pode ser "
+"desfeito."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr "Atribui itens do armazém a uma ou mais áreas do evento, item a item"
 

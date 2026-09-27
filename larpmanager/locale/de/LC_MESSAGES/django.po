@@ -10061,6 +10061,11 @@ msgstr ""
 "Dein Benutzer hat nicht die erforderlichen Berechtigungen für den Zugriff "
 "auf diese Seite."
 
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Die ausgewählten Charaktere den Teilnehmenden zuweisen? Das kann nicht "
+"rückgängig gemacht werden."
+
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Ordne die Lagerartikel einzeln einem oder mehreren Bereichen der "
