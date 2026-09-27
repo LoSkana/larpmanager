@@ -49,6 +49,8 @@
     var submitted = {{ submitted | safe }};
     var mandatory = {{ form.mandatory | safe }};
 
+    {% include "elements/form/mandatory.js" %}
+
     window.addEventListener('DOMContentLoaded', function() {
 
         $(function () {
@@ -93,38 +95,7 @@
         });
 
     function check_mandatory() {
-
-        for (var ix = 0; ix < mandatory.length; ix++) {
-            var k = mandatory[ix];
-            var el = $('#' + k);
-
-            if (el.attr('type') === 'hidden') continue;
-
-            // hidden questions mark their own row, fall back to the ancestors
-            var row = $('#' + k + '_tr');
-            if (!row.length) row = el.parent().parent();
-            if (row.hasClass('not-required')) continue;
-
-            empty = true;
-            if (el.is('input:text')) {
-                empty = (!$.trim(el.val()).length);
-            } else if (el.is('select')) {
-                empty = (!el.val());
-            } else if (el.is('textarea')) {
-                empty = (!$.trim(el.val()));
-            } else if (el.is('div')) {
-                empty = (!el.find('input:checked').length)
-            }
-
-            el.next('p').remove();
-            if (empty) {
-                el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
-                window.jump_to('#' + k);
-                return false;
-            }
-        }
-
-        return true;
+        return check_mandatory_fields(mandatory);
     }
 
     });

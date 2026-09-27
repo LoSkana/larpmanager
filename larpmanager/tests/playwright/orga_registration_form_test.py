@@ -297,7 +297,7 @@ def signup_check(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#register_form"), "options: 2 / 2")
     expect_normalized(page, page.locator("#register_form"), "mandatory (*)")
     page.get_by_role("button", name="Continue").click()
-    expect_normalized(page, page.locator("#register_form"), "Please select a value")
+    expect_normalized(page, page.locator("#register_form"), "Please fill in this field")
     expect_normalized(page, page.locator("#register_form"), "mandatory text")
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("ggggg")

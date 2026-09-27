@@ -277,6 +277,10 @@ input[type="checkbox"].checkbox_single {
   font-style: italic;
 }
 
+.mandatory-error .form-error {
+  color: var(--ter-clr);
+}
+
 .slug_pre {
   color: rgba(var(--pri-rgb), 0.7);
   font-size: 80%;
