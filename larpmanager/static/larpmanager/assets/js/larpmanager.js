@@ -88,6 +88,7 @@ window.show_form_field = function(fieldId) {
     const row = $('#' + fieldId + '_tr');
     if (!row.length) return;
     row.parents('.form_container.hide').removeClass('hide').show();
+    $('.my_toggle').each(function() { syncToggleAria(this); });
     window.jump_to(row);
 };
 
@@ -575,10 +576,33 @@ function initToggles() {
         } else {
             $(this).removeClass('select');
         }
+        syncToggleAria(this);
 
         return false;
 
     });
+
+    // Space activates toggles like buttons, Enter too when the toggle is not a link
+    $(document).on("keydown", ".my_toggle", function(e) {
+        if (e.key === ' ' || (e.key === 'Enter' && !(this.tagName === 'A' && this.hasAttribute('href')))) {
+            e.preventDefault();
+            $(this).trigger('click');
+        }
+    });
+
+    // links keep their role, other elements become focusable buttons
+    $('.my_toggle').each(function() {
+        var isLink = this.tagName === 'A' && this.hasAttribute('href');
+        if (!isLink && this.tagName !== 'BUTTON' && !this.hasAttribute('role')) $(this).attr('role', 'button');
+        if (!isLink && !this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
+        syncToggleAria(this);
+    });
+}
+
+// Reflect the visibility of a toggle's target blocks in its aria-expanded state.
+function syncToggleAria(toggle) {
+    var target = $('.' + $(toggle).attr('tog'));
+    $(toggle).attr('aria-expanded', target.is(':visible') ? 'true' : 'false');
 }
 
 // ========== Init: Datatable links / delete confirm ==========

@@ -302,6 +302,16 @@ form table tr td br.show {
   display: inline;
 }
 
+a:focus-visible,
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgba(var(--ter-rgb), 0.8);
+  outline-offset: 2px;
+}
+
 /* ---------------------------------------------------------------------------
    Typography & Text Helpers
    --------------------------------------------------------------------------- */
