@@ -2,6 +2,9 @@
 
 <script>
 
+// drafts are saved automatically, no need to warn before leaving
+window.lmDraftAutosave = true;
+
 var lm_auto_save = {
     url: '{{ request.path }}',
     form_id: '{{ auto_save_form_id|default:"main_form" }}',

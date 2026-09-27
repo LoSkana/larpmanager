@@ -8031,6 +8031,9 @@ msgstr "Et voi luoda suhdetta itsesi kanssa!"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Sinulla on tallentamattomia muutoksia. Suljetaanko tallentamatta?"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Sinun on maksettava %(amount)s%(currency)s välittömästi"

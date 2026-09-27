@@ -32,7 +32,8 @@ function submitForm(auto) {
             tinyMCE.triggerSave();
         }
 
-        var formData = $('form').serialize() + "&ajax=1";
+        var sentForm = $('form').serialize();
+        var formData = sentForm + "&ajax=1";
         if (edit_uuid) {
             formData += "&edit_uuid=" + edit_uuid + "&type=" + type + "&token=" + token;
         }
@@ -91,6 +92,9 @@ function submitForm(auto) {
                 });
                 reject('server-warn');
             } else {
+                // clean only if nothing changed while saving
+                if (window.tinyMCE && typeof tinyMCE.triggerSave === 'function') tinyMCE.triggerSave();
+                if ($('form').serialize() === sentForm) window.lmFormDirty = false;
                 resolve(true);
             }
         }).fail(function(xhr) {

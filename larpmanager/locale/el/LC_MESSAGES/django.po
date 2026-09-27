@@ -8039,6 +8039,9 @@ msgstr "Δεν μπορείς να δημιουργήσεις σχέση με τ
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Έχεις ανακατευθυνθεί στον Πίνακα Ελέγχου Εκδήλωσης"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Έχεις μη αποθηκευμένες αλλαγές. Κλείσιμο χωρίς αποθήκευση;"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Πρέπει να πληρώσεις %(amount)s%(currency)s άμεσα"

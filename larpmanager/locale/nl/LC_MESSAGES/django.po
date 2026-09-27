@@ -8038,6 +8038,9 @@ msgstr "Je kunt geen relatie met jezelf maken!"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Je bent doorgestuurd naar het evenementdashboard"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Je hebt niet-opgeslagen wijzigingen. Sluiten zonder op te slaan?"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Je moet %(amount)s%(currency)s meteen betalen"

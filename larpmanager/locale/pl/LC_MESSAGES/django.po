@@ -8032,6 +8032,9 @@ msgstr "Nie możesz utworzyć relacji z samym sobą!"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Nastąpiło przekierowanie do pulpitu nawigacyjnego wydarzenia"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Masz niezapisane zmiany. Zamknąć bez zapisywania?"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Musisz natychmiast zapłacić %(amount)s%(currency)s"

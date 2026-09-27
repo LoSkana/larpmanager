@@ -8035,6 +8035,9 @@ msgstr "Du kannst keine Beziehung mit dir selbst erstellen!"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du wurdest zum Ereignis-Dashboard weitergeleitet"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Du hast ungespeicherte Änderungen. Ohne Speichern schließen?"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Du musst sofort %(amount)s%(currency)s bezahlen"

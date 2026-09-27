@@ -72,10 +72,20 @@ window.openLmModal = function(content, cssClass) {
         '<button class="modal-close-btn">&times;</button>' + content;
     dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
         e.preventDefault();
-        window.closeLmModal();
+        window.requestCloseLmModal();
     });
     dialog.showModal();
 };
+
+// Esc on the shared modal goes through the unsaved edits check.
+document.addEventListener('DOMContentLoaded', function() {
+    const dialog = document.getElementById('lm-modal');
+    if (!dialog) return;
+    dialog.addEventListener('cancel', function(e) {
+        e.preventDefault();
+        window.requestCloseLmModal();
+    });
+});
 
 // Close the shared modal dialog if open.
 window.closeLmModal = function() {
@@ -103,30 +113,74 @@ $(function() {
     if (firstError.length) window.show_form_field(firstError.data('field'));
 });
 
-// Ask confirmation in the shared modal, calling onConfirm if accepted.
+// Ask confirmation in a dialog stacked over any open modal, calling onConfirm if accepted.
 window.lmConfirm = function(message, onConfirm) {
     // deferred so callers can resubmit forms outside the submit event
     if (window.lmTesting) {
         setTimeout(onConfirm, 0);
         return;
     }
-    const dialog = document.getElementById('lm-modal');
-    window.openLmModal(
-        '<div class="confirm-dialog"><p class="confirm-message"></p><div class="form-actions">' +
-        '<button type="button" class="btn-save confirm-ok"></button>' +
-        '<button type="button" class="btn-cancel confirm-cancel"></button></div></div>',
-        'popup_confirm'
-    );
+    const dialog = document.getElementById('lm-confirm');
     dialog.querySelector('.confirm-message').textContent = message;
-    const okButton = dialog.querySelector('.confirm-ok');
-    okButton.textContent = dialog.dataset.confirmLabel;
-    dialog.querySelector('.confirm-cancel').textContent = dialog.dataset.cancelLabel;
-    okButton.addEventListener('click', function() {
-        window.closeLmModal();
+    dialog.querySelector('.confirm-ok').onclick = function() {
+        dialog.close();
         onConfirm();
+    };
+    dialog.querySelector('.confirm-cancel').onclick = function() {
+        dialog.close();
+    };
+    dialog.showModal();
+    dialog.querySelector('.confirm-ok').focus();
+};
+
+// Track unsaved user edits in the main edit forms.
+window.lmFormDirty = false;
+
+$(document).on('input change select2:select select2:unselect', '#main_form, #manage_form', function(e) {
+    // ignore changes triggered by scripts
+    if (e.originalEvent || e.type.startsWith('select2')) window.lmFormDirty = true;
+});
+
+$(document).on('submit', '#main_form, #manage_form', function() {
+    window.lmFormDirty = false;
+});
+
+// Rich text editors inside the main edit forms mark them dirty too.
+function trackEditorDirty(editor) {
+    const element = editor.getElement();
+    if (!element || !element.closest('#main_form, #manage_form')) return;
+    editor.on('input change undo redo', function() {
+        window.lmFormDirty = true;
     });
-    dialog.querySelector('.confirm-cancel').addEventListener('click', window.closeLmModal);
-    okButton.focus();
+}
+
+window.addEventListener('load', function() {
+    if (!window.tinymce) return;
+    tinymce.get().forEach(trackEditorDirty);
+    tinymce.on('AddEditor', function(e) {
+        trackEditorDirty(e.editor);
+    });
+});
+
+// Warn before leaving a page with unsaved edits, unless drafts are kept by autosave.
+window.addEventListener('beforeunload', function(e) {
+    if (!window.lmFormDirty || window.lmTesting || window.lmDraftAutosave) return;
+    e.preventDefault();
+    e.returnValue = '';
+});
+
+// Close the shared modal, asking first if its iframe holds unsaved edits.
+window.requestCloseLmModal = function() {
+    const iframe = document.querySelector('#lm-modal iframe');
+    let dirty = false;
+    try {
+        dirty = !!(iframe && iframe.contentWindow.lmFormDirty);
+    } catch (_err) {}
+    if (!dirty) {
+        window.closeLmModal();
+        return;
+    }
+    window.lmConfirm(document.getElementById('lm-confirm').dataset.discardText, window.closeLmModal);
 };
 
 // Links, buttons and forms with data-confirm ask confirmation before proceeding.

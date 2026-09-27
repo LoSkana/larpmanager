@@ -245,10 +245,19 @@ window['dt_language'] = {
 
     });
         </script>
-        <dialog id="lm-modal"
-                data-confirm-label="{% trans "Confirm" %}"
-                data-cancel-label="{% trans "Cancel" %}">
+        <dialog id="lm-modal">
             <div id="lm-modal-content"></div>
+        </dialog>
+        <dialog id="lm-confirm"
+                class="popup_confirm"
+                data-discard-text="{% trans "You have unsaved changes. Close without saving?" %}">
+            <div class="confirm-dialog">
+                <p class="confirm-message"></p>
+                <div class="form-actions">
+                    <button type="button" class="btn-save confirm-ok">{% trans "Confirm" %}</button>
+                    <button type="button" class="btn-cancel confirm-cancel">{% trans "Cancel" %}</button>
+                </div>
+            </div>
         </dialog>
         {% if staging %}
             <script>

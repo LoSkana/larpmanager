@@ -8031,6 +8031,9 @@ msgstr "Du kan ikke oprette en relation med dig selv!"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du er blevet omdirigeret til Event-dashboardet"
 
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Du har ændringer, der ikke er gemt. Vil du lukke uden at gemme?"
+
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr "Du skal betale %(amount)s%(currency)s med det samme"
