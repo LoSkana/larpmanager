@@ -6113,6 +6113,45 @@ msgid ""
 "Please do NOT read it before the act to which it refers!"
 msgstr ""
 
+msgid "Font"
+msgstr ""
+
+msgid "Dyslexia friendly"
+msgstr ""
+
+msgid "Simple"
+msgstr ""
+
+msgid "Large"
+msgstr ""
+
+msgid "Extra large"
+msgstr ""
+
+msgid "Colors"
+msgstr ""
+
+msgid "High contrast"
+msgstr ""
+
+msgid "Color blind friendly"
+msgstr ""
+
+msgid "Wider text spacing"
+msgstr ""
+
+msgid "Underline links"
+msgstr ""
+
+msgid "Hide page background"
+msgstr ""
+
+msgid "Reduce animations"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
 msgid "Delegated users"
 msgstr ""
 
@@ -10089,6 +10128,9 @@ msgid "Assigned quantity"
 msgstr ""
 
 msgid "Final quantity"
+msgstr ""
+
+msgid "Will be deleted"
 msgstr ""
 
 msgid "WILL BE DELETED"

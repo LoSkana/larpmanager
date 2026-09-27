@@ -106,6 +106,14 @@ td {
    Tables
    --------------------------------------------------------------------------- */
 
+/* Overdue deadline cell: warning icon so the state is not conveyed by color only */
+td.deadline.redderized::before {
+  content: "\f071" / "";
+  font-family: "Font Awesome 7 Free";
+  font-weight: 900;
+  margin-right: 0.3em;
+}
+
 /* Inline options editor: override global input width caps so cells stay aligned in one row */
 .inline-options-table input[type="text"],
 .inline-options-table input[type="number"] {

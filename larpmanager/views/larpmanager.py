@@ -110,6 +110,7 @@ from larpmanager.utils.larpmanager.tasks import (
 )
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
+from larpmanager.utils.users.accessibility import accessibility_from_post, save_accessibility
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
@@ -453,6 +454,15 @@ def toggle_sidebar(request: HttpRequest) -> Any:
     else:
         request.session[key] = True
     return JsonResponse({"status": "success"})
+
+
+@require_POST
+def set_accessibility(request: HttpRequest) -> JsonResponse:
+    """Save the accessibility preferences chosen in the accessibility panel."""
+    tokens = accessibility_from_post(request.POST)
+    response = JsonResponse({"classes": [f"a11y-{token}" for token in tokens]})
+    save_accessibility(request, response, tokens)
+    return response
 
 
 @login_required

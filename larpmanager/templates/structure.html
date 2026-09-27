@@ -1,6 +1,6 @@
 {% load i18n static show_tags compress %}
 {% get_current_language as LANGUAGE_CODE %}<!DOCTYPE HTML>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE }}" class="{{ a11y_classes }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -110,6 +110,9 @@
         {% if not frame and is_larpmanager_skin %}
             {% include "elements/dashboard/chat.html" %}
         {% endif %}
+        {% if not frame %}
+            {% include "elements/structure/accessibility.html" %}
+        {% endif %}
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
@@ -137,6 +140,9 @@ window['icon_texts'] = {
         </script>
         {% include "elements/dashboard/modal.js.html" %}
         {% include "elements/dashboard/chat.js.html" %}
+        {% if not frame %}
+            {% include "elements/structure/accessibility.js.html" %}
+        {% endif %}
         {% if manage %}
             <link rel="stylesheet"
                   href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
