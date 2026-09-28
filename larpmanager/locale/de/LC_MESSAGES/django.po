@@ -119,6 +119,9 @@ msgstr "Datei"
 msgid "Five"
 msgstr "Fünf"
 
+msgid "Font"
+msgstr "Schriftart"
+
 msgid "Form"
 msgstr "Formular"
 
@@ -363,6 +366,9 @@ msgstr "Artikel:"
 msgid "Items"
 msgstr "Artikel"
 
+msgid "Large"
+msgstr "Groß"
+
 msgid "Login"
 msgstr "Anmeldung"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Kontingent"
+
+msgid "Reset"
+msgstr "Zurücksetzen"
 
 msgid "Role:"
 msgstr "Rolle:"
@@ -540,6 +549,9 @@ msgstr "Prüfungen"
 
 msgid "Closed"
 msgstr "Geschlossen"
+
+msgid "Colors"
+msgstr "Farben"
 
 msgid "Copied"
 msgstr "Kopiert"
@@ -717,6 +729,9 @@ msgstr "Wählen"
 
 msgid "Seller"
 msgstr "Verkäufer"
+
+msgid "Simple"
+msgstr "Einfach"
 
 msgid "Source"
 msgstr "Quelle"
@@ -2174,6 +2189,9 @@ msgstr "Veranstaltungstexte"
 msgid "Event texts"
 msgstr "Veranstaltungstexte"
 
+msgid "Extra large"
+msgstr "Extra groß"
+
 msgid "Fiscal code"
 msgstr "Steueridentifikationsnummer"
 
@@ -2734,6 +2752,9 @@ msgstr "Fraktionsbild"
 
 msgid "Free donation"
 msgstr "Spende nach freiem Ermessen"
+
+msgid "High contrast"
+msgstr "Hoher Kontrast"
 
 msgid "Inflows total"
 msgstr "Einnahmen insgesamt"
@@ -3461,6 +3482,9 @@ msgstr "Zahlungen insgesamt:"
 msgid "Translated text"
 msgstr "Übersetzter Text"
 
+msgid "Underline links"
+msgstr "Links unterstreichen"
+
 msgid "Upload Expenses"
 msgstr "Ausgaben hochladen"
 
@@ -3481,6 +3505,9 @@ msgstr "WIRD AKTUALISIERT"
 
 msgid "Warehouse items"
 msgstr "Lagerartikel"
+
+msgid "Will be deleted"
+msgstr "Wird gelöscht"
 
 msgid "Writing options"
 msgstr "Optionen zum Schreiben"
@@ -3846,6 +3873,9 @@ msgstr "Spende eingegangen"
 msgid "Download document"
 msgstr "Dokument herunterladen"
 
+msgid "Dyslexia friendly"
+msgstr "Legasthenie-freundlich"
+
 msgid "Element approved!"
 msgstr "Element genehmigt!"
 
@@ -3986,6 +4016,9 @@ msgstr "Realisierte Einnahmen:"
 
 msgid "Redeem collection"
 msgstr "Sammlung einlösen"
+
+msgid "Reduce animations"
+msgstr "Animationen reduzieren"
 
 msgid "Refund percentage"
 msgstr "Rückerstattungsprozentsatz"
@@ -4277,6 +4310,9 @@ msgstr "Freiwilligen-Register"
 msgid "Vote not yet open!"
 msgstr "Die Stimmabgabe ist noch nicht eröffnet!"
 
+msgid "Wider text spacing"
+msgstr "Größerer Textabstand"
+
 msgid "Workspace selector"
 msgstr "Arbeitsbereichswähler"
 
@@ -4493,6 +4529,9 @@ msgstr "Check-in QR-Code.png"
 msgid "Close the collection"
 msgstr "Die Sammlung schließen"
 
+msgid "Color blind friendly"
+msgstr "Farbenblind-freundlich"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Vollständiger Bogen (Pdf)"
 
@@ -4534,6 +4573,9 @@ msgstr "Externer Mail-Server"
 
 msgid "Field for exclusions"
 msgstr "Feld für Ausschlüsse"
+
+msgid "Hide page background"
+msgstr "Seitenhintergrund ausblenden"
 
 msgid "Independent factions"
 msgstr "Unabhängige Fraktionen"

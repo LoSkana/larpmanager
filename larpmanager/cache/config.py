@@ -97,6 +97,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "mail_server_host_password": "",
     "mail_server_host_user": "",
     "mail_server_port": "",
+    "member_a11y": "",
     "member_theme": "",
     "membership_age": "",
     "membership_day": "01-01",

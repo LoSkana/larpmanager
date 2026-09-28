@@ -119,6 +119,9 @@ msgstr "Bestand"
 msgid "Five"
 msgstr "Vijf"
 
+msgid "Font"
+msgstr "Lettertype"
+
 msgid "Form"
 msgstr "Formulier"
 
@@ -363,6 +366,9 @@ msgstr "Artikel:"
 msgid "Items"
 msgstr "Items"
 
+msgid "Large"
+msgstr "Groot"
+
 msgid "Login"
 msgstr "Inloggen"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Quota"
+
+msgid "Reset"
+msgstr "Resetten"
 
 msgid "Role:"
 msgstr "Rol:"
@@ -540,6 +549,9 @@ msgstr "Controles"
 
 msgid "Closed"
 msgstr "Gesloten"
+
+msgid "Colors"
+msgstr "Kleuren"
 
 msgid "Copied"
 msgstr "Gekopieerd"
@@ -717,6 +729,9 @@ msgstr "Selecteer"
 
 msgid "Seller"
 msgstr "Verkoper"
+
+msgid "Simple"
+msgstr "Eenvoudig"
 
 msgid "Source"
 msgstr "Bron"
@@ -2174,6 +2189,9 @@ msgstr "Evenementteksten"
 msgid "Event texts"
 msgstr "Evenementteksten"
 
+msgid "Extra large"
+msgstr "Extra groot"
+
 msgid "Fiscal code"
 msgstr "Fiscaal nummer"
 
@@ -2734,6 +2752,9 @@ msgstr "Factie-omslag"
 
 msgid "Free donation"
 msgstr "Vrijwillige donatie"
+
+msgid "High contrast"
+msgstr "Hoog contrast"
 
 msgid "Inflows total"
 msgstr "Totale inkomsten"
@@ -3461,6 +3482,9 @@ msgstr "Totaal betalingen:"
 msgid "Translated text"
 msgstr "Vertaalde tekst"
 
+msgid "Underline links"
+msgstr "Links onderstrepen"
+
 msgid "Upload Expenses"
 msgstr "Onkosten uploaden"
 
@@ -3481,6 +3505,9 @@ msgstr "ZAL WORDEN BIJGEWERKT"
 
 msgid "Warehouse items"
 msgstr "Magazijnartikelen"
+
+msgid "Will be deleted"
+msgstr "Wordt verwijderd"
 
 msgid "Writing options"
 msgstr "Schrijfopties"
@@ -3846,6 +3873,9 @@ msgstr "Donatie ontvangen"
 msgid "Download document"
 msgstr "Document downloaden"
 
+msgid "Dyslexia friendly"
+msgstr "Dyslexievriendelijk"
+
 msgid "Element approved!"
 msgstr "Element goedgekeurd!"
 
@@ -3986,6 +4016,9 @@ msgstr "Gerealiseerde omzet:"
 
 msgid "Redeem collection"
 msgstr "Inzameling verzilveren"
+
+msgid "Reduce animations"
+msgstr "Animaties verminderen"
 
 msgid "Refund percentage"
 msgstr "Terugbetalingspercentage"
@@ -4277,6 +4310,9 @@ msgstr "Vrijwilligers Register"
 msgid "Vote not yet open!"
 msgstr "Er kan nog niet gestemd worden!"
 
+msgid "Wider text spacing"
+msgstr "Bredere tekstafstand"
+
 msgid "Workspace selector"
 msgstr "Werkruimteselector"
 
@@ -4493,6 +4529,9 @@ msgstr "Check-in QR-code.png"
 msgid "Close the collection"
 msgstr "Sluit de inzameling"
 
+msgid "Color blind friendly"
+msgstr "Kleurenblindvriendelijk"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
 
@@ -4534,6 +4573,9 @@ msgstr "Externe mailserver"
 
 msgid "Field for exclusions"
 msgstr "Veld voor uitsluitingen"
+
+msgid "Hide page background"
+msgstr "Paginaachtergrond verbergen"
 
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"

@@ -438,3 +438,89 @@ body.theme-halo.new_v22 #topbar,
 body.theme-halo.new_v22 #sidebar {
   background-color: rgba(var(--sec-rgb), 0.8);
 }
+
+/* ---------------------------------------------------------------------------
+   Accessibility (classes set on the html element by the accessibility panel)
+   --------------------------------------------------------------------------- */
+
+html.a11y-font-dyslexic body,
+html.a11y-font-dyslexic
+  body
+  :is(h1, h2, h3, h4, h5, h6, input, select, textarea, button, .button, label) {
+  font-family: opendyslexic, "Helvetica Neue", Arial, sans-serif;
+}
+
+html.a11y-font-sans body,
+html.a11y-font-sans
+  body
+  :is(h1, h2, h3, h4, h5, h6, input, select, textarea, button, .button, label) {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+html.a11y-size-l,
+html.a11y-size-l body {
+  font-size: 21px;
+}
+
+html.a11y-size-xl,
+html.a11y-size-xl body {
+  font-size: 24px;
+}
+
+html.a11y-spacing body,
+html.a11y-spacing body *:not(i) {
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+}
+
+html.a11y-spacing body p {
+  margin-bottom: 2em;
+}
+
+html.a11y-links body a:not(.button),
+html.a11y-links body a:not(.button):hover {
+  text-decoration: underline;
+}
+
+html.a11y-motion *,
+html.a11y-motion *::before,
+html.a11y-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-nobg body {
+  background-image: none !important;
+  background-color: rgb(var(--sec-rgb));
+}
+
+html.a11y-color-contrast body,
+html.a11y-color-contrast body #topbar,
+html.a11y-color-contrast body #sidebar,
+html.a11y-color-contrast body #menu-mobile {
+  --pri-rgb: 255, 255, 255;
+  --sec-rgb: 0, 0, 0;
+  --ter-rgb: 255, 230, 0;
+  --pri-clr: rgb(var(--pri-rgb));
+  --sec-clr: rgb(var(--sec-rgb));
+  --ter-clr: rgb(var(--ter-rgb));
+  background-color: #000;
+  background-image: none !important;
+}
+
+/* Color blind correction (daltonize), filter defined in the accessibility panel.
+   Set on body since Firefox ignores filters on the root element; body is viewport
+   sized (page-wrapper scrolls), so fixed bars are unaffected */
+html.a11y-color-cb body {
+  filter: url(#a11y-cb-filter);
+}
+
+.a11y-svg-filters {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}

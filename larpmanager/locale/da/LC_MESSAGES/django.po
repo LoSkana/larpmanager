@@ -119,6 +119,9 @@ msgstr "Fil"
 msgid "Five"
 msgstr "Fem"
 
+msgid "Font"
+msgstr "Skrifttype"
+
 msgid "Form"
 msgstr "Formular"
 
@@ -363,6 +366,9 @@ msgstr "Element:"
 msgid "Items"
 msgstr "Artikler"
 
+msgid "Large"
+msgstr "Stor"
+
 msgid "Login"
 msgstr "Log ind"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Kvota"
+
+msgid "Reset"
+msgstr "Nulstil"
 
 msgid "Role:"
 msgstr "Rolle:"
@@ -540,6 +549,9 @@ msgstr "Tjek"
 
 msgid "Closed"
 msgstr "Lukket"
+
+msgid "Colors"
+msgstr "Farver"
 
 msgid "Copied"
 msgstr "Kopieret"
@@ -717,6 +729,9 @@ msgstr "Vælg"
 
 msgid "Seller"
 msgstr "Sælger"
+
+msgid "Simple"
+msgstr "Enkel"
 
 msgid "Source"
 msgstr "Kilde"
@@ -2174,6 +2189,9 @@ msgstr "Eventtekster"
 msgid "Event texts"
 msgstr "Eventtekster"
 
+msgid "Extra large"
+msgstr "Ekstra stor"
+
 msgid "Fiscal code"
 msgstr "Skatteidentifikationsnummer"
 
@@ -2734,6 +2752,9 @@ msgstr "Fraktionsforside"
 
 msgid "Free donation"
 msgstr "Fri donation"
+
+msgid "High contrast"
+msgstr "Høj kontrast"
 
 msgid "Inflows total"
 msgstr "Samlede indbetalinger"
@@ -3461,6 +3482,9 @@ msgstr "Samlede betalinger:"
 msgid "Translated text"
 msgstr "Oversat tekst"
 
+msgid "Underline links"
+msgstr "Understreg links"
+
 msgid "Upload Expenses"
 msgstr "Upload udgifter"
 
@@ -3481,6 +3505,9 @@ msgstr "VIL BLIVE OPDATERET"
 
 msgid "Warehouse items"
 msgstr "Lagerartikler"
+
+msgid "Will be deleted"
+msgstr "Bliver slettet"
 
 msgid "Writing options"
 msgstr "Skriveindstillinger"
@@ -3846,6 +3873,9 @@ msgstr "Donation modtaget"
 msgid "Download document"
 msgstr "Download dokument"
 
+msgid "Dyslexia friendly"
+msgstr "Ordblindevenlig"
+
 msgid "Element approved!"
 msgstr "Element godkendt!"
 
@@ -3986,6 +4016,9 @@ msgstr "Realiseret indtægt:"
 
 msgid "Redeem collection"
 msgstr "Indløs indsamling"
+
+msgid "Reduce animations"
+msgstr "Reducer animationer"
 
 msgid "Refund percentage"
 msgstr "Refusionsprocent"
@@ -4277,6 +4310,9 @@ msgstr "Frivilligregister"
 msgid "Vote not yet open!"
 msgstr "Afstemningen er ikke åben endnu!"
 
+msgid "Wider text spacing"
+msgstr "Større tekstafstand"
+
 msgid "Workspace selector"
 msgstr "Arbejdsområdevælger"
 
@@ -4493,6 +4529,9 @@ msgstr "Check-in QR-kode.png"
 msgid "Close the collection"
 msgstr "Luk indsamlingen"
 
+msgid "Color blind friendly"
+msgstr "Farveblindevenlig"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Komplet ark (PDF)"
 
@@ -4534,6 +4573,9 @@ msgstr "Ekstern mailserver"
 
 msgid "Field for exclusions"
 msgstr "Felt til udelukkelser"
+
+msgid "Hide page background"
+msgstr "Skjul sidens baggrund"
 
 msgid "Independent factions"
 msgstr "Uafhængige faktioner"

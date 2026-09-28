@@ -138,6 +138,18 @@
             src: url('{% static "fonts/easy_reading/EasyReadingPRO.ttf" %}');
             font-display: swap;
         }
+        @font-face {
+            font-family: 'opendyslexic';
+            src: url('{% static "node_modules/@fontsource/opendyslexic/files/opendyslexic-latin-400-normal.woff2" %}') format('woff2');
+            font-weight: 400;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'opendyslexic';
+            src: url('{% static "node_modules/@fontsource/opendyslexic/files/opendyslexic-latin-700-normal.woff2" %}') format('woff2');
+            font-weight: 700;
+            font-display: swap;
+        }
     </style>
     <link rel="preload"
           href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"

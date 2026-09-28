@@ -119,6 +119,9 @@ msgstr "Soubor"
 msgid "Five"
 msgstr "Pět"
 
+msgid "Font"
+msgstr "Písmo"
+
 msgid "Form"
 msgstr "Formulář"
 
@@ -363,6 +366,9 @@ msgstr "Položka:"
 msgid "Items"
 msgstr "Položky"
 
+msgid "Large"
+msgstr "Velké"
+
 msgid "Login"
 msgstr "Přihlášení"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Kvóta"
+
+msgid "Reset"
+msgstr "Obnovit"
 
 msgid "Role:"
 msgstr "Role:"
@@ -540,6 +549,9 @@ msgstr "Kontroly"
 
 msgid "Closed"
 msgstr "Uzavřeno"
+
+msgid "Colors"
+msgstr "Barvy"
 
 msgid "Copied"
 msgstr "Zkopírováno"
@@ -717,6 +729,9 @@ msgstr "Vyber"
 
 msgid "Seller"
 msgstr "Prodejce"
+
+msgid "Simple"
+msgstr "Jednoduché"
 
 msgid "Source"
 msgstr "Zdroj"
@@ -2174,6 +2189,9 @@ msgstr "Texty událostí"
 msgid "Event texts"
 msgstr "Texty událostí"
 
+msgid "Extra large"
+msgstr "Extra velké"
+
 msgid "Fiscal code"
 msgstr "Daňové identifikační číslo"
 
@@ -2734,6 +2752,9 @@ msgstr "Obálka frakce"
 
 msgid "Free donation"
 msgstr "Dobrovolný příspěvek"
+
+msgid "High contrast"
+msgstr "Vysoký kontrast"
 
 msgid "Inflows total"
 msgstr "Celkové příjmy"
@@ -3461,6 +3482,9 @@ msgstr "Platby celkem:"
 msgid "Translated text"
 msgstr "Přeložený text"
 
+msgid "Underline links"
+msgstr "Podtrhnout odkazy"
+
 msgid "Upload Expenses"
 msgstr "Nahrát výdaje"
 
@@ -3481,6 +3505,9 @@ msgstr "BUDE AKTUALIZOVÁN"
 
 msgid "Warehouse items"
 msgstr "Skladové položky"
+
+msgid "Will be deleted"
+msgstr "Bude smazáno"
 
 msgid "Writing options"
 msgstr "Možnosti psaní"
@@ -3846,6 +3873,9 @@ msgstr "Přijatý dar"
 msgid "Download document"
 msgstr "Stáhni dokument"
 
+msgid "Dyslexia friendly"
+msgstr "Vhodné pro dyslektiky"
+
 msgid "Element approved!"
 msgstr "Prvek schválen!"
 
@@ -3986,6 +4016,9 @@ msgstr "Realizované příjmy:"
 
 msgid "Redeem collection"
 msgstr "Uplatnit sbírku"
+
+msgid "Reduce animations"
+msgstr "Omezit animace"
 
 msgid "Refund percentage"
 msgstr "Procento vrácení peněz"
@@ -4277,6 +4310,9 @@ msgstr "Registr dobrovolníků"
 msgid "Vote not yet open!"
 msgstr "Hlasování ještě není otevřeno!"
 
+msgid "Wider text spacing"
+msgstr "Širší rozestupy textu"
+
 msgid "Workspace selector"
 msgstr "Výběr pracovního prostoru"
 
@@ -4493,6 +4529,9 @@ msgstr "QR kód pro odbavení.png"
 msgid "Close the collection"
 msgstr "Uzavření sbírky"
 
+msgid "Color blind friendly"
+msgstr "Vhodné pro barvoslepé"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Kompletní list (Pdf)"
 
@@ -4534,6 +4573,9 @@ msgstr "Externí poštovní server"
 
 msgid "Field for exclusions"
 msgstr "Pole pro vyloučení"
+
+msgid "Hide page background"
+msgstr "Skrýt pozadí stránky"
 
 msgid "Independent factions"
 msgstr "Nezávislé frakce"

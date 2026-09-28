@@ -119,6 +119,9 @@ msgstr "Fil"
 msgid "Five"
 msgstr "Fem"
 
+msgid "Font"
+msgstr "Typsnitt"
+
 msgid "Form"
 msgstr "Formulär"
 
@@ -363,6 +366,9 @@ msgstr "Artikel:"
 msgid "Items"
 msgstr "Föremål"
 
+msgid "Large"
+msgstr "Stort"
+
 msgid "Login"
 msgstr "Inloggning"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Kvot"
+
+msgid "Reset"
+msgstr "Återställ"
 
 msgid "Role:"
 msgstr "Roll:"
@@ -540,6 +549,9 @@ msgstr "Kontroller"
 
 msgid "Closed"
 msgstr "Stängt"
+
+msgid "Colors"
+msgstr "Färger"
 
 msgid "Copied"
 msgstr "Kopierad"
@@ -717,6 +729,9 @@ msgstr "Välj"
 
 msgid "Seller"
 msgstr "Säljare"
+
+msgid "Simple"
+msgstr "Enkelt"
 
 msgid "Source"
 msgstr "Källa"
@@ -2174,6 +2189,9 @@ msgstr "Evenemangstexter"
 msgid "Event texts"
 msgstr "Evenemangstexter"
 
+msgid "Extra large"
+msgstr "Extra stort"
+
 msgid "Fiscal code"
 msgstr "Skatteregistreringsnummer"
 
@@ -2734,6 +2752,9 @@ msgstr "Fraktionsomslag"
 
 msgid "Free donation"
 msgstr "Frivillig donation"
+
+msgid "High contrast"
+msgstr "Hög kontrast"
 
 msgid "Inflows total"
 msgstr "Totala intäkter"
@@ -3461,6 +3482,9 @@ msgstr "Totala betalningar:"
 msgid "Translated text"
 msgstr "Översatt text"
 
+msgid "Underline links"
+msgstr "Understryk länkar"
+
 msgid "Upload Expenses"
 msgstr "Ladda upp utgifter"
 
@@ -3481,6 +3505,9 @@ msgstr "KOMMER ATT UPPDATERAS"
 
 msgid "Warehouse items"
 msgstr "Lagervaror"
+
+msgid "Will be deleted"
+msgstr "Kommer att raderas"
 
 msgid "Writing options"
 msgstr "Alternativ för skrivning"
@@ -3846,6 +3873,9 @@ msgstr "Donation mottagen"
 msgid "Download document"
 msgstr "Ladda ner dokument"
 
+msgid "Dyslexia friendly"
+msgstr "Dyslexivänligt"
+
 msgid "Element approved!"
 msgstr "Element godkänt!"
 
@@ -3986,6 +4016,9 @@ msgstr "Realiserade intäkter:"
 
 msgid "Redeem collection"
 msgstr "Lös in insamlingen"
+
+msgid "Reduce animations"
+msgstr "Minska animationer"
 
 msgid "Refund percentage"
 msgstr "Återbetalningsprocent"
@@ -4277,6 +4310,9 @@ msgstr "Frivilligregister"
 msgid "Vote not yet open!"
 msgstr "Omröstningen är ännu inte inledd!"
 
+msgid "Wider text spacing"
+msgstr "Bredare textavstånd"
+
 msgid "Workspace selector"
 msgstr "Väljare för arbetsyta"
 
@@ -4493,6 +4529,9 @@ msgstr "QR-kod för incheckning.png"
 msgid "Close the collection"
 msgstr "Stäng insamlingen"
 
+msgid "Color blind friendly"
+msgstr "Färgblindvänligt"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Komplett blad (Pdf)"
 
@@ -4534,6 +4573,9 @@ msgstr "Extern e-postserver"
 
 msgid "Field for exclusions"
 msgstr "Fält för undantag"
+
+msgid "Hide page background"
+msgstr "Dölj sidans bakgrund"
 
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"

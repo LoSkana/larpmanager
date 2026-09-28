@@ -119,6 +119,9 @@ msgstr "Αρχείο"
 msgid "Five"
 msgstr "Πέντε"
 
+msgid "Font"
+msgstr "Γραμματοσειρά"
+
 msgid "Form"
 msgstr "Φόρμα"
 
@@ -363,6 +366,9 @@ msgstr "Στοιχείο:"
 msgid "Items"
 msgstr "Είδη"
 
+msgid "Large"
+msgstr "Μεγάλο"
+
 msgid "Login"
 msgstr "Σύνδεση"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Δόση"
+
+msgid "Reset"
+msgstr "Επαναφορά"
 
 msgid "Role:"
 msgstr "Ρόλος:"
@@ -540,6 +549,9 @@ msgstr "Έλεγχοι"
 
 msgid "Closed"
 msgstr "Κλειστό"
+
+msgid "Colors"
+msgstr "Χρώματα"
 
 msgid "Copied"
 msgstr "Αντιγράφηκε"
@@ -717,6 +729,9 @@ msgstr "Επίλεξε"
 
 msgid "Seller"
 msgstr "Πωλητής"
+
+msgid "Simple"
+msgstr "Απλό"
 
 msgid "Source"
 msgstr "Πηγή"
@@ -2174,6 +2189,9 @@ msgstr "Κείμενα event"
 msgid "Event texts"
 msgstr "Κείμενα event"
 
+msgid "Extra large"
+msgstr "Πολύ μεγάλο"
+
 msgid "Fiscal code"
 msgstr "ΑΦΜ"
 
@@ -2734,6 +2752,9 @@ msgstr "Εξώφυλλο παράταξης"
 
 msgid "Free donation"
 msgstr "Ελεύθερη δωρεά"
+
+msgid "High contrast"
+msgstr "Υψηλή αντίθεση"
 
 msgid "Inflows total"
 msgstr "Σύνολο εισροών"
@@ -3461,6 +3482,9 @@ msgstr "Συνολικές πληρωμές:"
 msgid "Translated text"
 msgstr "Μεταφρασμένο κείμενο"
 
+msgid "Underline links"
+msgstr "Υπογράμμιση συνδέσμων"
+
 msgid "Upload Expenses"
 msgstr "Ανέβασμα εξόδων"
 
@@ -3481,6 +3505,9 @@ msgstr "ΘΑ ΕΝΗΜΕΡΩΘΕΙ"
 
 msgid "Warehouse items"
 msgstr "Είδη αποθήκης"
+
+msgid "Will be deleted"
+msgstr "Θα διαγραφεί"
 
 msgid "Writing options"
 msgstr "Επιλογές συγγραφής"
@@ -3846,6 +3873,9 @@ msgstr "Λήφθηκε δωρεά"
 msgid "Download document"
 msgstr "Λήψη εγγράφου"
 
+msgid "Dyslexia friendly"
+msgstr "Φιλικό για δυσλεξία"
+
 msgid "Element approved!"
 msgstr "Το στοιχείο εγκρίθηκε!"
 
@@ -3986,6 +4016,9 @@ msgstr "Πραγματοποιημένα έσοδα:"
 
 msgid "Redeem collection"
 msgstr "Εξαργύρωση συλλογής"
+
+msgid "Reduce animations"
+msgstr "Μείωση κινούμενων εφέ"
 
 msgid "Refund percentage"
 msgstr "Ποσοστό επιστροφής"
@@ -4277,6 +4310,9 @@ msgstr "Μητρώο εθελοντών"
 msgid "Vote not yet open!"
 msgstr "Η ψηφοφορία δεν έχει ανοίξει ακόμη!"
 
+msgid "Wider text spacing"
+msgstr "Μεγαλύτερη απόσταση κειμένου"
+
 msgid "Workspace selector"
 msgstr "Επιλογέας χώρου εργασίας"
 
@@ -4493,6 +4529,9 @@ msgstr "Codice QR check-in.png"
 msgid "Close the collection"
 msgstr "Κλείσε τη συλλογή"
 
+msgid "Color blind friendly"
+msgstr "Φιλικό για αχρωματοψία"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Πλήρες φύλλο (PDF)"
 
@@ -4534,6 +4573,9 @@ msgstr "Server email esterno"
 
 msgid "Field for exclusions"
 msgstr "Πεδίο για αποκλεισμούς"
+
+msgid "Hide page background"
+msgstr "Απόκρυψη φόντου σελίδας"
 
 msgid "Independent factions"
 msgstr "Ανεξάρτητες παρατάξεις"

@@ -748,4 +748,64 @@ dialog::backdrop {
   .popup_confirm {
     max-width: 90vw;
   }
+  
+/* Accessibility panel */
+
+#a11y-dialog :focus-visible {
+  outline: 3px solid var(--ter-clr);
+  outline-offset: 2px;
+}
+
+#a11y-dialog {
+  width: 24em;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 1.5em;
+  border: none;
+  background-color: var(--sec-clr);
+  color: var(--pri-clr);
+  padding: 1em 1.5em;
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  text-align: left;
+}
+
+#a11y-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#a11y-dialog h2 {
+  margin: 0 0 0.5em 0;
+}
+
+#a11y-dialog fieldset {
+  border: none;
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+#a11y-dialog legend {
+  font-weight: 700;
+  margin-bottom: 0.3em;
+}
+
+#a11y-dialog fieldset label {
+  display: block;
+  margin: 0.2em 0 0.2em 1em;
+  text-align: left;
+  cursor: pointer;
+}
+
+#a11y-close {
+  position: absolute;
+  top: 0.5em;
+  right: 0.8em;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--pri-clr);
+  font-size: 1.3em;
+  line-height: 1;
+  padding: 0.3em;
+  cursor: pointer;
 }

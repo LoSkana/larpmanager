@@ -119,6 +119,9 @@ msgstr "Tiedosto"
 msgid "Five"
 msgstr "Viisi"
 
+msgid "Font"
+msgstr "Fontti"
+
 msgid "Form"
 msgstr "Lomake"
 
@@ -363,6 +366,9 @@ msgstr "Tuote:"
 msgid "Items"
 msgstr "Nimikkeet"
 
+msgid "Large"
+msgstr "Suuri"
+
 msgid "Login"
 msgstr "Kirjaudu sisään"
 
@@ -413,6 +419,9 @@ msgstr "Quest"
 
 msgid "Quota"
 msgstr "Kiintiö"
+
+msgid "Reset"
+msgstr "Palauta"
 
 msgid "Role:"
 msgstr "Rooli:"
@@ -540,6 +549,9 @@ msgstr "Tarkistukset"
 
 msgid "Closed"
 msgstr "Suljettu"
+
+msgid "Colors"
+msgstr "Värit"
 
 msgid "Copied"
 msgstr "Kopioitu"
@@ -717,6 +729,9 @@ msgstr "Valitse"
 
 msgid "Seller"
 msgstr "Myyjä"
+
+msgid "Simple"
+msgstr "Yksinkertainen"
 
 msgid "Source"
 msgstr "Lähde"
@@ -2174,6 +2189,9 @@ msgstr "Tapahtuman tekstit"
 msgid "Event texts"
 msgstr "Tapahtuman tekstit"
 
+msgid "Extra large"
+msgstr "Erittäin suuri"
+
 msgid "Fiscal code"
 msgstr "Verotunnus"
 
@@ -2734,6 +2752,9 @@ msgstr "Ryhmän kansikuva"
 
 msgid "Free donation"
 msgstr "Vapaaehtoinen lahjoitus"
+
+msgid "High contrast"
+msgstr "Korkea kontrasti"
 
 msgid "Inflows total"
 msgstr "Tulot yhteensä"
@@ -3461,6 +3482,9 @@ msgstr "Maksut yhteensä:"
 msgid "Translated text"
 msgstr "Käännetty teksti"
 
+msgid "Underline links"
+msgstr "Alleviivaa linkit"
+
 msgid "Upload Expenses"
 msgstr "Lataa kuluja"
 
@@ -3481,6 +3505,9 @@ msgstr "PÄIVITETÄÄN"
 
 msgid "Warehouse items"
 msgstr "Varastotuotteet"
+
+msgid "Will be deleted"
+msgstr "Poistetaan"
 
 msgid "Writing options"
 msgstr "Kirjoitusvaihtoehdot"
@@ -3846,6 +3873,9 @@ msgstr "Lahjoitus vastaanotettu"
 msgid "Download document"
 msgstr "Lataa asiakirja"
 
+msgid "Dyslexia friendly"
+msgstr "Lukihäiriöystävällinen"
+
 msgid "Element approved!"
 msgstr "Elementti hyväksytty!"
 
@@ -3986,6 +4016,9 @@ msgstr "Toteutuneet tulot:"
 
 msgid "Redeem collection"
 msgstr "Lunasta keräys"
+
+msgid "Reduce animations"
+msgstr "Vähennä animaatioita"
 
 msgid "Refund percentage"
 msgstr "Palautusprosentti"
@@ -4277,6 +4310,9 @@ msgstr "Vapaaehtoisten rekisteri"
 msgid "Vote not yet open!"
 msgstr "Äänestys ei ole vielä avoinna!"
 
+msgid "Wider text spacing"
+msgstr "Väljempi tekstin välistys"
+
 msgid "Workspace selector"
 msgstr "Työtilan valitsin"
 
@@ -4493,6 +4529,9 @@ msgstr "Check-in QR-koodi.png"
 msgid "Close the collection"
 msgstr "Sulje keräys"
 
+msgid "Color blind friendly"
+msgstr "Värisokeusystävällinen"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Täydellinen lomake (Pdf)"
 
@@ -4534,6 +4573,9 @@ msgstr "Ulkoinen sähköpostipalvelin"
 
 msgid "Field for exclusions"
 msgstr "Kenttä poissulkemista varten"
+
+msgid "Hide page background"
+msgstr "Piilota sivun tausta"
 
 msgid "Independent factions"
 msgstr "Riippumattomat fraktiot"

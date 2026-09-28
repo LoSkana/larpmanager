@@ -1,0 +1,56 @@
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    const dialog = document.getElementById('a11y-dialog');
+    const form = document.getElementById('a11y-form');
+    if (!dialog || !form) return;
+    let lastTrigger = null;
+
+    // Replace the a11y-* classes on the html element with the given list
+    function applyClasses(classes) {
+        const root = document.documentElement;
+        Array.from(root.classList)
+            .filter(function(name) { return name.startsWith('a11y-'); })
+            .forEach(function(name) { root.classList.remove(name); });
+        classes.forEach(function(name) { root.classList.add(name); });
+    }
+
+    // Send the form state, then apply the validated classes returned by the server
+    function save() {
+        $.ajax({
+            url: '{% url "set_accessibility" %}',
+            method: 'POST',
+            data: $(form).serialize(),
+            success: function(data) { applyClasses(data.classes); }
+        });
+    }
+
+    document.querySelectorAll('.a11y-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function(event) {
+            event.preventDefault();
+            lastTrigger = trigger;
+            dialog.showModal();
+        });
+    });
+
+    document.getElementById('a11y-close').addEventListener('click', function() {
+        dialog.close();
+    });
+
+    // Close when clicking on the backdrop
+    dialog.addEventListener('click', function(event) {
+        if (event.target === dialog) dialog.close();
+    });
+
+    dialog.addEventListener('close', function() {
+        if (lastTrigger) lastTrigger.focus();
+    });
+
+    form.addEventListener('change', save);
+
+    document.getElementById('a11y-reset').addEventListener('click', function() {
+        form.querySelectorAll('input[type="radio"][value=""]').forEach(function(input) { input.checked = true; });
+        form.querySelectorAll('input[type="checkbox"]').forEach(function(input) { input.checked = false; });
+        save();
+    });
+});
+</script>
