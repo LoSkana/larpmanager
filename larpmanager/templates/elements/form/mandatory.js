@@ -32,7 +32,7 @@ function check_mandatory_fields(mandatory, sections) {
             ? '{% filter escapejs %}{% trans "Please select a value" %}{% endfilter %}'
             : '{% filter escapejs %}{% trans "Please fill in this field" %}{% endfilter %}';
         el.after($('<p class="mandatory-error"><b class="form-error"></b></p>').find('b').text(message).end());
-        el.one('change input', function() { $(this).nextAll('.mandatory-error').remove(); });
+        el.off('.mandatory').one('change.mandatory input.mandatory', function() { $(this).nextAll('.mandatory-error').remove(); });
 
         if (sections && k in sections) $(".sec_" + slugify(sections[k])).show();
         if (!first_error) first_error = el;

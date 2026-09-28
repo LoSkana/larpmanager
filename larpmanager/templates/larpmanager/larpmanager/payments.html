@@ -39,7 +39,7 @@
                 <td>{{ el.total }}</td>
                 <td>
                     <a href='{% url "lm_payments_confirm" el.uuid %}'
-                       data-confirm="Confirm this payment?">Confirm</a>
+                       data-confirm="{% trans "Confirm this payment?" %}">Confirm</a>
                 </td>
             {% endfor %}
         </tr>

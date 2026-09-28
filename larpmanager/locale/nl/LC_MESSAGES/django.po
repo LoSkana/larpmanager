@@ -4776,6 +4776,9 @@ msgstr "Volledig karakterblad (Test)"
 msgid "Complete your profile"
 msgstr "Maak je profiel compleet"
 
+msgid "Confirm this payment?"
+msgstr "Deze betaling bevestigen?"
+
 msgid "Create your character"
 msgstr "Creëer je personage"
 
@@ -5892,6 +5895,10 @@ msgstr "De geselecteerde vaardigheid verkrijgen?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Optie %(name)s is uitgeschakeld!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "%(name)s definitief verwijderen?"
 
 msgid "Please wait before retrying."
 msgstr "Wacht even voordat je het opnieuw probeert."

@@ -4776,6 +4776,9 @@ msgstr "Vollständiger Bogen (Test)"
 msgid "Complete your profile"
 msgstr "Vervollständige dein Profil"
 
+msgid "Confirm this payment?"
+msgstr "Diese Zahlung bestätigen?"
+
 msgid "Create your character"
 msgstr "Erstelle deinen Charakter"
 
@@ -5892,6 +5895,10 @@ msgstr "Die ausgewählte Fähigkeit erwerben?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Option %(name)s ist deaktiviert!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "%(name)s endgültig löschen?"
 
 msgid "Please wait before retrying."
 msgstr "Bitte warte, bevor du es erneut versuchst."

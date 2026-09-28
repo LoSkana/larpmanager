@@ -4776,6 +4776,9 @@ msgstr "Kompletní list (Test)"
 msgid "Complete your profile"
 msgstr "Doplň svůj profil"
 
+msgid "Confirm this payment?"
+msgstr "Potvrdit tuto platbu?"
+
 msgid "Create your character"
 msgstr "Vytvoř si postavu"
 
@@ -5892,6 +5895,10 @@ msgstr "Získat vybranou schopnost?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Možnost %(name)s byla deaktivována!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Trvale smazat %(name)s?"
 
 msgid "Please wait before retrying."
 msgstr "Před dalším pokusem počkej."

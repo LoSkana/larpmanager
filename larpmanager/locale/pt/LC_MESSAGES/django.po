@@ -4776,6 +4776,9 @@ msgstr "Ficha completa (Teste)"
 msgid "Complete your profile"
 msgstr "Completa o teu perfil"
 
+msgid "Confirm this payment?"
+msgstr "Confirmar este pagamento?"
+
 msgid "Create your character"
 msgstr "Cria a tua personagem"
 
@@ -5892,6 +5895,10 @@ msgstr "Obter a habilidade selecionada?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Opção %(name)s desativada!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Excluir %(name)s permanentemente?"
 
 msgid "Please wait before retrying."
 msgstr "Aguarda antes de tentares novamente."

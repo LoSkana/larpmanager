@@ -4776,6 +4776,9 @@ msgstr "Komplett ark (Test)"
 msgid "Complete your profile"
 msgstr "Fyll i din profil"
 
+msgid "Confirm this payment?"
+msgstr "Bekräfta den här betalningen?"
+
 msgid "Create your character"
 msgstr "Skapa din karaktär"
 
@@ -5892,6 +5895,10 @@ msgstr "Skaffa den valda förmågan?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Alternativet %(name)s är inaktiverat!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Radera %(name)s permanent?"
 
 msgid "Please wait before retrying."
 msgstr "Vänta innan du försöker igen."

@@ -4776,6 +4776,9 @@ msgstr "Täydellinen lomake (Testi)"
 msgid "Complete your profile"
 msgstr "Täydennä profiiliasi"
 
+msgid "Confirm this payment?"
+msgstr "Vahvistetaanko tämä maksu?"
+
 msgid "Create your character"
 msgstr "Luo hahmosi"
 
@@ -5892,6 +5895,10 @@ msgstr "Hankitaanko valittu kyky?"
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Asetus %(name)s on poistettu käytöstä!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Poistetaanko %(name)s pysyvästi?"
 
 msgid "Please wait before retrying."
 msgstr "Odota ennen kuin yrität uudelleen."

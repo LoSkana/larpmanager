@@ -130,7 +130,8 @@ window.lmConfirm = function(message, onConfirm) {
         dialog.close();
     };
     dialog.showModal();
-    dialog.querySelector('.confirm-ok').focus();
+    // safe default, so Enter does not trigger destructive actions
+    dialog.querySelector('.confirm-cancel').focus();
 };
 
 // Track unsaved user edits in the main edit forms.
@@ -139,10 +140,6 @@ window.lmFormDirty = false;
 $(document).on('input change select2:select select2:unselect', '#main_form, #manage_form', function(e) {
     // ignore changes triggered by scripts
     if (e.originalEvent || e.type.startsWith('select2')) window.lmFormDirty = true;
-});
-
-$(document).on('submit', '#main_form, #manage_form', function() {
-    window.lmFormDirty = false;
 });
 
 // Rich text editors inside the main edit forms mark them dirty too.
@@ -213,6 +210,11 @@ $(document).on('submit', 'form[data-confirm]', function(e) {
         form.dataset.confirmed = '1';
         form.requestSubmit(submitter);
     });
+});
+
+// Edits count as saved only once the submit actually proceeds.
+$(document).on('submit', '#main_form, #manage_form', function(e) {
+    if (!e.isDefaultPrevented()) window.lmFormDirty = false;
 });
 
 /**

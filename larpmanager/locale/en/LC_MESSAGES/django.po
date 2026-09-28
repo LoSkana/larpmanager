@@ -8036,7 +8036,14 @@ msgstr ""
 msgid "Next:"
 msgstr ""
 
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr ""
+
 msgid "Show inactive"
+msgstr ""
+
+msgid "Confirm this payment?"
 msgstr ""
 
 msgid "Welcome to the dashboard of your organization!"

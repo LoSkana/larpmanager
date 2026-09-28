@@ -4776,6 +4776,9 @@ msgstr "Πλήρες φύλλο (Δοκιμή)"
 msgid "Complete your profile"
 msgstr "Ολοκλήρωσε το προφίλ σου"
 
+msgid "Confirm this payment?"
+msgstr "Να επιβεβαιωθεί αυτή η πληρωμή;"
+
 msgid "Create your character"
 msgstr "Δημιούργησε τον χαρακτήρα σου"
 
@@ -5892,6 +5895,10 @@ msgstr "Να αποκτήσεις την επιλεγμένη ικανότητα
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Η επιλογή %(name)s απενεργοποιήθηκε!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Να διαγραφεί οριστικά το %(name)s;"
 
 msgid "Please wait before retrying."
 msgstr "Περίμενε πριν προσπαθήσεις ξανά."
