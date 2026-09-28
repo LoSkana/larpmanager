@@ -28,6 +28,16 @@
         </a>
     </span>
     <span class="sidebar-link-wrap">
+        <a class="sidebar-link a11y-trigger"
+           href="#"
+           role="button"
+           aria-haspopup="dialog"
+           aria-controls="a11y-dialog">
+            <i class="fa-solid fa-universal-access"></i>
+            <span>{% trans "Accessibility" %}</span>
+        </a>
+    </span>
+    <span class="sidebar-link-wrap">
         <a class="sidebar-link" href="{% url 'privacy' %}">
             <i class="fa-solid fa-shield-halved"></i>
             <span>{% trans "Privacy Policy" %}</span>

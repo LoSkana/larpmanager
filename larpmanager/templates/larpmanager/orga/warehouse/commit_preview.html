@@ -43,7 +43,11 @@
                         <td>{{ item_data.assigned_quantity }}</td>
                         <td>
                             {% if item_data.will_delete %}
-                                <span class="redderized"><strong>{{ item_data.final_quantity }}</strong></span>
+                                <span class="redderized">
+                                    <i class="fa-solid fa-trash" aria-hidden="true"></i>
+                                    <strong>{{ item_data.final_quantity }}</strong>
+                                    <span class="sr-only">{% trans "Will be deleted" %}</span>
+                                </span>
                             {% else %}
                                 {{ item_data.final_quantity }}
                             {% endif %}

@@ -25,6 +25,7 @@ from django.http import HttpRequest
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.nav import build_profile_home_nav_items, build_profile_nav_items
+from larpmanager.utils.users.accessibility import get_accessibility_tokens
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
@@ -92,5 +93,9 @@ def cache_association(request: HttpRequest) -> dict:
         if above_threshold:
             hotjar_siteid = None
     context["hotjar_siteid"] = hotjar_siteid
+
+    # Personal accessibility preferences, rendered as classes on the html element
+    context["a11y_tokens"] = get_accessibility_tokens(request)
+    context["a11y_classes"] = " ".join(f"a11y-{token}" for token in context["a11y_tokens"])
 
     return context

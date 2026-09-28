@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@fontsource/opendyslexic": "5.x",
     "@fortawesome/fontawesome-free": "7.x",
     "@tholman/intense-images": "1.x",
     "chart.js": "4.x",
