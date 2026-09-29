@@ -1021,6 +1021,9 @@ msgstr "Reserve"
 msgid "Restore"
 msgstr "Gendan"
 
+msgid "Search:"
+msgstr "Søg:"
+
 msgid "Section"
 msgstr "Sektion"
 
@@ -1934,6 +1937,9 @@ msgstr "Næste kvote"
 msgid "No changes"
 msgstr "Ingen ændringer"
 
+msgid "No entries"
+msgstr "Ingen poster"
+
 msgid "No faction"
 msgstr "Ingen fraktion"
 
@@ -2672,9 +2678,6 @@ msgstr "Aldersvalg"
 msgid "Apply Upgrade"
 msgstr "Anvend opgradering"
 
-msgid "Are you sure?"
-msgstr "Er du sikker?"
-
 msgid "Assign Badges"
 msgstr "Tildel Badges"
 
@@ -3096,6 +3099,9 @@ msgstr "Samlede udbetalinger"
 
 msgid "PDF generation"
 msgstr "PDF-generering"
+
+msgid "Page not found"
+msgstr "Siden blev ikke fundet"
 
 msgid "Password reset"
 msgstr "Nulstil adgangskode"
@@ -3951,6 +3957,9 @@ msgstr "Ingen kommunikation"
 msgid "No users assigned"
 msgstr "Ingen brugere tildelt"
 
+msgid "Nothing here yet."
+msgstr "Intet her endnu."
+
 msgid "One-Time Contents"
 msgstr "Engangsindhold"
 
@@ -3977,6 +3986,9 @@ msgstr "Modtagne betalinger"
 
 msgid "Payments received"
 msgstr "Modtagne betalinger"
+
+msgid "Permission denied"
+msgstr "Adgang nægtet"
 
 msgid "Played characters"
 msgstr "Spillede karakterer"
@@ -4397,6 +4409,9 @@ msgstr "Eventkonfiguration"
 msgid "General information"
 msgstr "Generelle oplysninger"
 
+msgid "Go to the home page"
+msgstr "Gå til forsiden"
+
 msgid "History preferences"
 msgstr "Præferencehistorik"
 
@@ -4492,9 +4507,6 @@ msgstr "Alle udskrivbare ark"
 
 msgid "Annual fiscal report"
 msgstr "Årlig skatterapport"
-
-msgid "Are you really sure?"
-msgstr "Er du helt sikker?"
 
 msgid "Available characters"
 msgstr "Tilgængelige karakterer"
@@ -4764,8 +4776,8 @@ msgstr "Komplet ark (test)"
 msgid "Complete your profile"
 msgstr "Fuldfør din profil"
 
-msgid "Confirm your choices?"
-msgstr "Bekræft dine valg?"
+msgid "Confirm this payment?"
+msgstr "Vil du bekræfte denne betaling?"
 
 msgid "Create your character"
 msgstr "Opret din karakter"
@@ -5241,6 +5253,9 @@ msgstr "Velkommen til LarpManager!"
 
 msgid "Write to the organizers"
 msgstr "Skriv til arrangørerne"
+
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ poster pr. side"
 
 msgid "(Optional) Display order"
 msgstr "(Valgfrit) Visningsrækkefølge"
@@ -5720,6 +5735,9 @@ msgstr "Køkken: mad og service"
 msgid "Loading performed, see logs"
 msgstr "Indlæsning udført, se loggen"
 
+msgid "Log in to access this page."
+msgstr "Log ind for at få adgang til denne side."
+
 msgid "Manage experience modifiers"
 msgstr "Administrer erfaringsmodifikatorer"
 
@@ -5774,6 +5792,9 @@ msgstr "Opsæt dynamiske rater"
 
 msgid "Set up registration tickets"
 msgstr "Opsæt tilmeldingsbilletter"
+
+msgid "Submit this refund request?"
+msgstr "Indsend denne anmodning om refusion?"
 
 msgid "Ticket name (keep it short)"
 msgstr "Billetnavn (hold det kort)"
@@ -5868,9 +5889,16 @@ msgstr "Mine afventende guild-invitationer"
 msgid "Name of badge to be awarded."
 msgstr "Navn på det Badge, der skal tildeles."
 
+msgid "Obtain the selected ability?"
+msgstr "Opnå den valgte evne?"
+
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Tilvalg %(name)s deaktiveret!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Slet %(name)s permanent?"
 
 msgid "Please wait before retrying."
 msgstr "Vent venligst, før du prøver igen."
@@ -5951,6 +5979,9 @@ msgstr "Påmindelsesmail om medlemskontingent"
 
 msgid "Name of the experience system"
 msgstr "Navn på erfaringssystemet"
+
+msgid "No results match your search."
+msgstr "Ingen resultater matcher din søgning."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Handling: ADD, SUB, MUL, DIV"
@@ -6415,6 +6446,9 @@ msgstr "Gå til organisationens kontrolpanel"
 msgid "Character creation reminder email"
 msgstr "Påmindelsesmail om oprettelse af karakter"
 
+msgid "Confirm your casting preferences?"
+msgstr "Bekræft dine casting-præferencer?"
+
 msgid "Days available cannot be negative"
 msgstr "Antallet af tilgængelige dage kan ikke være negativt"
 
@@ -6648,6 +6682,9 @@ msgstr "(Valgfrit) Pris (0 = tildeles automatisk)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Valgfrit) Billettens beskrivelse"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtreret fra _MAX_ poster i alt)"
 
 msgid "Choose individual features yourself"
 msgstr "Vælg selv de enkelte funktioner"
@@ -6894,6 +6931,9 @@ msgstr "Hvis aktiveret, tillad billetniveauet: Staff."
 
 msgid "Indicates the details of the request:"
 msgstr "Angiv anmodningens detaljer:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Udbetal denne refusion til deltageren?"
 
 msgid "Manage all quest types for this event"
 msgstr "Administrer alle Quest-typer for dette event"
@@ -7575,6 +7615,9 @@ msgstr "Anmodning om tilmelding modtaget til %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Vælg et Badge ovenfor for at administrere dets medlemmer."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Viser _START_ til _END_ af _TOTAL_ poster"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Spring demoen over, og opret din egen organisation"
 
@@ -7926,6 +7969,9 @@ msgstr "Du kan nu tilføje lagerbeholdere og varer"
 msgid "You can now select which tickets can be gifted"
 msgstr "Du kan nu vælge, hvilke billetter der kan gives som gaver"
 
+msgid "You don't have permission to access this page."
+msgstr "Du har ikke adgang til denne side."
+
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr "muligheder: <span class=\"count\"></span> / %(max)s"
@@ -7985,6 +8031,9 @@ msgstr "Tilmelding for %(member)s kopieret til %(event)s"
 msgid "Review participants' safety-related information"
 msgstr "Gennemse deltagernes Safety-relaterede oplysninger"
 
+msgid "Send this email to all the selected recipients?"
+msgstr "Send denne e-mail til alle de valgte modtagere?"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Viser det beregnede skattebeløb for hver betaling"
 
@@ -8030,6 +8079,9 @@ msgstr "Du kan ikke oprette en relation med dig selv!"
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du er blevet omdirigeret til Event-dashboardet"
+
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Du har ændringer, der ikke er gemt. Vil du lukke uden at gemme?"
 
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
@@ -8723,6 +8775,12 @@ msgstr "Du skal vælge mindst én billet til denne rate"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Få adgang til din karakterprofil <a href='%(url)s'>her</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Bemærk: formularen indeholder fejl, ret dem venligst."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Bemærk: formularen indeholder fejl, ret dem venligst:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Tilgængelig kreditsaldo til eventbetalinger og køb"
 
@@ -8968,9 +9026,6 @@ msgstr "Gå til administrationspanelet <a href= %(url)s'>herfra</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr "Tilføjer en side, hvor du kan definere kortere URL'er til lange links"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Bemærk: formularen indeholder fejl i følgende felter:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"
@@ -9237,6 +9292,9 @@ msgstr "Dette er de workshops, du skal gennemføre, før du kan spille."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "For at bekræfte din tilmelding skal du betale det angivne beløb."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Beklager, vi kunne ikke finde den side, du ledte efter..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Du er blevet afmeldt denne organisations nyhedsbrev"
 
@@ -9328,6 +9386,9 @@ msgstr "Du skal oprette mindst én quest, før du kan oprette traits"
 #, python-format
 msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr "Er du sikker på, at du vil afmelde <strong>%(email)s</strong>?"
+
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Luk indsamlingen? Der kan ikke gives flere bidrag."
 
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
@@ -9798,6 +9859,9 @@ msgstr ""
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Udtog udstedt af banken som bevis på overførslen (som PDF-fil)"
 
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr "Linket kan være forældet, eller siden kan være flyttet eller slettet."
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "For at uploade relationer skal du tilføje en anden fil med følgende kolonner"
@@ -9813,6 +9877,11 @@ msgid "Your user does not have the required permissions to access this page."
 msgstr ""
 "Din bruger har ikke de nødvendige tilladelser til at få adgang til denne "
 "side."
+
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Vil du tildele de valgte karakterer til deltagerne? Dette kan ikke "
+"fortrydes."
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
@@ -9878,6 +9947,10 @@ msgstr "Den originale engelske tekst, som den vises i koden (msgid i gettext)"
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "De bliver automatisk anvendt, når du tilmelder dig et nyt event."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr ""
+"Upload dette arkiv? Billederne og videoerne i det bliver føjet til albummet."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -14745,6 +14818,14 @@ msgid ""
 msgstr ""
 "Denne relation blev ændret i et andet vindue: dine ændringer her er ikke "
 "blevet gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Du er logget ind som %(name)s. Hvis du burde have adgang, så bed en arrangør"
+" om at give dig den nødvendige rolle, eller log ind med en anden konto."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

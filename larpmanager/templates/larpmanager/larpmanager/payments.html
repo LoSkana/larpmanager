@@ -38,7 +38,8 @@
                 <td>{{ el.active_registrations }}</td>
                 <td>{{ el.total }}</td>
                 <td>
-                    <a href='{% url "lm_payments_confirm" el.uuid %}' class="confirm-link">Confirm</a>
+                    <a href='{% url "lm_payments_confirm" el.uuid %}'
+                       data-confirm="{% trans "Confirm this payment?" %}">Confirm</a>
                 </td>
             {% endfor %}
         </tr>
@@ -52,17 +53,3 @@
         {% endfor %}
     </table>
 {% endblock content %}
-{% block js %}
-    <script>
- window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
-        $('.confirm-link').on('click', function(e) {
-            const confirmAction = window.lmTesting || confirm('Sei sicuro di voler procedere?');
-            if (!confirmAction) {
-                e.preventDefault();
-            }
-        });
-    });
-});
-    </script>
-{% endblock js %}

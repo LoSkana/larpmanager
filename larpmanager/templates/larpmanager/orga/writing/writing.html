@@ -26,10 +26,6 @@
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
-        $('form').on('submit', function() {
-            return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
-        });
-
         $('option:selected').each(function(){
             $(this).prop('selected',true);
         });

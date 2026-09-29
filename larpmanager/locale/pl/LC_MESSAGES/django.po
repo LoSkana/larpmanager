@@ -1021,6 +1021,9 @@ msgstr "Rezerwa"
 msgid "Restore"
 msgstr "Przywracanie"
 
+msgid "Search:"
+msgstr "Szukaj:"
+
 msgid "Section"
 msgstr "Sekcja"
 
@@ -1934,6 +1937,9 @@ msgstr "Następna kwota"
 msgid "No changes"
 msgstr "Bez zmian"
 
+msgid "No entries"
+msgstr "Brak wpisów"
+
 msgid "No faction"
 msgstr "Żadna frakcja"
 
@@ -2672,9 +2678,6 @@ msgstr "Wybór wieku"
 msgid "Apply Upgrade"
 msgstr "Zastosuj aktualizację"
 
-msgid "Are you sure?"
-msgstr "Jesteś pewien?"
-
 msgid "Assign Badges"
 msgstr "Przyznaj Badges"
 
@@ -3096,6 +3099,9 @@ msgstr "Wypływy ogółem"
 
 msgid "PDF generation"
 msgstr "Generacja PDF"
+
+msgid "Page not found"
+msgstr "Nie znaleziono strony"
 
 msgid "Password reset"
 msgstr "Resetowanie hasła"
@@ -3951,6 +3957,9 @@ msgstr "Brak komunikatów"
 msgid "No users assigned"
 msgstr "Nie przypisano użytkowników"
 
+msgid "Nothing here yet."
+msgstr "Na razie nic tu nie ma."
+
 msgid "One-Time Contents"
 msgstr "Zawartości jednorazowe"
 
@@ -3977,6 +3986,9 @@ msgstr "Otrzymane płatności"
 
 msgid "Payments received"
 msgstr "Otrzymane płatności"
+
+msgid "Permission denied"
+msgstr "Brak uprawnień"
 
 msgid "Played characters"
 msgstr "Odgrywane postacie"
@@ -4397,6 +4409,9 @@ msgstr "Konfiguracja wydarzenia"
 msgid "General information"
 msgstr "Informacje ogólne"
 
+msgid "Go to the home page"
+msgstr "Przejdź do strony głównej"
+
 msgid "History preferences"
 msgstr "Historia preferencji"
 
@@ -4492,9 +4507,6 @@ msgstr "Wszystkie arkusze do wydrukowania"
 
 msgid "Annual fiscal report"
 msgstr "Roczne sprawozdanie finansowe"
-
-msgid "Are you really sure?"
-msgstr "Naprawdę jesteś pewien?"
 
 msgid "Available characters"
 msgstr "Dostępne postacie"
@@ -4764,8 +4776,8 @@ msgstr "Kompletny arkusz (test)"
 msgid "Complete your profile"
 msgstr "Uzupełnij swój profil"
 
-msgid "Confirm your choices?"
-msgstr "Potwierdź swoje wybory?"
+msgid "Confirm this payment?"
+msgstr "Potwierdzić tę płatność?"
 
 msgid "Create your character"
 msgstr "Stwórz swoją postać"
@@ -5241,6 +5253,9 @@ msgstr "Witamy w LarpManager!"
 
 msgid "Write to the organizers"
 msgstr "Napisz do organizatorów"
+
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ wpisów na stronę"
 
 msgid "(Optional) Display order"
 msgstr "(Opcjonalnie) Kolejność wyświetlania"
@@ -5720,6 +5735,9 @@ msgstr "Kuchnia: jedzenie i zastawa stołowa"
 msgid "Loading performed, see logs"
 msgstr "Wykonano ładowanie, patrz dzienniki"
 
+msgid "Log in to access this page."
+msgstr "Zaloguj się, aby wyświetlić tę stronę."
+
 msgid "Manage experience modifiers"
 msgstr "Zarządzaj modyfikatorami doświadczenia"
 
@@ -5774,6 +5792,9 @@ msgstr "Skonfiguruj dynamiczne raty"
 
 msgid "Set up registration tickets"
 msgstr "Skonfiguruj bilety rejestracyjne"
+
+msgid "Submit this refund request?"
+msgstr "Wysłać tę prośbę o zwrot?"
 
 msgid "Ticket name (keep it short)"
 msgstr "Nazwa biletu (niech będzie krótka)"
@@ -5868,9 +5889,16 @@ msgstr "Moje oczekujące zaproszenia do gildii"
 msgid "Name of badge to be awarded."
 msgstr "Nazwa badge do przyznania."
 
+msgid "Obtain the selected ability?"
+msgstr "Uzyskać wybraną umiejętność?"
+
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Opcja %(name)s została wyłączona!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Trwale usunąć %(name)s?"
 
 msgid "Please wait before retrying."
 msgstr "Poczekaj przed ponowieniem próby."
@@ -5951,6 +5979,9 @@ msgstr "E-mail z przypomnieniem o składce członkowskiej"
 
 msgid "Name of the experience system"
 msgstr "Nazwa systemu doświadczeń"
+
+msgid "No results match your search."
+msgstr "Brak wyników pasujących do wyszukiwania."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Działanie: ADD, SUB, MUL, DIV"
@@ -6415,6 +6446,9 @@ msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
 msgid "Character creation reminder email"
 msgstr "E-mail z przypomnieniem o tworzeniu postaci"
 
+msgid "Confirm your casting preferences?"
+msgstr "Potwierdzić swoje preferencje Casting?"
+
 msgid "Days available cannot be negative"
 msgstr "Liczba dostępnych dni nie może być ujemna"
 
@@ -6648,6 +6682,9 @@ msgstr "(Opcjonalnie) Koszt (0 = przypisany automatycznie)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Opcjonalnie) Opis biletu"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(przefiltrowano z _MAX_ wszystkich wpisów)"
 
 msgid "Choose individual features yourself"
 msgstr "Wybierz poszczególne funkcje samodzielnie"
@@ -6894,6 +6931,9 @@ msgstr "Jeśli włączone, zezwól na poziom biletu: Obsługa."
 
 msgid "Indicates the details of the request:"
 msgstr "Wskazuje szczegóły wniosku:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Zrealizować ten zwrot dla uczestnika?"
 
 msgid "Manage all quest types for this event"
 msgstr "Zarządzaj wszystkimi typami Questów dla tego wydarzenia"
@@ -7576,6 +7616,9 @@ msgstr "Otrzymano zgłoszenie rejestracji na %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Wybierz Badge powyżej, żeby zarządzać jego członkami."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Wyświetlanie od _START_ do _END_ z _TOTAL_ wpisów"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Pomiń demo, stwórz własną organizację"
 
@@ -7928,6 +7971,9 @@ msgstr "Możesz teraz dodawać kontenery i przedmioty do magazynu"
 msgid "You can now select which tickets can be gifted"
 msgstr "Możesz teraz wybrać, które bilety można podarować"
 
+msgid "You don't have permission to access this page."
+msgstr "Nie masz uprawnień, aby wyświetlić tę stronę."
+
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr "opcje: <span class=\"count\"></span> / %(max)s"
@@ -7987,6 +8033,9 @@ msgstr "Rejestracja %(member)s została skopiowana do %(event)s"
 msgid "Review participants' safety-related information"
 msgstr "Przejrzyj informacje uczestników związane z Safety"
 
+msgid "Send this email to all the selected recipients?"
+msgstr "Wysłać tego e-maila do wszystkich wybranych odbiorców?"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Pokazuje obliczoną kwotę podatku dla każdej płatności"
 
@@ -8031,6 +8080,9 @@ msgstr "Nie możesz utworzyć relacji z samym sobą!"
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Nastąpiło przekierowanie do pulpitu nawigacyjnego wydarzenia"
+
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Masz niezapisane zmiany. Zamknąć bez zapisywania?"
 
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
@@ -8739,6 +8791,12 @@ msgstr "Musisz wybrać co najmniej jeden bilet dla tej raty"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Wejdź do profilu swojej postaci <a href='%(url)s'>tutaj</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Uwaga: formularz zawiera błędy, popraw je."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Uwaga: formularz zawiera błędy, popraw je:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Dostępne saldo kredytowe na płatności za wydarzenia i zakupy"
 
@@ -9007,9 +9065,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Dodaje stronę, na której można zdefiniować krótsze adresy URL dla długich "
 "linków"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Uwaga: formularz zawiera błędy w następujących polach:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"
@@ -9303,6 +9358,9 @@ msgstr "To warsztaty, które musisz ukończyć, zanim będziesz mógł grać."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Aby potwierdzić rejestrację, zapłać wskazaną kwotę."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Przykro nam, nie udało nam się znaleźć strony, której szukasz..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Wypisano Cię z subskrypcji biuletynu tej organizacji"
 
@@ -9399,6 +9457,9 @@ msgstr ""
 msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr ""
 "Czy na pewno chcesz zrezygnować z subskrypcji <strong>%(email)s</strong>?"
+
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Zamknąć zbiórkę? Dalsze wpłaty nie będą już możliwe."
 
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
@@ -9912,6 +9973,11 @@ msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr ""
 "Dokument wystawiony przez bank jako potwierdzenie przelewu (w pliku PDF)"
 
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Link może być nieaktualny albo strona mogła zostać przeniesiona lub "
+"usunięta."
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr "Aby przesłać relacje, dodaj drugi plik z następującymi kolumnami"
 
@@ -9925,6 +9991,9 @@ msgstr "Osiągnięto maksymalną liczbę postaci, które można utworzyć"
 
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Użytkownik nie ma wymaganych uprawnień dostępu do tej strony."
+
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr "Przypisać wybrane postacie uczestnikom? Tego nie da się cofnąć."
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
@@ -10000,6 +10069,9 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Zostaną one automatycznie zastosowane, gdy zarejestrujesz się na nowe "
 "wydarzenie."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr "Przesłać to archiwum? Jego zdjęcia i filmy zostaną dodane do albumu."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -14923,6 +14995,14 @@ msgstr ""
 "Ta relacja została zmodyfikowana w innym oknie: Twoje zmiany tutaj nie "
 "zostały zapisane. Skopiuj tekst, który chcesz zachować, a następnie odśwież "
 "stronę."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Zalogowano jako %(name)s. Jeśli ten dostęp ci się należy, poproś "
+"organizatora o przyznanie ci wymaganej roli albo zaloguj się na inne konto."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

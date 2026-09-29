@@ -72,16 +72,163 @@ window.openLmModal = function(content, cssClass) {
         '<button class="modal-close-btn">&times;</button>' + content;
     dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
         e.preventDefault();
-        window.closeLmModal();
+        window.requestCloseLmModal();
     });
     dialog.showModal();
 };
+
+// Esc on the shared modal goes through the unsaved edits check.
+document.addEventListener('DOMContentLoaded', function() {
+    const dialog = document.getElementById('lm-modal');
+    if (!dialog) return;
+    dialog.addEventListener('cancel', function(e) {
+        e.preventDefault();
+        window.requestCloseLmModal();
+    });
+});
 
 // Close the shared modal dialog if open.
 window.closeLmModal = function() {
     const dialog = document.getElementById('lm-modal');
     if (dialog && dialog.open) dialog.close();
 };
+
+// Open the collapsed sections containing a form field and scroll to it.
+window.show_form_field = function(fieldId) {
+    // forms not rendered by the shared templates have no field row id
+    let row = $('#' + fieldId + '_tr');
+    if (!row.length) {
+        const field = $('#' + fieldId);
+        row = field.closest('tr').length ? field.closest('tr') : field;
+    }
+    if (!row.length) return;
+    row.parents('.form_container.hide').removeClass('hide').show();
+    $('.my_toggle').each(function() { syncToggleAria(this); });
+    window.jump_to(row);
+};
+
+// Error summary links jump to their field, and the first one is shown on load.
+$(document).on('click', '.form-error-link', function(e) {
+    e.preventDefault();
+    window.show_form_field($(this).data('field'));
+});
+
+$(function() {
+    const firstError = $('.form-error-link').first();
+    if (firstError.length) window.show_form_field(firstError.data('field'));
+});
+
+// Ask confirmation in a dialog stacked over any open modal, calling onConfirm if accepted.
+window.lmConfirm = function(message, onConfirm) {
+    // deferred so callers can resubmit forms outside the submit event
+    if (window.lmTesting) {
+        setTimeout(onConfirm, 0);
+        return;
+    }
+    const dialog = document.getElementById('lm-confirm');
+    dialog.querySelector('.confirm-message').textContent = message;
+    dialog.querySelector('.confirm-ok').onclick = function() {
+        dialog.close();
+        onConfirm();
+    };
+    dialog.querySelector('.confirm-cancel').onclick = function() {
+        dialog.close();
+    };
+    dialog.showModal();
+    // safe default, so Enter does not trigger destructive actions
+    dialog.querySelector('.confirm-cancel').focus();
+};
+
+// Track unsaved user edits in the main edit forms.
+window.lmFormDirty = false;
+
+// Last submit of the main edit forms, whose navigation leaves without warning.
+let lmFormSubmit = null;
+
+function markFormDirty() {
+    window.lmFormDirty = true;
+    lmFormSubmit = null;
+}
+
+$(document).on('input change select2:select select2:unselect', '#main_form, #manage_form', function(e) {
+    // ignore changes triggered by scripts
+    if (e.originalEvent || e.type.startsWith('select2')) markFormDirty();
+});
+
+// Rich text editors inside the main edit forms mark them dirty too.
+function trackEditorDirty(editor) {
+    const element = editor.getElement();
+    if (!element || !element.closest('#main_form, #manage_form')) return;
+    editor.on('input change undo redo', markFormDirty);
+}
+
+window.addEventListener('load', function() {
+    if (!window.tinymce) return;
+    tinymce.get().forEach(trackEditorDirty);
+    tinymce.on('AddEditor', function(e) {
+        trackEditorDirty(e.editor);
+    });
+});
+
+// Warn before leaving a page with unsaved edits, unless drafts are kept by autosave.
+window.addEventListener('beforeunload', function(e) {
+    if (!window.lmFormDirty || window.lmTesting || window.lmDraftAutosave) return;
+    // checked now, so handlers that cancel the submit after it was recorded are honored
+    if (lmFormSubmit && !lmFormSubmit.isDefaultPrevented()) return;
+    e.preventDefault();
+    e.returnValue = '';
+});
+
+// Close the shared modal, asking first if its iframe holds unsaved edits.
+window.requestCloseLmModal = function() {
+    const iframe = document.querySelector('#lm-modal iframe');
+    let dirty = false;
+    try {
+        dirty = !!(iframe && iframe.contentWindow.lmFormDirty);
+    } catch (_err) {}
+    if (!dirty) {
+        window.closeLmModal();
+        return;
+    }
+    window.lmConfirm(document.getElementById('lm-confirm').dataset.discardText, window.closeLmModal);
+};
+
+// Links, buttons and forms with data-confirm ask confirmation before proceeding.
+$(document).on('click', 'a[data-confirm], button[data-confirm], input[data-confirm]', function(e) {
+    const el = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (el.dataset.confirmed) {
+        delete el.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.lmConfirm(el.dataset.confirm, function() {
+        el.dataset.confirmed = '1';
+        el.click();
+    });
+});
+
+$(document).on('submit', 'form[data-confirm]', function(e) {
+    const form = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (form.dataset.confirmed) {
+        delete form.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const submitter = e.originalEvent ? e.originalEvent.submitter : null;
+    window.lmConfirm(form.dataset.confirm, function() {
+        form.dataset.confirmed = '1';
+        form.requestSubmit(submitter);
+    });
+});
+
+// Edits stay unsaved until the page actually navigates away with the submit.
+$(document).on('submit', '#main_form, #manage_form', function(e) {
+    lmFormSubmit = e;
+});
 
 /**
  * Open a dialog modal with an iframe and a close button
@@ -498,10 +645,33 @@ function initToggles() {
         } else {
             $(this).removeClass('select');
         }
+        syncToggleAria(this);
 
         return false;
 
     });
+
+    // Space activates toggles like buttons, Enter too when the toggle is not a link
+    $(document).on("keydown", ".my_toggle", function(e) {
+        if (e.key === ' ' || (e.key === 'Enter' && !(this.tagName === 'A' && this.hasAttribute('href')))) {
+            e.preventDefault();
+            $(this).trigger('click');
+        }
+    });
+
+    // links keep their role, other elements become focusable buttons
+    $('.my_toggle').each(function() {
+        var isLink = this.tagName === 'A' && this.hasAttribute('href');
+        if (!isLink && this.tagName !== 'BUTTON' && !this.hasAttribute('role')) $(this).attr('role', 'button');
+        if (!isLink && !this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
+        syncToggleAria(this);
+    });
+}
+
+// Reflect the visibility of a toggle's target blocks in its aria-expanded state.
+function syncToggleAria(toggle) {
+    var target = $('.' + $(toggle).attr('tog'));
+    $(toggle).attr('aria-expanded', target.is(':visible') ? 'true' : 'false');
 }
 
 // ========== Init: Datatable links / delete confirm ==========
@@ -1035,6 +1205,7 @@ function data_tables() {
         var search_top_start = show_search ? 'search' : null;
 
         var dtConfig = {
+            language: window.dt_language || {},
             scrollX: true,
             responsive: window.enviro === 'prod',
             stateSave: false,
@@ -1190,6 +1361,7 @@ function data_tables() {
         });
 
         const table = new DataTable('#' + tableId, {
+            language: window.dt_language || {},
             lengthMenu: [[25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,

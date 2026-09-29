@@ -227,12 +227,13 @@
         {% if messages %}
             {% for message in messages %}
                 $.toast({
-                    text: '{{ message }}',
+                    text: '{% filter escapejs %}{{ message }}{% endfilter %}',
                     showHideTransition: 'slide',
-                    icon: '{{ message.tags }}',
+                    icon: '{{ message.level_tag }}',
                     position: 'top-center',
                     textAlign: 'center',
-                    hideAfter: 5000   // in milli seconds
+                    // errors stay until closed, others hide after 5 seconds
+                    hideAfter: {% if message.level_tag == "error" %}false{% else %}5000{% endif %}
                 });
             {% endfor %}
         {% endif %}
@@ -252,17 +253,8 @@
         {% endif %}
 
         {% if form.errors %}
-            txt = '{% filter escapejs %}{% trans "Attention: the form contains errors in the following fields:" %}{% endfilter %}';
-            fls = []
-            {% for field in form.visible_fields %}
-                {% if field.errors %}
-                    fls.push('{{ field.label }}');
-                {% endif %}
-            {% endfor %}
-            // console.log(fls);
-
             $.toast({
-                text: txt + fls.join(', '),
+                text: '{% filter escapejs %}{% trans "Attention: the form contains errors, please correct them." %}{% endfilter %}',
                 showHideTransition: 'slide',
                 icon: 'error',
                 position: 'top-center',

@@ -26,9 +26,7 @@
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
-    $('form').on('submit', function() {
-        return window.lmTesting ? true : confirm('Sei davvero sicuro?');
-    });
+    $('form[enctype="multipart/form-data"]').attr('data-confirm', '{% filter escapejs %}{% trans "Upload this archive? Its photos and videos will be added to the album." %}{% endfilter %}');
 });
 });
     </script>

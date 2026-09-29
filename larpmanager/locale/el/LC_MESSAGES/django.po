@@ -1021,6 +1021,9 @@ msgstr "Επιλαχών"
 msgid "Restore"
 msgstr "Επαναφορά"
 
+msgid "Search:"
+msgstr "Αναζήτηση:"
+
 msgid "Section"
 msgstr "Ενότητα"
 
@@ -1934,6 +1937,9 @@ msgstr "Επόμενη δόση"
 msgid "No changes"
 msgstr "Καμία αλλαγή"
 
+msgid "No entries"
+msgstr "Δεν υπάρχουν εγγραφές"
+
 msgid "No faction"
 msgstr "Χωρίς παράταξη"
 
@@ -2672,9 +2678,6 @@ msgstr "Επιλογή ηλικίας"
 msgid "Apply Upgrade"
 msgstr "Εφαρμογή αναβάθμισης"
 
-msgid "Are you sure?"
-msgstr "Είσαι σίγουρος;"
-
 msgid "Assign Badges"
 msgstr "Ανάθεση Badges"
 
@@ -3096,6 +3099,9 @@ msgstr "Σύνολο εκροών"
 
 msgid "PDF generation"
 msgstr "Δημιουργία PDF"
+
+msgid "Page not found"
+msgstr "Η σελίδα δεν βρέθηκε"
 
 msgid "Password reset"
 msgstr "Επαναφορά κωδικού"
@@ -3951,6 +3957,9 @@ msgstr "Δεν υπάρχουν επικοινωνίες"
 msgid "No users assigned"
 msgstr "Δεν έχουν ανατεθεί χρήστες"
 
+msgid "Nothing here yet."
+msgstr "Δεν υπάρχει τίποτα εδώ ακόμα."
+
 msgid "One-Time Contents"
 msgstr "Περιεχόμενα μίας χρήσης"
 
@@ -3977,6 +3986,9 @@ msgstr "Πληρωμές που ελήφθησαν"
 
 msgid "Payments received"
 msgstr "Ληφθείσες πληρωμές"
+
+msgid "Permission denied"
+msgstr "Δεν επιτρέπεται η πρόσβαση"
 
 msgid "Played characters"
 msgstr "Χαρακτήρες που έχεις παίξει"
@@ -4397,6 +4409,9 @@ msgstr "Ρυθμίσεις event"
 msgid "General information"
 msgstr "Γενικές πληροφορίες"
 
+msgid "Go to the home page"
+msgstr "Πήγαινε στην αρχική σελίδα"
+
 msgid "History preferences"
 msgstr "Ιστορικό προτιμήσεων"
 
@@ -4492,9 +4507,6 @@ msgstr "Όλα τα εκτυπώσιμα φύλλα"
 
 msgid "Annual fiscal report"
 msgstr "Ετήσια φορολογική έκθεση"
-
-msgid "Are you really sure?"
-msgstr "Είσαι πραγματικά σίγουρος;"
 
 msgid "Available characters"
 msgstr "Διαθέσιμοι χαρακτήρες"
@@ -4764,8 +4776,8 @@ msgstr "Πλήρες φύλλο (Δοκιμή)"
 msgid "Complete your profile"
 msgstr "Ολοκλήρωσε το προφίλ σου"
 
-msgid "Confirm your choices?"
-msgstr "Επιβεβαιώνεις τις επιλογές σου;"
+msgid "Confirm this payment?"
+msgstr "Να επιβεβαιωθεί αυτή η πληρωμή;"
 
 msgid "Create your character"
 msgstr "Δημιούργησε τον χαρακτήρα σου"
@@ -5241,6 +5253,9 @@ msgstr "Καλώς ήρθες στο LarpManager!"
 
 msgid "Write to the organizers"
 msgstr "Γράψε στους διοργανωτές"
+
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ εγγραφές ανά σελίδα"
 
 msgid "(Optional) Display order"
 msgstr "(Προαιρετικό) Σειρά εμφάνισης"
@@ -5720,6 +5735,9 @@ msgstr "Κουζίνα: τρόφιμα και επιτραπέζια σκεύη"
 msgid "Loading performed, see logs"
 msgstr "Η φόρτωση ολοκληρώθηκε, δες τα αρχεία καταγραφής"
 
+msgid "Log in to access this page."
+msgstr "Συνδέσου για να δεις αυτή τη σελίδα."
+
 msgid "Manage experience modifiers"
 msgstr "Διαχείριση τροποποιητών εμπειρίας"
 
@@ -5774,6 +5792,9 @@ msgstr "Ρύθμισε τις δυναμικές δόσεις"
 
 msgid "Set up registration tickets"
 msgstr "Ρύθμισε τα εισιτήρια εγγραφής"
+
+msgid "Submit this refund request?"
+msgstr "Να υποβάλεις αυτό το αίτημα επιστροφής χρημάτων;"
 
 msgid "Ticket name (keep it short)"
 msgstr "Όνομα εισιτηρίου (κράτησέ το σύντομο)"
@@ -5868,9 +5889,16 @@ msgstr "Οι εκκρεμείς προσκλήσεις μου σε συντεχ�
 msgid "Name of badge to be awarded."
 msgstr "Όνομα του badge που θα απονεμηθεί."
 
+msgid "Obtain the selected ability?"
+msgstr "Να αποκτήσεις την επιλεγμένη ικανότητα;"
+
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Η επιλογή %(name)s απενεργοποιήθηκε!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Να διαγραφεί οριστικά το %(name)s;"
 
 msgid "Please wait before retrying."
 msgstr "Περίμενε πριν προσπαθήσεις ξανά."
@@ -5951,6 +5979,9 @@ msgstr "Email υπενθύμισης για τη συνδρομή μέλους"
 
 msgid "Name of the experience system"
 msgstr "Όνομα του συστήματος εμπειρίας"
+
+msgid "No results match your search."
+msgstr "Κανένα αποτέλεσμα δεν ταιριάζει με την αναζήτησή σου."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Ενέργεια: ADD, SUB, MUL, DIV"
@@ -6415,6 +6446,9 @@ msgstr "Πρόσβαση στον πίνακα ελέγχου του οργαν�
 msgid "Character creation reminder email"
 msgstr "Email υπενθύμισης δημιουργίας χαρακτήρα"
 
+msgid "Confirm your casting preferences?"
+msgstr "Επιβεβαιώνεις τις προτιμήσεις σου για το casting;"
+
 msgid "Days available cannot be negative"
 msgstr "Οι διαθέσιμες ημέρες δεν μπορούν να είναι αρνητικές"
 
@@ -6648,6 +6682,9 @@ msgstr "(Προαιρετικό) Κόστος (0 = ανατίθεται αυτό
 
 msgid "(Optional) The ticket's description"
 msgstr "(Προαιρετικό) Η περιγραφή του εισιτηρίου"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(φιλτραρισμένες από _MAX_ συνολικές εγγραφές)"
 
 msgid "Choose individual features yourself"
 msgstr "Επίλεξε εσύ μεμονωμένα τα χαρακτηριστικά"
@@ -6895,6 +6932,9 @@ msgstr "Αν ενεργοποιηθεί, επιτρέπει βαθμίδα ει�
 
 msgid "Indicates the details of the request:"
 msgstr "Ανέφερε τις λεπτομέρειες του αιτήματος:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Να γίνει αυτή η επιστροφή χρημάτων στον συμμετέχοντα;"
 
 msgid "Manage all quest types for this event"
 msgstr "Διαχειρίσου όλους τους τύπους Quest για αυτή την εκδήλωση"
@@ -7577,6 +7617,9 @@ msgstr "Λήφθηκε αίτημα εγγραφής για %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Επίλεξε ένα Badge παραπάνω για να διαχειριστείς τα μέλη του."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Εμφάνιση _START_ έως _END_ από _TOTAL_ εγγραφές"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Παράλειψε το demo, δημιούργησε τον δικό σου οργανισμό"
 
@@ -7933,6 +7976,9 @@ msgstr "Τώρα μπορείς να προσθέσεις δοχεία και α
 msgid "You can now select which tickets can be gifted"
 msgstr "Τώρα μπορείς να επιλέξεις ποια εισιτήρια μπορούν να δοθούν ως δώρο"
 
+msgid "You don't have permission to access this page."
+msgstr "Δεν έχεις άδεια πρόσβασης σε αυτή τη σελίδα."
+
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr "επιλογές: <span class=\"count\"></span> / %(max)s"
@@ -7993,6 +8039,9 @@ msgstr "Η εγγραφή του/της %(member)s αντιγράφηκε στη
 msgid "Review participants' safety-related information"
 msgstr "Έλεγχος πληροφοριών συμμετεχόντων σχετικών με την Safety"
 
+msgid "Send this email to all the selected recipients?"
+msgstr "Να σταλεί αυτό το email σε όλους τους επιλεγμένους παραλήπτες;"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Εμφανίζει το υπολογισμένο ποσό φόρου σε κάθε πληρωμή"
 
@@ -8038,6 +8087,9 @@ msgstr "Δεν μπορείς να δημιουργήσεις σχέση με τ
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Έχεις ανακατευθυνθεί στον Πίνακα Ελέγχου Εκδήλωσης"
+
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Έχεις μη αποθηκευμένες αλλαγές. Κλείσιμο χωρίς αποθήκευση;"
 
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
@@ -8784,6 +8836,12 @@ msgstr "Πρέπει να επιλέξεις τουλάχιστον ένα ει�
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Πρόσβαση στο προφίλ του χαρακτήρα σου <a href='%(url)s'>εδώ</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Προσοχή: η φόρμα περιέχει σφάλματα, διόρθωσέ τα."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Προσοχή: η φόρμα περιέχει σφάλματα, διόρθωσέ τα:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Διαθέσιμο υπόλοιπο πίστωσης για πληρωμές και αγορές εκδηλώσεων"
 
@@ -9068,9 +9126,6 @@ msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Προσθέτει μια σελίδα όπου μπορείς να ορίσεις συντομότερα URL για μεγάλους "
 "συνδέσμους"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Προσοχή: η φόρμα περιέχει σφάλματα στα ακόλουθα πεδία:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"
@@ -9391,6 +9446,9 @@ msgstr ""
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Για να επιβεβαιώσεις την εγγραφή σου, πλήρωσε το ποσό που αναφέρεται."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Λυπούμαστε, δεν βρήκαμε τη σελίδα που έψαχνες..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr ""
 "Η εγγραφή σου στο ενημερωτικό δελτίο αυτού του οργανισμού έχει ακυρωθεί"
@@ -9504,6 +9562,9 @@ msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr ""
 "Είσαι σίγουρος ότι θέλεις να καταργήσεις την εγγραφή του "
 "<strong>%(email)s</strong>;"
+
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Να κλείσει η συλλογή; Δεν θα είναι δυνατές άλλες συνεισφορές."
 
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
@@ -10061,6 +10122,11 @@ msgstr ""
 "Έγγραφο που εκδίδεται από την τράπεζα ως αποδεικτικό της μεταφοράς (σε "
 "αρχείο PDF)"
 
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+"Ο σύνδεσμος μπορεί να είναι παλιός ή η σελίδα μπορεί να έχει μετακινηθεί ή "
+"διαγραφεί."
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Για να ανεβάσεις σχέσεις, πρόσθεσε ένα δεύτερο αρχείο με τις παρακάτω στήλες"
@@ -10079,6 +10145,11 @@ msgid "Your user does not have the required permissions to access this page."
 msgstr ""
 "Ο χρήστης σου δεν έχει τα απαιτούμενα δικαιώματα για πρόσβαση σε αυτή τη "
 "σελίδα."
+
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr ""
+"Να αναθέσεις τους επιλεγμένους χαρακτήρες στους συμμετέχοντες; Αυτή η "
+"ενέργεια δεν αναιρείται."
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
@@ -10153,6 +10224,11 @@ msgstr ""
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Θα εφαρμοστούν αυτόματα όταν εγγραφείς σε νέα εκδήλωση."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr ""
+"Να ανεβάσεις αυτό το αρχείο; Οι φωτογραφίες και τα βίντεό του θα προστεθούν "
+"στο άλμπουμ."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -15189,6 +15265,15 @@ msgstr ""
 "Αυτή η σχέση τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν έχουν "
 "αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά ανανέωσε "
 "τη σελίδα."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Έχεις συνδεθεί ως %(name)s. Αν πιστεύεις ότι πρέπει να έχεις πρόσβαση, ζήτα "
+"από έναν διοργανωτή να σου δώσει τον απαιτούμενο ρόλο ή συνδέσου με άλλο "
+"λογαριασμό."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

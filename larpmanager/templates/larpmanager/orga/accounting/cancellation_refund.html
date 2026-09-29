@@ -80,7 +80,7 @@
         {% endfor %}
     </div>
     <br />
-    <form id="ref" action="{{ request.path }}" method="post">
+    <form id="ref_form" action="{{ request.path }}" method="post">
         {% csrf_token %}
         <input type="hidden" id="inp_token" name="inp_token" value="0" />
         <input type="hidden" id="inp_credit" name="inp_credit" value="0" />
@@ -171,12 +171,18 @@ window.addEventListener('DOMContentLoaded', function() {
         {% endif %}
         select_p('7');
 
-        $('form').on('submit', function() {
+        $('#ref_form').on('submit', function() {
             {% if not features.tokens and not features.credits %}
                 if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot issue a refund: neither tokens nor credits are enabled" %}{% endfilter %}');
                 return false;
             {% else %}
-                return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
+                const form = this;
+                if (form.dataset.confirmed) return true;
+                window.lmConfirm('{% filter escapejs %}{% trans "Issue this refund to the participant?" %}{% endfilter %}', function() {
+                    form.dataset.confirmed = '1';
+                    form.requestSubmit();
+                });
+                return false;
             {% endif %}
         });
     });

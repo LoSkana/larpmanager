@@ -1021,6 +1021,9 @@ msgstr "Rezerva"
 msgid "Restore"
 msgstr "Obnovení"
 
+msgid "Search:"
+msgstr "Hledat:"
+
 msgid "Section"
 msgstr "Sekce"
 
@@ -1934,6 +1937,9 @@ msgstr "Další kvóta"
 msgid "No changes"
 msgstr "Žádné změny"
 
+msgid "No entries"
+msgstr "Žádné záznamy"
+
 msgid "No faction"
 msgstr "Žádná frakce"
 
@@ -2672,9 +2678,6 @@ msgstr "Výběr věku"
 msgid "Apply Upgrade"
 msgstr "Použít upgrade"
 
-msgid "Are you sure?"
-msgstr "Jsi si jistý/á?"
-
 msgid "Assign Badges"
 msgstr "Přiřadit Badges"
 
@@ -3096,6 +3099,9 @@ msgstr "Celkové výdaje"
 
 msgid "PDF generation"
 msgstr "Generace PDF"
+
+msgid "Page not found"
+msgstr "Stránka nenalezena"
 
 msgid "Password reset"
 msgstr "Reset hesla"
@@ -3951,6 +3957,9 @@ msgstr "Žádná komunikace"
 msgid "No users assigned"
 msgstr "Nejsou přiřazeni žádní uživatelé"
 
+msgid "Nothing here yet."
+msgstr "Zatím tu nic není."
+
 msgid "One-Time Contents"
 msgstr "Jednorázové obsahy"
 
@@ -3977,6 +3986,9 @@ msgstr "Přijaté platby"
 
 msgid "Payments received"
 msgstr "Přijaté platby"
+
+msgid "Permission denied"
+msgstr "Přístup odepřen"
 
 msgid "Played characters"
 msgstr "Hrané postavy"
@@ -4397,6 +4409,9 @@ msgstr "Konfigurace události"
 msgid "General information"
 msgstr "Obecné informace"
 
+msgid "Go to the home page"
+msgstr "Přejít na domovskou stránku"
+
 msgid "History preferences"
 msgstr "Historie předvoleb"
 
@@ -4492,9 +4507,6 @@ msgstr "Všechny listy k vytištění"
 
 msgid "Annual fiscal report"
 msgstr "Výroční finanční zpráva"
-
-msgid "Are you really sure?"
-msgstr "Jsi si opravdu jistý?"
 
 msgid "Available characters"
 msgstr "Dostupné postavy"
@@ -4764,8 +4776,8 @@ msgstr "Kompletní list (Test)"
 msgid "Complete your profile"
 msgstr "Doplň svůj profil"
 
-msgid "Confirm your choices?"
-msgstr "Potvrzuješ své volby?"
+msgid "Confirm this payment?"
+msgstr "Potvrdit tuto platbu?"
 
 msgid "Create your character"
 msgstr "Vytvoř si postavu"
@@ -5241,6 +5253,9 @@ msgstr "Vítej v LarpManageru!"
 
 msgid "Write to the organizers"
 msgstr "Napiš organizátorům"
+
+msgid "_MENU_ entries per page"
+msgstr "_MENU_ záznamů na stránku"
 
 msgid "(Optional) Display order"
 msgstr "(Volitelné) Pořadí zobrazení"
@@ -5720,6 +5735,9 @@ msgstr "Kuchyně: jídlo a nádobí"
 msgid "Loading performed, see logs"
 msgstr "Provedeno načítání, viz protokoly"
 
+msgid "Log in to access this page."
+msgstr "Pro přístup na tuto stránku se přihlas."
+
 msgid "Manage experience modifiers"
 msgstr "Spravovat modifikátory zkušeností"
 
@@ -5774,6 +5792,9 @@ msgstr "Nastavení dynamických splátek"
 
 msgid "Set up registration tickets"
 msgstr "Nastavení registračních lístků"
+
+msgid "Submit this refund request?"
+msgstr "Odeslat tuto žádost o vrácení peněz?"
 
 msgid "Ticket name (keep it short)"
 msgstr "Název vstupenky (ať je krátký)"
@@ -5868,9 +5889,16 @@ msgstr "Moje nevyřízené pozvánky do gildy"
 msgid "Name of badge to be awarded."
 msgstr "Název badge, který má být udělen."
 
+msgid "Obtain the selected ability?"
+msgstr "Získat vybranou schopnost?"
+
 #, python-format
 msgid "Option %(name)s deactivated!"
 msgstr "Možnost %(name)s byla deaktivována!"
+
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr "Trvale smazat %(name)s?"
 
 msgid "Please wait before retrying."
 msgstr "Před dalším pokusem počkej."
@@ -5951,6 +5979,9 @@ msgstr "Připomínka členského příspěvku e-mailem"
 
 msgid "Name of the experience system"
 msgstr "Název systému zkušeností"
+
+msgid "No results match your search."
+msgstr "Tvému hledání neodpovídají žádné výsledky."
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
@@ -6415,6 +6446,9 @@ msgstr "Přejdi na řídicí panel organizace"
 msgid "Character creation reminder email"
 msgstr "E-mail s připomenutím vytvoření postavy"
 
+msgid "Confirm your casting preferences?"
+msgstr "Potvrdit tvoje preference pro casting?"
+
 msgid "Days available cannot be negative"
 msgstr "Počet dnů k dispozici nemůže být záporný"
 
@@ -6648,6 +6682,9 @@ msgstr "(Nepovinné) Náklady (0 = automaticky přiřazeno)"
 
 msgid "(Optional) The ticket's description"
 msgstr "(Nepovinné) Popis lístku"
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr "(filtrováno z celkem _MAX_ záznamů)"
 
 msgid "Choose individual features yourself"
 msgstr "Vyber si jednotlivé funkce sám/sama"
@@ -6894,6 +6931,9 @@ msgstr "Je-li povoleno, umožnit úroveň vstupenky: Staff."
 
 msgid "Indicates the details of the request:"
 msgstr "Uvádí podrobnosti žádosti:"
+
+msgid "Issue this refund to the participant?"
+msgstr "Vrátit peníze tomuto účastníkovi?"
 
 msgid "Manage all quest types for this event"
 msgstr "Spravuj všechny typy Questů pro tuto akci"
@@ -7576,6 +7616,9 @@ msgstr "Byla přijata žádost o registraci na %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Vyber badge výše a spravuj jeho členy."
 
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr "Zobrazeno _START_ až _END_ z _TOTAL_ záznamů"
+
 msgid "Skip the demo, create your own organization"
 msgstr "Přeskočit ukázku a vytvořit vlastní organizaci"
 
@@ -7927,6 +7970,9 @@ msgstr "Nyní můžeš přidávat skladové kontejnery a položky"
 msgid "You can now select which tickets can be gifted"
 msgstr "Nyní můžeš vybrat, které vstupenky lze darovat"
 
+msgid "You don't have permission to access this page."
+msgstr "Nemáš oprávnění k přístupu na tuto stránku."
+
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr "možnosti: <span class=\"count\"></span> / %(max)s"
@@ -7986,6 +8032,9 @@ msgstr "Registrace %(member)s byla zkopírována do %(event)s"
 msgid "Review participants' safety-related information"
 msgstr "Zkontrolovat informace účastníků související se Safety"
 
+msgid "Send this email to all the selected recipients?"
+msgstr "Odeslat tento e-mail všem vybraným příjemcům?"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Zobrazuje vypočtenou částku daně u každé platby"
 
@@ -8030,6 +8079,9 @@ msgstr "Nemůžeš vytvořit vztah sám se sebou!"
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Byl/a jsi přesměrován/a na panel událostí"
+
+msgid "You have unsaved changes. Close without saving?"
+msgstr "Máš neuložené změny. Zavřít bez uložení?"
 
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
@@ -8723,6 +8775,12 @@ msgstr "Pro tuto splátku musíš vybrat alespoň jednu vstupenku"
 msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr "Profil své postavy si můžeš zobrazit <a href='%(url)s'>zde</a>."
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr "Pozor: formulář obsahuje chyby, oprav je prosím."
+
+msgid "Attention: the form contains errors, please correct them:"
+msgstr "Pozor: formulář obsahuje chyby, oprav je prosím:"
+
 msgid "Available credit balance for event payments and purchases"
 msgstr "Dostupný zůstatek kreditu pro platby za události a nákupy"
 
@@ -8969,9 +9027,6 @@ msgstr "Do panelu správy se dostaneš <a href='%(url)s'>zde</a>!"
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 "Přidá stránku, kde můžeš definovat kratší adresy URL pro dlouhé odkazy"
-
-msgid "Attention: the form contains errors in the following fields:"
-msgstr "Pozor: formulář obsahuje chyby v následujících polích:"
 
 #, python-format
 msgid "Birth province does not match birth place (expected %(exp)s)"
@@ -9240,6 +9295,9 @@ msgstr "Tyto semináře musíš dokončit, abys mohl/a hrát."
 msgid "To confirm your registration, please pay the amount indicated."
 msgstr "Pro potvrzení registrace prosím zaplať uvedenou částku."
 
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr "Je nám líto, ale stránku, kterou hledáš, jsme nenašli..."
+
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Byl/a jsi odhlášen/a z odběru newsletteru této organizace"
 
@@ -9329,6 +9387,9 @@ msgstr "Před vytvořením Traitů musíš vytvořit alespoň jednu Quest"
 #, python-format
 msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
 msgstr "Opravdu chceš odhlásit <strong>%(email)s</strong>?"
+
+msgid "Close the collection? No further contributions will be possible."
+msgstr "Uzavřít sbírku? Další příspěvky už nebudou možné."
 
 msgid "Do you want users to join events only after an approval process?"
 msgstr ""
@@ -9776,6 +9837,9 @@ msgstr ""
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr "Potvrzení vydané bankou jako doklad o převodu (ve formátu PDF)"
 
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr "Odkaz může být zastaralý, nebo byla stránka přesunuta či smazána."
+
 msgid "To upload relationships, add a second file with the following columns"
 msgstr "Chceš-li nahrát vztahy, přidej druhý soubor s následujícími sloupci"
 
@@ -9789,6 +9853,9 @@ msgstr "Dosáhl/a jsi maximálního počtu postav, které lze vytvořit"
 
 msgid "Your user does not have the required permissions to access this page."
 msgstr "Tvůj uživatel nemá potřebná oprávnění pro přístup na tuto stránku."
+
+msgid "Assign the selected characters to participants? This cannot be undone."
+msgstr "Přiřadit vybrané postavy účastníkům? Tuto akci nelze vrátit zpět."
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
@@ -9853,6 +9920,9 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Tyto údaje se automaticky použijí při registraci na novou akci."
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
+msgstr "Nahrát tento archiv? Jeho fotky a videa budou přidány do alba."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -14623,6 +14693,14 @@ msgid ""
 msgstr ""
 "Tento vztah byl změněn v jiném okně: tvoje změny zde nebyly uloženy. "
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+"Aktuálně používáš účet %(name)s. Pokud máš mít přístup, požádej organizátora"
+" o přidělení potřebné role, nebo se přihlas jiným účtem."
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "

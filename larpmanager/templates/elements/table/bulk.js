@@ -27,7 +27,25 @@ window.addEventListener('DOMContentLoaded', function() {
 $("#main_bulk #exec").on("click", function(e) {
   e.preventDefault();
 
-    if (!window.lmTesting && !confirm("Confirm? Are you sure, like, really sure?")) return;
+  var payload = get_bulk_payload();
+  if (!payload.uuids.length) {
+    $.toast({
+      text: "{% filter escapejs %}{% trans "Select at least one row first" %}{% endfilter %}",
+      showHideTransition: 'slide',
+      icon: 'warning',
+      position: 'top-center',
+      textAlign: 'center',
+    });
+    return;
+  }
+
+  window.lmConfirm("{% filter escapejs %}{% trans "Apply this operation to the selected elements?" %}{% endfilter %}", function() {
+    run_bulk(payload);
+  });
+});
+
+// Collect the chosen operation, its target and the selected table rows.
+function get_bulk_payload() {
 
   // get operation
   var operation = $("#main_bulk #operation").val();
@@ -46,11 +64,14 @@ $("#main_bulk #exec").on("click", function(e) {
     });
   });
 
-  var payload = {
+  return {
     operation: operation,
     target: target,
     uuids: uuids
   };
+}
+
+function run_bulk(payload) {
 
   $.ajax({
     url: "{{ request.path }}",
@@ -72,7 +93,7 @@ $("#main_bulk #exec").on("click", function(e) {
       console.error("Error", xhr.status, xhr.responseText);
     }
   });
-});
+}
 
 
     });

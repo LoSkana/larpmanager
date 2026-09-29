@@ -19,7 +19,8 @@
             </p>
             <br />
             <p>
-                {% trans "When you want to close the collection, follow this link. A special redemption code will be generated, to be given to the recipient:" %}<a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Close the collection" %}</a>
+                {% trans "When you want to close the collection, follow this link. A special redemption code will be generated, to be given to the recipient:" %}<a href="{% url 'accounting_collection_close' coll.contribute_code %}"
+   data-confirm="{% trans "Close the collection? No further contributions will be possible." %}">{% trans "Close the collection" %}</a>
             </p>
             <br />
         {% endif %}
@@ -37,13 +38,3 @@
         {% endif %}
     </div>
 {% endblock content %}
-{% block js %}
-    <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-$('#close').click(function(){
-    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Do you confirm?" %}{% endfilter %}");
-})
-});
-    </script>
-{% endblock js %}

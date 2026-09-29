@@ -5408,6 +5408,30 @@ msgid ""
 "character's relationship back towards this one"
 msgstr ""
 
+msgid "Permission denied"
+msgstr ""
+
+msgid "You don't have permission to access this page."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are logged in as %(name)s. If you should have access, ask an organizer "
+"to grant you the required role, or log in with a different account."
+msgstr ""
+
+msgid "Log in to access this page."
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "We're sorry, we couldn't find the page you were looking for..."
+msgstr ""
+
+msgid "The link may be outdated, or the page may have been moved or deleted."
+msgstr ""
+
 msgid "Activation failed"
 msgstr ""
 
@@ -5490,7 +5514,7 @@ msgstr ""
 msgid "View the complete list of our events!"
 msgstr ""
 
-msgid "Are you sure?"
+msgid "Obtain the selected ability?"
 msgstr ""
 
 msgid "All"
@@ -5670,6 +5694,9 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
+msgid "Go to the home page"
+msgstr ""
+
 msgid "Enter an element name to insert its reference code"
 msgstr ""
 
@@ -5718,7 +5745,7 @@ msgstr ""
 msgid "Confirmation delete"
 msgstr ""
 
-msgid "Attention: the form contains errors in the following fields:"
+msgid "Attention: the form contains errors, please correct them:"
 msgstr ""
 
 msgid "These fields are required"
@@ -6338,7 +6365,7 @@ msgstr ""
 msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr ""
 
-msgid "Confirm your choices?"
+msgid "Confirm your casting preferences?"
 msgstr ""
 
 msgid "No characters found"
@@ -7632,7 +7659,7 @@ msgstr ""
 msgid "Send a bulk email to event's participants"
 msgstr ""
 
-msgid "Are you really sure?"
+msgid "Send this email to all the selected recipients?"
 msgstr ""
 
 msgid "Result of the bulk email send"
@@ -8009,7 +8036,14 @@ msgstr ""
 msgid "Next:"
 msgstr ""
 
+#, python-format
+msgid "Permanently delete %(name)s?"
+msgstr ""
+
 msgid "Show inactive"
+msgstr ""
+
+msgid "Confirm this payment?"
 msgstr ""
 
 msgid "Welcome to the dashboard of your organization!"
@@ -8423,6 +8457,9 @@ msgid ""
 "redemption code will be generated, to be given to the recipient:"
 msgstr ""
 
+msgid "Close the collection? No further contributions will be possible."
+msgstr ""
+
 msgid "Close the collection"
 msgstr ""
 
@@ -8641,6 +8678,9 @@ msgid ""
 "format):"
 msgstr ""
 
+msgid "Did you check the required data properly?"
+msgstr ""
+
 msgid "Confirmation of registration request"
 msgstr ""
 
@@ -8713,9 +8753,6 @@ msgstr ""
 msgid ""
 "The payment of your membership fee for this year has NOT been received: it "
 "is required to take part in events and the organization's meetings."
-msgstr ""
-
-msgid "Did you check the required data properly?"
 msgstr ""
 
 msgid "Manage which organizations can access your personal data"
@@ -8936,6 +8973,9 @@ msgstr ""
 msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 
+msgid "Issue this refund to the participant?"
+msgstr ""
+
 msgid "Cancellations"
 msgstr ""
 
@@ -8978,6 +9018,9 @@ msgstr ""
 msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 
+msgid "Submit this refund request?"
+msgstr ""
+
 msgid "Track all external income entries recorded for this event"
 msgstr ""
 
@@ -9004,6 +9047,9 @@ msgstr ""
 msgid ""
 "Select a zip file for upload. Directories will become albums, photos and the "
 "videos inside will be placed in the corresponding albums."
+msgstr ""
+
+msgid "Upload this archive? Its photos and videos will be added to the album."
 msgstr ""
 
 msgid "Event navigation"
@@ -9065,6 +9111,9 @@ msgid "Character already assigned, not selectable"
 msgstr ""
 
 msgid "Preference not valid"
+msgstr ""
+
+msgid "Assign the selected characters to participants? This cannot be undone."
 msgstr ""
 
 msgid "Assign selected characters to participants."
@@ -10513,6 +10562,9 @@ msgid ""
 "organization?"
 msgstr ""
 
+msgid "Attention: the form contains errors, please correct them."
+msgstr ""
+
 msgid "Please correct the error below."
 msgstr ""
 
@@ -10559,6 +10611,30 @@ msgid "Move up"
 msgstr ""
 
 msgid "Move down"
+msgstr ""
+
+msgid "Nothing here yet."
+msgstr ""
+
+msgid "No results match your search."
+msgstr ""
+
+msgid "Showing _START_ to _END_ of _TOTAL_ entries"
+msgstr ""
+
+msgid "No entries"
+msgstr ""
+
+msgid "(filtered from _MAX_ total entries)"
+msgstr ""
+
+msgid "_MENU_ entries per page"
+msgstr ""
+
+msgid "Search:"
+msgstr ""
+
+msgid "You have unsaved changes. Close without saving?"
 msgstr ""
 
 msgid "Writing"

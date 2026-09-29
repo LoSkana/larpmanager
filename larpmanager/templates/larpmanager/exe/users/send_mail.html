@@ -12,9 +12,7 @@
 {% block js %}
     <script>window.addEventListener('DOMContentLoaded', function() {
 $(function() {
-    $('form').on('submit', function() {
-        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
-    });
+    $('#main_form').attr('data-confirm', '{% filter escapejs %}{% trans "Send this email to all the selected recipients?" %}{% endfilter %}');
 });
 });
     </script>
