@@ -748,7 +748,8 @@ dialog::backdrop {
   .popup_confirm {
     max-width: 90vw;
   }
-  
+}
+
 /* Accessibility panel */
 
 #a11y-dialog :focus-visible {
