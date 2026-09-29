@@ -95,7 +95,12 @@ window.closeLmModal = function() {
 
 // Open the collapsed sections containing a form field and scroll to it.
 window.show_form_field = function(fieldId) {
-    const row = $('#' + fieldId + '_tr');
+    // forms not rendered by the shared templates have no field row id
+    let row = $('#' + fieldId + '_tr');
+    if (!row.length) {
+        const field = $('#' + fieldId);
+        row = field.closest('tr').length ? field.closest('tr') : field;
+    }
     if (!row.length) return;
     row.parents('.form_container.hide').removeClass('hide').show();
     $('.my_toggle').each(function() { syncToggleAria(this); });
@@ -137,18 +142,24 @@ window.lmConfirm = function(message, onConfirm) {
 // Track unsaved user edits in the main edit forms.
 window.lmFormDirty = false;
 
+// Last submit of the main edit forms, whose navigation leaves without warning.
+let lmFormSubmit = null;
+
+function markFormDirty() {
+    window.lmFormDirty = true;
+    lmFormSubmit = null;
+}
+
 $(document).on('input change select2:select select2:unselect', '#main_form, #manage_form', function(e) {
     // ignore changes triggered by scripts
-    if (e.originalEvent || e.type.startsWith('select2')) window.lmFormDirty = true;
+    if (e.originalEvent || e.type.startsWith('select2')) markFormDirty();
 });
 
 // Rich text editors inside the main edit forms mark them dirty too.
 function trackEditorDirty(editor) {
     const element = editor.getElement();
     if (!element || !element.closest('#main_form, #manage_form')) return;
-    editor.on('input change undo redo', function() {
-        window.lmFormDirty = true;
-    });
+    editor.on('input change undo redo', markFormDirty);
 }
 
 window.addEventListener('load', function() {
@@ -162,6 +173,8 @@ window.addEventListener('load', function() {
 // Warn before leaving a page with unsaved edits, unless drafts are kept by autosave.
 window.addEventListener('beforeunload', function(e) {
     if (!window.lmFormDirty || window.lmTesting || window.lmDraftAutosave) return;
+    // checked now, so handlers that cancel the submit after it was recorded are honored
+    if (lmFormSubmit && !lmFormSubmit.isDefaultPrevented()) return;
     e.preventDefault();
     e.returnValue = '';
 });
@@ -212,9 +225,9 @@ $(document).on('submit', 'form[data-confirm]', function(e) {
     });
 });
 
-// Edits count as saved only once the submit actually proceeds.
+// Edits stay unsaved until the page actually navigates away with the submit.
 $(document).on('submit', '#main_form, #manage_form', function(e) {
-    if (!e.isDefaultPrevented()) window.lmFormDirty = false;
+    lmFormSubmit = e;
 });
 
 /**
