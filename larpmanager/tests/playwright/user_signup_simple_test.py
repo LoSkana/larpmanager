@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
-    delete_modal, expand_options, sidebar
+    delete_modal, expand_options, sidebar, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -108,6 +108,8 @@ def help_questions(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/manage/questions")
     page.get_by_role("link", name="Close", exact=True).click()
+    with page.expect_navigation():
+        get_modal_iframe(page).get_by_role("button", name="Confirm").click(force=True)
     page.get_by_role("link", name="Show closed questions").click()
     submit_confirm(page)
 
