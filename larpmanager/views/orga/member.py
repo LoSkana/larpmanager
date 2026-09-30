@@ -414,7 +414,7 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str
 
     member = get_member(member_uuid)
     # Get the most recent help question for this member and run
-    h = (
+    question = (
         HelpQuestion.objects.filter(
             member_id=member.id,
             association_id=context["association_id"],
@@ -424,9 +424,10 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str
         .first()
     )
 
-    # Mark the question as closed and save
-    h.closed = True
-    h.save()
+    # Mark the question as closed and save if it exists
+    if question:
+        question.closed = True
+        question.save()
 
     return redirect("orga_questions", event_slug=event_slug)
 

@@ -91,6 +91,7 @@ from larpmanager.utils.io.pdf import (
     print_volunteer_registry,
     return_pdf,
 )
+from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.utils.security.csv_validation import SanitizingCsvWriter
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
@@ -1341,6 +1342,7 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
 
 
 @login_required
+@confirm_post
 def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Close a help question for a member."""
     context = check_association_context(request, "exe_questions")
