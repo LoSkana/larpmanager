@@ -516,7 +516,7 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
             | Q(name__icontains=term)
             | Q(teaser__icontains=term)
             | Q(title__icontains=term)
-            | Q(pk__in=get_character_ids_by_concept(qs, term))
+            | Q(pk__in=get_character_ids_by_concept(context["event"].id, qs, term))
         )
 
     if exclude_uuids:

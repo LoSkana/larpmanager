@@ -758,13 +758,18 @@ def character_label(
     return label
 
 
-def get_character_concepts(event_id: int, character_ids: list[int] | None = None) -> dict[int, str]:
-    """Return character id to concept answer for the event; staff-only data, never expose to participants."""
-    question_ids = [
+def _get_concept_question_ids(event_id: int) -> list[int]:
+    """Return the ids of the event character concept questions."""
+    return [
         question["id"]
         for question in get_cached_writing_questions(event_id, QuestionApplicable.CHARACTER)
         if question["typ"] == WritingQuestionType.CONCEPT
     ]
+
+
+def get_character_concepts(event_id: int, character_ids: list[int] | None = None) -> dict[int, str]:
+    """Return character id to concept answer for the event; staff-only data, never expose to participants."""
+    question_ids = _get_concept_question_ids(event_id)
     if not question_ids:
         return {}
     answers = WritingAnswer.objects.filter(question_id__in=question_ids)
@@ -773,13 +778,10 @@ def get_character_concepts(event_id: int, character_ids: list[int] | None = None
     return dict(answers.values_list("element_id", "text"))
 
 
-def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> QuerySet:
-    """Return ids of the given characters whose concept answer contains the term."""
-    concept_questions = WritingQuestion.objects.filter(
-        typ=WritingQuestionType.CONCEPT, applicable=QuestionApplicable.CHARACTER
-    ).values("id")
+def get_character_ids_by_concept(event_id: int, characters: QuerySet[Character], term: str) -> QuerySet:
+    """Return ids of the given characters whose concept answer for the event contains the term."""
     return WritingAnswer.objects.filter(
-        question_id__in=concept_questions,
+        question_id__in=_get_concept_question_ids(event_id),
         text__icontains=term,
         element_id__in=characters.values("id"),
     ).values("element_id")
@@ -832,7 +834,13 @@ class EventCharacterS2:
         if not self.show_concept or not term:
             return filtered
         base = queryset if queryset is not None else self.get_queryset()
-        return base.filter(Q(pk__in=filtered.values("pk")) | Q(pk__in=get_character_ids_by_concept(base, term)))
+        # select2 rebuilds the widget from cache without self.event: read it from the queryset
+        event_id = base.values_list("event_id", flat=True).first()
+        if event_id is None:
+            return filtered
+        return base.filter(
+            Q(pk__in=filtered.values("pk")) | Q(pk__in=get_character_ids_by_concept(event_id, base, term))
+        )
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
