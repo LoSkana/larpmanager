@@ -618,7 +618,8 @@ def _load_preferences_columns(context: dict) -> None:
     """Load and configure column visibility preferences for registration list.
 
     Loads user's saved column visibility preferences from member configuration.
-    If no preferences are set, automatically enables the ticket column by default.
+    If no preferences are set, enables the ticket column (and additional tickets
+    column, if the feature is active) by default.
 
     Args:
         context: Context dictionary containing member, event, and reg_questions data
@@ -641,13 +642,16 @@ def _load_preferences_columns(context: dict) -> None:
     except (json.JSONDecodeError, ValueError):
         default_fields = []
 
-    # If user hasn't set preferences, automatically open ticket column by default
+    # If user hasn't set preferences, automatically open default columns
     if not default_fields:
-        # Find the ticket question ID to add to default fields
-        for question_uuid, question in context["reg_questions"].items():
-            if question["typ"] == "ticket":
-                default_fields.append(f".lq_{question_uuid}")
-                break
+        default_types = {"ticket"}
+        if "additional_tickets" in context.get("features", {}):
+            default_types.add("additional_tickets")
+        default_fields.extend(
+            f".lq_{question_uuid}"
+            for question_uuid, question in context["reg_questions"].items()
+            if question["typ"] in default_types
+        )
 
     context["default_fields"] = json.dumps(default_fields)
 
