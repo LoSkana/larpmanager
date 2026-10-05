@@ -24,6 +24,7 @@ import logging
 from decimal import Decimal
 from typing import Any
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import (
     Case,
     DecimalField,
@@ -57,6 +58,16 @@ from larpmanager.models.accounting import (
 from larpmanager.models.member import Membership
 
 logger = logging.getLogger(__name__)
+
+# ColumnControl search logic mapped to (ORM lookup, negated); unknown logics fall back to contains
+_SEARCH_LOGIC_LOOKUPS = {
+    "contains": ("icontains", False),
+    "notContains": ("icontains", True),
+    "equal": ("iexact", False),
+    "notEqual": ("iexact", True),
+    "starts": ("istartswith", False),
+    "ends": ("iendswith", False),
+}
 
 
 def paginate(
@@ -99,6 +110,12 @@ def paginate(
             context["table_name"] = f"{model_name}_{context['association_id']}"
         else:
             context["table_name"] = f"{model_name}_{context['run'].get_slug()}"
+
+        # Callback columns without a DB path cannot be sorted or searched
+        field_db_paths = context.get("field_db_paths", {})
+        context["unsortable_fields"] = [
+            field_name for field_name in context.get("callbacks", {}) if field_name not in field_db_paths
+        ]
 
         return render(request, template_name, context)
 
@@ -267,7 +284,7 @@ def _set_filtering(
     Args:
         context: Context dictionary containing fields and optional callbacks/afield
         queryset: Django queryset to filter
-        column_filters: Dictionary mapping column indices to filter values
+        column_filters: Dictionary mapping column indices to (search value, search logic) tuples
         field_names: List of field names available on the model
 
     Returns:
@@ -294,8 +311,12 @@ def _set_filtering(
         # Extract field and name from context fields
         field_name, _display_name = context["fields"][field_idx]
 
+        field_db_paths = context.get("field_db_paths", {})
+        # Explicit DB path override takes precedence
+        if field_name in field_db_paths:
+            search_fields = field_db_paths[field_name]
         # Handle special case for run field with search capability
-        if field_name == "run":
+        elif field_name == "run":
             field_name = "run__search"
             additional_field = context.get("afield")
             if additional_field:
@@ -303,12 +324,9 @@ def _set_filtering(
             # Use the constructed path directly, don't apply _get_filter_field
             filter_field = field_name
             search_fields = field_map.get(filter_field, [filter_field])
-        # Check if callback field has an explicit DB path override
+        # Callback fields without a DB path cannot be searched
         elif field_name in context.get("callbacks", {}):
-            field_db_paths = context.get("field_db_paths", {})
-            if field_name not in field_db_paths:
-                continue
-            search_fields = field_db_paths[field_name]
+            continue
         else:
             # Get the correct filter path (handles related fields via selrel)
             filter_field = _get_filter_field(field_names, field_name, context)
@@ -316,12 +334,19 @@ def _set_filtering(
             search_fields = field_map.get(filter_field, [filter_field])
 
         # Build OR query for all mapped fields with case-insensitive search
+        search_value, search_logic = filter_value
+        lookup, is_negated = _SEARCH_LOGIC_LOOKUPS.get(search_logic, ("icontains", False))
         q_filter = Q()
         for search_field in search_fields:
-            q_filter |= Q(**{f"{search_field}__icontains": filter_value})
+            # Choice fields are matched on their display label
+            choice_codes = _get_choice_codes(queryset.model, search_field, search_value, lookup)
+            if choice_codes is not None:
+                q_filter |= Q(**{f"{search_field}__in": choice_codes})
+            else:
+                q_filter |= Q(**{f"{search_field}__{lookup}": search_value})
 
         # Apply the filter to the queryset
-        queryset = queryset.filter(q_filter)
+        queryset = queryset.exclude(q_filter) if is_negated else queryset.filter(q_filter)
 
     return queryset
 
@@ -364,12 +389,12 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
             continue
         field_name, _display_name = context["fields"][field_idx]
 
-        # Skip callback fields unless an explicit DB path override is provided
-        if field_name in context.get("callbacks", {}):
-            field_db_paths = context.get("field_db_paths", {})
-            if field_name not in field_db_paths:
-                continue
+        # Explicit DB path override takes precedence; callback fields without one cannot be sorted
+        field_db_paths = context.get("field_db_paths", {})
+        if field_name in field_db_paths:
             mapped_fields = field_db_paths[field_name]
+        elif field_name in context.get("callbacks", {}):
+            continue
         else:
             # Map field name if transformation exists, otherwise use as-is
             mapped_fields = field_map.get(field_name, [field_name])
@@ -384,12 +409,37 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
     return ordering_fields
 
 
+def _get_choice_codes(model: type[Model], field_path: str, search_value: str, lookup: str) -> list | None:
+    """Return the choice codes whose label matches the search, or None if the path is not a choice field."""
+    field = None
+    for part in field_path.split("__"):
+        try:
+            # noinspection PyProtectedMember
+            field = model._meta.get_field(part)  # noqa: SLF001  # Django model metadata
+        except FieldDoesNotExist:
+            return None
+        if field.is_relation:
+            model = field.related_model
+
+    if field is None or field.is_relation or not field.choices:
+        return None
+
+    search_value = search_value.lower()
+    matchers = {
+        "iexact": lambda label: label == search_value,
+        "istartswith": lambda label: label.startswith(search_value),
+        "iendswith": lambda label: label.endswith(search_value),
+    }
+    matcher = matchers.get(lookup, lambda label: search_value in label)
+    return [code for code, label in field.flatchoices if matcher(str(label).lower())]
+
+
 def _get_field_map() -> dict[str, list[str]]:
     """Return field mapping for member-related queries."""
     return {"member": ["member__surname", "member__name"]}
 
 
-def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, str]]:
+def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, tuple[str, str]]]:
     """Extract pagination, ordering, and filtering parameters from DataTables request.
 
     Args:
@@ -400,7 +450,7 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
             - start: Starting record index for pagination
             - length: Number of records to return
             - order: List of column names with ordering prefixes ('-' for desc)
-            - filters: Dictionary mapping column names to search values
+            - filters: Dictionary mapping column names to (search value, search logic) tuples
 
     """
     # Extract pagination parameters
@@ -426,10 +476,11 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
         if column_name is None:
             break
 
-        # Get fixed search term for this column
-        search_value = request.POST.get(f"columns[{column_index}][search][fixed][0][term]")
-        if search_value and not search_value.startswith("function"):
-            filters[column_name] = search_value
+        # Get ColumnControl search term and logic for this column
+        search_value = request.POST.get(f"columns[{column_index}][columnControl][search][value]")
+        if search_value:
+            search_logic = request.POST.get(f"columns[{column_index}][columnControl][search][logic]", "contains")
+            filters[column_name] = (search_value, search_logic)
         column_index += 1
 
     return start, length, order, filters

@@ -502,6 +502,8 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "method": ["inv__method__name"],
                 "net": ["net"],
                 "trans": ["trans"],
+                "type": ["pay"],
+                "status": ["inv__status"],
             },
         },
     )
@@ -648,6 +650,8 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "orga_outflows_delete",
         },
     )
@@ -803,6 +807,8 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "orga_expenses_delete",
         },
     )
