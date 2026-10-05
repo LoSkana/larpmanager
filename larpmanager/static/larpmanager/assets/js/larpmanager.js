@@ -1353,9 +1353,9 @@ function data_tables() {
         var thList = $table.find('thead th');
         var disable_sort_columns = [];
 
-        // disable sort for empty thead th
+        // disable sort for empty thead th, and for columns not backed by the database
         thList.each(function (index) {
-            if ($(this).text().trim() === '') {
+            if ($(this).text().trim() === '' || $(this).attr('no_sort') !== undefined) {
                 disable_sort_columns.push(index);
             }
         });

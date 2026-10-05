@@ -1038,6 +1038,8 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
             "callbacks": {
                 "operation_type": lambda el: el.get_operation_type_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"operation_type": ["operation_type"]},
         }
     )
 

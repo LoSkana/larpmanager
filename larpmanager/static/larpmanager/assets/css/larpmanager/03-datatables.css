@@ -159,7 +159,7 @@ div.dtcc-dropdown div.dtcc-search > div div.dtcc-search-type-icon {
 }
 
 div.dtcc-dropdown {
-  background: rgba(var(--sec-rgb), 0.8) !important;
+  background: rgba(var(--sec-rgb), 1) !important;
 }
 
 div.dtcc-dropdown div.dtcc-search > div select,

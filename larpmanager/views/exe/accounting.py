@@ -142,6 +142,8 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             # Add delete view name for delete button
             "delete_view": "exe_outflows_delete",
         },
@@ -497,6 +499,8 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "exe_expenses_delete",
         },
     )
@@ -649,6 +653,16 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
                     if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
                     else ""
                 ),
+            },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "member": ["registration__member__surname", "registration__member__name"],
+                "method": ["inv__method__name"],
+                "run": ["registration__run__search"],
+                "type": ["pay"],
+                "status": ["inv__status"],
+                "net": ["net"],
+                "trans": ["trans"],
             },
             "delete_view": "exe_payments_delete",
         },
@@ -862,6 +876,8 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
                     else ""
                 ),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"status": ["status"]},
             "delete_view": "exe_refunds_delete",
         },
     )

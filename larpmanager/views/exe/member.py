@@ -1224,6 +1224,14 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
                 "run": lambda el: str(el.run) if el.run else "",
                 "skipped": format_email_skipped,
             },
+            # DB paths for related and callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "run": ["email_content__run__search"],
+                "subj": ["email_content__subj"],
+                "body": ["email_content__body"],
+                "sent": ["sent"],
+                "skipped": ["skipped"],
+            },
         },
     )
 
