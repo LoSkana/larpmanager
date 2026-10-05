@@ -778,10 +778,12 @@ def get_character_concepts(event_id: int, character_ids: list[int] | None = None
     return dict(answers.values_list("element_id", "text"))
 
 
-def get_character_ids_by_concept(event_id: int, characters: QuerySet[Character], term: str) -> QuerySet:
-    """Return ids of the given characters whose concept answer for the event contains the term."""
+def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> QuerySet:
+    """Return ids of the given characters whose concept answer contains the term."""
     return WritingAnswer.objects.filter(
-        question_id__in=_get_concept_question_ids(event_id),
+        question__typ=WritingQuestionType.CONCEPT,
+        question__applicable=QuestionApplicable.CHARACTER,
+        question__deleted__isnull=True,
         text__icontains=term,
         element_id__in=characters.values("id"),
     ).values("element_id")
@@ -793,6 +795,8 @@ class EventCharacterS2:
     show_concept: ClassVar[bool] = False
 
     _concepts: dict[int, str] | None = None
+
+    _config_context: dict | None = None
 
     search_fields: ClassVar[list] = [
         "number__icontains",
@@ -823,7 +827,9 @@ class EventCharacterS2:
 
     def label_from_instance(self, obj: Character) -> str:
         """Return character label with title (and concept for staff widgets)."""
-        show_number = get_event_config(obj.event_id, "writing_number")
+        if self._config_context is None:
+            self._config_context = {}
+        show_number = get_event_config(obj.event_id, "writing_number", context=self._config_context)
         return character_label(obj.number, obj.name, obj.title, self.get_concept(obj), show_number=show_number)
 
     def filter_queryset(
@@ -834,13 +840,7 @@ class EventCharacterS2:
         if not self.show_concept or not term:
             return filtered
         base = queryset if queryset is not None else self.get_queryset()
-        # select2 rebuilds the widget from cache without self.event: read it from the queryset
-        event_id = base.values_list("event_id", flat=True).first()
-        if event_id is None:
-            return filtered
-        return base.filter(
-            Q(pk__in=filtered.values("pk")) | Q(pk__in=get_character_ids_by_concept(event_id, base, term))
-        )
+        return filtered | base.filter(pk__in=get_character_ids_by_concept(base, term))
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
