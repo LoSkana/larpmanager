@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_cache, has_multiple_exp_systems
 from larpmanager.forms.experience import OrgaDeliveryExpForm
+from larpmanager.forms.utils import character_label, get_character_concepts, get_character_ids_by_concept
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
@@ -489,12 +490,12 @@ def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_
 
 @login_required
 def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse:
-    """Return up to 25 characters matching a search term for the dual-list widget."""
+    """Return up to 25 characters matching a search term for the dual-list widget (staff only)."""
     if request.method != "POST":
         return JsonResponse({"res": []})
 
     try:
-        context = get_event_context(request, event_slug)
+        context = check_event_context(request, event_slug)
     except (Http404, PermissionDenied, UserPermissionError, FeatureError):
         return JsonResponse({"res": []}, status=403)
 
@@ -502,11 +503,17 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
     exclude_raw = request.POST.get("exclude", "")
     exclude_uuids = [u.strip() for u in exclude_raw.split(",") if u.strip()]
 
-    qs = get_event_elements(context["event"].id, Character, context=context).only("id", "uuid", "name", "number")
+    qs = get_event_elements(context["event"].id, Character, context=context).only(
+        "id", "uuid", "name", "number", "title"
+    )
 
     if term:
         qs = qs.filter(
-            Q(number__icontains=term) | Q(name__icontains=term) | Q(teaser__icontains=term) | Q(title__icontains=term)
+            Q(number__icontains=term)
+            | Q(name__icontains=term)
+            | Q(teaser__icontains=term)
+            | Q(title__icontains=term)
+            | Q(pk__in=get_character_ids_by_concept(qs, term))
         )
 
     if exclude_uuids:
@@ -514,8 +521,16 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
 
     show_number = get_event_config(context["event"].id, "writing_number", context=context)
 
-    qs = qs.order_by("name")[:25]
-    res = [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+    qs = list(qs.order_by("name")[:25])
+    concepts = get_character_concepts(context["event"].id, [ch.pk for ch in qs])
+    res = [
+        (
+            str(ch.uuid),
+            character_label(ch.number, ch.name, ch.title, concepts.get(ch.pk, ""), show_number=show_number),
+            ch.pk,
+        )
+        for ch in qs
+    ]
     return JsonResponse({"res": res})
 
 

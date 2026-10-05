@@ -841,6 +841,9 @@ msgstr "Uzavírání"
 msgid "Columns"
 msgstr "Sloupce"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Potvrdit"
 
@@ -14492,6 +14495,13 @@ msgid ""
 msgstr ""
 "Umožňuje slevu 'přiveď kamaráda'. Účastník může poskytnout svůj jedinečný "
 "kód novému registrovanému, čímž oběma poskytne slevu"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Zapne pole 'concept', krátký text skrytý před účastníky, který se zobrazí "
+"organizátorům vedle jména postavy při výběru postav."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

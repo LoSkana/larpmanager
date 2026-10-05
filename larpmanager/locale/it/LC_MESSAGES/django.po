@@ -841,6 +841,9 @@ msgstr "Chiusura"
 msgid "Columns"
 msgstr "Colonne"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Conferma"
 
@@ -14942,6 +14945,14 @@ msgid ""
 msgstr ""
 "Abilita lo sconto 'porta un amico'. Un partecipante può fornire il proprio "
 "codice univoco a un nuovo iscritto, garantendo a entrambi un prezzo scontato"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Abilita il campo 'concept', un breve testo nascosto ai partecipanti, "
+"mostrato allo staff accanto al nome del personaggio durante la selezione dei"
+" personaggi."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

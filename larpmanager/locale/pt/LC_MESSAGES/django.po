@@ -841,6 +841,9 @@ msgstr "Fecho"
 msgid "Columns"
 msgstr "Colunas"
 
+msgid "Concept"
+msgstr "Conceito"
+
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -14791,6 +14794,13 @@ msgid ""
 msgstr ""
 "Ativa o desconto 'traz um amigo'. Um participante pode fornecer o seu código"
 " único a uma nova pessoa inscrita, concedendo um preço com desconto a ambos"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Ativa o campo 'concept', um texto curto oculto aos participantes, mostrado à"
+" staff ao lado do nome da personagem quando selecionas personagens."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

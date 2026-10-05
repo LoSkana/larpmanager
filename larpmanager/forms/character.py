@@ -41,14 +41,15 @@ from larpmanager.forms.base import BaseModelForm, get_question_key
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     CharacterDualListWidget,
-    EventCharacterS2WidgetUuid,
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
+    OrgaEventCharacterS2WidgetUuid,
     RunStaffS2Widget,
     S2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
+    get_character_concepts,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.base import Feature
@@ -800,6 +801,9 @@ class OrgaCharacterForm(CharacterForm):
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
             rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
+        concepts = get_character_concepts(self.params["event"].id, [entry["char"].id for entry in rel_by_uuid.values()])
+        for entry in rel_by_uuid.values():
+            entry["concept"] = concepts.get(entry["char"].id, "")
         self.params["relationships"] = rel_by_uuid
 
     def _characters_relationships(self) -> None:
@@ -818,7 +822,7 @@ class OrgaCharacterForm(CharacterForm):
 
         context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
         context["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
-        widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
+        widget = OrgaEventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")
 
@@ -1404,6 +1408,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 if choice.value in visible_choices
             )
 
+        # concept is staff-only: visibility and status can't be changed
+        if self.instance.typ == WritingQuestionType.CONCEPT:
+            self.delete_field("visibility")
+            self.delete_field("status")
+
         self.check_applicable = self.params["writing_typ"]
 
         self._init_requirements()
@@ -1497,6 +1506,9 @@ class OrgaWritingQuestionForm(BaseModelForm):
         # Only set applicable for new instances
         if not instance.pk:
             instance.applicable = self.params["writing_typ"]
+        if instance.typ == WritingQuestionType.CONCEPT:
+            instance.visibility = QuestionVisibility.HIDDEN
+            instance.status = QuestionStatus.HIDDEN
         if commit:
             instance.save()
             # the instance was saved by hand: the m2m fields are still pending

@@ -803,6 +803,12 @@ class OrgaConfigForm(ConfigForm):
         config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name.")
         self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
+        config_label = _("Concept")
+        config_help_text = _(
+            "Enables field 'concept', a short text hidden from participants, shown to staff next to the character's name when selecting characters."
+        )
+        self.add_configs("writing_concept", ConfigType.BOOL, config_label, config_help_text)
+
         config_label = _("Number")
         config_help_text = _("Enables the 'number' field, a unique numerical ID used to reference the character.")
         self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)

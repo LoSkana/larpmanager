@@ -339,7 +339,7 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
         _orga_writing_choices(context, element_ids, element_mapping, event, question, res)
 
     # Handle text and computed questions
-    elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED]:
+    elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED, WritingQuestionType.CONCEPT]:
         _orga_writing_answers(element_ids, element_mapping, max_length, popup, question, res)
 
     # Handle file questions: render a download link from the stored storage path

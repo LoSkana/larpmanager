@@ -39,6 +39,7 @@ from xhtml2pdf.w3c.cssParser import CSSParseError
 
 from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
@@ -47,7 +48,13 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, AbilityTypeExp, SystemExp
-from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingOption,
+    WritingQuestion,
+    WritingQuestionType,
+)
 from larpmanager.models.inventory import PoolLabel, PoolType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -739,8 +746,46 @@ class TransferTargetRunS2Widget(S2Widget):
         )
 
 
+def character_label(
+    number: int | None, name: str, title: str = "", concept: str = "", *, show_number: bool = True
+) -> str:
+    """Return the character label used in selectors, with optional number prefix, title and concept."""
+    label = f"#{number} {name}" if show_number else name
+    if title:
+        label += f" - {title}"
+    if concept:
+        label += f" ({concept})"
+    return label
+
+
+def get_character_concepts(event_id: int, character_ids: list[int] | None = None) -> dict[int, str]:
+    """Return character id to concept answer for the event; staff-only data, never expose to participants."""
+    question_ids = [
+        question["id"]
+        for question in get_cached_writing_questions(event_id, QuestionApplicable.CHARACTER)
+        if question["typ"] == WritingQuestionType.CONCEPT
+    ]
+    if not question_ids:
+        return {}
+    answers = WritingAnswer.objects.filter(question_id__in=question_ids)
+    if character_ids is not None:
+        answers = answers.filter(element_id__in=character_ids)
+    return dict(answers.values_list("element_id", "text"))
+
+
+def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> QuerySet:
+    """Return ids of the given characters whose concept answer contains the term."""
+    return WritingAnswer.objects.filter(
+        question__typ=WritingQuestionType.CONCEPT,
+        text__icontains=term,
+        element_id__in=characters.values("id"),
+    ).values("element_id")
+
+
 class EventCharacterS2:
-    """Represents EventCharacterS2 model."""
+    """Character selector mixin; set show_concept only on staff-facing widgets."""
+
+    show_concept: ClassVar[bool] = False
 
     search_fields: ClassVar[list] = [
         "number__icontains",
@@ -761,6 +806,30 @@ class EventCharacterS2:
             .order_by("number")
         )
 
+    def get_concept(self, obj: Character) -> str:
+        """Return the character concept if this widget shows it, loading the event concepts once."""
+        if not self.show_concept:
+            return ""
+        concepts = self.__dict__.get("_concepts")
+        if concepts is None:
+            concepts = get_character_concepts(obj.event_id)
+            self._concepts = concepts
+        return concepts.get(obj.id, "")
+
+    def label_from_instance(self, obj: Character) -> str:
+        """Return character name with title (and concept for staff widgets)."""
+        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj), show_number=False)
+
+    def filter_queryset(
+        self, request: Any, term: str, queryset: QuerySet | None = None, **dependent_fields: Any
+    ) -> QuerySet:
+        """Filter by search fields, also matching the concept for staff widgets."""
+        filtered = super().filter_queryset(request, term, queryset, **dependent_fields)
+        if not self.show_concept or not term:
+            return filtered
+        base = queryset if queryset is not None else self.get_queryset()
+        return base.filter(Q(pk__in=filtered.values("pk")) | Q(pk__in=get_character_ids_by_concept(base, term)))
+
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
     """Represents EventCharacterS2WidgetMulti model."""
@@ -777,6 +846,8 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
     """
 
     template_name = "forms/widgets/character_dual.html"
+
+    show_concept: ClassVar[bool] = True
 
     class Media:
         js: ClassVar[list] = ["larpmanager/assets/js/character-dual.js"]
@@ -798,11 +869,21 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         if not val_list:
             return []
         show_number = get_event_config(self.event.id, "writing_number")
-        base_qs = get_event_elements(self.event.id, Character).only("id", "uuid", "name", "number").order_by("name")
+        base_qs = (
+            get_event_elements(self.event.id, Character).only("id", "uuid", "name", "number", "title").order_by("name")
+        )
         qs = base_qs.filter(uuid__in=val_list)
         if not qs.exists():
             qs = base_qs.filter(pk__in=val_list)
-        return [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+        concepts = get_character_concepts(self.event.id, [ch.pk for ch in qs])
+        return [
+            (
+                str(ch.uuid),
+                character_label(ch.number, ch.name, ch.title, concepts.get(ch.pk, ""), show_number=show_number),
+                ch.pk,
+            )
+            for ch in qs
+        ]
 
     def get_context(self, name: str, value: list, attrs: dict | None) -> dict:
         """Build template context for the dual-list widget."""
@@ -824,12 +905,18 @@ class EventCharacterS2Widget(EventCharacterS2, S2Widget):
     """Represents EventCharacterS2Widget model."""
 
 
+class OrgaEventCharacterS2Widget(EventCharacterS2Widget):
+    """Staff-only character select2 widget that also shows and searches the concept."""
+
+    show_concept: ClassVar[bool] = True
+
+
 class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
     """Select2 widget for characters that returns UUID instead of ID as value."""
 
     def label_from_instance(self, obj: Character) -> str:
         """Return formatted label for character instance."""
-        return f"#{obj.number} {obj.name}"
+        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj))
 
     def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
         """Override to return UUID instead of ID in select2 results."""
@@ -837,6 +924,12 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
             "id": obj.uuid,
             "text": self.label_from_instance(obj),
         }
+
+
+class OrgaEventCharacterS2WidgetUuid(EventCharacterS2WidgetUuid):
+    """Staff-only UUID character select2 widget that also shows and searches the concept."""
+
+    show_concept: ClassVar[bool] = True
 
 
 class GuildInviteS2Widget(EventCharacterS2WidgetUuid):

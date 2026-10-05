@@ -1396,6 +1396,14 @@ msgid ""
 "name."
 msgstr ""
 
+msgid "Concept"
+msgstr ""
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+
 msgid "Number"
 msgstr ""
 

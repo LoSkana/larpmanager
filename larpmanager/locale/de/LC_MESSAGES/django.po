@@ -841,6 +841,9 @@ msgstr "Schließung"
 msgid "Columns"
 msgstr "Spalten"
 
+msgid "Concept"
+msgstr "Konzept"
+
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -15081,6 +15084,14 @@ msgstr ""
 "Ermöglicht die Ermäßigung 'Bring a Friend'. Ein Teilnehmer kann seinen "
 "einmaligen Code an einen neuen Teilnehmer weitergeben, so dass beide einen "
 "ermäßigten Preis erhalten"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Aktiviert das Feld 'concept', einen kurzen Text, den Teilnehmende nicht "
+"sehen und der dem Staff bei der Auswahl von Charakteren neben dem Namen des "
+"Charakters angezeigt wird."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

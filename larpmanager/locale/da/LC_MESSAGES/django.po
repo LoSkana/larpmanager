@@ -841,6 +841,9 @@ msgstr "Lukning"
 msgid "Columns"
 msgstr "Kolonner"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Bekræft"
 
@@ -14615,6 +14618,13 @@ msgid ""
 msgstr ""
 "Aktiverer 'tag en ven med'-rabat. En deltager kan give sin unikke kode til "
 "en ny tilmeldt, så begge får en rabat"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Aktiverer feltet 'concept', en kort tekst skjult for deltagerne, som vises "
+"for staff ved siden af karakterens navn, når du vælger karakterer."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

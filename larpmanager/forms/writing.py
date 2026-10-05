@@ -33,6 +33,8 @@ from larpmanager.forms.utils import (
     EventCharacterS2Widget,
     RunStaffS2Widget,
     WritingTinyMCE,
+    character_label,
+    get_character_concepts,
 )
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, ProgressStep
@@ -327,6 +329,7 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
                     "character__name",
                     "text",
                     "character__uuid",
+                    "character__title",
                 ),
             )
             self.init_characters = [ch[0] for ch in plot_characters_data]
@@ -344,8 +347,9 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
+            concepts = get_character_concepts(self.params["event"].id, [ch[0] for ch in plot_characters_data])
             for ch in plot_characters_data:
-                char = f"#{ch[1]} {ch[2]}"
+                char = character_label(ch[1], ch[2], ch[5], concepts.get(ch[0], ""))
                 field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(

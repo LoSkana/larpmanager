@@ -35,7 +35,7 @@ from django.views.decorators.http import require_POST
 from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
-from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
+from larpmanager.forms.utils import EventTraitS2Widget, OrgaEventCharacterS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import Run
@@ -809,7 +809,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
         return
 
     # Select appropriate widget class based on type
-    widget_class = EventTraitS2Widget if model_type == Trait else EventCharacterS2Widget
+    widget_class = EventTraitS2Widget if model_type == Trait else OrgaEventCharacterS2Widget
 
     # Initialize widget with event configuration
     widget = widget_class(attrs={"id": "char_finder"})

@@ -841,6 +841,9 @@ msgstr "Stänger"
 msgid "Columns"
 msgstr "Kolumner"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Bekräfta"
 
@@ -14678,6 +14681,13 @@ msgid ""
 msgstr ""
 "Möjliggör rabatt för 'ta med en vän'. En deltagare kan ge sin unika kod till"
 " en ny anmälare, vilket ger båda ett rabatterat pris"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Aktiverar fältet 'koncept', en kort text som är dold för deltagarna och "
+"visas för staffen bredvid karaktärens namn när du väljer karaktärer."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

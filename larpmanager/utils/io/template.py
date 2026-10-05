@@ -44,6 +44,7 @@ TEMPLATE_VALUE_MAPPING = {
     WritingQuestionType.COVER: "element cover (utils path)",
     WritingQuestionType.FACTIONS: "faction names (comma separated)",
     WritingQuestionType.TITLE: "title short text",
+    WritingQuestionType.CONCEPT: "concept short text (staff only)",
     WritingQuestionType.MIRROR: "name of mirror character",
     WritingQuestionType.HIDE: "hide (true or false)",
     WritingQuestionType.LOCKED: "locked (true or false)",
