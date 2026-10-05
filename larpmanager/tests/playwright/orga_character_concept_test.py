@@ -112,7 +112,7 @@ def concept_relationships(page: Any) -> None:
     edit_iframe.locator("#id_name").fill("prova")
     edit_iframe.locator("#select2-new_rel_select-container").click()
     edit_iframe.get_by_role("searchbox").fill("spy")
-    option = edit_iframe.get_by_role("option", name="#1 Test Character (secret spy)")
+    option = edit_iframe.get_by_role("option", name="Test Character (secret spy)")
     option.wait_for(state="visible")
     option.click()
     expect(edit_iframe.locator("#form_relationships")).to_contain_text("Test Character (secret spy)")
@@ -139,7 +139,7 @@ def concept_plots(page: Any, live_server: Any) -> None:
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator(".char-dual-sel-list")).to_contain_text("Test Character (secret spy)")
-    expect(edit_iframe.locator("#main_form")).to_contain_text("#1 Test Character (secret spy)")
+    expect(edit_iframe.locator("#main_form")).to_contain_text("Test Character (secret spy)")
 
 
 def concept_hidden_to_players(page: Any, live_server: Any) -> None:

@@ -13,10 +13,7 @@
     <div id="form_relationships" class="form_container auto_resize">
         {% for key, item in relationships.items %}
             <h3>
-                <a href="{% url 'orga_characters_edit' run.get_slug item.char.uuid %}">{{ item.char }}
-                    {% if item.char.title %}- {{ item.char.title }}{% endif %}
-                    {% if item.concept %}({{ item.concept }}){% endif %}
-                </a>
+                <a href="{% url 'orga_characters_edit' run.get_slug item.char.uuid %}">{{ item.label }}</a>
             </h3>
             <table id="rel_{{ key }}_tr">
                 <tr>

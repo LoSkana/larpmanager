@@ -49,6 +49,7 @@ from larpmanager.forms.utils import (
     S2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
+    character_label,
     get_character_concepts,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
@@ -801,9 +802,14 @@ class OrgaCharacterForm(CharacterForm):
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
             rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
-        concepts = get_character_concepts(self.params["event"].id, [entry["char"].id for entry in rel_by_uuid.values()])
+        event_id = self.params["event"].id
+        concepts = get_character_concepts(event_id, [entry["char"].id for entry in rel_by_uuid.values()])
+        show_number = get_event_config(event_id, "writing_number")
         for entry in rel_by_uuid.values():
-            entry["concept"] = concepts.get(entry["char"].id, "")
+            char = entry["char"]
+            entry["label"] = character_label(
+                char.number, char.name, char.title, concepts.get(char.id, ""), show_number=show_number
+            )
         self.params["relationships"] = rel_by_uuid
 
     def _characters_relationships(self) -> None:

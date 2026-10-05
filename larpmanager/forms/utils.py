@@ -818,8 +818,9 @@ class EventCharacterS2:
         return concepts.get(obj.id, "")
 
     def label_from_instance(self, obj: Character) -> str:
-        """Return character name with title (and concept for staff widgets)."""
-        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj), show_number=False)
+        """Return character label with title (and concept for staff widgets)."""
+        show_number = get_event_config(obj.event_id, "writing_number")
+        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj), show_number=show_number)
 
     def filter_queryset(
         self, request: Any, term: str, queryset: QuerySet | None = None, **dependent_fields: Any
@@ -914,10 +915,6 @@ class OrgaEventCharacterS2Widget(EventCharacterS2Widget):
 
 class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
     """Select2 widget for characters that returns UUID instead of ID as value."""
-
-    def label_from_instance(self, obj: Character) -> str:
-        """Return formatted label for character instance."""
-        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj))
 
     def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
         """Override to return UUID instead of ID in select2 results."""

@@ -26,6 +26,7 @@ from django.db import transaction
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import (
@@ -348,8 +349,9 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
         self.field_link = {}
         if self.instance.pk:
             concepts = get_character_concepts(self.params["event"].id, [ch[0] for ch in plot_characters_data])
+            show_number = get_event_config(self.params["event"].id, "writing_number")
             for ch in plot_characters_data:
-                char = character_label(ch[1], ch[2], ch[5], concepts.get(ch[0], ""))
+                char = character_label(ch[1], ch[2], ch[5], concepts.get(ch[0], ""), show_number=show_number)
                 field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
