@@ -334,6 +334,13 @@ class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
         """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
 
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save the question, forcing concept questions to stay hidden from participants."""
+        if self.typ == WritingQuestionType.CONCEPT:
+            self.visibility = QuestionVisibility.HIDDEN
+            self.status = QuestionStatus.HIDDEN
+        super().save(*args, **kwargs)
+
     def show(self) -> dict[str, Any]:
         """Return JSON-serializable dictionary of object attributes."""
         js = {}

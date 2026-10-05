@@ -1461,6 +1461,13 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
                     continue
 
+                # Concept applies only to characters
+                if (
+                    choice[0] == WritingQuestionType.CONCEPT
+                    and self.params["writing_typ"] != QuestionApplicable.CHARACTER
+                ):
+                    continue
+
             # Handle character type 'c' - requires 'exp_rules' config
             elif choice[0] == "c":
                 if not get_event_config(self.params["event"].id, "exp_rules"):
@@ -1506,9 +1513,6 @@ class OrgaWritingQuestionForm(BaseModelForm):
         # Only set applicable for new instances
         if not instance.pk:
             instance.applicable = self.params["writing_typ"]
-        if instance.typ == WritingQuestionType.CONCEPT:
-            instance.visibility = QuestionVisibility.HIDDEN
-            instance.status = QuestionStatus.HIDDEN
         if commit:
             instance.save()
             # the instance was saved by hand: the m2m fields are still pending

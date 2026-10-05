@@ -777,6 +777,7 @@ def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> 
     """Return ids of the given characters whose concept answer contains the term."""
     return WritingAnswer.objects.filter(
         question__typ=WritingQuestionType.CONCEPT,
+        question__applicable=QuestionApplicable.CHARACTER,
         text__icontains=term,
         element_id__in=characters.values("id"),
     ).values("element_id")

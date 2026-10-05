@@ -1086,7 +1086,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             )
 
         # Handle simple text input fields
-        elif question["typ"] in [BaseQuestionType.TEXT, WritingQuestionType.TITLE, WritingQuestionType.CONCEPT]:
+        elif question["typ"] in [BaseQuestionType.TEXT, WritingQuestionType.CONCEPT]:
             self.init_text(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle multi-line text areas
