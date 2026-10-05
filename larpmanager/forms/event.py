@@ -1930,9 +1930,16 @@ class ExeEventForm(OrgaEventForm):
 
     page_title = _("Events")
 
+    class Meta(OrgaEventForm.Meta):
+        fields = (*OrgaEventForm.Meta.fields, "cover")
+
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize ExeEventForm with template event selection."""
+        """Initialize ExeEventForm with template event selection and cover upload on creation."""
         super().__init__(*args, **kwargs)
+
+        # Cover upload is offered only on creation; later edits go through appearance
+        if self.instance.pk:
+            self.delete_field("cover")
 
         if not self.instance.pk:
             if "template" in self.params["features"]:

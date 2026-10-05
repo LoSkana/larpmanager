@@ -56,7 +56,13 @@ from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_l
 from larpmanager.utils.core.copy import copy, get_copy_sections, read_copy_picks
 from larpmanager.utils.core.exceptions import RedirectError, UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit, save_log
-from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.edit.orga import (
+    OrgaAction,
+    check_registration_form_type,
+    orga_delete,
+    orga_edit,
+    orga_new,
+)
 from larpmanager.utils.io.download import _get_column_names, prepare_backup, zip_exports
 from larpmanager.utils.io.restore import execute_restore, load_restore_temp, preview_restore, save_restore_temp
 from larpmanager.utils.io.template import build_upload_template
@@ -698,9 +704,15 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
     permission_types = {
         "matchmaker_form": "matchmaker_answers",
         "debrief_form": "debrief_answers",
+        "request_form": "registration_form",
     }
     permission_type = permission_types.get(upload_type, upload_type)
     context = check_event_context(request, event_slug, f"orga_{permission_type}")
+
+    # Request questions are uploadable only while the approval process is active
+    if upload_type == "request_form":
+        check_registration_form_type(context, "request")
+
     context["typ"] = upload_type.rstrip("s")
     context["name"] = context["typ"]
 
@@ -712,10 +724,10 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         form = UploadElementsForm(request.POST, request.FILES)
 
         # Prepare redirect URL for after processing
-        if upload_type == "matchmaker_form":
-            redr = reverse("orga_registration_form", args=[context["run"].get_slug(), "matchmaker"])
-        elif upload_type == "debrief_form":
-            redr = reverse("orga_debrief_answers", args=[context["run"].get_slug()])
+        if upload_type in ("matchmaker_form", "request_form", "debrief_form"):
+            redr = reverse(
+                "orga_registration_form", args=[context["run"].get_slug(), upload_type.removesuffix("_form")]
+            )
         else:
             redr = reverse(f"orga_{upload_type}", args=[context["run"].get_slug()])
 
