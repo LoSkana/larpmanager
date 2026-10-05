@@ -570,6 +570,20 @@ body.association.new_v20 .user_resize {
   flex: 1;
 }
 
+.ability-descr-open {
+  margin-left: 0.25em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.qtip.qtip-ability {
+  max-width: 400px;
+}
+
+.ability-descr-full h3 {
+  margin-top: 0;
+}
+
 .ability-card-prereqs {
   font-size: 0.78em;
   opacity: 0.65;

@@ -4873,6 +4873,9 @@ msgstr "Inscrições de reserva"
 msgid "Show closed questions"
 msgstr "Mostrar perguntas fechadas"
 
+msgid "Show full description"
+msgstr "Mostrar descrição completa"
+
 msgid "Sign up as a reserve!"
 msgstr "Inscreve-te como reserva!"
 

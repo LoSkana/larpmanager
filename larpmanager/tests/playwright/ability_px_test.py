@@ -312,8 +312,8 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """Obtain ability all No abilities found. Select the new ability to obtain
-        Experience points 12 Total 3 Used 9 Available Abilities Hide descriptions base ability double shield (2)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live """,
+        Experience points 12 Total 3 Used 9 Available Abilities Hide descriptions base ability sword1 (1) sdsfdsfds
+        double shield (2) This text should show awards 2 first live """,
     )
     expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
 
@@ -371,8 +371,8 @@ def modifiers(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """
         Obtain ability All No abilities found. Select the new ability to obtain
-        Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability double shield (0)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
+        Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability sword1 (1) sdsfdsfds
+        double shield (0) This text should show awards 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -419,8 +419,8 @@ def modifiers(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """
         Obtain ability All No abilities found. Select the new ability to obtain
-        Experience points 12 Total 4 Used 8 Available Abilities Hide descriptions base ability double shield (3)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
+        Experience points 12 Total 4 Used 8 Available Abilities Hide descriptions base ability sword1 (1) sdsfdsfds
+        double shield (3) This text should show awards 2 first live""",
     )
 
 

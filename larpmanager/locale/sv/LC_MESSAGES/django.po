@@ -4873,6 +4873,9 @@ msgstr "Reservanmälningar"
 msgid "Show closed questions"
 msgstr "Visa stängda frågor"
 
+msgid "Show full description"
+msgstr "Visa hela beskrivningen"
+
 msgid "Sign up as a reserve!"
 msgstr "Anmäl dig som reserv!"
 

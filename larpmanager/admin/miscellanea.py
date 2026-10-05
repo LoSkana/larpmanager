@@ -290,7 +290,6 @@ class EmailContentAdmin(DefModelAdmin):
     list_filter: ClassVar[tuple] = (AssociationFilter, RunFilter)
     autocomplete_fields: ClassVar[list] = ["association", "run"]
     search_fields: ClassVar[list] = ["id", "subj", "body", "uuid"]
-    inlines: ClassVar[list] = [EmailRecipientInline]
 
     @staticmethod
     def body_red(instance: EmailContent) -> str:

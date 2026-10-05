@@ -4873,6 +4873,9 @@ msgstr "Varasijailmoittautumiset"
 msgid "Show closed questions"
 msgstr "Näytä suljetut kysymykset"
 
+msgid "Show full description"
+msgstr "Näytä koko kuvaus"
+
 msgid "Sign up as a reserve!"
 msgstr "Ilmoittaudu varamieheksi!"
 

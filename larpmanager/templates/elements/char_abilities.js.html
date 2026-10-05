@@ -23,6 +23,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var labelAll = "{% filter escapejs %}{% trans 'All' %}{% endfilter %}";
     var labelShowMore = "{% filter escapejs %}{% trans 'Show more' %}{% endfilter %}";
     var labelShowLess = "{% filter escapejs %}{% trans 'Show less' %}{% endfilter %}";
+    var labelFullDescr = "{% filter escapejs %}{% trans 'Show full description' %}{% endfilter %}";
     const PAGE_SIZE = 10;
     let expanded = false;
 
@@ -85,7 +86,34 @@ window.addEventListener('DOMContentLoaded', function() {
         if (ab.descr) {
             const stripped = new DOMParser().parseFromString(ab.descr, 'text/html').body.textContent || '';
             const preview = stripped.length > 100 ? stripped.slice(0, 120) + '...' : stripped;
-            $card.append($('<p class="ability-card-descr">').text(preview));
+            const $descr = $('<p class="ability-card-descr">').text(preview + ' ');
+            const $info = $('<span>', {
+                'class': 'ability-descr-open',
+                'aria-label': labelFullDescr
+            }).append($('<i class="fa-solid fa-circle-info">'));
+            const $content = $('<div class="ability-descr-full">');
+            $content.append($('<h3>').text(ab.name));
+            $content.append($('<div>').html(ab.descr));
+            $info.qtip({
+                content: {
+                    text: $content
+                }, style: {
+                    classes: 'qtip-dark qtip-rounded qtip-shadow qtip-ability'
+                }, position: {
+                    my: 'top center',
+                    at: 'bottom center',
+                    viewport: $(window)
+                }
+            });
+            const modalHtml = $content.prop('outerHTML');
+            $info.on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $info.qtip('hide');
+                window.openLmModal(modalHtml, 'popup');
+            });
+            $descr.append($info);
+            $card.append($descr);
         }
         if (ab.prereqs && ab.prereqs.length > 0) {
             const $prereq = $('<p class="ability-card-prereqs">');

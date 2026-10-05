@@ -209,7 +209,7 @@ def _get_current_abilities(
             "descr",
             "template__descr",
         )
-        .order_by("name")
+        .order_by("typ__order", "order", "name")
     )
     abilities_with_modified_costs = []
     for ability in abilities_queryset:

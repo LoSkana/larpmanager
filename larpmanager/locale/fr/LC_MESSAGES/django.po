@@ -4873,6 +4873,9 @@ msgstr "Inscriptions de réserve"
 msgid "Show closed questions"
 msgstr "Afficher les questions fermées"
 
+msgid "Show full description"
+msgstr "Afficher la description complète"
+
 msgid "Sign up as a reserve!"
 msgstr "Inscris-toi comme remplaçant·e !"
 

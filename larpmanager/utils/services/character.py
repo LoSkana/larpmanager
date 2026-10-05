@@ -317,7 +317,7 @@ def get_character_sheet_exp(context: dict) -> None:
     context["sheet_abilities"] = {}
 
     # Group abilities by their type name
-    for ability in context["character"].exp_ability_list.select_related("typ").all():
+    for ability in context["character"].exp_ability_list.select_related("typ").order_by("typ__order", "order", "name"):
         if not ability.typ or not ability.typ.name:
             continue
         # Ensure ability has valid type and name before processing
