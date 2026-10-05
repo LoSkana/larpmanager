@@ -4873,6 +4873,9 @@ msgstr "Reserveanmeldungen"
 msgid "Show closed questions"
 msgstr "Geschlossene Fragen anzeigen"
 
+msgid "Show full description"
+msgstr "Vollständige Beschreibung anzeigen"
+
 msgid "Sign up as a reserve!"
 msgstr "Melde dich als Reservespieler an!"
 

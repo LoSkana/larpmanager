@@ -4873,6 +4873,9 @@ msgstr "Reserveregistreringer"
 msgid "Show closed questions"
 msgstr "Vis lukkede spørsmål"
 
+msgid "Show full description"
+msgstr "Vis hele beskrivelsen"
+
 msgid "Sign up as a reserve!"
 msgstr "Meld deg på som reservespiller!"
 

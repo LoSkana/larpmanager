@@ -4873,6 +4873,9 @@ msgstr "Náhradní registrace"
 msgid "Show closed questions"
 msgstr "Zobrazit uzavřené otázky"
 
+msgid "Show full description"
+msgstr "Zobrazit celý popis"
+
 msgid "Sign up as a reserve!"
 msgstr "Zaregistruj se jako náhradník!"
 

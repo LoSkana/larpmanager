@@ -4873,6 +4873,9 @@ msgstr "Reserve-inschrijvingen"
 msgid "Show closed questions"
 msgstr "Toon gesloten vragen"
 
+msgid "Show full description"
+msgstr "Toon volledige beschrijving"
+
 msgid "Sign up as a reserve!"
 msgstr "Meld je aan als reserve!"
 

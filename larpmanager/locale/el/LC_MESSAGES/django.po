@@ -4873,6 +4873,9 @@ msgstr "Εγγραφές επιλαχόντων"
 msgid "Show closed questions"
 msgstr "Εμφάνιση κλειστών ερωτήσεων"
 
+msgid "Show full description"
+msgstr "Εμφάνιση πλήρους περιγραφής"
+
 msgid "Sign up as a reserve!"
 msgstr "Εγγράψου ως επιλαχών!"
 
