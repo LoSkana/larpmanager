@@ -775,9 +775,11 @@ def get_character_concepts(event_id: int, character_ids: list[int] | None = None
 
 def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> QuerySet:
     """Return ids of the given characters whose concept answer contains the term."""
+    concept_questions = WritingQuestion.objects.filter(
+        typ=WritingQuestionType.CONCEPT, applicable=QuestionApplicable.CHARACTER
+    ).values("id")
     return WritingAnswer.objects.filter(
-        question__typ=WritingQuestionType.CONCEPT,
-        question__applicable=QuestionApplicable.CHARACTER,
+        question_id__in=concept_questions,
         text__icontains=term,
         element_id__in=characters.values("id"),
     ).values("element_id")
@@ -787,6 +789,8 @@ class EventCharacterS2:
     """Character selector mixin; set show_concept only on staff-facing widgets."""
 
     show_concept: ClassVar[bool] = False
+
+    _concepts: dict[int, str] | None = None
 
     search_fields: ClassVar[list] = [
         "number__icontains",
@@ -811,11 +815,9 @@ class EventCharacterS2:
         """Return the character concept if this widget shows it, loading the event concepts once."""
         if not self.show_concept:
             return ""
-        concepts = self.__dict__.get("_concepts")
-        if concepts is None:
-            concepts = get_character_concepts(obj.event_id)
-            self._concepts = concepts
-        return concepts.get(obj.id, "")
+        if self._concepts is None:
+            self._concepts = get_character_concepts(obj.event_id)
+        return self._concepts.get(obj.id, "")
 
     def label_from_instance(self, obj: Character) -> str:
         """Return character label with title (and concept for staff widgets)."""

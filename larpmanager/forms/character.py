@@ -802,15 +802,19 @@ class OrgaCharacterForm(CharacterForm):
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
             rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
+        self.params["relationships"] = rel_by_uuid
+
+    def _set_relationships_labels(self) -> None:
+        """Add to each loaded relationship the target character label, with concept for staff."""
+        relationships = self.params["relationships"]
         event_id = self.params["event"].id
-        concepts = get_character_concepts(event_id, [entry["char"].id for entry in rel_by_uuid.values()])
-        show_number = get_event_config(event_id, "writing_number")
-        for entry in rel_by_uuid.values():
+        concepts = get_character_concepts(event_id, [entry["char"].id for entry in relationships.values()])
+        show_number = get_event_config(event_id, "writing_number", context=self.params)
+        for entry in relationships.values():
             char = entry["char"]
             entry["label"] = character_label(
                 char.number, char.name, char.title, concepts.get(char.id, ""), show_number=show_number
             )
-        self.params["relationships"] = rel_by_uuid
 
     def _characters_relationships(self) -> None:
         """Set up character relationships data and widgets for editing."""
@@ -834,6 +838,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship data from DB (also populates self.params["relationships"])
         self._load_relationships_data()
+        self._set_relationships_labels()
 
         if get_event_config(context["event"].id, "writing_relationship_tags", context=self.params):
             context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)

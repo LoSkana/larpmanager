@@ -49,6 +49,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character, get_event_elements
+from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.exceptions import FeatureError, ReturnNowError, UserPermissionError
@@ -495,8 +496,10 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
         return JsonResponse({"res": []})
 
     try:
-        context = check_event_context(request, event_slug)
+        context = get_event_context(request, event_slug)
     except (Http404, PermissionDenied, UserPermissionError, FeatureError):
+        return JsonResponse({"res": []}, status=403)
+    if not has_event_permission(request, context, event_slug):
         return JsonResponse({"res": []}, status=403)
 
     term = request.POST.get("term", "").strip()
