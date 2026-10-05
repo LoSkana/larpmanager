@@ -421,7 +421,7 @@ input[type="checkbox"].checkbox_single {
 
 .opt-desc {
   display: block;
-  color: #888;
+  color: rgba(var(--pri-rgb), 0.6);
   font-size: 0.85em;
   margin-top: 0.1em;
   overflow-wrap: break-word;
@@ -482,7 +482,7 @@ input[type="checkbox"].checkbox_single {
 }
 
 .opt-card-desc {
-  color: #666;
+  color: rgba(var(--pri-rgb), 0.6);
   font-size: 0.75em;
   margin-top: 0.15em;
   white-space: normal;
@@ -491,7 +491,7 @@ input[type="checkbox"].checkbox_single {
 
 .opt-card-avail {
   font-size: 0.8em;
-  color: #888;
+  color: rgba(var(--pri-rgb), 0.6);
   margin-top: 0.1em;
 }
 
