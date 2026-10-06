@@ -254,8 +254,9 @@
 }
 
 .sheet h2.title {
-  font-size: 110%;
+  font-size: 150%;
   letter-spacing: 0.05em;
+  margin-left: 2em;
 }
 
 /*** plot ***/

@@ -648,6 +648,18 @@ body.association.new_v20 .user_resize {
   font-style: italic;
 }
 
+.inline-p {
+  text-align: left;
+}
+
+.inline-p p {
+  display: inline;
+}
+
+.inline-p + .inline-p {
+  margin-top: 0.5em;
+}
+
 .exp-stat-row {
   display: flex;
   gap: 0.75em;
