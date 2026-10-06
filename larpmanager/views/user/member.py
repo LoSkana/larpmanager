@@ -61,6 +61,7 @@ from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.character import update_member_event_character_cache
 from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.forms.member import (
     AvatarForm,
@@ -389,6 +390,7 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
     path = default_storage.save(n_path, ContentFile(img_data))
     request.user.member.profile = path
     request.user.member.save()
+    update_member_event_character_cache(request.user.member)
     return JsonResponse(
         {
             "res": "ok",
@@ -439,6 +441,7 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
         logger.exception("Failed to rotate profile image")
         return JsonResponse({"res": "ko"})
     request.user.member.save()
+    update_member_event_character_cache(request.user.member)
 
     # Return success response with thumbnail URL
     return JsonResponse(
