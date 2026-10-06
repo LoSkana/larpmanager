@@ -93,6 +93,7 @@ WritingQuestionType = extend_textchoices(
         ("COVER", "cover", _("Cover")),
         ("FACTIONS", "faction", _("Factions")),
         ("TITLE", "title", _("Title")),
+        ("CONCEPT", "concept", _("Concept")),
         ("MIRROR", "mirror", _("Mirror")),
         ("FILE", "file", _("File")),
         ("HIDE", "hide", _("Hide")),
@@ -121,6 +122,7 @@ def get_writing_max_length() -> Any:
         WritingQuestionType.SHEET,
         WritingQuestionType.TEASER,
         WritingQuestionType.TEXT,
+        WritingQuestionType.CONCEPT,
         WritingQuestionType.PARAGRAPH,
         WritingQuestionType.MULTIPLE,
         WritingQuestionType.EDITOR,
@@ -331,6 +333,13 @@ class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save the question, forcing concept questions to stay hidden from participants."""
+        if self.typ == WritingQuestionType.CONCEPT:
+            self.visibility = QuestionVisibility.HIDDEN
+            self.status = QuestionStatus.HIDDEN
+        super().save(*args, **kwargs)
 
     def show(self) -> dict[str, Any]:
         """Return JSON-serializable dictionary of object attributes."""

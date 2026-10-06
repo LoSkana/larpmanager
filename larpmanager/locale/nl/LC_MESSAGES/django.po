@@ -841,6 +841,9 @@ msgstr "Sluiting"
 msgid "Columns"
 msgstr "Kolommen"
 
+msgid "Concept"
+msgstr "Concept"
+
 msgid "Confirm"
 msgstr "Bevestigen"
 
@@ -14947,6 +14950,14 @@ msgid ""
 msgstr ""
 "Maakt 'breng een vriend mee'-korting mogelijk. Een deelnemer kan zijn unieke"
 " code doorgeven aan een nieuwe inschrijver, waardoor beiden korting krijgen"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Schakelt het veld 'concept' in: een korte tekst die verborgen is voor "
+"deelnemers en die de staf naast de naam van het personage ziet bij het "
+"selecteren van personages."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

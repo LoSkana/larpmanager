@@ -841,6 +841,9 @@ msgstr "Stengning"
 msgid "Columns"
 msgstr "Spalter"
 
+msgid "Concept"
+msgstr "Konsept"
+
 msgid "Confirm"
 msgstr "Bekreft"
 
@@ -14703,6 +14706,13 @@ msgid ""
 msgstr ""
 "Muliggjør 'ta med en venn'-rabatt. En deltaker kan gi sin unike kode til en "
 "ny deltaker, slik at begge får rabatt"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Aktiverer feltet 'konsept', en kort tekst som er skjult for deltakerne og "
+"vises for staben ved siden av navnet på karakteren når du velger karakterer."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

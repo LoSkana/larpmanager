@@ -1086,7 +1086,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             )
 
         # Handle simple text input fields
-        elif question["typ"] == BaseQuestionType.TEXT:
+        elif question["typ"] in [BaseQuestionType.TEXT, WritingQuestionType.CONCEPT]:
             self.init_text(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle multi-line text areas
@@ -1548,7 +1548,12 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.save_registration_multiple(instance, oid, question)
             elif question["typ"] == BaseQuestionType.SINGLE:
                 self.save_registration_single(instance, oid, question)
-            elif question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+            elif question["typ"] in [
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.CONCEPT,
+            ]:
                 self.save_registration_text(instance, oid, question)
             elif question["typ"] == WritingQuestionType.FILE:
                 self.save_registration_file(instance, oid, question)

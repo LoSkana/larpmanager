@@ -41,14 +41,16 @@ from larpmanager.forms.base import BaseModelForm, get_question_key
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     CharacterDualListWidget,
-    EventCharacterS2WidgetUuid,
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
+    OrgaEventCharacterS2WidgetUuid,
     RunStaffS2Widget,
     S2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
+    character_label,
+    get_character_concepts,
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.base import Feature
@@ -802,6 +804,18 @@ class OrgaCharacterForm(CharacterForm):
             rel_by_uuid[other_char.uuid]["inverse"] = relationship.text
         self.params["relationships"] = rel_by_uuid
 
+    def _set_relationships_labels(self) -> None:
+        """Add to each loaded relationship the target character label, with concept for staff."""
+        relationships = self.params["relationships"]
+        event_id = self.params["event"].id
+        concepts = get_character_concepts(event_id, [entry["char"].id for entry in relationships.values()])
+        show_number = get_event_config(event_id, "writing_number", context=self.params)
+        for entry in relationships.values():
+            char = entry["char"]
+            entry["label"] = character_label(
+                char.number, char.name, char.title, concepts.get(char.id, ""), show_number=show_number
+            )
+
     def _characters_relationships(self) -> None:
         """Set up character relationships data and widgets for editing."""
         context = self.params
@@ -818,12 +832,13 @@ class OrgaCharacterForm(CharacterForm):
 
         context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
         context["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
-        widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
+        widget = OrgaEventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")
 
         # Load relationship data from DB (also populates self.params["relationships"])
         self._load_relationships_data()
+        self._set_relationships_labels()
 
         if get_event_config(context["event"].id, "writing_relationship_tags", context=self.params):
             context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
@@ -1404,6 +1419,11 @@ class OrgaWritingQuestionForm(BaseModelForm):
                 if choice.value in visible_choices
             )
 
+        # concept is staff-only: visibility and status can't be changed
+        if self.instance.typ == WritingQuestionType.CONCEPT:
+            self.delete_field("visibility")
+            self.delete_field("status")
+
         self.check_applicable = self.params["writing_typ"]
 
         self._init_requirements()
@@ -1450,6 +1470,13 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
                 # Check feature activation for non-default types
                 if choice[0] not in ["name", "teaser", "text"] and choice[0] not in self.params["features"]:
+                    continue
+
+                # Concept applies only to characters
+                if (
+                    choice[0] == WritingQuestionType.CONCEPT
+                    and self.params["writing_typ"] != QuestionApplicable.CHARACTER
+                ):
                     continue
 
             # Handle character type 'c' - requires 'exp_rules' config

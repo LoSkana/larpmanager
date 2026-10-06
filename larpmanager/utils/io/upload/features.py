@@ -37,6 +37,7 @@ def _get_feature_from_question_type(question_type: str) -> str | None:
     question_type_to_feature = {
         WritingQuestionType.FACTIONS: "faction",
         WritingQuestionType.MIRROR: "casting",
+        WritingQuestionType.PROGRESS: "progress",
     }
     return question_type_to_feature.get(question_type)
 
@@ -44,9 +45,9 @@ def _get_feature_from_question_type(question_type: str) -> str | None:
 def _get_config_from_question_type(question_type: str) -> str | None:
     """Get config name required for a WritingQuestionType."""
     question_type_to_config = {
-        WritingQuestionType.TITLE: "character_title",
-        WritingQuestionType.PROGRESS: "character_progress",
-        WritingQuestionType.ASSIGNED: "character_assigned",
+        WritingQuestionType.TITLE: "writing_title",
+        WritingQuestionType.CONCEPT: "writing_concept",
+        WritingQuestionType.ASSIGNED: "writing_assigned",
     }
     return question_type_to_config.get(question_type)
 

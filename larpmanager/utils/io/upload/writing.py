@@ -313,7 +313,12 @@ def _assign_choice_answer(
     question = available_questions[field_name]
 
     # check if answer
-    if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+    if question["typ"] in [
+        BaseQuestionType.TEXT,
+        BaseQuestionType.PARAGRAPH,
+        BaseQuestionType.EDITOR,
+        WritingQuestionType.CONCEPT,
+    ]:
         _assign_text_answer(target_element, question, field_value, is_registration=is_registration)
 
     # check if choice

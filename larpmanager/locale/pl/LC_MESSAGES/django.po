@@ -841,6 +841,9 @@ msgstr "Zamknięcie"
 msgid "Columns"
 msgstr "Kolumny"
 
+msgid "Concept"
+msgstr "Koncept"
+
 msgid "Confirm"
 msgstr "Potwierdź"
 
@@ -14784,6 +14787,13 @@ msgid ""
 msgstr ""
 "Włącza zniżkę „przyprowadź znajomego”. Uczestnik może przekazać swój "
 "unikalny kod nowemu rejestrującemu się, zapewniając obu osobom niższą cenę"
+
+msgid ""
+"Enables field 'concept', a short text hidden from participants, shown to "
+"staff next to the character's name when selecting characters."
+msgstr ""
+"Włącza pole 'concept', krótki tekst ukryty przed uczestnikami, widoczny dla "
+"obsługi obok imienia postaci podczas wybierania postaci."
 
 msgid ""
 "Please indicate below the exact method of payment you made. Remember to "

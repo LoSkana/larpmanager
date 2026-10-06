@@ -31,7 +31,7 @@
                     {{ value }}
                 {% endwith %}
             </td>
-        {% elif que.basic_typ or que.typ == 'c' or que.typ == 'file' %}
+        {% elif que.basic_typ or que.typ == 'c' or que.typ == 'file' or que.typ == 'concept' %}
             <td class="question q_{{ key }} editable"
                 question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">

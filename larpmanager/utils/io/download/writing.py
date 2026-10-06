@@ -293,7 +293,7 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
         if question["typ"] in question_type_mapping:
             cell_value = question_type_mapping[question["typ"]]()
         # Handle text-based question types (paragraph, text, email, computed)
-        elif question["typ"] in {"p", "t", "e", "c"}:
+        elif question["typ"] in {"p", "t", "e", "c", "concept"}:
             if element.id in question_answers.get(question["id"], {}):
                 cell_value = question_answers[question["id"]][element.id]
         # Handle choice-based question types (single, multiple)
