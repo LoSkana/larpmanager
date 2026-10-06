@@ -246,7 +246,7 @@ class OrgaAction(StrEnum):
     PX_RULES = ("orga_exp_rules", {"form": OrgaRuleExpForm})
     PX_MODIFIERS = ("orga_exp_modifiers", {"form": OrgaModifierExpForm})
     PX_CRITERIONS = ("orga_exp_criterions", {"form": OrgaCriterionExpForm})
-    PX_CALLS = ("orga_exp_calls", {"form": OrgaCallExpForm})
+    PX_CALLS = ("orga_exp_calls", {"form": OrgaCallExpForm, "exp": True})
 
     # Inventory
     CI_INVENTORY = ("orga_ci_inventory", {"form": OrgaInventoryForm})

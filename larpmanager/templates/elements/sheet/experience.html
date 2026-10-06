@@ -67,7 +67,15 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.get_description %}<span class="ability-desc">{{ el.get_description | safe }}</span>{% endif %}
+                            {% if el.get_description %}
+                                <span class="ability-desc">
+                                    {% if pdf %}
+                                        {{ el.get_description | safe }}
+                                    {% else %}
+                                        {{ el.get_description | calls_tooltip:sheet_calls | safe }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

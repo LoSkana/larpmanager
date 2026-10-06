@@ -31,7 +31,11 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
+from larpmanager.cache.experience import (
+    clear_event_exp_cache,
+    clear_event_exp_calls_cache,
+    clear_event_exp_systems_cache,
+)
 from larpmanager.cache.registration_lookup import (
     clear_registration_tickets_cache,
     get_active_registrations,
@@ -452,6 +456,7 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
         event_id = context["event"].id
         clear_event_exp_cache(event_id)
         clear_event_exp_systems_cache(event_id)
+        clear_event_exp_calls_cache(event_id)
     if action.config.get("button"):
         clear_event_button_cache(context["event"].id)
     if action.config.get("tickets"):

@@ -46,6 +46,7 @@ from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.io.pdf import get_trait_character
 from larpmanager.utils.larpmanager.versions import VERSIONS
 from larpmanager.utils.services.association import get_hint_for_slug
+from larpmanager.utils.services.experience import add_calls_tooltips
 
 _VERSION_BODY_CLASS_START = min(v["number"] for v in VERSIONS)
 
@@ -76,6 +77,12 @@ def basename(file_path: str | Path) -> str:
 def clean_tags(tx: str) -> str:
     """Template filter to clean HTML tags from text."""
     return clean_html(tx)
+
+
+@register.filter
+def calls_tooltip(text: str, calls: list) -> str:
+    """Add a hover tooltip with the description to the calls found in the text."""
+    return add_calls_tooltips(text, calls)
 
 
 @register.filter

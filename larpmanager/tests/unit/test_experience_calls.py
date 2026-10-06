@@ -37,7 +37,7 @@ from larpmanager.utils.io.download import (
 )
 from larpmanager.utils.io.restore import _FakeFile, _FakeForm, execute_restore, preview_restore
 from larpmanager.utils.io.upload import calls_load
-from larpmanager.utils.services.experience import get_character_calls
+from larpmanager.utils.services.experience import add_calls_tooltips, get_character_calls
 
 
 @pytest.mark.django_db(transaction=True)
@@ -83,7 +83,7 @@ class TestExperienceCalls(BaseTestCase):
 
     def test_character_calls_filter(self) -> None:
         """Only calls written as standalone uppercase words in the abilities descriptions are returned"""
-        stun = CallExp.objects.create(event=self.event, name="Stun", order=1)
+        CallExp.objects.create(event=self.event, name="Stun", descr="Fall down", order=1)
         CallExp.objects.create(event=self.event, name="BLEED", order=2)
         CallExp.objects.create(event=self.event, name="FIRE", order=3)
         CallExp.objects.create(event=self.event, name="KNOCK", order=4)
@@ -95,7 +95,34 @@ class TestExperienceCalls(BaseTestCase):
         self.assertEqual(get_character_calls(self.event.id, abilities), [])
 
         EventConfig.objects.create(event=self.event, name="exp_calls", value="True")
-        self.assertEqual(get_character_calls(self.event.id, abilities), [stun])
+        self.assertEqual(get_character_calls(self.event.id, abilities), [{"name": "STUN", "descr": "Fall down"}])
+
+        # Saving a call refreshes the cached calls
+        CallExp.objects.create(event=self.event, name="KNOCK DOWN", order=5)
+        abilities.append(self._ability(3, "<p>Call KNOCK DOWN.</p>"))
+        self.assertEqual(
+            [call["name"] for call in get_character_calls(self.event.id, abilities)], ["STUN", "KNOCK DOWN"]
+        )
+
+    def test_calls_tooltips(self) -> None:
+        """Calls in the description text get a tooltip, while tag attributes and other words are untouched"""
+        calls = [
+            {"name": "STUN", "descr": "<p>Fall down</p>"},
+            {"name": "MASS STUN", "descr": "<p>Everyone falls</p>"},
+            {"name": "BLEED", "descr": ""},
+        ]
+        text = '<p title="STUN">Call STUN or MASS STUN, not STUNNING or BLEED</p>'
+
+        result = add_calls_tooltips(text, calls)
+
+        self.assertEqual(
+            result,
+            '<p title="STUN">Call '
+            "<span class='exp-call' data-call-descr='&lt;p&gt;Fall down&lt;/p&gt;'>STUN</span> or "
+            "<span class='exp-call' data-call-descr='&lt;p&gt;Everyone falls&lt;/p&gt;'>MASS STUN</span>"
+            ", not STUNNING or BLEED</p>",
+        )
+        self.assertEqual(add_calls_tooltips(text, []), text)
 
     def test_backup_restore_round_trip(self) -> None:
         """Ability types, rules, modifiers and calls are restored from a backup zip"""
