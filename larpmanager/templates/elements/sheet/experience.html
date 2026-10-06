@@ -5,96 +5,103 @@
         {% for sys in exp_systems_data %}
             <div class="exp-summary">
                 {% if exp_systems_data|length > 1 %}<span class="exp-system-name">{{ sys.name }}</span>{% endif %}
-                <div class="exp-stat-row">
-                    <div class="exp-stat">
-                        <span class="exp-stat-value">{{ sys.tot }}</span>
-                        <span class="exp-stat-label">{% trans "Total" %}</span>
+                {% if pdf %}
+                    <table class="exp-stat-row">
+                        <tr>
+                            <td>
+                                <b>{{ sys.tot }}</b> {% trans "Total" %}
+                            </td>
+                            <td>
+                                <b>{{ sys.used }}</b> {% trans "Used" %}
+                            </td>
+                            <td>
+                                <b>{{ sys.avail }}</b> {% trans "Available" %}
+                            </td>
+                        </tr>
+                    </table>
+                {% else %}
+                    <div class="exp-stat-row">
+                        <div class="exp-stat">
+                            <span class="exp-stat-value">{{ sys.tot }}</span>
+                            <span class="exp-stat-label">{% trans "Total" %}</span>
+                        </div>
+                        <div class="exp-stat exp-stat-used">
+                            <span class="exp-stat-value">{{ sys.used }}</span>
+                            <span class="exp-stat-label">{% trans "Used" %}</span>
+                        </div>
+                        <div class="exp-stat exp-stat-avail">
+                            <span class="exp-stat-value">{{ sys.avail }}</span>
+                            <span class="exp-stat-label">{% trans "Available" %}</span>
+                        </div>
                     </div>
-                    <div class="exp-stat exp-stat-used">
-                        <span class="exp-stat-value">{{ sys.used }}</span>
-                        <span class="exp-stat-label">{% trans "Used" %}</span>
-                    </div>
-                    <div class="exp-stat exp-stat-avail">
-                        <span class="exp-stat-value">{{ sys.avail }}</span>
-                        <span class="exp-stat-label">{% trans "Available" %}</span>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         {% endfor %}
     {% endif %}
     {% if sheet_calls %}
         <h2 class="c title">{% trans "Calls" %}</h2>
-        <table class="mob abilities">
-            {% for el in sheet_calls %}
-                <tr>
-                    <th>
-                        <h4>{{ el.name }}</h4>
-                    </th>
-                    <td>
-                        {% if el.descr %}{{ el.descr | safe }}{% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% for el in sheet_calls %}
+            <div class="inline-p">
+                <b>{{ el.name }}</b>
+                {% if el.descr %}- {{ el.descr | safe }}{% endif %}
+            </div>
+        {% endfor %}
     {% endif %}
     {% if sheet_abilities %}
-        <h2 class="c title">{% trans "Abilities" %}</h2>
-        <p>
-            <a href="#" class="my_toggle" tog="ability-desc">{% trans "Hide descriptions" %}</a>
-        </p>
-        <table class="mob abilities">
-            {% for typ, ls in sheet_abilities.items %}
-                <tr>
-                    <th colspan="2">
-                        <h3>{{ typ }}</h3>
-                    </th>
-                </tr>
-                {% for el in ls %}
-                    <tr>
-                        <th>
-                            <h4>
-                                {% if exp_systems_data|length > 1 %}
-                                    {{ el.name }} ({{ el.cost }}, {{ el.system.name }})
-                                {% else %}
-                                    {{ el.name }} ({{ el.cost }})
-                                {% endif %}
-                                {% if undo_abilities and el.uuid in undo_abilities %}
-                                    <a href="{% url 'character_abilities_del' run.get_slug character.uuid el.uuid %}"
-                                       qtip="{% trans "Remove" %}">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </a>
-                                {% endif %}
-                            </h4>
-                        </th>
-                        <td>
-                            {% if el.get_description %}
-                                <span class="ability-desc">
-                                    {% if pdf %}
-                                        {{ el.get_description | safe }}
-                                    {% else %}
-                                        {{ el.get_description | calls_tooltip:sheet_calls | safe }}
-                                    {% endif %}
-                                </span>
+        {% if not pdf %}
+            <h2 class="c title">{% trans "Abilities" %}</h2>
+            <p>
+                <a href="#" class="my_toggle" tog="ability-desc">{% trans "Hide descriptions" %}</a>
+            </p>
+        {% endif %}
+        {% for typ, ls in sheet_abilities.items %}
+            <h3>{{ typ }}</h3>
+            {% for el in ls %}
+                <div class="inline-p">
+                    {% if exp_systems_data|length > 1 %}
+                        <b>{{ el.name }}</b> ({{ el.cost }}, {{ el.system.name }})
+                    {% else %}
+                        <b>{{ el.name }}</b> ({{ el.cost }})
+                    {% endif %}
+                    {% if not pdf and undo_abilities and el.uuid in undo_abilities %}
+                        <a href="{% url 'character_abilities_del' run.get_slug character.uuid el.uuid %}"
+                           qtip="{% trans "Remove" %}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </a>
+                    {% endif %}
+                    {% if el.get_description %}
+                        <span class="ability-desc">
+                            {% if pdf %}
+                                - {{ el.get_description | safe }}
+                            {% else %}
+                                - {{ el.get_description | calls_tooltip:sheet_calls | safe }}
                             {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
+                        </span>
+                    {% endif %}
+                </div>
             {% endfor %}
-        </table>
+        {% endfor %}
     {% endif %}
     {% if character.exp_delivery_list.count %}
         <h2 class="c title">{% trans "Awards" %}</h2>
-        <div class="exp-stat-row">
+        {% if pdf %}
             {% for el in character.exp_delivery_list.all %}
-                <div class="exp-stat">
-                    <span class="exp-stat-value">{{ el.amount }}</span>
-                    <span class="exp-stat-label">
-                        {{ el.name }}
-                        {% if exp_systems_data|length > 1 %}({{ el.system.name }}){% endif %}
-                    </span>
-                </div>
+                <b>{{ el.name }} ({{ el.amount }})</b>
+                {% if exp_systems_data|length > 1 %}({{ el.system.name }}){% endif %}
             {% endfor %}
-        </div>
+        {% else %}
+            <div class="exp-stat-row">
+                {% for el in character.exp_delivery_list.all %}
+                    <div class="exp-stat">
+                        <span class="exp-stat-value">{{ el.amount }}</span>
+                        <span class="exp-stat-label">
+                            {{ el.name }}
+                            {% if exp_systems_data|length > 1 %}({{ el.system.name }}){% endif %}
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         <hr class="clear" />
     {% endif %}
 {% endif %}

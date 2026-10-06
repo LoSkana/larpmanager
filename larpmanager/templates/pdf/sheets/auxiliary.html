@@ -29,6 +29,34 @@
             .show_char {
                 display: none;
             }
+
+            .inline-p p {
+                display: inline;
+            }
+
+            .inline-p + .inline-p {
+                margin-top: 0.5em;
+            }
+
+            #char_present .hide-screen {
+                display: none;
+            }
+
+            #char_present .go-inline + .go-inline .hide-screen {
+                display: inline;
+            }
+
+            h2, h3, .c {
+                text-align: left;
+                margin-left: 2em;
+                font-style: italic;
+                font-weight: bold;
+                font-size: 120%;
+            }
+
+            .inline-p p {
+                display: inline;
+            }
         </style>
         <style>{{ page_css | safe }}</style>
     </head>

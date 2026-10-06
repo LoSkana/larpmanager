@@ -112,15 +112,27 @@
                 font-size: 120%;
             }
 
-            #char_name {
-                display: none;
-            }
-
             .show_char {
                 display: none;
             }
 
             .go-inline {
+                display: inline;
+            }
+
+            .inline-p p {
+                display: inline;
+            }
+
+            .inline-p + .inline-p {
+                margin-top: 0.5em;
+            }
+
+            #char_present .hide-screen {
+                display: none;
+            }
+
+            #char_present .go-inline + .go-inline .hide-screen {
                 display: inline;
             }
 
