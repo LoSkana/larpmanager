@@ -83,6 +83,9 @@ msgstr "Kirja"
 msgid "Bulk"
 msgstr "Massatoiminnot"
 
+msgid "Call"
+msgstr "Huuto"
+
 msgid "Card"
 msgstr "Kortti"
 
@@ -298,6 +301,9 @@ msgstr "Myöntö"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Huudot"
 
 msgid "Cards"
 msgstr "Kortit"
@@ -6440,6 +6446,9 @@ msgstr "tarkista olemattomat suhteet:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s ei ole tällä hetkellä näkyvissä"
 
+msgid "(Optional) The call's description"
+msgstr "(Valinnainen) Huudon kuvaus"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valinnainen) Lipun hinta"
 
@@ -8118,6 +8127,9 @@ msgstr "Olen kiinnostunut, mutta minulla ei ole paljon kokemusta"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Inaktiivisia hahmoja ei voi määrittää pelaajille"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Hallitse pelin huutoja, jotka osallistujien täytyy muistaa"
+
 msgid "No additional payments are required at this time"
 msgstr "Tällä hetkellä ei vaadita lisämaksuja"
 
@@ -9603,6 +9615,9 @@ msgid "The assistant is temporarily unavailable, please try again later."
 msgstr ""
 "Avustaja ei ole tällä hetkellä käytettävissä. Yritä myöhemmin uudelleen."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr "Huudon nimi, joka kirjoitetaan isoilla kirjaimilla kykyjen kuvauksiin"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Maksua ei suoritettu. Ota yhteyttä meihin selvittääksesi miksi."
 
@@ -9863,6 +9878,11 @@ msgstr ""
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr "Hallinnoi tämän tapahtuman kunkin työpajamoduulin kysymyksiä"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Huutoja ei ole vielä määritelty. Luo ensimmäinen huuto yllä olevalla "
+"painikkeella."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""
@@ -12128,6 +12148,13 @@ msgstr ""
 "olevan painikkeen avulla."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat samannimiset huudot korvataan ladatuilla "
+"tiedoilla."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13732,6 +13759,13 @@ msgstr ""
 "merkittävä suorittamiinsa maksuihin."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Hallitse pelin huutoja; osallistujat näkevät isoilla kirjaimilla kirjoitetut"
+" huudot kykyjensä kuvauksissa"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14558,6 +14592,13 @@ msgid ""
 msgstr ""
 "Osallistujat voivat ostaa lippuja lahjaksi. Erityinen koodi luodaan ja "
 "annetaan lahjan saajalle ilmoittautumista varten"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Jos tämä on käytössä, hahmolomakkeella näkyy yhteenveto pelin huudoista, "
+"jotka on kirjoitettu isoilla kirjaimilla tunnettujen kykyjen kuvauksiin."
 
 msgid ""
 "Please remember that the information on this page was given with the "

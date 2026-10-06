@@ -83,6 +83,9 @@ msgstr "Bok"
 msgid "Bulk"
 msgstr "Massåtgärd"
 
+msgid "Call"
+msgstr "Anrop"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -298,6 +301,9 @@ msgstr "Tilldelning"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Anrop"
 
 msgid "Cards"
 msgstr "Kort"
@@ -6440,6 +6446,9 @@ msgstr "kontrollera icke-existerande relationer:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s syns inte just nu"
 
+msgid "(Optional) The call's description"
+msgstr "(Valfritt) Anropets beskrivning"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valfritt) Kostnaden för biljetten"
 
@@ -8118,6 +8127,9 @@ msgstr "Jag är intresserad, men har inte så mycket erfarenhet"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Inaktiva karaktärer kan inte tilldelas spelare"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Hantera spelanropen som deltagarna måste komma ihåg"
+
 msgid "No additional payments are required at this time"
 msgstr "Inga ytterligare betalningar krävs för närvarande"
 
@@ -9577,6 +9589,9 @@ msgid "The assistant is temporarily unavailable, please try again later."
 msgstr ""
 "Assistenten är tillfälligt inte tillgänglig. Vänligen försök igen senare."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr "Anropets namn, skrivet med versaler i förmågornas beskrivningar"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför."
 
@@ -9834,6 +9849,11 @@ msgstr ""
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Hantera de frågor som tilldelats varje workshopmodul för detta evenemang"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Inga anrop har skapats än. Använd knappen ovan för att skapa det första "
+"anropet."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar inom vilka spelaren måste betala sin nästa delbetalning"
@@ -12112,6 +12132,13 @@ msgstr ""
 "för att lägga till en ny fråga."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Observera att befintliga anrop med samma namn kommer att skrivas över med "
+"den uppladdade datan."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13727,6 +13754,13 @@ msgstr ""
 "ange på de betalningar som de gör."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Hantera spelanropen; deltagarna ser anropen skrivna med versaler i "
+"beskrivningen av sina förmågor"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14552,6 +14586,13 @@ msgid ""
 msgstr ""
 "Tillåter deltagare att köpa biljetter som gåvor. En särskild kod genereras "
 "och ges till gåvomottagaren för registrering"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Om det är aktiverat visar rollbladet en sammanfattning av spelanropen som "
+"står skrivna med versaler i beskrivningen av de kända förmågorna."
 
 msgid ""
 "Please remember that the information on this page was given with the "

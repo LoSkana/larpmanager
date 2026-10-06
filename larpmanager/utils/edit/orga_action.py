@@ -51,6 +51,7 @@ from larpmanager.forms.experience import (
     OrgaAbilityExpForm,
     OrgaAbilityTemplateExpForm,
     OrgaAbilityTypeExpForm,
+    OrgaCallExpForm,
     OrgaCriterionExpForm,
     OrgaDeliveryExpForm,
     OrgaModifierExpForm,
@@ -245,6 +246,7 @@ class OrgaAction(StrEnum):
     PX_RULES = ("orga_exp_rules", {"form": OrgaRuleExpForm})
     PX_MODIFIERS = ("orga_exp_modifiers", {"form": OrgaModifierExpForm})
     PX_CRITERIONS = ("orga_exp_criterions", {"form": OrgaCriterionExpForm})
+    PX_CALLS = ("orga_exp_calls", {"form": OrgaCallExpForm})
 
     # Inventory
     CI_INVENTORY = ("orga_ci_inventory", {"form": OrgaInventoryForm})

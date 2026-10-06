@@ -83,6 +83,9 @@ msgstr "Boek"
 msgid "Bulk"
 msgstr "Bulk"
 
+msgid "Call"
+msgstr "Call"
+
 msgid "Card"
 msgstr "Kaart"
 
@@ -298,6 +301,9 @@ msgstr "Toewijzing"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Calls"
 
 msgid "Cards"
 msgstr "Kaarten"
@@ -6440,6 +6446,9 @@ msgstr "controleer niet-bestaande relaties:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s is op dit moment niet zichtbaar"
 
+msgid "(Optional) The call's description"
+msgstr "(Optioneel) De beschrijving van de call"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Optioneel) De kosten van het ticket"
 
@@ -8125,6 +8134,9 @@ msgstr "Ik ben geïnteresseerd, maar heb niet veel ervaring"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Inactieve personages kunnen niet worden toegewezen aan spelers"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Beheer de game calls die deelnemers moeten onthouden"
+
 msgid "No additional payments are required at this time"
 msgstr "Op dit moment zijn geen extra betalingen vereist"
 
@@ -9691,6 +9703,11 @@ msgid "The assistant is temporarily unavailable, please try again later."
 msgstr ""
 "De assistent is tijdelijk niet beschikbaar. Probeer het later nog eens."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr ""
+"De naam van de call, in hoofdletters geschreven in de beschrijvingen van de "
+"vaardigheden"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr ""
 "De betaling is niet voltooid. Neem contact met ons op om uit te zoeken "
@@ -9980,6 +9997,11 @@ msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Beheer de vragen die aan elke workshopmodule voor dit evenement zijn "
 "toegewezen"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Er zijn nog geen calls aangemaakt. Gebruik de knop hierboven om de eerste "
+"call aan te maken."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
@@ -12358,6 +12380,13 @@ msgstr ""
 "hierboven om een nieuwe vraag toe te voegen."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Let op: bestaande calls met dezelfde naam worden overschreven met de "
+"geüploade gegevens."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13977,6 +14006,13 @@ msgstr ""
 "betalingen moet vermelden."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Beheer de game calls; deelnemers zien de calls die in hoofdletters in de "
+"beschrijving van hun vaardigheden staan"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14815,6 +14851,14 @@ msgid ""
 msgstr ""
 "Hiermee kunnen deelnemers tickets kopen als cadeau. Er wordt een speciale "
 "code gegenereerd en aan de ontvanger van het cadeau gegeven voor registratie"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Als dit is ingeschakeld, toont het personageblad een overzicht van de game "
+"calls die in hoofdletters in de beschrijving van de bekende vaardigheden "
+"staan."
 
 msgid ""
 "Please remember that the information on this page was given with the "

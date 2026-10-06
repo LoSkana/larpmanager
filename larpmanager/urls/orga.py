@@ -1446,6 +1446,26 @@ urlpatterns = [
         name="orga_exp_criterions_delete",
     ),
     path(
+        "<slug:event_slug>/manage/experience/calls/",
+        views_ox.orga_exp_calls,
+        name="orga_exp_calls",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/new/",
+        views_ox.orga_exp_calls_new,
+        name="orga_exp_calls_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/<slug:call_uuid>/edit/",
+        views_ox.orga_exp_calls_edit,
+        name="orga_exp_calls_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/<slug:call_uuid>/delete/",
+        views_ox.orga_exp_calls_delete,
+        name="orga_exp_calls_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/characters/search/",
         views_ox.orga_character_search,
         name="orga_character_search",

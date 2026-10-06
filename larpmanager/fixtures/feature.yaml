@@ -1692,3 +1692,16 @@
     module: writing
     dependencies:
     - character
+- model: larpmanager.feature
+  fields:
+    name: Experience Calls
+    descr: Pseudo-feature activated by exp_calls configuration
+    slug: exp_calls
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []

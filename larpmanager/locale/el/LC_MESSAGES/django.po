@@ -83,6 +83,9 @@ msgstr "Βιβλίο"
 msgid "Bulk"
 msgstr "Μαζικό"
 
+msgid "Call"
+msgstr "Κλήση"
+
 msgid "Card"
 msgstr "Κάρτα"
 
@@ -298,6 +301,9 @@ msgstr "Απονομή XP"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Κλήσεις"
 
 msgid "Cards"
 msgstr "Κάρτες"
@@ -6440,6 +6446,9 @@ msgstr "έλεγχος ανύπαρκτων σχέσεων:"
 msgid "%(name)s not visible at this time"
 msgstr "Το %(name)s δεν είναι ορατό αυτή τη στιγμή"
 
+msgid "(Optional) The call's description"
+msgstr "(Προαιρετικό) Η περιγραφή της κλήσης"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Προαιρετικό) Το κόστος του εισιτηρίου"
 
@@ -8126,6 +8135,10 @@ msgstr "Με ενδιαφέρει, αλλά δεν έχω μεγάλη εμπε�
 msgid "Inactive characters can't be assigned to players"
 msgstr "Οι ανενεργοί χαρακτήρες δεν μπορούν να ανατεθούν σε παίκτες"
 
+msgid "Manage the game calls participants must remember"
+msgstr ""
+"Διαχειρίσου τις κλήσεις παιχνιδιού που πρέπει να θυμούνται οι συμμετέχοντες"
+
 msgid "No additional payments are required at this time"
 msgstr "Δεν απαιτούνται επιπλέον πληρωμές αυτή τη στιγμή"
 
@@ -9753,6 +9766,10 @@ msgstr "Λείπει από ορισμένα εισιτήρια η τελική 
 msgid "The assistant is temporarily unavailable, please try again later."
 msgstr "Ο βοηθός είναι προσωρινά μη διαθέσιμος, δοκίμασε ξανά αργότερα."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr ""
+"Το όνομα της κλήσης, γραμμένο με κεφαλαία στις περιγραφές των ικανοτήτων"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr ""
 "Η πληρωμή δεν ολοκληρώθηκε. Επικοινώνησε μαζί μας για να μάθεις γιατί."
@@ -10040,6 +10057,11 @@ msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Διαχειρίσου τις ερωτήσεις που έχουν ανατεθεί σε κάθε ενότητα workshop για "
 "αυτό το event"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Δεν έχουν οριστεί ακόμα κλήσεις. Χρησιμοποίησε το παραπάνω κουμπί για να "
+"δημιουργήσεις την πρώτη κλήση."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""
@@ -12452,6 +12474,13 @@ msgstr ""
 "κουμπί για να προσθέσεις νέα ερώτηση."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Σημείωσε ότι οι υπάρχουσες κλήσεις με το ίδιο όνομα θα αντικατασταθούν με τα"
+" δεδομένα που ανεβάζεις."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -14071,6 +14100,13 @@ msgstr ""
 "στις πληρωμές που κάνει."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Διαχειρίσου τις κλήσεις παιχνιδιού· οι συμμετέχοντες βλέπουν τις κλήσεις "
+"γραμμένες με κεφαλαία στην περιγραφή των ικανοτήτων τους"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14916,6 +14952,14 @@ msgid ""
 msgstr ""
 "Επιτρέπει στους συμμετέχοντες να αγοράζουν εισιτήρια ως δώρα. Δημιουργείται "
 "ένας ειδικός κωδικός και δίνεται στον παραλήπτη του δώρου για την εγγραφή"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Αν είναι ενεργό, το φύλλο χαρακτήρα δείχνει μια σύνοψη των κλήσεων "
+"παιχνιδιού που είναι γραμμένες με κεφαλαία στην περιγραφή των γνωστών "
+"ικανοτήτων."
 
 msgid ""
 "Please remember that the information on this page was given with the "

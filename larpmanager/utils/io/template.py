@@ -91,6 +91,7 @@ def build_upload_template(context: dict, upload_type: str) -> list[tuple[str, li
         "exp_rule": _rule_template,
         "exp_modifier": _modifier_template,
         "exp_criterion": _criterion_template,
+        "exp_call": _call_template,
         "exp_deliverie": _delivery_template,
     }
     return builders.get(upload_type, _form_template)(context)
@@ -149,6 +150,14 @@ def _ability_type_template(context: dict) -> Any:
     column_names = list(context["columns"][0].keys())
     example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("ability_types", column_names, [example_row])]
+
+
+def _call_template(context: dict) -> Any:
+    """Generate template for call uploads with example data."""
+    field_example_values = {"name": "STUN", "descr": "Call description"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("calls", column_names, [example_row])]
 
 
 def _rule_template(context: dict) -> Any:

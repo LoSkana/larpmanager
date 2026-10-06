@@ -39,6 +39,7 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
     ModifierExp,
@@ -193,6 +194,22 @@ class OrgaAbilityTypeExpForm(BaseModelForm):
     class Meta:
         model = AbilityTypeExp
         exclude = ("number",)
+
+
+class OrgaCallExpForm(BaseModelForm):
+    """Form for OrgaCallExp."""
+
+    page_title = _("Call")
+
+    page_info = _(
+        "Manage the game calls; participants see the calls written in uppercase in the description of their abilities"
+    )
+
+    class Meta:
+        model = CallExp
+        exclude = ("number",)
+
+        widgets: ClassVar[dict] = {"descr": WritingTinyMCE()}
 
 
 class OrgaRuleExpForm(BaseModelForm):

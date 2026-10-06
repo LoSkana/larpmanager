@@ -24,7 +24,15 @@ from typing import TYPE_CHECKING
 import pandas as pd
 from django.db import transaction
 
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CallExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+)
 from larpmanager.models.form import WritingQuestion
 from larpmanager.models.member import LogOperationType
 from larpmanager.models.writing import get_event_class_parent, get_event_elements
@@ -184,18 +192,60 @@ def _ability_type_load(context: dict, csv_row: dict) -> str:
     if err:
         return err
 
-    event = context["event"]
-    parent_event = event.get_class_parent(AbilityTypeExp)
+    parent_event = get_event_class_parent(context["event"].id, AbilityTypeExp, context=context)
 
     # Match the stored ability type ignoring case, so a different casing updates it instead of duplicating it
-    ability_type = AbilityTypeExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
+    ability_type = AbilityTypeExp.objects.filter(event_id=parent_event, name__iexact=name).order_by("number").first()
     was_created = ability_type is None
     if was_created:
-        ability_type = AbilityTypeExp.objects.create(event=parent_event, name=name)
+        ability_type = AbilityTypeExp.objects.create(event_id=parent_event, name=name)
 
     save_log(context, AbilityTypeExp, ability_type, operation_type=LogOperationType.UPLOAD)
 
     return f"OK - Created {ability_type}" if was_created else f"OK - Updated {ability_type}"
+
+
+def calls_load(context: dict, form: Form) -> list[str]:
+    """Load calls from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+
+    if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
+        for call_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_call_load(context, call_row))
+    return processing_logs
+
+
+@transaction.atomic
+def _call_load(context: dict, csv_row: dict) -> str:
+    """Load call data from a CSV row for bulk import, matching existing calls by name."""
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
+
+    parent_event = get_event_class_parent(context["event"].id, CallExp, context=context)
+
+    # Match the stored call ignoring case, so a different casing updates it instead of duplicating it
+    call = CallExp.objects.filter(event_id=parent_event, name__iexact=name).order_by("number").first()
+    was_created = call is None
+    if was_created:
+        call = CallExp(event_id=parent_event, name=name)
+
+    logs = []
+    for field_name, field_value in csv_row.items():
+        if field_name == "name" or _is_missing(field_value) or _is_blank(field_value):
+            continue
+        if field_name == "descr":
+            call.descr = field_value
+        else:
+            logs.append(f"WARN - unknown column ignored: {field_name}")
+
+    call.save()
+    save_log(context, CallExp, call, operation_type=LogOperationType.UPLOAD)
+
+    status = f"OK - Created {call}" if was_created else f"OK - Updated {call}"
+    return _row_result(status, logs)
 
 
 def rules_load(context: dict, form: Form) -> list[str]:

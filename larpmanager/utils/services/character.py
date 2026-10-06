@@ -63,7 +63,7 @@ from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.services.event import has_access_character
-from larpmanager.utils.services.experience import add_char_addit
+from larpmanager.utils.services.experience import add_char_addit, get_character_calls
 
 logger = logging.getLogger(__name__)
 
@@ -317,7 +317,11 @@ def get_character_sheet_exp(context: dict) -> None:
     context["sheet_abilities"] = {}
 
     # Group abilities by their type name
-    for ability in context["character"].exp_ability_list.select_related("typ").order_by("typ__order", "order", "name"):
+    abilities = list(
+        context["character"].exp_ability_list.select_related("typ", "template").order_by("typ__order", "order", "name")
+    )
+    context["sheet_calls"] = get_character_calls(event_id, abilities)
+    for ability in abilities:
         if not ability.typ or not ability.typ.name:
             continue
         # Ensure ability has valid type and name before processing

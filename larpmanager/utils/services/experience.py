@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import html
 import json
+import re
 from collections import defaultdict
 from decimal import Decimal
 from typing import Any
@@ -27,13 +29,22 @@ from typing import Any
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Prefetch, Q
+from django.utils.html import strip_tags
 
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
 from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.rels import get_character_faction_ids_cached
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, Operation, RuleExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    CallExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    Operation,
+    RuleExp,
+)
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
@@ -982,3 +993,19 @@ def calculate_event_experience_points_bgk(event_id: int) -> None:
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
     calculate_event_experience_points_bgk(get_event_class_parent(instance.event_id, instance.__class__))
+
+
+def get_character_calls(event_id: int, abilities: list[AbilityExp]) -> list[CallExp]:
+    """Return the event calls whose name appears as a standalone uppercase word in the abilities descriptions."""
+    if not abilities or not get_event_config(event_id, "exp_calls"):
+        return []
+
+    text = " ".join(html.unescape(strip_tags(ability.get_description or "")) for ability in abilities)
+    if not text.strip():
+        return []
+
+    return [
+        call
+        for call in get_event_elements(event_id, CallExp).order_by("order")
+        if call.name.strip() and re.search(rf"(?<!\w){re.escape(call.name.strip().upper())}(?!\w)", text)
+    ]

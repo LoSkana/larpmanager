@@ -81,7 +81,7 @@ def _exp_column_names(context: dict) -> None:
     context["columns"] = [columns]
 
 
-_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type")
+_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type", "exp_call")
 
 
 def _exp_simple_column_names(context: dict) -> None:
@@ -106,6 +106,12 @@ def _exp_simple_column_names(context: dict) -> None:
             "order": _("(Optional) Display order"),
         }
         context["name"] = "Modifier"
+    elif context["typ"] == "exp_call":
+        columns = {
+            "name": _("The call's name, written in uppercase in the ability descriptions"),
+            "descr": _("(Optional) The call's description"),
+        }
+        context["name"] = "Call"
     else:
         columns = {"name": _("The ability type's name")}
         context["name"] = "Ability type"

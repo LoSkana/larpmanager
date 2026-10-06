@@ -29,9 +29,13 @@ from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.utils.io.download.core import zip_exports
 from larpmanager.utils.io.download.experience import (
     export_abilities,
+    export_ability_types,
+    export_calls,
     export_character_configs,
     export_criterions,
     export_deliveries,
+    export_modifiers,
+    export_rules,
 )
 from larpmanager.utils.io.download.forms import (
     export_character_form,
@@ -121,10 +125,14 @@ def prepare_backup(context: dict) -> HttpResponse:
 
     # Export experience/abilities data if feature is enabled
     if "experience" in context["features"]:
+        export_files.extend(export_ability_types(context))
         export_files.extend(export_abilities(context))
         export_files.extend(export_deliveries(context))
-        # Exported regardless of the criterions config, so that backup and restore stay symmetric
+        # Exported regardless of their configs, so that backup and restore stay symmetric
+        export_files.extend(export_rules(context))
+        export_files.extend(export_modifiers(context))
         export_files.extend(export_criterions(context))
+        export_files.extend(export_calls(context))
 
     # Export quest builder data if feature is enabled
     if "questbuilder" in context["features"]:

@@ -1618,6 +1618,14 @@ msgid ""
 "experience point totals based on prerequisites and requirements."
 msgstr ""
 
+msgid "Calls"
+msgstr ""
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in "
+"uppercase in the description of the known abilities."
+msgstr ""
+
 msgid "Auto buy"
 msgstr ""
 
@@ -2283,6 +2291,14 @@ msgstr ""
 
 msgid ""
 "Organize purchasable abilities into categories by managing ability types"
+msgstr ""
+
+msgid "Call"
+msgstr ""
+
+msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
 msgstr ""
 
 msgid "Rule"
@@ -9456,6 +9472,9 @@ msgid ""
 "ability type."
 msgstr ""
 
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+
 msgid "Operation"
 msgstr ""
 
@@ -9985,6 +10004,11 @@ msgstr ""
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
 "with the uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
 msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
@@ -11843,6 +11867,9 @@ msgstr ""
 msgid "Manage the event guilds"
 msgstr ""
 
+msgid "Manage the game calls participants must remember"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -12332,6 +12359,12 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr ""
 
 msgid "(Optional) Cost (0 = auto assigned)"
+msgstr ""
+
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr ""
+
+msgid "(Optional) The call's description"
 msgstr ""
 
 msgid "The ability type's name"
