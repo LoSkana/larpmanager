@@ -1090,3 +1090,15 @@
     icon: users
     feature: guild
     module: writing
+- model: larpmanager.eventpermission
+  fields:
+    name: Calls
+    descr: Manage the game calls participants must remember
+    slug: orga_exp_calls
+    number: 97
+    config: experience
+    active_if: exp_calls
+    hidden: false
+    icon: bullhorn
+    feature: exp_calls
+    module: experience

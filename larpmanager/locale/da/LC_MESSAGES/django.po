@@ -83,6 +83,9 @@ msgstr "Bog"
 msgid "Bulk"
 msgstr "Masse"
 
+msgid "Call"
+msgstr "Kald"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -298,6 +301,9 @@ msgstr "Tildeling"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Kald"
 
 msgid "Cards"
 msgstr "Kort"
@@ -6444,6 +6450,9 @@ msgstr "kontrollér ikke-eksisterende relationer:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s er ikke synlig på nuværende tidspunkt"
 
+msgid "(Optional) The call's description"
+msgstr "(Valgfrit) Kaldets beskrivelse"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valgfrit) Billettens pris"
 
@@ -8122,6 +8131,9 @@ msgstr "Jeg er interesseret, men har ikke meget erfaring"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Inaktive karakterer kan ikke tildeles spillere"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Administrer de kald i spillet, som deltagerne skal huske"
+
 msgid "No additional payments are required at this time"
 msgstr "Der kræves ingen yderligere betalinger på nuværende tidspunkt"
 
@@ -9549,6 +9561,9 @@ msgstr "Nogle billetter mangler en sidste rate (beløb 0): %(list)s"
 msgid "The assistant is temporarily unavailable, please try again later."
 msgstr "Assistenten er midlertidigt utilgængelig. Prøv igen senere."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr "Kaldets navn, skrevet med store bogstaver i evnebeskrivelserne"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr ""
 "Betalingen blev ikke gennemført. Kontakt os venligst for at finde ud af "
@@ -9799,6 +9814,11 @@ msgstr ""
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Administrer spørgsmålene, der er tildelt hvert workshopmodul for dette event"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Der er ingen kald endnu. Brug knappen ovenfor til at oprette det første "
+"kald."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dage, spilleren har til at betale sin næste rate"
@@ -12064,6 +12084,13 @@ msgstr ""
 "tilføje et nyt spørgsmål."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Bemærk, at eksisterende kald med samme navn bliver overskrevet med de "
+"uploadede data."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13677,6 +13704,13 @@ msgstr ""
 "skrive på de betalinger, de foretager."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Administrer kaldene i spillet; deltagerne ser de kald, der står med store "
+"bogstaver i beskrivelsen af deres evner"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14495,6 +14529,13 @@ msgid ""
 msgstr ""
 "Giver deltagere mulighed for at købe billetter som gaver. Der genereres en "
 "særlig kode, som gives til gavemodtageren til registrering"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Hvis det er slået til, viser karakterarket et overblik over de kald i "
+"spillet, der står med store bogstaver i beskrivelsen af de kendte evner."
 
 msgid ""
 "Please remember that the information on this page was given with the "

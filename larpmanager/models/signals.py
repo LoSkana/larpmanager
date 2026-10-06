@@ -90,6 +90,7 @@ from larpmanager.cache.config import (
 )
 from larpmanager.cache.event_text import update_event_text_cache_on_save
 from larpmanager.cache.experience import (
+    clear_event_exp_calls_cache,
     clear_event_exp_systems_cache,
     on_ability_characters_m2m_changed,
     on_ability_prerequisites_m2m_changed,
@@ -250,6 +251,7 @@ from larpmanager.models.event import (
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
     ModifierExp,
@@ -946,6 +948,12 @@ def post_delete_email_suppression(sender: type, instance: EmailSuppression, **kw
 def post_save_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear experience systems cache after save."""
     clear_event_exp_systems_cache(instance.event_id)
+
+
+@receiver(post_save, sender=CallExp)
+def post_save_call_exp(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear experience calls cache after save."""
+    clear_event_exp_calls_cache(instance.event_id)
 
 
 @receiver(post_save, sender=EventButton)

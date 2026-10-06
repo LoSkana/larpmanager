@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import html
 import json
+import re
 from collections import defaultdict
 from decimal import Decimal
 from typing import Any
@@ -27,13 +29,21 @@ from typing import Any
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Prefetch, Q
+from django.utils.html import escape, strip_tags
 
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
-from larpmanager.cache.experience import get_event_exp_systems
+from larpmanager.cache.experience import get_event_exp_calls, get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.rels import get_character_faction_ids_cached
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, Operation, RuleExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    Operation,
+    RuleExp,
+)
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
@@ -982,3 +992,51 @@ def calculate_event_experience_points_bgk(event_id: int) -> None:
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
     calculate_event_experience_points_bgk(get_event_class_parent(instance.event_id, instance.__class__))
+
+
+def get_event_calls(event_id: int) -> list[dict[str, str]]:
+    """Return the cached event calls (uppercase name and description), empty if calls are disabled."""
+    if not get_event_config(event_id, "exp_calls"):
+        return []
+    return get_event_exp_calls(event_id)
+
+
+def get_character_calls(event_id: int, abilities: list[AbilityExp]) -> list[dict[str, str]]:
+    """Return the event calls whose name appears as a standalone uppercase word in the abilities descriptions."""
+    if not abilities:
+        return []
+
+    calls = get_event_calls(event_id)
+    if not calls:
+        return []
+
+    text = " ".join(html.unescape(strip_tags(ability.get_description or "")) for ability in abilities)
+    found = set(_calls_pattern([call["name"] for call in calls]).findall(text))
+    return [call for call in calls if call["name"] in found]
+
+
+_HTML_TAG_SPLIT = re.compile(r"(<[^>]*>)")
+
+
+def _calls_pattern(names: list[str]) -> re.Pattern:
+    """Build the regex matching the calls names as whole words, longest first so a call containing another wins."""
+    names = sorted(names, key=len, reverse=True)
+    return re.compile(rf"(?<![\w&])({'|'.join(re.escape(name) for name in names)})(?!\w)")
+
+
+def add_calls_tooltips(text: str, calls: list[dict[str, str]]) -> str:
+    """Wrap the calls names found in the HTML text nodes with a hover tooltip showing their description."""
+    descr_by_name = {call["name"]: call["descr"] for call in calls or [] if call["descr"]}
+    if not text or not descr_by_name:
+        return text
+
+    pattern = _calls_pattern(list(descr_by_name))
+
+    def _wrap(match: re.Match) -> str:
+        return (
+            f"<span class='exp-call' data-call-descr='{escape(descr_by_name[match.group(1)])}'>{match.group(1)}</span>"
+        )
+
+    # Odd parts are tags: replace only in the text between them, never inside attributes
+    parts = _HTML_TAG_SPLIT.split(text)
+    return "".join(part if index % 2 else pattern.sub(_wrap, part) for index, part in enumerate(parts))

@@ -1612,6 +1612,38 @@ function reload_has_tooltip(parent='') {
 
 }
 
+// Show the description of the calls in the ability descriptions; bound on first hover, so it also works on
+// elements added later, and inside a modal dialog the tooltip is placed in the dialog to stay above it.
+$(document).on('mouseenter', '.exp-call', function(event) {
+    const $call = $(this);
+    if ($call.data('qtip')) return;
+    const $dialog = $call.closest('dialog');
+    $call.qtip({
+        content: {
+            text: $call.attr('data-call-descr')
+        }, style: {
+            classes: 'qtip-dark qtip-rounded qtip-shadow'
+        }, show: {
+            event: event.type,
+            ready: true
+        }, position: {
+            my: 'top center',
+            at: 'bottom center',
+            container: $dialog.length ? $dialog : $(document.body),
+            viewport: window
+        }
+    }, event);
+});
+
+// Remove the calls tooltips placed in a modal dialog when it closes, since its content is replaced on reopen.
+// The close event does not bubble, so it is caught in the capture phase.
+document.addEventListener('close', function(event) {
+    if (event.target.tagName !== 'DIALOG') return;
+    $(event.target).find('.exp-call').each(function() {
+        if ($(this).data('qtip')) $(this).qtip('destroy', true);
+    });
+}, true);
+
 // Add translated qtip tooltips to edit/up/down/trash action icons that lack one.
 function add_icon_tooltips() {
     // Dictionary mapping icon classes to their tooltip texts

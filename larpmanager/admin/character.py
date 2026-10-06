@@ -29,6 +29,7 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
     ModifierExp,
@@ -181,6 +182,16 @@ class CriterionPxAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("id", "event", "name", "system", "operation", "amount", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "system", "prerequisites", "requirements", "factions"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(CallExp)
+class CallExpAdmin(DefModelAdmin):
+    """Admin interface for CallExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event"]
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 

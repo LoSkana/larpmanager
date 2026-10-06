@@ -22,6 +22,21 @@
             </div>
         {% endfor %}
     {% endif %}
+    {% if sheet_calls %}
+        <h2 class="c title">{% trans "Calls" %}</h2>
+        <table class="mob abilities">
+            {% for el in sheet_calls %}
+                <tr>
+                    <th>
+                        <h4>{{ el.name }}</h4>
+                    </th>
+                    <td>
+                        {% if el.descr %}{{ el.descr | safe }}{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
     {% if sheet_abilities %}
         <h2 class="c title">{% trans "Abilities" %}</h2>
         <p>
@@ -52,7 +67,15 @@
                             </h4>
                         </th>
                         <td>
-                            {% if el.get_description %}<span class="ability-desc">{{ el.get_description | safe }}</span>{% endif %}
+                            {% if el.get_description %}
+                                <span class="ability-desc">
+                                    {% if pdf %}
+                                        {{ el.get_description | safe }}
+                                    {% else %}
+                                        {{ el.get_description | calls_tooltip:sheet_calls | safe }}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

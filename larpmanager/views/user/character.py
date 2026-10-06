@@ -101,7 +101,9 @@ from larpmanager.utils.services.experience import (
     build_exp_context,
     calculate_character_experience_points,
     get_available_ability_exp,
+    get_character_calls,
     get_current_ability_exp,
+    get_event_calls,
     remove_char_ability,
 )
 from larpmanager.utils.services.writing import char_add_addit
@@ -1040,8 +1042,11 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
         }
 
     # Build current character abilities organized by type name
+    current_abilities = list(get_current_ability_exp(char, exp_context))
+    context["sheet_calls"] = get_character_calls(context["event"].id, current_abilities)
+    context["exp_calls"] = get_event_calls(context["event"].id)
     context["sheet_abilities"] = {}
-    for el in get_current_ability_exp(char, exp_context):
+    for el in current_abilities:
         if el.typ is None:
             continue
         # Create type list if it doesn't exist

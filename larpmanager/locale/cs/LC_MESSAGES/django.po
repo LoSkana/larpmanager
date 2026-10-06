@@ -83,6 +83,9 @@ msgstr "Kniha"
 msgid "Bulk"
 msgstr "Hromadné"
 
+msgid "Call"
+msgstr "Volání"
+
 msgid "Card"
 msgstr "Karta"
 
@@ -298,6 +301,9 @@ msgstr "Udělení"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Volání"
 
 msgid "Cards"
 msgstr "Karty"
@@ -6444,6 +6450,9 @@ msgstr "Kontrola neexistujících vztahů:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s není v tuto chvíli viditelný"
 
+msgid "(Optional) The call's description"
+msgstr "(Volitelné) Popis volání"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Nepovinné) Cena vstupného"
 
@@ -8122,6 +8131,9 @@ msgstr "Mám zájem, ale nemám mnoho zkušeností"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Neaktivní postavy nelze přiřadit k hráčům"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Spravuj herní volání, která si účastníci musí pamatovat"
+
 msgid "No additional payments are required at this time"
 msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
@@ -9546,6 +9558,9 @@ msgstr "U některých vstupenek chybí poslední splátka (částka 0): %(list)s
 msgid "The assistant is temporarily unavailable, please try again later."
 msgstr "Asistent je momentálně nedostupný, zkus to prosím později."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr "Název volání, napsaný velkými písmeny v popisech schopností"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr "Platba nebyla dokončena. Kontaktuj nás a zjisti, proč."
 
@@ -9773,6 +9788,11 @@ msgstr "Spravuj kroky postupu, které se účastníkům během této akce zobraz
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Spravuj otázky přiřazené k jednotlivým modulům workshopu pro tuto akci"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Zatím nejsou definována žádná volání. Použij tlačítko výše a vytvoř první "
+"volání."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dní, během kterých musí hráč zaplatit další splátku"
@@ -11952,6 +11972,12 @@ msgstr ""
 "přidat novou otázku."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Pozor, existující volání se stejným názvem budou přepsána nahranými daty."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13555,6 +13581,13 @@ msgstr ""
 "platbách, které provádí."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Spravuj herní volání; účastníci uvidí volání napsaná velkými písmeny v "
+"popisu svých schopností"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14372,6 +14405,13 @@ msgid ""
 msgstr ""
 "Umožňuje účastníkům zakoupit vstupenky jako dárky. Pro registraci je "
 "vygenerován speciální kód, který je poskytnut obdarovanému"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Pokud je zapnuto, karta postavy zobrazí přehled herních volání napsaných "
+"velkými písmeny v popisu známých schopností."
 
 msgid ""
 "Please remember that the information on this page was given with the "

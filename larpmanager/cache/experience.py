@@ -31,7 +31,15 @@ from django.core.cache import cache
 from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    CallExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.writing import get_event_class_parent, get_event_elements
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
@@ -84,6 +92,31 @@ def has_multiple_exp_systems(event_id: int) -> bool:
 def clear_event_exp_systems_cache(event_id: int) -> None:
     """Clear cached experience systems list for the given event ID."""
     cache.delete(get_event_exp_systems_key(event_id))
+
+
+def get_event_exp_calls_key(event_id: int) -> str:
+    """Generate cache key for event experience calls list."""
+    return f"event__exp_calls__{event_id}"
+
+
+def get_event_exp_calls(event_id: int) -> list[dict[str, str]]:
+    """Get the ordered calls of an event as dicts with uppercase name and description, using cache."""
+    effective_event_id = get_event_class_parent(event_id, CallExp)
+    cache_key = get_event_exp_calls_key(effective_event_id)
+    calls = cache.get(cache_key)
+    if calls is None:
+        calls = [
+            {"name": name.strip().upper(), "descr": descr or ""}
+            for name, descr in get_event_elements(event_id, CallExp).order_by("order").values_list("name", "descr")
+            if name.strip()
+        ]
+        cache.set(cache_key, calls, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return calls
+
+
+def clear_event_exp_calls_cache(event_id: int) -> None:
+    """Clear cached experience calls list for the event the calls are inherited from."""
+    cache.delete(get_event_exp_calls_key(get_event_class_parent(event_id, CallExp)))
 
 
 def get_event_exp_key(event_id: int) -> str:

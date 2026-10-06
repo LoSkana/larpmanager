@@ -1,7 +1,46 @@
 {% load show_tags i18n %}
+{{ exp_calls|json_script:"exp-calls" }}
 <script>
 
 const abilities = {{ available | safe }};
+
+// Calls written in uppercase in the ability descriptions, shown with a hover tooltip
+const callDescr = {};
+JSON.parse(document.getElementById('exp-calls').textContent).forEach(function(call) {
+    if (call.descr) callDescr[call.name] = call.descr;
+});
+const callNames = Object.keys(callDescr).sort(function(a, b) { return b.length - a.length; });
+const callRegex = callNames.length ? new RegExp(
+    '(?<![\\p{L}\\p{N}_&])(' + callNames.map(function(name) {
+        return name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }).join('|') + ')(?![\\p{L}\\p{N}_])', 'gu'
+) : null;
+
+// Split a plain text in text nodes and call spans, the description shown on hover
+function callNodes(text) {
+    if (!callRegex) return [document.createTextNode(text)];
+    const nodes = [];
+    let last = 0;
+    text.replace(callRegex, function(match, name, offset) {
+        nodes.push(document.createTextNode(text.slice(last, offset)));
+        nodes.push($('<span class="exp-call">').attr('data-call-descr', callDescr[name]).text(name)[0]);
+        last = offset + match.length;
+        return match;
+    });
+    nodes.push(document.createTextNode(text.slice(last)));
+    return nodes;
+}
+
+// Replace the calls found in the text nodes of an element
+function wrapCalls(root) {
+    if (!callRegex) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(function(node) {
+        $(node).replaceWith(callNodes(node.nodeValue));
+    });
+}
 
 window.addEventListener('DOMContentLoaded', function() {
     $('form[enctype="multipart/form-data"]').attr('data-confirm', '{% filter escapejs %}{% trans "Obtain the selected ability?" %}{% endfilter %}');
@@ -86,14 +125,16 @@ window.addEventListener('DOMContentLoaded', function() {
         if (ab.descr) {
             const stripped = new DOMParser().parseFromString(ab.descr, 'text/html').body.textContent || '';
             const preview = stripped.length > 100 ? stripped.slice(0, 120) + '...' : stripped;
-            const $descr = $('<p class="ability-card-descr">').text(preview + ' ');
+            const $descr = $('<p class="ability-card-descr">').append(callNodes(preview + ' '));
             const $info = $('<span>', {
                 'class': 'ability-descr-open',
                 'aria-label': labelFullDescr
             }).append($('<i class="fa-solid fa-circle-info">'));
             const $content = $('<div class="ability-descr-full">');
             $content.append($('<h3>').text(ab.name));
-            $content.append($('<div>').html(ab.descr));
+            const $full = $('<div>').html(ab.descr);
+            wrapCalls($full[0]);
+            $content.append($full);
             $info.qtip({
                 content: {
                     text: $content
@@ -102,7 +143,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 }, position: {
                     my: 'top center',
                     at: 'bottom center',
-                    viewport: $(window)
+                    viewport: window
                 }
             });
             const modalHtml = $content.prop('outerHTML');

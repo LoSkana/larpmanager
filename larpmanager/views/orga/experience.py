@@ -37,6 +37,7 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
     ModifierExp,
@@ -58,6 +59,7 @@ from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga
 from larpmanager.utils.io.download import (
     export_abilities,
     export_ability_types,
+    export_calls,
     export_criterions,
     export_deliveries,
     export_modifiers,
@@ -487,6 +489,40 @@ def orga_exp_criterions_edit(request: HttpRequest, event_slug: str, criterion_uu
 def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
     """Delete criterion for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
+
+
+@login_required
+def orga_exp_calls(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage the game calls for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_calls")
+
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_calls(context), "Calls"))
+
+    context["upload"] = "exp_calls"
+    context["download"] = 1
+
+    context["list"] = get_event_elements(context["event"].id, CallExp, context=context).order_by("order")
+    return render(request, "larpmanager/orga/experience/calls.html", context)
+
+
+@login_required
+def orga_exp_calls_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a call for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_CALLS)
+
+
+@login_required
+def orga_exp_calls_edit(request: HttpRequest, event_slug: str, call_uuid: str) -> HttpResponse:
+    """Edit a call for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_CALLS, call_uuid)
+
+
+@login_required
+def orga_exp_calls_delete(request: HttpRequest, event_slug: str, call_uuid: str) -> HttpResponse:
+    """Delete a call for an event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_CALLS, call_uuid)
 
 
 @login_required

@@ -83,6 +83,9 @@ msgstr "Libro"
 msgid "Bulk"
 msgstr "En masa"
 
+msgid "Call"
+msgstr "Llamada"
+
 msgid "Card"
 msgstr "Tarjeta"
 
@@ -298,6 +301,9 @@ msgstr "Asignación"
 
 msgid "Badge"
 msgstr "Badge"
+
+msgid "Calls"
+msgstr "Llamadas"
 
 msgid "Cards"
 msgstr "Tarjetas"
@@ -6444,6 +6450,9 @@ msgstr "comprobar relaciones inexistentes:"
 msgid "%(name)s not visible at this time"
 msgstr "%(name)s no está visible ahora mismo"
 
+msgid "(Optional) The call's description"
+msgstr "(Opcional) La descripción de la llamada"
+
 msgid "(Optional) The cost of the ticket"
 msgstr "(Opcional) El coste de la entrada"
 
@@ -8130,6 +8139,9 @@ msgstr "Estoy interesado, pero no tengo mucha experiencia"
 msgid "Inactive characters can't be assigned to players"
 msgstr "Los personajes inactivos no pueden asignarse a jugadores"
 
+msgid "Manage the game calls participants must remember"
+msgstr "Gestiona las llamadas de juego que los participantes deben recordar"
+
 msgid "No additional payments are required at this time"
 msgstr "No se requieren pagos adicionales en este momento"
 
@@ -9698,6 +9710,11 @@ msgstr ""
 "El asistente no está disponible por el momento; por favor, vuelve a "
 "intentarlo más tarde."
 
+msgid "The call's name, written in uppercase in the ability descriptions"
+msgstr ""
+"El nombre de la llamada, escrito en mayúsculas en las descripciones de las "
+"habilidades"
+
 msgid "The payment was not completed. Please contact us to find out why."
 msgstr ""
 "El pago no se ha completado. Ponte en contacto con nosotros para saber por "
@@ -9976,6 +9993,11 @@ msgstr ""
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 "Gestiona las preguntas asignadas a cada módulo del taller para este evento"
+
+msgid "No calls defined yet. Use the button above to create the first call."
+msgstr ""
+"Todavía no hay llamadas definidas. Usa el botón de arriba para crear la "
+"primera llamada."
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Número de días en los que el jugador debe pagar su siguiente cuota"
@@ -12356,6 +12378,13 @@ msgstr ""
 "para añadir una nueva pregunta."
 
 msgid ""
+"Note that existing calls with the same name, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Ten en cuenta que las llamadas existentes con el mismo nombre se "
+"sobrescribirán con los datos subidos."
+
+msgid ""
 "Total amount of money expected if all registered participants fully pay "
 "their due amount"
 msgstr ""
@@ -13976,6 +14005,13 @@ msgstr ""
 "en los pagos que realiza."
 
 msgid ""
+"Manage the game calls; participants see the calls written in uppercase in "
+"the description of their abilities"
+msgstr ""
+"Gestiona las llamadas de juego; los participantes ven las llamadas escritas "
+"en mayúsculas en la descripción de sus habilidades"
+
+msgid ""
 "No inventory pool types defined yet. Add a pool type to categorize items "
 "available in character inventories."
 msgstr ""
@@ -14813,6 +14849,14 @@ msgstr ""
 "Permite a los participantes comprar entradas como regalo. Se genera un "
 "código especial que se proporciona al destinatario del regalo para que se "
 "registre"
+
+msgid ""
+"If enabled, the character sheet shows a summary of the game calls written in"
+" uppercase in the description of the known abilities."
+msgstr ""
+"Si está activado, la hoja de personaje muestra un resumen de las llamadas de"
+" juego escritas en mayúsculas en la descripción de las habilidades "
+"conocidas."
 
 msgid ""
 "Please remember that the information on this page was given with the "

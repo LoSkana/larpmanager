@@ -1006,6 +1006,13 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
 
+        # Calls configuration
+        calls_label = _("Calls")
+        calls_help_text = _(
+            "If enabled, the character sheet shows a summary of the game calls written in uppercase in the description of the known abilities.",
+        )
+        self.add_configs("exp_calls", ConfigType.BOOL, calls_label, calls_help_text)
+
         # Auto buy configuration
         auto_buy_label = _("Auto buy")
         auto_buy_help_text = _(

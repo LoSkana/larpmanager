@@ -628,6 +628,13 @@ body.association.new_v20 .user_resize {
   padding: 1em 0;
 }
 
+/* Calls in the ability descriptions, with the call description on hover */
+.exp-call {
+  font-weight: 600;
+  border-bottom: 1px dotted currentColor;
+  cursor: help;
+}
+
 /* Experience points summary */
 .exp-summary {
   margin-bottom: 1em;

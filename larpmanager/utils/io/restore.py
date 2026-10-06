@@ -34,7 +34,15 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import QuestType
 from larpmanager.models.event import EventConfig, RunConfig
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CallExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+)
 from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationOption,
@@ -55,10 +63,14 @@ from larpmanager.models.writing import (
 from larpmanager.utils.io.upload import (
     _get_row_number,
     abilities_load,
+    ability_types_load,
+    calls_load,
     criterions_load,
     deliveries_load,
     form_load,
+    modifiers_load,
     registrations_load,
+    rules_load,
     tickets_load,
     writing_load,
 )
@@ -382,6 +394,46 @@ def _preview_deliveries(context: dict, df: pd.DataFrame) -> dict:
     return _section(str(_("Deliveries")), creates, updates, skips)
 
 
+def _preview_by_name(context: dict, df: pd.DataFrame, model: type, label: str) -> dict:
+    """Preview elements matched case-insensitively by name, as their execution does."""
+    event_id = get_event_class_parent(context["event"].id, model, context=context)
+    existing = {
+        name.lower()
+        for name in model.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True)
+    }
+
+    creates, updates, skips = [], [], []
+    for _idx, row in df.iterrows():
+        name = _cell(row, "name")
+        if not name:
+            skips.append("(empty): missing name")
+            continue
+        (updates if name.lower() in existing else creates).append(name)
+
+    return _section(label, creates, updates, skips)
+
+
+def _preview_by_number(context: dict, df: pd.DataFrame, model: type, label: str, required: str | None = None) -> dict:
+    """Preview elements matched by number; new ones are skipped when the required column is empty."""
+    event_id = get_event_class_parent(context["event"].id, model, context=context)
+    existing = set(model.objects.filter(event_id=event_id, deleted__isnull=True).values_list("number", flat=True))
+
+    creates, updates, skips = [], [], []
+    for _idx, row in df.iterrows():
+        number_int, err = _get_row_number(row)
+        if err:
+            skips.append(f"{_cell(row, 'number') or '(empty)'}: {err}")
+            continue
+        if number_int in existing:
+            updates.append(str(number_int))
+        elif required and not _cell(row, required):
+            skips.append(f"{number_int}: missing {required}")
+        else:
+            creates.append(str(number_int))
+
+    return _section(label, creates, updates, skips)
+
+
 def _preview_registration(context: dict, df: pd.DataFrame) -> dict:
     run = context["run"]
     existing_emails = set(
@@ -597,6 +649,26 @@ def _exec_deliveries(context: dict, df: pd.DataFrame) -> list[str]:
     return deliveries_load(ctx, _FakeForm(first=_fake_csv(df)))
 
 
+def _exec_ability_types(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_ability_type"}
+    return ability_types_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
+def _exec_rules(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_rule"}
+    return rules_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
+def _exec_modifiers(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_modifier"}
+    return modifiers_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
+def _exec_calls(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_call"}
+    return calls_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
 def _exec_registration(context: dict, df: pd.DataFrame) -> list[str]:
     ctx = {**context, "typ": "registration"}
     return registrations_load(ctx, _FakeForm(first=_fake_csv(df)))
@@ -671,6 +743,23 @@ def _preview_form_sections(
 # ---------------------------------------------------------------------------
 
 
+def _preview_experience(context: dict, dfs: dict[str, pd.DataFrame], sections: list[dict], handled: set[str]) -> None:
+    """Preview the experience files, in the same order they are restored."""
+    previews = {
+        "ability_types": lambda df: _preview_by_name(context, df, AbilityTypeExp, str(_("Ability types"))),
+        "abilities": lambda df: _preview_abilities(context, df),
+        "rules": lambda df: _preview_by_number(context, df, RuleExp, str(_("Rules")), required="field"),
+        "modifiers": lambda df: _preview_by_number(context, df, ModifierExp, str(_("Modifiers"))),
+        "criterions": lambda df: _preview_criterions(context, df),
+        "deliveries": lambda df: _preview_deliveries(context, df),
+        "calls": lambda df: _preview_by_name(context, df, CallExp, str(_("Calls"))),
+    }
+    for stem, preview in previews.items():
+        if stem in dfs:
+            sections.append(preview(dfs[stem]))
+            handled.add(stem)
+
+
 def preview_restore(context: dict, zip_bytes: bytes) -> tuple[list[dict], list[str]]:
     """Parse ZIP and return (sections, unknown_files) without modifying the DB."""
     dfs = _parse_zip(zip_bytes)
@@ -705,17 +794,7 @@ def preview_restore(context: dict, zip_bytes: bytes) -> tuple[list[dict], list[s
         sections.append(_preview_questtype(context, dfs["questtype"]))
         handled.add("questtype")
 
-    if "abilities" in dfs:
-        sections.append(_preview_abilities(context, dfs["abilities"]))
-        handled.add("abilities")
-
-    if "criterions" in dfs:
-        sections.append(_preview_criterions(context, dfs["criterions"]))
-        handled.add("criterions")
-
-    if "deliveries" in dfs:
-        sections.append(_preview_deliveries(context, dfs["deliveries"]))
-        handled.add("deliveries")
+    _preview_experience(context, dfs, sections, handled)
 
     unknown = [f"{stem}.csv" for stem in dfs if stem not in handled]
     return sections, unknown
@@ -758,6 +837,22 @@ def _exec_form_sections(context: dict, dfs: dict[str, pd.DataFrame], logs: list[
             logs.append(f"ERR - character_form: {exc}")
 
 
+def _exec_experience(context: dict, dfs: dict[str, pd.DataFrame], logs: list[str]) -> None:
+    """Restore the experience files, types first since abilities reference them, then their dependents."""
+    executors = {
+        "ability_types": _exec_ability_types,
+        "abilities": _exec_abilities,
+        "rules": _exec_rules,
+        "modifiers": _exec_modifiers,
+        "criterions": _exec_criterions,
+        "deliveries": _exec_deliveries,
+        "calls": _exec_calls,
+    }
+    for stem, executor in executors.items():
+        if stem in dfs:
+            _safe_run(logs, stem, executor, context, dfs[stem])
+
+
 def execute_restore(context: dict, zip_bytes: bytes) -> list[str]:
     """Execute the full restore from the ZIP, return all log messages."""
     dfs = _parse_zip(zip_bytes)
@@ -781,11 +876,6 @@ def execute_restore(context: dict, zip_bytes: bytes) -> list[str]:
 
     if "questtype" in dfs:
         _safe_run(logs, "questtype", _exec_questtype, context, dfs["questtype"])
-    if "abilities" in dfs:
-        _safe_run(logs, "abilities", _exec_abilities, context, dfs["abilities"])
-    if "criterions" in dfs:
-        _safe_run(logs, "criterions", _exec_criterions, context, dfs["criterions"])
-    if "deliveries" in dfs:
-        _safe_run(logs, "deliveries", _exec_deliveries, context, dfs["deliveries"])
+    _exec_experience(context, dfs, logs)
 
     return logs

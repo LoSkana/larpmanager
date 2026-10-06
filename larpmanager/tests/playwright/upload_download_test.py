@@ -79,6 +79,8 @@ def test_upload_download(pw_page: Any) -> None:
 
     criterions_deliveries(page)
 
+    calls(page)
+
     full(page)
 
 
@@ -115,6 +117,33 @@ def criterions_deliveries(page: Any) -> None:
     )
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
+    check_download(page, "Download")
+
+
+def calls(page: Any) -> None:
+    # enable calls
+    page.get_by_role("link", name="Configuration").first.click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.locator("#id_exp_calls").check()
+    submit_confirm(page)
+
+    sidebar(page, "Calls")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("calls.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created STUN OK - Created BLEED",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "STUN Fall to the ground for five seconds BLEED Lose one hit point every minute",
+    )
     check_download(page, "Download")
 
 

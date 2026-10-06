@@ -353,3 +353,23 @@ class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
                 name="unique_criterion_without_optional",
             ),
         ]
+
+
+class CallExp(UuidMixin, OrderMixin, BaseConceptModel):
+    """Represents a game call that participants must remember, shown when referenced by their abilities."""
+
+    descr = HTMLField(max_length=5000, blank=True, null=True, verbose_name=_("Description"))
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_call_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_call_without_optional",
+            ),
+        ]
