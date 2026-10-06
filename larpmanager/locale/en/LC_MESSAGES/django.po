@@ -13114,6 +13114,10 @@ msgstr ""
 msgid "Answer submitted!"
 msgstr ""
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr ""
+
 msgid "Element"
 msgstr ""
 

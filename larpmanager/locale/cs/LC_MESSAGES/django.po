@@ -5843,6 +5843,10 @@ msgstr "Přiveď na %(event)s kamaráda!"
 msgid "Characters not participating"
 msgstr "Neúčastní se"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Uzavřít otázku od %(member)s"
+
 msgid "Color of all the other text."
 msgstr "Barva všeho ostatního textu."
 

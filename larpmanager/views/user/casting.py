@@ -266,6 +266,9 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
     # Load any previously saved preferences for this casting type
     _get_previous(request, context)
 
+    # Cap the minimum number of preferences to the available elements
+    context["casting_min"] = min(context["casting_min"], len(context.get("valid_element_ids", set())))
+
     # Process POST request with new casting preferences
     if request.method == "POST":
         return _process_casting_post(casting_type, context, request)
@@ -314,7 +317,7 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
         prefs[i] = pref
 
     # Validate the minimum number of preferences has been reached
-    if not validation_error and len(prefs) < min(context["casting_min"], len(valid_element_ids)):
+    if not validation_error and len(prefs) < context["casting_min"]:
         messages.error(request, _("You have not reached the minimum number of preferences"))
         validation_error = True
 

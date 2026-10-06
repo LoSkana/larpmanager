@@ -584,6 +584,16 @@ body.association.new_v20 .user_resize {
   margin-top: 0;
 }
 
+#lm-modal .ability-descr-full {
+  font-size: 1.5em;
+  line-height: 1.6;
+}
+
+#lm-modal .ability-descr-full h3 {
+  font-size: 2em;
+  margin-bottom: 0.6em;
+}
+
 .ability-card-prereqs {
   font-size: 0.78em;
   opacity: 0.65;

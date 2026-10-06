@@ -1349,8 +1349,15 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
     return render(request, "larpmanager/exe/users/questions_answer.html", context)
 
 
+def _exe_questions_close_name(request: HttpRequest, member_uuid: str) -> str:
+    """Return the label of the help question being closed."""
+    context = check_association_context(request, "exe_questions")
+    member = get_help_question_member(member_uuid, context["association_id"])
+    return str(_("Close question of %(member)s") % {"member": member})
+
+
 @login_required
-@confirm_post
+@confirm_post(el_name=_exe_questions_close_name)
 def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Close a help question for a member."""
     context = check_association_context(request, "exe_questions")
