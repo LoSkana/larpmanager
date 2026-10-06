@@ -5843,6 +5843,10 @@ msgstr "Φέρε έναν φίλο στο %(event)s!"
 msgid "Characters not participating"
 msgstr "Χαρακτήρες που δεν συμμετέχουν"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Κλείσιμο ερώτησης του %(member)s"
+
 msgid "Color of all the other text."
 msgstr "Χρώμα όλου του υπόλοιπου κειμένου."
 

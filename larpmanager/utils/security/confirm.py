@@ -45,13 +45,25 @@ if TYPE_CHECKING:
 REDIRECT_STATUS = (HTTPStatus.MOVED_PERMANENTLY, HTTPStatus.FOUND)
 
 
-def confirm_post(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpResponse]:
+def confirm_post(
+    view_func: Callable[..., HttpResponse] | None = None,
+    *,
+    el_name: Callable[..., str] | None = None,
+) -> Callable[..., HttpResponse]:
     """Require a confirming POST before running a state-changing view.
 
     On GET, render a confirmation page that POSTs back to the same URL with a
     CSRF token. On POST, run the wrapped view. This closes CSRF for endpoints
     that would otherwise mutate on a bare GET.
+
+    Args:
+        view_func: View to wrap (when used as bare ``@confirm_post``)
+        el_name: Optional callable receiving the view arguments, returning the
+            name of the affected element to show on the confirmation page
+
     """
+    if view_func is None:
+        return lambda func: confirm_post(func, el_name=el_name)
 
     @wraps(view_func)
     def _wrapped(request: HttpRequest, *args: object, **kwargs: object) -> HttpResponse:
@@ -70,6 +82,8 @@ def confirm_post(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpRe
 
         context = get_context(request)
         context["frame"] = is_frame
+        if el_name:
+            context["el_name"] = el_name(request, *args, **kwargs)
         return render(request, "elements/confirm_action.html", context)
 
     return _wrapped

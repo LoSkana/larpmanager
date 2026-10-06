@@ -406,8 +406,15 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
 
 
+def _orga_questions_close_name(request: HttpRequest, event_slug: str, member_uuid: str) -> str:
+    """Return the label of the help question being closed."""
+    check_event_context(request, event_slug, "orga_questions")
+    member = get_member(member_uuid)
+    return str(_("Close question of %(member)s") % {"member": member})
+
+
 @login_required
-@confirm_post
+@confirm_post(el_name=_orga_questions_close_name)
 def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")

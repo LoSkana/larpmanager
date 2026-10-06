@@ -5843,6 +5843,10 @@ msgstr "Tuo ystävä tapahtumaan %(event)s!"
 msgid "Characters not participating"
 msgstr "Eivät osallistu"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Sulje jäsenen %(member)s kysymys"
+
 msgid "Color of all the other text."
 msgstr "Kaiken muun tekstin vari."
 

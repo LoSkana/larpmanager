@@ -5843,6 +5843,10 @@ msgstr "Tag en ven med til %(event)s!"
 msgid "Characters not participating"
 msgstr "Karakterer, der ikke deltager"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Luk spørgsmål fra %(member)s"
+
 msgid "Color of all the other text."
 msgstr "Farve paa al anden tekst."
 

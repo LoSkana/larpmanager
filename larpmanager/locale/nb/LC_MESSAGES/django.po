@@ -5843,6 +5843,10 @@ msgstr "Ta med en venn til %(event)s!"
 msgid "Characters not participating"
 msgstr "Karakterer som ikke deltar"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Lukk spørsmålet fra %(member)s"
+
 msgid "Color of all the other text."
 msgstr "Farge på all annen tekst."
 

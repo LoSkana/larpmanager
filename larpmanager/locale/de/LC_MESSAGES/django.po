@@ -5843,6 +5843,10 @@ msgstr "Bring einen Freund zu %(event)s mit!"
 msgid "Characters not participating"
 msgstr "Nicht teilnehmend"
 
+#, python-format
+msgid "Close question of %(member)s"
+msgstr "Frage von %(member)s schließen"
+
 msgid "Color of all the other text."
 msgstr "Farbe des gesamten übrigen Textes."
 
