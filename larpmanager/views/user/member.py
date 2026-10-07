@@ -373,6 +373,8 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"res": "ko"})
 
     img = form.cleaned_data["image"]
+    if not img:
+        return JsonResponse({"res": "ko"})
 
     try:
         img_data = normalize_profile_image(img.read())
