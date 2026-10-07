@@ -652,6 +652,14 @@ body.association.new_v20 .user_resize {
   text-align: left;
 }
 
+.page_character_view h3 {
+  color: rgba(var(--sec-rgb), 1);
+}
+
+.inline-p b {
+  color: var(--ter-clr);
+}
+
 .inline-p p {
   display: inline;
 }
