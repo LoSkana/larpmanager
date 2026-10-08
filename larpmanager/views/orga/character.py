@@ -435,10 +435,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
     context = check_event_context(request, event_slug, "orga_characters")
     check_writing_form_type(context, writing_type)
 
-    # Get the parent event if this is a child event
     event = context["event"]
-    if event.parent:
-        event = event.parent
 
     # Retrieve the specific writing question from POST data
     q_uuid = request.POST.get("q_uuid")
@@ -475,7 +472,7 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
     """Process all character choices for a question."""
     res = {}
     player_ids = {}
-    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+    character_ids = get_event_elements(event.id, Character, context=context).values_list("id", flat=True)
     writing_number = get_event_config(context["event"].id, "writing_number", context=context)
     for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
         # Skip if character not in current event mapping

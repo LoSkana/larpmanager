@@ -34,7 +34,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
 from larpmanager.cache.media import get_run_media_filepath
 from larpmanager.cache.registration import search_player
-from larpmanager.cache.run import get_event_runs
+from larpmanager.cache.run import get_event_and_children_runs, get_event_runs
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -44,7 +44,14 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction, FactionType, Guild, get_event_elements
+from larpmanager.models.writing import (
+    Character,
+    Faction,
+    FactionType,
+    Guild,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.registrations.signals import apply_registration_post_save_updates
 
 if TYPE_CHECKING:
@@ -52,6 +59,9 @@ if TYPE_CHECKING:
     from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
+
+# Keys emitted by Character.show() / search_player() only when the related value is set
+OPTIONAL_CHARACTER_CACHE_KEYS = ("cover", "thumb", "mirror", "owner", "owner_uuid", "profile")
 
 
 def delete_all_in_path(path: str) -> None:
@@ -592,6 +602,15 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
+def _merge_character_cache_entry(chars: dict, number: int, character_display_data: dict) -> None:
+    """Merge fresh character data into the cache entry, dropping optional keys no longer present."""
+    entry = chars.setdefault(number, {})
+    for key in OPTIONAL_CHARACTER_CACHE_KEYS:
+        if key not in character_display_data:
+            entry.pop(key, None)
+    entry.update(character_display_data)
+
+
 def update_event_cache_all_character_reg(
     relation: RegistrationCharacterRel, cache_result: dict, event_run: Any
 ) -> None:
@@ -606,8 +625,8 @@ def update_event_cache_all_character_reg(
     # Get character from relation instance
     character = relation.character
 
-    # Only update cache if character belongs to this event
-    if character.event_id != event_run.event_id:
+    # Only update cache if character belongs to this event (or the parent it inherits characters from)
+    if character.event_id != get_event_class_parent(event_run.event_id, Character):
         return
 
     # Generate character display data
@@ -620,12 +639,8 @@ def update_event_cache_all_character_reg(
         {"run": event_run, "assignments": {character.number: relation}},
     )
 
-    # Initialize character entry if not exists
-    if character.number not in cache_result["chars"]:
-        cache_result["chars"][character.number] = {}
-
     # Update character data in result
-    cache_result["chars"][character.number].update(character_display_data)
+    _merge_character_cache_entry(cache_result["chars"], character.number, character_display_data)
 
     # Update char_mapping to keep character number -> id mapping in sync
     if "char_mapping" not in cache_result:
@@ -642,8 +657,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
         run: Event run context
 
     """
-    # Only update cache if character belongs to this event
-    if instance.event_id != run.event_id:
+    # Only update cache if character belongs to this event (or the parent it inherits characters from)
+    if instance.event_id != get_event_class_parent(run.event_id, Character):
         return
 
     # Generate character display data for the specific run
@@ -655,12 +670,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     # Search and update player information
     search_player(instance, character_display_data, {"run": run})
 
-    # Initialize character entry in results if not exists
-    if instance.number not in res["chars"]:
-        res["chars"][instance.number] = {}
-
     # Update the character data in results
-    res["chars"][instance.number].update(character_display_data)
+    _merge_character_cache_entry(res["chars"], instance.number, character_display_data)
 
     # Update char_mapping to keep character number -> id mapping in sync
     if "char_mapping" not in res:
@@ -670,6 +681,10 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict], run: Run) -> None:
     """Update or add faction data in the cache result dictionary."""
+    # Only update cache if faction belongs to this event (or the parent it inherits factions from)
+    if instance.event_id != get_event_class_parent(run.event_id, Faction):
+        return
+
     if instance.number not in res["factions"]:
         # Faction missing from cache: rebuild faction data so type index and mapping stay consistent
         get_event_cache_factions(run.event_id, res)
@@ -858,8 +873,8 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
 
 
 def update_event_cache_all_runs(event_id: int, instance: BaseModel) -> None:
-    """Update event cache for all runs of the given event."""
-    for run in get_event_runs(event_id):
+    """Update event cache for all runs of the given event and of its child events."""
+    for run in get_event_and_children_runs(event_id):
         update_event_cache_all(run, instance)
 
 

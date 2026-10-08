@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, QuerySet
+from django.db.models import Count, Q, QuerySet
 
 from larpmanager.cache.basic import _get_event_parent_id, get_event_association_id, reset_event_parent_cache
 from larpmanager.cache.button import get_event_button_cache
@@ -70,6 +70,16 @@ def reset_event_run_ids_cache(event_id: int) -> None:
 def get_event_runs(event_id: int) -> QuerySet[Run]:
     """Get an event's runs, using the cached run ids to build the filter."""
     return Run.objects.filter(id__in=get_event_run_ids(event_id))
+
+
+def get_event_and_children_runs(event_id: int) -> QuerySet[Run]:
+    """Get the runs of an event and of its child events, which may inherit its elements."""
+    return Run.objects.filter(Q(event_id=event_id) | Q(event__parent_id=event_id))
+
+
+def get_event_and_children_run_ids(event_id: int) -> list[int]:
+    """Get the ids of the runs of an event and of its child events."""
+    return list(get_event_and_children_runs(event_id).values_list("id", flat=True))
 
 
 def reset_cache_run(association: Association, slug: str) -> None:

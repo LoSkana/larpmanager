@@ -588,7 +588,11 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
     # Process each faction name in the comma-separated list
     for faction_name in faction_names:
         # Find faction by case-insensitive name match for the event
-        faction = Faction.objects.filter(name__iexact=faction_name.strip(), event=context["event"]).first()
+        faction = (
+            get_event_elements(context["event"].id, Faction, context=context)
+            .filter(name__iexact=faction_name.strip())
+            .first()
+        )
         if faction:
             faction.characters.add(element)
         else:
