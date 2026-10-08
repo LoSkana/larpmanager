@@ -751,8 +751,9 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         prev = Character.objects.get(pk=char.pk)
 
         # Check if cache-affecting fields changed
-        # Note: number is included because char_mapping uses number as key
-        lst = ["player_id", "mirror_id", "number"]
+        # Note: number is included because char_mapping uses number as key;
+        # cover is included because the uploaded file is committed (and renamed) only after pre_save
+        lst = ["player_id", "mirror_id", "number", "cover"]
         if has_different_cache_values(char, prev, lst):
             clear_event_cache_all_runs(char.event_id)
         else:
@@ -802,8 +803,8 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
     # Get the previous version from database for comparison
     prev = Faction.objects.get(pk=instance.pk)
 
-    # Check if faction type or visibility/access flags changed - requires full cache clear
-    lst = ["typ", "hide", "locked"]
+    # Check if faction type, visibility/access flags or cover changed - requires full cache clear
+    lst = ["typ", "hide", "locked", "cover"]
     if has_different_cache_values(instance, prev, lst):
         clear_event_cache_all_runs(instance.event_id)
 
