@@ -43,7 +43,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image, UnidentifiedImageError
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, update_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.experience import get_event_exp_systems
@@ -635,6 +635,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
     with transaction.atomic():
         rgr.custom_profile = path
         rgr.save()
+    update_event_cache_all(context["run"], rgr)
 
     return JsonResponse({"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"})
 
@@ -691,6 +692,7 @@ def character_profile_rotate(
         with transaction.atomic():
             rgr.custom_profile = n_path
             rgr.save()
+        update_event_cache_all(context["run"], rgr)
 
         return JsonResponse(
             {"res": "ok", "src": rgr.profile_thumb.url, "base_updated": f"{rgr.updated.timestamp():.6f}"}
