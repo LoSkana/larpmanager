@@ -312,6 +312,7 @@ from larpmanager.models.writing import (
     Relationship,
     RelationshipTag,
     SpeedLarp,
+    get_event_elements,
     replace_character_names,
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
@@ -601,7 +602,8 @@ def post_save_assignment_trait(
     if instance.member_id and instance.run_id:
         run_cache = get_run_basic_cache(instance.run_id)
         char_id = (
-            Character.objects.filter(player_id=instance.member_id, event_id=run_cache["event_id"], deleted__isnull=True)
+            get_event_elements(run_cache["event_id"], Character)
+            .filter(player_id=instance.member_id, deleted__isnull=True)
             .values_list("id", flat=True)
             .first()
         )

@@ -33,7 +33,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
-from larpmanager.cache.run import get_event_run_ids
+from larpmanager.cache.run import get_event_and_children_run_ids
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.form import (
@@ -885,7 +885,7 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         _add_refs(faction.text or "", faction.name)
 
     if character.player_id:
-        run_ids = get_event_run_ids(character.event_id)
+        run_ids = get_event_and_children_run_ids(character.event_id)
         for assignment in AssignmentTrait.objects.filter(
             member_id=character.player_id, run_id__in=run_ids, deleted__isnull=True
         ).select_related("trait"):
@@ -971,7 +971,7 @@ def auto_assign_character_faction(character: Character) -> None:
 
     option_names = WritingChoice.objects.filter(
         element_id=character.id,
-        question__event_id=event_id,
+        question__event_id=get_event_class_parent(event_id, "writingquestion"),
         question__applicable=QuestionApplicable.CHARACTER,
     ).values_list("option__name", flat=True)
     if not option_names:

@@ -1333,7 +1333,11 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
         else:
             # Fallback to database query if not in cache
             try:
-                ch = Character.objects.select_related("event", "player").get(event=context["event"], number=tg_num)
+                ch = (
+                    get_event_elements(context["event"].id, Character, context=context)
+                    .select_related("event", "player")
+                    .get(number=tg_num)
+                )
                 show = ch.show(context["run"])
             except ObjectDoesNotExist:
                 # Skip relationships to non-existent characters

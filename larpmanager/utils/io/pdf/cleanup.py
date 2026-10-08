@@ -31,7 +31,7 @@ from larpmanager.cache.media import (
     get_run_gallery_filepath,
     get_run_profiles_filepath,
 )
-from larpmanager.cache.run import get_event_run_ids
+from larpmanager.cache.run import get_event_and_children_run_ids
 from larpmanager.models.casting import AssignmentTrait, Casting, Trait
 from larpmanager.models.registration import RegistrationCharacterRel
 
@@ -58,8 +58,8 @@ def safe_remove(file_path: str) -> None:
 
 
 def remove_run_pdf(event_id: int) -> None:
-    """Remove PDF files for all runs associated with the event."""
-    for run_id in get_event_run_ids(event_id):
+    """Remove PDF files for all runs of the event and of its child events."""
+    for run_id in get_event_and_children_run_ids(event_id):
         # Remove profiles and gallery PDFs for each run
         safe_remove(get_run_profiles_filepath(run_id))
         safe_remove(get_run_gallery_filepath(run_id))
@@ -73,11 +73,11 @@ def delete_character_pdf_files(
     Args:
         instance: Character instance whose PDF files should be deleted
         single_run_id: Optional specific run id to delete files for
-        run_ids: Optional run ids, defaults to all event runs
+        run_ids: Optional run ids, defaults to all runs of the event and of its child events
 
     """
     if run_ids is None:
-        run_ids = get_event_run_ids(instance.event_id)
+        run_ids = get_event_and_children_run_ids(instance.event_id)
 
     for run_id in run_ids:
         if single_run_id and run_id != single_run_id:
@@ -101,7 +101,7 @@ def cleanup_relationship_pdfs_after_save(instance: object) -> None:
 
 def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup."""
-    run_ids = get_event_run_ids(instance.event_id)
+    run_ids = get_event_and_children_run_ids(instance.event_id)
     for char in instance.characters.all():
         delete_character_pdf_files(char, run_ids=run_ids)
 
