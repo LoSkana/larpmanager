@@ -2544,12 +2544,6 @@ msgstr ""
 msgid "Manage the answer options available for workshop questions"
 msgstr ""
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr ""
-
-msgid "Album"
-msgstr ""
-
 msgid "Manage problems reported by contributors during this event"
 msgstr ""
 
@@ -6312,9 +6306,6 @@ msgstr ""
 msgid "Hide other options"
 msgstr ""
 
-msgid "View photos and media from the event"
-msgstr ""
-
 msgid "Go to the casting for:"
 msgstr ""
 
@@ -9011,28 +9002,6 @@ msgid "Track all personal expenses directly incurred for this event"
 msgstr ""
 
 msgid "Manage all payments received from participants for this event"
-msgstr ""
-
-msgid "Master"
-msgstr ""
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-
-msgid "Upload of photo and video"
-msgstr ""
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the "
-"videos inside will be placed in the corresponding albums."
-msgstr ""
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
 msgstr ""
 
 msgid "Event navigation"
@@ -12156,9 +12125,6 @@ msgstr ""
 msgid "Find out what quests are available!"
 msgstr ""
 
-msgid "View photos from the event!"
-msgstr ""
-
 msgid "Gift a registration to your friend"
 msgstr ""
 
@@ -13246,9 +13212,6 @@ msgid ""
 msgstr ""
 
 msgid "View balances and transfer history for this character inventory"
-msgstr ""
-
-msgid "Photos and videos successfully uploaded!"
 msgstr ""
 
 msgid "Warehouse quantities already committed for this event"

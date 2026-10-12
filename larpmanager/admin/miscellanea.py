@@ -29,9 +29,6 @@ from larpmanager.admin.base import AssociationFilter, DefModelAdmin, EventFilter
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.member import NotificationQueue
 from larpmanager.models.miscellanea import (
-    Album,
-    AlbumImage,
-    AlbumUpload,
     ChatMessage,
     Contact,
     EmailContent,
@@ -75,30 +72,6 @@ class ChatMessageAdmin(DefModelAdmin):
 
     list_display = ("id", "sender", "receiver")
     autocomplete_fields = ("sender", "receiver", "association")
-
-
-@admin.register(Album)
-class AlbumAdmin(DefModelAdmin):
-    """Admin interface for Album model."""
-
-    list_display: ClassVar[tuple] = ("name", "parent", "run", "show_thumb", "uuid")
-    autocomplete_fields: ClassVar[list] = ["parent", "run", "association"]
-    search_fields: ClassVar[list] = ["id", "name", "uuid"]
-
-
-@admin.register(AlbumImage)
-class AlbumImageAdmin(DefModelAdmin):
-    """Admin interface for AlbumImage model."""
-
-    list_display = ("upload", "show_thumb", "width", "height")
-
-
-@admin.register(AlbumUpload)
-class AlbumUploadAdmin(DefModelAdmin):
-    """Admin interface for AlbumUpload model."""
-
-    list_display = ("id", "album")
-    autocomplete_fields: ClassVar[list] = ["album"]
 
 
 class WorkshopQuestionInline(admin.TabularInline):

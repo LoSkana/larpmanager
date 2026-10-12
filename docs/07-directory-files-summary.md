@@ -45,7 +45,7 @@ Django admin interface configuration providing web-based administration for all 
 
 **members.py**: Django admin configuration for member-related models including custom User admin, Member, MemberConfig, Membership, VolunteerRegistry, Vote, and Badge with search, filtering, and admin links between related models.
 
-**miscellanea.py**: Django admin configuration for miscellaneous models including Contact, ChatMessage, Album, AlbumImage, Workshop modules/questions/options, HelpQuestion, Warehouse (containers, tags, items, areas, assignments), ShuttleService, Util, PlayerRelationship, Email, and OneTimeContent/Tokens.
+**miscellanea.py**: Django admin configuration for miscellaneous models including Contact, ChatMessage, Workshop modules/questions/options, HelpQuestion, Warehouse (containers, tags, items, areas, assignments), ShuttleService, Util, PlayerRelationship, Email, and OneTimeContent/Tokens.
 
 **registrations.py**: Django admin configuration for registration-related models including Registration, RegistrationTicket, RegistrationSection, RegistrationQuestion, RegistrationOption, RegistrationChoice, RegistrationAnswer, and RegistrationCharacterRel with inline editing and filtering.
 
@@ -119,7 +119,7 @@ Django forms package containing all user input validation and form processing lo
 
 **member.py**: Member profile, registration, and account management forms.
 
-**miscellanea.py**: Miscellaneous forms for albums, workshops, warehouse, shuttle services, and other features.
+**miscellanea.py**: Miscellaneous forms for workshops, warehouse, shuttle services, and other features.
 
 **registration.py**: Registration forms for event sign-up, ticket selection, payment options, and registration questions.
 
@@ -219,7 +219,7 @@ Django ORM models defining the database schema and business logic. Core models i
 
 **member.py**: Member models including Member (custom user), MemberConfig, Membership, Badge, VolunteerRegistry, Vote, and Log for user account management and organization membership tracking.
 
-**miscellanea.py**: Miscellaneous models: Contact, ChatMessage, Album/Image/Upload, Workshop (Module/Question/Option/MemberRel), HelpQuestion, Warehouse (Container/Tag/Item/Area/Assignment), ShuttleService, Util, PlayerRelationship, Email, OneTimeContent/AccessToken.
+**miscellanea.py**: Miscellaneous models: Contact, ChatMessage, Workshop (Module/Question/Option/MemberRel), HelpQuestion, Warehouse (Container/Tag/Item/Area/Assignment), ShuttleService, Util, PlayerRelationship, Email, OneTimeContent/AccessToken.
 
 **registration.py**: Registration models including Registration, RegistrationTicket, RegistrationSection, RegistrationCharacterRel, RegistrationInstallment, and RegistrationSurcharge for event sign-up and payment tracking.
 
@@ -379,7 +379,7 @@ Django views handling HTTP requests and responses. Organized into subdirectories
 
 #### larpmanager/views/exe/ (Executive/Organization Views)
 
-Executive (organization-wide) views for association management. Contains accounting.py for organization-level financial reports and operations, association.py for organization settings and configuration, event.py for event creation and management across the organization, member.py for member management and roles, and miscellanea.py for auxiliary features like workshops and albums. These views require AssociationPermission and handle organization-wide operations including member management, event creation, financial oversight, organizational settings, and cross-event reporting. Provide executive dashboard functionality for association administrators with comprehensive oversight and management capabilities.
+Executive (organization-wide) views for association management. Contains accounting.py for organization-level financial reports and operations, association.py for organization settings and configuration, event.py for event creation and management across the organization, member.py for member management and roles, and miscellanea.py for auxiliary features like workshops. These views require AssociationPermission and handle organization-wide operations including member management, event creation, financial oversight, organizational settings, and cross-event reporting. Provide executive dashboard functionality for association administrators with comprehensive oversight and management capabilities.
 
 **accounting.py**: Organization-wide accounting views.
 

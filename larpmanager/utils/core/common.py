@@ -51,7 +51,6 @@ from larpmanager.models.base import BaseModel, Feature
 from larpmanager.models.event import DevelopStatus, Event, EventConfig, Run
 from larpmanager.models.member import Badge, Member
 from larpmanager.models.miscellanea import (
-    Album,
     Contact,
     HelpQuestion,
     PlayerRelationship,
@@ -220,26 +219,6 @@ def get_discount(context: dict, discount_uuid: str) -> None:
         set_name=True,
         runs=context["run"],
     )
-
-
-def get_album(context: dict, album_uuid: str) -> None:
-    """Get album by ID and add to context, scoped to the current association."""
-    add_context_by_uuid(
-        context,
-        "album",
-        Album,
-        album_uuid,
-        association_id=context["association_id"],
-    )
-
-
-def get_album_cod(context: dict, album_code: str) -> None:
-    """Get album by code and add it to context, raising 404 if not found."""
-    try:
-        context["album"] = Album.objects.get(cod=album_code)
-    except ObjectDoesNotExist as err:
-        msg = "Album does not exist"
-        raise Http404(msg) from err
 
 
 def get_feature(context: dict, feature_slug: str) -> None:

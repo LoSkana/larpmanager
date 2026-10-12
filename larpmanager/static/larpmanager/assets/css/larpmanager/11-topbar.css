@@ -19,10 +19,6 @@
   width: 100%;
 }
 
-#topbar .el span.label {
-  display: none;
-}
-
 #topbar img {
   height: 1.5em;
   margin-right: 0.5em;
@@ -32,46 +28,6 @@
 #topbar a,
 #sidebar a {
   transition: color 0.5s;
-}
-
-#topbar table {
-  margin: auto;
-}
-
-#topbar table tr,
-#topbar table td {
-  background: none;
-  border: none;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: revert;
-}
-
-/* Desktop: show desktop table, hide mobile table */
-#topbar table.mobile {
-  display: none;
-}
-
-#topbar .left {
-  text-align: left !important;
-}
-
-#topbar .center {
-  text-align: center !important;
-}
-
-#topbar .right {
-  text-align: right !important;
-}
-
-#topbar .left .el {
-  margin-right: 2em;
-  display: inline-block;
-}
-
-#topbar .right .el {
-  margin-left: 2em;
-  display: inline-block;
 }
 
 #topbar a.select,
@@ -86,25 +42,6 @@
 @media (max-width: 840px) {
   :root {
     --topbar-height: 2em;
-  }
-
-  .inner .no_mobile,
-  #topbar .no_mobile,
-  #sidebar .no_mobile {
-    display: none !important;
-  }
-
-  #topbar table.desktop {
-    display: none;
-  }
-
-  #topbar table.mobile {
-    display: table;
-  }
-
-  #topbar .right,
-  #topbar .left {
-    text-align: center !important;
   }
 
   .lm_default {
@@ -130,98 +67,6 @@
     margin-top: 0;
     margin-bottom: var(--topbar-height);
   }
-
-  #topbar .mobile {
-    table-layout: fixed;
-  }
-
-  #topbar .mobile td {
-    text-align: center !important;
-    width: auto;
-  }
-
-  .lm_default #topbar .mobile .el i {
-    font-size: 1.2em !important;
-    margin: 0;
-    display: block;
-  }
-
-  .lm_default #topbar .mobile .el .menu_profile {
-    width: 1.3em;
-    height: 1.3em;
-    padding-bottom: 0;
-    display: block;
-    margin: 0 auto;
-  }
-
-  .lm_default #topbar .mobile .el span.label {
-    font-size: 0.6em;
-    display: block;
-    white-space: nowrap;
-  }
-
-  .lm_default #topbar .dropdown {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-
-  .lm_default #topbar .dropdown > span {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    gap: 0.2em;
-  }
-
-  .lm_default #topbar .dropdown .dropdown-button i {
-    font-size: 0.7em;
-  }
-
-  .lm_default #topbar .dropdown .dropdown-menu {
-    bottom: 100%;
-    top: auto;
-    margin-bottom: 0.5em;
-  }
-
-  .lm_default #topbar table.mobile {
-    width: 100%;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Navigation Dropdowns
-   --------------------------------------------------------------------------- */
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-button {
-  cursor: pointer;
-  display: inline;
-}
-
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  white-space: nowrap;
-  box-shadow: 0px 8px 16px rgba(var(--pri-rgb), 0.2);
-  background: #3b3b3b;
-  padding: 0.5em;
-  border-radius: 5px;
-  z-index: 10;
-}
-
-.dropdown-menu a {
-  display: block;
-  padding: 8px;
-  margin: 0;
-}
-
-.dropdown-menu:empty {
-  display: none !important;
 }
 
 /* ---------------------------------------------------------------------------

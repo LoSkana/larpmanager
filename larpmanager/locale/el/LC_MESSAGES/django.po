@@ -281,9 +281,6 @@ msgstr "Ηθοποιός"
 msgid "Admin"
 msgstr "Διαχειριστής"
 
-msgid "Album"
-msgstr "Άλμπουμ"
-
 msgid "Alias"
 msgstr "Ψευδώνυμο"
 
@@ -648,9 +645,6 @@ msgstr "Διαχείριση"
 
 msgid "Manual"
 msgstr "Χειροκίνητο"
-
-msgid "Master"
-msgstr "Master"
 
 msgid "Medium"
 msgstr "Μεσαία"
@@ -5542,9 +5536,6 @@ msgstr "Έλεγχος ταυτότητας δύο παραγόντων"
 msgid "Update your personal data"
 msgstr "Ενημέρωσε τα προσωπικά σου στοιχεία"
 
-msgid "Upload of photo and video"
-msgstr "Ανέβασμα φωτογραφιών και βίντεο"
-
 msgid "Use of third party assets"
 msgstr "Χρήση περιουσιακών στοιχείων τρίτων"
 
@@ -5792,9 +5783,6 @@ msgstr "Όνομα εισιτηρίου (κράτησέ το σύντομο)"
 
 msgid "View badges you have earned"
 msgstr "Δες τα Badges που έχεις κερδίσει"
-
-msgid "View photos from the event!"
-msgstr "Δες φωτογραφίες από το event!"
 
 msgid "Withheld as transaction fee"
 msgstr "Παρακρατήθηκε ως προμήθεια συναλλαγής"
@@ -6855,9 +6843,6 @@ msgstr "Σε ευχαριστούμε που γίνεσαι μέλος της κ
 msgid "They need to complete it immediately"
 msgstr "Πρέπει να το ολοκληρώσουν αμέσως"
 
-msgid "View photos and media from the event"
-msgstr "Δες φωτογραφίες και πολυμέσα από το event"
-
 msgid "You can now set the discount options"
 msgstr "Τώρα μπορείς να ορίσεις τις επιλογές έκπτωσης"
 
@@ -7266,9 +7251,6 @@ msgstr "Διαχειρίσου τα εισερχόμενα έσοδα που σ�
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Φόρμα αίτησης μέλους για τον/την %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Οι φωτογραφίες και τα βίντεο ανέβηκαν με επιτυχία!"
 
 msgid "Set casting options in the configuration"
 msgstr "Ρύθμισε τις επιλογές casting στη διαμόρφωση"
@@ -8553,11 +8535,6 @@ msgstr "Τελευταίο βήμα, ανέβασε την αίτησή σου �
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Διαχείριση δυναμικών δόσεων πληρωμής για εγγραφές"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr ""
-"Διαχειρίσου τα άλμπουμ φωτογραφιών και βίντεο που ανέβηκαν για αυτή την "
-"εκδήλωση"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Δεν έχει ανατεθεί ακόμη αυτή η τιμή ρόλου σε κανέναν χαρακτήρα."
 
@@ -9320,11 +9297,6 @@ msgstr ""
 msgid "Upload a photo of your character specifically for this event!"
 msgstr ""
 "Μεταφόρτωσε μια φωτογραφία του χαρακτήρα σου ειδικά για αυτό το event!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-"Ανέβασε ένα αρχείο zip με φωτογραφίες και βίντεο για να συμπληρώσεις αυτό το"
-" άλμπουμ"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10229,11 +10201,6 @@ msgstr ""
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Θα εφαρμοστούν αυτόματα όταν εγγραφείς σε νέα εκδήλωση."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Να ανεβάσεις αυτό το αρχείο; Οι φωτογραφίες και τα βίντεό του θα προστεθούν "
-"στο άλμπουμ."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11537,13 +11504,6 @@ msgid ""
 msgstr ""
 "Διαχειρίσου τις ερωτήσεις που απαντούν οι συμμετέχοντες μετά την εκδήλωση, "
 "για να δώσουν τα σχόλιά τους"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Δεν έχουν δημιουργηθεί ακόμη άλμπουμ. Πρόσθεσε ένα άλμπουμ για να οργανώσεις"
-" και να μοιραστείς φωτογραφίες για αυτή την εκδήλωση."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -15082,14 +15042,6 @@ msgid ""
 msgstr ""
 "Δήλωσε παρακάτω την ακριβή μέθοδο πληρωμής που χρησιμοποίησες. Θυμήσου να "
 "υποβάλεις τη φόρμα, αλλιώς η πληρωμή σου δεν θα διεκπεραιωθεί!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Επίλεξε ένα αρχείο zip για ανέβασμα. Οι φάκελοι θα γίνουν άλμπουμ και οι "
-"φωτογραφίες και τα βίντεο που περιέχουν θα τοποθετηθούν στα αντίστοιχα "
-"άλμπουμ."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

@@ -281,9 +281,6 @@ msgstr "Skuespiller"
 msgid "Admin"
 msgstr "Admin"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Administrer"
 
 msgid "Manual"
 msgstr "Manuell"
-
-msgid "Master"
-msgstr "Mester"
 
 msgid "Medium"
 msgstr "Medium"
@@ -5542,9 +5536,6 @@ msgstr "To-faktor autentisering"
 msgid "Update your personal data"
 msgstr "Oppdater dine personopplysninger"
 
-msgid "Upload of photo and video"
-msgstr "Opplasting av bilder og videoer"
-
 msgid "Use of third party assets"
 msgstr "Bruk av tredjeparts eiendeler"
 
@@ -5792,9 +5783,6 @@ msgstr "Billettens navn (hold det kort)"
 
 msgid "View badges you have earned"
 msgstr "Se badges du har oppnådd"
-
-msgid "View photos from the event!"
-msgstr "Se bilder fra arrangementet!"
 
 msgid "Withheld as transaction fee"
 msgstr "Trukket fra som transaksjonsgebyr"
@@ -6855,9 +6843,6 @@ msgstr "Takk for at du har blitt en del av fellesskapet vårt!"
 msgid "They need to complete it immediately"
 msgstr "De må fullføre det umiddelbart"
 
-msgid "View photos and media from the event"
-msgstr "Se bilder og annet mediemateriale fra arrangementet"
-
 msgid "You can now set the discount options"
 msgstr "Du kan nå angi rabattalternativene"
 
@@ -7266,9 +7251,6 @@ msgstr "Administrer inntekter knyttet til arrangementer"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Medlemssøknadsskjema for %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Bilder og videoer er lastet opp vellykket!"
 
 msgid "Set casting options in the configuration"
 msgstr "Angi casting-alternativene i konfigurasjonen"
@@ -8519,10 +8501,6 @@ msgstr "Siste trinn er å laste opp medlemssøknaden din."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Administrer dynamiske avdragsbetalinger for påmeldinger"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr ""
-"Administrer foto- og videoalbum som er lastet opp for dette arrangementet"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Ingen karakterer har fått tildelt denne rolleverdien ennå."
 
@@ -9214,9 +9192,6 @@ msgstr "Veksle mellom administrative backend-sider og offentlige sider"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Last opp et bilde av karakteren din spesielt for dette arrangementet!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Last opp en zip-fil med bilder og videoer for å fylle dette albumet"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Vis hele innholdet i en arkivert e-post som er sendt av systemet"
@@ -10015,10 +9990,6 @@ msgstr "Den engelske originalteksten slik den vises i koden (msgid i gettext)"
 msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Disse vil bli brukt automatisk når du melder deg på et nytt arrangement."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Laste opp dette arkivet? Bildene og videoene i det blir lagt til i albumet."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11226,13 +11197,6 @@ msgid ""
 msgstr ""
 "Administrer spørsmålene deltakerne svarer på etter arrangementet for å gi "
 "tilbakemelding"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Det er ikke opprettet noen album ennå. Legg til et album for å organisere og"
-" dele bilder fra dette arrangementet."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14731,13 +14695,6 @@ msgid ""
 msgstr ""
 "Vennligst oppgi nøyaktig betalingsmåte nedenfor. Husk å sende inn skjemaet, "
 "ellers blir ikke betalingen behandlet!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Velg en zip-fil for opplasting. Katalogene blir til album, og bildene og "
-"videoene i dem plasseres i de respektive albumene."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

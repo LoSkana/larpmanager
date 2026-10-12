@@ -281,9 +281,6 @@ msgstr "Skådespelare"
 msgid "Admin"
 msgstr "Admin"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Hantera"
 
 msgid "Manual"
 msgstr "Manual"
-
-msgid "Master"
-msgstr "Mästare"
 
 msgid "Medium"
 msgstr "Medium"
@@ -5542,9 +5536,6 @@ msgstr "Tvåfaktorsautentisering"
 msgid "Update your personal data"
 msgstr "Uppdatera dina personuppgifter"
 
-msgid "Upload of photo and video"
-msgstr "Ladda upp foton och videor"
-
 msgid "Use of third party assets"
 msgstr "Användning av tredje parts tillgångar"
 
@@ -5792,9 +5783,6 @@ msgstr "Biljettens namn (håll det kort)"
 
 msgid "View badges you have earned"
 msgstr "Visa de badges du har förtjänat"
-
-msgid "View photos from the event!"
-msgstr "Se bilder från evenemanget!"
 
 msgid "Withheld as transaction fee"
 msgstr "Avdraget som transaktionsavgift"
@@ -6855,9 +6843,6 @@ msgstr "Tack för att du har anslutit dig till vår gemenskap!"
 msgid "They need to complete it immediately"
 msgstr "De måste slutföra det omedelbart"
 
-msgid "View photos and media from the event"
-msgstr "Se bilder och media från evenemanget"
-
 msgid "You can now set the discount options"
 msgstr "Du kan nu ställa in rabattalternativen"
 
@@ -7265,9 +7250,6 @@ msgstr "Hantera inkommande intäkter kopplade till evenemang"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Ansökningsblankett för medlemskap för %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Foton och videor har laddats upp framgångsrikt!"
 
 msgid "Set casting options in the configuration"
 msgstr "Ställ in casting-alternativ i konfigurationen"
@@ -8522,9 +8504,6 @@ msgstr "Sista steget är att ladda upp din medlemsansökan."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Hantera dynamiska delbetalningar för anmälningar"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Hantera foto- och videoalbum som har laddats upp för detta evenemang"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Inga karaktärer har tilldelats detta rollvärde ännu."
 
@@ -9204,10 +9183,6 @@ msgstr "Växla mellan administrativa backend- och publika sidor"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Ladda upp en bild på din karaktär speciellt för detta evenemang!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-"Ladda upp en zip-fil med foton och videoklipp för att fylla detta album"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -9997,10 +9972,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Dessa kommer att tillämpas automatiskt när du anmäler dig till ett nytt "
 "evenemang."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Ladda upp det här arkivet? Dess foton och videor läggs till i albumet."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11206,13 +11177,6 @@ msgid ""
 msgstr ""
 "Hantera frågorna som deltagarna svarar på efter eventet, för att ge sin "
 "feedback"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Inga album har skapats ännu. Lägg till ett album för att ordna och dela "
-"foton från detta evenemang."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14709,13 +14673,6 @@ msgid ""
 msgstr ""
 "Vänligen ange nedan exakt vilken betalningsmetod du har använt. Kom ihåg att"
 " skicka in formuläret, annars kommer din betalning inte att behandlas!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Välj en zip-fil för uppladdning. Katalogerna blir album och bilderna och "
-"videorna i dem placeras i motsvarande album."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

@@ -172,7 +172,7 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Sidebar links, badges and context selector
+   Sidebar links and badges
    --------------------------------------------------------------------------- */
 
 #sidebar .sidebar-link span {
@@ -228,29 +228,6 @@
   color: rgba(var(--pri-rgb), 0.9);
 }
 
-#sidebar .sidebar-context-selector {
-  padding: 0.5em 0.75em;
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
-  margin-bottom: 0.25em;
-  width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-#sidebar .sidebar-context-selector select {
-  width: 100%;
-  max-width: 100% !important;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: 0.4em 0.5em;
-  border-radius: 6px;
-  border: 1px solid rgba(var(--pri-rgb), 0.3);
-  background-color: rgba(var(--pri-rgb), 0.06);
-  color: inherit;
-  font-size: 0.85em;
-  cursor: pointer;
-}
-
 /* ---------------------------------------------------------------------------
    Sidebar collapse toggle
    --------------------------------------------------------------------------- */
@@ -287,7 +264,6 @@
 }
 
 #sidebar.sidebar-collapsed .sidebar-link-wrap span,
-#sidebar.sidebar-collapsed .sidebar-context-selector,
 #sidebar.sidebar-collapsed .sidebar-section > p {
   display: none;
 }

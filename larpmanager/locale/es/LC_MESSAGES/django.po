@@ -281,9 +281,6 @@ msgstr "Actor"
 msgid "Admin"
 msgstr "Admin"
 
-msgid "Album"
-msgstr "Álbum"
-
 msgid "Alias"
 msgstr "Apodo"
 
@@ -648,9 +645,6 @@ msgstr "Gestionar"
 
 msgid "Manual"
 msgstr "Manual"
-
-msgid "Master"
-msgstr "Master"
 
 msgid "Medium"
 msgstr "Medio"
@@ -5542,9 +5536,6 @@ msgstr "Autenticación de dos factores"
 msgid "Update your personal data"
 msgstr "Actualiza tus datos personales"
 
-msgid "Upload of photo and video"
-msgstr "Subir fotos y vídeos"
-
 msgid "Use of third party assets"
 msgstr "Uso de recursos de terceros"
 
@@ -5792,9 +5783,6 @@ msgstr "Nombre de la entrada (mantenlo breve)"
 
 msgid "View badges you have earned"
 msgstr "Ver los badges que has conseguido"
-
-msgid "View photos from the event!"
-msgstr "¡Ver fotos del evento!"
 
 msgid "Withheld as transaction fee"
 msgstr "Retención como coste de transacción"
@@ -6855,9 +6843,6 @@ msgstr "¡Gracias por unirte a nuestra comunidad!"
 msgid "They need to complete it immediately"
 msgstr "Tienen que completarlo inmediatamente"
 
-msgid "View photos and media from the event"
-msgstr "Mira las fotos y los contenidos multimedia del evento"
-
 msgid "You can now set the discount options"
 msgstr "Ahora puedes configurar las opciones de descuento"
 
@@ -7265,9 +7250,6 @@ msgstr "Gestiona los ingresos relacionados con los eventos"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Formulario de solicitud de afiliación para %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Fotos y vídeos cargados correctamente!"
 
 msgid "Set casting options in the configuration"
 msgstr "Configura las opciones de casting en la configuración"
@@ -8547,9 +8529,6 @@ msgstr "Último paso, carga tu solicitud de afiliación."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Gestiona los pagos a plazos dinámicos para las inscripciones"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Gestiona los álbumes de fotos y vídeos subidos para este evento"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Todavía no se le ha asignado este valor de rol a ningún personaje."
 
@@ -9288,9 +9267,6 @@ msgstr "Alternar entre el backend administrativo y las páginas públicas"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Sube una foto de tu personaje especialmente para este evento!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Sube un archivo zip con fotos y vídeos para completar este álbum"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10150,9 +10126,6 @@ msgstr ""
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Se aplicarán automáticamente cuando te inscribas en un nuevo evento."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr "¿Subir este archivo? Sus fotos y vídeos se añadirán al álbum."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11439,13 +11412,6 @@ msgid ""
 msgstr ""
 "Gestiona las preguntas que los participantes responden después del evento "
 "para darte su feedback"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Aún no se ha creado ningún álbum. Añade un álbum para organizar y compartir "
-"las fotos de este evento."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14971,13 +14937,6 @@ msgid ""
 msgstr ""
 "Por favor, indica a continuación el método de pago que has usado. ¡Recuerda "
 "enviar el formulario, de lo contrario tu pago no será procesado!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Selecciona un archivo zip para subirlo. Las carpetas se convertirán en "
-"álbumes y las fotos y vídeos que contengan se colocarán en su interior."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

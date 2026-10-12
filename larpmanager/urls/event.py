@@ -329,16 +329,6 @@ urlpatterns = [
         name="quest",
     ),
     path(
-        "<slug:event_slug>/album/",
-        views_ums.album,
-        name="album",
-    ),
-    path(
-        "<slug:event_slug>/album/<slug:album_uuid>/",
-        views_ums.album_sub,
-        name="album_sub",
-    ),
-    path(
         "<slug:event_slug>/export/<slug:export_type>/",
         views_ue.export,
         name="export",

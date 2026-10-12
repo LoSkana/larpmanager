@@ -281,9 +281,6 @@ msgstr "Ator"
 msgid "Admin"
 msgstr "Administrador"
 
-msgid "Album"
-msgstr "Álbum"
-
 msgid "Alias"
 msgstr "Pseudónimo"
 
@@ -648,9 +645,6 @@ msgstr "Gerir"
 
 msgid "Manual"
 msgstr "Manual"
-
-msgid "Master"
-msgstr "Mestre"
 
 msgid "Medium"
 msgstr "Média"
@@ -5542,9 +5536,6 @@ msgstr "Autenticação de dois fatores"
 msgid "Update your personal data"
 msgstr "Atualizar os teus dados pessoais"
 
-msgid "Upload of photo and video"
-msgstr "Carregamento de fotos e vídeos"
-
 msgid "Use of third party assets"
 msgstr "Utilização de recursos de terceiros"
 
@@ -5792,9 +5783,6 @@ msgstr "Nome do bilhete (mantém-no curto)"
 
 msgid "View badges you have earned"
 msgstr "Vê os Badges que conquistaste"
-
-msgid "View photos from the event!"
-msgstr "Vê as fotos do evento!"
 
 msgid "Withheld as transaction fee"
 msgstr "Retido como taxa de transação"
@@ -6855,9 +6843,6 @@ msgstr "Obrigado por te juntares à nossa comunidade!"
 msgid "They need to complete it immediately"
 msgstr "Têm de o completar imediatamente"
 
-msgid "View photos and media from the event"
-msgstr "Ver fotos e media do evento"
-
 msgid "You can now set the discount options"
 msgstr "Agora podes definir as opções de desconto"
 
@@ -7265,9 +7250,6 @@ msgstr "Gere receitas recebidas associadas a eventos"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Formulário de candidatura de membro para %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Fotos e vídeos carregados com sucesso!"
 
 msgid "Set casting options in the configuration"
 msgstr "Define as opções de casting na configuração"
@@ -8526,9 +8508,6 @@ msgstr "Último passo: carrega o teu pedido de adesão."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Gerir pagamentos dinâmicos em prestações para inscrições"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Gerir álbuns de fotos e vídeos carregados para este evento"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Ainda não foi atribuída nenhuma personagem a este valor de função."
 
@@ -9219,9 +9198,6 @@ msgstr "Alterna entre o backoffice administrativo e as páginas públicas"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Carrega uma foto da tua personagem especificamente para este evento!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Carrega um ficheiro zip de fotos e vídeos para preencher este álbum"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Vê o conteúdo completo de um e-mail arquivado enviado pelo sistema"
@@ -10049,10 +10025,6 @@ msgstr ""
 msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Estes serão aplicados automaticamente quando te inscreveres num novo evento."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Carregar este arquivo? As fotos e os vídeos dele serão adicionados ao álbum."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11320,13 +11292,6 @@ msgid ""
 msgstr ""
 "Gerencie as perguntas que os participantes respondem depois do evento, para "
 "dar o feedback deles"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Ainda não foram criados álbuns. Adiciona um álbum para organizar e partilhar"
-" fotos deste evento."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14823,14 +14788,6 @@ msgid ""
 msgstr ""
 "Indica abaixo o método exato de pagamento que efetuaste. Lembra-te de "
 "submeter o formulário, caso contrário o teu pagamento não será processado!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Seleciona um ficheiro zip para carregar. Os diretórios tornar-se-ão álbuns e"
-" as fotos e os vídeos no seu interior serão colocados nos álbuns "
-"correspondentes."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

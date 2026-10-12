@@ -281,9 +281,6 @@ msgstr "Näyttelijä"
 msgid "Admin"
 msgstr "Järjestelmänvalvoja"
 
-msgid "Album"
-msgstr "Albumi"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Hallitse"
 
 msgid "Manual"
 msgstr "Käyttöohje"
-
-msgid "Master"
-msgstr "Mestari"
 
 msgid "Medium"
 msgstr "Keskisuuri"
@@ -5542,9 +5536,6 @@ msgstr "Kahden tekijän todennus"
 msgid "Update your personal data"
 msgstr "Päivitä henkilötietosi"
 
-msgid "Upload of photo and video"
-msgstr "Valokuvan ja videon lataaminen"
-
 msgid "Use of third party assets"
 msgstr "Kolmannen osapuolen omaisuuden käyttö"
 
@@ -5792,9 +5783,6 @@ msgstr "Lipun nimi (pidä se lyhyenä)"
 
 msgid "View badges you have earned"
 msgstr "Tarkastele ansaitsemiasi badgeja"
-
-msgid "View photos from the event!"
-msgstr "Katso kuvia tapahtumasta!"
 
 msgid "Withheld as transaction fee"
 msgstr "Transaktiomaksuna pidätetty"
@@ -6855,9 +6843,6 @@ msgstr "Kiitos, että liityit yhteisöömme!"
 msgid "They need to complete it immediately"
 msgstr "Heidän on saatettava se päätökseen välittömästi"
 
-msgid "View photos and media from the event"
-msgstr "Katso tapahtuman valokuvia ja mediaa"
-
 msgid "You can now set the discount options"
 msgstr "Voit nyt määrittää alennusasetukset"
 
@@ -7265,9 +7250,6 @@ msgstr "Hallinnoi tapahtumiin liittyviä tuloja"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Jäsenhakemuslomake %(user)s:lle"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Kuvat ja videot onnistuneesti ladattu!"
 
 msgid "Set casting options in the configuration"
 msgstr "Määritä casting-vaihtoehdot asetuksissa"
@@ -8524,9 +8506,6 @@ msgstr "Viimeinen vaihe, lataa jäsenhakemuksesi."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Hallitse ilmoittautumisten dynaamisia erämaksuja"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Hallitse tähän tapahtumaan ladattuja valokuva- ja videoalbumeita"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Tälle rooliarvolle ei ole vielä määritetty yhtään hahmoa."
 
@@ -9218,11 +9197,6 @@ msgstr ""
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Lataa hahmosi valokuva nimenomaan tätä tapahtumaa varten!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-"Lataa valokuvia ja videoita sisältävä zip-tiedosto tämän albumin "
-"täyttämiseksi"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10034,9 +10008,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Nämä asetukset otetaan käyttöön automaattisesti, kun ilmoittaudut uuteen "
 "tapahtumaan."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr "Ladataanko tämä arkisto? Sen kuvat ja videot lisätään albumiin."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11230,13 +11201,6 @@ msgid ""
 msgstr ""
 "Hallinnoi kysymyksiä, joihin osallistujat vastaavat tapahtuman jälkeen "
 "antaakseen palautetta"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Albumeja ei ole vielä luotu. Lisää albumi, jotta voit järjestellä ja jakaa "
-"tämän tapahtuman valokuvia."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14719,13 +14683,6 @@ msgid ""
 msgstr ""
 "Ilmoita alla tarkka maksutapa, jolla maksoit. Muista lähettää lomake, muuten"
 " maksuasi ei käsitellä!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Valitse zip-tiedosto ladattavaksi. Hakemistot muuttuvat albumeiksi, ja "
-"niissä olevat kuvat ja videot sijoitetaan vastaaviin albumeihin."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

@@ -281,9 +281,6 @@ msgstr "Acteur"
 msgid "Admin"
 msgstr "Beheerder"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Beheer"
 
 msgid "Manual"
 msgstr "Handmatig"
-
-msgid "Master"
-msgstr "Meester"
 
 msgid "Medium"
 msgstr "Medium"
@@ -5542,9 +5536,6 @@ msgstr "Authenticatie met twee factoren"
 msgid "Update your personal data"
 msgstr "Werk je persoonlijke gegevens bij"
 
-msgid "Upload of photo and video"
-msgstr "Foto's en video's uploaden"
-
 msgid "Use of third party assets"
 msgstr "Gebruik van activa van derden"
 
@@ -5792,9 +5783,6 @@ msgstr "Ticketnaam (houd het kort)"
 
 msgid "View badges you have earned"
 msgstr "Bekijk de badges die je hebt verdiend"
-
-msgid "View photos from the event!"
-msgstr "Bekijk foto's van het evenement!"
 
 msgid "Withheld as transaction fee"
 msgstr "Inhouding als transactiekosten"
@@ -6856,9 +6844,6 @@ msgstr "Bedankt dat je je bij onze community hebt aangesloten!"
 msgid "They need to complete it immediately"
 msgstr "Ze moeten het onmiddellijk voltooien"
 
-msgid "View photos and media from the event"
-msgstr "Bekijk foto’s en media van het evenement"
-
 msgid "You can now set the discount options"
 msgstr "Je kunt nu de kortingsopties instellen"
 
@@ -7266,9 +7251,6 @@ msgstr "Beheer inkomsten uit evenementen"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Lidmaatschapsaanvraagformulier voor %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Foto's en video's succesvol geüpload!"
 
 msgid "Set casting options in the configuration"
 msgstr "Castingopties instellen in de configuratie"
@@ -8537,9 +8519,6 @@ msgstr "Upload als laatste stap je lidmaatschapsaanvraag."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Beheer dynamische termijnbetalingen voor inschrijvingen"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Beheer de foto- en videoalbums die voor dit evenement zijn geüpload"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Er zijn nog geen personages aan deze rolwaarde toegewezen."
 
@@ -9272,9 +9251,6 @@ msgstr "Schakel tussen de administratieve backend en openbare pagina's"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Upload een foto van je personage speciaal voor dit evenement!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Upload een zip-bestand met foto’s en video’s om dit album te vullen"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10163,11 +10139,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Deze worden automatisch toegepast als je je aanmeldt voor een nieuw "
 "evenement."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Dit archief uploaden? De foto's en video's erin worden aan het album "
-"toegevoegd."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11446,13 +11417,6 @@ msgid ""
 msgstr ""
 "Beheer de vragen die deelnemers na het evenement beantwoorden om hun "
 "feedback te geven"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Er zijn nog geen albums aangemaakt. Voeg een album toe om foto’s van dit "
-"evenement te ordenen en te delen."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14979,13 +14943,6 @@ msgid ""
 msgstr ""
 "Geef hieronder aan welke betalingsmethode je hebt gebruikt. Vergeet niet het"
 " formulier te verzenden, anders wordt je betaling niet verwerkt!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Selecteer een zipbestand om te uploaden. De mappen worden albums en de "
-"foto's en video's worden in de overeenkomstige albums geplaatst."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

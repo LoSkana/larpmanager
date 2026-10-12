@@ -406,31 +406,6 @@ urlpatterns = [
         name="orga_registration_transfer_confirm",
     ),
     path(
-        "<slug:event_slug>/manage/albums/",
-        views_oms.orga_albums,
-        name="orga_albums",
-    ),
-    path(
-        "<slug:event_slug>/manage/albums/new/",
-        views_oms.orga_albums_new,
-        name="orga_albums_new",
-    ),
-    path(
-        "<slug:event_slug>/manage/albums/<slug:album_uuid>/edit/",
-        views_oms.orga_albums_edit,
-        name="orga_albums_edit",
-    ),
-    path(
-        "<slug:event_slug>/manage/albums/<slug:album_uuid>/delete/",
-        views_oms.orga_albums_delete,
-        name="orga_albums_delete",
-    ),
-    path(
-        "<slug:event_slug>/manage/albums/<slug:album_slug>/upload/",
-        views_oms.orga_albums_upload,
-        name="orga_albums_upload",
-    ),
-    path(
         "<slug:event_slug>/manage/pdf/",
         views_op.orga_characters_pdf,
         name="orga_characters_pdf",

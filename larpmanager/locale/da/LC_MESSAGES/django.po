@@ -281,9 +281,6 @@ msgstr "Aktør"
 msgid "Admin"
 msgstr "Administrator"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Administrer"
 
 msgid "Manual"
 msgstr "Manuel"
-
-msgid "Master"
-msgstr "Master"
 
 msgid "Medium"
 msgstr "Mellem"
@@ -5542,9 +5536,6 @@ msgstr "Tofaktorgodkendelse"
 msgid "Update your personal data"
 msgstr "Opdater dine personoplysninger"
 
-msgid "Upload of photo and video"
-msgstr "Upload af billeder og videoer"
-
 msgid "Use of third party assets"
 msgstr "Brug af tredjepartsaktiver"
 
@@ -5792,9 +5783,6 @@ msgstr "Billetnavn (hold det kort)"
 
 msgid "View badges you have earned"
 msgstr "Se de Badges, du har opnået"
-
-msgid "View photos from the event!"
-msgstr "Se billeder fra eventet!"
 
 msgid "Withheld as transaction fee"
 msgstr "Tilbageholdt som transaktionsgebyr"
@@ -6855,9 +6843,6 @@ msgstr "Tak, fordi du er blevet en del af vores fællesskab!"
 msgid "They need to complete it immediately"
 msgstr "De skal udfylde det med det samme"
 
-msgid "View photos and media from the event"
-msgstr "Se billeder og medier fra eventet"
-
 msgid "You can now set the discount options"
 msgstr "Du kan nu angive rabatindstillingerne"
 
@@ -7265,9 +7250,6 @@ msgstr "Administrer indgående indtægter knyttet til events"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Medlemsansøgningsformular for %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Billeder og videoer uploadet!"
 
 msgid "Set casting options in the configuration"
 msgstr "Angiv Casting-muligheder i konfigurationen"
@@ -8520,9 +8502,6 @@ msgstr "Sidste trin: upload venligst din medlemsansøgning."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Administrer dynamiske afdragsbetalinger for tilmeldinger"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Administrer foto- og videoalbummer, der er uploadet til dette event"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Ingen karakterer har fået tildelt denne rolleværdi endnu."
 
@@ -9188,9 +9167,6 @@ msgstr ""
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Upload et billede af din karakter specifikt til dette event!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Upload en zip-fil med billeder og videoer for at udfylde dette album"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Se hele indholdet af en arkiveret e-mail sendt af systemet"
@@ -9950,10 +9926,6 @@ msgstr "Den originale engelske tekst, som den vises i koden (msgid i gettext)"
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "De bliver automatisk anvendt, når du tilmelder dig et nyt event."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Upload dette arkiv? Billederne og videoerne i det bliver føjet til albummet."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11156,13 +11128,6 @@ msgid ""
 msgstr ""
 "Administrer de spørgsmål, deltagerne besvarer efter eventet, for at give "
 "deres feedback"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Der er endnu ikke oprettet nogen albummer. Tilføj et album for at organisere"
-" og dele billeder fra dette event."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14646,13 +14611,6 @@ msgid ""
 msgstr ""
 "Angiv venligst nedenfor den præcise betalingsmetode, du har brugt. Husk at "
 "indsende formularen, ellers behandles din betaling ikke!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Vælg en zip-fil til upload. Mapper bliver til albummer, og billederne og "
-"videoerne indeni placeres i de tilsvarende albummer."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

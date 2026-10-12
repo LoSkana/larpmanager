@@ -207,10 +207,6 @@ i.fas {
   border-width: 0;
 }
 
-.nope {
-  display: none !important;
-}
-
 .disabled {
   pointer-events: none;
   opacity: 0.5;
@@ -314,22 +310,12 @@ td label {
   white-space: nowrap;
 }
 
-.show_tooltip {
-  font-size: 150%;
-  font-weight: bold;
-  line-height: 1.5;
-}
-
 .helptext {
   color: rgba(var(--pri-rgb), 0.7);
   font-size: 80%;
   padding: 1em 0 0 0;
   width: 100%;
   display: inline-block;
-}
-
-.helptext-checkbox {
-  display: inline;
 }
 
 .errorlist {

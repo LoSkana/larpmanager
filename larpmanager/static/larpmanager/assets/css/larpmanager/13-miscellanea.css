@@ -72,32 +72,6 @@
   text-align: center;
 }
 
-/*** event cover ***/
-
-#event_cover {
-  height: 25em;
-  background-position: center center;
-  background-size: cover;
-  width: 100%;
-  background-repeat: no-repeat;
-}
-
-@media (max-width: 600px) {
-  #event_cover {
-    height: 15em;
-  }
-}
-
-#event_cover a {
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 1em;
-  border-radius: 0.5em;
-  color: var(--pri-clr);
-  font-size: 120%;
-  position: relative;
-  top: 8em;
-}
-
 /* ---------------------------------------------------------------------------
    Table header/footer rows and registration banner
    --------------------------------------------------------------------------- */

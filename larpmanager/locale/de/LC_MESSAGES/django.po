@@ -281,9 +281,6 @@ msgstr "Schauspieler"
 msgid "Admin"
 msgstr "Admin"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Verwalten"
 
 msgid "Manual"
 msgstr "Manuell"
-
-msgid "Master"
-msgstr "Meister"
 
 msgid "Medium"
 msgstr "Mittel"
@@ -5542,9 +5536,6 @@ msgstr "Zwei-Faktoren-Authentifizierung"
 msgid "Update your personal data"
 msgstr "Aktualisiere deine persönlichen Daten"
 
-msgid "Upload of photo and video"
-msgstr "Hochladen von Fotos und Videos"
-
 msgid "Use of third party assets"
 msgstr "Nutzung von Vermögenswerten Dritter"
 
@@ -5792,9 +5783,6 @@ msgstr "Ticketname (kurz halten)"
 
 msgid "View badges you have earned"
 msgstr "Deine verdienten Badges anzeigen"
-
-msgid "View photos from the event!"
-msgstr "Schau dir die Fotos der Veranstaltung an!"
 
 msgid "Withheld as transaction fee"
 msgstr "Als Transaktionsgebühr einbehalten"
@@ -6855,9 +6843,6 @@ msgstr "Danke, dass du Teil unserer Community geworden bist!"
 msgid "They need to complete it immediately"
 msgstr "Sie müssen es sofort abschließen"
 
-msgid "View photos and media from the event"
-msgstr "Fotos und Medien zur Veranstaltung ansehen"
-
 msgid "You can now set the discount options"
 msgstr "Du kannst jetzt die Rabattoptionen festlegen"
 
@@ -7267,9 +7252,6 @@ msgstr "Verwalte die mit Veranstaltungen verbundenen Einnahmen"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Antragsformular für die Mitgliedschaft von %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Fotos und Videos erfolgreich hochgeladen!"
 
 msgid "Set casting options in the configuration"
 msgstr "Stelle Casting-Optionen in der Konfiguration ein"
@@ -8550,11 +8532,6 @@ msgstr "Als letzten Schritt lade bitte deinen Mitgliedsantrag hoch."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Verwalte dynamische Ratenzahlungen für Anmeldungen"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr ""
-"Verwalte Foto- und Videoalben, die für diese Veranstaltung hochgeladen "
-"wurden"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Keinem Charakter wurde dieser Rollenwert bisher zugewiesen."
 
@@ -9317,10 +9294,6 @@ msgid "Upload a photo of your character specifically for this event!"
 msgstr ""
 "Lade ein Foto deines Charakters hoch, das speziell für diese Veranstaltung "
 "gedacht ist!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-"Lade eine ZIP-Datei mit Fotos und Videos hoch, um dieses Album zu füllen"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10257,11 +10230,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Diese werden automatisch angewendet, wenn du dich für eine neue "
 "Veranstaltung anmeldest."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Dieses Archiv hochladen? Die enthaltenen Fotos und Videos werden zum Album "
-"hinzugefügt."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11559,13 +11527,6 @@ msgid ""
 msgstr ""
 "Verwalte die Fragen, die die Teilnehmenden nach dem Event beantworten, um "
 "ihr Feedback zu geben"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Es wurden noch keine Alben erstellt. Füge ein Album hinzu, um Fotos zu "
-"diesem Event zu organisieren und zu teilen."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -15115,14 +15076,6 @@ msgstr ""
 "Bitte gib unten die genaue Zahlungsmethode an, die du gewählt hast. Vergiss "
 "nicht, das Formular abzuschicken, da deine Zahlung sonst nicht bearbeitet "
 "werden kann!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Wähle eine Zip-Datei zum Hochladen aus. Die Verzeichnisse werden zu Alben, "
-"und die darin enthaltenen Fotos und Videos werden in den entsprechenden "
-"Alben abgelegt."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

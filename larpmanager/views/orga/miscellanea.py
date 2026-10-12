@@ -33,12 +33,8 @@ from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.warehouse import get_association_warehouse_cache, get_event_warehouse_assignments_cache
-from larpmanager.forms.miscellanea import (
-    UploadAlbumsForm,
-)
 from larpmanager.forms.warehouse import OrgaWarehouseItemCommitRemainingForm
 from larpmanager.models.miscellanea import (
-    Album,
     Log,
     Milestone,
     MilestoneStatus,
@@ -57,84 +53,14 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.core.checks import check_event_context
-from larpmanager.utils.core.common import get_album_cod, get_element, get_object_uuid
+from larpmanager.utils.core.common import get_element, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.bulk import handle_bulk_orga_items
-from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
+from larpmanager.utils.services.miscellanea import get_warehouse_optionals
 from larpmanager.utils.services.writing import writing_post
-
-
-@login_required
-def orga_albums(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display albums for an event run in the organizer dashboard."""
-    context = check_event_context(request, event_slug, "orga_albums")
-    context["list"] = Album.objects.filter(run=context["run"]).order_by("-created")
-    return render(request, "larpmanager/orga/albums.html", context)
-
-
-@login_required
-def orga_albums_new(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Create a new album for an event."""
-    return orga_new(request, event_slug, OrgaAction.ALBUMS)
-
-
-@login_required
-def orga_albums_edit(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
-    """Edit album for an event."""
-    return orga_edit(request, event_slug, OrgaAction.ALBUMS, album_uuid)
-
-
-@login_required
-def orga_albums_delete(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
-    """Delete album for event."""
-    return orga_delete(request, event_slug, OrgaAction.ALBUMS, album_uuid)
-
-
-@login_required
-def orga_albums_upload(request: HttpRequest, event_slug: str, album_slug: str) -> HttpResponse:
-    """Upload photos and videos to an event album.
-
-    Args:
-        request: The HTTP request object containing user data and files
-        event_slug: Event slug identifier
-        album_slug: The album code/identifier string
-
-    Returns:
-        HttpResponse: Rendered upload form or redirect after successful upload
-
-    Raises:
-        PermissionDenied: If user lacks orga_albums permission for the event
-
-    """
-    # Check user permissions and get event context
-    context = check_event_context(request, event_slug, "orga_albums")
-
-    # Retrieve and validate the album using the provided code
-    get_album_cod(context, album_slug)
-
-    # Handle POST request for file upload
-    if request.method == "POST":
-        # Create form with uploaded files and POST data
-        form = UploadAlbumsForm(request, event_slug.POST, request.FILES)
-
-        # Validate form data and process upload
-        if form.is_valid():
-            # Upload files to the specified album
-            upload_albums(context["album"], request.FILES["elem"])
-
-            # Show success message and redirect to same page
-            messages.success(request, event_slug, _("Photos and videos successfully uploaded!"))
-            return redirect(request, event_slug.path_info)
-    else:
-        # Create empty form for GET request
-        form = UploadAlbumsForm()
-
-    # Add form to context and render upload template
-    context["form"] = form
-    return render(request, "larpmanager/orga/albums_upload.html", context)
 
 
 @login_required

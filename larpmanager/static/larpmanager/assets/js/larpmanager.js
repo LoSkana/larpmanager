@@ -391,27 +391,6 @@ function initSidebar() {
 
 }
 
-// ========== Init: Dropdowns ==========
-
-// Hover fade for dropdown menus, stop button click bubbling, and mark empty menus as "nope".
-function initDropdowns() {
-    $('.dropdown-button').click(function(event) {
-        event.stopPropagation();
-    });
-
-    $('.dropdown').on('mouseenter', function() {
-        $(this).children('.dropdown-menu').fadeIn(100);
-    }).on('mouseleave', function() {
-        $(this).children('.dropdown-menu').fadeOut(100);
-    });
-
-    $('.dropdown-menu').each(function() {
-      if ($(this).children().length == 0) {
-        $(this).addClass('nope');
-      }
-    });
-}
-
 // ========== Init: Feature modals ==========
 
 // Open tutorial/feature iframe modals and the feature-description popup via AJAX.
@@ -703,7 +682,6 @@ function initTableSearch() {
 // Fade in the main layout regions (content, topbar, sidebar, footer) on load.
 function initFadeIns() {
     $('#one .inner').fadeIn(100);
-    $('#topbar .inner').fadeIn(100);
     $('#sidebar .inner').fadeIn(100);
     $('#footer .inner').fadeIn(100);
 }
@@ -744,7 +722,6 @@ $(document).ready(function() {
     // Layout / chrome
     initHeadings();
     initSidebar();
-    initDropdowns();
     initFadeIns();
 
     // Notifications

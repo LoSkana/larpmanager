@@ -281,9 +281,6 @@ msgstr "Herec"
 msgid "Admin"
 msgstr "Správce"
 
-msgid "Album"
-msgstr "Album"
-
 msgid "Alias"
 msgstr "Alias"
 
@@ -648,9 +645,6 @@ msgstr "Spravovat"
 
 msgid "Manual"
 msgstr "Ruční"
-
-msgid "Master"
-msgstr "Mistr"
 
 msgid "Medium"
 msgstr "Střední"
@@ -5542,9 +5536,6 @@ msgstr "Dvoufaktorové ověřování"
 msgid "Update your personal data"
 msgstr "Aktualizuj své osobní údaje"
 
-msgid "Upload of photo and video"
-msgstr "Nahrávání fotografií a videí"
-
 msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
 
@@ -5792,9 +5783,6 @@ msgstr "Název vstupenky (ať je krátký)"
 
 msgid "View badges you have earned"
 msgstr "Zobraz Badges, které jsi získal/a"
-
-msgid "View photos from the event!"
-msgstr "Prohlédni si fotografie z akce!"
 
 msgid "Withheld as transaction fee"
 msgstr "Zadrženo jako transakční poplatek"
@@ -6855,9 +6843,6 @@ msgstr "Děkujeme, že ses připojil/a k naší komunitě!"
 msgid "They need to complete it immediately"
 msgstr "Musí to okamžitě dokončit"
 
-msgid "View photos and media from the event"
-msgstr "Prohlédni si fotografie a multimediální obsah z akce"
-
 msgid "You can now set the discount options"
 msgstr "Nyní můžeš nastavit možnosti slev"
 
@@ -7266,9 +7251,6 @@ msgstr "Správa příjmů souvisejících s akcemi"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Formulář žádosti o členství pro %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Fotografie a videa byly úspěšně nahrány!"
 
 msgid "Set casting options in the configuration"
 msgstr "Nastav možnosti Casting v konfiguraci"
@@ -8520,9 +8502,6 @@ msgstr "V posledním kroku nahraj přihlášku ke členství."
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Spravovat dynamické splátky plateb za registrace"
 
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Správa alb fotek a videí nahraných pro tuto akci"
-
 msgid "No characters have been assigned this role value yet."
 msgstr "Této hodnotě role zatím nebyla přiřazena žádná postava."
 
@@ -9185,10 +9164,6 @@ msgstr "Přepínání mezi správou backendu a veřejnými stránkami"
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Nahraj fotografii své postavy speciálně pro tuto akci!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr ""
-"Nahraj soubor ZIP s fotografiemi a videi, aby se obsah zobrazil v tomto albu"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Zobrazit celý obsah archivovaného e-mailu odeslaného systémem"
@@ -9923,9 +9898,6 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "Tyto údaje se automaticky použijí při registraci na novou akci."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr "Nahrát tento archiv? Jeho fotky a videa budou přidány do alba."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11070,13 +11042,6 @@ msgid ""
 msgstr ""
 "Spravuj otázky, na které účastníci odpovídají po akci, aby ti dali zpětnou "
 "vazbu"
-
-msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Zatím nebyla vytvořena žádná alba. Přidej album, abys mohl uspořádat a "
-"sdílet fotografie z této události."
 
 msgid ""
 "Optional - Additional information about the option, displayed below the "
@@ -14522,13 +14487,6 @@ msgid ""
 msgstr ""
 "Níže prosím uveď přesný způsob platby, který jsi provedl. Nezapomeň formulář"
 " odeslat, jinak nebude tvoje platba zpracována!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Vyber soubor zip pro odeslání. Z adresářů se stanou alba a fotografie a "
-"videa v nich budou umístěny do příslušných alb."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

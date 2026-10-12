@@ -206,11 +206,11 @@ class UploadToPathAndRename:
         """Generate upload path for file with backup handling.
 
         Creates a unique filename using UUID and organizes files into directories
-        based on instance attributes (event, run, album). When updating existing
+        based on instance attributes (event, run). When updating existing
         instances, previous files are moved to a backup directory.
 
         Args:
-            instance: Model instance being saved (Event, Run, Album, etc.)
+            instance: Model instance being saved (Event, Run, etc.)
             filename: Original filename from upload
 
         Returns:
@@ -238,8 +238,6 @@ class UploadToPathAndRename:
 
             run_cache = get_run_basic_cache(instance.run_id)
             path = str(Path(path) / run_cache["slug"] / str(run_cache["number"]))
-        if hasattr(instance, "album") and instance.album:
-            path = str(Path(path) / instance.album.slug)
 
         # Construct final file path
         new_fn = str(Path(path) / filename)
