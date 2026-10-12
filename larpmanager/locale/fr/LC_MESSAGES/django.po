@@ -4388,9 +4388,6 @@ msgstr "Couleur des liens."
 msgid "Confirm Unsubscribe"
 msgstr "Confirmer le désabonnement"
 
-msgid "Confirmation delete"
-msgstr "Confirmation de la suppression"
-
 msgid "Content Unavailable"
 msgstr "Contenu non disponible"
 
@@ -12278,13 +12275,6 @@ msgid ""
 msgstr ""
 "Si coché, envoie un e-mail de rappel aux organisateurs pour les paiements "
 "encore en attente d'approbation."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Si tu es absolument certain de vouloir supprimer cet élément, clique sur ce "
-"bouton."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

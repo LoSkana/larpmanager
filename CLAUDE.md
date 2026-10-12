@@ -248,7 +248,7 @@ under the matching section-comment banner inside the file.
 | File | Put here | Do NOT put here |
 |------|----------|-----------------|
 | `00-base.css` | Page-agnostic primitives: single-purpose utility classes (`.hide`, `.show`, `.inline`, `.centerized`), bare HTML element defaults/resets (`table`, `form`, `select`, `button`, `label`, `ul/ol`), low-level text/color helpers (`.helptext`, `.errorlist`, `.redderized`), and the `body.theme-*` color-skin definitions (Themes section). | Anything component- or feature-specific. |
-| `01-forms.css` | Form inputs and their widgets: native `input`/checkbox/radio styling, custom option cards (`.opt-card`, `.reg-checkbox-class`), `#register_form` layout, form errors, reCAPTCHA, Select2 (`.select2-*`), TinyMCE (`.tox-*`), form-control width/responsive rules, `.form_container` layout incl. the `.new_v18` form-table variant. | DataTables controls (→ `03`), table layout (→ `02`). |
+| `01-forms.css` | Form inputs and their widgets: native `input`/checkbox/radio styling, custom option cards (`.opt-card`, `.reg-checkbox-class`), `#register_form` layout, form errors, reCAPTCHA, Select2 (`.select2-*`), TinyMCE (`.tox-*`), form-control width/responsive rules, `.form_container` layout incl. the `.lm_default` form-table variant. | DataTables controls (→ `03`), table layout (→ `02`). |
 | `02-tables.css` | `table`/`th`/`td`/`tr` layout, table-scoped responsive stacking (`.mob`, `.table-responsive`), rules tied to specific tables (inline options editor `.inline-options-table`, `#discount_tbl`). | DataTables-generated markup (→ `03`), non-table layout. |
 | `03-datatables.css` | Anything targeting DataTables-generated markup: selectors starting with `.dt-`, `.dtcc-`, `.dataTable`, `.dataTables_wrapper` — library controls, pagination, search/length inputs, column-control dropdowns, export buttons, cell/scrollbar overrides. | Plain HTML tables (→ `02`), the responsive inline-expand caret (→ `09`). |
 | `04-popups.css` | Loading spinners/overlays (`#overlay`, `.lds-roller`), toast notifications (`.jq-toast-*`), and any popup/modal/dialog/lightbox (`.popup*`, `dialog`, `#char-finder-popup`, `#excel-edit`, `#imagePopup`) — shells, size variants, backdrops, close buttons. | Manage-side option-edit popup and floating iframe (→ `07`). |
@@ -266,7 +266,7 @@ under the matching section-comment banner inside the file.
   by the `body.theme-*` rules in `00-base.css` and by per-association/event skin
   CSS; `--topbar-height` is defined in `11-topbar.css`. Files consume these vars
   without redefining them.
-- Version flags: `.new_v18` → `01`/`11`, `.new_v20` → `09`, `.new_v22`/`.only_v22`/
+- `.lm_default` (always on `<body>`) → `01`/`11`. Version flags: `.new_v20` → `09`, `.new_v22`/`.only_v22`/
   `.no_v22` → distributed across `10`-`13` by which shell component the rule
   touches (page skeleton, topbar, sidebar, or cross-cutting).
 - Never inline CSS in templates — all styles live here (per CLAUDE.md).

@@ -4388,9 +4388,6 @@ msgstr "Farg pa lankarna."
 msgid "Confirm Unsubscribe"
 msgstr "Bekräfta avbeställning"
 
-msgid "Confirmation delete"
-msgstr "Bekräfta radering"
-
 msgid "Content Unavailable"
 msgstr "Innehållet är inte tillgängligt"
 
@@ -11937,13 +11934,6 @@ msgid ""
 msgstr ""
 "Om detta är valt skickas ett påminnelsemejl till arrangörerna om betalningar"
 " som fortfarande väntar på godkännande."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Om du är helt säker på att du vill ta bort den här artikeln klickar du på "
-"den här knappen."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

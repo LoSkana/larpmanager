@@ -4388,9 +4388,6 @@ msgstr "Linkkien vari."
 msgid "Confirm Unsubscribe"
 msgstr "Vahvista tilauksen peruuttaminen"
 
-msgid "Confirmation delete"
-msgstr "Vahvista poistaminen"
-
 msgid "Content Unavailable"
 msgstr "Sisältö ei ole käytettävissä"
 
@@ -11955,13 +11952,6 @@ msgid ""
 msgstr ""
 "Jos valittu, järjestäjille lähetetään muistutussähköposti maksuista, jotka "
 "odottavat vielä hyväksyntää."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Jos olet täysin varma, että haluat poistaa kohteen, napsauta tätä "
-"painiketta."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

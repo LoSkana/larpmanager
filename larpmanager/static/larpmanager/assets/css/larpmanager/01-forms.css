@@ -637,42 +637,34 @@ input,
   background-color: #a5dee5 !important;
 }
 
-body:not(.new_v18) .only_new_v18 {
-  display: none;
-}
-
-.new_v18 .no_new_v18 {
-  display: none;
-}
-
-.new_v18 .auto_resize {
+.lm_default .auto_resize {
   width: 70%;
   margin: 0 auto;
 }
 
 @media (max-width: 1200px) {
-  .new_v18 .auto_resize {
+  .lm_default .auto_resize {
     width: 80%;
   }
 }
 
 @media (max-width: 840px) {
-  .new_v18 .auto_resize {
+  .lm_default .auto_resize {
     width: 90%;
   }
 }
 
-.new_v18 .auto_resize table {
+.lm_default .auto_resize table {
   width: 100%;
 }
 
-.new_v18 .form_container {
+.lm_default .form_container {
   border-collapse: collapse;
   margin: 1rem auto;
 }
 
 @media (max-width: 1200px) {
-  .new_v18 .form_container {
+  .lm_default .form_container {
     width: 90%;
   }
 
@@ -681,17 +673,17 @@ body:not(.new_v18) .only_new_v18 {
   }
 }
 
-.new_v18 .form_container table {
+.lm_default .form_container table {
   width: 100%;
 }
 
-.new_v18 th,
-.new_v18 td {
+.lm_default th,
+.lm_default td {
   padding: 1rem;
   text-align: left !important;
 }
 
-.new_v18 th label {
+.lm_default th label {
   text-align: left !important;
 }
 
@@ -700,90 +692,90 @@ body:not(.new_v18) .only_new_v18 {
   margin-top: 0.2em !important;
 }
 
-.new_v18 .form_container table input {
+.lm_default .form_container table input {
   width: 100% !important;
   padding: 0.4rem;
   box-sizing: border-box;
 }
 
-.new_v18 .form_container table select {
+.lm_default .form_container table select {
   width: 100% !important;
 }
 
-.new_v18 .form_container table textarea {
+.lm_default .form_container table textarea {
   width: 100% !important;
   height: 8em;
 }
 
-.new_v18 .form_container table input[type="checkbox"],
-.new_v18 .form_container table input[type="radio"] {
+.lm_default .form_container table input[type="checkbox"],
+.lm_default .form_container table input[type="radio"] {
   width: 1em !important;
 }
 
-.new_v18 .select2-container {
+.lm_default .select2-container {
   width: 100% !important;
 }
 
-.new_v18 .form_container table th {
+.lm_default .form_container table th {
   width: 25%;
 }
 
-.new_v18 .grid .grid-item th {
+.lm_default .grid .grid-item th {
   width: auto;
 }
 
-.new_v18 .grid .grid-item p {
+.lm_default .grid .grid-item p {
   text-align: left;
 }
 
-.new_v18 form.form_container {
+.lm_default form.form_container {
   text-align: left;
 }
 
-.new_v18 #search {
+.lm_default #search {
   text-align: left;
 }
 
-.new_v18 .form_container table input,
-.new_v18 .form_container table select,
-.new_v18 .form_container table .tox-tinymce,
-.new_v18 .form_container table .select2-container,
-.new_v18 .form_container table textarea {
+.lm_default .form_container table input,
+.lm_default .form_container table select,
+.lm_default .form_container table .tox-tinymce,
+.lm_default .form_container table .select2-container,
+.lm_default .form_container table textarea {
   margin: 0 !important;
   max-width: 100% !important;
   text-align: left;
 }
 
-.new_v18 .form_container table .old_delete {
+.lm_default .form_container table .old_delete {
   max-width: min-content !important;
   margin: 0 auto !important;
 }
 
 @media (max-width: 840px) {
-  .new_v18 .form_container {
+  .lm_default .form_container {
     width: 100%;
   }
 
-  .new_v18 .form_container table,
-  .new_v18 .form_container table tbody,
-  .new_v18 .form_container table tr,
-  .new_v18 .form_container table td,
-  .new_v18 .form_container table th {
+  .lm_default .form_container table,
+  .lm_default .form_container table tbody,
+  .lm_default .form_container table tr,
+  .lm_default .form_container table td,
+  .lm_default .form_container table th {
     display: block;
     width: 100%;
   }
 
-  .new_v18 .form_container table th {
+  .lm_default .form_container table th {
     padding-bottom: 0;
     margin-bottom: 0;
     font-weight: 600;
   }
 
-  .new_v18 .form_container table td {
+  .lm_default .form_container table td {
     margin-bottom: 0;
   }
 
-  .new_v18 .form_container table .tox-tinymce {
+  .lm_default .form_container table .tox-tinymce {
     width: 100% !important;
   }
 }

@@ -20,11 +20,6 @@
 
 VERSIONS = [
     {
-        "number": 17,
-        "description": "Dashboard: widgets shown as cards in columns",
-        "available": True,
-    },
-    {
         "number": 18,
         "description": "Form appearance: left-centered and more readable",
         "available": True,

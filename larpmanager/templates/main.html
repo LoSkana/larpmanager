@@ -263,12 +263,6 @@
             });
 
         {% endif %}
-
-        $('#delete_confirm').click(function(event) {
-            event.preventDefault();
-            $('#id_delete').val('1');
-            $('#main_form').submit();
-        });
     });
     </script>
 {% endblock js-req %}

@@ -4388,9 +4388,6 @@ msgstr "Barva odkazů."
 msgid "Confirm Unsubscribe"
 msgstr "Potvrzení odhlášení"
 
-msgid "Confirmation delete"
-msgstr "Potvrzení odstranění"
-
 msgid "Content Unavailable"
 msgstr "Obsah není k dispozici"
 
@@ -11779,13 +11776,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, pošle organizátorům e-mail s připomínkou plateb, které "
 "stále čekají na schválení."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Pokud si jsi naprosto jistý/á, že chceš tuto položku odstranit, klikni na "
-"toto tlačítko."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

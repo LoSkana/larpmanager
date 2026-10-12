@@ -988,6 +988,22 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResp
     return _form_gift(request, event_slug, gift_uuid)
 
 
+@login_required
+def gift_delete(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResponse:
+    """Cancel a gift registration after confirmation."""
+    context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
+    check_registration_open(context, request)
+    registration = get_registration_gift(context, gift_uuid)
+
+    if request.method != "POST":
+        context["el_name"] = registration.ticket.name if registration.ticket else ""
+        return render(request, "elements/confirm_action.html", context)
+
+    cancel_reg(registration)
+    messages.success(request, _("Operation completed!"))
+    return redirect("gift", event_slug=event_slug)
+
+
 def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = None) -> HttpResponse:
     """Handle gift registration modifications.
 

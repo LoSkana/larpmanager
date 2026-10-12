@@ -46,7 +46,6 @@
     {% if writing_unimportant %}<td class="stats">{{ el.character_rels.important }}</td>{% endif %}
     <td>
         <a href="{% url 'orga_plots_delete' run.get_slug el.uuid %}"
-           qtip="{% trans "Delete" %}"
-           class="only_new_v18"><i class="fas fa-trash"></i></a>
+           qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
     </td>
 {% endblock tr_content %}

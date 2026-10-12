@@ -5764,14 +5764,6 @@ msgid ""
 "next item"
 msgstr ""
 
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-
-msgid "Confirmation delete"
-msgstr ""
-
 msgid "Attention: the form contains errors, please correct them:"
 msgstr ""
 

@@ -4388,9 +4388,6 @@ msgstr "Farve paa links."
 msgid "Confirm Unsubscribe"
 msgstr "Bekræft afmelding"
 
-msgid "Confirmation delete"
-msgstr "Bekræft sletning"
-
 msgid "Content Unavailable"
 msgstr "Indhold ikke tilgængeligt"
 
@@ -11886,13 +11883,6 @@ msgid ""
 msgstr ""
 "Hvis valgt, sendes der en påmindelse via e-mail til arrangørerne om "
 "betalinger, der stadig venter på godkendelse."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Hvis du er helt sikker på, at du vil slette dette element, skal du klikke på"
-" denne knap."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

@@ -4388,9 +4388,6 @@ msgstr "Kleur van de links."
 msgid "Confirm Unsubscribe"
 msgstr "Uitschrijven bevestigen"
 
-msgid "Confirmation delete"
-msgstr "Verwijdering bevestigen"
-
 msgid "Content Unavailable"
 msgstr "Inhoud niet beschikbaar"
 
@@ -12185,13 +12182,6 @@ msgid ""
 msgstr ""
 "Als je dit selecteert, wordt er een herinneringsmail naar de organisatoren "
 "gestuurd voor betalingen die nog op goedkeuring wachten."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Als je absoluut zeker weet dat je dit item wilt verwijderen, klik je op deze"
-" knop."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"
