@@ -34,7 +34,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.basic import get_event_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import (
@@ -570,6 +570,14 @@ class BaseRegistrationForm(BaseModelFormRun):
         self.sections = {}
 
     @cached_property
+    def _currency_symbol(self) -> str | None:
+        """Return the currency symbol from params, falling back to the run basic cache."""
+        currency_symbol = self.params.get("currency_symbol")
+        if not currency_symbol and self.params.get("run"):
+            currency_symbol = get_run_basic_cache(self.params["run"].id)["currency_symbol"]
+        return currency_symbol
+
+    @cached_property
     def _collapse_min(self) -> int:
         """Return the minimum number of options needed to show the collapse toggle."""
         event = self.params.get("event")
@@ -628,9 +636,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def get_option_form_text(self, option: dict) -> str:
         """Generate form display text for an option dict."""
-        currency_symbol = self.params.get("currency_symbol")
-        event_association = self.params.get("run").event.association if not currency_symbol else None
-        return util_get_option_form_text(option, currency_symbol, event_association)
+        return util_get_option_form_text(option, self._currency_symbol)
 
     def _resolve_option(
         self,
@@ -695,10 +701,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         if not available_options:
             return choices, help_text, descriptions, metadata
 
-        # Resolve currency symbol once for card metadata
-        cs = self.params.get("currency_symbol")
-        if not cs and self.params.get("run"):
-            cs = self.params["run"].event.association.get_currency_symbol()
+        cs = self._currency_symbol
 
         for option in available_options:
             option_display_name, remaining_availability, is_valid = self._resolve_option(

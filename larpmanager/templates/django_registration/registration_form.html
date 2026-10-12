@@ -4,25 +4,27 @@
     {% trans "Register" %}
 {% endblock title %}
 {% block content %}
-    <div class="form_container user_resize">
-        <form id="register_form"
-              method="post"
-              action="{% url 'registration_register' %}">
-            {% csrf_token %}
-            <table>
-                {{ form.as_table }}
-            </table>
-            {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
-            <input type="submit" id="id_submit"  value="{% trans "Submit" %}" />
-        </form>
-        <p class="login_link">
-            {% trans "Already have an account?" %}
-            {% if request.GET.next %}
-                <a href="{% url 'login' %}?next={{ request.GET.next|urlencode }}">{% trans "Log in" %}</a>
-            {% else %}
-                <a href="{% url 'login' %}">{% trans "Log in" %}</a>
-            {% endif %}
-        </p>
+    <div class="lm_default">
+        <div class="form_container user_resize">
+            <form id="register_form"
+                  method="post"
+                  action="{% url 'registration_register' %}">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+                <input type="submit" id="id_submit"  value="{% trans "Submit" %}" />
+            </form>
+            <p class="login_link">
+                {% trans "Already have an account?" %}
+                {% if request.GET.next %}
+                    <a href="{% url 'login' %}?next={{ request.GET.next|urlencode }}">{% trans "Log in" %}</a>
+                {% else %}
+                    <a href="{% url 'login' %}">{% trans "Log in" %}</a>
+                {% endif %}
+            </p>
+        </div>
     </div>
 {% endblock content %}
 {% block js %}

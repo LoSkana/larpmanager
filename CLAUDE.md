@@ -266,7 +266,7 @@ under the matching section-comment banner inside the file.
   by the `body.theme-*` rules in `00-base.css` and by per-association/event skin
   CSS; `--topbar-height` is defined in `11-topbar.css`. Files consume these vars
   without redefining them.
-- `.lm_default` (always on `<body>`) → `01`/`09`/`11`. Version flags: `.new_v22`/`.only_v22`/
+- `.lm_default` (on `<body>` for organizations, not the platform site) → `01`/`09`/`11`. Version flags: `.new_v22`/`.only_v22`/
   `.no_v22` → distributed across `10`-`13` by which shell component the rule
   touches (page skeleton, topbar, sidebar, or cross-cutting).
 - Never inline CSS in templates — all styles live here (per CLAUDE.md).

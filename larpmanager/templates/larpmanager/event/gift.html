@@ -57,7 +57,7 @@
                                     </a>
                                     <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                                 {% endif %}
-                            {% elif registration.pending %}
+                            {% elif registration.payment_pending %}
                                 {% trans "Payment currently in review by the staff." %}
                             {% else %}
                                 <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
@@ -70,7 +70,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if not registration.tot_payed and not registration.pending %}
+                            {% if not registration.tot_payed and not registration.payment_pending %}
                                 <a href="{% url 'gift_delete' run.get_slug registration.uuid %}"
                                    qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
                             {% endif %}

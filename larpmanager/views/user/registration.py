@@ -961,7 +961,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Check for pending transactions
         for el in context["payments_pending"]:
             if registration.id == el.id:
-                registration.pending = el
+                registration.payment_pending = el
 
         # Attach additional registration info
         for el in context["registration_list"]:
@@ -998,24 +998,37 @@ def gift_delete(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpRe
     check_registration_open(context, request)
     registration = get_registration_gift(context, gift_uuid)
 
-    has_pending_payment = PaymentInvoice.objects.filter(
-        member_id=registration.member_id,
-        typ=PaymentType.REGISTRATION,
-        idx=registration.id,
-        status=PaymentStatus.SUBMITTED,
-    ).exists()
-    if registration.tot_payed or has_pending_payment:
-        messages.error(request, _("A gift that has already been paid cannot be deleted"))
-        return redirect("gift", event_slug=event_slug)
-
     if request.method != "POST":
+        if _gift_payment_started(registration):
+            messages.error(request, _("A gift that has already been paid cannot be deleted"))
+            return redirect("gift", event_slug=event_slug)
         context["el_name"] = registration.ticket.name if registration.ticket else ""
         return render(request, "elements/confirm_action.html", context)
 
-    cancel_reg(registration)
-    save_log(context, Registration, registration, operation_type=LogOperationType.DELETE)
+    with transaction.atomic():
+        # Lock the gift and re-check payments to avoid cancelling one paid in the meantime
+        registration = Registration.objects.select_for_update().get(pk=registration.pk)
+        if registration.cancellation_date or _gift_payment_started(registration):
+            messages.error(request, _("A gift that has already been paid cannot be deleted"))
+            return redirect("gift", event_slug=event_slug)
+        cancel_reg(registration)
+        save_log(context, Registration, registration, operation_type=LogOperationType.DELETE)
+
     messages.success(request, _("Operation completed!"))
     return redirect("gift", event_slug=event_slug)
+
+
+def _gift_payment_started(registration: Registration) -> bool:
+    """Return True if the gift has received payments or has a submitted payment awaiting approval."""
+    return (
+        bool(registration.tot_payed)
+        or PaymentInvoice.objects.filter(
+            member_id=registration.member_id,
+            typ=PaymentType.REGISTRATION,
+            idx=registration.id,
+            status=PaymentStatus.SUBMITTED,
+        ).exists()
+    )
 
 
 def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = None) -> HttpResponse:

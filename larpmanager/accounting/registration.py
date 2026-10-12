@@ -554,12 +554,11 @@ def cancel_reg(registration: Registration) -> None:
 
     Side effects:
         Sets cancellation date, deletes characters, traits, discounts,
-        bonus items, and resets event links. For unredeemed gifts, traits and
-        discounts are kept, since they belong to the giver's own registration.
+        bonus items, and resets event links. Traits and discounts are tracked
+        per member and run, so they are kept while the member still has other
+        active registrations (own or gifts) in the run.
 
     """
-    is_gift = bool(registration.redeem_code)
-
     with transaction.atomic():
         registration.cancellation_date = timezone.now()
         registration.save()
@@ -567,7 +566,16 @@ def cancel_reg(registration: Registration) -> None:
         # delete characters related
         RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
-        if not is_gift:
+        has_other_active = (
+            Registration.objects.filter(
+                run_id=registration.run_id,
+                member_id=registration.member_id,
+                cancellation_date__isnull=True,
+            )
+            .exclude(pk=registration.pk)
+            .exists()
+        )
+        if not has_other_active:
             # delete trait assignments
             AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
 
