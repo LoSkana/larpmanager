@@ -59,6 +59,30 @@
   border-radius: 10%;
 }
 
+/*** spoiler ***/
+
+.spoiler {
+  background-color: #000;
+  color: #000;
+  border-radius: 0.2em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.spoiler:hover,
+.spoiler:active {
+  color: #fff;
+}
+
+.spoiler::selection {
+  color: #fff;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 /*** GALLERY ***/
 
 .title {

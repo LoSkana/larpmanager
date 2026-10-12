@@ -612,6 +612,8 @@ _ALLOWED_HTML_TAGS = {
     "tr",
     "th",
     "td",
+    "details",
+    "summary",
 }
 
 _ALLOWED_HTML_ATTRS: dict[str, set[str]] = {
