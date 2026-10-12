@@ -44,11 +44,9 @@ from larpmanager.models.writing import Character, FactionType, get_event_element
 from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.io.pdf import get_trait_character
-from larpmanager.utils.larpmanager.versions import VERSIONS
+from larpmanager.utils.larpmanager.versions import EARLIEST_AVAILABLE_VERSION
 from larpmanager.utils.services.association import get_hint_for_slug
 from larpmanager.utils.services.experience import add_calls_tooltips
-
-_VERSION_BODY_CLASS_START = min(v["number"] for v in VERSIONS)
 
 if TYPE_CHECKING:
     from django.forms import BoundField, Form
@@ -1006,4 +1004,4 @@ def version_body_classes(effective_version: int) -> str:
     """Return CSS body classes for interface version gating."""
     if not effective_version:
         return ""
-    return " ".join(f"new_v{v}" for v in range(_VERSION_BODY_CLASS_START, int(effective_version) + 1))
+    return " ".join(f"new_v{v}" for v in range(EARLIEST_AVAILABLE_VERSION, int(effective_version) + 1))
