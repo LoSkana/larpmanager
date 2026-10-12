@@ -746,11 +746,6 @@ input,
   text-align: left;
 }
 
-.lm_default .form_container table .old_delete {
-  max-width: min-content !important;
-  margin: 0 auto !important;
-}
-
 @media (max-width: 840px) {
   .lm_default .form_container {
     width: 100%;

@@ -816,15 +816,6 @@ def _save_registration_edit(
     """Persist a validated registration form and return the appropriate response."""
     registration = form.save()
 
-    # Handle registration deletion if requested
-    if request.POST.get("delete") == "1":
-        save_log(context, Registration, registration, None, operation_type=LogOperationType.DELETE)
-        cancel_reg(registration)
-        messages.success(request, _("Registration cancelled"))
-        if is_frame:
-            return render(request, "elements/dashboard/form_success.html", context)
-        return redirect("orga_registrations", event_slug=context["run"].get_slug())
-
     save_log(context, Registration, registration, registration_uuid)
 
     # Save registration-specific questions and answers
