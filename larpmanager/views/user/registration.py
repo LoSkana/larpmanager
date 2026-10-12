@@ -805,6 +805,7 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
             registration__run=run,
             registration__member=member,
             registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
         ).select_related("disc")
     ]
 

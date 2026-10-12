@@ -39,6 +39,7 @@ def get_member_discounts(member: Member, run: Run) -> list[Discount]:
             registration__run=run,
             registration__member=member,
             registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
         ).values_list("disc_id", flat=True)
     )
     run_discount_ids = list(run.discounts.values_list("id", flat=True))
@@ -52,6 +53,7 @@ def count_discount_redemptions(discount: Discount, run: Run, exclude_member_id: 
         disc=discount,
         registration__run=run,
         registration__cancellation_date__isnull=True,
+        registration__deleted__isnull=True,
     ).count()
     reservations = get_discount_reservations(run.id, discount.id)
     reservations.pop(exclude_member_id, None)
