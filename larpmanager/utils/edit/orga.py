@@ -201,13 +201,15 @@ def _action_redirect(
         is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
         if is_frame:
             context["frame"] = True
-            return backend_delete_frame(request, context, model_type, element_uuid, action_data.get("can_delete"))
+            return backend_delete_frame(
+                request, context, model_type, element_uuid, action_data.get("can_delete"), writing
+            )
         # Non-frame direct access: confirm on GET, delete only on POST
         if request.method != "POST":
             backend_get(context, model_type, element_uuid, None)
             context["el_name"] = _element_display_name(context["el"])
             return render(request, "elements/confirm_action.html", context)
-        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
+        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"), writing)
 
     # Redirect to success page with event slug
     return redirect(permission, context["run"].get_slug())

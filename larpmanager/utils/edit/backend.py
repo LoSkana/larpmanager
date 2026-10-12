@@ -663,8 +663,9 @@ def backend_delete(
     model_type: BaseModel,
     entity_uuid: str,
     can_delete: Callable | None = None,
+    writing_type: str | None = None,
 ) -> None:
-    """Delete element from the system."""
+    """Delete element from the system, recording a deletion version for writing elements."""
     backend_get(context, model_type, entity_uuid, None)
 
     element = context["el"]
@@ -672,6 +673,9 @@ def backend_delete(
     if can_delete is not None and not can_delete(context, element):
         messages.error(request, _("Operation not allowed"))
         return
+
+    if writing_type:
+        save_version(element, writing_type, context["member"], to_delete=True)
 
     save_log(context, model_type, element, operation_type=LogOperationType.DELETE)
 
@@ -695,6 +699,7 @@ def backend_delete_frame(
     model_type: BaseModel,
     entity_uuid: str,
     can_delete: Callable | None = None,
+    writing_type: str | None = None,
 ) -> HttpResponse:
     """Handle delete inside an iframe modal: confirm page on GET, delete on POST.
 
@@ -703,7 +708,7 @@ def backend_delete_frame(
     parent window to close the modal and refresh the listing.
     """
     if request.method == "POST":
-        backend_delete(request, context, model_type, entity_uuid, can_delete)
+        backend_delete(request, context, model_type, entity_uuid, can_delete, writing_type)
         return render(request, "elements/dashboard/form_success.html", context)
 
     backend_get(context, model_type, entity_uuid, None)
