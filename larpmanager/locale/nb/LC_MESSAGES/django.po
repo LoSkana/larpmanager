@@ -5575,9 +5575,6 @@ msgstr "sjekk manglende relasjoner:"
 msgid "choice value not provided"
 msgstr "valgverdi ikke oppgitt"
 
-msgid "Access the event dashboard"
-msgstr "Få tilgang til hendelsesoversikten"
-
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme hendelse"
 
@@ -6158,9 +6155,6 @@ msgstr "Registreringer på ekstern lenke"
 msgid "Set up the taxes configuration"
 msgstr "Sett opp skattekonfigurasjonen"
 
-msgid "Set your interface preferences"
-msgstr "Angi grensesnittinnstillingene dine"
-
 msgid "Show/hide completed milestones"
 msgstr "Vis/skjul fullførte milepæler"
 
@@ -6455,9 +6449,6 @@ msgstr "(Valgfritt) Kostnaden for billetten"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valgfritt) Navnet på billetten"
-
-msgid "Access the organization dashboard"
-msgstr "Få tilgang til organisasjonens dashbord"
 
 msgid "Character creation reminder email"
 msgstr "E-postpåminnelse om opprettelse av karakter"

@@ -5575,9 +5575,6 @@ msgstr "Controlla le relazioni mancanti:"
 msgid "choice value not provided"
 msgstr "valore di scelta non fornito"
 
-msgid "Access the event dashboard"
-msgstr "Accedi al pannello di controllo dell'evento"
-
 msgid "Can't copy from same event"
 msgstr "Non puoi copiare dallo stesso evento"
 
@@ -6158,9 +6155,6 @@ msgstr "Iscrizioni su link esterno"
 msgid "Set up the taxes configuration"
 msgstr "Configura le imposte"
 
-msgid "Set your interface preferences"
-msgstr "Imposta le tue preferenze sull'interfaccia"
-
 msgid "Show/hide completed milestones"
 msgstr "Mostra/nascondi le tappe completate"
 
@@ -6455,9 +6449,6 @@ msgstr "(Facoltativo) Il costo del biglietto"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Facoltativo) Il nome del biglietto"
-
-msgid "Access the organization dashboard"
-msgstr "Accedi al pannello di controllo dell'organizzazione"
 
 msgid "Character creation reminder email"
 msgstr "Email di promemoria per la creazione del personaggio"

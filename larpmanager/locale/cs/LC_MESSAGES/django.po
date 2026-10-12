@@ -5575,9 +5575,6 @@ msgstr "Zkontrolovat chybějící vztahy:"
 msgid "choice value not provided"
 msgstr "hodnota výběru není uvedena"
 
-msgid "Access the event dashboard"
-msgstr "Přejdi na ovládací panel události"
-
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"
 
@@ -6158,9 +6155,6 @@ msgstr "Registrace na externím odkazu"
 msgid "Set up the taxes configuration"
 msgstr "Nastav konfiguraci daní"
 
-msgid "Set your interface preferences"
-msgstr "Nastav své preference rozhraní"
-
 msgid "Show/hide completed milestones"
 msgstr "Zobrazit/skrýt dokončené milníky"
 
@@ -6455,9 +6449,6 @@ msgstr "(Nepovinné) Cena vstupného"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Nepovinné) Název lístku"
-
-msgid "Access the organization dashboard"
-msgstr "Přejdi na řídicí panel organizace"
 
 msgid "Character creation reminder email"
 msgstr "E-mail s připomenutím vytvoření postavy"

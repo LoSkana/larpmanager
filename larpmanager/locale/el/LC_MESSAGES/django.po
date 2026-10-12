@@ -5575,9 +5575,6 @@ msgstr "Έλεγξε τις σχέσεις που λείπουν:"
 msgid "choice value not provided"
 msgstr "Δεν δόθηκε τιμή επιλογής"
 
-msgid "Access the event dashboard"
-msgstr "Πρόσβαση στον πίνακα ελέγχου του event"
-
 msgid "Can't copy from same event"
 msgstr "Δεν μπορείς να αντιγράψεις από το ίδιο event"
 
@@ -6158,9 +6155,6 @@ msgstr "Εγγραφές μέσω εξωτερικού συνδέσμου"
 msgid "Set up the taxes configuration"
 msgstr "Ρύθμισε τη διαμόρφωση φόρων"
 
-msgid "Set your interface preferences"
-msgstr "Ρύθμισε τις προτιμήσεις διεπαφής σου"
-
 msgid "Show/hide completed milestones"
 msgstr "Εμφάνιση/απόκρυψη ολοκληρωμένων ορόσημων"
 
@@ -6455,9 +6449,6 @@ msgstr "(Προαιρετικό) Το κόστος του εισιτηρίου"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Προαιρετικό) Το όνομα του εισιτηρίου"
-
-msgid "Access the organization dashboard"
-msgstr "Πρόσβαση στον πίνακα ελέγχου του οργανισμού"
 
 msgid "Character creation reminder email"
 msgstr "Email υπενθύμισης δημιουργίας χαρακτήρα"

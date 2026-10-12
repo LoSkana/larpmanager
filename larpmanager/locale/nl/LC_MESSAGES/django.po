@@ -5575,9 +5575,6 @@ msgstr "controleer ontbrekende relaties:"
 msgid "choice value not provided"
 msgstr "keuzewaarde niet opgegeven"
 
-msgid "Access the event dashboard"
-msgstr "Ga naar het evenementdashboard"
-
 msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
@@ -6158,9 +6155,6 @@ msgstr "Registraties op externe link"
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
 
-msgid "Set your interface preferences"
-msgstr "Stel je interfacevoorkeuren in"
-
 msgid "Show/hide completed milestones"
 msgstr "Voltooide mijlpalen weergeven/verbergen"
 
@@ -6455,9 +6449,6 @@ msgstr "(Optioneel) De kosten van het ticket"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Optioneel) De naam van het ticket"
-
-msgid "Access the organization dashboard"
-msgstr "Ga naar het organisatiedashboard"
 
 msgid "Character creation reminder email"
 msgstr "E-mailherinnering voor het aanmaken van een personage"

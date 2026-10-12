@@ -42,7 +42,7 @@
     {% endif %}
 </td>
 <td class="right">
-    {% if manage and effective_version >= 19 %}
+    {% if manage %}
         <div class="el">
             <a id="menu-open" href="#menu">
                 <i class="fa-solid fa-bars"></i>
@@ -86,7 +86,7 @@
                 </div>
             </td>
         {% endif %}
-        {% if manage and effective_version >= 19 %}
+        {% if manage %}
             {% with topbar_admin=True %}
                 {% include "elements/structure/topbar-right.html" with mobile=True %}
             {% endwith %}

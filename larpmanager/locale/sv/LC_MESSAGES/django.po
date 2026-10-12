@@ -5575,9 +5575,6 @@ msgstr "kontrollera saknade relationer:"
 msgid "choice value not provided"
 msgstr "val-värde angavs inte"
 
-msgid "Access the event dashboard"
-msgstr "Få tillgång till evenemangets instrumentpanel"
-
 msgid "Can't copy from same event"
 msgstr "Kan inte kopiera från samma händelse"
 
@@ -6158,9 +6155,6 @@ msgstr "Registreringar på extern länk"
 msgid "Set up the taxes configuration"
 msgstr "Ställ in skattekonfigurationen"
 
-msgid "Set your interface preferences"
-msgstr "Ställ in dina gränssnittsinställningar"
-
 msgid "Show/hide completed milestones"
 msgstr "Visa/dölj slutförda milstolpar"
 
@@ -6455,9 +6449,6 @@ msgstr "(Valfritt) Kostnaden för biljetten"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valfritt) Namnet på biljetten"
-
-msgid "Access the organization dashboard"
-msgstr "Gå till organisationens instrumentpanel"
 
 msgid "Character creation reminder email"
 msgstr "E-postpåminnelse om att skapa karaktär"

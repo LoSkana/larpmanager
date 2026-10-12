@@ -5575,9 +5575,6 @@ msgstr "tarkista puuttuvat suhteet:"
 msgid "choice value not provided"
 msgstr "valinnan arvoa ei ole annettu"
 
-msgid "Access the event dashboard"
-msgstr "Siirry tapahtuman kojelautaan"
-
 msgid "Can't copy from same event"
 msgstr "Ei voi kopioida samasta tapahtumasta"
 
@@ -6158,9 +6155,6 @@ msgstr "Ilmoittautumiset ulkoisen linkin kautta"
 msgid "Set up the taxes configuration"
 msgstr "Määritä verojen kokoonpano"
 
-msgid "Set your interface preferences"
-msgstr "Aseta käyttöliittymän asetukset"
-
 msgid "Show/hide completed milestones"
 msgstr "Näytä/piilota suoritetut virstanpylväät"
 
@@ -6455,9 +6449,6 @@ msgstr "(Valinnainen) Lipun hinta"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valinnainen) Lipun nimi"
-
-msgid "Access the organization dashboard"
-msgstr "Pääsy organisaation kojelautaan"
 
 msgid "Character creation reminder email"
 msgstr "Hahmonluonnin muistutussähköposti"

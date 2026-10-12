@@ -20,11 +20,6 @@
 
 VERSIONS = [
     {
-        "number": 18,
-        "description": "Form appearance: left-centered and more readable",
-        "available": True,
-    },
-    {
         "number": 19,
         "description": "Menu appearance: more immediate and understandable",
         "available": True,

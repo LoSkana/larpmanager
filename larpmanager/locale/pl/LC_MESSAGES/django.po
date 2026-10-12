@@ -5575,9 +5575,6 @@ msgstr "sprawdź brakujące relacje:"
 msgid "choice value not provided"
 msgstr "nie podano wartości wyboru"
 
-msgid "Access the event dashboard"
-msgstr "Przejdź do pulpitu nawigacyjnego wydarzenia"
-
 msgid "Can't copy from same event"
 msgstr "Nie można kopiować z tego samego zdarzenia"
 
@@ -6158,9 +6155,6 @@ msgstr "Rejestracje przez łącze zewnętrzne"
 msgid "Set up the taxes configuration"
 msgstr "Skonfiguruj podatki"
 
-msgid "Set your interface preferences"
-msgstr "Ustaw preferencje interfejsu"
-
 msgid "Show/hide completed milestones"
 msgstr "Pokaż/ukryj ukończone kamienie milowe"
 
@@ -6455,9 +6449,6 @@ msgstr "(Opcjonalnie) Koszt biletu"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Opcjonalnie) Nazwa biletu"
-
-msgid "Access the organization dashboard"
-msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
 
 msgid "Character creation reminder email"
 msgstr "E-mail z przypomnieniem o tworzeniu postaci"

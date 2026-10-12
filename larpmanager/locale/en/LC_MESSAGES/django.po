@@ -6231,16 +6231,7 @@ msgstr ""
 msgid "Legal Notice"
 msgstr ""
 
-msgid "Access the event dashboard"
-msgstr ""
-
-msgid "Set your interface preferences"
-msgstr ""
-
 msgid "Preferences"
-msgstr ""
-
-msgid "Access the organization dashboard"
 msgstr ""
 
 msgid "Role:"

@@ -5575,9 +5575,6 @@ msgstr "vérifier les relations manquantes:"
 msgid "choice value not provided"
 msgstr "valeur de choix non fournie"
 
-msgid "Access the event dashboard"
-msgstr "Accède au tableau de bord de l'événement"
-
 msgid "Can't copy from same event"
 msgstr "Impossible de copier depuis le même événement"
 
@@ -6158,9 +6155,6 @@ msgstr "Inscriptions sur lien externe"
 msgid "Set up the taxes configuration"
 msgstr "Configure les taxes"
 
-msgid "Set your interface preferences"
-msgstr "Définis tes préférences d'interface"
-
 msgid "Show/hide completed milestones"
 msgstr "Affiche/masque les étapes franchies"
 
@@ -6455,9 +6449,6 @@ msgstr "(Facultatif) Le coût du billet"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Facultatif) Le nom du ticket"
-
-msgid "Access the organization dashboard"
-msgstr "Accède au tableau de bord de l’organisation"
 
 msgid "Character creation reminder email"
 msgstr "E-mail de rappel de création de personnage"
