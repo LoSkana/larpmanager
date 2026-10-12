@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 
 from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
@@ -172,7 +173,10 @@ def confirm_reserved_discounts(registration: Registration, association_id: int) 
                 "association_id": association_id,
             },
         )
-        clear_member_reservation(run.id, discount.id, registration.member_id)
+        # Clear only once the item is committed, so the slot is never counted as free in between
+        transaction.on_commit(
+            partial(clear_member_reservation, run.id, discount.id, registration.member_id),
+        )
 
 
 def save_registration_standard(

@@ -33,6 +33,7 @@ from larpmanager.cache.discount import (
 from larpmanager.models.accounting import AccountingItemDiscount, Discount, DiscountType
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.registrations.discount import _check_discount, count_discount_redemptions
+from larpmanager.utils.registrations.save import confirm_reserved_discounts
 
 
 class TestDiscountReservations(BaseTestCase):
@@ -89,3 +90,19 @@ class TestDiscountReservations(BaseTestCase):
 
         self.assertIsNotNone(_check_discount(self.disc, self.other_member, self.run, self.run.event))
         self.assertIsNotNone(_check_discount(self.disc, self.member, self.run, self.run.event))
+
+    def test_confirm_clears_reservation_on_commit(self) -> None:
+        """Test confirming creates the item and clears the reservation only after commit"""
+        registration = self.create_registration(member=self.member, run=self.run)
+        reserve_discount(self.run.id, self.disc.id, self.member.id)
+
+        with self.captureOnCommitCallbacks(execute=False) as callbacks:
+            confirm_reserved_discounts(registration, self.get_association().id)
+
+        self.assertTrue(AccountingItemDiscount.objects.filter(registration=registration, disc=self.disc).exists())
+        self.assertIn(self.disc.id, get_member_reservations(self.run.id, [self.disc.id], self.member.id))
+
+        for callback in callbacks:
+            callback()
+
+        self.assertEqual(get_member_reservations(self.run.id, [self.disc.id], self.member.id), {})

@@ -63,6 +63,10 @@ class Migration(migrations.Migration):
             model_name="accountingitemdiscount",
             name="detail",
         ),
+        migrations.RemoveField(
+            model_name="accountingitemdiscount",
+            name="member",
+        ),
         migrations.AlterField(
             model_name="accountingitemdiscount",
             name="registration",

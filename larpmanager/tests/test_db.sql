@@ -474,7 +474,6 @@ CREATE TABLE public.larpmanager_accountingitemdiscount (
     hide boolean NOT NULL,
     association_id integer NOT NULL,
     disc_id integer NOT NULL,
-    member_id integer,
     inv_id integer,
     uuid character varying(12) NOT NULL,
     registration_id integer NOT NULL
@@ -5209,7 +5208,7 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 75
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (3, 1, 108);
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (4, 1, 55);
 
-INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, 'v1z3eksyq9cwutugh4lf6d8e82r8dtwp', 1);
+INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, '6gbktve0z0vuf82zt8yduh9hxmha8ahs', 1);
 
 INSERT INTO public.larpmanager_characterconfig VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'text_links', '0', 1);
 
@@ -5482,10 +5481,10 @@ INSERT INTO public.larpmanager_inventory_owners VALUES (1, 1, 1);
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test@test.it', 'a');
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', 'a');
 
-INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'z8vqv97neu2nthnh28h0wln9dymc08tz', NULL);
-INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'cm54w7svjs56w5ydgfss69b76mc56ipi', NULL);
-INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'nqtgg4ehiba5ybl4vkx0s1hyjqls5tzt', NULL);
-INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', '3ecpuwfwgyj01ycniwusvvkhg8ivse5y', NULL);
+INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', '9xg6oi5g9y7i717x5tih5ff3pg3t9uok', NULL);
+INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'fwyqndsmaff2bak14moaup7d3sdttono', NULL);
+INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'caa4nqbdg9bdrpizjacb8evznlcv91p4', NULL);
+INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', 'mvfrhg37rc9bovquv1xcb5a6lsb4orgq', NULL);
 
 INSERT INTO public.larpmanager_membership VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 4);
 INSERT INTO public.larpmanager_membership VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 2);
@@ -5564,7 +5563,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1', false);
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'mhoa52wzh1sh6uooc9ntsqzp5jw8qa6q');
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'k9sv5yagx8mu71gblcpfksy8mnpfu5wp');
 
 INSERT INTO public.larpmanager_writingquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'name', 'Test Larp - Name', 'Name', '', 1, 'm', 'c', 'c,s,r,a', 1000, true, 1, 'c', 'u1');
 INSERT INTO public.larpmanager_writingquestion VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'teaser', 'Test Larp - Presentation', 'Presentation', '', 2, 'o', 'c', 'c,s,r,a', 10000, true, 1, 'c', 'u2');
@@ -5600,7 +5599,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 267, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 268, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -7585,8 +7584,6 @@ CREATE INDEX larpmanager_accountingitemdiscount_deleted_3bbce325 ON public.larpm
 
 CREATE INDEX larpmanager_accountingitemdiscount_disc_id_c13b15f5 ON public.larpmanager_accountingitemdiscount USING btree (disc_id);
 
-CREATE INDEX larpmanager_accountingitemdiscount_member_id_9f3b8d57 ON public.larpmanager_accountingitemdiscount USING btree (member_id);
-
 CREATE INDEX larpmanager_accountingitemdiscount_registration_id_8919ca09 ON public.larpmanager_accountingitemdiscount USING btree (registration_id);
 
 CREATE INDEX larpmanager_accountingitemdiscount_uuid_b6b47f11_like ON public.larpmanager_accountingitemdiscount USING btree (uuid varchar_pattern_ops);
@@ -9280,9 +9277,6 @@ ALTER TABLE ONLY public.larpmanager_accountingitemdonation
 
 ALTER TABLE ONLY public.larpmanager_accountingitempayment
     ADD CONSTRAINT larpmanager_accounti_member_id_9be99ae1_fk_larpmanag FOREIGN KEY (member_id) REFERENCES public.larpmanager_member(id) DEFERRABLE INITIALLY DEFERRED;
-
-ALTER TABLE ONLY public.larpmanager_accountingitemdiscount
-    ADD CONSTRAINT larpmanager_accounti_member_id_9f3b8d57_fk_larpmanag FOREIGN KEY (member_id) REFERENCES public.larpmanager_member(id) DEFERRABLE INITIALLY DEFERRED;
 
 ALTER TABLE ONLY public.larpmanager_accountingitemmembership
     ADD CONSTRAINT larpmanager_accounti_member_id_c640f4ca_fk_larpmanag FOREIGN KEY (member_id) REFERENCES public.larpmanager_member(id) DEFERRABLE INITIALLY DEFERRED;

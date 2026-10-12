@@ -48,7 +48,11 @@ def get_member_discounts(member: Member, run: Run) -> list[Discount]:
 
 def count_discount_redemptions(discount: Discount, run: Run, exclude_member_id: int | None = None) -> int:
     """Count confirmed redemptions plus active reservations of a discount on a run."""
-    confirmed = AccountingItemDiscount.objects.filter(disc=discount, registration__run=run).count()
+    confirmed = AccountingItemDiscount.objects.filter(
+        disc=discount,
+        registration__run=run,
+        registration__cancellation_date__isnull=True,
+    ).count()
     reservations = get_discount_reservations(run.id, discount.id)
     reservations.pop(exclude_member_id, None)
     return confirmed + len(reservations)

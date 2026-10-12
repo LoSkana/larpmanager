@@ -676,6 +676,9 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
 class AccountingItemDiscount(AccountingItem):
     """Represents AccountingItemDiscount model."""
 
+    # The member is taken from the registration
+    member = None
+
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="discount_items")
 
     disc = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="accounting_items")

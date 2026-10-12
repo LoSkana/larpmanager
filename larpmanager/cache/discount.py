@@ -22,8 +22,13 @@
 from __future__ import annotations
 
 import time
+from contextlib import contextmanager
+from typing import TYPE_CHECKING
 
 from django.core.cache import cache
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 DISCOUNT_RESERVATION_SECONDS = 15 * 60
 
@@ -31,6 +36,17 @@ DISCOUNT_RESERVATION_SECONDS = 15 * 60
 def discount_reservations_key(run_id: int, discount_id: int) -> str:
     """Return the cache key holding the reservations of a discount on a run."""
     return f"discount_reservations_{run_id}_{discount_id}"
+
+
+@contextmanager
+def _reservations_lock(key: str) -> Iterator[None]:
+    """Serialize read-modify-write of a reservations entry, when the cache backend supports locking."""
+    lock = getattr(cache, "lock", None)
+    if lock is None:
+        yield
+        return
+    with lock(f"{key}_lock", timeout=5):
+        yield
 
 
 def _active_reservations(reservations: dict | None) -> dict[int, float]:
@@ -55,10 +71,11 @@ def count_discounts_reservations(run_id: int, discount_ids: list[int]) -> dict[i
 def reserve_discount(run_id: int, discount_id: int, member_id: int) -> float:
     """Reserve a discount for a member and return the reservation expiration timestamp."""
     key = discount_reservations_key(run_id, discount_id)
-    reservations = _active_reservations(cache.get(key))
-    expires = time.time() + DISCOUNT_RESERVATION_SECONDS
-    reservations[member_id] = expires
-    cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
+    with _reservations_lock(key):
+        reservations = _active_reservations(cache.get(key))
+        expires = time.time() + DISCOUNT_RESERVATION_SECONDS
+        reservations[member_id] = expires
+        cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
     return expires
 
 
@@ -76,10 +93,11 @@ def get_member_reservations(run_id: int, discount_ids: list[int], member_id: int
 def clear_member_reservation(run_id: int, discount_id: int, member_id: int) -> None:
     """Remove the reservation of a discount for a member."""
     key = discount_reservations_key(run_id, discount_id)
-    reservations = _active_reservations(cache.get(key))
-    if reservations.pop(member_id, None) is None:
-        return
-    if reservations:
-        cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
-    else:
-        cache.delete(key)
+    with _reservations_lock(key):
+        reservations = _active_reservations(cache.get(key))
+        if reservations.pop(member_id, None) is None:
+            return
+        if reservations:
+            cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
+        else:
+            cache.delete(key)

@@ -678,11 +678,14 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
             update_registration_status_bkg(registration.id)
 
 
-def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> None:
-    """Process accounting discount item after save.
+def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> Registration | None:
+    """Re-save the discount item registration to recompute its accounting.
 
     Args:
         discount_item: AccountingItemDiscount instance that was saved
+
+    Returns:
+        The registration of the discount item, if found
 
     """
     # Note: Using .save() to trigger accounting recalculation signals
@@ -693,6 +696,7 @@ def process_accounting_discount_post_save(discount_item: AccountingItemDiscount)
     )
     if registration:
         registration.save()
+    return registration
 
 
 def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:

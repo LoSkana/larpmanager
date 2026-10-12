@@ -1211,7 +1211,9 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Count redemptions per discount for this run
     discount_counts = dict(
-        AccountingItemDiscount.objects.filter(registration__run=context["run"])
+        AccountingItemDiscount.objects.filter(
+            registration__run=context["run"], registration__cancellation_date__isnull=True
+        )
         .values_list("disc_id")
         .annotate(total=Count("id"))
         .values_list("disc_id", "total")

@@ -477,12 +477,11 @@ def post_save_discount_accounting_cache(
         return
 
     # Process discount changes in accounting system
-    process_accounting_discount_post_save(instance)
+    registration = process_accounting_discount_post_save(instance)
 
     # Refresh member's accounting cache for the registration run
-    registration = Registration.objects.filter(pk=instance.registration_id).values("run_id", "member_id").first()
     if registration:
-        refresh_member_accounting_cache(registration["run_id"], registration["member_id"])
+        refresh_member_accounting_cache(registration.run_id, registration.member_id)
 
 
 @receiver(pre_save, sender=AccountingItemDonation)
