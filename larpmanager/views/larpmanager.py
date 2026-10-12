@@ -1208,24 +1208,27 @@ def lm_newsletter(request: HttpRequest) -> Any:
         if status_value not in NewsletterStatus.values:
             status_value = NewsletterStatus.NON_ACTIVE
         force_status = "force_status" in request.POST
-        count = 0
-        skipped = 0
+        counts = {"new": 0, "updated": 0, "ignored": 0, "invalid": 0}
         for orig_email in re.split(r"[\s,;|]+", emails_text):
             email = clean_newsletter_email(orig_email)
             if not email:
                 if orig_email.strip():
-                    skipped += 1
+                    counts["invalid"] += 1
                 continue
             obj, created = LarpManagerNewsletter.objects.get_or_create(
                 email=email,
                 defaults={"status": status_value},
             )
-            if not created and force_status:
+            if created:
+                counts["new"] += 1
+            elif force_status and obj.status != status_value:
                 obj.status = status_value
                 obj.save(update_fields=["status"])
-            count += 1
-        messages.success(request, f"{count} emails updated, {skipped} invalid skipped")
-        return redirect(request.path_info)
+                counts["updated"] += 1
+            else:
+                counts["ignored"] += 1
+        context["counts"] = counts
+        return render(request, "larpmanager/larpmanager/newsletter_result.html", context)
 
     show_active = request.GET.get("active", "1") == "1"
     show_non_active = request.GET.get("non_active", "0") == "1"
@@ -1237,7 +1240,7 @@ def lm_newsletter(request: HttpRequest) -> Any:
         statuses.append(NewsletterStatus.NON_ACTIVE)
 
     newsletter_list = (
-        list(LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("email")) if statuses else []
+        list(LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("created")) if statuses else []
     )
     context["newsletter_list"] = [entry for entry in newsletter_list if clean_newsletter_email(entry.email)]
     context["show_active"] = show_active

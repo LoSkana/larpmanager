@@ -1,0 +1,28 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    Newsletter
+{% endblock title %}
+{% block content %}
+    <table>
+        <tr>
+            <th>New</th>
+            <td>{{ counts.new }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ counts.updated }}</td>
+        </tr>
+        <tr>
+            <th>Ignored (already present)</th>
+            <td>{{ counts.ignored }}</td>
+        </tr>
+        <tr>
+            <th>Invalid</th>
+            <td>{{ counts.invalid }}</td>
+        </tr>
+    </table>
+    <p>
+        <a href="{% url 'lm_newsletter' %}">Back</a>
+    </p>
+{% endblock content %}
