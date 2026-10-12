@@ -380,6 +380,18 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
         context["submitted"]["ticket"] = str(form.initial["ticket"])
 
 
+def _warn_expired_discounts(request: HttpRequest, context: dict) -> None:
+    """Warn the user about reserved discounts that expired before the registration was saved."""
+    if not context.get("expired_discounts"):
+        return
+    messages.warning(
+        request,
+        _("The reservation of these discounts has expired, so they were not applied")
+        + ": "
+        + ", ".join(context["expired_discounts"]),
+    )
+
+
 @login_required
 def register(
     request: HttpRequest,
@@ -464,6 +476,7 @@ def register(
                 registration,
             )
             clear_draft(context["member"], draft_key)
+            _warn_expired_discounts(request, context)
             return registration_redirect(
                 request, context, saved_registration, current_run, is_new_registration=is_new_registration
             )
@@ -695,42 +708,6 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
     return render(request, "larpmanager/event/register_conditions.html", context)
 
 
-# ~ def discount_bring_friend(request: HttpRequest, context: dict, cod):
-# ~ # check if there is a registration with that cod
-# ~ try:
-# ~ friend = Registration.objects.get(uuid=cod)
-# ~ except Exception as e:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount code not valid")})
-# ~ if friend.member == context["member"]:
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Nice Try! But no, I'm sorry.')})
-# ~ # check same event
-# ~ if friend.run.event != context['event']:
-# ~ Return Jsonresonse ({'res': 'ko', 'msg': _ ('Code applicable only to run of the same event!')})
-# ~ # check future run
-# ~ if friend.run.end < timezone.now().date():
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Code not valid for runs passed!')})
-# ~ # get discount friend
-# ~ disc = Discount.objects.get(typ=DiscountType.FRIEND, runs__in=[context['run']])
-# ~ if disc.max_redeem > 0:
-# ~ if AccountingItemDiscount.objects.filter(disc=disc, run=context['run']).count() > disc.max_redeem:
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('We are sorry, the maximum number of concessions has been reached a friend')})
-# ~ # check if not already registered
-# ~ try:
-# ~ reg = Registration.objects.get(member=context["member"], run=context['run'])
-# ~ if disc.only_reg:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discounts only applicable with new registrations")})
-# ~ except Exception as e:
-# ~ pass
-# ~ # check there are no discount stores a friend
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.STANDARD).count() > 0:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits.")})
-# ~ # check the user TO don't already have the discount
-# ~ try:
-# ~ ac = AccountingItemDiscount.objects.get(disc=disc, member=context["member"], run=context['run'])
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('You have already used a personal code')})
-# ~ except Exception as e:
-# ~ pass
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.PLAYAGAIN).count() > 0:
 @login_required
 @require_POST
 def discount(request: HttpRequest, event_slug: str) -> JsonResponse:

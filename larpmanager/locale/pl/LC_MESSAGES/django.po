@@ -10354,6 +10354,10 @@ msgstr ""
 "organizacją"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Rezerwacja tych zniżek wygasła, więc nie zostały zastosowane"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Prześlij potwierdzenie opłacenia składki członkowskiej, aby potwierdzić "

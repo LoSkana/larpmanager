@@ -32,6 +32,11 @@ if TYPE_CHECKING:
 
 DISCOUNT_RESERVATION_SECONDS = 15 * 60
 
+# Expired reservations are kept this long, to warn the member that the discount was not applied
+DISCOUNT_RESERVATION_RETENTION_SECONDS = 24 * 60 * 60
+
+DISCOUNT_RESERVATION_CACHE_TIMEOUT = DISCOUNT_RESERVATION_SECONDS + DISCOUNT_RESERVATION_RETENTION_SECONDS
+
 
 def discount_reservations_key(run_id: int, discount_id: int) -> str:
     """Return the cache key holding the reservations of a discount on a run."""
@@ -40,7 +45,11 @@ def discount_reservations_key(run_id: int, discount_id: int) -> str:
 
 @contextmanager
 def _reservations_lock(key: str) -> Iterator[None]:
-    """Serialize read-modify-write of a reservations entry, when the cache backend supports locking."""
+    """Serialize read-modify-write of a reservations entry, when the cache backend supports locking.
+
+    Requires a backend exposing `lock()` (django_redis); with other backends no locking is done,
+    so concurrent updates of the same discount entry may be lost.
+    """
     lock = getattr(cache, "lock", None)
     if lock is None:
         yield
@@ -53,6 +62,12 @@ def _active_reservations(reservations: dict | None) -> dict[int, float]:
     """Return only the reservations not yet expired, as {member_id: expires_timestamp}."""
     now = time.time()
     return {int(member_id): expires for member_id, expires in (reservations or {}).items() if expires > now}
+
+
+def _retained_reservations(reservations: dict | None) -> dict[int, float]:
+    """Return the reservations not yet expired or expired within the retention window."""
+    threshold = time.time() - DISCOUNT_RESERVATION_RETENTION_SECONDS
+    return {int(member_id): expires for member_id, expires in (reservations or {}).items() if expires > threshold}
 
 
 def get_discount_reservations(run_id: int, discount_id: int) -> dict[int, float]:
@@ -72,10 +87,10 @@ def reserve_discount(run_id: int, discount_id: int, member_id: int) -> float:
     """Reserve a discount for a member and return the reservation expiration timestamp."""
     key = discount_reservations_key(run_id, discount_id)
     with _reservations_lock(key):
-        reservations = _active_reservations(cache.get(key))
+        reservations = _retained_reservations(cache.get(key))
         expires = time.time() + DISCOUNT_RESERVATION_SECONDS
         reservations[member_id] = expires
-        cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
+        cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_CACHE_TIMEOUT)
     return expires
 
 
@@ -90,14 +105,25 @@ def get_member_reservations(run_id: int, discount_ids: list[int], member_id: int
     return result
 
 
+def get_member_expired_reservations(run_id: int, discount_ids: list[int], member_id: int) -> list[int]:
+    """Return the ids of the given discounts whose reservation by the member has expired."""
+    keys = {discount_reservations_key(run_id, discount_id): discount_id for discount_id in discount_ids}
+    now = time.time()
+    return [
+        keys[key]
+        for key, reservations in cache.get_many(list(keys)).items()
+        if 0 < _retained_reservations(reservations).get(member_id, 0) <= now
+    ]
+
+
 def clear_member_reservation(run_id: int, discount_id: int, member_id: int) -> None:
-    """Remove the reservation of a discount for a member."""
+    """Remove the reservation of a discount for a member, expired or not."""
     key = discount_reservations_key(run_id, discount_id)
     with _reservations_lock(key):
-        reservations = _active_reservations(cache.get(key))
+        reservations = _retained_reservations(cache.get(key))
         if reservations.pop(member_id, None) is None:
             return
         if reservations:
-            cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_SECONDS)
+            cache.set(key, reservations, timeout=DISCOUNT_RESERVATION_CACHE_TIMEOUT)
         else:
             cache.delete(key)

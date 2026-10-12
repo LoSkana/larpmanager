@@ -20,13 +20,17 @@
 
 """Tests for discount reservations kept in cache and their effect on discount limits"""
 
+import time
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.core.cache import cache
 
 from larpmanager.cache.discount import (
     clear_member_reservation,
+    DISCOUNT_RESERVATION_SECONDS,
     count_discounts_reservations,
+    get_member_expired_reservations,
     get_member_reservations,
     reserve_discount,
 )
@@ -106,3 +110,36 @@ class TestDiscountReservations(BaseTestCase):
             callback()
 
         self.assertEqual(get_member_reservations(self.run.id, [self.disc.id], self.member.id), {})
+
+    def test_confirm_reports_expired_reservation(self) -> None:
+        """Test an expired reservation is not applied, is reported, and is cleared after commit"""
+        registration = self.create_registration(member=self.member, run=self.run)
+        reserve_discount(self.run.id, self.disc.id, self.member.id)
+
+        expired_time = time.time() + DISCOUNT_RESERVATION_SECONDS + 1
+        with patch("larpmanager.cache.discount.time.time", return_value=expired_time):
+            self.assertEqual(get_member_reservations(self.run.id, [self.disc.id], self.member.id), {})
+            self.assertEqual(
+                get_member_expired_reservations(self.run.id, [self.disc.id], self.member.id), [self.disc.id]
+            )
+
+            with self.captureOnCommitCallbacks(execute=True):
+                expired = confirm_reserved_discounts(registration, self.get_association().id)
+
+            self.assertEqual(expired, [self.disc.name])
+            self.assertEqual(get_member_expired_reservations(self.run.id, [self.disc.id], self.member.id), [])
+
+        self.assertFalse(AccountingItemDiscount.objects.filter(registration=registration).exists())
+
+    def test_confirm_gifted_releases_reservation(self) -> None:
+        """Test a gifted registration gets no discount and releases the member reservation"""
+        registration = self.create_registration(member=self.member, run=self.run)
+        registration.redeem_code = "gift"
+        reserve_discount(self.run.id, self.disc.id, self.member.id)
+
+        with self.captureOnCommitCallbacks(execute=True):
+            expired = confirm_reserved_discounts(registration, self.get_association().id)
+
+        self.assertEqual(expired, [])
+        self.assertFalse(AccountingItemDiscount.objects.filter(registration=registration).exists())
+        self.assertEqual(count_discounts_reservations(self.run.id, [self.disc.id]), {})

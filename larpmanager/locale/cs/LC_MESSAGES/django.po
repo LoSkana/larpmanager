@@ -10182,6 +10182,10 @@ msgstr ""
 "tvé organizace"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Rezervace těchto slev vypršela, takže nebyly uplatněny"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Nahraj potvrzení o zaplacení členského příspěvku pro potvrzení platby za "

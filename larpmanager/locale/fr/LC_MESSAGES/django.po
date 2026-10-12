@@ -10543,6 +10543,12 @@ msgstr ""
 " contacter ton organisation"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+"La réservation de ces réductions a expiré, elles n'ont donc pas été "
+"appliquées"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Téléverse un reçu de cotisation pour confirmer le paiement de l’année en "

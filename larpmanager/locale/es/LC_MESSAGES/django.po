@@ -10458,6 +10458,11 @@ msgstr ""
 "utilizar para ponerse en contacto con tu organización"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+"La reserva de estos descuentos ha caducado, así que no se han aplicado"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Sube un recibo de la cuota de membresía para confirmar el pago del año "

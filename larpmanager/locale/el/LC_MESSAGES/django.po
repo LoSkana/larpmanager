@@ -10541,6 +10541,10 @@ msgstr ""
 " επικοινωνούν με τον οργανισμό σου"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Η κράτηση αυτών των εκπτώσεων έληξε, οπότε δεν εφαρμόστηκαν"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Ανέβασε απόδειξη συνδρομής μέλους για να επιβεβαιώσεις την πληρωμή για το "

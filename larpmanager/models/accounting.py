@@ -697,7 +697,10 @@ class AccountingItemDiscount(AccountingItem):
         ]
 
     def __str__(self) -> str:
-        """Return string representation with registration member, run and value."""
+        """Return string representation with registration member, run and value.
+
+        Used to build the search field on save: loads registration member and run if not already fetched.
+        """
         return f"Discount - {self.registration.member} - {self.registration.run} - {self.value}"
 
 

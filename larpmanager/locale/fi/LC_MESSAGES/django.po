@@ -10317,6 +10317,10 @@ msgstr ""
 "organisaatioosi"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Näiden alennusten varaus on vanhentunut, joten niitä ei käytetty"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr "Lataa jäsenmaksun kuitti vahvistaaksesi kuluvan vuoden maksun."
 

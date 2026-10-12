@@ -10563,6 +10563,12 @@ msgstr ""
 "kontaktieren können"
 
 msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+"Die Reservierung dieser Rabatte ist abgelaufen, daher wurden sie nicht "
+"angewendet"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Lade einen Beleg über den Mitgliedsbeitrag hoch, um die Zahlung für das "

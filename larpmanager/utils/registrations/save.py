@@ -28,7 +28,11 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
-from larpmanager.cache.discount import clear_member_reservation, get_member_reservations
+from larpmanager.cache.discount import (
+    clear_member_reservation,
+    get_member_expired_reservations,
+    get_member_reservations,
+)
 from larpmanager.mail.base import bring_friend_instructions
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, Discount, OtherChoices
@@ -140,8 +144,7 @@ def save_registration(
         form.save_registration_questions(registration, is_organizer=False)
 
         # Confirm discounts reserved by the member on this registration
-        if not registration.redeem_code:
-            confirm_reserved_discounts(registration, context["association_id"])
+        context["expired_discounts"] = confirm_reserved_discounts(registration, context["association_id"])
 
         # Save the updated registration instance
         registration.save()
@@ -158,12 +161,29 @@ def save_registration(
     return registration
 
 
-def confirm_reserved_discounts(registration: Registration, association_id: int) -> None:
-    """Create the discount items reserved in cache by the registration member, then clear the reservations."""
+def confirm_reserved_discounts(registration: Registration, association_id: int) -> list[str]:
+    """Create the discount items reserved in cache by the registration member, then clear the reservations.
+
+    Gifted registrations get no discount, so the member reservations are only released.
+    Each created item re-saves the registration through its post_save signal.
+
+    Returns:
+        Names of the discounts whose reservation expired before the registration was saved
+
+    """
     run = registration.run
-    reservations = get_member_reservations(
-        run.id, list(run.discounts.values_list("id", flat=True)), registration.member_id
-    )
+    member_id = registration.member_id
+    discount_ids = list(run.discounts.values_list("id", flat=True))
+    reservations = get_member_reservations(run.id, discount_ids, member_id)
+    expired_ids = get_member_expired_reservations(run.id, discount_ids, member_id)
+
+    # Clear only once the items are committed, so the slots are never counted as free in between
+    for discount_id in [*reservations, *expired_ids]:
+        transaction.on_commit(partial(clear_member_reservation, run.id, discount_id, member_id))
+
+    if registration.redeem_code:
+        return []
+
     for discount in Discount.objects.select_for_update().filter(id__in=reservations):
         AccountingItemDiscount.objects.get_or_create(
             registration=registration,
@@ -173,10 +193,8 @@ def confirm_reserved_discounts(registration: Registration, association_id: int) 
                 "association_id": association_id,
             },
         )
-        # Clear only once the item is committed, so the slot is never counted as free in between
-        transaction.on_commit(
-            partial(clear_member_reservation, run.id, discount.id, registration.member_id),
-        )
+
+    return list(Discount.objects.filter(id__in=expired_ids).values_list("name", flat=True))
 
 
 def save_registration_standard(

@@ -13788,6 +13788,10 @@ msgstr ""
 msgid "Registration updated to %(event)s!"
 msgstr ""
 
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+
 msgid "This event has concluded"
 msgstr ""
 
