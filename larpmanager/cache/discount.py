@@ -26,6 +26,9 @@ from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 from django.core.cache import cache
+from django.db import transaction
+
+from larpmanager.models.accounting import Discount
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -44,17 +47,10 @@ def discount_reservations_key(run_id: int, discount_id: int) -> str:
 
 
 @contextmanager
-def _reservations_lock(key: str) -> Iterator[None]:
-    """Serialize read-modify-write of a reservations entry, when the cache backend supports locking.
-
-    Requires a backend exposing `lock()` (django_redis); with other backends no locking is done,
-    so concurrent updates of the same discount entry may be lost.
-    """
-    lock = getattr(cache, "lock", None)
-    if lock is None:
-        yield
-        return
-    with lock(f"{key}_lock", timeout=5):
+def _reservations_lock(discount_id: int) -> Iterator[None]:
+    """Serialize read-modify-write of a discount reservations entry by locking the discount row."""
+    with transaction.atomic():
+        Discount.objects.select_for_update().filter(pk=discount_id).exists()
         yield
 
 
@@ -86,7 +82,7 @@ def count_discounts_reservations(run_id: int, discount_ids: list[int]) -> dict[i
 def reserve_discount(run_id: int, discount_id: int, member_id: int) -> float:
     """Reserve a discount for a member and return the reservation expiration timestamp."""
     key = discount_reservations_key(run_id, discount_id)
-    with _reservations_lock(key):
+    with _reservations_lock(discount_id):
         reservations = _retained_reservations(cache.get(key))
         expires = time.time() + DISCOUNT_RESERVATION_SECONDS
         reservations[member_id] = expires
@@ -119,7 +115,7 @@ def get_member_expired_reservations(run_id: int, discount_ids: list[int], member
 def clear_member_reservation(run_id: int, discount_id: int, member_id: int) -> None:
     """Remove the reservation of a discount for a member, expired or not."""
     key = discount_reservations_key(run_id, discount_id)
-    with _reservations_lock(key):
+    with _reservations_lock(discount_id):
         reservations = _retained_reservations(cache.get(key))
         if reservations.pop(member_id, None) is None:
             return
