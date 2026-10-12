@@ -53,7 +53,7 @@
         {% endblock css %}
         {% compress css %}
             <link rel="stylesheet"
-                  href="{% static 'solid_state/assets/css/main.css' %}" />
+                  href="{% static 'larpmanager/assets/css/main.css' %}" />
             {% include "elements/structure/css-larpmanager.html" %}
         {% endcompress %}
         {% if association.skin_css %}<style>{{ association.skin_css }}</style>{% endif %}
@@ -65,33 +65,23 @@
             <link rel="stylesheet"
                   href="{% get_media_prefix %}/css/{{ association.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
         {% endif %}
-        <noscript>
-            <link rel="stylesheet"
-                  href="{% static 'larpmanager/assets/css/noscript.css' %}" />
-        </noscript>
     </head>
     {% firstof effective_version association.assoc_version 0 as body_eff_ver %}
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} association {% if association.id != 0 %}lm_default{% endif %} {% if manage %}manage{% endif %} {{ body_eff_ver|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
+          class="{% block body_class %} {% endblock body_class %} association {% if association.id != 0 %}lm_default{% endif %} {% if manage %}manage{% endif %} {{ body_eff_ver|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
-            {% if not frame and association.id != 0 %}
-                {% if effective_version >= 22 %}
-                    {% include "elements/structure/topbar-v22.html" %}
-                {% elif user.is_authenticated %}
-                    {% if topbar_admin %}
-                        {% include "elements/structure/topbar-admin.html" %}
-                    {% else %}
-                        {% include "elements/structure/topbar-user.html" %}
-                    {% endif %}
+            {% if not frame and association.id %}
+                {% if manage %}
+                    {% include "elements/structure/topbar-admin.html" %}
                 {% else %}
-                    {% include "elements/structure/topbar.html" %}
+                    {% include "elements/structure/topbar-user.html" %}
                 {% endif %}
                 {% include "elements/structure/sidebar.html" %}
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
+                 class="{% if not frame and association.id %} {% if manage %}manage{% endif %} sidebar topbar{% endif %} ">
                 <script>
                     (function() {
                         try {
@@ -141,11 +131,6 @@ window['dt_language'] = {
         {% block js-req %}
         {% endblock js-req %}
         <!--- script pipeline -->
-        {% compress js %}
-            <script defer src="{% static 'solid_state/assets/js/breakpoints.min.js' %}"></script>
-            <script defer
-                    src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
-        {% endcompress %}
         <script>
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
@@ -162,8 +147,6 @@ window['dt_language'] = {
             {% include "elements/dashboard/wwyltd.js.html" %}
         {% endif %}
         {% compress js %}
-            <script defer src="{% static 'solid_state/assets/js/util.js' %}"></script>
-            <script defer src="{% static 'solid_state/assets/js/main.js' %}"></script>
             <script defer src="{% static 'larpmanager/assets/js/larpmanager.js' %}"></script>
         {% endcompress %}
         {% block js %}
@@ -200,19 +183,6 @@ window['dt_language'] = {
             document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
-        function sidebar() {
-            $('#sidebar').toggle();
-            $('#header').toggleClass('sidebar');
-            $('#page-wrapper').toggleClass('sidebar');
-            $('#footer').toggleClass('sidebar');
-
-            $('.sidebar_button').toggle();
-
-            $.ajax({
-                url: '{% url "toggle_sidebar" %}',
-            });
-        }
-
     window.addEventListener('DOMContentLoaded', function() {
 
         $(document).ready(function() {
@@ -224,28 +194,6 @@ window['dt_language'] = {
                         xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     }
                 }
-            });
-
-            $('#sidebar-open, #sidebar-close').click(function() {
-                sidebar();
-            });
-
-            {% if manage and is_sidebar_open %}
-                $('#sidebar-close').hide();
-            {% else %}
-                $('#sidebar-open').hide();
-            {% endif %}
-
-            // add origin for manage links
-            {% if run %}
-                let origin = '{{ run.uuid }}';
-            {% else %}
-                let origin = '0';
-            {% endif %}
-            $('a[href].origin').each(function() {
-                const url = new URL(this.href);
-                url.searchParams.set('origin', origin);
-                this.href = url.toString();
             });
         });
 

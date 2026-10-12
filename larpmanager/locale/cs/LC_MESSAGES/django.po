@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Jít"
 
-msgid "Hi"
-msgstr "Ahoj"
-
 msgid "No"
 msgstr "Ne"
 
@@ -2258,9 +2255,6 @@ msgstr "Čistý zisk:"
 msgid "New session"
 msgstr "Nová relace"
 
-msgid "Next events"
-msgstr "Nadcházející události"
-
 msgid "Not scanned"
 msgstr "Nenaskenováno"
 
@@ -3172,9 +3166,6 @@ msgstr "Relace aktivní"
 msgid "Set quest type"
 msgstr "Nastavit typ Questu"
 
-msgid "Show shortcuts"
-msgstr "Zobrazit zkratky"
-
 msgid "Tax code check"
 msgstr "Kontrola daňového kódu"
 
@@ -3529,9 +3520,6 @@ msgstr "členské příspěvky"
 
 msgid "printable sheet"
 msgstr "list k vytištění"
-
-msgid "upcoming events"
-msgstr "Naplánované události"
 
 msgid "Ability Template"
 msgstr "Šablona schopnosti"
@@ -8385,9 +8373,6 @@ msgstr "Zadej píseň, kterou chceš věnovat své postavě"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Zadej šestimístný kód z aplikace autentizátoru."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Je-li povoleno, automaticky zobrazovat zkratky na mobilu."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Je-li povoleno, nepoužívat frakce nadřazené akce."

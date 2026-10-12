@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Ga"
 
-msgid "Hi"
-msgstr "Hoi"
-
 msgid "No"
 msgstr "Nee"
 
@@ -2258,9 +2255,6 @@ msgstr "Nettowinst:"
 msgid "New session"
 msgstr "Nieuwe sessie"
 
-msgid "Next events"
-msgstr "Komende evenementen"
-
 msgid "Not scanned"
 msgstr "Niet gescand"
 
@@ -3172,9 +3166,6 @@ msgstr "Sessie actief"
 msgid "Set quest type"
 msgstr "Questtype instellen"
 
-msgid "Show shortcuts"
-msgstr "Snelkoppelingen weergeven"
-
 msgid "Tax code check"
 msgstr "Belastingcode controleren"
 
@@ -3529,9 +3520,6 @@ msgstr "lidmaatschapsgelden"
 
 msgid "printable sheet"
 msgstr "afdrukbaar vel"
-
-msgid "upcoming events"
-msgstr "Geplande evenementen"
 
 msgid "Ability Template"
 msgstr "Vermogen Sjabloon"
@@ -8398,9 +8386,6 @@ msgstr "Voer een nummer in dat je aan je personage wilt opdragen"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Voer de 6-cijferige code van je authenticator-app in."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Indien ingeschakeld, toon snelkoppelingen automatisch op mobiel."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr ""

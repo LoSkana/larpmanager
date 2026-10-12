@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Gå"
 
-msgid "Hi"
-msgstr "Hej"
-
 msgid "No"
 msgstr "Nej"
 
@@ -2258,9 +2255,6 @@ msgstr "Nettooverskud:"
 msgid "New session"
 msgstr "Ny session"
 
-msgid "Next events"
-msgstr "Næste events"
-
 msgid "Not scanned"
 msgstr "Ikke scannet"
 
@@ -3172,9 +3166,6 @@ msgstr "Session aktiv"
 msgid "Set quest type"
 msgstr "Angiv questtype"
 
-msgid "Show shortcuts"
-msgstr "Vis genveje"
-
 msgid "Tax code check"
 msgstr "Kontrol af skatte-ID"
 
@@ -3529,9 +3520,6 @@ msgstr "medlemsgebyrer"
 
 msgid "printable sheet"
 msgstr "printvenligt ark"
-
-msgid "upcoming events"
-msgstr "kommende events"
 
 msgid "Ability Template"
 msgstr "Evneskabelon"
@@ -8386,9 +8374,6 @@ msgstr "Indtast en sang, du vil dedikere til din karakter"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Indtast den 6-cifrede kode fra din autentificeringsapp."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Hvis aktiveret, vises genveje automatisk på mobil."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Hvis aktiveret, bruges moder-eventets faktioner ikke."

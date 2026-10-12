@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
@@ -28,12 +28,10 @@ from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
-from django.utils import timezone
 
-from larpmanager.cache.basic import get_event_association_id, get_run_association_id
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Run
-from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.common import get_coming_runs
 
@@ -49,7 +47,7 @@ logger = logging.getLogger(__name__)
 def cache_event_links(request: HttpRequest, context: dict) -> None:
     """Get cached event navigation links for authenticated user.
 
-    Builds and caches navigation context including registrations, roles,
+    Builds and caches navigation context including roles
     and accessible runs for the user within the current association.
 
     Args:
@@ -57,7 +55,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         context: Dict for context information
 
     Returns:
-        Dict with keys: reg_menu, association_role, event_role, all_runs, open_runs, topbar
+        Dict with keys: association_role, event_role, all_runs, open_runs, topbar
 
     """
     # Skip if not authenticated or no association
@@ -84,22 +82,9 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    cutoff_date = (timezone.now() - timedelta(days=10)).date()
     member = context["member"]
     association_id = context["association_id"]
     navigation_context = {}
-
-    # Get user's active registrations for upcoming events
-    active_registrations = Registration.objects.filter(
-        member=member,
-        run__end__gte=cutoff_date,
-        cancellation_date__isnull=True,
-        pending=False,
-        run__event__association_id=association_id,
-    ).select_related("run", "run__event")
-    navigation_context["reg_menu"] = [
-        (registration.run.get_slug(), str(registration.run)) for registration in active_registrations
-    ]
 
     # Collect roles
     navigation_context["association_role"] = _get_association_roles(member, association_id, request)
@@ -118,16 +103,13 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     # Store personal theme preference (overrides event/association theme)
     navigation_context["member_theme"] = member.get_config("member_theme")
 
-    # Visible runs for v22 topbar (public upcoming events + hidden managed events)
-    navigation_context["visible_runs"] = _get_visible_runs(association_id)
-    navigation_context["hidden_role_runs"] = _get_hidden_role_runs(
+    # Topbar runs: public upcoming events, then hidden events the user manages
+    navigation_context["topbar_runs"] = _get_visible_runs(association_id) + _get_hidden_role_runs(
         association_id,
         navigation_context["association_role"],
         navigation_context["event_role"],
     )
-    navigation_context["visible_runs_slugs"] = {
-        vrun["slug"] for vrun in navigation_context["visible_runs"] + navigation_context["hidden_role_runs"]
-    }
+    navigation_context["topbar_runs_slugs"] = {vrun["slug"] for vrun in navigation_context["topbar_runs"]}
 
     return navigation_context
 
@@ -264,16 +246,6 @@ def clear_run_event_links_cache(event_id: int) -> None:
         reset_event_links(superuser.member.id, association_id)
 
 
-def on_registration_post_save_reset_event_links(instance: Registration) -> None:
-    """Handle registration post-save event link reset."""
-    # Early return if no member is associated with the registration
-    if not instance.member:
-        return
-
-    # Reset cached event links for the member and event association
-    reset_event_links(instance.member_id, get_run_association_id(instance.run_id))
-
-
 def reset_event_links(member_id: int, association_id: int) -> None:
     """Clear event link cache for a specific member and association."""
     # Generate cache key for the specific member-association combination
@@ -286,4 +258,4 @@ def reset_event_links(member_id: int, association_id: int) -> None:
 def get_cache_event_key(member_id: int, association_id: int) -> str:
     """Generate cache key for member event links."""
     # Generate cache key using member and association IDs
-    return f"ctx_event_links_{member_id}_{association_id}"
+    return f"ctx_nav_links_{member_id}_{association_id}"

@@ -1133,12 +1133,6 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-msgid "Show shortcuts"
-msgstr ""
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr ""
-
 msgid "Export"
 msgstr ""
 
@@ -6195,30 +6189,6 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-msgid "Delegated users"
-msgstr ""
-
-msgid "Messages"
-msgstr ""
-
-msgid "Badges"
-msgstr ""
-
-msgid "Security"
-msgstr ""
-
-msgid "Mail"
-msgstr ""
-
-msgid "Profiling"
-msgstr ""
-
-msgid "Change password"
-msgstr ""
-
-msgid "Password reset"
-msgstr ""
-
 msgid "Tech Support"
 msgstr ""
 
@@ -6237,13 +6207,7 @@ msgstr ""
 msgid "Tutorials"
 msgstr ""
 
-msgid "Hi"
-msgstr ""
-
-msgid "Scroll left"
-msgstr ""
-
-msgid "Scroll right"
+msgid "Password reset"
 msgstr ""
 
 msgid "What would you like to do?"
@@ -6253,6 +6217,12 @@ msgid "Ask a question"
 msgstr ""
 
 msgid "Manage"
+msgstr ""
+
+msgid "Scroll left"
+msgstr ""
+
+msgid "Scroll right"
 msgstr ""
 
 msgid "Select the table rows and choose the operation to apply"
@@ -7839,12 +7809,6 @@ msgstr ""
 msgid "Browse upcoming events"
 msgstr ""
 
-msgid "upcoming events"
-msgstr ""
-
-msgid "Next events"
-msgstr ""
-
 msgid "Tell me more"
 msgstr ""
 
@@ -8051,6 +8015,9 @@ msgid "Show inactive"
 msgstr ""
 
 msgid "Confirm this payment?"
+msgstr ""
+
+msgid "Profiling"
 msgstr ""
 
 msgid "Welcome to the dashboard of your organization!"
@@ -8549,6 +8516,9 @@ msgstr ""
 msgid "You don't have any characters yet."
 msgstr ""
 
+msgid "Messages"
+msgstr ""
+
 msgid "View your private conversations"
 msgstr ""
 
@@ -8583,6 +8553,9 @@ msgid "Enter your level of experience"
 msgstr ""
 
 msgid "Enter precisely your field of experience"
+msgstr ""
+
+msgid "Delegated users"
 msgstr ""
 
 msgid "Manage users that you can act on their behalf"
@@ -8848,6 +8821,9 @@ msgid "Show all"
 msgstr ""
 
 msgid "View the list of events you are registered for"
+msgstr ""
+
+msgid "Security"
 msgstr ""
 
 msgid "Manage your password and two-factor authentication"
@@ -9655,6 +9631,9 @@ msgid "Unconverted pre-registrations:"
 msgstr ""
 
 msgid "Pre registrations total:"
+msgstr ""
+
+msgid "Mail"
 msgstr ""
 
 msgid "Joined"
@@ -10607,6 +10586,9 @@ msgstr ""
 msgid "Password changed"
 msgstr ""
 
+msgid "Change password"
+msgstr ""
+
 msgid "Password reset confirmed"
 msgstr ""
 
@@ -11448,6 +11430,9 @@ msgid "Review all members"
 msgstr ""
 
 msgid "Manage votes for the assignment of roles in the organization"
+msgstr ""
+
+msgid "Badges"
 msgstr ""
 
 msgid "Manage badges and assign them to participants"

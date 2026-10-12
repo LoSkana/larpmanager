@@ -132,6 +132,7 @@
   border-radius: 0.5em;
   margin: 2em;
   color: var(--pri-clr);
+  text-align: center;
 }
 
 .gallery .icon .icon-name p {
@@ -314,10 +315,6 @@ form .plot {
   text-align: center;
 }
 
-.workshop p {
-  text-align: center;
-}
-
 .workshop h2 {
   font-size: 150%;
 }
@@ -476,7 +473,7 @@ form .plot {
    --------------------------------------------------------------------------- */
 
 .reg_status {
-  text-align: center;
+  text-align: left;
 }
 
 .reg_status br {
@@ -484,7 +481,7 @@ form .plot {
 }
 
 .reg-links {
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .reg-links span + span::before {

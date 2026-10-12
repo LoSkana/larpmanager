@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Μετάβαση"
 
-msgid "Hi"
-msgstr "Γεια"
-
 msgid "No"
 msgstr "No"
 
@@ -2258,9 +2255,6 @@ msgstr "Καθαρό κέρδος:"
 msgid "New session"
 msgstr "Νέα συνεδρία"
 
-msgid "Next events"
-msgstr "Επόμενα event"
-
 msgid "Not scanned"
 msgstr "Non scansionato"
 
@@ -3172,9 +3166,6 @@ msgstr "Η συνεδρία είναι ενεργή"
 msgid "Set quest type"
 msgstr "Ορισμός τύπου Quest"
 
-msgid "Show shortcuts"
-msgstr "Εμφάνιση συντομεύσεων"
-
 msgid "Tax code check"
 msgstr "Έλεγχος φορολογικού κωδικού"
 
@@ -3529,9 +3520,6 @@ msgstr "συνδρομές μέλους"
 
 msgid "printable sheet"
 msgstr "εκτυπώσιμο φύλλο"
-
-msgid "upcoming events"
-msgstr "επερχόμενα event"
 
 msgid "Ability Template"
 msgstr "Πρότυπο ικανότητας"
@@ -8411,9 +8399,6 @@ msgstr "Εισήγαγε ένα τραγούδι που θέλεις να αφι
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Εισήγαγε τον 6ψήφιο κωδικό από την εφαρμογή ελέγχου ταυτότητάς σου."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Αν ενεργοποιηθεί, εμφανίζει αυτόματα συντομεύσεις σε κινητά."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr ""

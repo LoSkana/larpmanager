@@ -470,12 +470,6 @@ class OrgaConfigForm(ConfigForm):
         """Configure visualisation settings for the event management page."""
         self.set_section("visualisation", _("Display"))
 
-        show_shortcuts_label = _("Show shortcuts")
-        show_shortcuts_help_text = _(
-            "If enabled, automatically show shortcuts on mobile.",
-        )
-        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
-
         export_label = _("Export")
         export_help_text = _(
             "If enabled, allows characters and registrations to be exported to an easily readable page."

@@ -223,7 +223,6 @@ body.manage.lm_default #one .inner {
 }
 
 .lm_default .staff-list {
-  text-align: left;
   clear: both;
 }
 
@@ -276,18 +275,12 @@ body.manage.lm_default #one .inner {
 }
 
 body.association.lm_default .user_resize {
-  padding: 0.5em 1em;
   margin: 0.5em auto;
-  border-radius: 8px;
-  background-color: rgba(var(--pri-rgb), 0.04);
 }
 
 @media (max-width: 840px) {
   body.association.lm_default .user_resize {
-    padding: 0em 0em;
     margin: 0.2em auto;
-    border-radius: 0px;
-    background-color: transparent;
   }
 
   body.association.lm_default .user_resize table tbody tr {
@@ -383,8 +376,18 @@ body.association.lm_default .user_resize {
 
 #info_bar {
   font-style: italic;
-  font-size: 85%;
+  font-size: 80%;
   margin-bottom: 1em;
+  margin-left: 1em;
+  text-align: left;
+}
+
+@media (max-width: 840px) {
+  #info_bar {
+    text-align: center;
+    justify-content: center;
+    margin-left: 0;
+  }
 }
 
 #info_bar:empty {

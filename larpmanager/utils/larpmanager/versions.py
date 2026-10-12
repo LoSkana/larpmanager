@@ -20,11 +20,6 @@
 
 VERSIONS = [
     {
-        "number": 21,
-        "description": "Clean form edit, with inline popups",
-        "available": True,
-    },
-    {
         "number": 22,
         "description": "Introduces an organized user interface sidebar",
         "available": True,

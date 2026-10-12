@@ -170,11 +170,6 @@ urlpatterns = [
         name="set_accessibility",
     ),
     path(
-        "toggle_sidebar/",
-        views_lm.toggle_sidebar,
-        name="toggle_sidebar",
-    ),
-    path(
         "demo/hint/dismiss/",
         views_lm.demo_hint_dismiss,
         name="demo_hint_dismiss",

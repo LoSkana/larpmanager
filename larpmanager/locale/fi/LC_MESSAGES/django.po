@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Mene"
 
-msgid "Hi"
-msgstr "Hei"
-
 msgid "No"
 msgstr "Ei"
 
@@ -2258,9 +2255,6 @@ msgstr "Nettovoitto:"
 msgid "New session"
 msgstr "Uusi istunto"
 
-msgid "Next events"
-msgstr "Seuraavat tapahtumat"
-
 msgid "Not scanned"
 msgstr "Ei skannattu"
 
@@ -3172,9 +3166,6 @@ msgstr "Istunto aktiivinen"
 msgid "Set quest type"
 msgstr "Aseta Questin tyyppi"
 
-msgid "Show shortcuts"
-msgstr "Näytä pikanäppäimet"
-
 msgid "Tax code check"
 msgstr "Verotunnuksen tarkistus"
 
@@ -3529,9 +3520,6 @@ msgstr "jäsenmaksut"
 
 msgid "printable sheet"
 msgstr "Tulostettava arkki"
-
-msgid "upcoming events"
-msgstr "tulevat tapahtumat"
 
 msgid "Ability Template"
 msgstr "Taito-pohja"
@@ -8386,9 +8374,6 @@ msgstr "Syötä kappale, jonka haluat omistaa hahmollesi"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Syötä 6-numeroinen koodi autentikointisovelluksestasi."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Jos käytössä, näytä pikavalinnat automaattisesti mobiilissa."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Jos käytössä, älä käytä päätapahtuman ryhmittymiä."

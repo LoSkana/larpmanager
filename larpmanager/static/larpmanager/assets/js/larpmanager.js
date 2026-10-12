@@ -310,19 +310,12 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     }, { once: true });
 }
 
-// Toggle the mobile sidebar visibility and swap the open/close buttons.
 function sidebar_mobile() {
-    $('body').toggleClass('is-sidebar-visible');
-    $('#sidebar-mobile-open').toggle();
-    $('#sidebar-mobile-close').toggle();
-}
-
-function sidebar_mobile_v22() {
     $('#topbar').removeClass('mobile-visible');
     $('#sidebar').toggleClass('mobile-visible');
 }
 
-function topbar_mobile_v22() {
+function topbar_mobile() {
     $('#sidebar').removeClass('mobile-visible');
     $('#topbar').toggleClass('mobile-visible');
 }
@@ -346,14 +339,8 @@ window.addTinyMCETextarea = function(sel) {
 
 // ========== Init: Headings ==========
 
-// Fit banner/sidebar/header titles with textfill (skipped on v22) and strip trailing ":" from table header labels.
+// Strip trailing ":" from table header labels.
 function initHeadings() {
-    if (!$('body').hasClass('new_v22')) {
-        $('.association #banner h1').textfill({});
-        $('#sidebar h1').textfill({});
-        $('#header h1').textfill({});
-    }
-
     // strip trailing ":" from table header labels
     $("th label").each(function() {
         $(this).contents().filter(function() {
@@ -366,22 +353,8 @@ function initHeadings() {
 
 // ========== Init: Sidebar ==========
 
-// Wire mobile sidebar open/close toggles, close-on-outside-click, and highlight the active link.
+// Highlight the active sidebar link and wire the desktop collapse toggle.
 function initSidebar() {
-    $('#sidebar-mobile-open, #sidebar-mobile-close').on('click', function(event) {
-        sidebar_mobile();
-    });
-
-    $('#sidebar-mobile-close').hide();
-
-    $(document).on('click', function(event) {
-        if (parseFloat($('#sidebar').css('opacity')) > 0) {
-            if (!$(event.target).closest('#sidebar .inner').length) {
-                $('body').removeClass('is-sidebar-visible');
-            }
-        }
-    });
-
     show_sidebar_active();
 
     // collapse sidebar desktop
@@ -407,13 +380,13 @@ function initSidebar() {
     }
 
     // open sidebar mobile
-    $('#sidebar-mobile-v22').on('click', function(event) {
-        sidebar_mobile_v22();
+    $('#sidebar-mobile-toggle').on('click', function(event) {
+        sidebar_mobile();
     });
 
     // open topbar mobile
-    $('#topbar-mobile-v22').on('click', function(event) {
-        topbar_mobile_v22();
+    $('#topbar-mobile-toggle').on('click', function(event) {
+        topbar_mobile();
     });
 
 }
@@ -486,40 +459,6 @@ function initFeatureModals() {
 
         return false;
     });
-}
-
-// ========== Init: Menu ==========
-
-// Accordion behavior for menu openers and removal of empty menu lists/cells.
-function initMenu() {
-    $menu_openers = $('#menu .opener');
-
-    // Openers.
-    $menu_openers.each(function() {
-
-        var $this = $(this);
-
-        $this.on('click', function(event) {
-
-            // Prevent default.
-                event.preventDefault();
-
-            // Toggle.
-                $menu_openers.not($this).removeClass('active');
-                $this.toggleClass('active');
-
-            // Trigger resize (sidebar lock).
-                $(window).triggerHandler('resize.sidebar-lock');
-
-        });
-
-    });
-
-    $('#menu .links ul:empty ').hide();
-
-    $('#menu .links ul:not(:has(*))').parent().remove();
-
-    $('.links td:not(:has(*))').parent().remove();
 }
 
 // ========== Init: Flash messages ==========
@@ -806,7 +745,6 @@ $(document).ready(function() {
     initHeadings();
     initSidebar();
     initDropdowns();
-    initMenu();
     initFadeIns();
 
     // Notifications

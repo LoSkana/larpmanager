@@ -555,7 +555,7 @@ dialog::backdrop {
   pointer-events: auto;
 }
 
-/* the page-level default/v22 rules left-align headings and option rows: the popup centers them */
+/* the page-level default rules left-align headings and option rows: the popup centers them */
 #excel-edit h1,
 #excel-edit h2,
 #excel-edit h3,

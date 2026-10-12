@@ -257,17 +257,17 @@ under the matching section-comment banner inside the file.
 | `07-dashboard.css` | Organizer/staff manage-side chrome: `#manage`/`.manage` panels, sticky notices, `#wwyltd` quick-action select2, AJAX option-edit popups (`.ajax-option-form-container`), driver.js tour tooltips (`.my-driverjs`), one-time media pages (`.onetime-*`), floating-iframe embedding (`body.floating_iframe`, `#options-iframe`, `.frame-container`), the manage dashboard grid (`.grid`, `.grid-item`, `.copy-link-btn`). | Player-facing feature styling (→ `06`), page shell (→ `10`-`12`). |
 | `08-casting.css` | Casting/character-preference assignment UI (`.casting-*`, `.faction-chip`, `.char-card`, drag-rank `.pref-*`) and badge/leaderboard pages (`.page_badges`, `.badge-selector`, `.char-assign-icon`). | Generic character/profile display (→ `06`). |
 | `09-widgets.css` | Self-contained interactive widgets: DataTables responsive expand caret (`td.dtr-control::before`), default interface shell (`.lm_default` buttons/headings, `.reg-confirmed/.reg-pending`), ability selector (`.ability-*`, `.exp-stat-*`), character dual-list transfer (`.char-dual-*`). | Generic layout/typography/base. |
-| `10-structure.css` | Page skeleton not owned by one bar: `html`/`body`, `#page-container`, `#page-wrapper`, `#wrapper`, `#staging`, `#header h1`, `#footer.lm`, the `#one/#topbar/#sidebar/#footer .inner` visibility resets, `.only_mobile`, and the `.new_v22` page-wrapper/banner overrides. | Topbar-only rules (→ `11`), sidebar-only rules (→ `12`). |
-| `11-topbar.css` | `#topbar` and everything rendered inside it: base topbar layout + `--topbar-height`, mobile topbar table, nav dropdowns (`.dropdown*`), the v22 topbar shell (`#topbar.topbar_v22`) and pill/switch widgets (`.tv22-*`). | Sidebar (→ `12`), generic page shell (→ `10`). |
-| `12-sidebar.css` | `#sidebar` and everything rendered inside/around it: base sidebar layout, mobile sidebar overlay, `#mobile-bar`, the v22 sidebar shell incl. collapse toggle (`#sidebar-collapse-btn`), sidebar status badges (`.sidebar-status-badge`), context selector, and the v22 mobile bottom bar (`#menu-mobile`). | Topbar (→ `11`), generic page shell (→ `10`). |
-| `13-miscellanea.css` | v22 cross-cutting rules not tied to the shell: visibility toggles (`.new_v22 .no_v22`/`.only_v22`), reg-status/`.reg-banner` styling, v22 typography alignment, calendar run-card grid (`.run-card-*`), event-page two-column layout (`.event-*`), payment summary cards (`.payment-summary-*`). | Shell/chrome (→ `10`-`12`). |
+| `10-structure.css` | Page skeleton not owned by one bar: `html`/`body`, `#page-container`, `#page-wrapper`, `#wrapper`, `#staging`, `#footer.lm`, the `#one/#topbar/#sidebar/#footer .inner` visibility resets, `.only_mobile`, banner overrides and error pages. | Topbar-only rules (→ `11`), sidebar-only rules (→ `12`). |
+| `11-topbar.css` | `#topbar` and everything rendered inside it: base topbar layout + `--topbar-height`, mobile topbar table, nav dropdowns (`.dropdown*`), the org topbar shell (`.lm_default #topbar`) and pill/switch widgets (`.topbar-*`). | Sidebar (→ `12`), generic page shell (→ `10`). |
+| `12-sidebar.css` | `#sidebar` and everything rendered inside/around it: base sidebar layout, collapse toggle (`#sidebar-collapse-btn`), sidebar status badges (`.sidebar-status-badge`), context selector, and the mobile bottom bar (`#menu-mobile`). | Topbar (→ `11`), generic page shell (→ `10`). |
+| `13-miscellanea.css` | cross-cutting rules not tied to the shell: table header/footer rows, reg-status/`.reg-banner` styling, calendar run-card grid (`.run-card-*`), event-page two-column layout (`.event-*`), payment summary cards (`.payment-summary-*`). | Shell/chrome (→ `10`-`12`). |
 
 - CSS color vars (`--pri-rgb`, `--sec-rgb`, `--ter-rgb`, `--ter-clr`) are defined
   by the `body.theme-*` rules in `00-base.css` and by per-association/event skin
   CSS; `--topbar-height` is defined in `11-topbar.css`. Files consume these vars
   without redefining them.
-- `.lm_default` (on `<body>` for organizations, not the platform site) → `01`/`09`/`11`. Version flags: `.new_v22`/`.only_v22`/
-  `.no_v22` → distributed across `10`-`13` by which shell component the rule
-  touches (page skeleton, topbar, sidebar, or cross-cutting).
+- `.lm_default` (on `<body>` for organizations, not the platform site) → `01`/`09`/`11`.
+  Interface version body classes (`.new_v<N>`) are only for gating a version still
+  being rolled out; once its floor is reached, fold the rules into the base selectors.
 - Never inline CSS in templates — all styles live here (per CLAUDE.md).
 - No non-ASCII characters; use a Font Awesome icon if a symbol is needed.

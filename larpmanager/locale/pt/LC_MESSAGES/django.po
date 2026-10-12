@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Ir"
 
-msgid "Hi"
-msgstr "Olá"
-
 msgid "No"
 msgstr "Não"
 
@@ -2258,9 +2255,6 @@ msgstr "Lucro líquido:"
 msgid "New session"
 msgstr "Nova sessão"
 
-msgid "Next events"
-msgstr "Próximos eventos"
-
 msgid "Not scanned"
 msgstr "Não digitalizado"
 
@@ -3172,9 +3166,6 @@ msgstr "Sessão ativa"
 msgid "Set quest type"
 msgstr "Definir tipo de Quest"
 
-msgid "Show shortcuts"
-msgstr "Mostrar atalhos"
-
 msgid "Tax code check"
 msgstr "Verificação do código fiscal"
 
@@ -3529,9 +3520,6 @@ msgstr "quotas associativas"
 
 msgid "printable sheet"
 msgstr "ficha imprimível"
-
-msgid "upcoming events"
-msgstr "próximos eventos"
 
 msgid "Ability Template"
 msgstr "Modelo de habilidade"
@@ -8392,9 +8380,6 @@ msgstr "Indica uma canção que queiras dedicar à tua personagem"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Introduz o código de 6 dígitos da tua aplicação de autenticação."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Se ativado, mostra automaticamente atalhos em dispositivos móveis."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Se ativado, não utiliza as fações do evento principal."

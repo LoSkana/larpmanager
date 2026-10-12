@@ -2,17 +2,7 @@
 {% load i18n static show_tags %}
 {% block main %}
     <!-- Header -->
-    <header id="header"
-            class="alt {% if manage and is_sidebar_open %}sidebar{% endif %} no_v22">
-        <h1>
-            <span>
-                {% block title %}
-                {% endblock title %}
-            </span>
-        </h1>
-    </header>
     <!-- Menu -->
-    {% include "elements/structure/menu.html" %}
     {% block wrapper %}
         <!-- Main -->
         <div id="banner">
@@ -61,8 +51,7 @@
                 </div>
             </div>
         </div>
-        <div id="footer"
-             class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
+        <div id="footer" class="lm">
             <div class="inner">
                 {% if association.footer %}
                     <div class="footer-text">
@@ -70,34 +59,6 @@
                         {{ association.footer | safe }}
                     </div>
                 {% endif %}
-                <table class="mob no_v22">
-                    <tr>
-                        {% if 'help' in association.features %}
-                            <td>
-                                <p>
-                                    <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help?" %}</a>
-                                </p>
-                            </td>
-                        {% endif %}
-                        <td>
-                            <p>
-                                <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
-                            </p>
-                        </td>
-                        {% if 'legal_notice' in association.features %}
-                            <td>
-                                <a href="{% url 'legal_notice' %}">{% trans "Legal Notice" %}</a>
-                            </td>
-                        {% endif %}
-                        <td>
-                            <a href="{% url 'ticket' %}">{% trans "Technical Support" %}</a>
-                        </td>
-                    </tr>
-                </table>
-                <p class="no_v22">
-                    <!-- Please, do not remove! -->
-                    Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
-                </p>
             </div>
         </div>
         {% if association.demo %}

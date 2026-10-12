@@ -7,9 +7,6 @@
     {% trans "Choose your preferred language" %}
 {% endblock info %}
 {% block content %}
-    {% if request.user.is_authenticated %}
-        {% include "larpmanager/member/profile_nav.html" %}
-    {% endif %}
     <div class="user_resize platform form_container">
         <form method="post">
             {% csrf_token %}

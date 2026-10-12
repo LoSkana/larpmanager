@@ -35,7 +35,6 @@
                             {{ status_text }}
                         {% endif %}
                         {% if run_status.details %}<p>{{ run_status.details }}</p>{% endif %}
-                        {% if run_status.details_characters and effective_version < 22 %}<p>{{ run_status.details_characters }}</p>{% endif %}
                     </p>
                     {% if checkin_qr_url %}
                         <div class="checkin-qr">

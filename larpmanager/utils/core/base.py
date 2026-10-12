@@ -141,9 +141,6 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
                 name="intro_driver",
             ).delete()
 
-    # Set sidebar state from user session
-    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
-
     return context
 
 

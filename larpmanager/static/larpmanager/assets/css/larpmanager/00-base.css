@@ -82,8 +82,12 @@ h4 {
   margin: 0.5em;
 }
 
-h2 {
-  text-align: center;
+p,
+h1,
+h2,
+h3,
+h4 {
+  text-align: left;
 }
 
 hr {
@@ -92,7 +96,7 @@ hr {
 }
 
 .c {
-  text-align: center;
+  text-align: left;
 }
 
 p {
@@ -423,12 +427,12 @@ body.theme-nebula #sidebar {
   color: var(--pri-clr);
 }
 
-body.theme-nebula #sidebar .new-menu a.select {
+body.theme-nebula #sidebar .inner a.select {
   background-color: rgba(var(--pri-rgb), 0.8);
 }
 
-body.theme-halo.new_v22 #topbar,
-body.theme-halo.new_v22 #sidebar {
+body.theme-halo #topbar,
+body.theme-halo #sidebar {
   background-color: rgba(var(--sec-rgb), 0.8);
 }
 

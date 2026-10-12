@@ -25,7 +25,7 @@ body {
 #banner h1 {
   padding: 0.5em 5em 0.5em 6em;
   min-height: 2.2em;
-  text-align: center;
+  text-align: left;
   line-height: 2;
   margin-bottom: 0em;
   font-size: 1.8em;
@@ -157,6 +157,13 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  transition:
+    margin-left 0.25s,
+    width 0.25s;
+}
+
+#page-wrapper header {
+  transition: margin-left 0.25s;
 }
 
 #wrapper {
@@ -199,10 +206,6 @@ body {
   margin-top: 0;
 }
 
-#page-wrapper.topbar #header h1 {
-  padding: 1em;
-}
-
 #page-wrapper.topbar #banner h1 {
   padding: 0.5em;
 }
@@ -233,37 +236,22 @@ body {
   display: none;
 }
 
-.only_mobile {
-  display: none;
-}
-
-@media (max-width: 840px) {
-  .only_mobile {
-    display: initial;
-  }
-}
-
 /* ---------------------------------------------------------------------------
-   Version 22 structure overrides
+   Banner overrides
    --------------------------------------------------------------------------- */
 
-.new_v22 #banner h1 {
-  text-align: left;
-}
-
-.new_v22 #banner .inner {
+#banner .inner {
   margin: 0;
   padding: 0 0.5em;
 }
 
-.new_v22 #banner .inner h1 {
-  text-align: left;
+#banner .inner h1 {
   justify-content: flex-start;
   padding-left: 0;
 }
 
 @media (max-width: 840px) {
-  .new_v22 #banner .inner h1 {
+  #banner .inner h1 {
     text-align: center;
     justify-content: center;
   }
@@ -273,28 +261,16 @@ body {
    Error pages (400/403/404/500)
    --------------------------------------------------------------------------- */
 
-body.error-page #header,
 body.error-page #footer,
-body.error-page #nav,
-body.error-page #menu,
 body.error-page #staging,
 body.error-page .info {
   display: none !important;
 }
 
-/* Version 22 keeps its topbar/sidebar chrome on error pages (subdomains only;
-   the landing site never renders them regardless of version). */
-body.error-page:not(.new_v22) #topbar,
-body.error-page:not(.new_v22) #sidebar,
-body.error-page:not(.new_v22) #menu-mobile {
-  display: none !important;
-}
-
-body.error-page:not(.new_v22) #page-wrapper,
-body.error-page:not(.new_v22) #page-wrapper.topbar,
-body.error-page:not(.new_v22) #page-wrapper.sidebar {
-  margin: 0 !important;
-  padding: 0 !important;
+/* Error pages rendered without an association have no topbar/sidebar: center the content. */
+body.error-page #page-wrapper:not(.topbar) {
+  margin: 0;
+  padding: 0;
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -329,37 +305,27 @@ body.error-page .container img {
   margin: 0 auto;
 }
 
-.new_v22 #one .inner {
+#one .inner {
   padding: 0em 1em 0em 0.5em !important;
 }
 
-.new_v22 #page-wrapper {
-  transition:
-    margin-left 0.25s,
-    width 0.25s;
-}
-
-.new_v22 #page-wrapper header {
-  transition: margin-left 0.25s;
-}
-
-.v22_only_mobile {
+.only_mobile {
   display: none;
 }
 
 @media (max-width: 840px) {
-  .new_v22 #one .inner {
+  #one .inner {
     padding: 0em 0.5em !important;
   }
 
-  .new_v22 #page-wrapper.topbar,
-  .new_v22 #page-wrapper.topbar header,
-  .new_v22 #page-wrapper.sidebar {
+  #page-wrapper.topbar,
+  #page-wrapper.topbar header,
+  #page-wrapper.sidebar {
     margin-bottom: calc(7vh + 1em);
     margin-bottom: calc(7dvh + 1em);
   }
 
-  .v22_only_mobile {
+  .only_mobile {
     display: inherit;
   }
 }

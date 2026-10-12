@@ -321,14 +321,6 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
         context, context["member"], element_uuid=str(context["event"].uuid)
     )
 
-    # Mobile shortcuts handling
-    if get_event_config(context["event"].id, "show_shortcuts_mobile", context=context):
-        origin_id = request.GET.get("origin", "")
-        should_open_shortcuts = False
-        if origin_id:
-            should_open_shortcuts = str(context["run"].id) != origin_id
-        context["open_shortcuts"] = should_open_shortcuts
-
     # Loads widget data
     _orga_widgets(request, context, features)
 

@@ -124,13 +124,11 @@ def check_orga_features(page: Any) -> None:
 def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
     page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
-    page.locator("#id_show_shortcuts_mobile").check()
     page.locator("#id_show_limitations").check()
     submit_confirm(page)
     page.get_by_role("link", name="Configuration").first.click()
     page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
-    expect(page.locator("#id_show_shortcuts_mobile")).to_be_checked()
     expect(page.locator("#id_show_export")).not_to_be_checked()
     expect(page.locator("#id_show_limitations")).to_be_checked()
 
