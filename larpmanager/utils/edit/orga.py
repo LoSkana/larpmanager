@@ -467,11 +467,6 @@ def form_edit_handler(
         # Set permission suggestion for future operations
         set_suggestion(context, permission)
 
-        # If item was deleted, redirect to list view
-        if request.POST.get("delete") == "1":
-            messages.success(request, _("Operation completed!"))
-            return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
-
         # If AJAX request, return JSON with question UUID
         if is_ajax:
             return JsonResponse(

@@ -1039,12 +1039,7 @@ def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = No
         """Save gift registration using the specialized save_registration function."""
         return save_registration(ctx, form, ctx["run"], ctx["event"], registration, gifted=True)
 
-    # Define custom delete callback for gift registrations
-    def delete_gift_callback(reg: Registration) -> None:
-        """Cancel gift registration using the specialized cancel_reg function."""
-        cancel_reg(reg)
-
-    # Use user_edit to handle form processing with custom callbacks
+    # Use user_edit to handle form processing with custom save callback
     if user_edit(
         request,
         context,
@@ -1052,7 +1047,6 @@ def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = No
         "registration",
         gift_uuid,
         save_callback=save_gift_callback,
-        delete_callback=delete_gift_callback,
     ):
         # Redirect back to gift list after successful operation
         return redirect("gift", event_slug=event_slug)
