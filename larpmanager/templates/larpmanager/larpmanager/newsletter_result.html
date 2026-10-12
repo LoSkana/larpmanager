@@ -7,21 +7,37 @@
     <table>
         <tr>
             <th>New</th>
-            <td>{{ counts.new }}</td>
+            <td>{{ results.new|length }}</td>
         </tr>
         <tr>
             <th>Updated</th>
-            <td>{{ counts.updated }}</td>
+            <td>{{ results.updated|length }}</td>
         </tr>
         <tr>
             <th>Ignored (already present)</th>
-            <td>{{ counts.ignored }}</td>
+            <td>{{ results.ignored|length }}</td>
         </tr>
         <tr>
             <th>Invalid</th>
-            <td>{{ counts.invalid }}</td>
+            <td>{{ results.invalid|length }}</td>
         </tr>
     </table>
+    {% if results.new %}
+        <h3>New</h3>
+        <p>{{ results.new|join:", " }}</p>
+    {% endif %}
+    {% if results.updated %}
+        <h3>Updated</h3>
+        <p>{{ results.updated|join:", " }}</p>
+    {% endif %}
+    {% if results.ignored %}
+        <h3>Ignored (already present)</h3>
+        <p>{{ results.ignored|join:", " }}</p>
+    {% endif %}
+    {% if results.invalid %}
+        <h3>Invalid</h3>
+        <p>{{ results.invalid|join:", " }}</p>
+    {% endif %}
     <p>
         <a href="{% url 'lm_newsletter' %}">Back</a>
     </p>
