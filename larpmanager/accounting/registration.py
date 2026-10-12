@@ -35,10 +35,9 @@ from django.utils import timezone
 
 from larpmanager.accounting.base import is_registration_provisional, round_to_nearest_cent
 from larpmanager.accounting.token_credit import handle_tokes_credits
-from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
+from larpmanager.cache.basic import get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.run import get_event_runs
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
@@ -553,8 +552,8 @@ def cancel_reg(registration: Registration) -> None:
         registration: Registration instance to cancel
 
     Side effects:
-        Sets cancellation date, deletes characters, traits, discounts,
-        bonus items, and resets event links. Traits and discounts are tracked
+        Sets cancellation date, deletes characters, traits, discounts
+        and bonus items. Traits and discounts are tracked
         per member and run, so they are kept while the member still has other
         active registrations (own or gifts) in the run.
 
@@ -584,9 +583,6 @@ def cancel_reg(registration: Registration) -> None:
 
         # delete bonus credits / tokens
         AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
-
-    # Reset event links
-    reset_event_links(registration.member_id, get_run_association_id(registration.run_id))
 
 
 def process_registration_pre_save(registration: Registration) -> None:
