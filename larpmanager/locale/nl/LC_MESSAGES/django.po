@@ -2531,9 +2531,6 @@ msgstr "Lift nodig?"
 msgid "Not included"
 msgstr "Niet inbegrepen"
 
-msgid "Not selected"
-msgstr "Niet geselecteerd"
-
 msgid "Open on date"
 msgstr "Openingsdatum"
 

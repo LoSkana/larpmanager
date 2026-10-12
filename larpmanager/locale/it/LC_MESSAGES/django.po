@@ -2531,9 +2531,6 @@ msgstr "Hai bisogno di un passaggio?"
 msgid "Not included"
 msgstr "Non incluso"
 
-msgid "Not selected"
-msgstr "Non selezionato"
-
 msgid "Open on date"
 msgstr "Data di apertura"
 

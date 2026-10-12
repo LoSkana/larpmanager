@@ -949,9 +949,6 @@ msgstr ""
 msgid "Read only"
 msgstr ""
 
-msgid "Not selected"
-msgstr ""
-
 msgid "Choose one option"
 msgstr ""
 

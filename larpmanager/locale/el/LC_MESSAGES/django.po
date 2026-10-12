@@ -2531,9 +2531,6 @@ msgstr "Χρειάζεσαι μεταφορά;"
 msgid "Not included"
 msgstr "Δεν περιλαμβάνεται"
 
-msgid "Not selected"
-msgstr "Δεν επιλέχθηκε"
-
 msgid "Open on date"
 msgstr "Άνοιγμα στις"
 

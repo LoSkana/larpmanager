@@ -638,20 +638,8 @@ input,
 }
 
 .lm_default .auto_resize {
-  width: 70%;
+  width: auto;
   margin: 0 auto;
-}
-
-@media (max-width: 1200px) {
-  .lm_default .auto_resize {
-    width: 80%;
-  }
-}
-
-@media (max-width: 840px) {
-  .lm_default .auto_resize {
-    width: 90%;
-  }
 }
 
 .lm_default .auto_resize table {
@@ -665,10 +653,6 @@ input,
 
 @media (max-width: 1200px) {
   .lm_default .form_container {
-    width: 90%;
-  }
-
-  .new_v20 .form_container {
     width: 100% !important;
   }
 }
@@ -685,11 +669,6 @@ input,
 
 .lm_default th label {
   text-align: left !important;
-}
-
-.new_v20 .form_container table input[type="checkbox"],
-.new_v20 .form_container table input[type="radio"] {
-  margin-top: 0.2em !important;
 }
 
 .lm_default .form_container table input {
@@ -710,6 +689,7 @@ input,
 .lm_default .form_container table input[type="checkbox"],
 .lm_default .form_container table input[type="radio"] {
   width: 1em !important;
+  margin-top: 0.2em !important;
 }
 
 .lm_default .select2-container {

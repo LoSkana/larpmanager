@@ -2531,9 +2531,6 @@ msgstr "Potřebuješ odvoz?"
 msgid "Not included"
 msgstr "Není zahrnuto"
 
-msgid "Not selected"
-msgstr "Nevybráno"
-
 msgid "Open on date"
 msgstr "Datum otevření"
 

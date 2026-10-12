@@ -2531,9 +2531,6 @@ msgstr "Precisas de boleia?"
 msgid "Not included"
 msgstr "Não incluído"
 
-msgid "Not selected"
-msgstr "Não selecionado"
-
 msgid "Open on date"
 msgstr "Abre em"
 

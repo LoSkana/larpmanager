@@ -2531,9 +2531,6 @@ msgstr "Besoin d'un trajet?"
 msgid "Not included"
 msgstr "Non inclus"
 
-msgid "Not selected"
-msgstr "Non sélectionné"
-
 msgid "Open on date"
 msgstr "Date d'ouverture"
 

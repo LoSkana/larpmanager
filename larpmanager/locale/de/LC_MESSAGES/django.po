@@ -2531,9 +2531,6 @@ msgstr "Du brauchst eine Mitfahrgelegenheit?"
 msgid "Not included"
 msgstr "Nicht enthalten"
 
-msgid "Not selected"
-msgstr "Nicht ausgewählt"
-
 msgid "Open on date"
 msgstr "Öffnungsdatum"
 

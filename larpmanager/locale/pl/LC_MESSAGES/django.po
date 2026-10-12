@@ -2531,9 +2531,6 @@ msgstr "Potrzebujesz podwózki?"
 msgid "Not included"
 msgstr "Nie uwzględnione"
 
-msgid "Not selected"
-msgstr "Nie wybrano"
-
 msgid "Open on date"
 msgstr "Data otwarcia"
 

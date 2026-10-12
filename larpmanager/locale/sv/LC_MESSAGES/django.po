@@ -2531,9 +2531,6 @@ msgstr "Behöver du skjuts?"
 msgid "Not included"
 msgstr "Ingår ej"
 
-msgid "Not selected"
-msgstr "Ej vald"
-
 msgid "Open on date"
 msgstr "Öppningsdatum"
 

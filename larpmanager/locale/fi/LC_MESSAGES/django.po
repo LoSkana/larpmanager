@@ -2531,9 +2531,6 @@ msgstr "Tarvitsetko kyydin?"
 msgid "Not included"
 msgstr "Ei sisälly"
 
-msgid "Not selected"
-msgstr "Ei valittu"
-
 msgid "Open on date"
 msgstr "Avaamispäivä"
 

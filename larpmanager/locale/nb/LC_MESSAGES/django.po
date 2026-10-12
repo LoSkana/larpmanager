@@ -2531,9 +2531,6 @@ msgstr "Trenger du skyss?"
 msgid "Not included"
 msgstr "Ikke inkludert"
 
-msgid "Not selected"
-msgstr "Ikke valgt"
-
 msgid "Open on date"
 msgstr "Åpningsdato"
 
