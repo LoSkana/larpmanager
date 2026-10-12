@@ -919,6 +919,7 @@ def orga_registrations_delete(request: HttpRequest, event_slug: str, registratio
 
     if request.method == "POST":
         cancel_reg(context["registration"])
+        save_log(context, Registration, context["registration"], operation_type=LogOperationType.DELETE)
         messages.success(request, _("Registration cancelled"))
         return render(request, "elements/dashboard/form_success.html", context)
 

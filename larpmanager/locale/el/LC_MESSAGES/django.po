@@ -8403,6 +8403,9 @@ msgstr "μήκος κειμένου: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "μπορείς ακόμη να πληρώσεις το υπόλοιπο ποσό αν θέλεις"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Ένα δώρο που έχει ήδη πληρωθεί δεν μπορεί να διαγραφεί"
+
 msgid "Answer questions to help match you with characters!"
 msgstr ""
 "Απάντησε σε ερωτήσεις για να βοηθήσεις το ταίριασμά σου με χαρακτήρες!"

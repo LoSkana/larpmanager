@@ -55,6 +55,9 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     Discount,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import (
@@ -65,7 +68,7 @@ from larpmanager.models.event import (
     RegistrationStatus,
     Run,
 )
-from larpmanager.models.member import MembershipStatus
+from larpmanager.models.member import LogOperationType, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -88,7 +91,7 @@ from larpmanager.utils.edit.autosave import (
     save_draft_from_request,
     set_auto_save,
 )
-from larpmanager.utils.edit.backend import user_edit
+from larpmanager.utils.edit.backend import save_log, user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.registrations.casting_status import casting_preferences_pending
 from larpmanager.utils.registrations.context import (
@@ -995,11 +998,22 @@ def gift_delete(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpRe
     check_registration_open(context, request)
     registration = get_registration_gift(context, gift_uuid)
 
+    has_pending_payment = PaymentInvoice.objects.filter(
+        member_id=registration.member_id,
+        typ=PaymentType.REGISTRATION,
+        idx=registration.id,
+        status=PaymentStatus.SUBMITTED,
+    ).exists()
+    if registration.tot_payed or has_pending_payment:
+        messages.error(request, _("A gift that has already been paid cannot be deleted"))
+        return redirect("gift", event_slug=event_slug)
+
     if request.method != "POST":
         context["el_name"] = registration.ticket.name if registration.ticket else ""
         return render(request, "elements/confirm_action.html", context)
 
     cancel_reg(registration)
+    save_log(context, Registration, registration, operation_type=LogOperationType.DELETE)
     messages.success(request, _("Operation completed!"))
     return redirect("gift", event_slug=event_slug)
 

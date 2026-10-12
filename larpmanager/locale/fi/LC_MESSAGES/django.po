@@ -8381,6 +8381,9 @@ msgstr "tekstin pituus: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "voit halutessasi maksaa jäljellä olevan summan"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Jo maksettua lahjaa ei voi poistaa"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Vastaa kysymyksiin, jotta voimme löytää sinulle sopivia hahmoja!"
 

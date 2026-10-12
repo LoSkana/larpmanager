@@ -8392,6 +8392,9 @@ msgstr "tekstlengte: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "je kunt nog steeds het resterende bedrag betalen als je dat wilt"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Een cadeau dat al is betaald, kan niet worden verwijderd"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Beantwoord de vragen om te zien welke personages bij je passen!"
 

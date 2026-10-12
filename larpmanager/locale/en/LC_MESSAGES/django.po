@@ -13828,6 +13828,9 @@ msgstr ""
 msgid "Your registration for %(event)s has been cancelled."
 msgstr ""
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr ""
+
 msgid "You cannot redeem a membership, you are already a member!"
 msgstr ""
 

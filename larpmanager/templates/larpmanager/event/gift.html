@@ -70,8 +70,10 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{% url 'gift_delete' run.get_slug registration.uuid %}"
-                               qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                            {% if not registration.tot_payed and not registration.pending %}
+                                <a href="{% url 'gift_delete' run.get_slug registration.uuid %}"
+                                   qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

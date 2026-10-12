@@ -8385,6 +8385,9 @@ msgstr "comprimento do texto: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "ainda podes pagar o montante restante se quiseres"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Um presente que já foi pago não pode ser excluído"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Responde a perguntas para ajudar a associar-te a personagens!"
 

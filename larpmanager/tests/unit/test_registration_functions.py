@@ -49,6 +49,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.association import AssociationConfig
+from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import (
@@ -640,6 +641,43 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         # Should delete character relationships
         self.assertEqual(RegistrationCharacterRel.objects.filter(registration=registration).count(), 0)
+
+    def _create_trait_and_discount(self, member: Any, run: Any) -> None:
+        """Assign a trait and a discount to the member for the run."""
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=run.event)
+        quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=run.event)
+        trait = Trait.objects.create(name="Test Trait", event=run.event, quest=quest)
+        AssignmentTrait.objects.create(run=run, member=member, trait=trait, typ=0)
+        AccountingItemDiscount.objects.create(
+            member=member, run=run, disc=self.discount(), value=Decimal("10.00"), association=self.get_association()
+        )
+
+    def test_cancel_reg_deletes_traits_and_discounts(self) -> None:
+        """Test cancel_reg deletes the member traits and discounts for the run"""
+        member = self.get_member()
+        run = self.get_run()
+        registration = self.create_registration(member=member, run=run)
+        self._create_trait_and_discount(member, run)
+
+        cancel_reg(registration)
+
+        self.assertFalse(AssignmentTrait.objects.filter(run=run, member=member).exists())
+        self.assertFalse(AccountingItemDiscount.objects.filter(run=run, member=member).exists())
+
+    def test_cancel_reg_gift_keeps_giver_traits_and_discounts(self) -> None:
+        """Test cancelling an unredeemed gift keeps the giver traits and discounts"""
+        member = self.get_member()
+        run = self.get_run()
+        self.create_registration(member=member, run=run)
+        gift = self.create_registration(member=member, run=run, redeem_code="giftcode12345678")
+        self._create_trait_and_discount(member, run)
+
+        cancel_reg(gift)
+
+        gift.refresh_from_db()
+        self.assertIsNotNone(gift.cancellation_date)
+        self.assertTrue(AssignmentTrait.objects.filter(run=run, member=member).exists())
+        self.assertTrue(AccountingItemDiscount.objects.filter(run=run, member=member).exists())
 
 
 @pytest.mark.django_db(transaction=True)

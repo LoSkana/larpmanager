@@ -8380,6 +8380,9 @@ msgstr "délka textu: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přeješ, můžeš zaplatit zbývající částku"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Dárek, který už byl zaplacen, nejde smazat"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Odpověz na otázky, které nám pomohou najít pro tebe vhodné postavy!"
 
