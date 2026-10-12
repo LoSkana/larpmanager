@@ -571,9 +571,6 @@ msgstr "Vytvořit"
 msgid "Delete"
 msgstr "Odstranit"
 
-msgid "Detail"
-msgstr "Detail"
-
 msgid "Direct"
 msgstr "Přímý"
 

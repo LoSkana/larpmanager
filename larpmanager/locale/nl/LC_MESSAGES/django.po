@@ -571,9 +571,6 @@ msgstr "Maak"
 msgid "Delete"
 msgstr "Verwijder"
 
-msgid "Detail"
-msgstr "Detail"
-
 msgid "Direct"
 msgstr "Direct"
 

@@ -571,9 +571,6 @@ msgstr "Crea"
 msgid "Delete"
 msgstr "Elimina"
 
-msgid "Detail"
-msgstr "Dettaglio"
-
 msgid "Direct"
 msgstr "Diretto"
 

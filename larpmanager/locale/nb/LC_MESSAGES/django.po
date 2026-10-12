@@ -571,9 +571,6 @@ msgstr "Opprett"
 msgid "Delete"
 msgstr "Slett"
 
-msgid "Detail"
-msgstr "Detalj"
-
 msgid "Direct"
 msgstr "Direkte"
 

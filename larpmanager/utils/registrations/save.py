@@ -27,9 +27,10 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.cache.discount import clear_member_reservation, get_member_reservations
 from larpmanager.mail.base import bring_friend_instructions
 from larpmanager.mail.registration import update_registration_status_bkg
-from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, OtherChoices
+from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, Discount, OtherChoices
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import my_uuid
@@ -137,13 +138,9 @@ def save_registration(
         # Process and save registration-specific questions
         form.save_registration_questions(registration, is_organizer=False)
 
-        # Confirm and finalize any pending discounts for this member/run
-        que = AccountingItemDiscount.objects.filter(member=context["member"], run=registration.run)
-        for el in que:
-            # Remove expiration date to confirm discount usage
-            if el.expires is not None:
-                el.expires = None
-                el.save()
+        # Confirm discounts reserved by the member on this registration
+        if not registration.redeem_code:
+            confirm_reserved_discounts(registration, context["association_id"])
 
         # Save the updated registration instance
         registration.save()
@@ -158,6 +155,24 @@ def save_registration(
     update_registration_status_bkg(registration.id)
 
     return registration
+
+
+def confirm_reserved_discounts(registration: Registration, association_id: int) -> None:
+    """Create the discount items reserved in cache by the registration member, then clear the reservations."""
+    run = registration.run
+    reservations = get_member_reservations(
+        run.id, list(run.discounts.values_list("id", flat=True)), registration.member_id
+    )
+    for discount in Discount.objects.select_for_update().filter(id__in=reservations):
+        AccountingItemDiscount.objects.get_or_create(
+            registration=registration,
+            disc=discount,
+            defaults={
+                "value": discount.value,
+                "association_id": association_id,
+            },
+        )
+        clear_member_reservation(run.id, discount.id, registration.member_id)
 
 
 def save_registration_standard(

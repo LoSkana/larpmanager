@@ -571,9 +571,6 @@ msgstr "Luo"
 msgid "Delete"
 msgstr "Poista"
 
-msgid "Detail"
-msgstr "Yksityiskohta"
-
 msgid "Direct"
 msgstr "Suora"
 

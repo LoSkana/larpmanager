@@ -38,6 +38,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_association_basic_cache, get_run_basic_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.discount import count_discounts_reservations
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
@@ -1210,17 +1211,24 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Count redemptions per discount for this run
     discount_counts = dict(
-        AccountingItemDiscount.objects.filter(run=context["run"])
+        AccountingItemDiscount.objects.filter(registration__run=context["run"])
         .values_list("disc_id")
         .annotate(total=Count("id"))
         .values_list("disc_id", "total")
     )
 
     # Build discounts list with visibility filtering
+    # Count active reservations, not yet confirmed by a registration save
+    visible_discounts = list(context["run"].discounts.exclude(visible=False))
+    reservation_counts = count_discounts_reservations(
+        context["run"].id, [discount.id for discount in visible_discounts]
+    )
+
     context["disc"] = []
-    for discount in context["run"].discounts.exclude(visible=False):
+    for discount in visible_discounts:
         dt = discount.show()
-        dt["remaining"] = _remaining(discount.max_redeem, discount_counts.get(discount.id, 0))
+        used = discount_counts.get(discount.id, 0) + reservation_counts.get(discount.id, 0)
+        dt["remaining"] = _remaining(discount.max_redeem, used)
         context["disc"].append(dt)
 
     context["tickets"] = []

@@ -571,9 +571,6 @@ msgstr "Skapa"
 msgid "Delete"
 msgstr "Radera"
 
-msgid "Detail"
-msgstr "Detalj"
-
 msgid "Direct"
 msgstr "Direkt"
 

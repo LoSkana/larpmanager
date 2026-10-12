@@ -571,9 +571,6 @@ msgstr "Δημιουργία"
 msgid "Delete"
 msgstr "Διαγραφή"
 
-msgid "Detail"
-msgstr "Λεπτομέρεια"
-
 msgid "Direct"
 msgstr "Άμεσο"
 

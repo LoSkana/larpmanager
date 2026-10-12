@@ -28,6 +28,8 @@ from typing import ClassVar
 
 from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
+from django.db.models import QuerySet
+from django.http import HttpRequest
 
 from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, RegistrationFilter, RunFilter
 from larpmanager.models.accounting import (
@@ -50,6 +52,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
 )
 from larpmanager.models.event import Run
+from larpmanager.models.member import Member
 
 
 class InvoiceFilter(AutocompleteFilter):
@@ -86,9 +89,19 @@ class AccountingItemTransactionAdmin(AccountingItemAdmin):
 class AccountingItemDiscountAdmin(AccountingItemAdmin):
     """Admin interface for discount accounting items."""
 
-    list_display = ("id", "disc", "run", "member", "value")
-    autocomplete_fields: ClassVar[list] = ["member", "inv", "association", "run", "disc"]
-    list_filter = (MemberFilter, AssociationFilter, RunFilter)
+    list_display = ("id", "disc", "get_run", "get_member", "value")
+    autocomplete_fields: ClassVar[list] = ["inv", "association", "registration", "disc"]
+    list_filter = (AssociationFilter, RegistrationFilter)
+    search_fields: ClassVar[tuple] = ("id", "search", "registration__member__name", "registration__member__surname")
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        """Prefetch registration member and run for list display."""
+        return super().get_queryset(request).select_related("registration__member", "registration__run")
+
+    @admin.display(ordering="registration__member", description="Member")
+    def get_member(self, instance: AccountingItemDiscount) -> Member:
+        """Get member from instance registration for admin display."""
+        return instance.registration.member
 
 
 @admin.register(AccountingItemDonation)

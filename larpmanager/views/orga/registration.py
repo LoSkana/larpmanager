@@ -443,14 +443,18 @@ def _orga_registrations_discount(context: dict) -> None:
 
     # Initialize discount tracking structures
     context["reg_discounts"] = {}
-    discount_items_query = AccountingItemDiscount.objects.filter(run=context["run"])
+    discount_items_query = AccountingItemDiscount.objects.filter(registration__run=context["run"])
 
-    # Process each discount item and organize by member
-    for accounting_item_discount in discount_items_query.select_related("member", "disc").exclude(hide=True):
-        regs_list_add(context, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.member)
-        if accounting_item_discount.member_id not in context["reg_discounts"]:
-            context["reg_discounts"][accounting_item_discount.member_id] = []
-        context["reg_discounts"][accounting_item_discount.member_id].append(accounting_item_discount.disc.name)
+    # Process each discount item and organize by registration
+    for accounting_item_discount in discount_items_query.select_related("registration__member", "disc").exclude(
+        hide=True
+    ):
+        regs_list_add(
+            context, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.registration.member
+        )
+        context["reg_discounts"].setdefault(accounting_item_discount.registration_id, []).append(
+            accounting_item_discount.disc.name
+        )
 
 
 def _orga_registrations_text_fields(context: dict) -> None:
@@ -561,8 +565,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         _orga_registrations_standard(r, context)
 
         # Add discount information if available
-        if "discount" in context["features"] and r.member_id in context["reg_discounts"]:
-            r.discounts = context["reg_discounts"][r.member_id]
+        if "discount" in context["features"] and r.id in context["reg_discounts"]:
+            r.discounts = context["reg_discounts"][r.id]
 
         # Add questbuilder trait information
         _orga_registrations_traits(r, context)
@@ -997,10 +1001,9 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, registrat
     context = check_event_context(request, event_slug, "orga_registrations")
     get_registration(context, registration_uuid)
 
-    # Get active discounts for this registration's member
+    # Get active discounts for this registration
     context["active"] = AccountingItemDiscount.objects.filter(
-        run=context["run"],
-        member=context["registration"].member,
+        registration=context["registration"],
     ).select_related("disc")
 
     # Get discounts of this run not already applied to the registration
@@ -1032,11 +1035,10 @@ def orga_registration_discount_add(
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
 
-    # Skip if the same discount is already applied to this member for this run
+    # Skip if the same discount is already applied to this registration
     (_item, created) = AccountingItemDiscount.objects.get_or_create(
-        member=context["registration"].member,
+        registration=context["registration"],
         disc=context["discount"],
-        run=context["run"],
         defaults={
             "value": context["discount"].value,
             "association_id": context["association_id"],
@@ -1064,11 +1066,10 @@ def orga_registration_discount_del(
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
 
-    # Delete the discount accounting item for this member/run and save registration
+    # Delete the discount accounting item for this registration and save registration
     AccountingItemDiscount.objects.filter(
         disc=context["discount"],
-        member=context["registration"].member,
-        run=context["run"],
+        registration=context["registration"],
     ).delete()
     context["registration"].save()
 

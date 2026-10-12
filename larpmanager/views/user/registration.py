@@ -22,13 +22,13 @@ from __future__ import annotations
 import logging
 import secrets
 import traceback
-from datetime import timedelta
+from datetime import UTC, datetime
 from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models, transaction
+from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -41,6 +41,7 @@ from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.discount import get_member_reservations, reserve_discount
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.base import get_question_key
@@ -772,10 +773,6 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 
-    # Clean up expired discount reservations
-    now = timezone.now()
-    AccountingItemDiscount.objects.filter(expires__lte=now).delete()
-
     # Extract context variables for discount validation
     member = context["member"]
     run = context["run"]
@@ -790,15 +787,8 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         if check:
             return error(check)
 
-        # Create temporary discount reservation with 15-minute expiration
-        AccountingItemDiscount.objects.create(
-            value=disc.value,
-            member=member,
-            expires=now + timedelta(minutes=15),
-            disc=disc,
-            run=run,
-            association_id=context["association_id"],
-        )
+        # Reserve the discount until the registration is saved
+        reserve_discount(run.id, disc.id, member.id)
 
     # Return success response with reservation confirmation
     return JsonResponse(
@@ -828,30 +818,24 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
     """
     # Get the event run context from the request and identifier
     context = get_event_context(request, event_slug, check_visibility=False)
-    now = timezone.now()
+    member = context["member"]
+    run = context["run"]
 
-    # Bulk delete expired discount items for this user and run
-    AccountingItemDiscount.objects.filter(member=context["member"], run=context["run"], expires__lte=now).delete()
+    # Discounts confirmed on the member active registrations for this run
+    lst = [
+        {"name": item.disc.name, "value": item.value, "expires": ""}
+        for item in AccountingItemDiscount.objects.filter(
+            registration__run=run,
+            registration__member=member,
+            registration__cancellation_date__isnull=True,
+        ).select_related("disc")
+    ]
 
-    # Get remaining valid discount items with optimized query
-    # Filter for current user/run and non-expired items
-    discount_items = (
-        AccountingItemDiscount.objects.filter(member=context["member"], run=context["run"])
-        .select_related("disc")
-        .filter(models.Q(expires__isnull=True) | models.Q(expires__gt=now))
-    )
-
-    # Build response list efficiently
-    # Convert discount items to JSON-serializable format
-    lst = []
-    for aid in discount_items:
-        j = {"name": aid.disc.name, "value": aid.value}
-        # Format expiration time or set empty string for permanent discounts
-        if aid.expires:
-            j["expires"] = aid.expires.strftime("%H:%M")
-        else:
-            j["expires"] = ""
-        lst.append(j)
+    # Discounts reserved by the member, pending registration save
+    reservations = get_member_reservations(run.id, list(run.discounts.values_list("id", flat=True)), member.id)
+    for disc in Discount.objects.filter(id__in=reservations):
+        expires = timezone.localtime(datetime.fromtimestamp(reservations[disc.id], tz=UTC))
+        lst.append({"name": disc.name, "value": disc.value, "expires": expires.strftime("%H:%M")})
 
     return JsonResponse({"lst": lst})
 
