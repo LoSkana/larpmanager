@@ -194,6 +194,11 @@ urlpatterns = [
         name="gift_edit",
     ),
     path(
+        "<slug:event_slug>/gift/delete/<slug:gift_uuid>/",
+        views_ur.gift_delete,
+        name="gift_delete",
+    ),
+    path(
         "<slug:event_slug>/gift/redeem/<slug:code>/",
         views_ur.gift_redeem,
         name="gift_redeem",

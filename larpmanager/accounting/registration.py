@@ -551,23 +551,36 @@ def cancel_reg(registration: Registration) -> None:
 
     Side effects:
         Sets cancellation date, deletes characters, traits, discounts,
-        bonus items, and resets event links
+        bonus items, and resets event links. Traits are tracked per member
+        and run, so they are kept while the member still has other active
+        registrations (own or gifts) in the run.
 
     """
-    registration.cancellation_date = timezone.now()
-    registration.save()
+    with transaction.atomic():
+        registration.cancellation_date = timezone.now()
+        registration.save()
 
-    # delete characters related
-    RegistrationCharacterRel.objects.filter(registration=registration).delete()
+        # delete characters related
+        RegistrationCharacterRel.objects.filter(registration=registration).delete()
 
-    # delete trait assignments
-    AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
+        has_other_active = (
+            Registration.objects.filter(
+                run_id=registration.run_id,
+                member_id=registration.member_id,
+                cancellation_date__isnull=True,
+            )
+            .exclude(pk=registration.pk)
+            .exists()
+        )
+        if not has_other_active:
+            # delete trait assignments
+            AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
 
-    # delete discounts
-    AccountingItemDiscount.objects.filter(registration_id=registration.id).delete()
+        # delete discounts
+        AccountingItemDiscount.objects.filter(registration_id=registration.id).delete()
 
-    # delete bonus credits / tokens
-    AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
+        # delete bonus credits / tokens
+        AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
 
     # Reset event links
     reset_event_links(registration.member_id, get_run_association_id(registration.run_id))

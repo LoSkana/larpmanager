@@ -2528,9 +2528,6 @@ msgstr "Tarvitsetko kyydin?"
 msgid "Not included"
 msgstr "Ei sisälly"
 
-msgid "Not selected"
-msgstr "Ei valittu"
-
 msgid "Open on date"
 msgstr "Avaamispäivä"
 
@@ -4385,9 +4382,6 @@ msgstr "Linkkien vari."
 msgid "Confirm Unsubscribe"
 msgstr "Vahvista tilauksen peruuttaminen"
 
-msgid "Confirmation delete"
-msgstr "Vahvista poistaminen"
-
 msgid "Content Unavailable"
 msgstr "Sisältö ei ole käytettävissä"
 
@@ -5575,9 +5569,6 @@ msgstr "tarkista puuttuvat suhteet:"
 msgid "choice value not provided"
 msgstr "valinnan arvoa ei ole annettu"
 
-msgid "Access the event dashboard"
-msgstr "Siirry tapahtuman kojelautaan"
-
 msgid "Can't copy from same event"
 msgstr "Ei voi kopioida samasta tapahtumasta"
 
@@ -6158,9 +6149,6 @@ msgstr "Ilmoittautumiset ulkoisen linkin kautta"
 msgid "Set up the taxes configuration"
 msgstr "Määritä verojen kokoonpano"
 
-msgid "Set your interface preferences"
-msgstr "Aseta käyttöliittymän asetukset"
-
 msgid "Show/hide completed milestones"
 msgstr "Näytä/piilota suoritetut virstanpylväät"
 
@@ -6455,9 +6443,6 @@ msgstr "(Valinnainen) Lipun hinta"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valinnainen) Lipun nimi"
-
-msgid "Access the organization dashboard"
-msgstr "Pääsy organisaation kojelautaan"
 
 msgid "Character creation reminder email"
 msgstr "Hahmonluonnin muistutussähköposti"
@@ -8380,6 +8365,9 @@ msgstr "tekstin pituus: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "voit halutessasi maksaa jäljellä olevan summan"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Jo maksettua lahjaa ei voi poistaa"
 
 msgid "Answer questions to help match you with characters!"
 msgstr "Vastaa kysymyksiin, jotta voimme löytää sinulle sopivia hahmoja!"
@@ -11956,13 +11944,6 @@ msgid ""
 msgstr ""
 "Jos valittu, järjestäjille lähetetään muistutussähköposti maksuista, jotka "
 "odottavat vielä hyväksyntää."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Jos olet täysin varma, että haluat poistaa kohteen, napsauta tätä "
-"painiketta."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

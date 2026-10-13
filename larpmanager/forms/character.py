@@ -1445,7 +1445,6 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
         Side Effects:
             - Modifies self.fields["typ"].choices
-            - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
         writing_questions = get_cached_writing_questions(self.params["event"].id, self.params["writing_typ"])
@@ -1456,8 +1455,6 @@ class OrgaWritingQuestionForm(BaseModelForm):
         # Handle existing instance - allow editing current type
         if self.instance.pk and self.instance.typ:
             already_used_types.remove(self.instance.typ)
-            # Prevent cancellation for multi-character default types
-            self.prevent_canc = len(self.instance.typ) > 1
 
         # Build filtered choices list based on features and usage
         filtered_choices = []

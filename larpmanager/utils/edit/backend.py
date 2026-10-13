@@ -340,13 +340,11 @@ def user_edit(
     model_name: str,
     entity_uuid: str | None = None,
     save_callback: Callable[[Any, dict], Any] | None = None,
-    delete_callback: Callable[[Any], None] | None = None,
 ) -> bool:
     """Edit user data with validation.
 
     Handle both GET and POST requests for editing user data. On POST, validate
-    the form and save the instance. Support deletion functionality when
-    'delete' parameter is set to '1' in POST data.
+    the form and save the instance.
 
     Args:
         request: HTTP request object containing method and POST data
@@ -355,7 +353,6 @@ def user_edit(
         model_name: Name key for accessing the model instance in context dictionary
         entity_uuid: Entity ID for editing, used for form numbering (0 for new instances)
         save_callback: Optional custom save function (form, context) -> instance
-        delete_callback: Optional custom delete function (instance) -> None
 
     Returns:
         True if form was successfully processed and saved, False if form
@@ -363,8 +360,7 @@ def user_edit(
 
     Side Effects:
         - Adds success message to request on successful save
-        - Logs the operation using save_log function (unless custom callbacks used)
-        - Deletes instance if delete flag is set
+        - Logs the operation using save_log function (unless custom callback used)
         - Updates context with 'saved', 'form', 'num', and optionally 'name' keys
 
     """
@@ -375,25 +371,6 @@ def user_edit(
         info = re.sub(r"^(Exe|Orga)|Form$", "", form_type.__name__)
 
         if form.is_valid():
-            # Check if delete operation was requested
-            should_delete = "delete" in request.POST and request.POST["delete"] == "1"
-
-            if should_delete:
-                # Use delete callback if provided
-                if delete_callback:
-                    delete_callback(context[model_name])
-                else:
-                    # Default delete behavior
-                    model_type = form_type.Meta.model
-                    save_log(
-                        context, model_type, context[model_name], operation_type=LogOperationType.DELETE, info=info
-                    )
-                    context[model_name].delete()
-
-                messages.success(request, _("Operation completed!"))
-                context["saved"] = context[model_name]
-                return True
-
             # Use save callback if provided
             if save_callback:
                 saved_instance = save_callback(form, context)
@@ -540,25 +517,14 @@ def _backend_save(
     if not quiet:
         messages.success(request, _("Operation completed!"))
 
-    # Handle deletion if delete flag is set in POST data
-    should_delete = request.POST.get("delete") == "1"
-
     # Use versioning for writing elements, logging for others
     if writing_type:
-        save_version(saved_object, writing_type, context["member"], to_delete=should_delete)
+        save_version(saved_object, writing_type, context["member"])
 
-    # Log with appropriate operation type
+    # Detect NEW vs UPDATE based on whether element existed before
     log_info = re.sub(r"^(Exe|Orga)|Form$", "", form_type.__name__)
-    if should_delete:
-        save_log(context, model_type, saved_object, operation_type=LogOperationType.DELETE, info=log_info)
-    else:
-        # Detect NEW vs UPDATE based on whether element existed before
-        element_uuid = None if context["el"] is None else context["el"].uuid
-        save_log(context, model_type, saved_object, element_uuid=element_uuid, info=log_info)
-
-    if should_delete:
-        saved_object.delete()
-        context["deleted"] = True
+    element_uuid = None if context["el"] is None else context["el"].uuid
+    save_log(context, model_type, saved_object, element_uuid=element_uuid, info=log_info)
 
     # Store saved object in context and return success
     context["saved"] = saved_object
@@ -697,8 +663,9 @@ def backend_delete(
     model_type: BaseModel,
     entity_uuid: str,
     can_delete: Callable | None = None,
+    writing_type: str | None = None,
 ) -> None:
-    """Delete element from the system."""
+    """Delete element from the system, recording a deletion version for writing elements."""
     backend_get(context, model_type, entity_uuid, None)
 
     element = context["el"]
@@ -706,6 +673,9 @@ def backend_delete(
     if can_delete is not None and not can_delete(context, element):
         messages.error(request, _("Operation not allowed"))
         return
+
+    if writing_type:
+        save_version(element, writing_type, context["member"], to_delete=True)
 
     save_log(context, model_type, element, operation_type=LogOperationType.DELETE)
 
@@ -729,6 +699,7 @@ def backend_delete_frame(
     model_type: BaseModel,
     entity_uuid: str,
     can_delete: Callable | None = None,
+    writing_type: str | None = None,
 ) -> HttpResponse:
     """Handle delete inside an iframe modal: confirm page on GET, delete on POST.
 
@@ -737,7 +708,7 @@ def backend_delete_frame(
     parent window to close the modal and refresh the listing.
     """
     if request.method == "POST":
-        backend_delete(request, context, model_type, entity_uuid, can_delete)
+        backend_delete(request, context, model_type, entity_uuid, can_delete, writing_type)
         return render(request, "elements/dashboard/form_success.html", context)
 
     backend_get(context, model_type, entity_uuid, None)

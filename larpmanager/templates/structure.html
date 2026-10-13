@@ -72,7 +72,7 @@
     </head>
     {% firstof effective_version association.assoc_version 0 as body_eff_ver %}
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} association {% if manage %}manage{% endif %} {{ body_eff_ver|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} association {% if association.id != 0 %}lm_default{% endif %} {% if manage %}manage{% endif %} {{ body_eff_ver|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
