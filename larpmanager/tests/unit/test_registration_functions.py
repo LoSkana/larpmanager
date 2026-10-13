@@ -384,7 +384,11 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("50.00"),
         )
 
         result = get_registration_payments(registration)
@@ -399,10 +403,18 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("30.00"),
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("20.00"),
         )
 
         result = get_registration_payments(registration)
@@ -417,7 +429,11 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("30.00"),
         )
         AccountingItemPayment.objects.create(
             member=member,
@@ -441,10 +457,18 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("30.00"),
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.TOKEN,
+            value=Decimal("20.00"),
         )
 
         get_registration_payments(registration)
@@ -642,14 +666,17 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         # Should delete character relationships
         self.assertEqual(RegistrationCharacterRel.objects.filter(registration=registration).count(), 0)
 
-    def _create_trait_and_discount(self, member: Any, run: Any) -> None:
-        """Assign a trait and a discount to the member for the run."""
+    def _create_trait_and_discount(self, member: Any, run: Any, registration: Any) -> None:
+        """Assign a trait to the member for the run and a discount to the registration."""
         quest_type = QuestType.objects.create(name="Test Quest Type", event=run.event)
         quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=run.event)
         trait = Trait.objects.create(name="Test Trait", event=run.event, quest=quest)
         AssignmentTrait.objects.create(run=run, member=member, trait=trait, typ=0)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=self.discount(), value=Decimal("10.00"), association=self.get_association()
+            registration=registration,
+            disc=self.discount(),
+            value=Decimal("10.00"),
+            association=self.get_association(),
         )
 
     def test_cancel_reg_deletes_traits_and_discounts(self) -> None:
@@ -657,27 +684,27 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         member = self.get_member()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
-        self._create_trait_and_discount(member, run)
+        self._create_trait_and_discount(member, run, registration)
 
         cancel_reg(registration)
 
         self.assertFalse(AssignmentTrait.objects.filter(run=run, member=member).exists())
-        self.assertFalse(AccountingItemDiscount.objects.filter(run=run, member=member).exists())
+        self.assertFalse(AccountingItemDiscount.objects.filter(registration=registration).exists())
 
     def test_cancel_reg_gift_keeps_giver_traits_and_discounts(self) -> None:
         """Test cancelling an unredeemed gift keeps the giver traits and discounts"""
         member = self.get_member()
         run = self.get_run()
-        self.create_registration(member=member, run=run)
+        own_registration = self.create_registration(member=member, run=run)
         gift = self.create_registration(member=member, run=run, redeem_code="giftcode12345678")
-        self._create_trait_and_discount(member, run)
+        self._create_trait_and_discount(member, run, own_registration)
 
         cancel_reg(gift)
 
         gift.refresh_from_db()
         self.assertIsNotNone(gift.cancellation_date)
         self.assertTrue(AssignmentTrait.objects.filter(run=run, member=member).exists())
-        self.assertTrue(AccountingItemDiscount.objects.filter(run=run, member=member).exists())
+        self.assertTrue(AccountingItemDiscount.objects.filter(registration=own_registration).exists())
 
     def test_cancel_reg_own_keeps_traits_and_discounts_with_active_gift(self) -> None:
         """Test cancelling the giver own registration keeps traits and discounts while a gift is active"""
