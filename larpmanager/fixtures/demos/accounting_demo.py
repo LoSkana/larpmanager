@@ -34,6 +34,7 @@ from typing import Any
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemExpense,
@@ -275,6 +276,16 @@ def _build_installments(event: Event, tickets: dict[str, RegistrationTicket]) ->
     balance.tickets.set(applicable)
 
 
+def _add_discount(registration: Registration, discount: Discount) -> None:
+    # The discount post_save signal re-saves the registration, recomputing tot_iscr.
+    AccountingItemDiscount.objects.create(
+        registration=registration,
+        association_id=get_run_basic_cache(registration.run_id)["association_id"],
+        disc=discount,
+        value=discount.value,
+    )
+
+
 def _make_registration(
     run: Any,
     ticket: RegistrationTicket,
@@ -337,10 +348,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
     )
 
     ben = _make_member("demo-acct-ben", "Ben", "Voss", association)
-    AccountingItemDiscount.objects.create(
-        member=ben, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         standard,
         ben,
@@ -349,12 +357,10 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         reg_days_ago=40,
         paid_days_ago=26,
     )
+    _add_discount(registration, discount)
 
     clara = _make_member("demo-acct-clara", "Clara", "Wynn", association)
-    AccountingItemDiscount.objects.create(
-        member=clara, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         standard,
         clara,
@@ -368,6 +374,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         paid=82,
         reg_days_ago=30,
     )
+    _add_discount(registration, discount)
 
     dario = _make_member("demo-acct-dario", "Dario", "Kell", association)
     _make_registration(
@@ -443,10 +450,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
     )
 
     isla = _make_member("demo-acct-isla", "Isla", "Novak", association)
-    AccountingItemDiscount.objects.create(
-        member=isla, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         new_player,
         isla,
@@ -461,6 +465,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         paid=25,
         reg_days_ago=15,
     )
+    _add_discount(registration, discount)
 
     jules = _make_member("demo-acct-jules", "Jules", "Farrow", association)
     _make_registration(

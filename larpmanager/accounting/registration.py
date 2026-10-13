@@ -109,10 +109,7 @@ def get_registration_iscr(registration: Registration) -> int:
 
     # Apply discounts only for non-gifted registrations
     if not registration.redeem_code:
-        discount_items = AccountingItemDiscount.objects.filter(
-            member_id=registration.member_id,
-            run_id=registration.run_id,
-        )
+        discount_items = AccountingItemDiscount.objects.filter(registration_id=registration.id)
         for discount_item in discount_items.select_related("disc"):
             total_registration_fee -= discount_item.disc.value
 
@@ -567,7 +564,7 @@ def cancel_reg(registration: Registration) -> None:
     AssignmentTrait.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
 
     # delete discounts
-    AccountingItemDiscount.objects.filter(run_id=registration.run_id, member_id=registration.member_id).delete()
+    AccountingItemDiscount.objects.filter(registration_id=registration.id).delete()
 
     # delete bonus credits / tokens
     AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
@@ -681,21 +678,25 @@ def handle_registration_accounting_updates(registration: Registration) -> None:
             update_registration_status_bkg(registration.id)
 
 
-def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> None:
-    """Process accounting discount item after save.
+def process_accounting_discount_post_save(discount_item: AccountingItemDiscount) -> Registration | None:
+    """Re-save the discount item registration to recompute its accounting.
 
     Args:
         discount_item: AccountingItemDiscount instance that was saved
 
+    Returns:
+        The registration of the discount item, if found
+
     """
-    if discount_item.run and not discount_item.expires:
-        # Note: Using .save() to trigger accounting recalculation signals
-        # Cannot use bulk_update as it bypasses signals needed for accounting
-        registrations = Registration.objects.filter(
-            member_id=discount_item.member_id, run_id=discount_item.run_id
-        ).select_related("run", "run__event", "ticket", "member")
-        for registration in registrations:
-            registration.save()
+    # Note: Using .save() to trigger accounting recalculation signals
+    registration = (
+        Registration.objects.filter(pk=discount_item.registration_id)
+        .select_related("run", "run__event", "ticket", "member")
+        .first()
+    )
+    if registration:
+        registration.save()
+    return registration
 
 
 def log_registration_ticket_saved(ticket: RegistrationTicket) -> None:

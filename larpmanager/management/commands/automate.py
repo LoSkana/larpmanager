@@ -54,10 +54,8 @@ from larpmanager.mail.remind import (
 )
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives
 from larpmanager.models.accounting import (
-    AccountingItemDiscount,
     AccountingItemMembership,
     AccountingItemPayment,
-    DiscountType,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
@@ -760,13 +758,6 @@ class Command(BaseCommand):
             # Cache event data for reference
             events_by_id[run.event_id] = run.event
 
-        # Process future events for friend referral tracking
-        for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in get_active_registrations(run.id).exclude(
-                ticket__tier=TicketTier.WAITING,
-            ):
-                self.check_friends_player(registration, cache)
-
     def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
         """Award a badge to a member if not already possessed.
 
@@ -874,45 +865,6 @@ class Command(BaseCommand):
         # Increment counter and return new value
         activity_cache[counter_name][member.id] += increment_value
         return activity_cache[counter_name][member.id]
-
-    def check_friends_player(self, registration: Registration, cache: dict) -> None:
-        """Check and award friend referral badges based on friend count.
-
-        This method counts how many friends a player has referred and awards
-        appropriate tier badges (bronze, silver, gold, platinum) based on
-        predefined thresholds.
-
-        Args:
-            registration: Registration instance to check friend count for
-            cache: Activity cache dictionary for tracking friend counts
-                  and preventing duplicate badge awards
-
-        Returns:
-            None
-
-        """
-        # Count total friend referral discounts associated with this registration
-        friend_discount_count = AccountingItemDiscount.objects.filter(
-            detail=registration.id,
-            disc__typ=DiscountType.FRIEND,
-        ).count()
-
-        # Get current friend count from cache or calculate if not cached
-        current_friend_count = self.get_count("friend", cache, registration.member, friend_discount_count)
-
-        # Define badge tiers and their corresponding friend count thresholds
-        badge_tiers = ["bronze", "silver", "gold", "platinum"]
-        tier_thresholds = [1, 4, 8, 12]  # Minimum friends required for each tier
-
-        # Iterate through each tier and award badges if threshold is met
-        for tier_index in range(len(badge_tiers)):
-            # Skip tier if friend count doesn't meet minimum requirement
-            if current_friend_count < tier_thresholds[tier_index]:
-                continue
-
-            # Generate badge key and award to member
-            badge_key = f"friends-{badge_tiers[tier_index]}"
-            self.add_member_badge(badge_key, registration.member, cache)
 
     def check_ach_player(self, registration: Registration, cache: dict) -> None:
         """Check and award player participation badges based on play count.
