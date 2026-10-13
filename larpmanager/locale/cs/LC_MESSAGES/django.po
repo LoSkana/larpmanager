@@ -571,9 +571,6 @@ msgstr "Vytvořit"
 msgid "Delete"
 msgstr "Odstranit"
 
-msgid "Detail"
-msgstr "Detail"
-
 msgid "Direct"
 msgstr "Přímý"
 
@@ -10183,6 +10180,10 @@ msgid ""
 msgstr ""
 "Hlavní e-mailová adresa, kterou mohou účastníci používat pro kontaktování "
 "tvé organizace"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Rezervace těchto slev vypršela, takže nebyly uplatněny"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

@@ -571,9 +571,6 @@ msgstr "Luo"
 msgid "Delete"
 msgstr "Poista"
 
-msgid "Detail"
-msgstr "Yksityiskohta"
-
 msgid "Direct"
 msgstr "Suora"
 
@@ -10318,6 +10315,10 @@ msgid ""
 msgstr ""
 "Pääsähköpostiosoite, jolla osallistujat voivat ottaa yhteyttä "
 "organisaatioosi"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Näiden alennusten varaus on vanhentunut, joten niitä ei käytetty"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

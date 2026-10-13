@@ -676,26 +676,32 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
 class AccountingItemDiscount(AccountingItem):
     """Represents AccountingItemDiscount model."""
 
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, verbose_name=_("Event"))
+    # The member is taken from the registration
+    member = None
+
+    registration = models.ForeignKey(Registration, on_delete=models.CASCADE, related_name="discount_items")
 
     disc = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="accounting_items")
 
-    expires = models.DateTimeField(null=True, blank=True)
+    class Meta:
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["registration", "disc", "deleted"],
+                name="unique_accounting_item_discount_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["registration", "disc"],
+                condition=Q(deleted=None),
+                name="unique_accounting_item_discount_without_optional",
+            ),
+        ]
 
-    detail = models.IntegerField(null=True, blank=True)
+    def __str__(self) -> str:
+        """Return string representation with registration member, run and value.
 
-    def show(self) -> dict[str, str]:
-        """Return dictionary representation of the discount with name, value, and expiration time."""
-        # Build base discount information
-        j = {"name": self.disc.name, "value": self.value}
-
-        # Add formatted expiration time if available
-        if self.expires:
-            # noinspection PyUnresolvedReferences
-            j["expires"] = self.expires.strftime("%H:%M")
-        else:
-            j["expires"] = ""
-        return j
+        Used to build the search field on save: loads registration member and run if not already fetched.
+        """
+        return f"Discount - {self.registration.member} - {self.registration.run} - {self.value}"
 
 
 class CollectionStatus(models.TextChoices):
