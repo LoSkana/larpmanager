@@ -475,10 +475,10 @@ def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpRespons
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member_edit"],
+        registration__member=context["member_edit"],
         hide=False,
         association_id=context["association_id"],
-    )
+    ).select_related("registration__run", "disc")
 
     # Process membership data for credit/token balances
     get_user_membership(context["member_edit"], context["association_id"])

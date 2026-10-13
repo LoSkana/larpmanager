@@ -571,9 +571,6 @@ msgstr "Δημιουργία"
 msgid "Delete"
 msgstr "Διαγραφή"
 
-msgid "Detail"
-msgstr "Λεπτομέρεια"
-
 msgid "Direct"
 msgstr "Άμεσο"
 
@@ -10530,6 +10527,10 @@ msgid ""
 msgstr ""
 "Η κύρια διεύθυνση email που μπορούν να χρησιμοποιούν οι συμμετέχοντες για να"
 " επικοινωνούν με τον οργανισμό σου"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Η κράτηση αυτών των εκπτώσεων έληξε, οπότε δεν εφαρμόστηκαν"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

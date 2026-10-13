@@ -451,13 +451,12 @@ class TestUtilitySignals(BaseTestCase):
         """Test that AccountingItemDiscount post_save signal updates discount usage"""
         from larpmanager.models.accounting import AccountingItemDiscount
 
-        member = self.get_member()
+        registration = self.get_registration()
         discount = self.discount()
         item = AccountingItemDiscount(
-            member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            run=self.get_run(),
+            registration=registration,
             disc=discount,
         )
         item.save()

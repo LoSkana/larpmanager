@@ -7482,9 +7482,6 @@ msgstr ""
 msgid "Token balance:"
 msgstr ""
 
-msgid "Detail"
-msgstr ""
-
 msgid ""
 "No user flags have been created yet. Use the button above to add a new one."
 msgstr ""
@@ -13769,6 +13766,10 @@ msgstr ""
 
 #, python-format
 msgid "Registration updated to %(event)s!"
+msgstr ""
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
 msgstr ""
 
 msgid "This event has concluded"

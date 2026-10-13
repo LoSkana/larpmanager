@@ -346,8 +346,9 @@ class TestRunAccountingFunctions(BaseTestCase):
         )
         discount.runs.add(run)
 
+        registration = self.create_registration(member=member, run=run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         summary, details = get_run_accounting(run, {})
