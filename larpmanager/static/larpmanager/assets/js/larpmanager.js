@@ -676,7 +676,7 @@ function syncToggleAria(toggle) {
 
 // ========== Init: Datatable links / delete confirm ==========
 
-// Suppress link navigation during bulk mode and add native delete confirmation outside v21 modals.
+// Suppress link navigation during bulk mode and add native delete confirmation outside manage modals.
 function initDatatableLinks() {
     // dont' follow links if bulk is active
     $('.go_datatable').on('click', 'a', function(e) {
@@ -686,11 +686,11 @@ function initDatatableLinks() {
         }
     });
 
-    // Confirmation for delete icons (fa-trash). On v21 manage pages the confirmation
+    // Confirmation for delete icons (fa-trash). On manage pages the confirmation
     // is handled by the iframe modal (see replaceNewUrl), so skip the native confirm.
     $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
         const inDatatable = $(this).closest('table.go_datatable, table.pagin_datatable').length > 0;
-        if (inDatatable && $('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+        if (inDatatable && $('body').hasClass('lm_default') && $('body').hasClass('manage')) {
             return;
         }
         if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
@@ -835,7 +835,7 @@ $(document).ready(function() {
     $(document).trigger("lm_ready");
 });
 
-// Route "new"/edit/delete table links through iframe modals on v21 manage pages.
+// Route "new"/edit/delete table links through iframe modals on manage pages.
 function replaceNewUrl() {
     $(document).on('click', 'a.form-new', function(event) {
         event.preventDefault();
@@ -848,14 +848,14 @@ function replaceNewUrl() {
             let cleanedUrl = currentUrl.split('#')[0].split('?')[0];
             newUrl = cleanedUrl + 'new/';
         }
-        if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+        if ($('body').hasClass('lm_default') && $('body').hasClass('manage')) {
             openIframeModal(newUrl + '?frame=1', 'popup_edit', refreshDatatables);
         } else {
             window.location.href = newUrl;
         }
     });
 
-    if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+    if ($('body').hasClass('lm_default') && $('body').hasClass('manage')) {
         $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit), table.go_datatable a:has(i.action-dialog), table.pagin_datatable a:has(i.action-dialog)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);

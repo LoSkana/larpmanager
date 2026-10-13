@@ -1018,7 +1018,6 @@ class ExeProfileForm(BaseModelForm):
 
         """
         super().__init__(*args, **kwargs)
-        self.prevent_canc = True
 
         mandatory = set(self.instance.mandatory_fields.split(","))
         optional = set(self.instance.optional_fields.split(","))

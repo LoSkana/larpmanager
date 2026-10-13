@@ -34,15 +34,15 @@ body {
   justify-content: center;
 }
 
-body.new_v20 #banner {
+body.lm_default #banner {
   padding-bottom: 0em;
 }
 
-body.new_v20 #banner h1 {
+body.lm_default #banner h1 {
   border-bottom: 0;
 }
 
-body.new_v20 #banner h1 span {
+body.lm_default #banner h1 span {
   border-bottom: solid 2px rgba(var(--ter-rgb), 0.2);
   padding-bottom: 0.15em;
 }

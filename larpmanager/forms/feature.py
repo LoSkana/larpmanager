@@ -119,11 +119,6 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
 class FeatureForm(BaseModelForm):
     """Form for Feature."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and set cancellation prevention flag."""
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
-
     def _init_features(self, *, is_association: bool, source: Any = None) -> None:
         """Initialize feature selection fields organized by modules.
 
@@ -203,11 +198,6 @@ class QuickSetupForm(BaseModelForm):
     """Form for QuickSetup."""
 
     setup: ClassVar[dict] = {}
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the form and prevent cancellation."""
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
 
     def init_fields(self, features: dict[str, int]) -> None:
         """Initialize form fields for quick setup configuration.

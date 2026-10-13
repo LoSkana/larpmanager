@@ -34,7 +34,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.basic import get_event_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import (
@@ -552,7 +552,6 @@ class BaseRegistrationForm(BaseModelFormRun):
     """
 
     gift = False
-    _inline_widgets_min_version = 20
     answer_class = RegistrationAnswer
     choice_class = RegistrationChoice
     option_class = RegistrationOption
@@ -571,9 +570,12 @@ class BaseRegistrationForm(BaseModelFormRun):
         self.sections = {}
 
     @cached_property
-    def _use_inline_widgets_v20(self) -> bool:
-        """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
-        return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
+    def _currency_symbol(self) -> str | None:
+        """Return the currency symbol from params, falling back to the run basic cache."""
+        currency_symbol = self.params.get("currency_symbol")
+        if not currency_symbol and self.params.get("run"):
+            currency_symbol = get_run_basic_cache(self.params["run"].id)["currency_symbol"]
+        return currency_symbol
 
     @cached_property
     def _collapse_min(self) -> int:
@@ -634,9 +636,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def get_option_form_text(self, option: dict) -> str:
         """Generate form display text for an option dict."""
-        currency_symbol = self.params.get("currency_symbol")
-        event_association = self.params.get("run").event.association if not currency_symbol else None
-        return util_get_option_form_text(option, currency_symbol, event_association)
+        return util_get_option_form_text(option, self._currency_symbol)
 
     def _resolve_option(
         self,
@@ -701,12 +701,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         if not available_options:
             return choices, help_text, descriptions, metadata
 
-        # Resolve currency symbol once (only needed for v20+ card metadata)
-        cs = None
-        if self._use_inline_widgets_v20:
-            cs = self.params.get("currency_symbol")
-            if not cs and self.params.get("run"):
-                cs = self.params["run"].event.association.get_currency_symbol()
+        cs = self._currency_symbol
 
         for option in available_options:
             option_display_name, remaining_availability, is_valid = self._resolve_option(
@@ -717,23 +712,20 @@ class BaseRegistrationForm(BaseModelFormRun):
 
             option_uuid = str(option["uuid"])
 
-            # Build card metadata only for v20+ widgets
-            if self._use_inline_widgets_v20:
-                price = option.get("price", 0) if isinstance(option, dict) else getattr(option, "price", 0)
-                price_text = None
-                if price and price > 0 and cs:
-                    price_text = f"{decimal_to_str(price)}{cs}"
-                metadata[option_uuid] = {
-                    "name": option["name"] if isinstance(option, dict) else option.name,
-                    "price": price_text,
-                    "available": remaining_availability,
-                }
+            # Build card metadata
+            price = option.get("price", 0) if isinstance(option, dict) else getattr(option, "price", 0)
+            price_text = None
+            if price and price > 0 and cs:
+                price_text = f"{decimal_to_str(price)}{cs}"
+            metadata[option_uuid] = {
+                "name": option["name"] if isinstance(option, dict) else option.name,
+                "price": price_text,
+                "available": remaining_availability,
+            }
 
             choices.append((option_uuid, option_display_name))
             if option.get("description"):
                 descriptions[option_uuid] = option["description"]
-                if not self._use_inline_widgets_v20:
-                    help_text += f'<p id="hp_{option["uuid"]!s}"><b>{option["name"]}</b> {option["description"]}</p>'
 
         return choices, help_text, descriptions, metadata
 
@@ -1390,10 +1382,6 @@ class BaseRegistrationForm(BaseModelFormRun):
         if is_organizer:
             # Get choice options for organizational context
             (available_choices, help_text, descriptions, metadata) = self.get_choice_options(question)
-
-            # Add default "Not selected" option if no previous selection exists and not using inline widgets
-            if question["id"] not in self.singles and not self._use_inline_widgets_v20:
-                available_choices.insert(0, (0, "--- " + _("Not selected")))
         else:
             # Prepare list of previously chosen options for user context
             previously_chosen_options = []
@@ -1416,7 +1404,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         }
         if not is_field_active:
             field_kwargs["widget"] = ReadOnlyChoiceWidget()
-        elif self._use_inline_widgets_v20:
+        else:
             hint = _("Choose one option")
             field_kwargs["help_text"] = f'<span class="choice-hint">{hint}</span>' + (
                 f" - {help_text}" if help_text else ""
@@ -1488,7 +1476,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Create the multiple choice field with checkbox widget
         if not is_field_active:
             widget = ReadOnlyChoiceWidget()
-        elif self._use_inline_widgets_v20:
+        else:
             widget = DescriptionCheckboxSelectMultiple(
                 attrs={"class": "my-checkbox-class"},
                 descriptions=descriptions,
@@ -1498,8 +1486,6 @@ class BaseRegistrationForm(BaseModelFormRun):
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")
-        else:
-            widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
         self.fields[field_key] = forms.MultipleChoiceField(
             required=is_required,
             choices=available_choices,

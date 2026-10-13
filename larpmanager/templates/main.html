@@ -24,7 +24,7 @@
             <div id="one" class="wrapper">
                 <div class="inner">
                     {% if not request.GET.in_iframe and not request.GET.frame %}
-                        <div id="info_bar" class="only_v20">
+                        <div id="info_bar">
                             <span id="info">
                                 {% block info %}
                                     {% if not frame %}
@@ -51,21 +51,6 @@
                             {% endif %}
                         </div>
                     {% endif %}
-                    <div id="right_bar" class="no_v20 info nav main_nav no_mobile">
-                        {% if tutorial %}
-                            <a href="#"
-                               class="feature_tutorial"
-                               tut="{{ tutorial }}"
-                               qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
-                        {% endif %}
-                        {% if config and not lite_mode %}
-                            <a href="{{ config }}"
-                               class="action-link"
-                               data-modal-eligible="true"
-                               data-slug="config"
-                               qtip="Config"><i class="fa-solid fa-gear"></i></a>
-                        {% endif %}
-                    </div>
                     {% block nav %}
                         {% include "larpmanager/manage/nav.html" %}
                     {% endblock nav %}
@@ -263,12 +248,6 @@
             });
 
         {% endif %}
-
-        $('#delete_confirm').click(function(event) {
-            event.preventDefault();
-            $('#id_delete').val('1');
-            $('#main_form').submit();
-        });
     });
     </script>
 {% endblock js-req %}

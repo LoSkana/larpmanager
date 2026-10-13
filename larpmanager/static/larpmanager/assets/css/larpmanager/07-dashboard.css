@@ -585,36 +585,31 @@ body.floating_iframe .inner {
    Manage
    --------------------------------------------------------------------------- */
 
-.new_v20 #page-wrapper.manage #banner .inner h1 {
+.lm_default #page-wrapper.manage #banner .inner h1 {
   text-align: left;
   justify-content: flex-start;
   padding-left: 0;
 }
 
-.new_v20 .manage .auto_resize {
+.lm_default .manage .auto_resize {
   width: 100%;
 }
 
-.new_v20 .manage .info_bar {
+.lm_default .manage .info_bar {
   text-align: left;
   font-size: 80%;
   font-style: italic;
 }
 
-.new_v20 .manage .staff-list {
-  text-align: left;
-}
-
-.new_v20 .manage p,
-.new_v20 h1,
-.new_v20 h2,
-.new_v20 h3,
-.new_v20 h4 {
+.lm_default h1,
+.lm_default h2,
+.lm_default h3,
+.lm_default h4 {
   text-align: left;
 }
 
 @media (max-width: 840px) {
-  .new_v20 #page-wrapper.manage #banner .inner h1 {
+  .lm_default #page-wrapper.manage #banner .inner h1 {
     text-align: center;
   }
 }
@@ -651,9 +646,6 @@ body.floating_iframe .inner {
 .grid .grid-item h2 {
   margin-top: 0;
   font-size: 1.3em;
-}
-
-.new_v19 .grid .grid-item h2 {
   text-align: left;
 }
 
@@ -674,11 +666,6 @@ body.floating_iframe .inner {
   .grid {
     columns: 2;
   }
-}
-
-.old_dashboard .grid-item {
-  margin: 0.2em 0;
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.9);
 }
 
 .copy-link-btn {

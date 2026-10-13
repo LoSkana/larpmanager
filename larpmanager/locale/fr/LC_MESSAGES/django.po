@@ -2528,9 +2528,6 @@ msgstr "Besoin d'un trajet?"
 msgid "Not included"
 msgstr "Non inclus"
 
-msgid "Not selected"
-msgstr "Non sélectionné"
-
 msgid "Open on date"
 msgstr "Date d'ouverture"
 
@@ -4385,9 +4382,6 @@ msgstr "Couleur des liens."
 msgid "Confirm Unsubscribe"
 msgstr "Confirmer le désabonnement"
 
-msgid "Confirmation delete"
-msgstr "Confirmation de la suppression"
-
 msgid "Content Unavailable"
 msgstr "Contenu non disponible"
 
@@ -5575,9 +5569,6 @@ msgstr "vérifier les relations manquantes:"
 msgid "choice value not provided"
 msgstr "valeur de choix non fournie"
 
-msgid "Access the event dashboard"
-msgstr "Accède au tableau de bord de l'événement"
-
 msgid "Can't copy from same event"
 msgstr "Impossible de copier depuis le même événement"
 
@@ -6158,9 +6149,6 @@ msgstr "Inscriptions sur lien externe"
 msgid "Set up the taxes configuration"
 msgstr "Configure les taxes"
 
-msgid "Set your interface preferences"
-msgstr "Définis tes préférences d'interface"
-
 msgid "Show/hide completed milestones"
 msgstr "Affiche/masque les étapes franchies"
 
@@ -6455,9 +6443,6 @@ msgstr "(Facultatif) Le coût du billet"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Facultatif) Le nom du ticket"
-
-msgid "Access the organization dashboard"
-msgstr "Accède au tableau de bord de l’organisation"
 
 msgid "Character creation reminder email"
 msgstr "E-mail de rappel de création de personnage"
@@ -8401,6 +8386,9 @@ msgstr "longueur du texte : <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "tu peux encore payer le montant restant si tu le souhaites"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Un cadeau qui a déjà été payé ne peut pas être supprimé"
 
 msgid "Answer questions to help match you with characters!"
 msgstr ""
@@ -12281,13 +12269,6 @@ msgid ""
 msgstr ""
 "Si coché, envoie un e-mail de rappel aux organisateurs pour les paiements "
 "encore en attente d'approbation."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Si tu es absolument certain de vouloir supprimer cet élément, clique sur ce "
-"bouton."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

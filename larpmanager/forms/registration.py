@@ -126,9 +126,8 @@ class RegistrationForm(BaseRegistrationForm):
         # This data determines ticket availability and waiting list status
         registration_counts = get_registration_counts(run.id, run.event_id)
 
-        # Initialize ticket selection field and retrieve help text for user guidance
-        # Creates the primary ticket selection interface with availability info
-        ticket_help = self.init_ticket(event, registration_counts, run)
+        # Initialize ticket selection field with availability info
+        self.init_ticket(event, registration_counts, run)
 
         # Determine if registration should be placed in waiting list based on instance or run status
         # Checks existing registration status or current run capacity
@@ -153,10 +152,6 @@ class RegistrationForm(BaseRegistrationForm):
         # Setup friend referral system functionality for social registration features
         # Enables users to invite friends during registration process
         self.init_bring_friend()
-
-        # Append additional help text to ticket selection field for complete user guidance
-        # Combines base help text with dynamic availability information
-        self.fields["ticket"].help_text += ticket_help
 
     def sel_ticket_map(self, ticket: Any) -> None:
         """Check if given the selected ticket, we need to not require questions reserved to other tickets."""
@@ -338,16 +333,13 @@ class RegistrationForm(BaseRegistrationForm):
         elif self.instance.pk and self.instance.quotas:
             self.initial["quotas"] = self.instance.quotas
 
-    def init_ticket(self, event: Event, registration_counts: dict, run: Run) -> str:
+    def init_ticket(self, event: Event, registration_counts: dict, run: Run) -> None:
         """Initialize ticket selection field with available options.
 
         Args:
             event: Event instance to get tickets for
             registration_counts: Dictionary containing registration count data
             run: Run instance associated with the event
-
-        Returns:
-            HTML string containing formatted ticket descriptions for help text
 
         """
         # Get available tickets based on event, registration counts and run
@@ -357,7 +349,6 @@ class RegistrationForm(BaseRegistrationForm):
         ticket_choices = []
         ticket_descriptions = {}
         ticket_metadata = {}
-        ticket_help_html = ""
 
         # Process each available ticket to create form choices and descriptions
         for ticket in available_tickets:
@@ -379,20 +370,19 @@ class RegistrationForm(BaseRegistrationForm):
 
             if ticket.get("description"):
                 ticket_descriptions[ticket_uuid] = ticket.get("description")
-                if not self._use_inline_widgets_v20:
-                    ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
 
-        # Create the ticket selection field; use radio buttons with inline descriptions for v20+
-        ticket_field_kwargs: dict = {"required": True, "choices": ticket_choices}
-        if self._use_inline_widgets_v20:
-            ticket_field_kwargs["widget"] = DescriptionRadioSelect(
+        # Create the ticket selection field as radio buttons with inline descriptions
+        self.fields["ticket"] = forms.ChoiceField(
+            required=True,
+            choices=ticket_choices,
+            widget=DescriptionRadioSelect(
                 attrs={"class": "my-radio-class"},
                 descriptions=ticket_descriptions,
                 metadata=ticket_metadata,
                 collapse_unselected=self._collapse_unselected,
                 collapse_min=self._collapse_min,
-            )
-        self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
+            ),
+        )
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
@@ -403,8 +393,6 @@ class RegistrationForm(BaseRegistrationForm):
         # If only one ticket available, auto-select it
         if len(ticket_choices) == 1:
             self.initial["ticket"] = ticket_choices[0][0]
-
-        return ticket_help_html
 
     def has_ticket(self, ticket_tier: Any) -> Any:
         """Check if registration has ticket of specified tier."""
@@ -930,28 +918,27 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             "help_text": self.fields["ticket"].help_text,
             "choices": [(str(ticket["uuid"]), get_ticket_form_text(ticket, currency_symbol)) for ticket in tickets],
         }
-        if self._use_inline_widgets_v20:
-            orga_descriptions = {}
-            orga_metadata = {}
-            for ticket in tickets:
-                ticket_uuid = str(ticket["uuid"])
-                if ticket.get("description"):
-                    orga_descriptions[ticket_uuid] = ticket["description"]
-                price_text = None
-                if ticket.get("price") and ticket["price"] > 0:
-                    price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol}"
-                orga_metadata[ticket_uuid] = {
-                    "name": ticket["name"],
-                    "price": price_text,
-                    "available": ticket.get("available"),
-                }
-            orga_ticket_kwargs["widget"] = DescriptionRadioSelect(
-                attrs={"class": "my-radio-class"},
-                descriptions=orga_descriptions,
-                metadata=orga_metadata,
-                collapse_unselected=self._collapse_unselected,
-                collapse_min=self._collapse_min,
-            )
+        orga_descriptions = {}
+        orga_metadata = {}
+        for ticket in tickets:
+            ticket_uuid = str(ticket["uuid"])
+            if ticket.get("description"):
+                orga_descriptions[ticket_uuid] = ticket["description"]
+            price_text = None
+            if ticket.get("price") and ticket["price"] > 0:
+                price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol}"
+            orga_metadata[ticket_uuid] = {
+                "name": ticket["name"],
+                "price": price_text,
+                "available": ticket.get("available"),
+            }
+        orga_ticket_kwargs["widget"] = DescriptionRadioSelect(
+            attrs={"class": "my-radio-class"},
+            descriptions=orga_descriptions,
+            metadata=orga_metadata,
+            collapse_unselected=self._collapse_unselected,
+            collapse_min=self._collapse_min,
+        )
         self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 
         # Set initial value if editing existing instance
@@ -1445,11 +1432,8 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         registration_questions = get_cached_registration_questions(self.params["event"].id, applicable=registration_typ)
         already_used_types = list({question["typ"] for question in registration_questions})
 
-        if self.instance.pk and self.instance.typ:
-            if self.instance.typ in already_used_types:
-                already_used_types.remove(self.instance.typ)
-            # prevent cancellation if one of the default types
-            self.prevent_canc = len(self.instance.typ) > 1
+        if self.instance.pk and self.instance.typ and self.instance.typ in already_used_types:
+            already_used_types.remove(self.instance.typ)
 
         available_choices = [
             choice

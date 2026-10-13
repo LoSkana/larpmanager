@@ -949,9 +949,6 @@ msgstr ""
 msgid "Read only"
 msgstr ""
 
-msgid "Not selected"
-msgstr ""
-
 msgid "Choose one option"
 msgstr ""
 
@@ -5764,14 +5761,6 @@ msgid ""
 "next item"
 msgstr ""
 
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-
-msgid "Confirmation delete"
-msgstr ""
-
 msgid "Attention: the form contains errors, please correct them:"
 msgstr ""
 
@@ -6239,16 +6228,7 @@ msgstr ""
 msgid "Legal Notice"
 msgstr ""
 
-msgid "Access the event dashboard"
-msgstr ""
-
-msgid "Set your interface preferences"
-msgstr ""
-
 msgid "Preferences"
-msgstr ""
-
-msgid "Access the organization dashboard"
 msgstr ""
 
 msgid "Role:"
@@ -13835,6 +13815,9 @@ msgstr ""
 
 #, python-format
 msgid "Your registration for %(event)s has been cancelled."
+msgstr ""
+
+msgid "A gift that has already been paid cannot be deleted"
 msgstr ""
 
 msgid "You cannot redeem a membership, you are already a member!"
