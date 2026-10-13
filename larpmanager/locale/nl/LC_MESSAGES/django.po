@@ -571,9 +571,6 @@ msgstr "Maak"
 msgid "Delete"
 msgstr "Verwijder"
 
-msgid "Detail"
-msgstr "Detail"
-
 msgid "Direct"
 msgstr "Direct"
 
@@ -10461,6 +10458,11 @@ msgid ""
 msgstr ""
 "Het belangrijkste e-mailadres dat deelnemers kunnen gebruiken om contact op "
 "te nemen met je organisatie"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+"De reservering van deze kortingen is verlopen, dus ze zijn niet toegepast"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

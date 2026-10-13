@@ -571,9 +571,6 @@ msgstr "Utwórz"
 msgid "Delete"
 msgstr "Usuń"
 
-msgid "Detail"
-msgstr "Szczegóły"
-
 msgid "Direct"
 msgstr "Bezpośredni"
 
@@ -10346,6 +10343,10 @@ msgid ""
 msgstr ""
 "Główny adres e-mail, za pomocą którego uczestnicy mogą kontaktować się z "
 "organizacją"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Rezerwacja tych zniżek wygasła, więc nie zostały zastosowane"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

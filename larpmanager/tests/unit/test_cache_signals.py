@@ -475,34 +475,31 @@ class TestCacheSignals(BaseTestCase):
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that AccountingItemDiscount post_save signal resets accounting cache"""
-        member = self.get_member()
-        run = self.get_run()
+        registration = self.get_registration()
         discount = self.discount()
         item = AccountingItemDiscount(
-            member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            run=run,
+            registration=registration,
             disc=discount,
         )
         item.save()
 
-        mock_reset.assert_called_with(run.id, member.id)
+        mock_reset.assert_called_with(registration.run_id, registration.member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that AccountingItemDiscount post_delete signal resets accounting cache"""
-        member = self.get_member()
+        registration = self.get_registration()
         discount = self.discount()
         item = AccountingItemDiscount.objects.create(
-            member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            run=self.get_run(),
+            registration=registration,
             disc=discount,
         )
-        member_id = item.member_id
-        run = item.run
+        member_id = registration.member_id
+        run = registration.run
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
 
