@@ -551,9 +551,9 @@ def cancel_reg(registration: Registration) -> None:
 
     Side effects:
         Sets cancellation date, deletes characters, traits, discounts,
-        bonus items, and resets event links. Traits and discounts are tracked
-        per member and run, so they are kept while the member still has other
-        active registrations (own or gifts) in the run.
+        bonus items, and resets event links. Traits are tracked per member
+        and run, so they are kept while the member still has other active
+        registrations (own or gifts) in the run.
 
     """
     with transaction.atomic():
