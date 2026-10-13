@@ -282,7 +282,10 @@ class TestRegistrationAccountingFunctions(BaseTestCase):
 
         # Apply discount
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=self.get_association()
+            registration=registration,
+            disc=discount,
+            value=Decimal("20.00"),
+            association=self.get_association(),
         )
 
         total = get_registration_iscr(registration)
@@ -553,7 +556,10 @@ class TestAccountingEdgeCases(BaseTestCase):
 
         # Apply discount
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("200.00"), association=self.get_association()
+            registration=registration,
+            disc=discount,
+            value=Decimal("200.00"),
+            association=self.get_association(),
         )
 
         total = get_registration_iscr(registration)

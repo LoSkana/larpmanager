@@ -571,9 +571,6 @@ msgstr "Skapa"
 msgid "Delete"
 msgstr "Radera"
 
-msgid "Detail"
-msgstr "Detalj"
-
 msgid "Direct"
 msgstr "Direkt"
 
@@ -10277,6 +10274,11 @@ msgid ""
 msgstr ""
 "Den huvudsakliga e-postadressen som deltagarna kan använda för att kontakta "
 "din organisation"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr ""
+"Reservationen för de här rabatterna har gått ut, så de tillämpades inte"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

@@ -1208,26 +1208,26 @@ def lm_newsletter(request: HttpRequest) -> Any:
         if status_value not in NewsletterStatus.values:
             status_value = NewsletterStatus.NON_ACTIVE
         force_status = "force_status" in request.POST
-        counts = {"new": 0, "updated": 0, "ignored": 0, "invalid": 0}
+        results = {"new": [], "updated": [], "ignored": [], "invalid": []}
         for orig_email in re.split(r"[\s,;|]+", emails_text):
             email = clean_newsletter_email(orig_email)
             if not email:
                 if orig_email.strip():
-                    counts["invalid"] += 1
+                    results["invalid"].append(orig_email.strip())
                 continue
             obj, created = LarpManagerNewsletter.objects.get_or_create(
                 email=email,
                 defaults={"status": status_value},
             )
             if created:
-                counts["new"] += 1
+                results["new"].append(email)
             elif force_status and obj.status != status_value:
                 obj.status = status_value
                 obj.save(update_fields=["status"])
-                counts["updated"] += 1
+                results["updated"].append(email)
             else:
-                counts["ignored"] += 1
-        context["counts"] = counts
+                results["ignored"].append(email)
+        context["results"] = results
         return render(request, "larpmanager/larpmanager/newsletter_result.html", context)
 
     show_active = request.GET.get("active", "1") == "1"

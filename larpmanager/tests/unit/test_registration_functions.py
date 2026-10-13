@@ -174,7 +174,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("50.00"), association=association
+            registration=registration, disc=discount, value=Decimal("50.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -227,7 +227,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("30.00"), association=association
+            registration=registration, disc=discount, value=Decimal("30.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -296,7 +296,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -337,7 +337,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -363,7 +363,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("100.00"), association=association
+            registration=registration, disc=discount, value=Decimal("100.00"), association=association
         )
 
         result = get_registration_iscr(registration)
