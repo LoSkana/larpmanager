@@ -16,12 +16,14 @@
 {% endblock landing_title %}
 {% block landing_content %}
     <div id="tutorials">
-        <div class="column">
-            {% for el in list %}
-                <a href="{% url 'tutorials' el.2 %}{% if iframe %}?in_iframe=1{% endif %}"
-                   {% if el.1 == seq %}class="select"{% endif %}>{{ el.0 | template_trans }}</a>
-            {% endfor %}
-        </div>
+        {% if not iframe %}
+            <div class="column">
+                {% for el in list %}
+                    <a href="{% url 'tutorials' el.2 %}"
+                       {% if el.1 == seq %}class="select"{% endif %}>{{ el.0 | template_trans }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class="feature">
             {% if intro %}
                 <p>
