@@ -75,16 +75,16 @@
                     <th></th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Discount" %}</th>
-                    <th>{% trans "Detail" %}</th>
+                    <th>{% trans "Value" %}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for el in discounts %}
                     <tr>
                         <td></td>
-                        <td>{{ el.run.search }}</td>
+                        <td>{{ el.registration.run.search }}</td>
                         <td>{{ el.disc }}</td>
-                        <td>{{ el.detail }}</td>
+                        <td>{{ el.value }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

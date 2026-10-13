@@ -565,9 +565,6 @@ msgstr "Opprett"
 msgid "Delete"
 msgstr "Slett"
 
-msgid "Detail"
-msgstr "Detalj"
-
 msgid "Direct"
 msgstr "Direkte"
 
@@ -10245,6 +10242,10 @@ msgid ""
 msgstr ""
 "Den viktigste e-postadressen deltakerne kan bruke for å kontakte "
 "organisasjonen din"
+
+msgid ""
+"The reservation of these discounts has expired, so they were not applied"
+msgstr "Reservasjonen av disse rabattene har utløpt, så de ble ikke brukt"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."

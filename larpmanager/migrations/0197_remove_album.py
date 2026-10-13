@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0195_callexp'),
+        ('larpmanager', '0196_accountingitemdiscount_registration'),
     ]
 
     operations = [

@@ -423,6 +423,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
             AccountingItemDiscount,
             None,
             None,
+            filter_by_registration=True,
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
