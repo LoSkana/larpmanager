@@ -20,6 +20,7 @@
                 <th></th>
                 <th>{% trans "Ticket" %}</th>
                 <th>{% trans "Accounting" %}</th>
+                <th></th>
             </tr>
             {% for registration in list %}
                 <tr>
@@ -66,6 +67,12 @@
                                 <b>
                                     {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
                                 </b>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not registration.tot_payed and not registration.pending %}
+                                <a href="{% url 'gift_delete' run.get_slug registration.uuid %}"
+                                   qtip="{% trans "Delete" %}"><i class="fas fa-trash"></i></a>
                             {% endif %}
                         </td>
                     </tr>

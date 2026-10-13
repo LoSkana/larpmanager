@@ -4385,9 +4385,6 @@ msgstr "Color de los enlaces."
 msgid "Confirm Unsubscribe"
 msgstr "Confirmar anulación de suscripción"
 
-msgid "Confirmation delete"
-msgstr "Confirmación de eliminación"
-
 msgid "Content Unavailable"
 msgstr "Contenido no disponible"
 
@@ -5575,9 +5572,6 @@ msgstr "Comprobar las relaciones faltantes:"
 msgid "choice value not provided"
 msgstr "valor de elección no proporcionado"
 
-msgid "Access the event dashboard"
-msgstr "Acceder al panel de control del evento"
-
 msgid "Can't copy from same event"
 msgstr "No se puede copiar desde el mismo evento"
 
@@ -6158,9 +6152,6 @@ msgstr "Inscripciones en enlace externo"
 msgid "Set up the taxes configuration"
 msgstr "Establece la configuración de impuestos"
 
-msgid "Set your interface preferences"
-msgstr "Configura tus preferencias de interfaz"
-
 msgid "Show/hide completed milestones"
 msgstr "Mostrar/ocultar hitos completados"
 
@@ -6455,9 +6446,6 @@ msgstr "(Opcional) El coste de la entrada"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Opcional) El nombre de la entrada"
-
-msgid "Access the organization dashboard"
-msgstr "Acceder al panel de control de la organización"
 
 msgid "Character creation reminder email"
 msgstr "Correo de recordatorio de creación del personaje"
@@ -8393,6 +8381,9 @@ msgstr "longitud del texto: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "aún puedes pagar el importe restante si lo deseas"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Un regalo que ya se ha pagado no se puede eliminar"
 
 msgid "Answer questions to help match you with characters!"
 msgstr ""
@@ -12181,13 +12172,6 @@ msgid ""
 msgstr ""
 "Si lo seleccionas, se enviará un correo de recordatorio a los organizadores "
 "sobre los pagos que aún están pendientes de aprobación."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Si estás absolutamente seguro de que quieres suprimir este elemento, haz "
-"clic en este botón"
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

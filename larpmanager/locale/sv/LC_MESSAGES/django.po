@@ -4385,9 +4385,6 @@ msgstr "Farg pa lankarna."
 msgid "Confirm Unsubscribe"
 msgstr "Bekräfta avbeställning"
 
-msgid "Confirmation delete"
-msgstr "Bekräfta radering"
-
 msgid "Content Unavailable"
 msgstr "Innehållet är inte tillgängligt"
 
@@ -5575,9 +5572,6 @@ msgstr "kontrollera saknade relationer:"
 msgid "choice value not provided"
 msgstr "val-värde angavs inte"
 
-msgid "Access the event dashboard"
-msgstr "Få tillgång till evenemangets instrumentpanel"
-
 msgid "Can't copy from same event"
 msgstr "Kan inte kopiera från samma händelse"
 
@@ -6158,9 +6152,6 @@ msgstr "Registreringar på extern länk"
 msgid "Set up the taxes configuration"
 msgstr "Ställ in skattekonfigurationen"
 
-msgid "Set your interface preferences"
-msgstr "Ställ in dina gränssnittsinställningar"
-
 msgid "Show/hide completed milestones"
 msgstr "Visa/dölj slutförda milstolpar"
 
@@ -6455,9 +6446,6 @@ msgstr "(Valfritt) Kostnaden för biljetten"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valfritt) Namnet på biljetten"
-
-msgid "Access the organization dashboard"
-msgstr "Gå till organisationens instrumentpanel"
 
 msgid "Character creation reminder email"
 msgstr "E-postpåminnelse om att skapa karaktär"
@@ -8382,6 +8370,9 @@ msgstr "textlängd: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortfarande betala det återstående beloppet om du vill"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "En gåva som redan har betalats kan inte tas bort"
 
 msgid "Answer questions to help match you with characters!"
 msgstr "Svara på frågorna så att vi kan hitta karaktärer som passar dig!"
@@ -11939,13 +11930,6 @@ msgid ""
 msgstr ""
 "Om detta är valt skickas ett påminnelsemejl till arrangörerna om betalningar"
 " som fortfarande väntar på godkännande."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Om du är helt säker på att du vill ta bort den här artikeln klickar du på "
-"den här knappen."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

@@ -230,8 +230,23 @@ def gift(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_giftable").check()
     save_modal(page, edit_iframe)
 
-    # gift
+    # gift to be deleted
     go_to(page, live_server, "/test/gift/")
+    page.get_by_role("link", name="Add new").click()
+    page.locator("#id_que_u3").get_by_text("one").click()
+    page.locator('label[for="id_que_u2_1"]').click()  # secondas
+    page.get_by_role("textbox", name="who").fill("tobedeleted")
+    page.get_by_role("textbox", name="when").fill("tobedeleted")
+    page.get_by_role("button", name="Continue").click()
+    expect_normalized(page, page.locator("#one"), "choice - secondas")
+
+    # delete gift
+    page.locator("a:has(i.fa-trash)").first.click()
+    expect(page.locator(".delete-confirm-message")).to_be_visible()
+    submit_confirm(page)
+    expect(page.locator("#one")).not_to_contain_text("secondas")
+
+    # gift
     page.get_by_role("link", name="Add new").click()
     page.locator("#id_que_u3").get_by_text("one").click()
     page.locator('label[for="id_que_u2_0"]').click()  # prima

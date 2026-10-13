@@ -651,9 +651,6 @@ body.floating_iframe .inner {
 .grid .grid-item h2 {
   margin-top: 0;
   font-size: 1.3em;
-}
-
-.new_v19 .grid .grid-item h2 {
   text-align: left;
 }
 
@@ -674,11 +671,6 @@ body.floating_iframe .inner {
   .grid {
     columns: 2;
   }
-}
-
-.old_dashboard .grid-item {
-  margin: 0.2em 0;
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.9);
 }
 
 .copy-link-btn {

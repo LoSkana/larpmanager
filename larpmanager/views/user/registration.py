@@ -56,6 +56,9 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     Discount,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import (
@@ -66,7 +69,7 @@ from larpmanager.models.event import (
     RegistrationStatus,
     Run,
 )
-from larpmanager.models.member import MembershipStatus
+from larpmanager.models.member import LogOperationType, MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
@@ -89,7 +92,7 @@ from larpmanager.utils.edit.autosave import (
     save_draft_from_request,
     set_auto_save,
 )
-from larpmanager.utils.edit.backend import user_edit
+from larpmanager.utils.edit.backend import save_log, user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.registrations.casting_status import casting_preferences_pending
 from larpmanager.utils.registrations.context import (
@@ -950,6 +953,33 @@ def gift_edit(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResp
     return _form_gift(request, event_slug, gift_uuid)
 
 
+@login_required
+def gift_delete(request: HttpRequest, event_slug: str, gift_uuid: str) -> HttpResponse:
+    """Cancel a gift registration after confirmation."""
+    context = get_event_context(request, event_slug, feature_slug="gift", include_status=True, check_visibility=False)
+    check_registration_open(context, request)
+    registration = get_registration_gift(context, gift_uuid)
+
+    has_pending_payment = PaymentInvoice.objects.filter(
+        member_id=registration.member_id,
+        typ=PaymentType.REGISTRATION,
+        idx=registration.id,
+        status=PaymentStatus.SUBMITTED,
+    ).exists()
+    if registration.tot_payed or has_pending_payment:
+        messages.error(request, _("A gift that has already been paid cannot be deleted"))
+        return redirect("gift", event_slug=event_slug)
+
+    if request.method != "POST":
+        context["el_name"] = registration.ticket.name if registration.ticket else ""
+        return render(request, "elements/confirm_action.html", context)
+
+    cancel_reg(registration)
+    save_log(context, Registration, registration, operation_type=LogOperationType.DELETE)
+    messages.success(request, _("Operation completed!"))
+    return redirect("gift", event_slug=event_slug)
+
+
 def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = None) -> HttpResponse:
     """Handle gift registration modifications.
 
@@ -985,12 +1015,7 @@ def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = No
         """Save gift registration using the specialized save_registration function."""
         return save_registration(ctx, form, ctx["run"], ctx["event"], registration, gifted=True)
 
-    # Define custom delete callback for gift registrations
-    def delete_gift_callback(reg: Registration) -> None:
-        """Cancel gift registration using the specialized cancel_reg function."""
-        cancel_reg(reg)
-
-    # Use user_edit to handle form processing with custom callbacks
+    # Use user_edit to handle form processing with custom save callback
     if user_edit(
         request,
         context,
@@ -998,7 +1023,6 @@ def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = No
         "registration",
         gift_uuid,
         save_callback=save_gift_callback,
-        delete_callback=delete_gift_callback,
     ):
         # Redirect back to gift list after successful operation
         return redirect("gift", event_slug=event_slug)

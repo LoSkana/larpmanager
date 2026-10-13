@@ -4385,9 +4385,6 @@ msgstr "Colore dei link."
 msgid "Confirm Unsubscribe"
 msgstr "Conferma l'annullamento dell'iscrizione"
 
-msgid "Confirmation delete"
-msgstr "Conferma cancellazione"
-
 msgid "Content Unavailable"
 msgstr "Contenuto non disponibile"
 
@@ -5575,9 +5572,6 @@ msgstr "Controlla le relazioni mancanti:"
 msgid "choice value not provided"
 msgstr "valore di scelta non fornito"
 
-msgid "Access the event dashboard"
-msgstr "Accedi al pannello di controllo dell'evento"
-
 msgid "Can't copy from same event"
 msgstr "Non puoi copiare dallo stesso evento"
 
@@ -6158,9 +6152,6 @@ msgstr "Iscrizioni su link esterno"
 msgid "Set up the taxes configuration"
 msgstr "Configura le imposte"
 
-msgid "Set your interface preferences"
-msgstr "Imposta le tue preferenze sull'interfaccia"
-
 msgid "Show/hide completed milestones"
 msgstr "Mostra/nascondi le tappe completate"
 
@@ -6455,9 +6446,6 @@ msgstr "(Facoltativo) Il costo del biglietto"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Facoltativo) Il nome del biglietto"
-
-msgid "Access the organization dashboard"
-msgstr "Accedi al pannello di controllo dell'organizzazione"
 
 msgid "Character creation reminder email"
 msgstr "Email di promemoria per la creazione del personaggio"
@@ -8393,6 +8381,9 @@ msgstr "lunghezza del testo: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Un regalo già pagato non può essere eliminato"
 
 msgid "Answer questions to help match you with characters!"
 msgstr "Rispondi alle domande per trovare i personaggi che si adattano a te!"
@@ -12192,13 +12183,6 @@ msgid ""
 msgstr ""
 "Se selezionato, invia agli organizzatori un'email di promemoria per i "
 "pagamenti ancora in attesa di approvazione."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Se sei assolutamente certo di voler eliminare questo elemento, fai clic su "
-"questo pulsante."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

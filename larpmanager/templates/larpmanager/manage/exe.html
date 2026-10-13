@@ -17,13 +17,9 @@
     {% else %}
         <div id="manage">
             {% include "larpmanager/manage/sticky_messages.html" %}
-            <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+            <div class="grid">
                 {% include "larpmanager/manage/widgets/demo.html" %}
-                {% if effective_version < 17 %}
-                    {% include "larpmanager/manage/widgets/exe_events_old.html" %}
-                {% else %}
-                    {% include "larpmanager/manage/widgets/exe_events.html" %}
-                {% endif %}
+                {% include "larpmanager/manage/widgets/exe_events.html" %}
                 {% with list=priorities typ="priorities" %}
                     {% include "larpmanager/manage/widgets/helpers.html" %}
                 {% endwith %}

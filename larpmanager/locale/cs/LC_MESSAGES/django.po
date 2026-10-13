@@ -4385,9 +4385,6 @@ msgstr "Barva odkazů."
 msgid "Confirm Unsubscribe"
 msgstr "Potvrzení odhlášení"
 
-msgid "Confirmation delete"
-msgstr "Potvrzení odstranění"
-
 msgid "Content Unavailable"
 msgstr "Obsah není k dispozici"
 
@@ -5575,9 +5572,6 @@ msgstr "Zkontrolovat chybějící vztahy:"
 msgid "choice value not provided"
 msgstr "hodnota výběru není uvedena"
 
-msgid "Access the event dashboard"
-msgstr "Přejdi na ovládací panel události"
-
 msgid "Can't copy from same event"
 msgstr "Nelze kopírovat ze stejné události"
 
@@ -6158,9 +6152,6 @@ msgstr "Registrace na externím odkazu"
 msgid "Set up the taxes configuration"
 msgstr "Nastav konfiguraci daní"
 
-msgid "Set your interface preferences"
-msgstr "Nastav své preference rozhraní"
-
 msgid "Show/hide completed milestones"
 msgstr "Zobrazit/skrýt dokončené milníky"
 
@@ -6455,9 +6446,6 @@ msgstr "(Nepovinné) Cena vstupného"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Nepovinné) Název lístku"
-
-msgid "Access the organization dashboard"
-msgstr "Přejdi na řídicí panel organizace"
 
 msgid "Character creation reminder email"
 msgstr "E-mail s připomenutím vytvoření postavy"
@@ -8379,6 +8367,9 @@ msgstr "délka textu: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "pokud si přeješ, můžeš zaplatit zbývající částku"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Dárek, který už byl zaplacen, nejde smazat"
 
 msgid "Answer questions to help match you with characters!"
 msgstr "Odpověz na otázky, které nám pomohou najít pro tebe vhodné postavy!"
@@ -11780,13 +11771,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, pošle organizátorům e-mail s připomínkou plateb, které "
 "stále čekají na schválení."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Pokud si jsi naprosto jistý/á, že chceš tuto položku odstranit, klikni na "
-"toto tlačítko."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

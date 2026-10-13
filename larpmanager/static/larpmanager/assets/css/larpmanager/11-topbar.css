@@ -164,12 +164,6 @@
     --topbar-height: 2em;
   }
 
-  body:not(.new_v18) #topbar {
-    margin: 0;
-    padding: 0.1em 0;
-    flex-shrink: 0;
-  }
-
   .inner .no_mobile,
   #topbar .no_mobile,
   #sidebar .no_mobile {
@@ -189,11 +183,11 @@
     text-align: center !important;
   }
 
-  .new_v18 {
+  .lm_default {
     --topbar-height: 3.2em;
   }
 
-  .new_v18 #topbar {
+  .lm_default #topbar {
     top: auto;
     bottom: 3vw;
     width: 94vw;
@@ -207,9 +201,9 @@
     backdrop-filter: blur(10px);
   }
 
-  .new_v18 #sidebar.topbar,
-  .new_v18 #page-wrapper.topbar,
-  .new_v18 #page-wrapper.topbar header {
+  .lm_default #sidebar.topbar,
+  .lm_default #page-wrapper.topbar,
+  .lm_default #page-wrapper.topbar header {
     margin-top: 0;
     margin-bottom: var(--topbar-height);
   }
@@ -223,13 +217,13 @@
     width: auto;
   }
 
-  .new_v18 #topbar .mobile .el i {
+  .lm_default #topbar .mobile .el i {
     font-size: 1.2em !important;
     margin: 0;
     display: block;
   }
 
-  .new_v18 #topbar .mobile .el .menu_profile {
+  .lm_default #topbar .mobile .el .menu_profile {
     width: 1.3em;
     height: 1.3em;
     padding-bottom: 0;
@@ -237,37 +231,37 @@
     margin: 0 auto;
   }
 
-  .new_v18 #topbar .mobile .el span.label {
+  .lm_default #topbar .mobile .el span.label {
     font-size: 0.6em;
     display: block;
     white-space: nowrap;
   }
 
-  .new_v18 #topbar .dropdown {
+  .lm_default #topbar .dropdown {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     position: relative;
   }
 
-  .new_v18 #topbar .dropdown > span {
+  .lm_default #topbar .dropdown > span {
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
     gap: 0.2em;
   }
 
-  .new_v18 #topbar .dropdown .dropdown-button i {
+  .lm_default #topbar .dropdown .dropdown-button i {
     font-size: 0.7em;
   }
 
-  .new_v18 #topbar .dropdown .dropdown-menu {
+  .lm_default #topbar .dropdown .dropdown-menu {
     bottom: 100%;
     top: auto;
     margin-bottom: 0.5em;
   }
 
-  .new_v18 #topbar table.mobile {
+  .lm_default #topbar table.mobile {
     width: 100%;
   }
 }

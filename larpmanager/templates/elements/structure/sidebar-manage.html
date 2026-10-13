@@ -4,237 +4,137 @@
          class="{% if eff_ver < 22 and not is_sidebar_open %}hide{% endif %} topbar">
         <div class="inner new-menu">
             {% include "elements/structure/sidebar-header.html" %}
-            {% if eff_ver < 19 %}
+            <div class="sidebar-body">
                 {% if run %}
-                    <p>
-                        <span class="sidebar-link-wrap"
-                              descr="{% trans "Access the event dashboard" %}">
-                            <a class="sidebar-link" href="{% url 'manage' run.get_slug %}">Dashboard</a>
-                            <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
+                    <div class="sidebar-section">
+                        <span class="sidebar-link-wrap">
+                            <a class="sidebar-link"
+                               href="{% url 'manage' run.get_slug %}"
+                               title="Dashboard">
+                                <i class="fa-solid fa-gauge"></i>
+                                <span>Dashboard</span>
+                            </a>
                         </span>
-                        <span class="sidebar-link-wrap"
-                              descr="{% trans "Set your interface preferences" %}">
-                            <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
-                            <a href="#" class="explain-icon" tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
-                        </span>
-                    </p>
+                        {% if not lite_mode and not demo %}
+                            <span class="sidebar-link-wrap">
+                                <a class="sidebar-link"
+                                   href="{% url 'orga_preferences' run.get_slug %}"
+                                   title="{% trans "Preferences" %}">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    <span>{% trans "Preferences" %}</span>
+                                </a>
+                            </span>
+                        {% endif %}
+                    </div>
                     {% for mod, list in event_pms.items %}
                         {% if list %}
                             <div class="sidebar-section">
-                                <h2>
-                                    {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                                    <span class="no_mobile">{{ mod.0 }}</span>
-                                </h2>
-                                <p>
-                                    {% for ap in list %}
-                                        {% if not ap.hidden %}
-                                            <span class="sidebar-link-wrap"
-                                                  descr="{% trans ap.descr %}"
-                                                  id="{{ ap.slug }}">
-                                                <a class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
-                                                   href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
-                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                            </span>
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
+                                {% for ap in list %}
+                                    {% if not ap.hidden %}
+                                        <span class="sidebar-link-wrap">
+                                            <a id="{{ ap.slug }}"
+                                               class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
+                                               href="{% url ap.slug run.get_slug %}"
+                                               title="{% trans ap.name %}">
+                                                <i class="fa-solid fa-{{ ap.icon }}"></i>
+                                                <span>{% trans ap.name %}</span>
+                                                {% with badge=sidebar_badges|get:ap.slug %}
+                                                    {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
+                                                {% endwith %}
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <p>
-                        <span class="sidebar-link-wrap"
-                              descr="{% trans "Access the organization dashboard" %}">
-                            <a class="sidebar-link" href="{% url 'manage' %}">Dashboard</a>
-                            <a href="#" class="explain-icon" tog="manage"><i class="fas fa-question-circle"></i></a>
+                    <div class="sidebar-section">
+                        <span class="sidebar-link-wrap">
+                            <a class="sidebar-link" href="{% url 'manage' %}" title="Dashboard">
+                                <i class="fa-solid fa-gauge"></i>
+                                <span>Dashboard</span>
+                            </a>
                         </span>
-                        <span class="sidebar-link-wrap"
-                              descr="{% trans "Set your interface preferences" %}">
-                            <a class="sidebar-link" href="{% url 'exe_preferences' %}">{% trans "Preferences" %}</a>
-                            <a href="#" class="explain-icon" tog="exe_preferences"><i class="fas fa-question-circle"></i></a>
-                        </span>
-                    </p>
+                        {% if not lite_mode %}
+                            <span class="sidebar-link-wrap">
+                                <a class="sidebar-link"
+                                   href="{% url 'exe_preferences' %}"
+                                   title="{% trans "Preferences" %}">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    <span>{% trans "Preferences" %}</span>
+                                </a>
+                            </span>
+                        {% endif %}
+                    </div>
                     {% for mod, list in association_pms.items %}
                         {% if list %}
                             <div class="sidebar-section">
-                                <h2>
-                                    {% if mod.1 %}<i class="fa-solid fa-{{ mod.1 }}"></i>{% endif %}
-                                    <span class="no_mobile">{{ mod.0 }}</span>
-                                </h2>
-                                <p>
-                                    {% for ap in list %}
-                                        {% if not ap.hidden %}
-                                            <span class="sidebar-link-wrap"
-                                                  descr="{% trans ap.descr %}"
-                                                  id="{{ ap.slug }}">
-                                                <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
-                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
-                                            </span>
-                                        {% endif %}
-                                    {% endfor %}
-                                </p>
+                                {% for ap in list %}
+                                    {% if not ap.hidden %}
+                                        <span class="sidebar-link-wrap">
+                                            <a id="{{ ap.slug }}"
+                                               class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
+                                               href="{% url ap.slug %}"
+                                               title="{% trans ap.name %}">
+                                                <i class="fa-solid fa-{{ ap.icon }}"></i>
+                                                <span>{% trans ap.name %}</span>
+                                                {% with badge=sidebar_badges|get:ap.slug %}
+                                                    {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
+                                                {% endwith %}
+                                            </a>
+                                        </span>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                <hr />
-                {% if association.skin_id == 1 %}
-                    <div>
-                        <p class="centerized">
+                {% if not association.lite_mode and not association.demo %}
+                    <hr />
+                    {% if role_names %}
+                        <div class="roles">
+                            <i>{% trans "Role:" %}
+                                {% for rn in role_names %}
+                                    {% include "elements/comma.html" %}
+                                    {{ rn }}
+                                {% endfor %}
+                            </i>
+                        </div>
+                    {% endif %}
+                    {% if association.skin_id == 1 %}
+                        <span class="sidebar-link-wrap">
                             <a href="https://discord.gg/C4KuyQbuft"
                                class="sidebar-link"
                                target="_blank"
-                               rel="noopener noreferrer">Discord</a>
-                        </p>
-                    </div>
-                    <div>
-                        <p class="centerized">
+                               rel="noopener noreferrer"
+                               title="Discord">
+                                <i class="fa-brands fa-discord"></i>
+                                <span>Discord</span>
+                            </a>
+                        </span>
+                        <span class="sidebar-link-wrap">
                             <a href="{% url 'guides' %}"
                                class="sidebar-link popup-iframe-link"
-                               data-iframe-url="{% url 'guides' %}?in_iframe=1">Guides</a>
-                        </p>
-                    </div>
-                {% endif %}
-                <div>
-                    <p class="centerized">
-                        <a href="{% url 'tutorials' %}"
-                           class="sidebar-link popup-iframe-link"
-                           data-iframe-url="{% url 'tutorials' %}?in_iframe=1">Tutorials</a>
-                    </p>
-                </div>
-            {% else %}
-                <div class="sidebar-body">
-                    {% if run %}
-                        <div class="sidebar-section">
-                            <span class="sidebar-link-wrap">
-                                <a class="sidebar-link"
-                                   href="{% url 'manage' run.get_slug %}"
-                                   title="Dashboard">
-                                    <i class="fa-solid fa-gauge"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </span>
-                            {% if not lite_mode and not demo %}
-                                <span class="sidebar-link-wrap">
-                                    <a class="sidebar-link"
-                                       href="{% url 'orga_preferences' run.get_slug %}"
-                                       title="{% trans "Preferences" %}">
-                                        <i class="fa-solid fa-sliders"></i>
-                                        <span>{% trans "Preferences" %}</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                        </div>
-                        {% for mod, list in event_pms.items %}
-                            {% if list %}
-                                <div class="sidebar-section">
-                                    {% for ap in list %}
-                                        {% if not ap.hidden %}
-                                            <span class="sidebar-link-wrap">
-                                                <a id="{{ ap.slug }}"
-                                                   class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
-                                                   href="{% url ap.slug run.get_slug %}"
-                                                   title="{% trans ap.name %}">
-                                                    <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span>
-                                                    {% with badge=sidebar_badges|get:ap.slug %}
-                                                        {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
-                                                    {% endwith %}
-                                                </a>
-                                            </span>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        <div class="sidebar-section">
-                            <span class="sidebar-link-wrap">
-                                <a class="sidebar-link" href="{% url 'manage' %}" title="Dashboard">
-                                    <i class="fa-solid fa-gauge"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </span>
-                            {% if not lite_mode %}
-                                <span class="sidebar-link-wrap">
-                                    <a class="sidebar-link"
-                                       href="{% url 'exe_preferences' %}"
-                                       title="{% trans "Preferences" %}">
-                                        <i class="fa-solid fa-sliders"></i>
-                                        <span>{% trans "Preferences" %}</span>
-                                    </a>
-                                </span>
-                            {% endif %}
-                        </div>
-                        {% for mod, list in association_pms.items %}
-                            {% if list %}
-                                <div class="sidebar-section">
-                                    {% for ap in list %}
-                                        {% if not ap.hidden %}
-                                            <span class="sidebar-link-wrap">
-                                                <a id="{{ ap.slug }}"
-                                                   class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
-                                                   href="{% url ap.slug %}"
-                                                   title="{% trans ap.name %}">
-                                                    <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span>
-                                                    {% with badge=sidebar_badges|get:ap.slug %}
-                                                        {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
-                                                    {% endwith %}
-                                                </a>
-                                            </span>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                    {% if not association.lite_mode and not association.demo %}
-                        <hr />
-                        {% if role_names %}
-                            <div class="roles">
-                                <i>{% trans "Role:" %}
-                                    {% for rn in role_names %}
-                                        {% include "elements/comma.html" %}
-                                        {{ rn }}
-                                    {% endfor %}
-                                </i>
-                            </div>
-                        {% endif %}
-                        {% if association.skin_id == 1 %}
-                            <span class="sidebar-link-wrap">
-                                <a href="https://discord.gg/C4KuyQbuft"
-                                   class="sidebar-link"
-                                   target="_blank"
-                                   rel="noopener noreferrer"
-                                   title="Discord">
-                                    <i class="fa-brands fa-discord"></i>
-                                    <span>Discord</span>
-                                </a>
-                            </span>
-                            <span class="sidebar-link-wrap">
-                                <a href="{% url 'guides' %}"
-                                   class="sidebar-link popup-iframe-link"
-                                   data-iframe-url="{% url 'guides' %}?in_iframe=1"
-                                   title="Guides">
-                                    <i class="fa-solid fa-book-open"></i>
-                                    <span>Guides</span>
-                                </a>
-                            </span>
-                        {% endif %}
-                        <span class="sidebar-link-wrap">
-                            <a href="{% url 'tutorials' %}"
-                               class="sidebar-link popup-iframe-link"
-                               data-iframe-url="{% url 'tutorials' %}?in_iframe=1"
-                               title="{% trans "Tutorials" %}">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span>Tutorials</span>
+                               data-iframe-url="{% url 'guides' %}?in_iframe=1"
+                               title="Guides">
+                                <i class="fa-solid fa-book-open"></i>
+                                <span>Guides</span>
                             </a>
                         </span>
                     {% endif %}
-                    {% include "elements/structure/sidebar-footer.html" %}
-                </div>
-            {% endif %}
+                    <span class="sidebar-link-wrap">
+                        <a href="{% url 'tutorials' %}"
+                           class="sidebar-link popup-iframe-link"
+                           data-iframe-url="{% url 'tutorials' %}?in_iframe=1"
+                           title="{% trans "Tutorials" %}">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Tutorials</span>
+                        </a>
+                    </span>
+                {% endif %}
+                {% include "elements/structure/sidebar-footer.html" %}
+            </div>
         </div>
     </div>
 {% endwith %}

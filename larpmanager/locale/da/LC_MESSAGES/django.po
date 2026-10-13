@@ -4385,9 +4385,6 @@ msgstr "Farve paa links."
 msgid "Confirm Unsubscribe"
 msgstr "Bekræft afmelding"
 
-msgid "Confirmation delete"
-msgstr "Bekræft sletning"
-
 msgid "Content Unavailable"
 msgstr "Indhold ikke tilgængeligt"
 
@@ -5575,9 +5572,6 @@ msgstr "kontrollér manglende relationer:"
 msgid "choice value not provided"
 msgstr "valg-værdi er ikke angivet"
 
-msgid "Access the event dashboard"
-msgstr "Gå til eventets kontrolpanel"
-
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme event"
 
@@ -6158,9 +6152,6 @@ msgstr "Tilmeldinger via eksternt link"
 msgid "Set up the taxes configuration"
 msgstr "Opsæt skattekonfigurationen"
 
-msgid "Set your interface preferences"
-msgstr "Indstil dine grænsefladepræferencer"
-
 msgid "Show/hide completed milestones"
 msgstr "Vis/skjul fuldførte milepæle"
 
@@ -6455,9 +6446,6 @@ msgstr "(Valgfrit) Billettens pris"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valgfrit) Billettens navn"
-
-msgid "Access the organization dashboard"
-msgstr "Gå til organisationens kontrolpanel"
 
 msgid "Character creation reminder email"
 msgstr "Påmindelsesmail om oprettelse af karakter"
@@ -8380,6 +8368,9 @@ msgstr "tekstlængde: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan stadig betale det resterende beløb, hvis du ønsker det"
+
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "En gave, der allerede er betalt, kan ikke slettes"
 
 msgid "Answer questions to help match you with characters!"
 msgstr "Besvar spørgsmål for at hjælpe med at matche dig med karakterer!"
@@ -11887,13 +11878,6 @@ msgid ""
 msgstr ""
 "Hvis valgt, sendes der en påmindelse via e-mail til arrangørerne om "
 "betalinger, der stadig venter på godkendelse."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Hvis du er helt sikker på, at du vil slette dette element, skal du klikke på"
-" denne knap."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

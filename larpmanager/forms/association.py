@@ -95,9 +95,6 @@ class ExeAssociationForm(BaseModelForm):
         # Initialize parent class with all provided arguments
         super().__init__(*args, **kwargs)
 
-        # Set flag to prevent cancellation operations
-        self.prevent_canc = True
-
         # Remove specified fields from the form's field collection
         for field_name in ["slug"]:
             self.delete_field(field_name)
@@ -336,9 +333,8 @@ class ExeAppearanceForm(BaseModelCssForm):
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with cancel prevention and CSS link visibility."""
+        """Initialize form with CSS link visibility."""
         super().__init__(*args, **kwargs)
-        self.prevent_canc = True
         self.show_link = ["id_association_css"]
         if self.instance.pk:
             self.initial["theme"] = self.instance.get_config("theme")
@@ -408,12 +404,6 @@ class ExeConfigForm(ConfigForm):
     class Meta:
         model = Association
         fields = ()
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and prevent cancellation."""
-        # Initialize parent class and prevent cancellation
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
 
     def set_configs(self) -> None:
         """Configure association-level settings."""
@@ -1144,7 +1134,6 @@ class ExePreferencesForm(ConfigForm):
         super().__init__(*args, **kwargs)
 
         # Configure form behavior flags
-        self.prevent_canc = True
         self.show_sections = True
 
     def set_configs(self) -> None:
