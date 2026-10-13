@@ -4385,9 +4385,6 @@ msgstr "Cor das ligações."
 msgid "Confirm Unsubscribe"
 msgstr "Confirmar cancelamento de subscrição"
 
-msgid "Confirmation delete"
-msgstr "Confirmar eliminação"
-
 msgid "Content Unavailable"
 msgstr "Conteúdo indisponível"
 
@@ -8385,6 +8382,9 @@ msgstr "comprimento do texto: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "ainda podes pagar o montante restante se quiseres"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Um presente que já foi pago não pode ser excluído"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Responde a perguntas para ajudar a associar-te a personagens!"
 
@@ -12054,13 +12054,6 @@ msgid ""
 msgstr ""
 "Se selecionado, envia um e-mail de lembrete aos organizadores sobre os "
 "pagamentos que ainda aguardam aprovação."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Se tiveres a certeza absoluta de que queres eliminar este item, clica neste "
-"botão."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

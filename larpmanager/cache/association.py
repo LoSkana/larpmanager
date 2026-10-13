@@ -31,6 +31,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
+from larpmanager.utils.larpmanager.versions import EARLIEST_AVAILABLE_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -151,7 +152,11 @@ def init_cache_association(a_slug: str) -> dict | None:
     ]:
         association_dict[config] = get_association_config(association.id, config, context=temp_context)
 
-    association_dict["assoc_version"] = int(get_association_config(association.id, "version", context=temp_context))
+    # Versions below the earliest available one are treated as the earliest
+    association_dict["assoc_version"] = max(
+        int(get_association_config(association.id, "version", context=temp_context)),
+        EARLIEST_AVAILABLE_VERSION,
+    )
 
     if "app_integration" in association_dict.get("features", {}):
         for config in ["app_integration_button_text", "app_integration_redirect_url"]:

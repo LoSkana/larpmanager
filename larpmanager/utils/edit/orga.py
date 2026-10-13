@@ -201,13 +201,15 @@ def _action_redirect(
         is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
         if is_frame:
             context["frame"] = True
-            return backend_delete_frame(request, context, model_type, element_uuid, action_data.get("can_delete"))
+            return backend_delete_frame(
+                request, context, model_type, element_uuid, action_data.get("can_delete"), writing
+            )
         # Non-frame direct access: confirm on GET, delete only on POST
         if request.method != "POST":
             backend_get(context, model_type, element_uuid, None)
             context["el_name"] = _element_display_name(context["el"])
             return render(request, "elements/confirm_action.html", context)
-        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
+        backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"), writing)
 
     # Redirect to success page with event slug
     return redirect(permission, context["run"].get_slug())
@@ -466,11 +468,6 @@ def form_edit_handler(
     if backend_edit(request, context, form_class, question_uuid, quiet=True):
         # Set permission suggestion for future operations
         set_suggestion(context, permission)
-
-        # If item was deleted, redirect to list view
-        if request.POST.get("delete") == "1":
-            messages.success(request, _("Operation completed!"))
-            return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
 
         # If AJAX request, return JSON with question UUID
         if is_ajax:

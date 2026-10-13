@@ -1445,11 +1445,8 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         registration_questions = get_cached_registration_questions(self.params["event"].id, applicable=registration_typ)
         already_used_types = list({question["typ"] for question in registration_questions})
 
-        if self.instance.pk and self.instance.typ:
-            if self.instance.typ in already_used_types:
-                already_used_types.remove(self.instance.typ)
-            # prevent cancellation if one of the default types
-            self.prevent_canc = len(self.instance.typ) > 1
+        if self.instance.pk and self.instance.typ and self.instance.typ in already_used_types:
+            already_used_types.remove(self.instance.typ)
 
         available_choices = [
             choice

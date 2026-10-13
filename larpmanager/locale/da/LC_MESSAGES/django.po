@@ -4385,9 +4385,6 @@ msgstr "Farve paa links."
 msgid "Confirm Unsubscribe"
 msgstr "Bekræft afmelding"
 
-msgid "Confirmation delete"
-msgstr "Bekræft sletning"
-
 msgid "Content Unavailable"
 msgstr "Indhold ikke tilgængeligt"
 
@@ -8381,6 +8378,9 @@ msgstr "tekstlængde: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan stadig betale det resterende beløb, hvis du ønsker det"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "En gave, der allerede er betalt, kan ikke slettes"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Besvar spørgsmål for at hjælpe med at matche dig med karakterer!"
 
@@ -11887,13 +11887,6 @@ msgid ""
 msgstr ""
 "Hvis valgt, sendes der en påmindelse via e-mail til arrangørerne om "
 "betalinger, der stadig venter på godkendelse."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Hvis du er helt sikker på, at du vil slette dette element, skal du klikke på"
-" denne knap."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"

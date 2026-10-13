@@ -4385,9 +4385,6 @@ msgstr "Χρώμα των συνδέσμων."
 msgid "Confirm Unsubscribe"
 msgstr "Επιβεβαίωση κατάργησης εγγραφής"
 
-msgid "Confirmation delete"
-msgstr "Επιβεβαίωση διαγραφής"
-
 msgid "Content Unavailable"
 msgstr "Το περιεχόμενο δεν είναι διαθέσιμο"
 
@@ -8403,6 +8400,9 @@ msgstr "μήκος κειμένου: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "μπορείς ακόμη να πληρώσεις το υπόλοιπο ποσό αν θέλεις"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Ένα δώρο που έχει ήδη πληρωθεί δεν μπορεί να διαγραφεί"
+
 msgid "Answer questions to help match you with characters!"
 msgstr ""
 "Απάντησε σε ερωτήσεις για να βοηθήσεις το ταίριασμά σου με χαρακτήρες!"
@@ -12281,13 +12281,6 @@ msgid ""
 msgstr ""
 "Αν το επιλέξεις, στέλνεται email υπενθύμισης στους διοργανωτές για τις "
 "πληρωμές που περιμένουν ακόμα έγκριση."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Αν είσαι απολύτως βέβαιος ότι θέλεις να διαγράψεις αυτό το στοιχείο, κάνε "
-"κλικ σε αυτό το κουμπί."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"
