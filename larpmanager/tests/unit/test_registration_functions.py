@@ -706,18 +706,18 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         self.assertTrue(AssignmentTrait.objects.filter(run=run, member=member).exists())
         self.assertTrue(AccountingItemDiscount.objects.filter(registration=own_registration).exists())
 
-    def test_cancel_reg_own_keeps_traits_and_discounts_with_active_gift(self) -> None:
-        """Test cancelling the giver own registration keeps traits and discounts while a gift is active"""
+    def test_cancel_reg_own_keeps_traits_with_active_gift(self) -> None:
+        """Test cancelling the giver own registration keeps traits while a gift is active, deletes its discounts"""
         member = self.get_member()
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
         self.create_registration(member=member, run=run, redeem_code="giftcode12345678")
-        self._create_trait_and_discount(member, run)
+        self._create_trait_and_discount(member, run, registration)
 
         cancel_reg(registration)
 
         self.assertTrue(AssignmentTrait.objects.filter(run=run, member=member).exists())
-        self.assertTrue(AccountingItemDiscount.objects.filter(run=run, member=member).exists())
+        self.assertFalse(AccountingItemDiscount.objects.filter(registration=registration).exists())
 
 
 @pytest.mark.django_db(transaction=True)
