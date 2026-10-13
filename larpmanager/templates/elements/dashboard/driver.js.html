@@ -50,13 +50,13 @@ window.addEventListener('DOMContentLoaded', function() {
         const driver = window.driver.js.driver;
 
         function ensureTopbarVisible(element) {
-            if ($('#topbar-mobile-v22').is(':visible') && !$('#topbar').hasClass('mobile-visible'))
-                $('#topbar-mobile-v22').trigger('click');
+            if ($('#topbar-mobile-toggle').is(':visible') && !$('#topbar').hasClass('mobile-visible'))
+                $('#topbar-mobile-toggle').trigger('click');
         }
 
         function ensureSidebarVisible(element) {
-            if ($('#sidebar-mobile-v22').is(':visible') && !$('#sidebar').hasClass('mobile-visible'))
-                $('#sidebar-mobile-v22').trigger('click');
+            if ($('#sidebar-mobile-toggle').is(':visible') && !$('#sidebar').hasClass('mobile-visible'))
+                $('#sidebar-mobile-toggle').trigger('click');
         }
 
         let steps = [
@@ -67,7 +67,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: '#tv22-user-pills',
+            element: '#topbar-user-pills',
             onHighlightStarted: ensureTopbarVisible,
             popover: {
               title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
@@ -77,7 +77,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: '#tv22-switch',
+            element: '#topbar-switch',
             onHighlightStarted: ensureTopbarVisible,
             popover: {
               title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',

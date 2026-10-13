@@ -347,7 +347,7 @@ def confirm_modal(page: Any) -> None:
 
 
 def delete_modal(page: Any, trash_locator: Any = None, name: str = None) -> None:
-    """Open the v21 delete confirmation modal, optionally check the element name, and confirm.
+    """Open the delete confirmation modal, optionally check the element name, and confirm.
 
     Clicks the trash icon (the first one on the page when no locator is given), waits for the
     iframe modal to appear, verifies the confirmation message contains the expected name when

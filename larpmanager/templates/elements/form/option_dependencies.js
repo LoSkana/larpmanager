@@ -115,7 +115,6 @@ function disable_dependencies_pass() {
 
         // disable selects with that value
         $('select option[value="' + key + '"]').prop('hidden', !available);
-        toggle_dependency_element($('#hp_' + key), available);
 
         if (!available) {
             // check if there are select with disabled selected value

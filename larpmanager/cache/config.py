@@ -140,7 +140,6 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "show_addit": "[]",
     "show_export": False,
     "show_limitations": False,
-    "show_shortcuts_mobile": False,
     "sticky": "{}",
     "token_credit_credit_name": None,
     "token_credit_token_name": None,

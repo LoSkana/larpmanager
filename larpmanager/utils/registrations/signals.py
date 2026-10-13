@@ -28,7 +28,6 @@ from larpmanager.accounting.registration import handle_registration_accounting_u
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.links import on_registration_post_save_reset_event_links
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration_counts import clear_registration_counts_cache
 from larpmanager.cache.run import get_event_run_ids
@@ -255,7 +254,6 @@ def apply_registration_post_save_updates(registration: Registration) -> None:
         handle_registration_accounting_updates(registration)
 
     clear_registration_accounting_cache(registration.run_id)
-    on_registration_post_save_reset_event_links(registration)
     if registration.member_id:
         invalidate_user_nav_entries(registration.member_id)
     clear_registration_counts_cache(registration.run_id)

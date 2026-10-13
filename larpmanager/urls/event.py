@@ -194,6 +194,11 @@ urlpatterns = [
         name="gift_edit",
     ),
     path(
+        "<slug:event_slug>/gift/delete/<slug:gift_uuid>/",
+        views_ur.gift_delete,
+        name="gift_delete",
+    ),
+    path(
         "<slug:event_slug>/gift/redeem/<slug:code>/",
         views_ur.gift_redeem,
         name="gift_redeem",
@@ -322,16 +327,6 @@ urlpatterns = [
         "<slug:event_slug>/quest/<slug:quest_uuid>/",
         views_ue.quest,
         name="quest",
-    ),
-    path(
-        "<slug:event_slug>/album/",
-        views_ums.album,
-        name="album",
-    ),
-    path(
-        "<slug:event_slug>/album/<slug:album_uuid>/",
-        views_ums.album_sub,
-        name="album_sub",
     ),
     path(
         "<slug:event_slug>/export/<slug:export_type>/",

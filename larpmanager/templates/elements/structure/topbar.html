@@ -1,45 +1,90 @@
-{% load static i18n %}
+{% load i18n %}
 <div id="topbar">
-    <div class="inner">
-        <table class="desktop">
-            <tr>
-                <td class="left">
-                    <span class="el">
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Home</span>
-                        </a>
-                    </span>
-                </td>
-                <td class="right">
-                    <div class="el">
-                        <a id="menu-open" href="#menu">
-                            <i class="fa-solid fa-bars"></i>
-                            <span>Menu</span>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table id="topbar-mobile" class="mobile">
-            <tr>
-                <td class="left">
-                    <span class="el">
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                        </a>
-                        <span class="label">Home</span>
-                    </span>
-                </td>
-                <td class="right">
-                    <div class="el">
-                        <a id="menu-open" href="#menu">
-                            <i class="fa-solid fa-bars"></i>
-                        </a>
-                        <span class="label">Menu</span>
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <button class="topbar-scroll-btn topbar-scroll-left"
+            aria-label="{% trans "Scroll left" %}">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <div class="topbar-pills-wrapper">
+        <div class="topbar-pills" id="topbar-user-pills">
+            {% block pills %}
+            {% endblock pills %}
+        </div>
     </div>
+    <button class="topbar-scroll-btn topbar-scroll-right"
+            aria-label="{% trans "Scroll right" %}">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    {% block actions %}
+    {% endblock actions %}
 </div>
+<div id="menu-mobile">
+    <table class="mobile">
+        <tr>
+            <td>
+                <div class="el">
+                    <a id="sidebar-mobile-toggle" href="#" class="sidebar_tutorial"><i class="fa-solid fa-bars"></i></a>
+                </div>
+            </td>
+            <td>
+                <span class="el">
+                    {% block mobile_current %}
+                    {% endblock mobile_current %}
+                </span>
+            </td>
+            <td>
+                <div class="el">
+                    <a id="topbar-mobile-toggle" href="#" class="sidebar_tutorial"><i class="fa-solid fa-layer-group"></i></a>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+{% block extra %}
+{% endblock extra %}
+<script>
+(function () {
+    var wrapper = document.querySelector('.topbar-pills-wrapper');
+    var btnLeft = document.querySelector('.topbar-scroll-left');
+    var btnRight = document.querySelector('.topbar-scroll-right');
+
+    function updateScrollBtns() {
+        if (!wrapper) return;
+        btnLeft.style.visibility = wrapper.scrollLeft > 0 ? 'visible' : 'hidden';
+        btnRight.style.visibility = wrapper.scrollLeft < wrapper.scrollWidth - wrapper.clientWidth - 1 ? 'visible' : 'hidden';
+    }
+
+    var scrollInterval;
+    function startScroll(dir) {
+        scrollInterval = setInterval(function () { wrapper.scrollLeft += dir * 200; updateScrollBtns(); }, 16);
+    }
+    function stopScroll() { clearInterval(scrollInterval); }
+
+    if (btnLeft) {
+        btnLeft.addEventListener('mousedown', function () { startScroll(-1); });
+        btnLeft.addEventListener('touchstart', function () { startScroll(-1); });
+        btnLeft.addEventListener('mouseup', stopScroll);
+        btnLeft.addEventListener('mouseleave', stopScroll);
+        btnLeft.addEventListener('touchend', stopScroll);
+    }
+    if (btnRight) {
+        btnRight.addEventListener('mousedown', function () { startScroll(1); });
+        btnRight.addEventListener('touchstart', function () { startScroll(1); });
+        btnRight.addEventListener('mouseup', stopScroll);
+        btnRight.addEventListener('mouseleave', stopScroll);
+        btnRight.addEventListener('touchend', stopScroll);
+    }
+
+    if (wrapper) {
+        wrapper.addEventListener('scroll', updateScrollBtns);
+        window.addEventListener('resize', updateScrollBtns);
+        updateScrollBtns();
+
+        var activePill = wrapper.querySelector('.topbar-pill.active');
+        if (activePill) {
+            var target = activePill.offsetLeft - (wrapper.clientWidth - activePill.offsetWidth) / 2;
+            wrapper.scrollLeft = Math.max(0, target);
+            updateScrollBtns();
+        }
+    }
+})();
+</script>

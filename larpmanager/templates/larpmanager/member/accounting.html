@@ -7,9 +7,7 @@
     {% trans "View all your historical financial movements" %}
 {% endblock info %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" %}
     <div class="user_resize platform">
-        <hr class="no_v20" />
         {% if association_terms_conditions %}
             <p>
                 {% url 'register_conditions' as conditions_url %}

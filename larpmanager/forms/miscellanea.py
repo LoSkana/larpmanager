@@ -39,7 +39,6 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.models.event import Event
 from larpmanager.models.miscellanea import (
-    Album,
     Competence,
     HelpQuestion,
     Milestone,
@@ -58,7 +57,6 @@ from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType, get_event_elements
 from larpmanager.utils.core.copy_choices import get_copy_choices
-from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (
     ("t", _("Overpaid")),
@@ -202,27 +200,6 @@ class WorkshopOptionForm(BaseModelForm):
         ]
 
 
-class OrgaAlbumForm(BaseModelForm):
-    """Form for OrgaAlbum."""
-
-    page_info = _("Manage photo and video albums uploaded for this event")
-
-    page_title = _("Album")
-
-    class Meta:
-        model = Album
-        fields = "__all__"
-        exclude = ()
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with filtered parent album choices for the current run."""
-        super().__init__(*args, **kwargs)
-        # Build choices: unassigned option + existing albums excluding self
-        self.fields["parent"].choices = [("", _("--- NOT ASSIGNED ---"))] + [
-            (m.uuid, m.name) for m in Album.objects.filter(run=self.params["run"]).exclude(pk=self.instance.id)
-        ]
-
-
 class OrgaProblemForm(BaseModelForm):
     """Form for OrgaProblem."""
 
@@ -241,12 +218,6 @@ class OrgaProblemForm(BaseModelForm):
             "who": Textarea(attrs={"rows": 3}),
             "comments": Textarea(attrs={"rows": 3}),
         }
-
-
-class UploadAlbumsForm(BaseForm):
-    """Form for UploadAlbums."""
-
-    file = forms.FileField(validators=[FileTypeValidator(allowed_types=["application/zip"])])
 
 
 class CompetencesForm(BaseForm):

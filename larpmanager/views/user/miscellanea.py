@@ -26,7 +26,6 @@ from typing import Any
 import jwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -43,8 +42,6 @@ from larpmanager.models.access import RoleInvite
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.member import MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import (
-    Album,
-    AlbumUpload,
     HelpQuestion,
     ShuttleService,
     ShuttleStatus,
@@ -55,7 +52,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Handout
 from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop
+from larpmanager.utils.core.common import get_object_uuid, get_workshop
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import (
     print_handout,
@@ -174,56 +171,6 @@ def handout_ext(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     # Generate PDF response
     return print_handout(context)
-
-
-def album_aux(request: HttpRequest, context: dict, parent_album: Any) -> Any:
-    """Prepare album context with sub-albums and paginated uploads.
-
-    Args:
-        request: Django HTTP request object
-        context: Context dictionary to update
-        parent_album: Parent album instance or None for root level
-
-    Returns:
-        Rendered album page with sub-albums and uploads
-
-    """
-    context["subs"] = Album.objects.filter(run=context["run"], parent=parent_album, is_visible=True).order_by(
-        "-created",
-    )
-    if parent_album is not None:
-        upload_list = AlbumUpload.objects.filter(album=context["album"]).order_by("-created")
-        paginator = Paginator(upload_list, 20)
-        page_number = request.GET.get("page")
-        try:
-            upload_list = paginator.page(page_number)
-        except PageNotAnInteger:
-            upload_list = paginator.page(1)  # If page is not an integer, deliver first
-        except EmptyPage:
-            upload_list = paginator.page(
-                paginator.num_pages,
-            )  # If page is out of range (e.g.  9999), deliver last page of results.
-        context["page"] = upload_list
-        context["name"] = f"{context['album']} - {context['run']!s}"
-    else:
-        context["name"] = f"Album - {context['run']!s}"
-    context["parent"] = parent_album
-    return render(request, "larpmanager/event/album.html", context)
-
-
-@login_required
-def album(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Render photo album view for an event."""
-    context = get_event_context(request, event_slug)
-    return album_aux(request, context, None)
-
-
-@login_required
-def album_sub(request: HttpRequest, event_slug: str, album_uuid: str) -> HttpResponse:
-    """View handler for displaying a specific photo album within an event run."""
-    context = get_event_context(request, event_slug)
-    get_album(context, album_uuid)
-    return album_aux(request, context, context["album"])
 
 
 @login_required

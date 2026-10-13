@@ -1,0 +1,13 @@
+<span class="sidebar-link-wrap">
+    <a class="sidebar-link{% if active or id and id == select_slug %} select{% endif %}"
+       href="{{ url }}"
+       title="{{ title|default:label }}"
+       {% if id %}id="{{ id }}"{% endif %}
+       {% if target %}target="{{ target }}"{% endif %}
+       {% if download %}download{% endif %}>
+        {% if icon %}<i class="{{ icon }}"></i>{% endif %}
+        <span>{{ label }}</span>
+        {% if status_icon %}<i class="{{ status_icon }} sidebar-status-badge reg-{{ status_type }}"></i>{% endif %}
+        {% if badge %}<span class="sidebar-count-badge">{{ badge }}</span>{% endif %}
+    </a>
+</span>

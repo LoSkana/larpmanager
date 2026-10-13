@@ -278,11 +278,6 @@
    Badges assignment
    --------------------------------------------------------------------------- */
 
-.page_leaderboard h2,
-.page_badges h2 {
-  text-align: center;
-}
-
 .page_leaderboard .icon,
 .page_badges .icon {
   padding-bottom: 0em;

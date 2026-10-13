@@ -295,20 +295,8 @@ def _add_extra_items(
     features: set[str],
     context: dict[str, Any],
     registration: Any,
-    run: Any,
 ) -> None:
     allowed_sidebar = context.get("demo_allowed_sidebar")
-    if "album" in features and run.albums.exists():
-        _append(
-            items,
-            _item(
-                reverse("album", args=[slug]),
-                "fa-solid fa-camera",
-                _("Album"),
-                str(_("View photos from the event!")),
-                sidebar_gate=("album", allowed_sidebar),
-            ),
-        )
     if "gift" in features:
         _append(
             items,
@@ -414,7 +402,7 @@ def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
 
     _add_registration_items(items, slug, active, features, registration, context)
     _add_writing_items(items, slug, active, features, context)
-    _add_extra_items(items, slug, features, context, registration, run)
+    _add_extra_items(items, slug, features, context, registration)
 
     return items
 

@@ -304,12 +304,10 @@ def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     Side Effects:
         - Adds permission fields to form.fields dict
         - Sets form.modules list with field names
-        - Sets form.prevent_canc=True for role number 1 (executives)
 
     """
-    # Early return for executive role (number 1) - prevent cancellation
+    # Early return for executive role (number 1)
     if form.instance and form.instance.number == 1:
-        form.prevent_canc = True
         return
 
     # Initialize modules list for storing field names

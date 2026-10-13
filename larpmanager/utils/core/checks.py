@@ -56,7 +56,6 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
             - User context data from def_user_ctx
             - manage: Set to 1 to indicate management mode
             - exe_page: Set to 1 to indicate executive page
-            - is_sidebar_open: Sidebar state from session
             - tutorial: Tutorial identifier if available
             - config: Configuration URL if user has config permissions
 

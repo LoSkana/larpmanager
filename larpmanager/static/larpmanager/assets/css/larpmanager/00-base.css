@@ -82,15 +82,12 @@ h4 {
   margin: 0.5em;
 }
 
-.new_v20 h1,
-.new_v20 h2,
-.new_v20 h3,
-.new_v20 h4 {
-  text-align: center;
-}
-
-h2 {
-  text-align: center;
+p,
+h1,
+h2,
+h3,
+h4 {
+  text-align: left;
 }
 
 hr {
@@ -99,7 +96,7 @@ hr {
 }
 
 .c {
-  text-align: center;
+  text-align: left;
 }
 
 p {
@@ -210,10 +207,6 @@ i.fas {
   border-width: 0;
 }
 
-.nope {
-  display: none !important;
-}
-
 .disabled {
   pointer-events: none;
   opacity: 0.5;
@@ -317,22 +310,12 @@ td label {
   white-space: nowrap;
 }
 
-.show_tooltip {
-  font-size: 150%;
-  font-weight: bold;
-  line-height: 1.5;
-}
-
 .helptext {
   color: rgba(var(--pri-rgb), 0.7);
   font-size: 80%;
   padding: 1em 0 0 0;
   width: 100%;
   display: inline-block;
-}
-
-.helptext-checkbox {
-  display: inline;
 }
 
 .errorlist {
@@ -430,12 +413,12 @@ body.theme-nebula #sidebar {
   color: var(--pri-clr);
 }
 
-body.theme-nebula #sidebar .new-menu a.select {
+body.theme-nebula #sidebar .inner a.select {
   background-color: rgba(var(--pri-rgb), 0.8);
 }
 
-body.theme-halo.new_v22 #topbar,
-body.theme-halo.new_v22 #sidebar {
+body.theme-halo #topbar,
+body.theme-halo #sidebar {
   background-color: rgba(var(--sec-rgb), 0.8);
 }
 

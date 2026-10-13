@@ -7,9 +7,7 @@
     {% trans "Switch to the latest interface version for your account" %}
 {% endblock info %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" %}
     <div class="user_resize platform">
-        <hr class="no_v20" />
         <p>
             {% blocktrans with version=latest_version %}You can switch your account to version {{ version }} now.{% endblocktrans %}
         </p>

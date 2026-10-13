@@ -1,11 +1,34 @@
+{% load i18n %}
 {% if not iframe %}
-    {% if manage %}
-        {% include "elements/structure/sidebar-manage.html" %}
-    {% elif run %}
-        {% include "elements/structure/sidebar-event.html" %}
-    {% elif is_profile_page %}
-        {% include "elements/structure/sidebar-profile.html" %}
-    {% else %}
-        {% include "elements/structure/sidebar-home.html" %}
-    {% endif %}
+    <div id="sidebar" class="topbar">
+        <div class="inner">
+            {% url 'home' as home_url %}
+            {% include "elements/structure/sidebar-link.html" with url=home_url icon="fa-solid fa-home" label="Home" only %}
+            <button id="sidebar-collapse-btn" aria-label="Toggle sidebar">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            {% if manage %}
+                {% include "elements/structure/sidebar-manage.html" %}
+            {% elif run %}
+                {% include "elements/structure/sidebar-event.html" %}
+            {% elif is_profile_page %}
+                {% include "elements/structure/sidebar-profile.html" %}
+            {% else %}
+                {% include "elements/structure/sidebar-home.html" %}
+            {% endif %}
+            {% if not manage and not user.is_authenticated %}
+                <div class="sidebar-section">
+                    {% url 'login' as login_url %}
+                    {% include "elements/structure/sidebar-link.html" with url=login_url icon="fa-solid fa-right-to-bracket" label="Log In" only %}
+                    {% url 'registration_register' as register_url %}
+                    {% trans "Register" as register_label %}
+                    {% include "elements/structure/sidebar-link.html" with url=register_url icon="fa-solid fa-user-plus" label=register_label only %}
+                    {% url 'password_reset' as reset_url %}
+                    {% trans "Password reset" as reset_label %}
+                    {% include "elements/structure/sidebar-link.html" with url=reset_url icon="fa-solid fa-key" label=reset_label only %}
+                </div>
+            {% endif %}
+            {% include "elements/structure/sidebar-footer.html" %}
+        </div>
+    </div>
 {% endif %}

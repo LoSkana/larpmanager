@@ -310,19 +310,12 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     }, { once: true });
 }
 
-// Toggle the mobile sidebar visibility and swap the open/close buttons.
 function sidebar_mobile() {
-    $('body').toggleClass('is-sidebar-visible');
-    $('#sidebar-mobile-open').toggle();
-    $('#sidebar-mobile-close').toggle();
-}
-
-function sidebar_mobile_v22() {
     $('#topbar').removeClass('mobile-visible');
     $('#sidebar').toggleClass('mobile-visible');
 }
 
-function topbar_mobile_v22() {
+function topbar_mobile() {
     $('#sidebar').removeClass('mobile-visible');
     $('#topbar').toggleClass('mobile-visible');
 }
@@ -346,14 +339,8 @@ window.addTinyMCETextarea = function(sel) {
 
 // ========== Init: Headings ==========
 
-// Fit banner/sidebar/header titles with textfill (skipped on v22) and strip trailing ":" from table header labels.
+// Strip trailing ":" from table header labels.
 function initHeadings() {
-    if (!$('body').hasClass('new_v22')) {
-        $('.association #banner h1').textfill({});
-        $('#sidebar h1').textfill({});
-        $('#header h1').textfill({});
-    }
-
     // strip trailing ":" from table header labels
     $("th label").each(function() {
         $(this).contents().filter(function() {
@@ -366,22 +353,8 @@ function initHeadings() {
 
 // ========== Init: Sidebar ==========
 
-// Wire mobile sidebar open/close toggles, close-on-outside-click, and highlight the active link.
+// Highlight the active sidebar link and wire the desktop collapse toggle.
 function initSidebar() {
-    $('#sidebar-mobile-open, #sidebar-mobile-close').on('click', function(event) {
-        sidebar_mobile();
-    });
-
-    $('#sidebar-mobile-close').hide();
-
-    $(document).on('click', function(event) {
-        if (parseFloat($('#sidebar').css('opacity')) > 0) {
-            if (!$(event.target).closest('#sidebar .inner').length) {
-                $('body').removeClass('is-sidebar-visible');
-            }
-        }
-    });
-
     show_sidebar_active();
 
     // collapse sidebar desktop
@@ -407,36 +380,15 @@ function initSidebar() {
     }
 
     // open sidebar mobile
-    $('#sidebar-mobile-v22').on('click', function(event) {
-        sidebar_mobile_v22();
+    $('#sidebar-mobile-toggle').on('click', function(event) {
+        sidebar_mobile();
     });
 
     // open topbar mobile
-    $('#topbar-mobile-v22').on('click', function(event) {
-        topbar_mobile_v22();
+    $('#topbar-mobile-toggle').on('click', function(event) {
+        topbar_mobile();
     });
 
-}
-
-// ========== Init: Dropdowns ==========
-
-// Hover fade for dropdown menus, stop button click bubbling, and mark empty menus as "nope".
-function initDropdowns() {
-    $('.dropdown-button').click(function(event) {
-        event.stopPropagation();
-    });
-
-    $('.dropdown').on('mouseenter', function() {
-        $(this).children('.dropdown-menu').fadeIn(100);
-    }).on('mouseleave', function() {
-        $(this).children('.dropdown-menu').fadeOut(100);
-    });
-
-    $('.dropdown-menu').each(function() {
-      if ($(this).children().length == 0) {
-        $(this).addClass('nope');
-      }
-    });
 }
 
 // ========== Init: Feature modals ==========
@@ -486,40 +438,6 @@ function initFeatureModals() {
 
         return false;
     });
-}
-
-// ========== Init: Menu ==========
-
-// Accordion behavior for menu openers and removal of empty menu lists/cells.
-function initMenu() {
-    $menu_openers = $('#menu .opener');
-
-    // Openers.
-    $menu_openers.each(function() {
-
-        var $this = $(this);
-
-        $this.on('click', function(event) {
-
-            // Prevent default.
-                event.preventDefault();
-
-            // Toggle.
-                $menu_openers.not($this).removeClass('active');
-                $this.toggleClass('active');
-
-            // Trigger resize (sidebar lock).
-                $(window).triggerHandler('resize.sidebar-lock');
-
-        });
-
-    });
-
-    $('#menu .links ul:empty ').hide();
-
-    $('#menu .links ul:not(:has(*))').parent().remove();
-
-    $('.links td:not(:has(*))').parent().remove();
 }
 
 // ========== Init: Flash messages ==========
@@ -676,7 +594,7 @@ function syncToggleAria(toggle) {
 
 // ========== Init: Datatable links / delete confirm ==========
 
-// Suppress link navigation during bulk mode and add native delete confirmation outside v21 modals.
+// Suppress link navigation during bulk mode and add native delete confirmation outside manage modals.
 function initDatatableLinks() {
     // dont' follow links if bulk is active
     $('.go_datatable').on('click', 'a', function(e) {
@@ -686,11 +604,11 @@ function initDatatableLinks() {
         }
     });
 
-    // Confirmation for delete icons (fa-trash). On v21 manage pages the confirmation
+    // Confirmation for delete icons (fa-trash). On manage pages the confirmation
     // is handled by the iframe modal (see replaceNewUrl), so skip the native confirm.
     $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
         const inDatatable = $(this).closest('table.go_datatable, table.pagin_datatable').length > 0;
-        if (inDatatable && $('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+        if (inDatatable && $('body').hasClass('lm_default') && $('body').hasClass('manage')) {
             return;
         }
         if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
@@ -764,7 +682,6 @@ function initTableSearch() {
 // Fade in the main layout regions (content, topbar, sidebar, footer) on load.
 function initFadeIns() {
     $('#one .inner').fadeIn(100);
-    $('#topbar .inner').fadeIn(100);
     $('#sidebar .inner').fadeIn(100);
     $('#footer .inner').fadeIn(100);
 }
@@ -805,8 +722,6 @@ $(document).ready(function() {
     // Layout / chrome
     initHeadings();
     initSidebar();
-    initDropdowns();
-    initMenu();
     initFadeIns();
 
     // Notifications
@@ -835,7 +750,7 @@ $(document).ready(function() {
     $(document).trigger("lm_ready");
 });
 
-// Route "new"/edit/delete table links through iframe modals on v21 manage pages.
+// Route "new"/edit/delete table links through iframe modals on manage pages.
 function replaceNewUrl() {
     $(document).on('click', 'a.form-new', function(event) {
         event.preventDefault();
@@ -848,14 +763,14 @@ function replaceNewUrl() {
             let cleanedUrl = currentUrl.split('#')[0].split('?')[0];
             newUrl = cleanedUrl + 'new/';
         }
-        if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+        if ($('body').hasClass('lm_default') && $('body').hasClass('manage')) {
             openIframeModal(newUrl + '?frame=1', 'popup_edit', refreshDatatables);
         } else {
             window.location.href = newUrl;
         }
     });
 
-    if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+    if ($('body').hasClass('lm_default') && $('body').hasClass('manage')) {
         $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit), table.go_datatable a:has(i.action-dialog), table.pagin_datatable a:has(i.action-dialog)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);

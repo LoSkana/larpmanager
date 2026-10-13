@@ -692,8 +692,6 @@ class ExePaymentSettingsForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        self.prevent_canc = True
-
         assoc_nationality = getattr(self.instance, "nationality", None) or ""
         nationality_filter = (
             models.Q(nationality__isnull=True) | models.Q(nationality="") | models.Q(nationality=assoc_nationality)

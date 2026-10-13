@@ -94,7 +94,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     """Display the event calendar with open and future runs for an association.
 
     This function retrieves upcoming runs for an association, checks user registration status,
-    and categorizes runs into 'open' (available for registration) and 'future' (not yet open).
+    and lists the runs that are open or not yet open for registration.
     It also filters runs based on development status and user permissions.
 
     Args:
@@ -105,8 +105,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     Returns:
         HttpResponse: Rendered calendar template containing:
-            - open: List of runs open for registration
-            - future: List of future runs not yet open
+            - all_runs: Runs open or not yet open for registration, ordered by end date
             - langs: Available language options
             - custom_text: Association-specific homepage text
             - my_reg: User's registration status for each run (if authenticated)
@@ -126,8 +125,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     context = get_context(request)
     context.update(
         {
-            "open": [],
-            "future": [],
+            "all_runs": [],
             "langs": [],
             "page": "calendar",
             "my_regs": {},
@@ -172,23 +170,19 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
         # Anonymous users cannot see runs in START development status
         runs = runs.exclude(development=DevelopStatus.START)
 
-    # Process each run to determine registration status and categorize
+    # Process each run to determine registration status and keep the not-yet-registered ones
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
         run.status = registration_status(context, run, context["member"])
         set_run_assoc_basic(run, context)
 
-        # Categorize runs based on registration availability
-        if run.status["open"]:
-            context["open"].append(run)  # Available for registration
-        elif "already" not in run.status:
-            context["future"].append(run)  # Future runs (not yet open, not already registered)
+        if run.status["open"] or "already" not in run.status:
+            context["all_runs"].append(run)
 
     # Add association-specific homepage text to context
     context["custom_text"] = get_association_text(context["association_id"], AssociationTextType.HOME)
 
-    # v22 layout does not distinguish open from future runs, show them together, ordered by end date
-    context["all_runs"] = sorted(context["open"] + context["future"], key=lambda run: run.end)
+    context["all_runs"].sort(key=lambda run: run.end)
 
     return render(request, "larpmanager/general/calendar.html", context)
 

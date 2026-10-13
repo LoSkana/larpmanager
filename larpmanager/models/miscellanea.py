@@ -37,7 +37,7 @@ from larpmanager.models.base import BaseModel, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, Run
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_miny, show_thumb
+from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid_miny
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.validators import FileTypeValidator
 
@@ -196,120 +196,6 @@ class UrlShortner(UuidMixin, BaseModel):
     def __str__(self) -> str:
         """Return string representation."""
         return f"U{self.number} {self.name}"
-
-
-class Album(UuidMixin, BaseModel):
-    """Represents Album model."""
-
-    name = models.CharField(max_length=70)
-
-    cover = models.ImageField(max_length=500, upload_to=UploadToPathAndRename("albums/cover/"), blank=True)
-
-    thumb = ImageSpecField(
-        source="cover",
-        processors=[ResizeToFit(300)],
-        format="JPEG",
-        options={"quality": 80},
-    )
-
-    is_visible = models.BooleanField(default=True)
-
-    cod = models.SlugField(max_length=32, unique=True, default=my_uuid, db_index=True)
-
-    parent = models.ForeignKey(
-        "album",
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True,
-        related_name="sub_albums",
-    )
-
-    run = models.ForeignKey(Run, on_delete=models.PROTECT, blank=True, null=True, related_name="albums")
-
-    association = models.ForeignKey(Association, on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        """Return string representation of the album."""
-        return self.name
-
-    def __unicode__(self) -> str:
-        """Return the title of the object."""
-        # noinspection PyUnresolvedReferences
-        return self.title
-
-    def show_thumb(self) -> Any:
-        """Return HTML for displaying thumbnail image if available."""
-        if self.thumb:
-            # noinspection PyUnresolvedReferences
-            return show_thumb(100, self.thumb.url)
-        return None
-
-
-class AlbumUpload(BaseModel):
-    """Model for tracking uploaded content to albums."""
-
-    name = models.CharField(max_length=70)
-
-    album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="uploads")
-
-    PHOTO = "p"
-    TYPE_CHOICES: ClassVar[list] = [
-        (PHOTO, _("Photo")),
-    ]
-    typ = models.CharField(max_length=1, choices=TYPE_CHOICES)
-
-    def __str__(self) -> str:
-        """Return string representation of the album upload."""
-        return self.name
-
-
-class AlbumImage(BaseModel):
-    """Model for storing and processing album images with thumbnails."""
-
-    upload = models.OneToOneField(AlbumUpload, on_delete=models.CASCADE, related_name="image")
-
-    original = models.ImageField(upload_to=UploadToPathAndRename("albums/"))
-
-    thumb = ImageSpecField(
-        source="original",
-        processors=[ResizeToFit(300)],
-        format="JPEG",
-        options={"quality": 80},
-    )
-
-    show = ImageSpecField(
-        source="original",
-        processors=[ResizeToFit(1280)],
-        format="JPEG",
-        options={"quality": 70},
-    )
-
-    width = models.IntegerField(default=0)
-
-    height = models.IntegerField(default=0)
-
-    def __str__(self) -> str:
-        """Return string representation."""
-        return self.upload.name
-
-    def show_thumb(self) -> Any:
-        """Return HTML for displaying thumbnail image if available."""
-        if self.thumb:
-            # noinspection PyUnresolvedReferences
-            return show_thumb(100, self.thumb.url)
-        return None
-
-    def original_url(self) -> str:
-        """Extract the original media URL path from the full URL."""
-        # noinspection PyUnresolvedReferences
-        s = self.original.url
-        # Split by /media/ and take the third part (after two splits)
-        parts = s.split("/media/")
-        expected_parts = 3
-        if len(parts) >= expected_parts:
-            return "/media/" + parts[2]
-        # Fallback: return the URL as-is if it doesn't have expected structure
-        return s
 
 
 class Competence(BaseModel):

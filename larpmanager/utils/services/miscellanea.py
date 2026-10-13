@@ -23,14 +23,10 @@ import json
 import logging
 import os
 import random
-import shutil
-import zipfile
 from io import BytesIO
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from uuid import uuid4
 
-from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
@@ -38,183 +34,15 @@ from django.db.models import Sum
 from django.shortcuts import render
 from PIL import Image as PILImage, ImageOps
 
-from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Badge
-from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem, WarehouseItemAssignment
-from larpmanager.utils.security import safe_extract_zip
+from larpmanager.models.miscellanea import WarehouseItem, WarehouseItemAssignment
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
-
-
-def upload_albums_dir(main: Any, cache_subs: dict, name: str) -> Any:
-    """Create or find album directory structure for uploaded files.
-
-    Creates a hierarchical album structure based on directory paths from zip files.
-    Uses caching to avoid duplicate database queries for existing albums.
-
-    Args:
-        main: Main album instance that serves as the root parent
-        cache_subs (dict): Cache mapping directory paths to Album instances
-        name (str): Full directory path from zip file entry
-
-    Returns:
-        Album: Album instance representing the directory structure
-
-    Side Effects:
-        - Creates new Album instances in database for missing directories
-        - Updates cache_subs dictionary with newly created albums
-
-    """
-    # Extract directory path, removing filename component
-    path_obj = Path(name)
-    directory_path = str(path_obj.parent) if path_obj.parent != Path() else ""
-
-    # Check if this directory path is already cached
-    if directory_path not in cache_subs:
-        # Determine parent directory for hierarchy creation
-        parent_path_obj = Path(directory_path) if directory_path else Path()
-        parent_directory_path = (
-            str(parent_path_obj.parent) if directory_path and parent_path_obj.parent != Path() else ""
-        )
-        if not parent_directory_path or parent_directory_path == "":
-            parent_album = main
-        else:
-            parent_album = cache_subs[parent_directory_path]
-
-        # Search for existing sub-album with matching name
-        existing_album = None
-        album_name = path_obj.parent.name if path_obj.parent != Path() else ""
-
-        # Query existing sub-albums to avoid duplicates
-        for sub_album in parent_album.sub_albums.all():
-            if sub_album.name == album_name:
-                existing_album = sub_album
-
-        # Create new album if none exists
-        if not existing_album:
-            existing_album = Album()
-            existing_album.cod = uuid4().hex
-            existing_album.name = album_name
-            existing_album.parent = parent_album
-            existing_album.run = main.run
-            existing_album.save()
-
-        # Cache the album for future lookups
-        cache_subs[directory_path] = existing_album
-
-    return cache_subs[directory_path]
-
-
-def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: str) -> None:
-    """Upload individual file from zip archive to album.
-
-    Processes a single file from a zip archive, creates album upload and image records,
-    and moves the file to the appropriate media directory structure.
-
-    Args:
-        alb: Album instance to upload the file to
-        name: File name from zip archive (including path if nested)
-        main: Main album instance containing run and event references
-        o_path: Output path where zip contents were extracted
-
-    Side Effects:
-        - Creates AlbumUpload and AlbumImage database records
-        - Moves file from extraction path to media directory
-        - Creates directory structure if it doesn't exist
-        - Generates unique filename using UUID to prevent conflicts
-
-    Returns:
-        None
-
-    """
-    # Check if file already exists in album to avoid duplicates
-    upload_name = Path(name).name
-    for existing_upload in alb.uploads.all():
-        if existing_upload.name == upload_name:
-            return
-
-    # Create album upload record for the file
-    album_upload = AlbumUpload()
-    album_upload.album = alb
-    album_upload.name = upload_name
-    album_upload.typ = AlbumUpload.PHOTO
-    album_upload.save()
-
-    # Create associated album image record
-    album_image = AlbumImage()
-    album_image.upload = album_upload
-
-    # Generate unique filename preserving original extension
-    filename_parts = upload_name.split(".")
-    file_extension = filename_parts[-1] if len(filename_parts) > 1 and filename_parts[-1] else "tmp"
-    unique_filename = f"{uuid4().hex}.{file_extension}"
-
-    # Build destination path starting from media root
-    run_cache = get_run_basic_cache(main.run_id)
-    destination_path = Path(conf_settings.MEDIA_ROOT) / "albums" / run_cache["slug"] / str(run_cache["number"])
-
-    # Traverse album hierarchy to build nested directory structure
-    parent_album = alb.parent
-    parent_directories = []
-    while parent_album is not None:
-        parent_directories.append(parent_album.id)
-        parent_album = parent_album.parent
-    parent_directories.reverse()
-
-    # Create directory structure for nested albums
-    for directory_id in parent_directories:
-        destination_path = destination_path / str(directory_id)
-        if not destination_path.exists():
-            destination_path.mkdir(mode=0o770, parents=True, exist_ok=True)
-
-    # Complete the file path with unique filename
-    destination_path = destination_path / unique_filename
-    logger.debug("Uploading album image to: %s", destination_path)
-
-    # Move file from extraction path to final destination
-    Path(o_path, name).rename(destination_path)
-
-    # Store file path and extract image dimensions
-    album_image.original = destination_path
-    with PILImage.open(destination_path) as image_file:
-        album_image.width, album_image.height = image_file.size
-    album_image.save()
-
-
-def upload_albums(main: Any, el: Any) -> None:
-    """Extract and upload all files from zip archive to album structure.
-
-    Args:
-        main: Main album instance
-        el: Zip file to extract
-
-    Side effects:
-        Extracts zip file, creates album structure, uploads all images
-
-    Raises:
-        ZipSecurityError: If ZIP file contains malicious content
-
-    """
-    cache_subalbums = {}
-
-    extraction_path = Path(conf_settings.MEDIA_ROOT) / "zip" / uuid4().hex
-
-    with zipfile.ZipFile(el, "r") as zip_file:
-        safe_extract_zip(zip_file, extraction_path)
-
-        for filename in zip_file.namelist():
-            file_info = zip_file.getinfo(filename)
-            album = upload_albums_dir(main, cache_subalbums, filename)
-            if file_info.is_dir():
-                continue
-            upload_albums_el(album, filename, main, extraction_path)
-
-    shutil.rmtree(extraction_path)
 
 
 def zipdir(path: Any, ziph: Any) -> None:

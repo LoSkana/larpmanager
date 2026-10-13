@@ -118,30 +118,22 @@ $(document).ready(function(){
         var s = $('select[name =\"signup\"] option:selected').val();
 
         var sum = ticket_price;
-        var price_map = {};
 
         $('select').each(function() {
             var sel = $(this).val();
             if (!sel) return;
 
-            var text = $(this).find(":selected").text();
-            var price = get_price(text);
-
-            price_map[this.id] = price; // usa this.id
-            sum += price;
+            sum += get_price($(this).find(":selected").text());
         });
 
         // check additionals
         const additionals = $("#id_additionals");
         if (additionals.length && additionals.val()) {
             const addTickets = parseInt(additionals.val());
-            let ticketUnitPrice = price_map["id_ticket"];
-            if (ticketUnitPrice === undefined) {
-                // ticket may use radio buttons (v20+) instead of select
-                const checkedTicket = $('input[name="ticket"]:checked');
-                if (checkedTicket.length) {
-                    ticketUnitPrice = get_price(checkedTicket.closest('label').text());
-                }
+            let ticketUnitPrice;
+            const checkedTicket = $('input[name="ticket"]:checked');
+            if (checkedTicket.length) {
+                ticketUnitPrice = get_price(checkedTicket.closest('label').text());
             }
             if (ticketUnitPrice) {
                 sum += ticketUnitPrice * addTickets;

@@ -106,14 +106,6 @@ class EventCharactersPdfForm(ConfigForm):
         model = Event
         fields = ()
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the instance with cancellation prevention."""
-        # Initialize parent class with all provided arguments
-        super().__init__(*args, **kwargs)
-
-        # Set flag to prevent cancellation operations on this instance
-        self.prevent_canc: bool = True
-
     def set_configs(self) -> None:
         """Configure PDF-related settings for the application.
 
@@ -295,15 +287,10 @@ class OrgaEventForm(BaseModelForm):
 
         Side effects:
             - Modifies form fields by deleting disabled feature fields
-            - Sets prevent_canc flag to prevent cancellation
             - Configures campaign parent field widget
 
         """
         super().__init__(*args, **kwargs)
-
-        # Prevent cancellation for non-executive users
-        if "exe" not in self.params:
-            self.prevent_canc = True
 
         # Configure slug field based on whether this is a new or existing event
         if self.instance.pk:
@@ -432,11 +419,6 @@ class OrgaConfigForm(ConfigForm):
         model = Event
         fields = ()
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form and prevent registration cancellation."""
-        super().__init__(*args, **kwargs)
-        self.prevent_canc = True
-
     def _get_config_save_target(self, instance: Any) -> Any:
         """Save configs to parent event if one exists, otherwise to the event itself."""
         return instance.parent if instance.parent_id else instance
@@ -487,12 +469,6 @@ class OrgaConfigForm(ConfigForm):
     def set_config_display(self) -> None:
         """Configure visualisation settings for the event management page."""
         self.set_section("visualisation", _("Display"))
-
-        show_shortcuts_label = _("Show shortcuts")
-        show_shortcuts_help_text = _(
-            "If enabled, automatically show shortcuts on mobile.",
-        )
-        self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
 
         export_label = _("Export")
         export_help_text = _(
@@ -1340,8 +1316,6 @@ class OrgaAppearanceForm(BaseModelCssForm):
         """Initialize form with conditional field handling based on carousel feature."""
         super().__init__(*args, **kwargs)
 
-        self.prevent_canc = True
-
         # Configure visible links for event CSS
         self.show_link = ["id_event_css"]
 
@@ -1621,9 +1595,6 @@ class OrgaRunForm(ConfigForm):
             self.fields["start"].required = True
         if "end" in self.fields:
             self.fields["end"].required = True
-
-        if "exe" not in self.params:
-            self.prevent_canc = True
 
         dl = []
 

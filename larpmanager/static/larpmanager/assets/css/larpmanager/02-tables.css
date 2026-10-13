@@ -259,26 +259,9 @@ th select {
   #id_discount {
     display: inline-block;
   }
-
-  .discount_input_row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 0.5em;
-    margin: 1em 0;
-  }
-
-  @media (max-width: 600px) {
-    .discount_input_row {
-      flex-wrap: wrap;
-    }
-    .discount_input_row input {
-      width: 100%;
-    }
-  }
 }
 
-.new_v22 .discount_input_row {
+.discount_input_row {
   display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
@@ -286,7 +269,7 @@ th select {
   margin: 1em 0;
 }
 
-.new_v22 .discount_input_row #id_discount {
+.discount_input_row #id_discount {
   flex: 1 1 auto;
   min-width: 0;
   padding: 0.5em 0.8em;
@@ -294,18 +277,18 @@ th select {
   border-radius: 0.3em;
 }
 
-.new_v22 .discount_input_row #discount_go {
+.discount_input_row #discount_go {
   flex: 0 0 auto;
   width: auto !important;
   max-width: initial !important;
 }
 
 @media (max-width: 600px) {
-  .new_v22 .discount_input_row {
+  .discount_input_row {
     flex-wrap: wrap;
   }
 
-  .new_v22 .discount_input_row input {
+  .discount_input_row input {
     width: 100%;
   }
 }

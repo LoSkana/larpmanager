@@ -1,31 +1,91 @@
-{% load static i18n %}
-<div id="topbar">
-    <div class="inner">
-        <table class="desktop">
-            <tr>
-                <td class="left">
-                    <span class="el">
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                            <span>Home</span>
-                        </a>
-                    </span>
-                </td>
-                {% include "elements/structure/topbar-right.html" with mobile=False %}
-            </tr>
-        </table>
-        <table id="topbar-mobile" class="mobile">
-            <tr>
-                <td>
-                    <span class="el">
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                        </a>
-                        <span class="label">Home</span>
-                    </span>
-                </td>
-                {% include "elements/structure/topbar-right.html" with mobile=True %}
-            </tr>
-        </table>
-    </div>
-</div>
+{% extends "elements/structure/topbar.html" %}
+{% load i18n show_tags %}
+{% block pills %}
+    <a class="topbar-pill{% if not run and not is_profile_page %} active{% endif %}"
+       href="{% url 'home' %}">
+        {% if association.favicon %}
+            <img class="topbar-pill-img" src="{{ association.favicon }}" alt="">
+        {% else %}
+            <i class="fa-solid fa-house"></i>
+        {% endif %}
+        <span>{{ association.name }}</span>
+    </a>
+    {% if run and run.get_slug not in topbar_runs_slugs %}
+        <a class="topbar-pill active"
+           href="{% url 'event_redirect' event_slug=run.get_slug %}">
+            {% if run.get_cover_url %}<img class="topbar-pill-img" src="{{ run.get_cover_url }}" alt="">{% endif %}
+            <span>{{ run }}</span>
+        </a>
+    {% endif %}
+    {% for vrun in topbar_runs %}
+        <a class="topbar-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
+           href="{% url 'event_redirect' event_slug=vrun.slug %}">
+            {% if vrun.cover_url %}<img class="topbar-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
+            <span>{{ vrun.name }}</span>
+        </a>
+    {% endfor %}
+{% endblock pills %}
+{% block actions %}
+    {% if user.is_authenticated and not association.demo_type_name %}
+        <a class="topbar-profile{% if not run and is_profile_page %} active{% endif %}"
+           href="{% url 'profile' %}">
+            {% if user.member.profile %}
+                <img class="topbar-pill-img"
+                     src="{{ user.member.profile_thumb.url }}"
+                     alt="">
+            {% else %}
+                <i class="fa-solid fa-gear"></i>
+            {% endif %}
+            <span>{% trans "Profile" %}</span>
+        </a>
+    {% endif %}
+    {% if run %}
+        {% with current_event_role=event_role|get:run.event.slug %}
+            {% if current_event_role %}
+                {% url 'manage' run.get_slug as admin_href %}
+                <div class="topbar-switch">
+                    <span class="topbar-switch-opt active">{% trans "User" %}</span>
+                    <a class="topbar-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+                </div>
+            {% endif %}
+        {% endwith %}
+    {% elif association_role %}
+        {% url 'manage' as admin_href %}
+        <div class="topbar-switch">
+            <span class="topbar-switch-opt active">{% trans "User" %}</span>
+            <a class="topbar-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+        </div>
+    {% endif %}
+{% endblock actions %}
+{% block mobile_current %}
+    {% if not run and is_profile_page and not association.demo_type_name %}
+        <a href="{% url 'profile' %}">
+            {% if user.member.profile %}
+                <img class="topbar-pill-img"
+                     src="{{ user.member.profile_thumb.url }}"
+                     alt="">
+            {% else %}
+                <i class="fa-solid fa-user"></i>
+            {% endif %}
+            <span class="label">{% trans "Profile" %}</span>
+        </a>
+    {% elif run %}
+        <a href="{% url 'event_redirect' event_slug=run.get_slug %}">
+            {% if run.get_cover_url %}
+                <img class="topbar-pill-img" src="{{ run.get_cover_url }}" alt="">
+            {% else %}
+                <i class="fa-solid fa-calendar-days"></i>
+            {% endif %}
+            <span class="label">{{ run|truncatechars:20 }}</span>
+        </a>
+    {% else %}
+        <a href="{% url 'home' %}">
+            {% if association.favicon %}
+                <img class="topbar-pill-img" src="{{ association.favicon }}" alt="">
+            {% else %}
+                <i class="fa-solid fa-house"></i>
+            {% endif %}
+            <span class="label">{{ association.name|truncatechars:20 }}</span>
+        </a>
+    {% endif %}
+{% endblock mobile_current %}

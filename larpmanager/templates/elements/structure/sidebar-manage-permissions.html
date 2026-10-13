@@ -1,0 +1,18 @@
+{% load i18n show_tags %}
+{% for mod, list in permissions.items %}
+    {% if list %}
+        <div class="sidebar-section">
+            {% for ap in list %}
+                {% if not ap.hidden %}
+                    {% if run %}
+                        {% url ap.slug run.get_slug as ap_url %}
+                    {% else %}
+                        {% url ap.slug as ap_url %}
+                    {% endif %}
+                    {% trans ap.name as ap_label %}
+                    {% include "elements/structure/sidebar-link.html" with id=ap.slug url=ap_url icon="fa-solid fa-"|add:ap.icon label=ap_label select_slug=sidebar_active badge=sidebar_badges|get:ap.slug only %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}

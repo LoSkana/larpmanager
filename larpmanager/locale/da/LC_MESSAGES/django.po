@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Gå"
 
-msgid "Hi"
-msgstr "Hej"
-
 msgid "No"
 msgstr "Nej"
 
@@ -283,9 +280,6 @@ msgstr "Aktør"
 
 msgid "Admin"
 msgstr "Administrator"
-
-msgid "Album"
-msgstr "Album"
 
 msgid "Alias"
 msgstr "Alias"
@@ -648,9 +642,6 @@ msgstr "Administrer"
 
 msgid "Manual"
 msgstr "Manuel"
-
-msgid "Master"
-msgstr "Master"
 
 msgid "Medium"
 msgstr "Mellem"
@@ -2255,9 +2246,6 @@ msgstr "Nettooverskud:"
 msgid "New session"
 msgstr "Ny session"
 
-msgid "Next events"
-msgstr "Næste events"
-
 msgid "Not scanned"
 msgstr "Ikke scannet"
 
@@ -2527,9 +2515,6 @@ msgstr "Har du brug for et lift?"
 
 msgid "Not included"
 msgstr "Ikke inkluderet"
-
-msgid "Not selected"
-msgstr "Ikke valgt"
 
 msgid "Open on date"
 msgstr "Åbningsdato"
@@ -3172,9 +3157,6 @@ msgstr "Session aktiv"
 msgid "Set quest type"
 msgstr "Angiv questtype"
 
-msgid "Show shortcuts"
-msgstr "Vis genveje"
-
 msgid "Tax code check"
 msgstr "Kontrol af skatte-ID"
 
@@ -3529,9 +3511,6 @@ msgstr "medlemsgebyrer"
 
 msgid "printable sheet"
 msgstr "printvenligt ark"
-
-msgid "upcoming events"
-msgstr "kommende events"
 
 msgid "Ability Template"
 msgstr "Evneskabelon"
@@ -4384,9 +4363,6 @@ msgstr "Farve paa links."
 
 msgid "Confirm Unsubscribe"
 msgstr "Bekræft afmelding"
-
-msgid "Confirmation delete"
-msgstr "Bekræft sletning"
 
 msgid "Content Unavailable"
 msgstr "Indhold ikke tilgængeligt"
@@ -5557,9 +5533,6 @@ msgstr "Tofaktorgodkendelse"
 msgid "Update your personal data"
 msgstr "Opdater dine personoplysninger"
 
-msgid "Upload of photo and video"
-msgstr "Upload af billeder og videoer"
-
 msgid "Use of third party assets"
 msgstr "Brug af tredjepartsaktiver"
 
@@ -5574,9 +5547,6 @@ msgstr "kontrollér manglende relationer:"
 
 msgid "choice value not provided"
 msgstr "valg-værdi er ikke angivet"
-
-msgid "Access the event dashboard"
-msgstr "Gå til eventets kontrolpanel"
 
 msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme event"
@@ -5810,9 +5780,6 @@ msgstr "Billetnavn (hold det kort)"
 
 msgid "View badges you have earned"
 msgstr "Se de Badges, du har opnået"
-
-msgid "View photos from the event!"
-msgstr "Se billeder fra eventet!"
 
 msgid "Withheld as transaction fee"
 msgstr "Tilbageholdt som transaktionsgebyr"
@@ -6158,9 +6125,6 @@ msgstr "Tilmeldinger via eksternt link"
 msgid "Set up the taxes configuration"
 msgstr "Opsæt skattekonfigurationen"
 
-msgid "Set your interface preferences"
-msgstr "Indstil dine grænsefladepræferencer"
-
 msgid "Show/hide completed milestones"
 msgstr "Vis/skjul fuldførte milepæle"
 
@@ -6455,9 +6419,6 @@ msgstr "(Valgfrit) Billettens pris"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Valgfrit) Billettens navn"
-
-msgid "Access the organization dashboard"
-msgstr "Gå til organisationens kontrolpanel"
 
 msgid "Character creation reminder email"
 msgstr "Påmindelsesmail om oprettelse af karakter"
@@ -6879,9 +6840,6 @@ msgstr "Tak, fordi du er blevet en del af vores fællesskab!"
 msgid "They need to complete it immediately"
 msgstr "De skal udfylde det med det samme"
 
-msgid "View photos and media from the event"
-msgstr "Se billeder og medier fra eventet"
-
 msgid "You can now set the discount options"
 msgstr "Du kan nu angive rabatindstillingerne"
 
@@ -7289,9 +7247,6 @@ msgstr "Administrer indgående indtægter knyttet til events"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Medlemsansøgningsformular for %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Billeder og videoer uploadet!"
 
 msgid "Set casting options in the configuration"
 msgstr "Angiv Casting-muligheder i konfigurationen"
@@ -8381,6 +8336,9 @@ msgstr "tekstlængde: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan stadig betale det resterende beløb, hvis du ønsker det"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "En gave, der allerede er betalt, kan ikke slettes"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Besvar spørgsmål for at hjælpe med at matche dig med karakterer!"
 
@@ -8395,9 +8353,6 @@ msgstr "Indtast en sang, du vil dedikere til din karakter"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Indtast den 6-cifrede kode fra din autentificeringsapp."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr "Hvis aktiveret, vises genveje automatisk på mobil."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Hvis aktiveret, bruges moder-eventets faktioner ikke."
@@ -8543,9 +8498,6 @@ msgstr "Sidste trin: upload venligst din medlemsansøgning."
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Administrer dynamiske afdragsbetalinger for tilmeldinger"
-
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Administrer foto- og videoalbummer, der er uploadet til dette event"
 
 msgid "No characters have been assigned this role value yet."
 msgstr "Ingen karakterer har fået tildelt denne rolleværdi endnu."
@@ -9212,9 +9164,6 @@ msgstr ""
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Upload et billede af din karakter specifikt til dette event!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Upload en zip-fil med billeder og videoer for at udfylde dette album"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Se hele indholdet af en arkiveret e-mail sendt af systemet"
@@ -9974,10 +9923,6 @@ msgstr "Den originale engelske tekst, som den vises i koden (msgid i gettext)"
 
 msgid "These will be automatically applied when you register for a new event."
 msgstr "De bliver automatisk anvendt, når du tilmelder dig et nyt event."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr ""
-"Upload dette arkiv? Billederne og videoerne i det bliver føjet til albummet."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11186,13 +11131,6 @@ msgstr ""
 "deres feedback"
 
 msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Der er endnu ikke oprettet nogen albummer. Tilføj et album for at organisere"
-" og dele billeder fra dette event."
-
-msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -11887,13 +11825,6 @@ msgid ""
 msgstr ""
 "Hvis valgt, sendes der en påmindelse via e-mail til arrangørerne om "
 "betalinger, der stadig venter på godkendelse."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Hvis du er helt sikker på, at du vil slette dette element, skal du klikke på"
-" denne knap."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"
@@ -14681,13 +14612,6 @@ msgid ""
 msgstr ""
 "Angiv venligst nedenfor den præcise betalingsmetode, du har brugt. Husk at "
 "indsende formularen, ellers behandles din betaling ikke!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Vælg en zip-fil til upload. Mapper bliver til albummer, og billederne og "
-"videoerne indeni placeres i de tilsvarende albummer."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

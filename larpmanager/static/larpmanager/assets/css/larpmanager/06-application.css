@@ -129,10 +129,6 @@ details summary {
   width: 95%;
 }
 
-.gallery .album-icon {
-  height: 6em;
-}
-
 .gallery .badge .icon {
   width: 90%;
   height: auto;
@@ -156,6 +152,7 @@ details summary {
   border-radius: 0.5em;
   margin: 2em;
   color: var(--pri-clr);
+  text-align: center;
 }
 
 .gallery .icon .icon-name p {
@@ -176,19 +173,6 @@ details summary {
   border-radius: 1em;
   background-color: rgba(var(--pri-rgb), 0.1);
   margin-bottom: 0.3em;
-}
-
-#album .el {
-  width: 21%;
-  margin: 2%;
-}
-
-#album .photo {
-  width: 100%;
-  height: 10em;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .relationships {
@@ -305,11 +289,6 @@ form .plot {
   max-height: 10em;
 }
 
-.plot-cont {
-  position: relative;
-  height: 8em;
-}
-
 .plot p {
   margin: 0 0 1em 0;
   line-height: 1.3;
@@ -335,10 +314,6 @@ form .plot {
 /*** MISCELLANEA - workshop ***/
 
 .workshop {
-  text-align: center;
-}
-
-.workshop p {
   text-align: center;
 }
 
@@ -381,12 +356,6 @@ form .plot {
 .workshop .correct {
   color: green;
   font-weight: bolder;
-}
-
-/*** OTHER ***/
-
-.membership_document {
-  width: 80%;
 }
 
 /*** misc ***/
@@ -500,7 +469,7 @@ form .plot {
    --------------------------------------------------------------------------- */
 
 .reg_status {
-  text-align: center;
+  text-align: left;
 }
 
 .reg_status br {
@@ -508,7 +477,7 @@ form .plot {
 }
 
 .reg-links {
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .reg-links span + span::before {
@@ -570,10 +539,6 @@ form .plot {
   .calendar td {
     padding: 0.2em !important;
   }
-
-  .calendar .gall h3 {
-    text-align: center;
-  }
 }
 
 .cover-container {
@@ -607,10 +572,6 @@ form .plot {
 
 .character-name {
   font-size: 130%;
-}
-
-.private-header {
-  font-size: 250%;
 }
 
 .char_profile {
@@ -718,11 +679,6 @@ form .plot {
 .satispay-button {
   height: 50px;
   cursor: pointer;
-}
-
-#smart-button-container {
-  margin-top: 2em;
-  text-align: center;
 }
 
 #paypal-buttons {
@@ -848,7 +804,7 @@ form .plot {
   margin: 0;
 }
 
-.new_v18 .abilities th {
+.lm_default .abilities th {
   padding: 0.5em;
 }
 

@@ -72,51 +72,9 @@
   text-align: center;
 }
 
-/*** event cover ***/
-
-#event_cover {
-  height: 25em;
-  background-position: center center;
-  background-size: cover;
-  width: 100%;
-  background-repeat: no-repeat;
-}
-
-@media (max-width: 600px) {
-  #event_cover {
-    height: 15em;
-  }
-}
-
-#event_cover a {
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 1em;
-  border-radius: 0.5em;
-  color: var(--pri-clr);
-  font-size: 120%;
-  position: relative;
-  top: 8em;
-}
-
 /* ---------------------------------------------------------------------------
-   Version 22 miscellanea
+   Table header/footer rows and registration banner
    --------------------------------------------------------------------------- */
-
-.new_v22 .no_v22 {
-  display: none !important;
-}
-
-.only_v22 {
-  display: none !important;
-}
-
-.new_v22 .only_v22 {
-  display: initial !important;
-}
-
-.new_v22 .table-footer.only_v22 {
-  display: block !important;
-}
 
 .table-footer-row {
   display: flex;
@@ -129,27 +87,23 @@
   clear: none;
 }
 
-.new_v22 .table-header-row {
+.table-header-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5em;
 }
 
-.new_v22 .table-header-row .staff-list {
+.table-header-row .staff-list {
   clear: none;
 }
 
-.new_v22 .reg_status {
-  text-align: left;
-}
-
-.new_v22 .reg-status-details {
+.reg-status-details {
   display: inline;
 }
 
-/* Slim registration action banner (v22, only when action pending) */
-.new_v22 .reg-banner {
+/* Slim registration action banner (only when action pending) */
+.reg-banner {
   display: flex !important;
   flex-wrap: wrap;
   align-items: baseline;
@@ -164,7 +118,7 @@
   text-align: left;
 }
 
-.new_v22 .reg-banner a {
+.reg-banner a {
   margin: 0;
 }
 
@@ -234,7 +188,7 @@
   color: #c89900;
 }
 
-body.association.new_v22 .user_resize {
+body.association .user_resize {
   padding: 0.5em 1em;
   border-radius: 8px;
   background-color: rgba(var(--pri-rgb), 0.04);
@@ -242,72 +196,25 @@ body.association.new_v22 .user_resize {
 }
 
 @media (max-width: 840px) {
-  body.association.new_v22 .user_resize {
+  body.association .user_resize {
     padding: 0.5em;
   }
 }
 
-.new_v22 .reg-links {
-  text-align: left !important;
-}
-
-.new_v22 .grid {
-  padding: 0;
-}
-
-.new_v22 #info_bar {
-  text-align: left;
-  font-size: 80%;
-  font-style: italic;
-  margin-left: 1em;
-}
-
-@media (max-width: 840px) {
-  .new_v22 #info_bar {
-    text-align: center;
-    justify-content: center;
-    margin-left: 0;
-  }
-}
-
-.new_v22 .staff-list {
-  text-align: left;
-}
-
-.new_v22 p,
-.new_v22 h1,
-.new_v22 h2,
-.new_v22 h3,
-.new_v22 h4 {
-  text-align: left;
-}
-
-.new_v22 .icon-name p {
-  text-align: center;
-}
-
-.new_v22 .page_search .nav {
-  text-align: left;
-}
-
-.new_v22 .c {
+.page_search .nav {
   text-align: left;
 }
 
 /* ---------------------------------------------------------------------------
-   v22 Run card grid (calendar page)
+   Run card grid (calendar page)
    --------------------------------------------------------------------------- */
 
 .run-card-grid {
-  display: none;
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   align-items: stretch;
   margin: 1em 0;
-}
-
-.new_v22 .run-card-grid {
-  display: grid;
 }
 
 .run-card {
@@ -675,7 +582,7 @@ body.association.new_v22 .user_resize {
     left: 26ch;
   }
 
-  .new_v22 #page-wrapper.sidebar.sidebar-collapsed #sheet-quickbar {
+  #page-wrapper.sidebar.sidebar-collapsed #sheet-quickbar {
     left: 4em;
   }
 

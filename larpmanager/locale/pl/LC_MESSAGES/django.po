@@ -5,9 +5,6 @@ msgstr "Content-Type: text/plain; charset=UTF-8\n"
 msgid "Go"
 msgstr "Idź"
 
-msgid "Hi"
-msgstr "Cześć"
-
 msgid "No"
 msgstr "Nie"
 
@@ -283,9 +280,6 @@ msgstr "Aktor"
 
 msgid "Admin"
 msgstr "Admin"
-
-msgid "Album"
-msgstr "Album"
 
 msgid "Alias"
 msgstr "Alias"
@@ -648,9 +642,6 @@ msgstr "Zarządzaj"
 
 msgid "Manual"
 msgstr "Podręcznik"
-
-msgid "Master"
-msgstr "Mistrz"
 
 msgid "Medium"
 msgstr "Średni"
@@ -2255,9 +2246,6 @@ msgstr "Zysk netto:"
 msgid "New session"
 msgstr "Nowa sesja"
 
-msgid "Next events"
-msgstr "Następne wydarzenia"
-
 msgid "Not scanned"
 msgstr "Nie zeskanowano"
 
@@ -2527,9 +2515,6 @@ msgstr "Potrzebujesz podwózki?"
 
 msgid "Not included"
 msgstr "Nie uwzględnione"
-
-msgid "Not selected"
-msgstr "Nie wybrano"
 
 msgid "Open on date"
 msgstr "Data otwarcia"
@@ -3172,9 +3157,6 @@ msgstr "Sesja aktywna"
 msgid "Set quest type"
 msgstr "Ustaw typ Quest"
 
-msgid "Show shortcuts"
-msgstr "Pokaż skróty"
-
 msgid "Tax code check"
 msgstr "Sprawdzenie kodu podatkowego"
 
@@ -3529,9 +3511,6 @@ msgstr "składki członkowskie"
 
 msgid "printable sheet"
 msgstr "arkusz do druku"
-
-msgid "upcoming events"
-msgstr "nadchodzące wydarzenia"
 
 msgid "Ability Template"
 msgstr "Szablon zdolności"
@@ -4384,9 +4363,6 @@ msgstr "Kolor linków."
 
 msgid "Confirm Unsubscribe"
 msgstr "Potwierdź rezygnację z subskrypcji"
-
-msgid "Confirmation delete"
-msgstr "Potwierdzenie usunięcia"
 
 msgid "Content Unavailable"
 msgstr "Zawartość niedostępna"
@@ -5557,9 +5533,6 @@ msgstr "Uwierzytelnianie dwuskładnikowe"
 msgid "Update your personal data"
 msgstr "Zaktualizuj swoje dane osobowe"
 
-msgid "Upload of photo and video"
-msgstr "Przesyłanie zdjęć i filmów"
-
 msgid "Use of third party assets"
 msgstr "Korzystanie z aktywów stron trzecich"
 
@@ -5574,9 +5547,6 @@ msgstr "sprawdź brakujące relacje:"
 
 msgid "choice value not provided"
 msgstr "nie podano wartości wyboru"
-
-msgid "Access the event dashboard"
-msgstr "Przejdź do pulpitu nawigacyjnego wydarzenia"
 
 msgid "Can't copy from same event"
 msgstr "Nie można kopiować z tego samego zdarzenia"
@@ -5810,9 +5780,6 @@ msgstr "Nazwa biletu (niech będzie krótka)"
 
 msgid "View badges you have earned"
 msgstr "Zobacz zdobyte badge"
-
-msgid "View photos from the event!"
-msgstr "Zobacz zdjęcia z wydarzenia!"
 
 msgid "Withheld as transaction fee"
 msgstr "Zatrzymane jako opłata transakcyjna"
@@ -6158,9 +6125,6 @@ msgstr "Rejestracje przez łącze zewnętrzne"
 msgid "Set up the taxes configuration"
 msgstr "Skonfiguruj podatki"
 
-msgid "Set your interface preferences"
-msgstr "Ustaw preferencje interfejsu"
-
 msgid "Show/hide completed milestones"
 msgstr "Pokaż/ukryj ukończone kamienie milowe"
 
@@ -6455,9 +6419,6 @@ msgstr "(Opcjonalnie) Koszt biletu"
 
 msgid "(Optional) The name of the ticket"
 msgstr "(Opcjonalnie) Nazwa biletu"
-
-msgid "Access the organization dashboard"
-msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
 
 msgid "Character creation reminder email"
 msgstr "E-mail z przypomnieniem o tworzeniu postaci"
@@ -6879,9 +6840,6 @@ msgstr "Dzięki za dołączenie do naszej społeczności!"
 msgid "They need to complete it immediately"
 msgstr "Muszą go natychmiast ukończyć"
 
-msgid "View photos and media from the event"
-msgstr "Zobacz zdjęcia i materiały z imprezy"
-
 msgid "You can now set the discount options"
 msgstr "Możesz teraz ustawić opcje zniżek"
 
@@ -7289,9 +7247,6 @@ msgstr "Zarządzaj przychodami związanymi z wydarzeniami"
 #, python-format
 msgid "Membership application form for %(user)s"
 msgstr "Formularz wniosku o członkostwo dla %(user)s"
-
-msgid "Photos and videos successfully uploaded!"
-msgstr "Zdjęcia i filmy zostały pomyślnie przesłane!"
 
 msgid "Set casting options in the configuration"
 msgstr "Ustaw opcje Castingu w konfiguracji"
@@ -8386,6 +8341,9 @@ msgstr "długość tekstu: <span class=\"count\"></span> / %(max)s"
 msgid "you can still pay the remaining amount if you wish"
 msgstr "Jeśli chcesz, nadal możesz zapłacić pozostałą kwotę"
 
+msgid "A gift that has already been paid cannot be deleted"
+msgstr "Nie można usunąć prezentu, który został już opłacony"
+
 msgid "Answer questions to help match you with characters!"
 msgstr "Odpowiedz na pytania, żebyśmy mogli dopasować cię do bohaterów!"
 
@@ -8400,10 +8358,6 @@ msgstr "Wpisz piosenkę, którą chcesz zadedykować swojej postaci"
 
 msgid "Enter the 6-digit code from your authenticator app."
 msgstr "Wprowadź 6-cyfrowy kod z aplikacji uwierzytelniającej."
-
-msgid "If enabled, automatically show shortcuts on mobile."
-msgstr ""
-"Jeśli włączone, automatycznie pokazuj skróty na urządzeniach mobilnych."
 
 msgid "If enabled, do not use the parent event's factions."
 msgstr "Jeśli włączone, nie używaj frakcji wydarzenia nadrzędnego."
@@ -8551,9 +8505,6 @@ msgstr "Ostatnim krokiem: prześlij swój wniosek o członkostwo."
 
 msgid "Manage dynamic installment payments for registrations"
 msgstr "Zarządzaj dynamicznymi płatnościami ratalnymi za rejestracje"
-
-msgid "Manage photo and video albums uploaded for this event"
-msgstr "Zarządzaj albumami ze zdjęciami i filmami dodanymi do tego wydarzenia"
 
 msgid "No characters have been assigned this role value yet."
 msgstr "Żadnej postaci nie przypisano jeszcze tej wartości roli."
@@ -9268,9 +9219,6 @@ msgstr "Przełączanie między zapleczem administracyjnym a stronami publicznymi
 
 msgid "Upload a photo of your character specifically for this event!"
 msgstr "Prześlij zdjęcie swojej postaci specjalnie na tę okazję!"
-
-msgid "Upload a zip file of photos and videos to populate this album"
-msgstr "Prześlij plik ZIP ze zdjęciami i filmami, aby uzupełnić ten album"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
@@ -10096,9 +10044,6 @@ msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 "Zostaną one automatycznie zastosowane, gdy zarejestrujesz się na nowe "
 "wydarzenie."
-
-msgid "Upload this archive? Its photos and videos will be added to the album."
-msgstr "Przesłać to archiwum? Jego zdjęcia i filmy zostaną dodane do albumu."
 
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
@@ -11332,13 +11277,6 @@ msgstr ""
 "przekazać swoją opinię"
 
 msgid ""
-"No albums created yet. Add an album to organize and share photos for this "
-"event."
-msgstr ""
-"Nie utworzono jeszcze żadnych albumów. Dodaj album, żeby uporządkować i "
-"udostępnić zdjęcia z tego wydarzenia."
-
-msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr "Opcjonalnie - dodatkowe informacje o opcji, wyświetlane pod pytaniem"
@@ -12034,13 +11972,6 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczysz tę opcję, organizatorzy dostaną e-mail z przypomnieniem o "
 "płatnościach, które wciąż czekają na zatwierdzenie."
-
-msgid ""
-"If you are absolutely certain that you want to delete this item, click on "
-"this button."
-msgstr ""
-"Jeśli jesteś absolutnie pewien, że chcesz usunąć tę pozycję, kliknij ten "
-"przycisk."
 
 msgid ""
 "Issue a refund in tokens or credits for a participant whose registration was"
@@ -14847,13 +14778,6 @@ msgid ""
 msgstr ""
 "Wskaż poniżej dokładną metodę płatności, której użyłeś. Pamiętaj, aby "
 "przesłać formularz, w przeciwnym razie płatność nie zostanie przetworzona!"
-
-msgid ""
-"Select a zip file for upload. Directories will become albums, photos and the"
-" videos inside will be placed in the corresponding albums."
-msgstr ""
-"Wybierz plik zip do przesłania. Katalogi staną się albumami, a zdjęcia i "
-"filmy zostaną umieszczone w odpowiednich albumach."
 
 msgid ""
 "Given a payment deadline, indicates the number of days under which it "

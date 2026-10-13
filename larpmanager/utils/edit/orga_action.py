@@ -67,7 +67,6 @@ from larpmanager.forms.inventory import (
 from larpmanager.forms.miscellanea import (
     OneTimeAccessTokenForm,
     OneTimeContentForm,
-    OrgaAlbumForm,
     OrgaMilestoneForm,
     OrgaProblemForm,
     UtilForm,
@@ -255,7 +254,6 @@ class OrgaAction(StrEnum):
     CI_POOL_LABELS = ("orga_ci_pool_labels", {"form": OrgaPoolLabelForm})
 
     # Miscellaneous
-    ALBUMS = ("orga_albums", {"form": OrgaAlbumForm})
     MILESTONES = ("orga_milestones", {"form": OrgaMilestoneForm})
     UTILS = ("orga_utils", {"form": UtilForm})
     WORKSHOP_MODULES = ("orga_workshop_modules", {"form": WorkshopModuleForm})

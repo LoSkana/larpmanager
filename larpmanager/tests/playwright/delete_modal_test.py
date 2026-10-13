@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """
-Test: v21 delete confirmation modal.
+Test: delete confirmation modal.
 Verifies that clicking the trash icon on a manage list opens an iframe confirmation
 modal showing the element name, that Cancel keeps the element, and that Confirm
 deletes it and refreshes the listing without a full page reload.

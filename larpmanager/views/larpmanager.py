@@ -445,17 +445,6 @@ def activate_feature_event(
     return redirect("event", event_slug=event_slug)
 
 
-@login_required
-def toggle_sidebar(request: HttpRequest) -> Any:
-    """Toggle the sidebar open/closed state in user session."""
-    key = "is_sidebar_open"
-    if key in request.session:
-        request.session[key] = not request.session[key]
-    else:
-        request.session[key] = True
-    return JsonResponse({"status": "success"})
-
-
 @require_POST
 def set_accessibility(request: HttpRequest) -> JsonResponse:
     """Save the accessibility preferences chosen in the accessibility panel."""

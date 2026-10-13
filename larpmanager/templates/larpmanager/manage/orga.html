@@ -6,7 +6,7 @@
 {% block content %}
     <div id="manage">
         {% include "larpmanager/manage/sticky_messages.html" %}
-        <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
+        <div class="grid">
             {% include "larpmanager/manage/widgets/demo.html" %}
             {% include "larpmanager/manage/widgets/orga_event.html" %}
             {% include "larpmanager/manage/widgets/orga_registrations.html" %}
@@ -54,15 +54,4 @@
 {% block js %}
     {% include "elements/dashboard/tutorial_query.js" %}
     {% include "elements/dashboard/driver.js.html" %}
-    <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        $(document).ready(function() {
-            {% if open_shortcuts %}
-                if ($('#sidebar-mobile-open').is(':visible')) {
-                    $('body').toggleClass('is-sidebar-visible');
-                }
-            {% endif %}
-        });
-    });
-    </script>
 {% endblock js %}
