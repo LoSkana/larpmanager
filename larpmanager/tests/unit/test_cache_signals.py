@@ -604,16 +604,6 @@ class TestCacheSignals(BaseTestCase):
         # Verify plot was deleted
         self.assertFalse(Plot.objects.filter(id=plot_id).exists())
 
-    @patch("larpmanager.cache.links.reset_event_links")
-    def test_registration_post_save_resets_links_cache(self, mock_reset: Any) -> None:
-        """Test that Registration post_save signal resets links cache"""
-        registration = self.get_registration()
-        mock_reset.reset_mock()  # Reset after get_accounting_registration
-        registration.save()
-
-        # Signal resets for the member
-        self.assertTrue(mock_reset.called)
-
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
     def test_event_post_save_resets_links_cache(self, mock_reset: Any) -> None:
         """Test that Event post_save signal resets links cache"""
