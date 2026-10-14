@@ -375,6 +375,8 @@ def _assign_ranking_answer(
     ranked_uuids = []
     for original_input_option in field_value.split(","):
         normalized_input_option = original_input_option.lower().strip()
+        if not normalized_input_option:
+            continue
         option_uuid = question["option_uuids"].get(normalized_input_option)
         if not option_uuid:
             error_logs.append(f"Problem with question {field_name}: couldn't find option {normalized_input_option}")
