@@ -1116,16 +1116,20 @@ def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpRes
 
     answers_by_registration = get_registration_answers_by_question(question_ids, registration_id__in=registration_ids)
     choices_by_registration = get_registration_choices_by_question(question_ids, registration_id__in=registration_ids)
+    ranking_names = {
+        question.id: {str(option.uuid): option.name for option in question.options.all()}
+        for question in questions
+        if question.typ == RegistrationQuestionType.RANKING
+    }
 
     for registration in context["list"]:
         cells = []
         for question in questions:
             if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
                 value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
-            elif question.typ == RegistrationQuestionType.RANKING:
+            elif question.id in ranking_names:
                 raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
-                names_by_uuid = {str(option.uuid): option.name for option in question.options.all()}
-                value = ", ".join(get_ranking_names(raw, names_by_uuid))
+                value = ", ".join(get_ranking_names(raw, ranking_names[question.id]))
             else:
                 value = answers_by_registration.get(registration.id, {}).get(question.id, "")
             cells.append(value)

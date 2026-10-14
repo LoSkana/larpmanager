@@ -20,8 +20,13 @@
 """Tests for the ranking question helpers and widget."""
 
 from larpmanager.forms.widgets import RankingWidget
+from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationQuestionType
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.registrations.questions import get_ranking_names, sanitize_ranking
+from larpmanager.utils.registrations.questions import (
+    get_ranking_names,
+    get_transferred_answer_text,
+    sanitize_ranking,
+)
 
 UUIDS = ["u1", "u2", "u3"]
 NAMES = {"u1": "Alpha", "u2": "Beta", "u3": "Gamma"}
@@ -65,3 +70,26 @@ class TestRankingQuestion(BaseTestCase):
         assert "ranking-readonly" in html
         assert "Beta" in html
         assert "Alpha" not in html
+
+    def test_transfer_ranking_matches_options_by_name(self) -> None:
+        """Ranking answers are remapped to the target options with the same name, up to the target max rank"""
+        source, hotel, camping = self.question_with_options(typ=RegistrationQuestionType.RANKING)
+        answer = RegistrationAnswer(question=source, text=f"{camping.uuid},{hotel.uuid}")
+        target = {
+            "typ": RegistrationQuestionType.RANKING,
+            "max_length": 1,
+            "options": [{"uuid": "t-hotel", "name": "hotel"}, {"uuid": "t-camping", "name": "Camping"}],
+        }
+        assert get_transferred_answer_text(answer, target) == "t-camping"
+        target["max_length"] = 0
+        assert get_transferred_answer_text(answer, target) == "t-camping,t-hotel"
+
+    def test_transfer_requires_same_type(self) -> None:
+        """Likert and ranking answers are dropped on a target of another type, plain text kept"""
+        likert = RegistrationAnswer(question=self.question(typ=RegistrationQuestionType.LIKERT), text="4")
+        assert get_transferred_answer_text(likert, {"typ": RegistrationQuestionType.LIKERT}) == "4"
+        assert get_transferred_answer_text(likert, {"typ": BaseQuestionType.TEXT}) == ""
+
+        text = RegistrationAnswer(question=self.question(name="notes"), text="hello")
+        assert get_transferred_answer_text(text, {"typ": BaseQuestionType.PARAGRAPH}) == "hello"
+        assert get_transferred_answer_text(text, {"typ": RegistrationQuestionType.RANKING}) == ""

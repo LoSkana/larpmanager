@@ -58,6 +58,7 @@ TEMPLATE_VALUE_MAPPING = {
     RegistrationQuestionType.PWYW: "amount of free donation",
     RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
     RegistrationQuestionType.SURCHARGE: "surcharge applied",
+    RegistrationQuestionType.RANKING: "option names in order of preference (comma separated)",
 }
 
 
@@ -319,7 +320,7 @@ def _reg_template(
             row_values.append(default_values[key])
         else:
             field_type = context["fields"][key]
-            row_values.append(value_mapping[field_type])
+            row_values.append(value_mapping.get(field_type, ""))
 
     # Create export tuple with template name, keys, and values
     return [(f"{template_type} - template", column_keys, [row_values])]
