@@ -441,6 +441,9 @@ msgstr "Κανόνες"
 msgid "Saved"
 msgstr "Αποθηκεύτηκε"
 
+msgid "Scale"
+msgstr "Κλίμακα"
+
 msgid "Sheet"
 msgstr "Φύλλο"
 
@@ -1003,6 +1006,9 @@ msgstr "Προφίλ"
 msgid "Pronoun"
 msgstr "Αντωνυμία"
 
+msgid "Ranking"
+msgstr "Κατάταξη"
+
 msgid "Reading"
 msgstr "Ανάγνωση"
 
@@ -1351,6 +1357,9 @@ msgstr "Ποσότητα"
 
 msgid "Question"
 msgstr "Ερώτηση"
+
+msgid "Rankings"
+msgstr "Κατατάξεις"
 
 msgid "Receipts"
 msgstr "Αποδείξεις"
@@ -2420,6 +2429,9 @@ msgstr "Προσθήκη προλόγου"
 msgid "Availability"
 msgstr "Διαθεσιμότητα"
 
+msgid "Average rank"
+msgstr "Μέση κατάταξη"
+
 msgid "Bank address"
 msgstr "Διεύθυνση τράπεζας"
 
@@ -3368,6 +3380,12 @@ msgstr "Φόρμα Matchmaker"
 msgid "Maximum members"
 msgstr "Μέγιστα μέλη"
 
+msgid "Maximum options"
+msgstr "Μέγιστες επιλογές"
+
+msgid "Maximum tickets"
+msgstr "Μέγιστα εισιτήρια"
+
 msgid "Member demoted!"
 msgstr "Το μέλος υποβιβάστηκε!"
 
@@ -3394,6 +3412,9 @@ msgstr "Δεν βρέθηκαν χρήστες."
 
 msgid "Non-residential"
 msgstr "Χωρίς διαμονή"
+
+msgid "Options to rank"
+msgstr "Επιλογές προς κατάταξη"
 
 msgid "Overall balance"
 msgstr "Γενικό υπόλοιπο"
@@ -7609,6 +7630,9 @@ msgstr "Δήλωσε ελεύθερα το ποσό της δωρεάς σου"
 msgid "Manage fields that track participants' data"
 msgstr "Διαχειρίσου τα πεδία που καταγράφουν τα δεδομένα των συμμετεχόντων"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Μέγιστος αριθμός χαρακτήρων (0 = χωρίς όριο)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Δεν έχουν δημιουργηθεί ακόμη ερωτήσεις απολογισμού."
 
@@ -7821,6 +7845,9 @@ msgstr "Είσαι σίγουρος ότι θέλεις να διαγράψει�
 
 msgid "Are you sure you want to play this character?"
 msgstr "Είσαι σίγουρος ότι θέλεις να παίξεις αυτόν τον χαρακτήρα;"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Μέση κατάταξη κάθε επιλογής (όσο χαμηλότερη, τόσο καλύτερη)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Προσαρμογή κουμπιών στη γραμμή πλοήγησης της εκδήλωσης"
@@ -8895,6 +8922,9 @@ msgstr ""
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Δεν έχουν οριστεί ακόμη ερωτήσεις απολογισμού για αυτό το event."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Αριθμός επιλογών που θα βάλεις σε σειρά προτίμησης (0 = όλες)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Προαιρετικό - Άλλες επιλογές ως απαιτήσεις, χωρισμένες με κόμματα"
 
@@ -9084,6 +9114,9 @@ msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 "Μέγιστος αριθμός guilds που μπορούν να δημιουργήσουν οι παίκτες (0 = χωρίς "
 "όριο)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Μέγιστη τιμή της κλίμακας, ξεκινώντας από 1 (0 = προεπιλογή 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9321,6 +9354,9 @@ msgstr ""
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Διαχειρίσου τους χώρους της εκδήλωσης όπου θα τοποθετηθούν είδη αποθήκης"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Μέγιστος αριθμός επιλογών που μπορείς να διαλέξεις (0 = χωρίς όριο)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10513,6 +10549,12 @@ msgstr ""
 "τελών εγγραφής στην εκδήλωση"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Μέγιστος αριθμός επιπλέον εισιτηρίων που μπορείς να κρατήσεις (0 = χωρίς "
+"όριο)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "Οργάνωσε τις αγοραζόμενες ικανότητες σε κατηγορίες διαχειριζόμενος τους "
@@ -11537,6 +11579,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Σου ανατέθηκε ο χαρακτήρας <b>%(character)s</b> για το <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Πρέπει να ορίσεις τουλάχιστον μία επιλογή πριν αποθηκεύσεις μια ερώτηση "
+"επιλογής ή κατάταξης."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13106,13 +13155,6 @@ msgid ""
 msgstr ""
 "Όταν είσαι έτοιμος να ενημερώσεις μόνιμα τις ποσότητες της αποθήκης βάσει "
 "των αναθέσεων αυτού του event"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Πρέπει να ορίσεις τουλάχιστον μία επιλογή πριν αποθηκεύσεις μια ερώτηση μίας"
-" ή πολλαπλής επιλογής."
 
 #, python-format
 msgid ""
@@ -15748,15 +15790,6 @@ msgstr ""
 "event."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Προαιρετικό - Για ερωτήσεις κειμένου, μέγιστος αριθμός χαρακτήρων· για "
-"πολλαπλές επιλογές, μέγιστος αριθμός επιλογών· για ερωτήσεις κλίμακας "
-"Likert, μέγιστη τιμή της κλίμακας (0 = χωρίς όριο)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15926,6 +15959,17 @@ msgstr ""
 " να απαντήσει στην ερώτηση και δεν έχει επιλεγεί καμία επιλογή· αν "
 "επισημανθούν πολλές επιλογές, ανατίθεται η πρώτη της οποίας πληρούνται οι "
 "προϋποθέσεις"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Προαιρετικό - Για ερωτήσεις κειμένου, μέγιστος αριθμός χαρακτήρων· Για "
+"πολλαπλές επιλογές, μέγιστος αριθμός επιλογών· Για ερωτήσεις κλίμακας "
+"Likert, μέγιστη τιμή της κλίμακας· Για ερωτήσεις κατάταξης, αριθμός επιλογών"
+" προς κατάταξη (0 = χωρίς όριο)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

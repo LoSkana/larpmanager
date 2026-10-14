@@ -44,7 +44,7 @@ from larpmanager.forms.utils import (
     WritingTinyMCE,
     css_delimeter,
 )
-from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, FactionPreferenceWidget
+from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, RankingWidget
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -68,6 +68,7 @@ from larpmanager.models.utils import (
     strip_tags,
 )
 from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
+from larpmanager.utils.registrations.questions import sanitize_ranking
 from larpmanager.utils.security.file_validation import normalize_filename
 
 if TYPE_CHECKING:
@@ -1101,9 +1102,9 @@ class BaseRegistrationForm(BaseModelFormRun):
         elif question["typ"] == WritingQuestionType.FILE:
             self.init_file(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
-        # Handle faction preference drag-reorder fields
-        elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
-            self.init_faction_preference(field_key, question, is_required=is_required)
+        # Handle ranking drag-reorder fields (options, or factions for faction preference)
+        elif question["typ"] in (RegistrationQuestionType.RANKING, RegistrationQuestionType.FACTION_PREFERENCE):
+            self.init_ranking(field_key, question, is_required=is_required)
 
         # Handle Likert scale fields
         elif question["typ"] == RegistrationQuestionType.LIKERT:
@@ -1302,40 +1303,53 @@ class BaseRegistrationForm(BaseModelFormRun):
         if form_question["id"] in self.answers:
             self.initial[field_key] = self.answers[form_question["id"]].text
 
-    def init_faction_preference(self, field_key: str, form_question: dict, *, is_required: bool) -> None:
-        """Initialize a faction-preference drag-reorder field.
+    def _get_ranking_items(self, question: dict) -> list[tuple[str, str]]:
+        """Return the (uuid, name) items to rank: the event visible factions for faction preference, else the options."""
+        if question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+            event = self.params["run"].event
+            visible_factions = (
+                get_event_elements(event.id, Faction, context=self.params).filter(hide=False).order_by("order")
+            )
+            return [(str(faction.uuid), faction.name) for faction in visible_factions]
+        return [(str(option["uuid"]), option["name"]) for option in question["options"]]
 
-        The submitted value is a comma-separated ordered list of faction UUIDs, stored
+    @staticmethod
+    def _get_max_rank(question: dict) -> int:
+        """Return how many items have to be ranked (0 means all); faction preference always ranks all."""
+        if question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+            return 0
+        return question.get("max_length") or 0
+
+    def init_ranking(self, field_key: str, form_question: dict, *, is_required: bool) -> None:
+        """Initialize a drag-reorder ranking field.
+
+        The submitted value is a comma-separated ordered list of the ranked uuids, stored
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
-        event = self.params["run"].event
-        visible_factions = list(
-            get_event_elements(event.id, Faction, context=self.params).filter(hide=False).order_by("order")
-        )
-        visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
+        names_by_uuid = dict(self._get_ranking_items(form_question))
+        max_rank = self._get_max_rank(form_question)
 
-        # Start from the previously saved order, dropping factions no longer visible
+        # Start from the previously saved order, dropping items no longer available
         ordered_uuids: list[str] = []
         if form_question["id"] in self.answers:
             saved_order = self.answers[form_question["id"]].text.split(",")
-            ordered_uuids = [uuid for uuid in saved_order if uuid in visible_uuids]
+            ordered_uuids = [item_uuid for item_uuid in saved_order if item_uuid in names_by_uuid]
 
-        # Append any visible factions not yet ranked (new factions, or first-time fill-in)
-        for faction in visible_factions:
-            faction_uuid = str(faction.uuid)
-            if faction_uuid not in ordered_uuids:
-                ordered_uuids.append(faction_uuid)
+        # Append any item not yet ranked (new items, or first-time fill-in)
+        ordered_uuids.extend(item_uuid for item_uuid in names_by_uuid if item_uuid not in ordered_uuids)
 
         self.fields[field_key] = forms.CharField(
             required=is_required,
-            widget=FactionPreferenceWidget(
-                factions=[(uuid, visible_uuids[uuid].name) for uuid in ordered_uuids],
+            widget=RankingWidget(
+                items=[(item_uuid, names_by_uuid[item_uuid]) for item_uuid in ordered_uuids],
+                max_rank=max_rank,
             ),
             label=form_question["name"],
             help_text=form_question["description"],
         )
 
-        self.initial[field_key] = ",".join(ordered_uuids)
+        ranked_uuids = ordered_uuids[:max_rank] if max_rank else ordered_uuids
+        self.initial[field_key] = ",".join(ranked_uuids)
 
     def init_likert(self, field_key: str, question: dict, *, is_required: bool, is_field_active: bool = True) -> None:
         """Initialize a Likert scale field, rendered as radio choices from 1 to max_length.
@@ -1553,36 +1567,23 @@ class BaseRegistrationForm(BaseModelFormRun):
                 BaseQuestionType.PARAGRAPH,
                 BaseQuestionType.EDITOR,
                 WritingQuestionType.CONCEPT,
+                RegistrationQuestionType.LIKERT,
             ]:
                 self.save_registration_text(instance, oid, question)
             elif question["typ"] == WritingQuestionType.FILE:
                 self.save_registration_file(instance, oid, question)
-            elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
-                self.save_registration_faction_preference(instance, oid, question)
-            elif question["typ"] == RegistrationQuestionType.LIKERT:
-                self.save_registration_text(instance, oid, question)
+            elif question["typ"] in (RegistrationQuestionType.RANKING, RegistrationQuestionType.FACTION_PREFERENCE):
+                self.save_registration_ranking(instance, oid, question)
 
-    def save_registration_faction_preference(self, instance: Any, value: str | None, question: dict) -> None:
-        """Sanitize and save the submitted faction ordering.
+    def save_registration_ranking(self, instance: Any, value: str | None, question: dict) -> None:
+        """Sanitize and save the submitted ranking.
 
-        Strips out any UUID that doesn't belong to a currently visible faction of the
-        event, so a tampered hidden-field value can't smuggle in arbitrary data.
+        Strips out any uuid that isn't a currently rankable item, so a tampered hidden-field
+        value can't smuggle in arbitrary data.
         """
-        event = self.params["run"].event
-        visible_faction_uuids = [
-            str(uuid)
-            for uuid in get_event_elements(event.id, Faction, context=self.params)
-            .filter(hide=False)
-            .order_by("order")
-            .values_list("uuid", flat=True)
-        ]
-        submitted = (value or "").split(",")
-        sanitized = [uuid for uuid in submitted if uuid in visible_faction_uuids]
-        # append any visible faction the client dropped, so every faction is always ranked
-        for faction_uuid in visible_faction_uuids:
-            if faction_uuid not in sanitized:
-                sanitized.append(faction_uuid)
-        self.save_registration_text(instance, ",".join(sanitized), question)
+        valid_uuids = [item[0] for item in self._get_ranking_items(question)]
+        ranking = sanitize_ranking(value, valid_uuids, max_rank=self._get_max_rank(question))
+        self.save_registration_text(instance, ranking, question)
 
     def save_registration_text(
         self,

@@ -80,6 +80,7 @@ from larpmanager.utils.edit.orga import (
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 from larpmanager.utils.registrations.questions import (
     get_ordered_registration_questions,
+    get_ranking_names,
     get_registration_answers_by_question,
     get_registration_choices_by_question,
 )
@@ -477,8 +478,8 @@ def _orga_single_applicable_answers(
     """Show, per participant, the answers to the questions of a single applicable form.
 
     Shared by matchmaker/debrief (and any future single-applicable-question orga review
-    page): matchmaker additionally resolves RegistrationQuestionType.FACTION_PREFERENCE
-    answers (raw comma-separated faction uuids) into ranked faction names.
+    page): ranking answers (raw comma-separated option uuids, or faction uuids for
+    RegistrationQuestionType.FACTION_PREFERENCE) are resolved into ranked names.
     """
     context = check_event_context(request, event_slug, permission_slug)
     context["page_info"] = page_info
@@ -499,14 +500,7 @@ def _orga_single_applicable_answers(
     answers_by_registration = get_registration_answers_by_question(question_ids, registration__run=context["run"])
     choices_by_registration = get_registration_choices_by_question(question_ids, registration__run=context["run"])
 
-    faction_names_by_uuid = {}
-    if applicable == RegistrationQuestionApplicable.MATCHMAKER:
-        faction_names_by_uuid = {
-            str(uuid): name
-            for uuid, name in get_event_elements(context["event"].id, Faction, context=context).values_list(
-                "uuid", "name"
-            )
-        }
+    ranking_names = _get_ranking_names_by_question(context, questions)
 
     rows = []
     for registration in registrations:
@@ -515,9 +509,9 @@ def _orga_single_applicable_answers(
         for question in questions:
             if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
                 value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
-            elif question.typ == RegistrationQuestionType.FACTION_PREFERENCE:
+            elif question.id in ranking_names:
                 raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
-                names = [faction_names_by_uuid[uuid] for uuid in raw.split(",") if uuid in faction_names_by_uuid]
+                names = get_ranking_names(raw, ranking_names[question.id])
                 value = ", ".join(f"{i}. {name}" for i, name in enumerate(names, start=1))
             else:
                 value = answers_by_registration.get(registration.id, {}).get(question.id, "")
@@ -529,8 +523,58 @@ def _orga_single_applicable_answers(
 
     context["rows"] = rows
     context["likert_charts"] = _get_likert_charts(questions, rows)
+    context["ranking_charts"] = _get_ranking_charts(questions, answers_by_registration, rows, ranking_names)
 
     return render(request, template, context)
+
+
+def _get_ranking_names_by_question(context: dict, questions: list) -> dict[int, dict[str, str]]:
+    """Map each ranking question id to its rankable items, as uuid -> name (in display order)."""
+    ranking_names = {}
+    faction_names = None
+    for question in questions:
+        if question.typ == RegistrationQuestionType.RANKING:
+            ranking_names[question.id] = {str(option.uuid): option.name for option in question.options.all()}
+        elif question.typ == RegistrationQuestionType.FACTION_PREFERENCE:
+            if faction_names is None:
+                faction_names = {
+                    str(uuid): name
+                    for uuid, name in get_event_elements(context["event"].id, Faction, context=context)
+                    .order_by("order")
+                    .values_list("uuid", "name")
+                }
+            ranking_names[question.id] = faction_names
+    return ranking_names
+
+
+def _get_ranking_charts(
+    questions: list, answers_by_registration: dict, rows: list, ranking_names: dict[int, dict[str, str]]
+) -> list:
+    """Build per-question average rank of each item, for bar charts (lower is better).
+
+    Items left out of a partial ranking are not counted for that participant.
+    """
+    ranking_charts = []
+    for question in questions:
+        if question.id not in ranking_names:
+            continue
+        names_by_uuid = ranking_names[question.id]
+        positions = {item_uuid: [] for item_uuid in names_by_uuid}
+        for row in rows:
+            raw = answers_by_registration.get(row["registration"].id, {}).get(question.id, "")
+            ranked = [item_uuid for item_uuid in raw.split(",") if item_uuid in names_by_uuid]
+            for position, item_uuid in enumerate(ranked, start=1):
+                positions[item_uuid].append(position)
+
+        items = [
+            {"name": names_by_uuid[item_uuid], "average": round(sum(values) / len(values), 2), "count": len(values)}
+            for item_uuid, values in positions.items()
+            if values
+        ]
+        if items:
+            items.sort(key=lambda item: item["average"])
+            ranking_charts.append({"question": question, "items": items})
+    return ranking_charts
 
 
 def _get_likert_charts(questions: list, rows: list) -> list:

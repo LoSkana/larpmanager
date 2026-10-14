@@ -4415,6 +4415,9 @@ msgstr ""
 msgid "Likert scale"
 msgstr ""
 
+msgid "Ranking"
+msgstr ""
+
 msgid "Mandatory"
 msgstr ""
 
@@ -4496,7 +4499,8 @@ msgstr ""
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
 "options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
+"value of the scale; For ranking questions, number of options to rank (0 = no "
+"limit)"
 msgstr ""
 
 msgid ""
@@ -6060,7 +6064,47 @@ msgstr ""
 msgid "Reference"
 msgstr ""
 
+msgid "Maximum options"
+msgstr ""
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr ""
+
+msgid "Scale"
+msgstr ""
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr ""
+
+msgid "Options to rank"
+msgstr ""
+
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr ""
+
+msgid "Maximum tickets"
+msgstr ""
+
+msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+
+msgid "Maximum number of characters (0 = no limit)"
+msgstr ""
+
 msgid "Add at least one option for this question type"
+msgstr ""
+
+msgid "Average rank of each option (lower is better)"
+msgstr ""
+
+msgid "Option"
+msgstr ""
+
+msgid "Average rank"
+msgstr ""
+
+msgid "Rankings"
 msgstr ""
 
 msgid "Total registration fee:"
@@ -6360,6 +6404,12 @@ msgid "Show other options"
 msgstr ""
 
 msgid "Hide other options"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
 msgstr ""
 
 msgid "View photos and media from the event"
@@ -10367,9 +10417,6 @@ msgstr ""
 msgid "Count"
 msgstr ""
 
-msgid "Option"
-msgstr ""
-
 msgid ""
 "Preview the factions and plots linked to this character as a compact summary"
 msgstr ""
@@ -10637,12 +10684,6 @@ msgid "Enter your email below to receive instructions on how to change it:"
 msgstr ""
 
 msgid "Sign In"
-msgstr ""
-
-msgid "Move up"
-msgstr ""
-
-msgid "Move down"
 msgstr ""
 
 msgid "Nothing here yet."
@@ -12258,8 +12299,8 @@ msgid "Question saved successfully"
 msgstr ""
 
 msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
+"You must define at least one option before saving a choice or ranking "
+"question."
 msgstr ""
 
 msgid ""

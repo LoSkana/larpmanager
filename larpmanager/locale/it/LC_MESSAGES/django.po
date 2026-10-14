@@ -441,6 +441,9 @@ msgstr "Regole"
 msgid "Saved"
 msgstr "Salvato"
 
+msgid "Scale"
+msgstr "Scala"
+
 msgid "Sheet"
 msgstr "Scheda"
 
@@ -1003,6 +1006,9 @@ msgstr "Profilo"
 msgid "Pronoun"
 msgstr "Pronome"
 
+msgid "Ranking"
+msgstr "Classifica"
+
 msgid "Reading"
 msgstr "Lettura"
 
@@ -1351,6 +1357,9 @@ msgstr "Quantità"
 
 msgid "Question"
 msgstr "Domanda"
+
+msgid "Rankings"
+msgstr "Classifiche"
 
 msgid "Receipts"
 msgstr "Ricevute"
@@ -2420,6 +2429,9 @@ msgstr "Aggiungi prologo"
 msgid "Availability"
 msgstr "Disponibilità"
 
+msgid "Average rank"
+msgstr "Posizione media"
+
 msgid "Bank address"
 msgstr "Indirizzo bancario"
 
@@ -3368,6 +3380,12 @@ msgstr "Modulo Matchmaker"
 msgid "Maximum members"
 msgstr "Numero massimo di membri"
 
+msgid "Maximum options"
+msgstr "Opzioni massime"
+
+msgid "Maximum tickets"
+msgstr "Biglietti massimi"
+
 msgid "Member demoted!"
 msgstr "Membro retrocesso!"
 
@@ -3394,6 +3412,9 @@ msgstr "Nessun utente trovato."
 
 msgid "Non-residential"
 msgstr "Non residenziale"
+
+msgid "Options to rank"
+msgstr "Opzioni da ordinare"
 
 msgid "Overall balance"
 msgstr "Bilancio complessivo"
@@ -7609,6 +7630,9 @@ msgstr "Indica liberamente l'ammontare della tua donazione"
 msgid "Manage fields that track participants' data"
 msgstr "Gestisci i campi che tracciano i dati dei partecipanti"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Numero massimo di caratteri (0 = nessun limite)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Non sono ancora state create domande di debrief."
 
@@ -7819,6 +7843,9 @@ msgstr "Sei sicuro di voler eliminare questo elemento?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Sei sicuro di voler giocare questo personaggio?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Posizione media di ciascuna opzione (più bassa è, meglio è)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizza i pulsanti nella barra di navigazione dell'evento"
@@ -8871,6 +8898,9 @@ msgid "No debrief questions have been set up for this event yet."
 msgstr ""
 "Non sono ancora state configurate domande di debrief per questo evento."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Numero di opzioni da mettere in ordine di preferenza (0 = tutte)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Opzionale - Altre opzioni come requisiti, separate da virgole"
 
@@ -9055,6 +9085,9 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 "Numero massimo di gilde che i giocatori possono creare (0 = nessun limite)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Valore massimo della scala, a partire da 1 (0 = predefinito 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9285,6 +9318,9 @@ msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Gestisci le aree dell'evento in cui verranno sistemati gli articoli del "
 "magazzino"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Numero massimo di opzioni selezionabili (0 = nessun limite)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10433,6 +10469,11 @@ msgstr ""
 "agli eventi"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Numero massimo di biglietti aggiuntivi prenotabili (0 = nessun limite)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "Organizza le abilità acquistabili in categorie in base al tipo di abilità"
@@ -11454,6 +11495,13 @@ msgid ""
 msgstr ""
 "Ti è stato assegnato il personaggio <b>%(character)s</b> per "
 "<b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Devi definire almeno un'opzione prima di salvare una domanda a scelta o di "
+"classifica."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13018,13 +13066,6 @@ msgid ""
 msgstr ""
 "Quando sei pronto ad aggiornare in modo permanente le quantità di magazzino "
 "in base alle assegnazioni di questo evento"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Devi definire almeno un'opzione prima di salvare una domanda a scelta "
-"singola o multipla."
 
 #, python-format
 msgid ""
@@ -15640,15 +15681,6 @@ msgstr ""
 "l'appartenenza alla gilda dalla pagina dell'evento."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Facoltativo - Per le domande di testo, numero massimo di caratteri; per le "
-"opzioni multiple, numero massimo di opzioni; per le domande con scala "
-"Likert, valore massimo della scala (0 = nessun limite)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15819,6 +15851,17 @@ msgstr ""
 "partecipante non può rispondere alla domanda e non è stata scelta alcuna "
 "opzione; se sono contrassegnate più opzioni, viene assegnata la prima i cui "
 "requisiti sono soddisfatti"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Facoltativo - Per le domande di testo, numero massimo di caratteri; per le "
+"opzioni multiple, numero massimo di opzioni; per le domande a scala Likert, "
+"valore massimo della scala; per le domande di classifica, numero di opzioni "
+"da ordinare (0 = nessun limite)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

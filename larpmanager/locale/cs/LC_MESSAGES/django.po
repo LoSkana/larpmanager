@@ -441,6 +441,9 @@ msgstr "Pravidla"
 msgid "Saved"
 msgstr "Uloženo"
 
+msgid "Scale"
+msgstr "Škála"
+
 msgid "Sheet"
 msgstr "List"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Zájmeno"
 
+msgid "Ranking"
+msgstr "Pořadí"
+
 msgid "Reading"
 msgstr "Čtení"
 
@@ -1351,6 +1357,9 @@ msgstr "Množství"
 
 msgid "Question"
 msgstr "Otázka"
+
+msgid "Rankings"
+msgstr "Žebříčky"
 
 msgid "Receipts"
 msgstr "Příjmové doklady"
@@ -2420,6 +2429,9 @@ msgstr "Přidat prolog"
 msgid "Availability"
 msgstr "Dostupnost"
 
+msgid "Average rank"
+msgstr "Průměrné pořadí"
+
 msgid "Bank address"
 msgstr "Adresa banky"
 
@@ -3368,6 +3380,12 @@ msgstr "Formulář Matchmakeru"
 msgid "Maximum members"
 msgstr "Maximální počet členů"
 
+msgid "Maximum options"
+msgstr "Maximum možností"
+
+msgid "Maximum tickets"
+msgstr "Maximum vstupenek"
+
 msgid "Member demoted!"
 msgstr "Člen byl degradován!"
 
@@ -3394,6 +3412,9 @@ msgstr "Nenalezeni žádní uživatelé."
 
 msgid "Non-residential"
 msgstr "Bez ubytování"
+
+msgid "Options to rank"
+msgstr "Možnosti k seřazení"
 
 msgid "Overall balance"
 msgstr "Souhrnná bilance"
@@ -7608,6 +7629,9 @@ msgstr "Volně uveď výši svého daru"
 msgid "Manage fields that track participants' data"
 msgstr "Spravovat pole sledující údaje účastníků"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maximální počet znaků (0 = bez omezení)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Zatím nebyly vytvořeny žádné otázky pro debrief."
 
@@ -7817,6 +7841,9 @@ msgstr "Opravdu chceš tento prvek smazat?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Opravdu chceš hrát tuto postavu?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Průměrné pořadí každé možnosti (nižší je lepší)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobit tlačítka v navigační liště události"
@@ -8829,6 +8856,9 @@ msgstr "Hlavní barva pro textový obsah na stránkách tvé události"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Pro tuto akci zatím nebyly nastaveny žádné otázky pro debrief."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Počet možností, které seřadíš podle preference (0 = všechny)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Nepovinné – Další možnosti jako požadavky, oddělené čárkami"
 
@@ -8989,6 +9019,9 @@ msgstr "Správa volitelných možností pro otázku ve formuláři postavy"
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Maximální počet gild, které mohou hráči vytvořit (0 = bez limitu)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Maximální hodnota škály, počínaje 1 (0 = výchozí 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9189,6 +9222,9 @@ msgstr ""
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Spravuj prostory, kde budou skladové položky rozmístěny"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Maximální počet možností, které můžeš vybrat (0 = bez omezení)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10158,6 +10194,11 @@ msgstr ""
 "událost"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Maximální počet dalších vstupenek, které můžeš rezervovat (0 = bez omezení)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr "Rozděl koupitelné schopnosti do kategorií podle typu schopnosti"
 
@@ -11071,6 +11112,13 @@ msgid ""
 "You have been assigned the character <b>%(character)s</b> for "
 "<b>%(event)s</b>."
 msgstr "Byla ti přidělena postava <b>%(character)s</b> pro <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Než uložíš otázku s výběrem nebo s pořadím, musíš definovat alespoň jednu "
+"možnost."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -12588,13 +12636,6 @@ msgid ""
 msgstr ""
 "Až budeš připraven/a trvale aktualizovat skladová množství na základě "
 "přiřazení této události"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Před uložením otázky s jednou nebo více možnostmi musíš definovat alespoň "
-"jednu možnost."
 
 #, python-format
 msgid ""
@@ -15145,15 +15186,6 @@ msgstr ""
 " stránce události."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Volitelné – u textových otázek maximální počet znaků; u otázek s více "
-"možnostmi maximální počet možností; u otázek s Likertovou škálou maximální "
-"hodnota škály (0 = bez omezení)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15318,6 +15350,17 @@ msgstr ""
 "Uveď, zda je tato možnost přiřazena automaticky, pokud účastník nemůže na "
 "otázku odpovědět a nebyla zvolena žádná možnost; pokud je označeno několik "
 "možností, přiřadí se první, jejíž předpoklady jsou splněny"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Volitelné - U textových otázek maximální počet znaků; u otázek s více "
+"možnostmi maximální počet možností; u otázek s Likertovou škálou maximální "
+"hodnota škály; u otázek s pořadím počet možností k seřazení (0 = bez "
+"omezení)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

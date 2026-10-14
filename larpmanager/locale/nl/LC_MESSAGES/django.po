@@ -441,6 +441,9 @@ msgstr "Regels"
 msgid "Saved"
 msgstr "Opgeslagen"
 
+msgid "Scale"
+msgstr "Schaal"
+
 msgid "Sheet"
 msgstr "Blad"
 
@@ -1003,6 +1006,9 @@ msgstr "Profiel"
 msgid "Pronoun"
 msgstr "Voornaamwoord"
 
+msgid "Ranking"
+msgstr "Rangschikking"
+
 msgid "Reading"
 msgstr "Lezen"
 
@@ -1351,6 +1357,9 @@ msgstr "Hoeveelheid"
 
 msgid "Question"
 msgstr "Vraag"
+
+msgid "Rankings"
+msgstr "Rangschikkingen"
 
 msgid "Receipts"
 msgstr "Ontvangstbewijzen"
@@ -2420,6 +2429,9 @@ msgstr "Proloog toevoegen"
 msgid "Availability"
 msgstr "Beschikbaarheid"
 
+msgid "Average rank"
+msgstr "Gemiddelde positie"
+
 msgid "Bank address"
 msgstr "Adres bank"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-formulier"
 msgid "Maximum members"
 msgstr "Maximaal aantal leden"
 
+msgid "Maximum options"
+msgstr "Maximaal aantal opties"
+
+msgid "Maximum tickets"
+msgstr "Maximaal aantal tickets"
+
 msgid "Member demoted!"
 msgstr "Lid gedegradeerd!"
 
@@ -3394,6 +3412,9 @@ msgstr "Geen gebruikers gevonden."
 
 msgid "Non-residential"
 msgstr "Niet-residentieel"
+
+msgid "Options to rank"
+msgstr "Te rangschikken opties"
 
 msgid "Overall balance"
 msgstr "Totaalsaldo"
@@ -7608,6 +7629,9 @@ msgstr "Geef vrij het bedrag van je donatie aan"
 msgid "Manage fields that track participants' data"
 msgstr "Beheer velden die deelnemersgegevens bijhouden"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maximaal aantal tekens (0 = geen limiet)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Er zijn nog geen nabesprekingsvragen aangemaakt."
 
@@ -7821,6 +7845,9 @@ msgstr "Weet je zeker dat je dit element wilt verwijderen?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Weet je zeker dat je dit personage wilt spelen?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Gemiddelde positie van elke optie (lager is beter)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Pas knoppen in de navigatiebalk van het evenement aan"
@@ -8861,6 +8888,9 @@ msgstr "Hoofdkleur voor tekstinhoud op alle pagina's van je evenement"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Er zijn nog geen nabesprekingsvragen ingesteld voor dit evenement."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Aantal opties om op volgorde van voorkeur te zetten (0 = alle)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Optioneel - Andere opties als vereisten, door komma's gescheiden"
 
@@ -9046,6 +9076,9 @@ msgstr ""
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Maximumaantal gildes dat spelers kunnen aanmaken (0 = geen limiet)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Maximale waarde van de schaal, vanaf 1 (0 = standaard 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9274,6 +9307,9 @@ msgstr ""
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Beheer de evenementlocaties waar de magazijnartikelen worden ingezet"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Maximaal aantal opties dat je kunt selecteren (0 = geen limiet)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10440,6 +10476,11 @@ msgstr ""
 "evenement te betalen"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Maximaal aantal extra tickets dat je kunt reserveren (0 = geen limiet)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "De te kopen vaardigheden in categorieën indelen door vaardigheidstypen te "
@@ -11447,6 +11488,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Je hebt het personage <b>%(character)s</b> gekregen voor <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Je moet minstens één optie aanmaken voordat je een keuze- of "
+"rangschikkingsvraag opslaat."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13013,13 +13061,6 @@ msgid ""
 msgstr ""
 "Als je klaar bent om magazijnhoeveelheden permanent bij te werken op basis "
 "van de toewijzingen van deze gebeurtenis"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Je moet minstens één optie definiëren voordat je een vraag met één of "
-"meerdere keuzes opslaat."
 
 #, python-format
 msgid ""
@@ -15642,15 +15683,6 @@ msgstr ""
 " het lidmaatschap beheren via de evenementpagina."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Optioneel - Voor tekstvragen, maximum aantal tekens; voor meerkeuzevragen, "
-"maximum aantal opties; voor Likert-schaalvragen, maximumwaarde van de schaal"
-" (0 = geen limiet)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15823,6 +15855,17 @@ msgstr ""
 "vraag niet kan beantwoorden en er geen optie is gekozen; als meerdere opties"
 " zijn gemarkeerd, wordt de eerste toegewezen waarvan de vereisten zijn "
 "vervuld"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Optioneel - Voor tekstvragen: maximaal aantal tekens; voor meerkeuzevragen: "
+"maximaal aantal opties; voor Likertschaalvragen: maximale waarde van de "
+"schaal; voor rangschikkingsvragen: aantal opties om te rangschikken (0 = "
+"geen limiet)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

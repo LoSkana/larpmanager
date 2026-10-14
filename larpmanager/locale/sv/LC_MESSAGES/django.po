@@ -441,6 +441,9 @@ msgstr "Regler"
 msgid "Saved"
 msgstr "Sparat"
 
+msgid "Scale"
+msgstr "Skala"
+
 msgid "Sheet"
 msgstr "Ark"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronomen"
 
+msgid "Ranking"
+msgstr "Rangordning"
+
 msgid "Reading"
 msgstr "Läsning"
 
@@ -1351,6 +1357,9 @@ msgstr "Kvantitet"
 
 msgid "Question"
 msgstr "Fråga"
+
+msgid "Rankings"
+msgstr "Rangordningar"
 
 msgid "Receipts"
 msgstr "Kvitton"
@@ -2420,6 +2429,9 @@ msgstr "Lägg till prolog"
 msgid "Availability"
 msgstr "Tillgänglighet"
 
+msgid "Average rank"
+msgstr "Genomsnittlig rang"
+
 msgid "Bank address"
 msgstr "Bankens adress"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-formulär"
 msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
+msgid "Maximum options"
+msgstr "Max antal alternativ"
+
+msgid "Maximum tickets"
+msgstr "Max antal biljetter"
+
 msgid "Member demoted!"
 msgstr "Medlem degraderad!"
 
@@ -3394,6 +3412,9 @@ msgstr "Inga användare hittades."
 
 msgid "Non-residential"
 msgstr "Icke-residentiell"
+
+msgid "Options to rank"
+msgstr "Alternativ att rangordna"
 
 msgid "Overall balance"
 msgstr "Övergripande saldo"
@@ -7607,6 +7628,9 @@ msgstr "Ange fritt beloppet för din donation"
 msgid "Manage fields that track participants' data"
 msgstr "Hantera fält som registrerar deltagarnas uppgifter"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maximalt antal tecken (0 = ingen gräns)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Inga debriefingfrågor har skapats ännu."
 
@@ -7816,6 +7840,9 @@ msgstr "Är du säker på att du vill ta bort det här elementet?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Är du säker på att du vill spela den här karaktären?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Genomsnittlig rang för varje alternativ (lägre är bättre)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knappar i evenemangets navigeringsfält"
@@ -8830,6 +8857,9 @@ msgstr "Huvudfärg för textinnehåll på alla sidor för ditt evenemang"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Inga debriefingfrågor har ställts in för det här evenemanget ännu."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Antal alternativ att rangordna efter preferens (0 = alla)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valfritt - Andra alternativ som krav, kommaseparerade"
 
@@ -8997,6 +9027,9 @@ msgstr "Hantera de valbara alternativen för en fråga i karaktärsformuläret"
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Maximalt antal gillen som spelare kan skapa (0 = ingen gräns)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Skalans maxvärde, med start från 1 (0 = standard 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9208,6 +9241,9 @@ msgstr ""
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Hantera de evenemangsområden där lagerartiklarna ska placeras ut"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Maximalt antal alternativ som kan väljas (0 = ingen gräns)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10253,6 +10289,10 @@ msgstr ""
 "evenemang"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr "Maximalt antal extra biljetter som kan reserveras (0 = ingen gräns)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr "Sortera köpbara förmågor i kategorier genom att hantera förmågetyper"
 
@@ -11207,6 +11247,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Du har tilldelats karaktären <b>%(character)s</b> för <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Du måste lägga till minst ett alternativ innan du sparar en val- eller "
+"rangordningsfråga."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -12763,13 +12810,6 @@ msgid ""
 msgstr ""
 "När du är redo att permanent uppdatera lagerkvantiteterna baserat på den här"
 " händelsens tilldelningar"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Du måste definiera minst ett alternativ innan du sparar en fråga med ett "
-"eller flera svarsalternativ."
 
 #, python-format
 msgid ""
@@ -15350,15 +15390,6 @@ msgstr ""
 "medlemskapet från evenemangssidan."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Valfritt – för textfrågor: maximalt antal tecken; för flervalsfrågor: "
-"maximalt antal alternativ; för frågor med Likertskala: skalans högsta värde "
-"(0 = ingen gräns)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15531,6 +15562,16 @@ msgstr ""
 "Ange om detta alternativ tilldelas automatiskt när deltagaren inte kan "
 "besvara frågan och inget alternativ har valts; om flera alternativ är "
 "markerade tilldelas det första vars förutsättningar är uppfyllda"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Valfritt - För textfrågor, maximalt antal tecken; för flervalsfrågor, "
+"maximalt antal alternativ; för Likert-skalefrågor, skalans maxvärde; för "
+"rangordningsfrågor, antal alternativ att rangordna (0 = ingen gräns)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

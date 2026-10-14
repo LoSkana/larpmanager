@@ -72,13 +72,44 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // ========== Form Field Visibility ==========
 
+    // Label and help text of the max length field, by question type
+    const maxLengthMeanings = {
+        "m": {
+            label: '{% filter escapejs %}{% trans "Maximum options" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum number of options that can be selected (0 = no limit)" %}{% endfilter %}'
+        },
+        "l": {
+            label: '{% filter escapejs %}{% trans "Scale" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum value of the scale, starting from 1 (0 = default 5)" %}{% endfilter %}'
+        },
+        "r": {
+            label: '{% filter escapejs %}{% trans "Options to rank" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Number of options to put in order of preference (0 = all)" %}{% endfilter %}'
+        },
+        "additional_tickets": {
+            label: '{% filter escapejs %}{% trans "Maximum tickets" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum number of additional tickets that can be reserved (0 = no limit)" %}{% endfilter %}'
+        }
+    };
+    const maxLengthText = {
+        label: '{% filter escapejs %}{% trans "Maximum length" %}{% endfilter %}',
+        help: '{% filter escapejs %}{% trans "Maximum number of characters (0 = no limit)" %}{% endfilter %}'
+    };
+
+    function updateMaxLengthMeaning(selectedValue) {
+        const meaning = maxLengthMeanings[selectedValue] || maxLengthText;
+        $('#lbl_id_max_length').text(meaning.label);
+        $('#id_max_length_tr .helptext').first().text(meaning.help);
+    }
+
     // Toggle visibility of form fields based on question type
     function toggleOptions() {
         const selectedValue = $('#id_typ').val();
         const speed = 300;
 
-        // Options section visibility
-        if (["m", "s"].includes(selectedValue)) {
+        // Options section visibility; ranking options have no price nor maximum
+        $('#options').toggleClass('options-ranking', selectedValue === "r");
+        if (["m", "s", "r"].includes(selectedValue)) {
             if (!$('#options').is(':visible')) {
                 $('#options').removeClass('hide').fadeIn(speed);
             }
@@ -90,12 +121,13 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Max length field visibility
-        const maxLengtheable = ["m", "t", "p", "e", "l", "name", "teaser", "text", "title", "additional_tickets"];
+        // Max length field visibility, with label and help text matching its meaning for the type
+        const maxLengtheable = ["m", "t", "p", "e", "l", "r", "name", "teaser", "text", "title", "additional_tickets"];
         $('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
+        updateMaxLengthMeaning(selectedValue);
 
         // Printable and visibility fields
-        if (["s", "m", "t", "p", "e", "l", "c", "title", "file"].includes(selectedValue)) {
+        if (["s", "m", "t", "p", "e", "l", "r", "c", "title", "file"].includes(selectedValue)) {
             $('#id_printable_tr').fadeIn(speed);
             $('#id_visibility_tr').fadeIn(speed);
         } else {
@@ -104,7 +136,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // Requirements gate only the questions rendered with their own field key
-        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e", "l", "file"].includes(selectedValue));
+        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e", "l", "r", "file"].includes(selectedValue));
 
         // Hide visibility for specific types
         if (["name", "teaser", "text", "faction"].includes(selectedValue)) {

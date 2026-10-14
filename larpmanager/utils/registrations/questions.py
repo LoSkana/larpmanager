@@ -108,3 +108,22 @@ def get_registration_choices_by_question(
             choice.option.name
         )
     return choices_by_registration
+
+
+def sanitize_ranking(value: str | None, valid_uuids: list[str], max_rank: int = 0) -> str:
+    """Clean a submitted comma-separated ranking of uuids.
+
+    Drops unknown and duplicate uuids, appends any valid uuid missing from the submission
+    (so every item is always ranked), then keeps only the first ``max_rank`` (0 = all).
+    """
+    valid = set(valid_uuids)
+    sanitized = list(dict.fromkeys(item_uuid for item_uuid in (value or "").split(",") if item_uuid in valid))
+    sanitized.extend(item_uuid for item_uuid in valid_uuids if item_uuid not in sanitized)
+    if max_rank:
+        sanitized = sanitized[:max_rank]
+    return ",".join(sanitized)
+
+
+def get_ranking_names(value: str | None, names_by_uuid: dict[str, str]) -> list[str]:
+    """Resolve a comma-separated ranking of uuids into the ordered list of names."""
+    return [names_by_uuid[item_uuid] for item_uuid in (value or "").split(",") if item_uuid in names_by_uuid]

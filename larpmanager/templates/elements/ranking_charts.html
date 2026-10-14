@@ -1,0 +1,54 @@
+{% load i18n static %}
+{% if ranking_charts %}
+    {% if not likert_charts %}
+        <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
+    {% endif %}
+    {% for chart in ranking_charts %}
+        <h3>{{ chart.question.name }}</h3>
+        <p class="helptext">{% trans "Average rank of each option (lower is better)" %}</p>
+        <table class="ranking-chart-table">
+            <thead>
+                <tr>
+                    <th>{% trans "Option" %}</th>
+                    <th>{% trans "Average rank" %}</th>
+                    <th>{% trans "Rankings" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in chart.items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.average }}</td>
+                        <td>{{ item.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <canvas id="ranking_chart_{{ forloop.counter }}" width="400" height="200"></canvas>
+        <script>
+(function() {
+    var ctx = document.getElementById('ranking_chart_{{ forloop.counter }}').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [{% for item in chart.items %}{% include "elements/comma.html" with separator="," %}"{{ item.name|escapejs }}"{% endfor %}],
+            datasets: [{
+                label: '{{ chart.question.name|escapejs }}',
+                data: [{% for item in chart.items %}{% include "elements/comma.html" with separator="," %}{{ item.average|stringformat:"f" }}{% endfor %}],
+                backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                borderWidth: 0
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            responsive: false,
+            scales: {
+                x: { beginAtZero: true }
+            }
+        }
+    });
+})();
+        </script>
+    {% endfor %}
+{% endif %}

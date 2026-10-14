@@ -846,16 +846,16 @@ body.association.new_v20 .user_resize {
 }
 
 /* ---------------------------------------------------------------------------
-   Faction preference drag-reorder list
+   Ranking drag-reorder list
    --------------------------------------------------------------------------- */
 
-.faction-pref-list {
+.ranking-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.faction-pref-item {
+.ranking-item {
   display: flex;
   align-items: center;
   gap: 0.5em;
@@ -867,10 +867,29 @@ body.association.new_v20 .user_resize {
   cursor: grab;
 }
 
-.faction-pref-item.faction-pref-dragging {
+.ranking-item.ranking-dragging {
   opacity: 0.4;
 }
 
-.faction-pref-handle {
+.ranking-item.ranking-unranked {
+  opacity: 0.55;
+  border-style: dashed;
+}
+
+.ranking-handle {
   color: rgba(var(--ter-rgb), 0.6);
+}
+
+.ranking-position {
+  min-width: 1.5em;
+  font-weight: bold;
+}
+
+.ranking-name {
+  flex: 1;
+}
+
+.ranking-buttons {
+  display: flex;
+  gap: 0.5em;
 }
