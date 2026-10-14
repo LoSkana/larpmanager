@@ -441,6 +441,9 @@ msgstr "Regeln"
 msgid "Saved"
 msgstr "Gespeichert"
 
+msgid "Scale"
+msgstr "Skala"
+
 msgid "Sheet"
 msgstr "Blatt"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronomen"
 
+msgid "Ranking"
+msgstr "Rangfolge"
+
 msgid "Reading"
 msgstr "Lesen"
 
@@ -1351,6 +1357,9 @@ msgstr "Menge"
 
 msgid "Question"
 msgstr "Frage"
+
+msgid "Rankings"
+msgstr "Rangfolgen"
 
 msgid "Receipts"
 msgstr "Quittungen"
@@ -2420,6 +2429,9 @@ msgstr "Prolog hinzufügen"
 msgid "Availability"
 msgstr "Verfügbarkeit"
 
+msgid "Average rank"
+msgstr "Durchschnittlicher Rang"
+
 msgid "Bank address"
 msgstr "Adresse der Bank"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-Formular"
 msgid "Maximum members"
 msgstr "Maximale Mitgliederzahl"
 
+msgid "Maximum options"
+msgstr "Maximale Optionen"
+
+msgid "Maximum tickets"
+msgstr "Maximale Tickets"
+
 msgid "Member demoted!"
 msgstr "Mitglied herabgestuft!"
 
@@ -3394,6 +3412,9 @@ msgstr "Keine Benutzer gefunden."
 
 msgid "Non-residential"
 msgstr "Ohne Übernachtung"
+
+msgid "Options to rank"
+msgstr "Zu ordnende Optionen"
 
 msgid "Overall balance"
 msgstr "Gesamtsaldo"
@@ -7609,6 +7630,9 @@ msgstr "Gib den Betrag deiner Spende frei ein"
 msgid "Manage fields that track participants' data"
 msgstr "Verwalte Felder zur Erfassung von Teilnehmendendaten"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maximale Anzahl an Zeichen (0 = keine Begrenzung)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Es wurden noch keine Debriefing-Fragen erstellt."
 
@@ -7819,6 +7843,9 @@ msgstr "Bist du sicher, dass du dieses Element löschen möchtest?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Möchtest du diesen Charakter wirklich spielen?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Durchschnittlicher Rang jeder Option (niedriger ist besser)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Passe die Schaltflächen in der Navigationsleiste der Veranstaltung an"
@@ -8887,6 +8914,9 @@ msgstr "Hauptfarbe für Textinhalte auf den Seiten deiner Veranstaltung"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Für dieses Event wurden noch keine Debriefing-Fragen eingerichtet."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Anzahl der Optionen, die du nach Präferenz ordnen sollst (0 = alle)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Optional - Andere Optionen als Anforderungen, durch Komma getrennt"
 
@@ -9080,6 +9110,9 @@ msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 "Maximale Anzahl an Gilden, die Spieler erstellen können (0 = keine "
 "Begrenzung)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Höchstwert der Skala, beginnend bei 1 (0 = Standard 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9319,6 +9352,11 @@ msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Verwalte die Veranstaltungsbereiche, in denen die Lagerartikel "
 "bereitgestellt werden"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr ""
+"Maximale Anzahl an Optionen, die ausgewählt werden können (0 = keine "
+"Begrenzung)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10533,6 +10571,12 @@ msgstr ""
 "Verwaltet Tokens, die Teilnehmende zur Deckung der Anmeldegebühren verwenden"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Maximale Anzahl an zusätzlichen Tickets, die reserviert werden können (0 = "
+"keine Begrenzung)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "Ordne erwerbbare Fähigkeiten nach Kategorien, indem du die Fähigkeitstypen "
@@ -11562,6 +11606,13 @@ msgid ""
 msgstr ""
 "Dir wurde der Charakter <b>%(character)s</b> für <b>%(event)s</b> "
 "zugewiesen."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Du musst mindestens eine Option festlegen, bevor du eine Auswahl- oder "
+"Rangfolge-Frage speicherst."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13134,13 +13185,6 @@ msgid ""
 msgstr ""
 "Wenn du bereit bist, die Lagermengen auf der Grundlage der Zuweisungen "
 "dieser Veranstaltung dauerhaft zu aktualisieren"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Du musst mindestens eine Option definieren, bevor du eine Einzelauswahl- "
-"oder Mehrfachauswahlfrage speicherst."
 
 #, python-format
 msgid ""
@@ -15789,15 +15833,6 @@ msgstr ""
 "und die Mitgliedschaft über die Event-Seite verwalten."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Optional – Bei Textfragen: maximale Anzahl an Zeichen; bei Multiple-Choice-"
-"Fragen: maximale Anzahl an Optionen; bei Likert-Skala-Fragen: maximaler "
-"Skalenwert (0 = kein Limit)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15973,6 +16008,17 @@ msgstr ""
 "teilnehmenden Person nicht beantwortet werden kann und keine Option "
 "ausgewählt wurde; wenn mehrere Optionen markiert sind, wird die erste "
 "zugewiesen, deren Voraussetzungen erfüllt sind"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Optional - Bei Textfragen die maximale Anzahl an Zeichen; bei "
+"Mehrfachauswahl die maximale Anzahl an Optionen; bei Likert-Skala-Fragen der"
+" Höchstwert der Skala; bei Rangfolge-Fragen die Anzahl der zu ordnenden "
+"Optionen (0 = keine Begrenzung)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

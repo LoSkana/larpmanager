@@ -140,6 +140,7 @@ RegistrationQuestionType = extend_textchoices(
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
         ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
         ("LIKERT", "l", _("Likert scale")),
+        ("RANKING", "r", _("Ranking")),
     ],
 )
 
@@ -592,7 +593,8 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "Optional - For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options; For Likert scale questions, maximum value of the scale (0 = no limit)",
+            "number of options; For Likert scale questions, maximum value of the scale; For ranking "
+            "questions, number of options to rank (0 = no limit)",
         ),
     )
 

@@ -30,6 +30,7 @@ from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationAnswer,
     RegistrationChoice,
+    RegistrationQuestionType,
     WritingAnswer,
     WritingChoice,
     WritingQuestionType,
@@ -50,6 +51,7 @@ from larpmanager.utils.io.upload.constants import MAX_COMMA_VALUES, MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
 from larpmanager.utils.io.upload.features import _activate_features_from_columns
 from larpmanager.utils.io.upload.parsing import _strip_number_prefix, _text_to_html_paragraphs
+from larpmanager.utils.registrations.questions import sanitize_ranking
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -266,6 +268,8 @@ def _get_questions(questions_queryset: QuerySet) -> dict:
             "id": question["id"],
             "typ": question["typ"],
             "options": options_by_name,
+            "option_uuids": {option["name"].lower(): str(option["uuid"]) for option in question["options"]},
+            "max_length": question.get("max_length") or 0,
         }
     return questions_by_name
 
@@ -321,6 +325,10 @@ def _assign_choice_answer(
     ]:
         _assign_text_answer(target_element, question, field_value, is_registration=is_registration)
 
+    # check if ranking
+    elif is_registration and question["typ"] == RegistrationQuestionType.RANKING:
+        _assign_ranking_answer(target_element, field_name, field_value, question, error_logs)
+
     # check if choice
     else:
         option_values = field_value.split(",")
@@ -354,6 +362,35 @@ def _assign_choice_answer(
                     question_id=question["id"],
                     option_id=option_id,
                 )
+
+
+def _assign_ranking_answer(
+    target_element: Registration,
+    field_name: str,
+    field_value: str,
+    question: dict[str, Any],
+    error_logs: list[str],
+) -> None:
+    """Store a ranking answer from comma-separated option names, in ranked order."""
+    ranked_uuids = []
+    for original_input_option in field_value.split(","):
+        normalized_input_option = original_input_option.lower().strip()
+        if not normalized_input_option:
+            continue
+        option_uuid = question["option_uuids"].get(normalized_input_option)
+        if not option_uuid:
+            error_logs.append(f"Problem with question {field_name}: couldn't find option {normalized_input_option}")
+            continue
+        ranked_uuids.append(option_uuid)
+
+    ranking = sanitize_ranking(
+        ",".join(ranked_uuids), list(question["option_uuids"].values()), max_rank=question["max_length"]
+    )
+    answer, _created = RegistrationAnswer.objects.get_or_create(
+        registration_id=target_element.id, question_id=question["id"]
+    )
+    answer.text = ranking
+    answer.save()
 
 
 def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:

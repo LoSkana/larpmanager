@@ -37,6 +37,7 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
+    RegistrationQuestionType,
     WritingChoice,
 )
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
@@ -44,6 +45,7 @@ from larpmanager.models.writing import Character, get_event_elements
 from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.publication.base import publish_registration
+from larpmanager.utils.registrations.questions import get_transferred_answer_text
 
 
 def get_reduced_available_count(run: Any) -> int:
@@ -138,35 +140,48 @@ def process_registration_event_change(registration: Registration) -> None:
         try:
             # Find matching question and option in the new event
             matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
-            registration_choice.question_id = matched_question["id"]
-            registration_choice.option = get_event_elements(
+            matched_option = get_event_elements(
                 get_run_event_id(registration.run_id, context=context), RegistrationOption
             ).get(
                 question_id=matched_question["id"],
                 name__iexact=option_name,
             )
-            registration_choice.save()
         except (StopIteration, ObjectDoesNotExist):
-            # Clear the choice if no matching question/option found
-            registration_choice.question = None
-            registration_choice.option = None
+            # Remove the choice if no matching question/option found in the new event
+            registration_choice.delete()
+            continue
+
+        registration_choice.question_id = matched_question["id"]
+        registration_choice.option = matched_option
+        registration_choice.save()
 
     # Process all registration answers (free-form question responses)
     # Attempt to preserve answers by finding matching questions
     for registration_answer in RegistrationAnswer.objects.filter(
         registration=registration,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
-    ):
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            RegistrationQuestionType.LIKERT,
+            RegistrationQuestionType.RANKING,
+        ],
+    ).select_related("question"):
         question_name = registration_answer.question.name
 
-        try:
-            # Find matching question in the new event to preserve the answer
-            matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
-            registration_answer.question_id = matched_question["id"]
-            registration_answer.save()
-        except StopIteration:
-            # Clear the answer if no matching question found
-            registration_answer.question = None
+        # Find matching question in the new event to preserve the answer, adapted to it
+        matched_question = next((q for q in cached_questions if q["name"].lower() == question_name.lower()), None)
+        transferred_text = (
+            get_transferred_answer_text(registration_answer, matched_question) if matched_question else ""
+        )
+        if not transferred_text:
+            # Remove the answer if no compatible question found in the new event
+            registration_answer.delete()
+            continue
+
+        registration_answer.question_id = matched_question["id"]
+        registration_answer.text = transferred_text
+        registration_answer.save()
 
 
 def check_character_ticket_options(registration: Registration, character: Character) -> None:

@@ -441,6 +441,9 @@ msgstr "Regler"
 msgid "Saved"
 msgstr "Lagret"
 
+msgid "Scale"
+msgstr "Skala"
+
 msgid "Sheet"
 msgstr "Ark"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronomen"
 
+msgid "Ranking"
+msgstr "Rangering"
+
 msgid "Reading"
 msgstr "Lesing"
 
@@ -1351,6 +1357,9 @@ msgstr "Antall"
 
 msgid "Question"
 msgstr "Spørsmål"
+
+msgid "Rankings"
+msgstr "Rangeringer"
 
 msgid "Receipts"
 msgstr "Kvitteringer"
@@ -2420,6 +2429,9 @@ msgstr "Legg til prolog"
 msgid "Availability"
 msgstr "Tilgjengelighet"
 
+msgid "Average rank"
+msgstr "Gjennomsnittlig rangering"
+
 msgid "Bank address"
 msgstr "Bankens adresse"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-skjema"
 msgid "Maximum members"
 msgstr "Maksimalt antall medlemmer"
 
+msgid "Maximum options"
+msgstr "Maks antall alternativer"
+
+msgid "Maximum tickets"
+msgstr "Maks antall billetter"
+
 msgid "Member demoted!"
 msgstr "Medlem degradert!"
 
@@ -3394,6 +3412,9 @@ msgstr "Ingen brukere funnet."
 
 msgid "Non-residential"
 msgstr "Ikke-bolig"
+
+msgid "Options to rank"
+msgstr "Alternativer å rangere"
 
 msgid "Overall balance"
 msgstr "Totalbalanse"
@@ -7608,6 +7629,9 @@ msgstr "Angi fritt hvor mye du vil donere"
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felt som sporer deltakernes data"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maksimalt antall tegn (0 = ingen grense)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Ingen debriefspørsmål er opprettet ennå."
 
@@ -7817,6 +7841,9 @@ msgstr "Er du sikker på at du vil slette dette elementet?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Er du sikker på at du vil spille denne karakteren?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Gjennomsnittlig rangering for hvert alternativ (lavere er bedre)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i arrangementets navigasjonslinje"
@@ -8832,6 +8859,9 @@ msgstr "Hovedfarge for tekstinnhold på alle arrangementets sider"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Ingen debriefspørsmål er satt opp for dette arrangementet ennå."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Antall alternativer du skal sette i prioritert rekkefølge (0 = alle)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valgfritt - Andre alternativer som krav, kommaseparert"
 
@@ -9006,6 +9036,9 @@ msgstr ""
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Maksimalt antall laug spillere kan opprette (0 = ingen grense)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Maksimal verdi på skalaen, fra 1 (0 = standard 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9216,6 +9249,9 @@ msgstr ""
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Administrer arrangementsområdene der varene fra lageret skal plasseres"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Maksimalt antall alternativer som kan velges (0 = ingen grense)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10275,6 +10311,11 @@ msgstr ""
 "Administrerer tokener brukt av deltakere til å dekke arrangementsavgiften"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Maksimalt antall ekstra billetter som kan reserveres (0 = ingen grense)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr "Organiser kjøpbare evner i kategorier ved å sortere etter evnetype"
 
@@ -11226,6 +11267,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Du har fått tildelt karakteren <b>%(character)s</b> for <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Du må legge til minst ett alternativ før du lagrer et valg- eller "
+"rangeringsspørsmål."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -12780,13 +12828,6 @@ msgid ""
 msgstr ""
 "Når du er klar til å oppdatere lagerantallene permanent basert på denne "
 "hendelsens tildelinger"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Du må definere minst ett alternativ før du lagrer et enkeltvalgs- eller "
-"flervalgs-spørsmål."
 
 #, python-format
 msgid ""
@@ -15370,15 +15411,6 @@ msgstr ""
 "medlemskap fra arrangementssiden."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Valgfritt – for tekstspørsmål, maksimalt antall tegn; for flervalgsspørsmål,"
-" maksimalt antall alternativer; for Likert-skala-spørsmål, maksimal verdi på"
-" skalaen (0 = ingen grense)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15550,6 +15582,17 @@ msgstr ""
 "Angi om dette alternativet tildeles automatisk når deltakeren ikke kan svare"
 " på spørsmålet og ikke har valgt noe alternativ; hvis flere alternativer er "
 "markert, tildeles det første alternativet der forutsetningene er oppfylt"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Valgfritt - For tekstspørsmål, maksimalt antall tegn; For flervalg, "
+"maksimalt antall alternativer; For Likert-skalaspørsmål, maksimal verdi på "
+"skalaen; For rangeringsspørsmål, antall alternativer som skal rangeres (0 = "
+"ingen grense)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

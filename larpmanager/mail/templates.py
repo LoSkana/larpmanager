@@ -33,9 +33,10 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.models.association import Association
-from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationChoice
+from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationChoice, RegistrationQuestionType
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_run
+from larpmanager.utils.registrations.questions import get_ranking_names
 
 if TYPE_CHECKING:
     from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
@@ -466,6 +467,14 @@ def get_password_reset_url(membership: Membership) -> str:
     return get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", membership.association)
 
 
+def _format_text_answer(question: dict, answer_text: str) -> str:
+    """Format a text answer for display, resolving ranking uuids into comma-separated option names."""
+    if question["typ"] != RegistrationQuestionType.RANKING:
+        return answer_text
+    names_by_uuid = {str(option["uuid"]): option["name"] for option in question["options"]}
+    return ", ".join(get_ranking_names(answer_text, names_by_uuid))
+
+
 def get_registration_options(instance: object) -> list[tuple[str, str]]:
     """Get formatted list of registration options and answers for display.
 
@@ -504,7 +513,12 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     for answer in RegistrationAnswer.objects.filter(
         question_id__in=question_ids_cache,
         registration=instance,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            RegistrationQuestionType.RANKING,
+        ],
     ):
         text_answers_by_question[answer.question_id] = answer.text
 
@@ -529,8 +543,9 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
                 formatted_choices = ",".join([option.name for option in choice_options_by_question[question["id"]]])
                 formatted_results.append((question["name"], formatted_choices))
 
-            # Handle text answer questions
+            # Handle text answer questions, resolving ranking uuids into option names
             if question["id"] in text_answers_by_question:
-                formatted_results.append((question["name"], text_answers_by_question[question["id"]]))
+                answer_text = _format_text_answer(question, text_answers_by_question[question["id"]])
+                formatted_results.append((question["name"], answer_text))
 
     return formatted_results

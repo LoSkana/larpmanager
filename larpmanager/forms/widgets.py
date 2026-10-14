@@ -153,27 +153,33 @@ class DescriptionCheckboxSelectMultiple(_DescriptionOptionsMixin, forms.Checkbox
         self.attrs["class"] = (self.attrs["class"] + " reg-checkbox-class").strip()
 
 
-class FactionPreferenceWidget(forms.Widget):
-    """Drag-reorder list of factions, backed by a hidden comma-separated UUID input.
+class RankingWidget(forms.Widget):
+    """Drag-reorder list of items, backed by a hidden comma-separated UUID input.
 
     ``value`` is the comma-separated ordered UUID string (matches what's stored in
-    ``RegistrationAnswer.text``); ``factions`` is the ordered list of ``(uuid, name)``
-    tuples to render as draggable rows. Self-contained: dropped into a form field's
-    widget, it renders its full UI wherever ``{{ field }}`` is called.
+    ``RegistrationAnswer.text``); ``items`` is the ordered list of ``(uuid, name)``
+    tuples to render as draggable rows. When ``max_rank`` is set, only the first
+    ``max_rank`` rows are ranked, the others are shown as unranked. Self-contained:
+    dropped into a form field's widget, it renders its full UI wherever ``{{ field }}``
+    is called.
     """
 
-    template_name = "forms/widgets/faction_preference.html"
+    template_name = "forms/widgets/ranking.html"
 
     class Media:
-        js: ClassVar[list] = ["larpmanager/assets/js/faction-preference.js"]
+        js: ClassVar[list] = ["larpmanager/assets/js/ranking.js"]
 
-    def __init__(self, *args: Any, factions: list[tuple[str, str]] | None = None, **kwargs: Any) -> None:
-        """Store the ordered (uuid, name) faction list to render."""
+    def __init__(
+        self, *args: Any, items: list[tuple[str, str]] | None = None, max_rank: int = 0, **kwargs: Any
+    ) -> None:
+        """Store the ordered (uuid, name) item list to render, and how many of them are ranked."""
         super().__init__(*args, **kwargs)
-        self.factions = factions or []
+        self.items = items or []
+        self.max_rank = max_rank
 
     def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
         """Build template context for the drag-reorder widget."""
         ctx = super().get_context(name, value, attrs)
-        ctx["widget"]["factions"] = self.factions
+        ctx["widget"]["items"] = self.items
+        ctx["widget"]["max_rank"] = self.max_rank
         return ctx

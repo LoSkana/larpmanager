@@ -1521,6 +1521,11 @@ class OrgaRegistrationOptionForm(BaseModelForm):
         if question and question.applicable != RegistrationQuestionApplicable.REGISTRATION:
             self.delete_field("price")
 
+        # Ranking options are ordered, not selected: no price nor availability limit
+        if question and question.typ == RegistrationQuestionType.RANKING:
+            self.delete_field("price")
+            self.delete_field("max_available")
+
     def clean_price(self) -> Any:
         """Treat blank price as 0."""
         value = self.cleaned_data.get("price")

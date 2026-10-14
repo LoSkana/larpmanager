@@ -48,6 +48,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.writing import get_event_class_parent
+from larpmanager.utils.registrations.questions import get_transferred_answer_text
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Run
@@ -224,8 +225,14 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
     """Transfer text answers from source registration to destination."""
     source_answers = RegistrationAnswer.objects.filter(
         registration=source_reg,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
-    )
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            RegistrationQuestionType.LIKERT,
+            RegistrationQuestionType.RANKING,
+        ],
+    ).select_related("question")
     transferred_answers = []
     context: dict = {}
 
@@ -235,9 +242,14 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
         if not target_question:
             continue
 
+        # Adapt the answer to the destination question, skipping it if incompatible
+        transferred_text = get_transferred_answer_text(answer, target_question)
+        if not transferred_text:
+            continue
+
         # Create the new answer
         new_answer = RegistrationAnswer.objects.create(
-            question_id=target_question["id"], text=answer.text, registration=target_reg
+            question_id=target_question["id"], text=transferred_text, registration=target_reg
         )
         transferred_answers.append(new_answer)
 

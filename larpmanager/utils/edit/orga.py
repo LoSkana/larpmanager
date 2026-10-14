@@ -38,6 +38,7 @@ from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionType,
     WritingOption,
     WritingQuestion,
     _get_registration_mapping,
@@ -494,12 +495,16 @@ def form_edit_handler(
                 redirect_kwargs = {"event_slug": context["run"].get_slug()}
             return redirect(redirect_view_name.replace("_edit", "_new"), **redirect_kwargs)
 
-        # Check if question is single/multiple choice and needs options
-        is_choice = context["saved"].typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+        # Check if question is single/multiple choice or ranking and needs options
+        is_choice = context["saved"].typ in [
+            BaseQuestionType.SINGLE,
+            BaseQuestionType.MULTIPLE,
+            RegistrationQuestionType.RANKING,
+        ]
         if is_choice and not option_model.objects.filter(question_id=context["saved"].id).exists():
             messages.warning(
                 request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question."),
+                _("You must define at least one option before saving a choice or ranking question."),
             )
 
             # Redirect to question page

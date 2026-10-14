@@ -441,6 +441,9 @@ msgstr "Regler"
 msgid "Saved"
 msgstr "Gemt"
 
+msgid "Scale"
+msgstr "Skala"
+
 msgid "Sheet"
 msgstr "Ark"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Stedord"
 
+msgid "Ranking"
+msgstr "Rangering"
+
 msgid "Reading"
 msgstr "Læsning"
 
@@ -1351,6 +1357,9 @@ msgstr "Antal"
 
 msgid "Question"
 msgstr "Spørgsmål"
+
+msgid "Rankings"
+msgstr "Rangeringer"
 
 msgid "Receipts"
 msgstr "Kvitteringer"
@@ -2420,6 +2429,9 @@ msgstr "Tilføj prolog"
 msgid "Availability"
 msgstr "Tilgængelighed"
 
+msgid "Average rank"
+msgstr "Gennemsnitlig placering"
+
 msgid "Bank address"
 msgstr "Bankadresse"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-formular"
 msgid "Maximum members"
 msgstr "Maksimalt antal medlemmer"
 
+msgid "Maximum options"
+msgstr "Maks. muligheder"
+
+msgid "Maximum tickets"
+msgstr "Maks. billetter"
+
 msgid "Member demoted!"
 msgstr "Medlem degraderet!"
 
@@ -3394,6 +3412,9 @@ msgstr "Ingen brugere fundet."
 
 msgid "Non-residential"
 msgstr "Uden overnatning"
+
+msgid "Options to rank"
+msgstr "Muligheder at rangere"
 
 msgid "Overall balance"
 msgstr "Samlet saldo"
@@ -7607,6 +7628,9 @@ msgstr "Angiv frit beløbet for din donation"
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felter, der registrerer deltagerdata"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Maksimalt antal tegn (0 = ingen grænse)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Der er endnu ikke oprettet nogen debriefspørgsmål."
 
@@ -7816,6 +7840,9 @@ msgstr "Er du sikker på, at du vil slette dette element?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Er du sikker på, at du vil spille denne karakter?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Gennemsnitlig placering for hver mulighed (lavere er bedre)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpas knapper i arrangementets navigationsbjælke"
@@ -8828,6 +8855,9 @@ msgstr "Hovedfarve til tekstindhold på alle dit events sider"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Der er endnu ikke opsat nogen debriefspørgsmål for dette event."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Antal muligheder, du skal sætte i prioriteret rækkefølge (0 = alle)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valgfrit - Andre muligheder som krav, kommasepareret"
 
@@ -8994,6 +9024,9 @@ msgstr ""
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Maksimalt antal laug, som spillere kan oprette (0 = ingen grænse)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Skalaens maksimumværdi, startende fra 1 (0 = standard 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9190,6 +9223,9 @@ msgstr "Administrer deltagerspørgsmål ved at besvare eller lukke hvert enkelt"
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Administrer eventområderne, hvor lagerartikler skal anvendes"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Maksimalt antal muligheder, der kan vælges (0 = ingen grænse)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10199,6 +10235,11 @@ msgstr ""
 "tilmeldingsgebyrer"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Maksimalt antal ekstra billetter, der kan reserveres (0 = ingen grænse)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr "Organisér købbare evner i kategorier ved at administrere evnetyper"
 
@@ -11157,6 +11198,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Du er blevet tildelt karakteren <b>%(character)s</b> til <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Du skal oprette mindst én mulighed, før du gemmer et valg- eller "
+"rangeringsspørgsmål."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -12709,13 +12757,6 @@ msgid ""
 msgstr ""
 "Når du er klar til permanent at opdatere lagerantal baseret på dette events "
 "tildelinger"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Du skal definere mindst én mulighed, før du gemmer et enkeltvalgs- eller "
-"flervalgsspørgsmål."
 
 #, python-format
 msgid ""
@@ -15281,15 +15322,6 @@ msgstr ""
 "eventsiden."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Valgfrit - For tekstspørgsmål, maksimalt antal tegn; for spørgsmål med flere"
-" valgmuligheder, maksimalt antal muligheder; for Likertskalaspørgsmål, "
-"maksimal værdi på skalaen (0 = ingen grænse)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15456,6 +15488,17 @@ msgstr ""
 "Angiv, om denne mulighed tildeles automatisk, når spørgsmålet ikke kan "
 "besvares af deltageren, og ingen mulighed blev valgt; hvis flere muligheder "
 "er markeret, tildeles den første, hvis forudsætninger er opfyldt"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Valgfrit - For tekstspørgsmål: maksimalt antal tegn; for flere "
+"valgmuligheder: maksimalt antal valgmuligheder; for Likert-skala-spørgsmål: "
+"skalaens maksimumværdi; for rangeringsspørgsmål: antal muligheder, der skal "
+"rangeres (0 = ingen grænse)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

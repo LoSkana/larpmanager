@@ -441,6 +441,9 @@ msgstr "Reglas"
 msgid "Saved"
 msgstr "Guardado"
 
+msgid "Scale"
+msgstr "Escala"
+
 msgid "Sheet"
 msgstr "Ficha"
 
@@ -1003,6 +1006,9 @@ msgstr "Perfil"
 msgid "Pronoun"
 msgstr "Pronombre"
 
+msgid "Ranking"
+msgstr "Ranking"
+
 msgid "Reading"
 msgstr "Lectura"
 
@@ -1351,6 +1357,9 @@ msgstr "Cantidad"
 
 msgid "Question"
 msgstr "Pregunta"
+
+msgid "Rankings"
+msgstr "Rankings"
 
 msgid "Receipts"
 msgstr "Recibos"
@@ -2420,6 +2429,9 @@ msgstr "Añadir prólogo"
 msgid "Availability"
 msgstr "Disponibilidad"
 
+msgid "Average rank"
+msgstr "Posición media"
+
 msgid "Bank address"
 msgstr "Dirección bancaria"
 
@@ -3368,6 +3380,12 @@ msgstr "Formulario de Matchmaker"
 msgid "Maximum members"
 msgstr "Número máximo de miembros"
 
+msgid "Maximum options"
+msgstr "Opciones máximas"
+
+msgid "Maximum tickets"
+msgstr "Entradas máximas"
+
 msgid "Member demoted!"
 msgstr "Miembro degradado!"
 
@@ -3394,6 +3412,9 @@ msgstr "No se han encontrado usuarios."
 
 msgid "Non-residential"
 msgstr "No residencial"
+
+msgid "Options to rank"
+msgstr "Opciones que ordenar"
 
 msgid "Overall balance"
 msgstr "Balance total"
@@ -7609,6 +7630,9 @@ msgstr "Indica libremente la cantidad de tu donación"
 msgid "Manage fields that track participants' data"
 msgstr "Gestiona los campos que registran los datos de los participantes"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Número máximo de caracteres (0 = sin límite)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Todavía no se han creado preguntas de evaluación."
 
@@ -7818,6 +7842,9 @@ msgstr "¿Estás seguro de que quieres borrar este elemento?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "¿Seguro que quieres jugar con este personaje?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Posición media de cada opción (cuanto más baja, mejor)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personaliza los botones de la barra de navegación del evento"
@@ -8870,6 +8897,9 @@ msgid "No debrief questions have been set up for this event yet."
 msgstr ""
 "Todavía no se han configurado preguntas de evaluación para este evento."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Número de opciones que ordenar por preferencia (0 = todas)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Opcional - Otras opciones como requisitos, separadas por comas"
 
@@ -9052,6 +9082,9 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 "Número máximo de gremios que pueden crear los jugadores (0 = sin límite)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Valor máximo de la escala, empezando desde 1 (0 = 5 por defecto)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9292,6 +9325,9 @@ msgstr ""
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Gestiona las zonas del evento donde se colocarán los artículos del almacén"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Número máximo de opciones que se pueden seleccionar (0 = sin límite)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10430,6 +10466,12 @@ msgstr ""
 "inscripción del evento"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Número máximo de entradas adicionales que se pueden reservar (0 = sin "
+"límite)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "Organiza las habilidades que se pueden comprar en categorías según su tipo"
@@ -11440,6 +11482,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "Te han asignado el personaje <b>%(character)s</b> para <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Tienes que definir al menos una opción antes de guardar una pregunta de "
+"elección o de ranking."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13008,13 +13057,6 @@ msgid ""
 msgstr ""
 "Cuando estés preparado para actualizar permanentemente las cantidades de "
 "almacén en función de las asignaciones de este evento"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Debes definir al menos una opción antes de guardar una pregunta de elección "
-"única o múltiple."
 
 #, python-format
 msgid ""
@@ -15625,15 +15667,6 @@ msgstr ""
 "personajes y gestionar los miembros desde la página del evento."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Opcional: para preguntas de texto, número máximo de caracteres; para "
-"opciones múltiples, número máximo de opciones; para preguntas de escala "
-"Likert, valor máximo de la escala (0 = sin límite)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15805,6 +15838,17 @@ msgstr ""
 "participante no puede responder a la pregunta y no ha elegido ninguna "
 "opción; si se marcan varias opciones, se asigna la primera cuyos requisitos "
 "se cumplan"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Opcional - Para preguntas de texto, número máximo de caracteres; para "
+"opciones múltiples, número máximo de opciones; para preguntas de escala "
+"Likert, valor máximo de la escala; para preguntas de ranking, número de "
+"opciones que ordenar (0 = sin límite)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

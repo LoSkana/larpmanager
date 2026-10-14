@@ -485,8 +485,12 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     all_types = choices.keys()
     all_types -= basic_tps
     # Faction preference is matchmaker-only and handled separately;
-    # Likert scale is not tied to a feature flag
-    all_types -= {RegistrationQuestionType.FACTION_PREFERENCE, RegistrationQuestionType.LIKERT}
+    # Likert scale and ranking are not tied to a feature flag
+    all_types -= {
+        RegistrationQuestionType.FACTION_PREFERENCE,
+        RegistrationQuestionType.LIKERT,
+        RegistrationQuestionType.RANKING,
+    }
 
     # Create default question types if they don't exist
     for el in def_tps:

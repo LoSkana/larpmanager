@@ -441,6 +441,9 @@ msgstr "Règles"
 msgid "Saved"
 msgstr "Enregistré"
 
+msgid "Scale"
+msgstr "Échelle"
+
 msgid "Sheet"
 msgstr "Fiche"
 
@@ -1003,6 +1006,9 @@ msgstr "Profil"
 msgid "Pronoun"
 msgstr "Pronom"
 
+msgid "Ranking"
+msgstr "Classement"
+
 msgid "Reading"
 msgstr "Lecture"
 
@@ -1351,6 +1357,9 @@ msgstr "Quantité"
 
 msgid "Question"
 msgstr "Question"
+
+msgid "Rankings"
+msgstr "Classements"
 
 msgid "Receipts"
 msgstr "Reçus"
@@ -2420,6 +2429,9 @@ msgstr "Ajouter un prologue"
 msgid "Availability"
 msgstr "Disponibilités"
 
+msgid "Average rank"
+msgstr "Rang moyen"
+
 msgid "Bank address"
 msgstr "Adresse de la banque"
 
@@ -3368,6 +3380,12 @@ msgstr "Formulaire Matchmaker"
 msgid "Maximum members"
 msgstr "Nombre maximum de membres"
 
+msgid "Maximum options"
+msgstr "Options maximum"
+
+msgid "Maximum tickets"
+msgstr "Billets maximum"
+
 msgid "Member demoted!"
 msgstr "Membre rétrogradé!"
 
@@ -3394,6 +3412,9 @@ msgstr "Aucun utilisateur trouvé."
 
 msgid "Non-residential"
 msgstr "Non résidentiel"
+
+msgid "Options to rank"
+msgstr "Options à classer"
 
 msgid "Overall balance"
 msgstr "Bilan global"
@@ -7614,6 +7635,9 @@ msgstr "Indique librement le montant de ton don"
 msgid "Manage fields that track participants' data"
 msgstr "Gère les champs qui suivent les données des participants"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Nombre maximal de caractères (0 = aucune limite)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Aucune question de débriefing n’a encore été créée."
 
@@ -7826,6 +7850,9 @@ msgstr "Tu es sûr de vouloir supprimer cet élément ?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Veux-tu vraiment jouer ce personnage ?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Rang moyen de chaque option (plus il est bas, mieux c'est)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personnalise les boutons de la barre de navigation de l’événement"
@@ -8896,6 +8923,9 @@ msgid "No debrief questions have been set up for this event yet."
 msgstr ""
 "Aucune question de débriefing n’a encore été configurée pour cet événement."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr "Nombre d'options à classer par ordre de préférence (0 = toutes)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 "Facultatif - Autres options comme prérequis, séparées par des virgules"
@@ -9093,6 +9123,9 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 "Nombre maximal de guildes que les joueurs peuvent créer (0 = aucune limite)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Valeur maximale de l'échelle, à partir de 1 (0 = 5 par défaut)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9330,6 +9363,9 @@ msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 "Gère les zones de l'événement où les articles de l'entrepôt seront mis en "
 "place"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Nombre maximal d'options que tu peux sélectionner (0 = aucune limite)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10513,6 +10549,12 @@ msgstr ""
 "d’inscription à l’événement"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr ""
+"Nombre maximal de billets supplémentaires que tu peux réserver (0 = aucune "
+"limite)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 "Regroupe les compétences disponibles à l'achat en catégories en gérant les "
@@ -11537,6 +11579,13 @@ msgid ""
 "<b>%(event)s</b>."
 msgstr ""
 "On t'a attribué le personnage <b>%(character)s</b> pour <b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Tu dois définir au moins une option avant d'enregistrer une question à choix"
+" ou de classement."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -13108,13 +13157,6 @@ msgid ""
 msgstr ""
 "Lorsque tu es prêt à mettre à jour de façon permanente les quantités de "
 "l'entrepôt en fonction des affectations de cet événement"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Tu dois définir au moins une option avant d'enregistrer une question à choix"
-" unique ou à choix multiple."
 
 #, python-format
 msgid ""
@@ -15762,15 +15804,6 @@ msgstr ""
 "des personnages et gérer les adhésions depuis la page de l'événement."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Facultatif - Pour les questions texte, nombre maximum de caractères ; pour "
-"les choix multiples, nombre maximum d’options ; pour les questions à échelle"
-" de Likert, valeur maximale de l’échelle (0 = aucune limite)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15944,6 +15977,17 @@ msgstr ""
 " ne peut pas répondre à la question et qu’aucune option n’a été choisie ; si"
 " plusieurs options sont indiquées, la première dont les conditions "
 "préalables sont remplies est attribuée"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Facultatif - Pour les questions texte, nombre maximal de caractères ; pour "
+"les choix multiples, nombre maximal d'options ; pour les questions à échelle"
+" de Likert, valeur maximale de l'échelle ; pour les questions de classement,"
+" nombre d'options à classer (0 = aucune limite)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

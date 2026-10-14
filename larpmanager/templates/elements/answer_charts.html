@@ -1,0 +1,6 @@
+{% load static %}
+{% if likert_charts or ranking_charts %}
+    <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
+    {% include "elements/likert_charts.html" %}
+    {% include "elements/ranking_charts.html" %}
+{% endif %}

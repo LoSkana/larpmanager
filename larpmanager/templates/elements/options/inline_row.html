@@ -18,7 +18,7 @@ When opt is None, renders the blank row used as the "new option" template.
         <span class="io-error-msg" data-field="name"></span>
     </td>
     {% if inline_cfg.show_price %}
-        <td>
+        <td class="io-col-num">
             <input type="number"
                    name="price"
                    min="0"
@@ -29,7 +29,7 @@ When opt is None, renders the blank row used as the "new option" template.
         </td>
     {% endif %}
     {% if inline_cfg.show_max %}
-        <td>
+        <td class="io-col-num">
             <input type="number"
                    name="max_available"
                    min="0"

@@ -34,12 +34,13 @@ from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.cache.writing import get_character_element_fields
-from larpmanager.models.form import BaseQuestionType
+from larpmanager.models.form import BaseQuestionType, RegistrationQuestionType
 from larpmanager.models.registration import CheckIn, Registration
 from larpmanager.models.writing import FactionType
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.registrations.questions import (
     get_ordered_registration_questions,
+    get_ranking_names,
     get_registration_answers_by_question,
     get_registration_choices_by_question,
 )
@@ -114,7 +115,7 @@ def orga_checkin_detail(request: HttpRequest, event_slug: str) -> JsonResponse:
     except ObjectDoesNotExist:
         return JsonResponse({"res": "ko", "error": "invalid_uuid"}, status=404)
 
-    questions = list(get_ordered_registration_questions(context))
+    questions = list(get_ordered_registration_questions(context).prefetch_related("options"))
     question_ids = [question.id for question in questions]
     answers = get_registration_answers_by_question(question_ids, registration_id=registration.id)
     choices = get_registration_choices_by_question(question_ids, registration_id=registration.id)
@@ -123,6 +124,9 @@ def orga_checkin_detail(request: HttpRequest, event_slug: str) -> JsonResponse:
     for question in questions:
         if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
             value = ", ".join(choices.get(registration.id, {}).get(question.id, []))
+        elif question.typ == RegistrationQuestionType.RANKING:
+            names_by_uuid = {str(option.uuid): option.name for option in question.options.all()}
+            value = ", ".join(get_ranking_names(answers.get(registration.id, {}).get(question.id, ""), names_by_uuid))
         else:
             value = answers.get(registration.id, {}).get(question.id, "")
         if value:

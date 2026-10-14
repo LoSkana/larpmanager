@@ -40,6 +40,7 @@ from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relati
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.edit.backend import _get_values_mapping
 from larpmanager.utils.io.download.columns import _get_reg_type_names
+from larpmanager.utils.registrations.questions import get_ranking_names
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -285,30 +286,39 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
             continue
         column_headers.append(question["name"])
 
-        # Get element-specific value mapping for special question types
-        question_type_mapping = _get_values_mapping(element)
-        cell_value = ""
-
-        # Handle mapped question types (direct element attributes)
-        if question["typ"] in question_type_mapping:
-            cell_value = question_type_mapping[question["typ"]]()
-        # Handle text-based question types (paragraph, text, email, computed)
-        elif question["typ"] in {"p", "t", "e", "c", "concept"}:
-            if element.id in question_answers.get(question["id"], {}):
-                cell_value = question_answers[question["id"]][element.id]
-        # Handle choice-based question types (single, multiple)
-        elif (
-            question["typ"] in {"s", "m"}
-            and question["id"] in question_choices
-            and element.id in question_choices[question["id"]]
-        ):
-            cell_value = ", ".join(question_choices[question["id"]][element.id])
+        cell_value = _get_question_cell(question, element, question_answers, question_choices)
 
         # Clean value for export format (remove tabs, convert newlines)
         cell_value = cell_value.replace("\t", "").replace("\n", "<br />")
         row_values.append(cell_value)
 
     return row_values, column_headers
+
+
+def _get_question_cell(question: dict, element: object, question_answers: dict, question_choices: dict) -> str:
+    """Return the export value of a question for the given element."""
+    # Get element-specific value mapping for special question types
+    question_type_mapping = _get_values_mapping(element)
+    element_answers = question_answers.get(question["id"], {})
+
+    # Handle mapped question types (direct element attributes)
+    if question["typ"] in question_type_mapping:
+        return question_type_mapping[question["typ"]]()
+
+    # Handle text-based question types (paragraph, text, email, computed)
+    if question["typ"] in {"p", "t", "e", "c", "concept"}:
+        return element_answers.get(element.id, "")
+
+    # Handle ranking question types, as comma-separated ranked option names
+    if question["typ"] == "r":
+        names_by_uuid = {str(option["uuid"]): option["name"] for option in question["options"]}
+        return ", ".join(get_ranking_names(element_answers.get(element.id, ""), names_by_uuid))
+
+    # Handle choice-based question types (single, multiple)
+    if question["typ"] in {"s", "m"}:
+        return ", ".join(question_choices.get(question["id"], {}).get(element.id, []))
+
+    return ""
 
 
 def _row_header(  # noqa: C901, PLR0912

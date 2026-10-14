@@ -34,7 +34,13 @@ from typing import Any
 
 from django.db.models import F, QuerySet
 
-from larpmanager.models.form import RegistrationAnswer, RegistrationChoice, RegistrationQuestion
+from larpmanager.models.form import (
+    RegistrationAnswer,
+    RegistrationChoice,
+    RegistrationOption,
+    RegistrationQuestion,
+    RegistrationQuestionType,
+)
 from larpmanager.models.writing import get_event_elements
 
 
@@ -108,3 +114,60 @@ def get_registration_choices_by_question(
             choice.option.name
         )
     return choices_by_registration
+
+
+def sanitize_ranking(value: str | None, valid_uuids: list[str], max_rank: int = 0) -> str:
+    """Clean a submitted comma-separated ranking of uuids.
+
+    Drops unknown and duplicate uuids, appends any valid uuid missing from the submission
+    (so every item is always ranked), then keeps only the first ``max_rank`` (0 = all).
+    """
+    valid = set(valid_uuids)
+    sanitized = list(dict.fromkeys(item_uuid for item_uuid in (value or "").split(",") if item_uuid in valid))
+    sanitized.extend(item_uuid for item_uuid in valid_uuids if item_uuid not in sanitized)
+    if max_rank:
+        sanitized = sanitized[:max_rank]
+    return ",".join(sanitized)
+
+
+def get_ranking_names(value: str | None, names_by_uuid: dict[str, str]) -> list[str]:
+    """Resolve a comma-separated ranking of uuids into the ordered list of names."""
+    return [names_by_uuid[item_uuid] for item_uuid in (value or "").split(",") if item_uuid in names_by_uuid]
+
+
+def remap_ranking(value: str | None, source_question_id: int, target_question: dict) -> str:
+    """Translate a ranking of source option uuids into the target question options with the same name."""
+    source_names = {
+        str(option_uuid): name.lower()
+        for option_uuid, name in RegistrationOption.objects.filter(question_id=source_question_id).values_list(
+            "uuid", "name"
+        )
+    }
+    target_uuids = {option["name"].lower(): str(option["uuid"]) for option in target_question["options"]}
+    ranked = [
+        target_uuids[source_names[item_uuid]]
+        for item_uuid in (value or "").split(",")
+        if source_names.get(item_uuid) in target_uuids
+    ]
+    ranked = list(dict.fromkeys(ranked))
+    max_rank = target_question.get("max_length") or 0
+    if max_rank:
+        ranked = ranked[:max_rank]
+    return ",".join(ranked)
+
+
+def get_transferred_answer_text(answer: RegistrationAnswer, target_question: dict) -> str:
+    """Return the answer text adapted to a matching question of another event, empty if it can't be kept.
+
+    Likert and ranking answers are kept only on a question of the same type, with ranking
+    options matched by name.
+    """
+    structured_types = {RegistrationQuestionType.LIKERT, RegistrationQuestionType.RANKING}
+    source_typ = answer.question.typ
+    if source_typ not in structured_types and target_question["typ"] not in structured_types:
+        return answer.text
+    if source_typ != target_question["typ"]:
+        return ""
+    if source_typ == RegistrationQuestionType.RANKING:
+        return remap_ranking(answer.text, answer.question_id, target_question)
+    return answer.text

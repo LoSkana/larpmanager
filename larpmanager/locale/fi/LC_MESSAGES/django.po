@@ -441,6 +441,9 @@ msgstr "Säännöt"
 msgid "Saved"
 msgstr "Tallennettu"
 
+msgid "Scale"
+msgstr "Asteikko"
+
 msgid "Sheet"
 msgstr "Hahmolomake"
 
@@ -1003,6 +1006,9 @@ msgstr "Profiili"
 msgid "Pronoun"
 msgstr "Pronomini"
 
+msgid "Ranking"
+msgstr "Paremmuusjärjestys"
+
 msgid "Reading"
 msgstr "Lukeminen"
 
@@ -1351,6 +1357,9 @@ msgstr "Määrä"
 
 msgid "Question"
 msgstr "Kysymys"
+
+msgid "Rankings"
+msgstr "Paremmuusjärjestykset"
 
 msgid "Receipts"
 msgstr "Kuitit"
@@ -2420,6 +2429,9 @@ msgstr "Lisää prologi"
 msgid "Availability"
 msgstr "Saatavuus"
 
+msgid "Average rank"
+msgstr "Keskimääräinen sijoitus"
+
 msgid "Bank address"
 msgstr "Pankin osoite"
 
@@ -3368,6 +3380,12 @@ msgstr "Matchmaker-lomake"
 msgid "Maximum members"
 msgstr "Jäsenten enimmäismäärä"
 
+msgid "Maximum options"
+msgstr "Vaihtoehtoja enintään"
+
+msgid "Maximum tickets"
+msgstr "Lippuja enintään"
+
 msgid "Member demoted!"
 msgstr "Jäsen alennettiin!"
 
@@ -3394,6 +3412,9 @@ msgstr "Käyttäjiä ei löytynyt."
 
 msgid "Non-residential"
 msgstr "Ei-majoituksellinen"
+
+msgid "Options to rank"
+msgstr "Järjestettävät vaihtoehdot"
 
 msgid "Overall balance"
 msgstr "Kokonaissaldo"
@@ -7607,6 +7628,9 @@ msgstr "Ilmoita vapaasti lahjoituksesi määrä"
 msgid "Manage fields that track participants' data"
 msgstr "Hallitse kenttiä, joilla seurataan osallistujien tietoja"
 
+msgid "Maximum number of characters (0 = no limit)"
+msgstr "Merkkien enimmäismäärä (0 = ei rajaa)"
+
 msgid "No debrief questions have been created yet."
 msgstr "Jälkipuintikysymyksiä ei ole vielä luotu."
 
@@ -7816,6 +7840,9 @@ msgstr "Haluatko varmasti poistaa tämän elementin?"
 
 msgid "Are you sure you want to play this character?"
 msgstr "Haluatko varmasti pelata tätä hahmoa?"
+
+msgid "Average rank of each option (lower is better)"
+msgstr "Kunkin vaihtoehdon keskimääräinen sijoitus (pienempi on parempi)"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Mukauta tapahtuman navigointipalkin painikkeita"
@@ -8838,6 +8865,10 @@ msgstr "Pääväri tekstisisältöä varten tapahtuman sivuilla"
 msgid "No debrief questions have been set up for this event yet."
 msgstr "Tähän tapahtumaan ei ole vielä määritetty jälkipuintikysymyksiä."
 
+msgid "Number of options to put in order of preference (0 = all)"
+msgstr ""
+"Kuinka monta vaihtoehtoa laitetaan mieluisuusjärjestykseen (0 = kaikki)"
+
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 "Valinnainen - Muut vaatimuksiksi käytettävät vaihtoehdot, pilkulla "
@@ -9006,6 +9037,9 @@ msgstr "Hallitse hahmolomakkeen kysymyksen valittavia vaihtoehtoja"
 
 msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr "Kiltien enimmäismäärä, jonka pelaajat voivat luoda (0 = ei rajaa)."
+
+msgid "Maximum value of the scale, starting from 1 (0 = default 5)"
+msgstr "Asteikon enimmäisarvo 1:stä alkaen (0 = oletus 5)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -9218,6 +9252,9 @@ msgstr ""
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Hallinnoi tapahtuma-alueita, joille varastotuotteet sijoitetaan"
+
+msgid "Maximum number of options that can be selected (0 = no limit)"
+msgstr "Kuinka monta vaihtoehtoa voi valita enintään (0 = ei rajaa)"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
@@ -10290,6 +10327,10 @@ msgstr ""
 "ilmoittautumismaksujen kattamiseen"
 
 msgid ""
+"Maximum number of additional tickets that can be reserved (0 = no limit)"
+msgstr "Kuinka monta lisälippua voi varata enintään (0 = ei rajaa)"
+
+msgid ""
 "Organize purchasable abilities into categories by managing ability types"
 msgstr "Järjestä ostettavat kyvyt luokkiin hallinnoimalla kyvyn tyyppejä"
 
@@ -11230,6 +11271,13 @@ msgid ""
 msgstr ""
 "Sinulle on osoitettu hahmo <b>%(character)s</b> tapahtumaan "
 "<b>%(event)s</b>."
+
+msgid ""
+"You must define at least one option before saving a choice or ranking "
+"question."
+msgstr ""
+"Määritä vähintään yksi vaihtoehto ennen kuin tallennat valinta- tai "
+"järjestyskysymyksen."
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -12769,13 +12817,6 @@ msgid ""
 msgstr ""
 "Kun olet valmis päivittämään varastomäärät pysyvästi tämän tapahtuman "
 "kohdistusten perusteella"
-
-msgid ""
-"You must define at least one option before saving a single-choice or "
-"multiple-choice question."
-msgstr ""
-"Sinun on määritettävä vähintään yksi vaihtoehto ennen yksi- tai "
-"monivalintakysymyksen tallentamista."
 
 #, python-format
 msgid ""
@@ -15364,15 +15405,6 @@ msgstr ""
 "jäsenyyttä tapahtumasivulta."
 
 msgid ""
-"Optional - For text questions, maximum number of characters; For multiple "
-"options, maximum number of options; For Likert scale questions, maximum "
-"value of the scale (0 = no limit)"
-msgstr ""
-"Valinnainen - Tekstikysymyksissä merkkien enimmäismäärä; "
-"monivalintakysymyksissä vaihtoehtojen enimmäismäärä; Likert-"
-"asteikkokysymyksissä asteikon enimmäisarvo (0 = ei rajoitusta)"
-
-msgid ""
 "Select a file with extension csv. The first column contains the amounts, the"
 " second the receipts. Get this data from the bank or an equivalent entity to"
 " verify the marked entries."
@@ -15542,6 +15574,17 @@ msgstr ""
 "vastata kysymykseen eikä mitään vaihtoehtoa ole valittu; jos useita "
 "vaihtoehtoja on merkitty, annetaan ensimmäinen, რომლის edellytykset "
 "täyttyvät"
+
+msgid ""
+"Optional - For text questions, maximum number of characters; For multiple "
+"options, maximum number of options; For Likert scale questions, maximum "
+"value of the scale; For ranking questions, number of options to rank (0 = no"
+" limit)"
+msgstr ""
+"Valinnainen - Tekstikysymyksissä merkkien enimmäismäärä; monivalinnoissa "
+"vaihtoehtojen enimmäismäärä; Likert-asteikkokysymyksissä asteikon "
+"enimmäisarvo; järjestyskysymyksissä järjestettävien vaihtoehtojen määrä (0 ="
+" ei rajaa)"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

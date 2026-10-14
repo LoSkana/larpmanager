@@ -69,6 +69,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
     RegistrationQuestionApplicable,
+    RegistrationQuestionType,
 )
 from larpmanager.models.member import LogOperationType, Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -88,6 +89,7 @@ from larpmanager.utils.registrations.context import _get_registration_fields, ge
 from larpmanager.utils.registrations.features import _save_questbuilder, lottery_info
 from larpmanager.utils.registrations.questions import (
     get_ordered_registration_questions,
+    get_ranking_names,
     get_registration_answers_by_question,
     get_registration_choices_by_question,
 )
@@ -668,8 +670,18 @@ def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> Json
     return JsonResponse(res)
 
 
+def _get_ranking_form_list(context: dict, question: dict) -> dict[str, str]:
+    """Map registration uuid to the comma-separated ranked option names of a ranking question."""
+    names_by_uuid = {str(option["uuid"]): option["name"] for option in question.get("options", [])}
+    answers = RegistrationAnswer.objects.filter(question_id=question["id"], registration__run=context["run"])
+    return {
+        str(answer["registration__uuid"]): ", ".join(get_ranking_names(answer["text"], names_by_uuid))
+        for answer in answers.values("text", "registration__uuid")
+    }
+
+
 @login_required
-def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  # noqa: C901 - Complex form list management with POST handling
+def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  # noqa: C901, PLR0912 - Complex form list management with POST handling
     """Handle registration form list management for event organizers.
 
     Args:
@@ -731,6 +743,9 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
             if len(answer) == max_length:
                 popup.append(el["registration__uuid"])
             res[el["registration__uuid"]] = answer
+
+    elif q["typ"] == RegistrationQuestionType.RANKING:
+        res = _get_ranking_form_list(context, q)
 
     return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q["uuid"])})
 
@@ -1101,12 +1116,20 @@ def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpRes
 
     answers_by_registration = get_registration_answers_by_question(question_ids, registration_id__in=registration_ids)
     choices_by_registration = get_registration_choices_by_question(question_ids, registration_id__in=registration_ids)
+    ranking_names = {
+        question.id: {str(option.uuid): option.name for option in question.options.all()}
+        for question in questions
+        if question.typ == RegistrationQuestionType.RANKING
+    }
 
     for registration in context["list"]:
         cells = []
         for question in questions:
             if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
                 value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            elif question.id in ranking_names:
+                raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
+                value = ", ".join(get_ranking_names(raw, ranking_names[question.id]))
             else:
                 value = answers_by_registration.get(registration.id, {}).get(question.id, "")
             cells.append(value)

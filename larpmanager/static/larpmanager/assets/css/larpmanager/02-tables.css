@@ -121,6 +121,11 @@ td.deadline.redderized::before {
   max-width: 100% !important;
 }
 
+/* Ranking question options have no price nor maximum */
+#options.options-ranking .inline-options-table .io-col-num {
+  display: none !important;
+}
+
 /* Keep the details row collapsed when toggled shut, even nested inside a .mob form table on mobile */
 .inline-option-details.hide {
   display: none !important;
@@ -140,7 +145,8 @@ td.deadline.redderized::before {
     width: auto !important;
   }
 
-  .inline-options-table tr.inline-option > td:not([class]) {
+  .inline-options-table tr.inline-option > td:not([class]),
+  .inline-options-table tr.inline-option > td.io-col-num {
     order: 0;
     flex: 1 1 100%;
   }
