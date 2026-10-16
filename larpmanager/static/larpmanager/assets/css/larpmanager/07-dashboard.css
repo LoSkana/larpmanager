@@ -676,11 +676,6 @@ body.floating_iframe .inner {
   }
 }
 
-.old_dashboard .grid-item {
-  margin: 0.2em 0;
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.9);
-}
-
 .copy-link-btn {
   background: none;
   border: none;
