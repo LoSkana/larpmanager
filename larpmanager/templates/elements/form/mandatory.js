@@ -40,7 +40,7 @@ function check_mandatory_fields(mandatory, sections) {
         missing.push(k);
     }
 
-    show_mandatory_summary(first_error, missing);
+    show_mandatory_summary(missing);
 
     if (first_error) {
         window.jump_to($('#mandatory-summary'));
@@ -51,9 +51,9 @@ function check_mandatory_fields(mandatory, sections) {
 }
 
 // Lists the unanswered mandatory questions at the top of the form, each linking to its field
-function show_mandatory_summary(first_error, missing) {
+function show_mandatory_summary(missing) {
     $('#mandatory-summary').remove();
-    if (!first_error) return;
+    if (!missing.length) return;
 
     var list = $('<ul></ul>');
     $.each(missing, function(index, k) {
@@ -66,7 +66,8 @@ function show_mandatory_summary(first_error, missing) {
         .append($('<p></p>').text('{% filter escapejs %}{% trans "Missing reply in the following questions:" %}{% endfilter %}'))
         .append(list);
 
-    var form = first_error.closest('form');
+    var field = $('#' + missing[0]);
+    var form = field.closest('form');
     if (form.length) form.prepend(summary);
-    else first_error.closest('table').before(summary);
+    else field.closest('table').before(summary);
 }

@@ -299,6 +299,8 @@ def signup_check(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#register_form"), "Please fill in this field")
     expect_normalized(page, page.locator("#mandatory-summary"), "Missing reply in the following questions: mandatory")
+    page.locator("#mandatory-summary .form-error-link").first.click()
+    expect(page.get_by_role("textbox", name="mandatory (*)")).to_be_in_viewport()
     expect_normalized(page, page.locator("#register_form"), "mandatory text")
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("ggggg")
