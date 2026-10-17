@@ -168,7 +168,7 @@ class RegistrationForm(BaseRegistrationForm):
             if key not in self.fields:
                 continue
             tm = [str(i) for i in question.get("tickets_map", []) if i is not None]
-            if not ticket or ticket not in tm:
+            if tm and ticket not in tm:
                 self.fields[key].required = False
 
     def init_additionals(self) -> None:

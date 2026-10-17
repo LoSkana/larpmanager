@@ -102,7 +102,7 @@ window.show_form_field = function(fieldId) {
         row = field.closest('tr').length ? field.closest('tr') : field;
     }
     if (!row.length) return;
-    row.parents('.form_container.hide').removeClass('hide').show();
+    row.parents('.hide').removeClass('hide').show();
     $('.my_toggle').each(function() { syncToggleAria(this); });
     window.jump_to(row);
 };
