@@ -1,4 +1,5 @@
 {% load tz show_tags static i18n %}
+{% include "elements/form/errors.html" %}
 {% include "elements/form/informations.html" %}
 {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
 {% define "" as old_section %}
