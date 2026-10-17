@@ -28,7 +28,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.models.miscellanea import WarehouseItem
+from larpmanager.cache.config import save_single_config
+from larpmanager.models.miscellanea import Log, WarehouseItem, WarehouseItemAssignment
 from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
@@ -65,6 +66,7 @@ def test_warehouse(pw_page: Any) -> None:
     checks(page)
     edit_loaded_deployed(page)
     item_areas(page)
+    commit_quantities(page)
 
 
 def prepare(page: Any) -> None:
@@ -386,3 +388,38 @@ def item_areas(page: Any) -> None:
     row = page.locator("tr", has_text="Item 2")
     expect(row.get_by_text("Kitchen", exact=False)).to_have_count(0)
     expect(row.get_by_text("sALOON", exact=False)).to_have_count(0)
+
+
+def commit_quantities(page: Any) -> None:
+    # enable quantity tracking: Item 1 keeps part of its stock, Item 3sa is used up
+    save_single_config(WarehouseItem.objects.get(name="Item 1").association, "warehouse_quantity", "True")
+    WarehouseItem.objects.filter(name="Item 1").update(quantity=10)
+    WarehouseItem.objects.filter(name="Item 3sa").update(quantity=3)
+    WarehouseItemAssignment.objects.filter(item__name="Item 1").update(quantity=2, loaded=True)
+    WarehouseItemAssignment.objects.filter(item__name="Item 3sa").update(quantity=2, loaded=True)
+    assert WarehouseItemAssignment.objects.filter(item__name="Item 1").count() == 2
+    assert WarehouseItemAssignment.objects.filter(item__name="Item 3sa").count() == 2
+
+    # preview lists the impact on each item
+    page.get_by_role("link", name="Manifest").click()
+    page.get_by_role("link", name="commit quantities to warehouse").click()
+    _wait_lm_ready(page)
+    preview_url = page.url
+    expect_normalized(page, page.locator("#preview_table"), "Item 3sa Box A - bibi 3 4 -1 WILL BE DELETED")
+    expect_normalized(page, page.locator("#preview_table"), "Item 1 Boc B - dd 10 4 6 WILL BE UPDATED")
+
+    # commit: stock is reduced, used up items are removed and the change is logged
+    page.get_by_role("button", name="Confirm and commit quantities").click()
+    _wait_lm_ready(page)
+    expect(page.get_by_text("Warehouse quantities committed successfully")).to_be_visible()
+    expect(page.get_by_text("Warehouse quantities have been committed for this event")).to_be_visible()
+    assert WarehouseItem.objects.get(name="Item 1").quantity == 6
+    assert not WarehouseItem.objects.filter(name="Item 3sa").exists()
+    log = Log.objects.get(cls="WarehouseCommit")
+    assert "1 items updated, 1 items deleted" in log.element_name
+
+    # a second commit is refused
+    page.goto(preview_url)
+    _wait_lm_ready(page)
+    expect(page.get_by_text("Warehouse quantities already committed for this event")).to_be_visible()
+    assert Log.objects.filter(cls="WarehouseCommit").count() == 1
