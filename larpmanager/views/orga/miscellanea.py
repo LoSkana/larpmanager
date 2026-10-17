@@ -18,12 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import json
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -31,15 +33,17 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.config import save_single_config
+from larpmanager.cache.config import reset_event_configs, save_single_config
 from larpmanager.cache.warehouse import get_association_warehouse_cache, get_event_warehouse_assignments_cache
 from larpmanager.forms.miscellanea import (
     UploadAlbumsForm,
 )
 from larpmanager.forms.warehouse import OrgaWarehouseItemCommitRemainingForm
+from larpmanager.models.event import Event, EventConfig
 from larpmanager.models.miscellanea import (
     Album,
     Log,
+    LogOperationType,
     Milestone,
     MilestoneStatus,
     OneTimeAccessToken,
@@ -942,7 +946,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
         - Modifies WarehouseItem.quantity values in database
         - Deletes WarehouseItem records with final quantity <= 0
         - Sets event config 'warehouse_committed' to True
-        - Creates Log entry with category 'warehouse'
+        - Creates a WarehouseCommit Log entry
 
     """
     # Check user permissions for warehouse manifest access
@@ -961,54 +965,69 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
         messages.warning(request, _("Quantity tracking is not enabled for this organization"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
-    # Aggregate total assigned quantities per item across all areas
-    # Key: item_id, Value: sum of all quantities assigned to that item
-    # Only process items with "loaded" status for this event
-    item_assignments: dict[int, int] = {}
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
-        event=context["event"], loaded=True
-    ):
-        if el.quantity:
-            item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
+    with transaction.atomic():
+        # Lock the event row so concurrent commits are serialized, then recheck the flag
+        Event.objects.select_for_update().filter(pk=context["event"].id).first()
+        if EventConfig.objects.filter(event_id=context["event"].id, name="warehouse_committed", value="True").exists():
+            messages.warning(request, _("Warehouse quantities already committed for this event"))
+            return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
-    # Initialize tracking variables for audit log and user feedback
-    items_updated: int = 0
-    items_deleted: int = 0
-    items_modified: list[str] = []
+        # Aggregate total assigned quantities per item across all areas
+        # Key: item_id, Value: sum of all quantities assigned to that item
+        # Only process items with "loaded" status for this event
+        item_assignments: dict[int, int] = {}
+        for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+            event=context["event"], loaded=True
+        ):
+            if el.quantity:
+                item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
-    # Process each item that has assignments, updating or deleting as needed
-    for item in WarehouseItem.objects.filter(id__in=item_assignments.keys()):
-        assigned_quantity = item_assignments[item.id]
-        current_quantity = item.quantity or 0
-        final_quantity = current_quantity - assigned_quantity
+        # Initialize tracking variables for audit log and user feedback
+        items_updated: int = 0
+        items_deleted: int = 0
+        items_modified: list[str] = []
 
-        if assigned_quantity > 0:
-            if final_quantity <= 0:
-                # Delete item if all inventory has been assigned (or over-assigned)
-                items_modified.append(f"DELETED: {item.name} (was {current_quantity}, assigned {assigned_quantity})")
-                item.delete()
-                items_deleted += 1
-            else:
-                # Reduce item quantity by the assigned amount
-                items_modified.append(
-                    f"UPDATED: {item.name} ({current_quantity} -> {final_quantity}, assigned {assigned_quantity})",
-                )
-                item.quantity = final_quantity
-                item.save()
-                items_updated += 1
+        # Process each item that has assignments, updating or deleting as needed
+        for item in WarehouseItem.objects.select_for_update().filter(id__in=item_assignments.keys()):
+            assigned_quantity = item_assignments[item.id]
+            current_quantity = item.quantity or 0
+            final_quantity = current_quantity - assigned_quantity
 
-    # Mark event as having committed quantities to prevent duplicate commits
-    save_single_config(context["event"], "warehouse_committed", "True")
+            if assigned_quantity > 0:
+                if final_quantity <= 0:
+                    # Delete item if all inventory has been assigned (or over-assigned)
+                    items_modified.append(
+                        f"DELETED: {item.name} (was {current_quantity}, assigned {assigned_quantity})"
+                    )
+                    item.delete()
+                    items_deleted += 1
+                else:
+                    # Reduce item quantity by the assigned amount
+                    items_modified.append(
+                        f"UPDATED: {item.name} ({current_quantity} -> {final_quantity}, assigned {assigned_quantity})",
+                    )
+                    item.quantity = final_quantity
+                    item.save()
+                    items_updated += 1
 
-    # Create comprehensive audit log entry with all changes
-    Log.objects.create(
-        association=context["association"],
-        member=context["member"],
-        event=context["event"],
-        category="warehouse",
-        description=f"Committed warehouse quantities: {items_updated} items updated, {items_deleted} items deleted",
-        note="\n".join(items_modified) if items_modified else "No items modified",
-    )
+        # Mark event as having committed quantities to prevent duplicate commits
+        save_single_config(context["event"], "warehouse_committed", "True")
+
+        # Create audit log entry with all changes
+        summary = f"Committed warehouse quantities: {items_updated} items updated, {items_deleted} items deleted"
+        Log.objects.create(
+            member=context["member"],
+            cls="WarehouseCommit",
+            eid=context["event"].id,
+            dct=json.dumps(items_modified),
+            operation_type=LogOperationType.UPDATE,
+            element_name=summary,
+            run=context["run"],
+            association_id=context["association_id"],
+        )
+
+    # Reset again after commit so a concurrent read cannot leave a stale cached flag
+    reset_event_configs(context["event"].id)
 
     # Display success message with statistics to user
     messages.success(

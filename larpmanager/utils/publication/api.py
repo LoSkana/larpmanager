@@ -86,7 +86,7 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
         }
 
         # Create log entry in database
-        Log.objects.create(member=system_member, eid=api_key.id, cls="PublisherAPI", dct=json.dumps(log_data), dl=False)
+        Log.objects.create(member=system_member, eid=api_key.id, cls="PublisherAPI", dct=json.dumps(log_data))
 
         # Update API key usage statistics
         api_key.last_used = timezone.now()
