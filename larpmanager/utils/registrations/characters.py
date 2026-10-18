@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import F, Q
 
 from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
@@ -222,7 +222,7 @@ def check_assign_character(context: dict) -> None:
     """
     # Get registration
     registration = get_player_signup(context)
-    if not registration:
+    if not registration or registration.pending:
         return
 
     # Get the number of characters the player can play at the same time
@@ -269,7 +269,7 @@ def check_assign_character(context: dict) -> None:
 def assign_created_character(context: dict, character: Character) -> None:
     """Assign a character just created by the player to their signup, if a play slot is free."""
     registration = get_player_signup(context)
-    if not registration or not character.is_active:
+    if not registration or registration.pending or not character.is_active:
         return
 
     # Skip if player already plays the maximum number of characters
@@ -311,7 +311,7 @@ def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
         )
         .exclude(registration__run__event_id=event_id)
         .select_related("character")
-        .order_by("-registration__run__end")
+        .order_by(F("registration__run__end").desc(nulls_last=True))
     ):
         previous_rels.setdefault(rel.character_id, rel)
 
@@ -350,7 +350,7 @@ def assign_campaign_character(registration: Registration, candidate: dict) -> No
     character = candidate["character"]
     with transaction.atomic():
         # Lock the character to serialise concurrent assignments
-        Character.objects.select_for_update().filter(pk=character.pk).first()
+        Character.objects.select_for_update().get(pk=character.pk)
 
         if RegistrationCharacterRel.objects.filter(
             character=character,

@@ -219,7 +219,9 @@ class RegistrationForm(BaseRegistrationForm):
             help_text=_("Choose which of your characters to play in this event, or none to create a new one"),
             widget=forms.Select(attrs={"class": "keep_initial"}),
         )
-        self.initial["campaign_character"] = str(self.campaign_candidates[0]["character"].uuid)
+        # Preselect the most recent character only on new registrations, to avoid assigning one on edits
+        if not self.instance.pk:
+            self.initial["campaign_character"] = str(self.campaign_candidates[0]["character"].uuid)
 
     def clean_campaign_character(self) -> dict | None:
         """Return the chosen campaign candidate, None if no character was chosen."""

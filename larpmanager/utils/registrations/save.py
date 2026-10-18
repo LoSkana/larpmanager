@@ -154,7 +154,8 @@ def save_registration(
         if campaign_candidate and not registration.pending:
             assign_campaign_character(registration, campaign_candidate)
 
-        # Handle special feature processing based on context flags; campaign choice replaces auto-assignment
+        # Handle special feature processing based on context flags. When the campaign choice is offered,
+        # auto-assignment is skipped even if "None" was picked: owned characters are already among its candidates
         if "user_character" in context["features"] and "campaign_character" not in form.fields:
             check_assign_character(context)
         if "bring_friend" in context["features"]:
