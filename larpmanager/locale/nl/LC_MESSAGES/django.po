@@ -4151,6 +4151,9 @@ msgstr "Goedgekeurd karakter"
 msgid "Available versions"
 msgstr "Beschikbare versies"
 
+msgid "Campaign character"
+msgstr "Campagnepersonage"
+
 msgid "Changed character!"
 msgstr "Personage gewijzigd!"
 
@@ -5867,6 +5870,9 @@ msgstr "Neem een vriend(in) mee naar %(event)s!"
 msgid "Characters not participating"
 msgstr "Personages die niet deelnemen"
 
+msgid "Choose the character to play"
+msgstr "Kies het personage dat je wilt spelen"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Vraag van %(member)s sluiten"
@@ -6016,6 +6022,9 @@ msgstr "Naam van het ervaringssysteem"
 
 msgid "No results match your search."
 msgstr "Geen resultaten gevonden voor je zoekopdracht."
+
+msgid "None (Create a new character)"
+msgstr "Geen (maak een nieuw personage aan)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Bewerking: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Toeslag op het ticket"
 
 msgid "The date when this event begins"
 msgstr "De datum waarop dit evenement begint"
+
+msgid "This character is not available"
+msgstr "Dit personage is niet beschikbaar"
 
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstromingen"
@@ -11717,6 +11729,13 @@ msgid ""
 msgstr ""
 "Bekijk alle e-mails die door het systeem zijn verzonden, met ontvanger, "
 "onderwerp en bezorgstatus"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Kies welk van je personages je in dit evenement wilt spelen, of geen om een "
+"nieuw personage aan te maken"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

@@ -4151,6 +4151,9 @@ msgstr "Zatwierdzona postać"
 msgid "Available versions"
 msgstr "Dostępne wersje"
 
+msgid "Campaign character"
+msgstr "Postać z kampanii"
+
 msgid "Changed character!"
 msgstr "Zmieniono postać!"
 
@@ -5867,6 +5870,9 @@ msgstr "Przyprowadź znajomego na %(event)s!"
 msgid "Characters not participating"
 msgstr "Nieuczestniczące postaci"
 
+msgid "Choose the character to play"
+msgstr "Wybierz postać, którą chcesz zagrać"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Zamknij pytanie użytkownika %(member)s"
@@ -6016,6 +6022,9 @@ msgstr "Nazwa systemu doświadczeń"
 
 msgid "No results match your search."
 msgstr "Brak wyników pasujących do wyszukiwania."
+
+msgid "None (Create a new character)"
+msgstr "Brak (utwórz nową postać)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Działanie: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Dopłata zastosowana do biletu"
 
 msgid "The date when this event begins"
 msgstr "Data rozpoczęcia wydarzenia"
+
+msgid "This character is not available"
+msgstr "Ta postać jest niedostępna"
 
 msgid "Total of recorded money inflows"
 msgstr "Suma zarejestrowanych wpływów pieniężnych"
@@ -11572,6 +11584,13 @@ msgid ""
 msgstr ""
 "Przejrzyj wszystkie wiadomości e-mail wysłane przez system wraz z danymi "
 "odbiorcy, tematem i statusem dostarczenia"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Wybierz, którą ze swoich postaci chcesz zagrać na tym wydarzeniu, albo nie "
+"wybieraj żadnej, żeby stworzyć nową"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

@@ -80,7 +80,7 @@ from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.registrations.characters import (
-    check_assign_character,
+    assign_created_character,
     check_character_maximum,
     get_character_play_max,
     get_player_characters,
@@ -467,8 +467,10 @@ def _save_character(
                 if isinstance(character, Character) and not character.player:
                     character.player = context["member"]
 
+                is_new = isinstance(character, Character) and not character.pk
                 character = form.save()
-                check_assign_character(context)
+                if is_new:
+                    assign_created_character(context, character)
             # Success - break out of retry loop
             break
         except IntegrityError as e:
@@ -956,7 +958,7 @@ def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None
     """Point the relation to another character, dropping the data customized for the previous one.
 
     The relation is updated in place instead of being recreated, so the registration is never
-    left without a character (which would trigger the campaign auto-assignment again).
+    left without a character.
     """
     rel.character_id = character_id
     for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:

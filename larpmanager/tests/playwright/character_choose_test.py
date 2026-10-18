@@ -32,6 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    _select2_search_and_pick,
     fill_date,
     fill_tinymce,
     get_modal_iframe,
@@ -151,7 +152,9 @@ def test_character_choose_campaign(pw_page: Any) -> None:
 
     login_orga(page, live_server)
     setup_event(page, live_server)
-    create_child_event(page, live_server)
+    create_child_event(page, live_server, "child choose", "childchoose", "2050-04")
+    create_child_event(page, live_server, "child none", "childnone", "2050-05")
+    create_child_event(page, live_server, "child orga", "childorga", "2050-06")
     logout(page)
 
     login_user(page, live_server)
@@ -161,38 +164,80 @@ def test_character_choose_campaign(pw_page: Any) -> None:
     create_character(page, live_server, "alpha character")
     create_character(page, live_server, "beta character", another=True)
 
-    # signing up to the next run of the campaign carries over the played character
+    # signing up to the next run of the campaign offers the active characters, the last played preselected
     go_to(page, live_server, "/childchoose/register/")
+    check_campaign_character_choice(page)
     submit_register(page)
 
     check_carried_character(page, live_server)
     switch_campaign_character(page, live_server)
     check_other_run_untouched(page, live_server)
 
+    # choosing none leaves the registration without a character
+    go_to(page, live_server, "/childnone/register/")
+    page.locator("#id_campaign_character").select_option("")
+    submit_register(page)
+    go_to(page, live_server, "/childnone/character/list/")
+    expect(page.locator(".char-choose-badge")).to_have_count(0)
+    logout(page)
 
-def create_child_event(page: Any, live_server: Any) -> None:
-    """Create a second event of the same campaign, with Test Larp as parent."""
+    # the organizer chooses the character when creating the registration
+    login_orga(page, live_server)
+    orga_register_campaign_character(page, live_server)
+    logout(page)
+
+    login_user(page, live_server)
+    go_to(page, live_server, "/childorga/character/list/")
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
+    expect(played).to_contain_text("beta character")
+
+
+def create_child_event(page: Any, live_server: Any, name: str, slug: str, month: str) -> None:
+    """Create another event of the same campaign, with Test Larp as parent, held in the given month."""
     go_to(page, live_server, "/manage/features/campaign/on")
     go_to(page, live_server, "/manage/events")
     page.get_by_role("link", name="New event").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").click()
-    edit_iframe.locator("#id_form1-name").fill("child choose")
+    edit_iframe.locator("#id_form1-name").fill(name)
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("childchoose")
-    expect(edit_iframe.locator("#slug")).to_have_value("childchoose")
+    edit_iframe.locator("#slug").fill(slug)
+    expect(edit_iframe.locator("#slug")).to_have_value(slug)
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
     edit_iframe.locator('label[for="id_form2-development_1"]').click()
     edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
-    fill_date(edit_iframe, "#id_form2-start", "2050-03-01")
-    fill_date(edit_iframe, "#id_form2-end", "2050-03-03")
+    fill_date(edit_iframe, "#id_form2-start", f"{month}-01")
+    fill_date(edit_iframe, "#id_form2-end", f"{month}-03")
+    save_modal(page, edit_iframe)
+
+
+def check_campaign_character_choice(page: Any) -> None:
+    """Check the registration offers the campaign characters, with the last played one preselected."""
+    select = page.locator("#id_campaign_character")
+    expect(select.locator("option:not([disabled])")).to_have_count(3)
+    expect(select).to_contain_text("None (Create a new character)")
+    expect(select).to_contain_text("beta character")
+    expect(select.locator("option:checked")).to_have_text("alpha character")
+
+
+def orga_register_campaign_character(page: Any, live_server: Any) -> None:
+    """Create the user registration from the organizer side, choosing a campaign character."""
+    go_to(page, live_server, "/childorga/manage/registrations")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-search__field").last, edit_iframe, "user@test")
+
+    select = edit_iframe.locator("#id_campaign_character")
+    expect(select.locator("option")).to_have_count(3)
+    expect(select.locator("option:checked")).to_have_text("beta character")
     save_modal(page, edit_iframe)
 
 
 def check_carried_character(page: Any, live_server: Any) -> None:
-    """Check the character played in the previous run is carried over to the new one."""
+    """Check the character chosen on signup is played in the new run."""
     go_to(page, live_server, "/childchoose/character/list/")
     expect(page.locator("#characters tbody tr")).to_have_count(2)
 

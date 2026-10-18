@@ -4151,6 +4151,9 @@ msgstr "Hyväksytty hahmo"
 msgid "Available versions"
 msgstr "Saatavilla olevat versiot"
 
+msgid "Campaign character"
+msgstr "Kampanjahahmo"
+
 msgid "Changed character!"
 msgstr "Hahmoa muokattu!"
 
@@ -5867,6 +5870,9 @@ msgstr "Tuo ystävä tapahtumaan %(event)s!"
 msgid "Characters not participating"
 msgstr "Eivät osallistu"
 
+msgid "Choose the character to play"
+msgstr "Valitse hahmo, jolla pelaat"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Sulje jäsenen %(member)s kysymys"
@@ -6016,6 +6022,9 @@ msgstr "Kokemusjärjestelmän nimi"
 
 msgid "No results match your search."
 msgstr "Hakuasi vastaavia tuloksia ei löytynyt."
+
+msgid "None (Create a new character)"
+msgstr "Ei mitään (luo uusi hahmo)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operaatio: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Lippuun sovellettu lisämaksu"
 
 msgid "The date when this event begins"
 msgstr "Päivämäärä, jolloin tapahtuma alkaa"
+
+msgid "This character is not available"
+msgstr "Tämä hahmo ei ole saatavilla"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
@@ -11494,6 +11506,13 @@ msgid ""
 msgstr ""
 "Selaa kaikkia järjestelmän lähettämiä sähköposteja, joissa näkyvät "
 "vastaanottaja, aihe ja toimitustila"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Valitse, kenellä hahmoistasi pelaat tässä tapahtumassa, tai jätä "
+"valitsematta luodaksesi uuden"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

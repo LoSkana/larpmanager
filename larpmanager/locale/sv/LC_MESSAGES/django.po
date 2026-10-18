@@ -4151,6 +4151,9 @@ msgstr "Godkänd karaktär"
 msgid "Available versions"
 msgstr "Tillgängliga versioner"
 
+msgid "Campaign character"
+msgstr "Kampanjkaraktär"
+
 msgid "Changed character!"
 msgstr "Karaktären har ändrats!"
 
@@ -5867,6 +5870,9 @@ msgstr "Ta med en vän till %(event)s!"
 msgid "Characters not participating"
 msgstr "Deltar inte"
 
+msgid "Choose the character to play"
+msgstr "Välj karaktären du vill spela"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Stäng frågan från %(member)s"
@@ -6016,6 +6022,9 @@ msgstr "Namn på erfarenhetssystemet"
 
 msgid "No results match your search."
 msgstr "Inga resultat matchar din sökning."
+
+msgid "None (Create a new character)"
+msgstr "Ingen (skapa en ny karaktär)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Tilläggsavgift till biljett"
 
 msgid "The date when this event begins"
 msgstr "Datum då händelsen börjar"
+
+msgid "This character is not available"
+msgstr "Den här karaktären är inte tillgänglig"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt belopp av registrerade penninginflöden"
@@ -11474,6 +11486,13 @@ msgid ""
 msgstr ""
 "Se alla e-postmeddelanden som systemet har skickat, med mottagare, ämne och "
 "leveransstatus"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Välj vilken av dina karaktärer du vill spela i det här eventet, eller ingen "
+"för att skapa en ny"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

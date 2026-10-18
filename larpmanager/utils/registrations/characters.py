@@ -22,8 +22,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
     Character,
@@ -260,3 +263,103 @@ def check_assign_character(context: dict) -> None:
     # Auto-assign the remaining characters
     for character in assignable_characters:
         RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
+
+
+def assign_created_character(context: dict, character: Character) -> None:
+    """Assign a character just created by the player to their signup, if a play slot is free."""
+    registration = get_player_signup(context)
+    if not registration or not character.is_active:
+        return
+
+    # Skip if player already plays the maximum number of characters
+    if registration.rcrs.count() >= get_character_play_max(context["event"].id, context):
+        return
+
+    RegistrationCharacterRel.objects.get_or_create(character_id=character.id, registration=registration)
+
+
+def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
+    """Get the active campaign characters a member can choose to play in a run.
+
+    Candidates are the characters the member played in the other events of the campaign,
+    and the characters they own, skipping inactive ones and the ones already assigned in the run.
+
+    Args:
+        member_id: Member registering to the run
+        run_id: Run the member is registering to
+
+    Returns:
+        List of dicts with keys character and previous_rel (latest relation in the campaign,
+        or None), ordered with the most recently played first
+
+    """
+    run_cache = get_run_basic_cache(run_id)
+    parent_id = run_cache["parent_id"]
+    event_id = run_cache["event_id"]
+    if "campaign" not in get_event_features(event_id) or not parent_id:
+        return []
+
+    # Latest relation for each character played by the member in the other events of the campaign
+    previous_rels = {}
+    for rel in (
+        RegistrationCharacterRel.objects.filter(
+            Q(registration__run__event__parent_id=parent_id) | Q(registration__run__event_id=parent_id),
+            registration__member_id=member_id,
+            registration__cancellation_date__isnull=True,
+        )
+        .exclude(registration__run__event_id=event_id)
+        .select_related("character")
+        .order_by("-registration__run__end")
+    ):
+        previous_rels.setdefault(rel.character_id, rel)
+
+    characters = {rel.character_id: rel.character for rel in previous_rels.values()}
+    if "user_character" in get_event_features(event_id):
+        for character in get_event_elements(event_id, Character).filter(player_id=member_id).order_by("-updated"):
+            characters.setdefault(character.id, character)
+
+    # Skip characters inactive or already assigned in the run
+    excluded_ids = set(
+        CharacterConfig.objects.filter(character_id__in=characters.keys(), name="inactive", value="True").values_list(
+            "character_id", flat=True
+        )
+    )
+    excluded_ids.update(
+        RegistrationCharacterRel.objects.filter(
+            character_id__in=characters.keys(),
+            registration__run_id=run_id,
+            registration__cancellation_date__isnull=True,
+        ).values_list("character_id", flat=True)
+    )
+
+    return [
+        {"character": character, "previous_rel": previous_rels.get(character_id)}
+        for character_id, character in characters.items()
+        if character_id not in excluded_ids
+    ]
+
+
+def assign_campaign_character(registration: Registration, candidate: dict) -> None:
+    """Assign a chosen campaign character to a registration, carrying over its customized data.
+
+    Skipped if the character was meanwhile assigned to another registration of the run.
+    """
+    if RegistrationCharacterRel.objects.filter(
+        character=candidate["character"],
+        registration__run_id=registration.run_id,
+        registration__cancellation_date__isnull=True,
+    ).exists():
+        return
+
+    new_rel, _created = RegistrationCharacterRel.objects.get_or_create(
+        registration=registration,
+        character=candidate["character"],
+    )
+
+    previous_rel = candidate["previous_rel"]
+    if not previous_rel:
+        return
+
+    for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
+        setattr(new_rel, custom_field, getattr(previous_rel, custom_field))
+    new_rel.save()

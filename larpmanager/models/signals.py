@@ -352,7 +352,6 @@ from larpmanager.utils.services.character import (
     update_character_referenced_chars_background,
 )
 from larpmanager.utils.services.event import (
-    assign_previous_campaign_character,
     create_default_event_setup,
     on_event_features_m2m_changed,
     prepare_campaign_event_data,
@@ -1477,10 +1476,6 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Signup requests awaiting approval have no ticket/characters yet: skip
     if instance.pending:
         return
-
-    # Assign character from previous campaign if applicable
-    if not instance.deleted:
-        assign_previous_campaign_character(instance)
 
     # Process ticket options, accounting, and caches shared with other registration-save paths
     apply_registration_post_save_updates(instance)

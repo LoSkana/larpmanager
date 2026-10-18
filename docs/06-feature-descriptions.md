@@ -23,7 +23,7 @@ Discount mechanism encouraging participant referrals through the "Friend" discou
 
 ### Campaign Feature
 
-Multi-event campaign system enabling shared characters and factions across event series. Parent events copy writing elements to campaign children while maintaining independence. Automatically assigns previous campaign characters to returning participants. Supports character continuity across campaign acts with inheritable element management. Organizers configure parent-child event relationships with selective element inheritance. Enables long-term storytelling with persistent character progression across multiple events.
+Multi-event campaign system enabling shared characters and factions across event series. Parent events copy writing elements to campaign children while maintaining independence. Returning participants choose at registration which of their active campaign characters to play, or none to create a new one. Supports character continuity across campaign acts with inheritable element management. Organizers configure parent-child event relationships with selective element inheritance. Enables long-term storytelling with persistent character progression across multiple events.
 
 ### Carousel Feature
 

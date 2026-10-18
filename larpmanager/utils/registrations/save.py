@@ -40,7 +40,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import my_uuid
 from larpmanager.utils.core.common import get_object_uuid
-from larpmanager.utils.registrations.characters import check_assign_character
+from larpmanager.utils.registrations.characters import assign_campaign_character, check_assign_character
 
 logger = logging.getLogger(__name__)
 
@@ -149,8 +149,13 @@ def save_registration(
         # Save the updated registration instance
         registration.save()
 
-        # Handle special feature processing based on context flags
-        if "user_character" in context["features"]:
+        # Assign the campaign character chosen on signup
+        campaign_candidate = form.cleaned_data.get("campaign_character")
+        if is_new and campaign_candidate:
+            assign_campaign_character(registration, campaign_candidate)
+
+        # Handle special feature processing based on context flags; campaign choice replaces auto-assignment
+        if "user_character" in context["features"] and "campaign_character" not in form.fields:
             check_assign_character(context)
         if "bring_friend" in context["features"]:
             save_registration_bring_friend(context, form, registration)

@@ -55,6 +55,7 @@ from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
+from larpmanager.forms.utils import get_members_queryset
 from larpmanager.mail.registration import send_registration_request_accepted_email
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -85,6 +86,7 @@ from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_discount, get_element_event, get_time_diff
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
+from larpmanager.utils.registrations.characters import get_campaign_characters
 from larpmanager.utils.registrations.context import _get_registration_fields, get_pre_registration, get_registration
 from larpmanager.utils.registrations.features import _save_questbuilder, lottery_info
 from larpmanager.utils.registrations.questions import (
@@ -1410,6 +1412,27 @@ def calculate_age(date_of_birth: date, reference_date: date) -> int:
         reference_date.year
         - date_of_birth.year
         - ((reference_date.month, reference_date.day) < (date_of_birth.month, date_of_birth.day))
+    )
+
+
+@require_POST
+def orga_registration_campaign_characters(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return the campaign characters the chosen member can play in the run, most recently played first."""
+    context = check_event_context(request, event_slug, "orga_registrations")
+
+    member_id = request.POST.get("mid", "")
+    if not member_id.isdigit() or not get_members_queryset(context["association_id"]).filter(pk=member_id).exists():
+        return JsonResponse({"k": 0})
+
+    candidates = get_campaign_characters(int(member_id), context["run"].id)
+    return JsonResponse(
+        {
+            "k": 1,
+            "v": [
+                {"uuid": str(candidate["character"].uuid), "name": candidate["character"].name}
+                for candidate in candidates
+            ],
+        }
     )
 
 

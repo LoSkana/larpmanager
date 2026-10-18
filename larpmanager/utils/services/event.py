@@ -22,7 +22,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
@@ -576,76 +576,6 @@ def _activate_orga_lang(instance: Event) -> None:
 
     # Activate the selected language
     activate(most_common_language)
-
-
-def assign_previous_campaign_character(registration: Any) -> None:
-    """Auto-assign last character from previous campaign run to new registration.
-
-    Automatically assigns the character from the most recent campaign run to a new
-    registration if the event is part of a campaign series. Only applies when the
-    member doesn't already have a character assigned to the current run.
-
-    Args:
-        registration: Registration instance to assign character to. Must have
-            a member and run associated with it.
-
-    Returns:
-        None
-
-    Note:
-        - Only works for campaign events with a parent event
-        - Skips cancelled registrations
-        - Preserves custom character attributes from previous run
-        - Does nothing if character already assigned to current run
-
-    """
-    # Skip if registration has no member or is cancelled
-    if not registration.member or registration.cancellation_date:
-        return
-
-    # Only proceed if this is a campaign event with parent
-    run_cache = get_run_basic_cache(registration.run_id)
-    parent_id = run_cache["parent_id"]
-    event_id = run_cache["event_id"]
-    if "campaign" not in get_event_features(event_id) or not parent_id:
-        return
-
-    # Skip if member already has a character assigned to this run
-    if (
-        RegistrationCharacterRel.objects.filter(
-            registration__member=registration.member, registration__run=registration.run
-        ).count()
-        > 0
-    ):
-        return
-
-    # Find the most recent character the member had in this campaign series
-    previous_character_relation = (
-        RegistrationCharacterRel.objects.filter(
-            Q(registration__run__event__parent_id=parent_id) | Q(registration__run__event_id=parent_id),
-            registration__member=registration.member,
-            registration__cancellation_date__isnull=True,
-        )
-        .exclude(registration__run__event_id=event_id)
-        .order_by("-registration__run__end")
-        .first()
-    )
-
-    # Only proceed if previous character exists and is active
-    if not previous_character_relation or not previous_character_relation.character.is_active:
-        return
-
-    new_character_relation = RegistrationCharacterRel.objects.create(
-        registration=registration,
-        character=previous_character_relation.character,
-    )
-
-    # Copy custom character attributes from previous run
-    for custom_attribute_name in ["name", "pronoun", "song", "public", "private"]:
-        if hasattr(previous_character_relation, "custom_" + custom_attribute_name):
-            attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
-            setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
-    new_character_relation.save()
 
 
 def reset_all_run(run_id: int) -> None:

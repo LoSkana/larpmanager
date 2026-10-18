@@ -98,6 +98,9 @@ $(document).ready(function(){
         // skip if the value was submitted in a previous POST
         if ((nm in submitted) && submitted[nm]) return;
 
+        // skip if the field comes with a meaningful preselected value
+        if ($(this).hasClass('keep_initial')) return;
+
         $(this).prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
     });
 

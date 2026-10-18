@@ -4151,6 +4151,9 @@ msgstr "Schválená postava"
 msgid "Available versions"
 msgstr "Dostupné verze"
 
+msgid "Campaign character"
+msgstr "Postava z kampaně"
+
 msgid "Changed character!"
 msgstr "Postava změněna!"
 
@@ -5867,6 +5870,9 @@ msgstr "Přiveď na %(event)s kamaráda!"
 msgid "Characters not participating"
 msgstr "Neúčastní se"
 
+msgid "Choose the character to play"
+msgstr "Vyber postavu, za kterou chceš hrát"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Uzavřít otázku od %(member)s"
@@ -6016,6 +6022,9 @@ msgstr "Název systému zkušeností"
 
 msgid "No results match your search."
 msgstr "Tvému hledání neodpovídají žádné výsledky."
+
+msgid "None (Create a new character)"
+msgstr "Žádná (vytvoř novou postavu)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Příplatek k lístku"
 
 msgid "The date when this event begins"
 msgstr "Datum zahájení této události"
+
+msgid "This character is not available"
+msgstr "Tato postava není dostupná"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
@@ -11333,6 +11345,13 @@ msgid ""
 msgstr ""
 "Prohlédni si všechny e-maily odeslané systémem včetně příjemce, předmětu a "
 "stavu doručení"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Vyber, za kterou ze svých postav chceš v této akci hrát, nebo žádnou, pokud "
+"chceš vytvořit novou"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

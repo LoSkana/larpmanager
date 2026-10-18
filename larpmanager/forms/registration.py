@@ -69,12 +69,38 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction, get_event_elements
 from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.registrations.characters import assign_campaign_character, get_campaign_characters
 from larpmanager.utils.registrations.signals import get_reduced_available_count
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
     from larpmanager.models.base import BaseModel
+
+
+def campaign_character_field(candidates: list[dict]) -> forms.ChoiceField:
+    """Build the field to choose which campaign character to play, or none."""
+    choices = [("", _("None (Create a new character)"))]
+    choices.extend((str(candidate["character"].uuid), candidate["character"].name) for candidate in candidates)
+    return forms.ChoiceField(
+        required=False,
+        choices=choices,
+        label=_("Character"),
+        help_text=_("Choose which of your characters to play in this event, or none to create a new one"),
+        widget=forms.Select(attrs={"class": "keep_initial"}),
+    )
+
+
+def clean_campaign_character_choice(candidates: list[dict], character_uuid: str) -> dict | None:
+    """Return the campaign candidate matching the chosen character uuid, None if no character was chosen."""
+    if not character_uuid:
+        return None
+
+    for candidate in candidates:
+        if str(candidate["character"].uuid) == character_uuid:
+            return candidate
+
+    raise ValidationError(_("This character is not available"))
 
 
 class RegistrationForm(BaseRegistrationForm):
@@ -129,6 +155,9 @@ class RegistrationForm(BaseRegistrationForm):
         # Initialize ticket selection field and retrieve help text for user guidance
         # Creates the primary ticket selection interface with availability info
         ticket_help = self.init_ticket(event, registration_counts, run)
+
+        # Let returning campaign players choose which character to play
+        self.init_campaign_character(run)
 
         # Determine if registration should be placed in waiting list based on instance or run status
         # Checks existing registration status or current run capacity
@@ -193,6 +222,23 @@ class RegistrationForm(BaseRegistrationForm):
         # Set initial value from instance if available
         if self.instance:
             self.initial["additionals"] = self.instance.additionals
+
+    def init_campaign_character(self, run: Run) -> None:
+        """Add the choice of the campaign character to play, only on new registrations."""
+        self.campaign_candidates = []
+        if self.instance.pk or not self.params.get("member"):
+            return
+
+        self.campaign_candidates = get_campaign_characters(self.params["member"].id, run.id)
+        if not self.campaign_candidates:
+            return
+
+        self.fields["campaign_character"] = campaign_character_field(self.campaign_candidates)
+        self.initial["campaign_character"] = str(self.campaign_candidates[0]["character"].uuid)
+
+    def clean_campaign_character(self) -> dict | None:
+        """Validate the chosen campaign character among the available ones."""
+        return clean_campaign_character_choice(self.campaign_candidates, self.cleaned_data["campaign_character"])
 
     def init_bring_friend(self) -> None:
         """Initialize bring-a-friend code field for discounts."""
@@ -860,6 +906,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Initialize character fields if feature is enabled
         if "character" in self.params["features"]:
             self.init_character(char_section)
+            self.init_campaign_character(char_section)
 
         # Initialize organization-specific fields and clean up unused ones
         keys = self.init_orga_fields(main_section)
@@ -1021,6 +1068,28 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         self._init_quest_traits(char_section)
 
+    def init_campaign_character(self, char_section: str) -> None:
+        """Add the choice of the campaign character to play, only on new registrations of a campaign child event.
+
+        The available characters depend on the chosen member: they are loaded in the page on member change.
+        """
+        if (
+            self.instance.pk
+            or not self.params.get("orga_characters")
+            or "campaign" not in self.params["features"]
+            or not self.params["event"].parent_id
+        ):
+            return
+
+        self.fields["campaign_character"] = forms.CharField(
+            required=False,
+            label=_("Campaign character"),
+            help_text=_("Choose the character to play"),
+            widget=forms.Select(choices=[("", _("None"))]),
+        )
+        self.sections["id_campaign_character"] = char_section
+        self.load_js = [*getattr(self, "load_js", []), "registration-campaign-character"]
+
     def _init_quest_traits(self, char_section: str) -> None:
         """Initialize manual questbuilder assignment in orga registration form editing."""
         if "questbuilder" not in self.params["features"]:
@@ -1176,7 +1245,28 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 msg = _("User already has a registration for this event!")
                 raise ValidationError(msg)
 
+        self._clean_campaign_character(form_data)
+
         return form_data
+
+    def _clean_campaign_character(self, form_data: dict) -> None:
+        """Validate the chosen campaign character among the ones available to the member."""
+        if "campaign_character" not in self.fields:
+            return
+
+        member = form_data.get("member")
+        candidates = get_campaign_characters(member.id, self.params["run"].id) if member else []
+        try:
+            candidate = clean_campaign_character_choice(candidates, form_data.get("campaign_character"))
+        except ValidationError as error:
+            self.add_error("campaign_character", error)
+            return
+
+        form_data["campaign_character"] = candidate
+
+        # The chosen character is assigned with its campaign data: drop it from the plain assignments
+        if candidate and form_data.get("characters_new") is not None:
+            form_data["characters_new"] = form_data["characters_new"].exclude(pk=candidate["character"].pk)
 
     def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save form instance with custom field handling."""
@@ -1185,7 +1275,14 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             self.instance.ticket_id = self._single_ticket["id"]
 
         # Call parent save method to get the instance
-        return super(BaseRegistrationForm, self).save(commit=commit)
+        instance = super(BaseRegistrationForm, self).save(commit=commit)
+
+        # Assign the chosen campaign character
+        campaign_candidate = self.cleaned_data.get("campaign_character")
+        if commit and campaign_candidate:
+            assign_campaign_character(instance, campaign_candidate)
+
+        return instance
 
 
 class RegistrationCharacterRelForm(BaseModelForm):

@@ -4151,6 +4151,9 @@ msgstr "Εγκεκριμένος χαρακτήρας"
 msgid "Available versions"
 msgstr "Διαθέσιμες εκδόσεις"
 
+msgid "Campaign character"
+msgstr "Χαρακτήρας campaign"
+
 msgid "Changed character!"
 msgstr "Ο χαρακτήρας άλλαξε!"
 
@@ -5867,6 +5870,9 @@ msgstr "Φέρε έναν φίλο στο %(event)s!"
 msgid "Characters not participating"
 msgstr "Χαρακτήρες που δεν συμμετέχουν"
 
+msgid "Choose the character to play"
+msgstr "Διάλεξε τον χαρακτήρα που θα παίξεις"
+
 #, python-format
 msgid "Close question of %(member)s"
 msgstr "Κλείσιμο ερώτησης του %(member)s"
@@ -6016,6 +6022,9 @@ msgstr "Όνομα του συστήματος εμπειρίας"
 
 msgid "No results match your search."
 msgstr "Κανένα αποτέλεσμα δεν ταιριάζει με την αναζήτησή σου."
+
+msgid "None (Create a new character)"
+msgstr "Κανένας (Δημιούργησε νέο χαρακτήρα)"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Ενέργεια: ADD, SUB, MUL, DIV"
@@ -6293,6 +6302,9 @@ msgstr "Προσαύξηση που εφαρμόζεται στο εισιτήρ
 
 msgid "The date when this event begins"
 msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσης"
+
+msgid "This character is not available"
+msgstr "Αυτός ο χαρακτήρας δεν είναι διαθέσιμος"
 
 msgid "Total of recorded money inflows"
 msgstr "Συνολικό ποσό καταγεγραμμένων χρηματικών εισροών"
@@ -11811,6 +11823,13 @@ msgid ""
 msgstr ""
 "Περιηγήσου σε όλα τα email που έστειλε το σύστημα, με παραλήπτη, θέμα και "
 "κατάσταση παράδοσης"
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+"Διάλεξε ποιον από τους χαρακτήρες σου θα παίξεις σε αυτή την εκδήλωση, ή "
+"κανέναν για να δημιουργήσεις νέο"
 
 msgid ""
 "Click here if after submitting the form, you want to move on to edit the "

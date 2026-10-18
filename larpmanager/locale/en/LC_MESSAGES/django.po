@@ -2603,6 +2603,17 @@ msgstr ""
 msgid "Manage event milestones and their deadlines for this event"
 msgstr ""
 
+msgid "None (Create a new character)"
+msgstr ""
+
+msgid ""
+"Choose which of your characters to play in this event, or none to create a "
+"new one"
+msgstr ""
+
+msgid "This character is not available"
+msgstr ""
+
 #, python-format
 msgid ""
 "Enter the 'bring a friend' code provided by a registered participant to "
@@ -2652,6 +2663,15 @@ msgid "Quotas"
 msgstr ""
 
 msgid "The number of payments to split the fee."
+msgstr ""
+
+msgid "Campaign character"
+msgstr ""
+
+msgid "Choose the character to play"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "User already has a registration for this event!"
@@ -7011,9 +7031,6 @@ msgid "You are excluding (none of these filters)"
 msgstr ""
 
 msgid "Additional fields"
-msgstr ""
-
-msgid "None"
 msgstr ""
 
 msgid "Cancel your registration"
