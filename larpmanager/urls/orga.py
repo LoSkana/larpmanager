@@ -386,11 +386,6 @@ urlpatterns = [
         name="orga_cancellation_refund",
     ),
     path(
-        "<slug:event_slug>/manage/registrations/campaign_characters",
-        views_or.orga_registration_campaign_characters,
-        name="orga_registration_campaign_characters",
-    ),
-    path(
         "<slug:event_slug>/manage/registrations/member",
         views_or.orga_registration_member,
         name="orga_registration_member",

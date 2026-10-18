@@ -91,7 +91,7 @@ window.addEventListener('DOMContentLoaded', function() {
             data: formData,
             contentType: false,
             processData: false,
-            datatype: "json",
+            dataType: "json",
         });
 
         request.done(function(res) {
@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 url: "{% url 'orga_writing_excel_edit' run.get_slug label_typ %}",
                 method: "POST",
                 data: { question_uuid: question_uuid, edit_uuid: edit_uuid},
-                datatype: "json",
+                dataType: "json",
             });
 
             request.done(function(res) {

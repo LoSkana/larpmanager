@@ -142,7 +142,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 url: "{% url 'orga_character_get_number' run.get_slug %}",
                 data: { idx: value, type: type },
                 method: "POST",
-                datatype: "json",
+                dataType: "json",
             });
 
             request.done(function(result) {

@@ -36,7 +36,7 @@ function search_tutorial() {
         url: "{% url 'tutorial_query' %}",
         method: "POST",
         data: {'q': query, 'r': run_id},
-        datatype: "json",
+        dataType: "json",
     });
 
     request.done(function(data) {

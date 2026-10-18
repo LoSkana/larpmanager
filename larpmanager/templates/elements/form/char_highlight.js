@@ -76,7 +76,7 @@ function setUpHighlight(key) {
                 url: "{% url 'show_char' run.get_slug %}",
                 method: "POST",
                 data: { text: selected },
-                datatype: "json",
+                dataType: "json",
             });
 
             request.done(function(res) {

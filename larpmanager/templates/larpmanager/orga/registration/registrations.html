@@ -387,7 +387,7 @@ window.addEventListener('DOMContentLoaded', function() {
         request = $.ajax({
             url: "{% url 'orga_registrations_accounting' run.get_slug %}",
             method: "POST",
-            datatype: "json",
+            dataType: "json",
         });
 
         // Show spinner only after 500ms delay
@@ -484,7 +484,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     url: "{% url 'orga_registration_member' run.get_slug %}",
                     method: "POST",
                     data: { mid: $(this).attr("pop") },
-                    datatype: "json",
+                    dataType: "json",
                 });
 
                 request.done(function(res) {

@@ -2665,15 +2665,6 @@ msgstr ""
 msgid "The number of payments to split the fee."
 msgstr ""
 
-msgid "Campaign character"
-msgstr ""
-
-msgid "Choose the character to play"
-msgstr ""
-
-msgid "None"
-msgstr ""
-
 msgid "User already has a registration for this event!"
 msgstr ""
 
@@ -7031,6 +7022,9 @@ msgid "You are excluding (none of these filters)"
 msgstr ""
 
 msgid "Additional fields"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "Cancel your registration"

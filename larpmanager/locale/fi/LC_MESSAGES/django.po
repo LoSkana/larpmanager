@@ -4151,9 +4151,6 @@ msgstr "Hyväksytty hahmo"
 msgid "Available versions"
 msgstr "Saatavilla olevat versiot"
 
-msgid "Campaign character"
-msgstr "Kampanjahahmo"
-
 msgid "Changed character!"
 msgstr "Hahmoa muokattu!"
 
@@ -5869,9 +5866,6 @@ msgstr "Tuo ystävä tapahtumaan %(event)s!"
 
 msgid "Characters not participating"
 msgstr "Eivät osallistu"
-
-msgid "Choose the character to play"
-msgstr "Valitse hahmo, jolla pelaat"
 
 #, python-format
 msgid "Close question of %(member)s"

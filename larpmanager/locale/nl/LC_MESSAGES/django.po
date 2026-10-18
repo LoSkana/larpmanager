@@ -4151,9 +4151,6 @@ msgstr "Goedgekeurd karakter"
 msgid "Available versions"
 msgstr "Beschikbare versies"
 
-msgid "Campaign character"
-msgstr "Campagnepersonage"
-
 msgid "Changed character!"
 msgstr "Personage gewijzigd!"
 
@@ -5869,9 +5866,6 @@ msgstr "Neem een vriend(in) mee naar %(event)s!"
 
 msgid "Characters not participating"
 msgstr "Personages die niet deelnemen"
-
-msgid "Choose the character to play"
-msgstr "Kies het personage dat je wilt spelen"
 
 #, python-format
 msgid "Close question of %(member)s"

@@ -149,9 +149,9 @@ def save_registration(
         # Save the updated registration instance
         registration.save()
 
-        # Assign the campaign character chosen on signup
+        # Assign the campaign character chosen on signup, skipping registrations awaiting approval
         campaign_candidate = form.cleaned_data.get("campaign_character")
-        if campaign_candidate:
+        if campaign_candidate and not registration.pending:
             assign_campaign_character(registration, campaign_candidate)
 
         # Handle special feature processing based on context flags; campaign choice replaces auto-assignment

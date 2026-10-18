@@ -4151,9 +4151,6 @@ msgstr "Personaje aprobado"
 msgid "Available versions"
 msgstr "Versiones disponibles"
 
-msgid "Campaign character"
-msgstr "Personaje de campaña"
-
 msgid "Changed character!"
 msgstr "¡Personaje cambiado!"
 
@@ -5869,9 +5866,6 @@ msgstr "¡Trae a un amigo a %(event)s!"
 
 msgid "Characters not participating"
 msgstr "No participan"
-
-msgid "Choose the character to play"
-msgstr "Elige el personaje que vas a jugar"
 
 #, python-format
 msgid "Close question of %(member)s"

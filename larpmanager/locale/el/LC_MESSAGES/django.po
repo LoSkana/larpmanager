@@ -4151,9 +4151,6 @@ msgstr "Εγκεκριμένος χαρακτήρας"
 msgid "Available versions"
 msgstr "Διαθέσιμες εκδόσεις"
 
-msgid "Campaign character"
-msgstr "Χαρακτήρας campaign"
-
 msgid "Changed character!"
 msgstr "Ο χαρακτήρας άλλαξε!"
 
@@ -5869,9 +5866,6 @@ msgstr "Φέρε έναν φίλο στο %(event)s!"
 
 msgid "Characters not participating"
 msgstr "Χαρακτήρες που δεν συμμετέχουν"
-
-msgid "Choose the character to play"
-msgstr "Διάλεξε τον χαρακτήρα που θα παίξεις"
 
 #, python-format
 msgid "Close question of %(member)s"

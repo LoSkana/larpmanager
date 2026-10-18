@@ -39,7 +39,7 @@ function load_question(el) {
         url: url_load_questions,
         data: { q_uuid: key },
         method: "POST",
-        datatype: "json",
+        dataType: "json",
     });
 
     // Show spinner only after 500ms delay
@@ -132,7 +132,7 @@ function load_question_email(el) {
         url: url_load_questions_email,
         data: { q_uuid: key },
         method: "POST",
-        datatype: "json",
+        dataType: "json",
     });
 
     // Show spinner only after 500ms delay

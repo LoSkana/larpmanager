@@ -32,7 +32,6 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
-    _select2_search_and_pick,
     fill_date,
     fill_tinymce,
     get_modal_iframe,
@@ -154,7 +153,6 @@ def test_character_choose_campaign(pw_page: Any) -> None:
     setup_event(page, live_server)
     create_child_event(page, live_server, "child choose", "childchoose", "2050-04")
     create_child_event(page, live_server, "child none", "childnone", "2050-05")
-    create_child_event(page, live_server, "child orga", "childorga", "2050-06")
     logout(page)
 
     login_user(page, live_server)
@@ -179,17 +177,6 @@ def test_character_choose_campaign(pw_page: Any) -> None:
     submit_register(page)
     go_to(page, live_server, "/childnone/character/list/")
     expect(page.locator(".char-choose-badge")).to_have_count(0)
-    logout(page)
-
-    # the organizer chooses the character when creating the registration
-    login_orga(page, live_server)
-    orga_register_campaign_character(page, live_server)
-    logout(page)
-
-    login_user(page, live_server)
-    go_to(page, live_server, "/childorga/character/list/")
-    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
-    expect(played).to_contain_text("beta character")
 
 
 def create_child_event(page: Any, live_server: Any, name: str, slug: str, month: str) -> None:
@@ -220,20 +207,6 @@ def check_campaign_character_choice(page: Any) -> None:
     expect(select).to_contain_text("None (Create a new character)")
     expect(select).to_contain_text("beta character")
     expect(select.locator("option:checked")).to_have_text("alpha character")
-
-
-def orga_register_campaign_character(page: Any, live_server: Any) -> None:
-    """Create the user registration from the organizer side, choosing a campaign character."""
-    go_to(page, live_server, "/childorga/manage/registrations")
-    page.get_by_role("link", name="New").click()
-    edit_iframe = get_modal_iframe(page)
-    edit_iframe.locator("#select2-id_member-container").click()
-    _select2_search_and_pick(edit_iframe.locator(".select2-search__field").last, edit_iframe, "user@test")
-
-    select = edit_iframe.locator("#id_campaign_character")
-    expect(select.locator("option")).to_have_count(3)
-    expect(select.locator("option:checked")).to_have_text("beta character")
-    save_modal(page, edit_iframe)
 
 
 def check_carried_character(page: Any, live_server: Any) -> None:

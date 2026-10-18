@@ -4151,9 +4151,6 @@ msgstr "Godkendt karakter"
 msgid "Available versions"
 msgstr "Tilgængelige versioner"
 
-msgid "Campaign character"
-msgstr "Kampagnekarakter"
-
 msgid "Changed character!"
 msgstr "Karakter skiftet!"
 
@@ -5869,9 +5866,6 @@ msgstr "Tag en ven med til %(event)s!"
 
 msgid "Characters not participating"
 msgstr "Karakterer, der ikke deltager"
-
-msgid "Choose the character to play"
-msgstr "Vælg den karakter, du vil spille"
 
 #, python-format
 msgid "Close question of %(member)s"

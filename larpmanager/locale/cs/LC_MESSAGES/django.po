@@ -4151,9 +4151,6 @@ msgstr "Schválená postava"
 msgid "Available versions"
 msgstr "Dostupné verze"
 
-msgid "Campaign character"
-msgstr "Postava z kampaně"
-
 msgid "Changed character!"
 msgstr "Postava změněna!"
 
@@ -5869,9 +5866,6 @@ msgstr "Přiveď na %(event)s kamaráda!"
 
 msgid "Characters not participating"
 msgstr "Neúčastní se"
-
-msgid "Choose the character to play"
-msgstr "Vyber postavu, za kterou chceš hrát"
 
 #, python-format
 msgid "Close question of %(member)s"

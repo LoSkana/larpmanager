@@ -4151,9 +4151,6 @@ msgstr "Zatwierdzona postać"
 msgid "Available versions"
 msgstr "Dostępne wersje"
 
-msgid "Campaign character"
-msgstr "Postać z kampanii"
-
 msgid "Changed character!"
 msgstr "Zmieniono postać!"
 
@@ -5869,9 +5866,6 @@ msgstr "Przyprowadź znajomego na %(event)s!"
 
 msgid "Characters not participating"
 msgstr "Nieuczestniczące postaci"
-
-msgid "Choose the character to play"
-msgstr "Wybierz postać, którą chcesz zagrać"
 
 #, python-format
 msgid "Close question of %(member)s"
