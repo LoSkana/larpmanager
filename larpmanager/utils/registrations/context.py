@@ -102,7 +102,6 @@ def _register_prepare(context: dict, registration: Any) -> Any:
             > 0
         )
         context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
-        registration.pending = has_pending_payment
 
     _add_bring_friend_discounts(context)
 
