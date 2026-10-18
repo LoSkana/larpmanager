@@ -25,9 +25,9 @@ from __future__ import annotations
 from datetime import date
 from unittest.mock import patch
 
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Event, EventConfig, Run
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import CharacterConfig
+from larpmanager.models.writing import CharacterConfig, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.registrations.characters import assign_campaign_character, get_campaign_characters
 
@@ -87,6 +87,15 @@ class TestCampaignCharacters(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=other_registration, character=self.alpha)
         with patch(FEATURES_PATH, return_value={"campaign"}):
             assert get_campaign_characters(self.member.id, self.child_run.id) == []
+
+    def test_owned_unapproved_excluded(self) -> None:
+        """With approval required, owned characters not yet approved are not offered."""
+        owned = self.character(event=self.parent, name="Owned", player=self.member, status=CharacterStatus.CREATION)
+        EventConfig.objects.create(event=self.parent, name="user_character_approval", value="True")
+        with patch(FEATURES_PATH, return_value={"campaign", "user_character"}):
+            candidates = get_campaign_characters(self.member.id, self.child_run.id)
+
+        assert owned not in [candidate["character"] for candidate in candidates]
 
     def test_assign_carries_custom_data(self) -> None:
         """Assigning the chosen character copies the data customized in the previous run."""

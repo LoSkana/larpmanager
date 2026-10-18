@@ -151,7 +151,7 @@ def save_registration(
 
         # Assign the campaign character chosen on signup
         campaign_candidate = form.cleaned_data.get("campaign_character")
-        if is_new and campaign_candidate:
+        if campaign_candidate:
             assign_campaign_character(registration, campaign_candidate)
 
         # Handle special feature processing based on context flags; campaign choice replaces auto-assignment

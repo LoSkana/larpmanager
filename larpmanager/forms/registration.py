@@ -224,9 +224,9 @@ class RegistrationForm(BaseRegistrationForm):
             self.initial["additionals"] = self.instance.additionals
 
     def init_campaign_character(self, run: Run) -> None:
-        """Add the choice of the campaign character to play, only on new registrations."""
+        """Add the choice of the campaign character to play, only on registrations without characters."""
         self.campaign_candidates = []
-        if self.instance.pk or not self.params.get("member"):
+        if not self.params.get("member") or (self.instance.pk and self.instance.rcrs.exists()):
             return
 
         self.campaign_candidates = get_campaign_characters(self.params["member"].id, run.id)
@@ -1087,6 +1087,10 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             help_text=_("Choose the character to play"),
             widget=forms.Select(choices=[("", _("None"))]),
         )
+        # Keep the submitted choice on re-render, as options are loaded in the page
+        submitted = self.data.get(self.add_prefix("campaign_character"))
+        if submitted is not None:
+            self.fields["campaign_character"].widget.attrs["data-selected"] = submitted
         self.sections["id_campaign_character"] = char_section
         self.load_js = [*getattr(self, "load_js", []), "registration-campaign-character"]
 
@@ -1251,11 +1255,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
     def _clean_campaign_character(self, form_data: dict) -> None:
         """Validate the chosen campaign character among the ones available to the member."""
-        if "campaign_character" not in self.fields:
+        # Skip without a valid member, its own error is already shown
+        member = form_data.get("member")
+        if "campaign_character" not in self.fields or not member:
             return
 
-        member = form_data.get("member")
-        candidates = get_campaign_characters(member.id, self.params["run"].id) if member else []
+        candidates = get_campaign_characters(member.id, self.params["run"].id)
         try:
             candidate = clean_campaign_character_choice(candidates, form_data.get("campaign_character"))
         except ValidationError as error:

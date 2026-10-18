@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q
 
 from larpmanager.cache.basic import get_run_basic_cache
@@ -296,7 +297,8 @@ def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
     run_cache = get_run_basic_cache(run_id)
     parent_id = run_cache["parent_id"]
     event_id = run_cache["event_id"]
-    if "campaign" not in get_event_features(event_id) or not parent_id:
+    features = get_event_features(event_id)
+    if "campaign" not in features or not parent_id:
         return []
 
     # Latest relation for each character played by the member in the other events of the campaign
@@ -314,8 +316,9 @@ def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
         previous_rels.setdefault(rel.character_id, rel)
 
     characters = {rel.character_id: rel.character for rel in previous_rels.values()}
-    if "user_character" in get_event_features(event_id):
-        for character in get_event_elements(event_id, Character).filter(player_id=member_id).order_by("-updated"):
+    if "user_character" in features:
+        owned = get_event_elements(event_id, Character).filter(player_id=member_id)
+        for character in owned.order_by("-updated"):
             characters.setdefault(character.id, character)
 
     # Skip characters inactive or already assigned in the run
@@ -344,22 +347,24 @@ def assign_campaign_character(registration: Registration, candidate: dict) -> No
 
     Skipped if the character was meanwhile assigned to another registration of the run.
     """
-    if RegistrationCharacterRel.objects.filter(
-        character=candidate["character"],
-        registration__run_id=registration.run_id,
-        registration__cancellation_date__isnull=True,
-    ).exists():
-        return
+    character = candidate["character"]
+    with transaction.atomic():
+        # Lock the character to serialise concurrent assignments
+        Character.objects.select_for_update().filter(pk=character.pk).first()
 
-    new_rel, _created = RegistrationCharacterRel.objects.get_or_create(
-        registration=registration,
-        character=candidate["character"],
-    )
+        if RegistrationCharacterRel.objects.filter(
+            character=character,
+            registration__run_id=registration.run_id,
+            registration__cancellation_date__isnull=True,
+        ).exists():
+            return
 
-    previous_rel = candidate["previous_rel"]
-    if not previous_rel:
-        return
+        new_rel = RegistrationCharacterRel.objects.create(registration=registration, character=character)
 
-    for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
-        setattr(new_rel, custom_field, getattr(previous_rel, custom_field))
-    new_rel.save()
+        previous_rel = candidate["previous_rel"]
+        if not previous_rel:
+            return
+
+        for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
+            setattr(new_rel, custom_field, getattr(previous_rel, custom_field))
+        new_rel.save()

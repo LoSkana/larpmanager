@@ -9,7 +9,12 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var noneOption = select.find('option[value=""]').clone();
 
+        // choice submitted before a validation error, restored on the first load only
+        var submitted = select.attr('data-selected');
+
         function loadCampaignCharacters() {
+            var keep = submitted;
+            submitted = undefined;
             select.empty().append(noneOption.clone());
             if (!member.val()) return;
 
@@ -24,8 +29,12 @@ window.addEventListener('DOMContentLoaded', function() {
                 res.v.forEach(function(character) {
                     select.append($('<option>').val(character.uuid).text(character.name));
                 });
-                // preselect the most recently played character
-                if (res.v.length) select.val(res.v[0].uuid);
+                // restore the submitted choice, otherwise preselect the most recently played character
+                if (keep !== undefined && select.find('option').filter(function() { return this.value === keep; }).length) {
+                    select.val(keep);
+                } else if (res.v.length) {
+                    select.val(res.v[0].uuid);
+                }
             });
         }
 
