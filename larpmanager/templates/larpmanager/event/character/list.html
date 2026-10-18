@@ -10,7 +10,7 @@
     {% trans "Your characters" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if not char_maximum %}
+    {% if not char_maximum and not payment_required %}
         <a href="{% url 'character_create' run.get_slug %}" class="add-new">{% trans "Create new character" %}</a>
         <br />
     {% endif %}
@@ -49,8 +49,10 @@
                     <td></td>
                     {% if features.user_character %}
                         <td>
-                            <a href="{% url 'character_edit' run.get_slug el.uuid %}"
-                               qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            {% if not payment_required %}
+                                <a href="{% url 'character_edit' run.get_slug el.uuid %}"
+                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                            {% endif %}
                         </td>
                     {% endif %}
                     <td>{{ el.name }}</td>
@@ -85,13 +87,15 @@
                     </td>
                     {% if exp_user %}
                         <td>
-                            <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
+                            {% if not payment_required %}
+                                <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
+                            {% endif %}
                         </td>
                     {% endif %}
                     <td>
                         {% if el.assigned_here %}
                             <span class="char-choose-badge">{% trans "Selected" %}</span>
-                        {% elif el.addit.inactive != "True" %}
+                        {% elif el.addit.inactive != "True" and not payment_required %}
                             {% if can_select or can_switch %}
                                 <form action="{% url 'character_assign' run.get_slug el.uuid %}"
                                       method="post"

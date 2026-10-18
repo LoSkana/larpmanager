@@ -3467,6 +3467,9 @@ msgstr "Poista prologi"
 msgid "Replacing names"
 msgstr "Nimien korvaaminen"
 
+msgid "Require payment"
+msgstr "Vaadi maksu"
+
 msgid "Restore Preview"
 msgstr "Palautuksen esikatselu"
 
@@ -4502,6 +4505,9 @@ msgstr "Tuloksia ei ole"
 msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
+msgid "Submit your payment"
+msgstr "Lähetä maksusi"
+
 msgid "The delivery's name"
 msgstr "Lähetyksen nimi"
 
@@ -5247,6 +5253,9 @@ msgstr "Palauta poistetut kohteet"
 
 msgid "Registration conditions"
 msgstr "Ilmoittautumisehdot"
+
+msgid "Registration incomplete"
+msgstr "Ilmoittautuminen kesken"
 
 msgid "Registration is closed."
 msgstr "Ilmoittautuminen on päättynyt."
@@ -13407,6 +13416,13 @@ msgstr ""
 "käytettävissä ilmoittautumisen aikana."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Viimeistele ilmoittautumisesi lähettämällä maksusi ennen kuin luot, valitset"
+" tai muokkaat hahmoa"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -13777,6 +13793,13 @@ msgstr ""
 " ilmoittaaksesi meille maksusta."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Lähetä maksusi viimeistelläksesi ilmoittautumisesi: sen jälkeen voit luoda "
+"tai valita hahmosi"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -13981,6 +14004,13 @@ msgid ""
 msgstr ""
 "Sinut on kutsuttu osallistumaan rooliin <strong>%(role.name)s</strong> "
 "tapahtumassa <strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Ilmoittautumisesi ei ole valmis: et voi luoda, valita tai muokata hahmoa "
+"ennen kuin lähetät maksusi"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -14749,6 +14779,14 @@ msgid ""
 msgstr ""
 "Jos käytössä, voit hallita tapahtumalle useita kokemuspistejärjestelmiä. "
 "Jokainen kyky ja myöntäminen voidaan liittää tiettyyn järjestelmään."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Jos tämä on käytössä, osallistujat eivät voi luoda, valita tai muokata "
+"hahmoa eivätkä asettaa casting-toiveita ennen kuin he ovat lähettäneet "
+"maksun."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

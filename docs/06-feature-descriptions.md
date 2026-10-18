@@ -43,7 +43,7 @@ Enables participant customization of assigned character attributes including nam
 
 ### Character Feature
 
-Manages player characters with comprehensive workflow support. Organizers create/edit characters with name, title, presentation (teaser), and private text. Supports player assignment, status tracking (creation→proposed→review→approved), mirror characters for secret identities, cover images, and faction/plot assignments. Includes customizable writing questions/forms for character creation, external access via secret URLs, and character approval workflows. Characters integrate with plots, factions, relationships, and registration systems. Provides list/edit/view interfaces with version history tracking.
+Manages player characters with comprehensive workflow support. Organizers create/edit characters with name, title, presentation (teaser), and private text. Supports player assignment, status tracking (creation->proposed->review->approved), mirror characters for secret identities, cover images, and faction/plot assignments. Includes customizable writing questions/forms for character creation, external access via secret URLs, and character approval workflows. Characters integrate with plots, factions, relationships, and registration systems. Provides list/edit/view interfaces with version history tracking.
 
 ### Chat Feature
 
@@ -191,7 +191,7 @@ Optional registration field allowing participants to add a voluntary contributio
 
 ### Payment Feature
 
-Comprehensive payment management system supporting multiple gateways (PayPal, Stripe, Redsys, Satispay, SumUp). Tracks payment invoices with statuses (Created, Submitted, Confirmed, Checked), transaction fees, and payment methods. Event organizers can view and confirm pending payments via orga_payments, while organization executives manage all payments through exe_payments (and exe_donations, exe_collections, exe_membership for the other invoice types). Includes verification workflow, gross/net calculations, and detailed payment history. Links payments to registrations, memberships, donations, or collections.
+Comprehensive payment management system supporting multiple gateways (PayPal, Stripe, Redsys, Satispay, SumUp). Tracks payment invoices with statuses (Created, Submitted, Confirmed, Checked), transaction fees, and payment methods. Event organizers can view and confirm pending payments via orga_payments, while organization executives manage all payments through exe_payments (and exe_donations, exe_collections, exe_membership for the other invoice types). Includes verification workflow, gross/net calculations, and detailed payment history. Links payments to registrations, memberships, donations, or collections. The `require_payment` event config blocks participants from creating, choosing or editing characters, and from setting casting preferences, until a registration payment is submitted, confirmed or checked, or any payment item (money, tokens, credits) is recorded.
 
 ### PDF Generation Feature
 
@@ -239,7 +239,7 @@ Financial snapshot system creating periodic accounting records via RecordAccount
 
 ### Refund Feature
 
-Refund request management for participants seeking reimbursement. Members submit RefundRequest with payment details (IBAN, PayPal, etc.), requested amount, and status (Request/Delivered). Organization executives review via exe_refunds and mark as delivered when processed. Displays remaining credits alongside refund amount. Does not automatically process payments—requires manual external transaction. Tracks refund history and integrates with member balance calculations for complete financial oversight.
+Refund request management for participants seeking reimbursement. Members submit RefundRequest with payment details (IBAN, PayPal, etc.), requested amount, and status (Request/Delivered). Organization executives review via exe_refunds and mark as delivered when processed. Displays remaining credits alongside refund amount. Does not automatically process payments - requires manual external transaction. Tracks refund history and integrates with member balance calculations for complete financial oversight.
 
 ### Relationships Feature
 

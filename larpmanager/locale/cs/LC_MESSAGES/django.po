@@ -3467,6 +3467,9 @@ msgstr "Odstranit prolog"
 msgid "Replacing names"
 msgstr "Nahrazování jmen"
 
+msgid "Require payment"
+msgstr "Vyžadovat platbu"
+
 msgid "Restore Preview"
 msgstr "Náhled obnovení"
 
@@ -4502,6 +4505,9 @@ msgstr "Výsledky nejsou k dispozici"
 msgid "Signup cancellation"
 msgstr "Zrušení registrace"
 
+msgid "Submit your payment"
+msgstr "Odešli svou platbu"
+
 msgid "The delivery's name"
 msgstr "Název zásilky"
 
@@ -5247,6 +5253,9 @@ msgstr "Obnovit smazané objekty"
 
 msgid "Registration conditions"
 msgstr "Registrační podmínky"
+
+msgid "Registration incomplete"
+msgstr "Registrace nedokončena"
 
 msgid "Registration is closed."
 msgstr "Registrace je uzavřena."
@@ -13226,6 +13235,13 @@ msgstr ""
 "registraci k dispozici."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Dokonči svou registraci odesláním platby, než vytvoříš, vybereš nebo upravíš"
+" postavu"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -13595,6 +13611,13 @@ msgstr ""
 "abys nás informoval/a o své platbě."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Odešli platbu a dokonči tak svou registraci: pak si budeš moct vytvořit nebo"
+" vybrat postavu"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -13799,6 +13822,13 @@ msgid ""
 msgstr ""
 "Byl/a jsi pozván/a k účasti v roli <strong>%(role.name)s</strong> v rámci "
 "akce <strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Tvoje registrace není dokončená: dokud neodešleš platbu, nemůžeš vytvořit, "
+"vybrat ani upravit postavu"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -14556,6 +14586,13 @@ msgid ""
 msgstr ""
 "Pokud je povoleno, zapne správu více systémů zkušeností pro akci. Každé "
 "schopnosti a každému přidělení lze přiřadit konkrétní systém."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Pokud je zapnuto, účastníci nemohou vytvořit, vybrat ani upravit postavu ani"
+" nastavit preference pro casting, dokud neodešlou platbu."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

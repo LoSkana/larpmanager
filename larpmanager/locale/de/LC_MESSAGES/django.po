@@ -3467,6 +3467,9 @@ msgstr "Prolog entfernen"
 msgid "Replacing names"
 msgstr "Ersetzen von Namen"
 
+msgid "Require payment"
+msgstr "Zahlung verlangen"
+
 msgid "Restore Preview"
 msgstr "Wiederherstellungsvorschau"
 
@@ -4502,6 +4505,9 @@ msgstr "Ergebnisse nicht vorhanden"
 msgid "Signup cancellation"
 msgstr "Anmeldungskündigung"
 
+msgid "Submit your payment"
+msgstr "Übermittle deine Zahlung"
+
 msgid "The delivery's name"
 msgstr "Der Name der Lieferung"
 
@@ -5247,6 +5253,9 @@ msgstr "Stelle gelöschte Objekte wieder her"
 
 msgid "Registration conditions"
 msgstr "Registrierungsbedingungen"
+
+msgid "Registration incomplete"
+msgstr "Anmeldung unvollständig"
 
 msgid "Registration is closed."
 msgstr "Die Anmeldung ist geschlossen."
@@ -13783,6 +13792,13 @@ msgstr ""
 "bei der Anmeldung nicht mehr verfügbar."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Schließe deine Anmeldung ab, indem du deine Zahlung übermittelst, bevor du "
+"einen Charakter erstellst, auswählst oder bearbeitest"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -14156,6 +14172,13 @@ msgstr ""
 "das untenstehende Formular ab, um uns über deine Zahlung zu informieren."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Übermittle deine Zahlung, um deine Anmeldung abzuschließen: Danach kannst du"
+" deinen Charakter erstellen oder auswählen"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -14362,6 +14385,13 @@ msgid ""
 msgstr ""
 "Du wurdest eingeladen, in der Rolle <strong>%(role.name)s</strong> an der "
 "Veranstaltung <strong>%(event)s</strong> teilzunehmen."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Deine Anmeldung ist nicht vollständig: Du kannst keinen Charakter erstellen,"
+" auswählen oder bearbeiten, bis du deine Zahlung übermittelt hast"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -15151,6 +15181,14 @@ msgstr ""
 "Wenn aktiviert, wird die Verwaltung mehrerer Erfahrungssysteme für das Event"
 " aktiviert. Jede Fähigkeit und jede Zuweisung kann einem bestimmten System "
 "zugeordnet werden."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Wenn aktiviert, können Teilnehmende keinen Charakter erstellen, auswählen "
+"oder bearbeiten und keine Casting-Präferenzen festlegen, bis sie eine "
+"Zahlung übermittelt haben."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

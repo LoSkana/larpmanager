@@ -35,7 +35,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.accounting.base import is_registration_payment_pending, is_registration_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.association_text import get_association_text
@@ -284,8 +284,13 @@ def registration_redirect(
             messages.success(request, message)
             return redirect("membership")
 
-    # Redirect to payment page if registration has outstanding payment alert
-    if "payment" in context["features"] and registration.alert:
+    # Redirect to payment page if registration has outstanding payment alert, or needs a payment for characters
+    if "payment" in context["features"] and (
+        registration.alert
+        or is_registration_payment_pending(
+            registration, event_id=run.event_id, features=context["features"], context=context
+        )
+    ):
         message = _("To confirm your registration, please pay the amount indicated.")
         messages.success(request, message)
         return redirect("accounting_registration", registration_uuid=registration.uuid)

@@ -3467,6 +3467,9 @@ msgstr "Αφαίρεση προλόγου"
 msgid "Replacing names"
 msgstr "Αντικατάσταση ονομάτων"
 
+msgid "Require payment"
+msgstr "Απαίτηση πληρωμής"
+
 msgid "Restore Preview"
 msgstr "Προεπισκόπηση επαναφοράς"
 
@@ -4502,6 +4505,9 @@ msgstr "Δεν υπάρχουν αποτελέσματα"
 msgid "Signup cancellation"
 msgstr "Ακύρωση εγγραφής"
 
+msgid "Submit your payment"
+msgstr "Υπόβαλε την πληρωμή σου"
+
 msgid "The delivery's name"
 msgstr "Το όνομα της παράδοσης"
 
@@ -5247,6 +5253,9 @@ msgstr "Ανάκτηση διαγραμμένων αντικειμένων"
 
 msgid "Registration conditions"
 msgstr "Όροι εγγραφής"
+
+msgid "Registration incomplete"
+msgstr "Μη ολοκληρωμένη εγγραφή"
 
 msgid "Registration is closed."
 msgstr "Οι εγγραφές είναι κλειστές."
@@ -13749,6 +13758,13 @@ msgstr ""
 "πλέον διαθέσιμη κατά την εγγραφή."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Ολοκλήρωσε την εγγραφή σου υποβάλλοντας την πληρωμή σου, πριν δημιουργήσεις,"
+" επιλέξεις ή επεξεργαστείς έναν χαρακτήρα"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -14118,6 +14134,13 @@ msgstr ""
 "την παρακάτω φόρμα για να μας ειδοποιήσεις για την πληρωμή σου."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Υπόβαλε την πληρωμή σου για να ολοκληρώσεις την εγγραφή σου: μετά θα μπορείς"
+" να δημιουργήσεις ή να επιλέξεις τον χαρακτήρα σου"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -14324,6 +14347,13 @@ msgid ""
 msgstr ""
 "Έχεις προσκληθεί να συμμετάσχεις στον ρόλο <strong>%(role.name)s</strong> "
 "στο event <strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Η εγγραφή σου δεν έχει ολοκληρωθεί: δεν μπορείς να δημιουργήσεις, να "
+"επιλέξεις ή να επεξεργαστείς χαρακτήρα μέχρι να υποβάλεις την πληρωμή σου"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -15113,6 +15143,14 @@ msgstr ""
 "Αν ενεργοποιηθεί, επιτρέπει τη διαχείριση πολλαπλών συστημάτων εμπειρίας για"
 " την εκδήλωση. Κάθε ικανότητα και ανάθεση μπορεί να αντιστοιχιστεί σε "
 "συγκεκριμένο σύστημα."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Αν είναι ενεργό, οι συμμετέχοντες δεν μπορούν να δημιουργήσουν, να επιλέξουν"
+" ή να επεξεργαστούν χαρακτήρα, ούτε να ορίσουν προτιμήσεις casting, μέχρι να"
+" υποβάλουν πληρωμή."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

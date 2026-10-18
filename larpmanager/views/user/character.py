@@ -82,6 +82,7 @@ from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.registrations.characters import (
     check_assign_character,
     check_character_maximum,
+    check_registration_payment,
     get_character_play_max,
     get_player_characters,
 )
@@ -513,6 +514,7 @@ def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str
 
     """
     context = get_event_context(request, event_slug, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     if not get_event_config(context["event"].id, "user_character_approval", context=context):
@@ -555,6 +557,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
 
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+    check_registration_payment(request, context)
 
     get_char_check(request, context, character_uuid, deny_public=True)
 
@@ -608,6 +611,7 @@ def character_profile_upload(request: HttpRequest, event_slug: str, character_uu
 
     # Get event context and validate user permissions
     context = get_event_context(request, event_slug, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Retrieve character registration relationship
@@ -661,6 +665,7 @@ def character_profile_rotate(
     """
     # Get event context and validate character access permissions
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Retrieve character registration relationship with related objects
@@ -748,6 +753,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     context["char_maximum"] = check
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
+    context["payment_required"] = context["run_status"].get("payment_required", False)
 
     _character_list_assigned(context)
     _character_list_last_run(context, char_ids)
@@ -826,6 +832,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
+    check_registration_payment(request, context)
 
     check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     if check:
@@ -843,6 +850,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Handle user character editing form."""
     context = get_event_context(request, event_slug, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
     set_auto_save(context)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
@@ -899,6 +907,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
 
     """
     context = get_event_context(request, event_slug, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     blocking_error = _get_character_assign_error(context)
@@ -998,6 +1007,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     """
     # Initialize context with character and permission checks
     context = check_char_abilities(request, event_slug, character_uuid)
+    check_registration_payment(request, context)
     char = context["character"]
 
     # Ensure char.addit is populated with per-system exp data
@@ -1193,6 +1203,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
 def character_abilities_del(request: HttpRequest, event_slug: str, character_uuid: str, ability_uuid: str) -> Any:
     """Remove ability from character, if the ability was added recently enough."""
     context = check_char_abilities(request, event_slug, character_uuid)
+    check_registration_payment(request, context)
 
     get_element(context, ability_uuid, "ability", AbilityExp)
 
@@ -1313,6 +1324,7 @@ def character_relationships(request: HttpRequest, event_slug: str, character_uui
     """
     # Get event context and validate user access to event and character
     context = get_event_context(request, event_slug, include_status=True, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Load all cached event data for performance
@@ -1357,6 +1369,7 @@ def _character_relationship(
 ) -> HttpResponse:
     """Handle creation / editing of character relationship."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
+    check_registration_payment(request, context)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     context["relationship"] = None

@@ -25,6 +25,7 @@ from django.urls import reverse
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_registration_payment_pending
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.casting import Casting
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
@@ -42,7 +43,13 @@ if TYPE_CHECKING:
 
 
 def registration_status_characters(
-    run: Run, registration: Registration, run_status: dict, features: dict, context: dict | None = None
+    run: Run,
+    registration: Registration,
+    run_status: dict,
+    features: dict,
+    context: dict | None = None,
+    *,
+    payment_pending: bool = False,
 ) -> None:
     """Update registration status with character assignment information.
 
@@ -56,6 +63,8 @@ def registration_status_characters(
         run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
+        payment_pending: If True, the registration still needs a payment: only the character sheet is linked,
+            and no character or casting action is offered
 
     """
     # Extract values from context dictionary if provided
@@ -73,7 +82,8 @@ def registration_status_characters(
 
     # Build list of character links with names and approval status
     character_links_data = [
-        _get_character_links(run, context, features, character_rel) for character_rel in registration_character_rels
+        _get_character_links(run, context, features, character_rel, payment_pending=payment_pending)
+        for character_rel in registration_character_rels
     ]
     run_status["character_links"] = character_links_data
     character_links = [_character_links_html(character_entry) for character_entry in character_links_data]
@@ -90,6 +100,9 @@ def registration_status_characters(
 
     assigned_count = len(character_links)
     is_assigned = assigned_count > 0
+
+    if payment_pending:
+        return
 
     # Count the player's own characters still available to be chosen
     selectable_count = 0
@@ -122,8 +135,13 @@ def registration_status_characters(
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
 
-def _get_character_links(run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel) -> dict:
-    """Builds structured data with links for the character quick access bar."""
+def _get_character_links(
+    run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel, *, payment_pending: bool = False
+) -> dict:
+    """Builds structured data with links for the character quick access bar.
+
+    With a payment pending, the links to edit the character are left out.
+    """
     character_url = reverse("character", args=[run.get_slug(), character_rel.character.uuid])
     character_name = character_rel.character.name
     character_uuid = character_rel.character.uuid
@@ -143,6 +161,9 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
     ]
 
     allowed_sidebar = context.get("demo_allowed_sidebar")
+
+    if payment_pending:
+        return {"name": character_name, "links": character_links}
 
     if feature_visible("user_character", features, allowed_sidebar):
         character_links.append(
@@ -339,7 +360,8 @@ def casting_preferences_pending(
 
     Skipped once the character is assigned (casting already happened), once the
     member has already submitted preferences for this run, if the ticket is on
-    the waiting list, or if characters aren't visible to players yet.
+    the waiting list, if the registration still needs a payment, or if characters
+    aren't visible to players yet.
     """
     if "casting" not in features:
         return False
@@ -348,6 +370,9 @@ def casting_preferences_pending(
         return False
 
     if is_character_assigned:
+        return False
+
+    if is_registration_payment_pending(registration, event_id=run.event_id, features=features, context=context):
         return False
 
     field_visibility = get_event_config(run.event_id, "writing_field_visibility", context=context)

@@ -3467,6 +3467,9 @@ msgstr "Remover prólogo"
 msgid "Replacing names"
 msgstr "Substituição de nomes"
 
+msgid "Require payment"
+msgstr "Exigir pagamento"
+
 msgid "Restore Preview"
 msgstr "Pré-visualização do restauro"
 
@@ -4502,6 +4505,9 @@ msgstr "Resultados indisponíveis"
 msgid "Signup cancellation"
 msgstr "Cancelamento de inscrição"
 
+msgid "Submit your payment"
+msgstr "Submete o teu pagamento"
+
 msgid "The delivery's name"
 msgstr "Nome da entrega"
 
@@ -5247,6 +5253,9 @@ msgstr "Recuperar objetos eliminados"
 
 msgid "Registration conditions"
 msgstr "Condições de inscrição"
+
+msgid "Registration incomplete"
+msgstr "Inscrição incompleta"
 
 msgid "Registration is closed."
 msgstr "As inscrições estão encerradas."
@@ -13518,6 +13527,13 @@ msgstr ""
 "durante a inscrição."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Conclui a tua inscrição submetendo o teu pagamento, antes de criar, escolher"
+" ou editar uma personagem"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -13887,6 +13903,13 @@ msgstr ""
 "abaixo para nos notificares do teu pagamento."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Submete o teu pagamento para concluir a tua inscrição: depois poderás criar "
+"ou escolher a tua personagem"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -14092,6 +14115,13 @@ msgid ""
 msgstr ""
 "Foste convidado a juntar-te à função <strong>%(role.name)s</strong> no "
 "evento <strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"A tua inscrição não está concluída: não podes criar, escolher ou editar uma "
+"personagem até submeteres o teu pagamento"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -14856,6 +14886,14 @@ msgid ""
 msgstr ""
 "Se ativado, permite gerir vários sistemas de experiência para o evento. Cada"
 " habilidade e atribuição pode ser associada a um sistema específico."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Se ativado, os participantes não podem criar, escolher ou editar uma "
+"personagem, nem definir preferências de Casting, até terem submetido um "
+"pagamento."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

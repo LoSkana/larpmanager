@@ -40,6 +40,7 @@ from larpmanager.models.writing import Character, Faction, FactionType, get_even
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import check_event_feature
+from larpmanager.utils.registrations.characters import check_registration_payment
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.event import get_event_filter_characters
 
@@ -247,6 +248,8 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
             ),
         )
         return redirect("event", event_slug=context["run"].get_slug())
+
+    check_registration_payment(request, context)
 
     get_element(context, casting_type, "quest_type", QuestType)
 

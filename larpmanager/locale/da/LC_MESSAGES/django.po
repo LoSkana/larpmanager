@@ -3467,6 +3467,9 @@ msgstr "Fjern prolog"
 msgid "Replacing names"
 msgstr "Erstatning af navne"
 
+msgid "Require payment"
+msgstr "Kræv betaling"
+
 msgid "Restore Preview"
 msgstr "Forhåndsvisning af gendannelse"
 
@@ -4502,6 +4505,9 @@ msgstr "Ingen resultater"
 msgid "Signup cancellation"
 msgstr "Annullering af tilmelding"
 
+msgid "Submit your payment"
+msgstr "Indsend din betaling"
+
 msgid "The delivery's name"
 msgstr "Leveringens navn"
 
@@ -5247,6 +5253,9 @@ msgstr "Gendan slettede objekter"
 
 msgid "Registration conditions"
 msgstr "Tilmeldingsbetingelser"
+
+msgid "Registration incomplete"
+msgstr "Tilmelding ufuldstændig"
 
 msgid "Registration is closed."
 msgstr "Tilmelding er lukket."
@@ -13349,6 +13358,13 @@ msgstr ""
 "tilgængelig under tilmelding."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Fuldfør din tilmelding ved at indsende din betaling, før du opretter, vælger"
+" eller redigerer en karakter"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -13718,6 +13734,13 @@ msgstr ""
 "indsende formularen nedenfor for at underrette os om din betaling."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Indsend din betaling for at fuldføre din tilmelding: derefter kan du oprette"
+" eller vælge din karakter"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -13922,6 +13945,13 @@ msgid ""
 msgstr ""
 "Du er blevet inviteret til rollen <strong>%(role.name)s</strong> i eventet "
 "<strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Din tilmelding er ikke fuldført: du kan ikke oprette, vælge eller redigere "
+"en karakter, før du indsender din betaling"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -14680,6 +14710,13 @@ msgid ""
 msgstr ""
 "Hvis aktiveret, kan du administrere flere erfaringssystemer for eventet. "
 "Hver evne og XP-tildeling kan knyttes til et bestemt system."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Hvis aktiveret, kan deltagere ikke oprette, vælge eller redigere en karakter"
+" eller angive casting-præferencer, før de har indsendt en betaling."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

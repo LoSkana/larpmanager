@@ -26,7 +26,11 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import _format_decimal, is_registration_provisional
+from larpmanager.accounting.base import (
+    _format_decimal,
+    is_registration_payment_pending,
+    is_registration_provisional,
+)
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.basic import RunBasicCache, get_run_basic_cache
 from larpmanager.cache.config import get_association_config
@@ -157,8 +161,13 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
         run_status["can_pay"] = False
         return
 
+    # Registrations still needing a payment cannot create, choose or edit characters
+    payment_pending = is_registration_payment_pending(
+        registration, event_id=run.event_id, features=features, context=context
+    )
+
     # Initialize character registration status for the run
-    registration_status_characters(run, registration, run_status, features, context)
+    registration_status_characters(run, registration, run_status, features, context, payment_pending=payment_pending)
 
     # Get user membership for the event's association
     user_membership = get_user_membership(member, run_cache["association_id"])
@@ -217,6 +226,10 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     # Set base text before payment check (may be overridden for submitted/wire cases)
     run_status["text"] = registration_text
 
+    if payment_pending:
+        _status_payment_required(registration, run_status)
+        return
+
     # Check payment status and return if payment handling is complete
     if "payment" in features and _status_payment(register_url, registration, run_status, context):
         return
@@ -253,6 +266,24 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
 
     # Set final confirmed registration status for completed registrations
     run_status["text"] = registration_text
+
+
+def _status_payment_required(registration: Registration, run_status: dict) -> None:
+    """Mark the registration as incomplete until a payment is submitted."""
+    run_status["text"] = _("Registration incomplete")
+    run_status["text_long"] = _(
+        "Your registration is not complete: you cannot create, choose or edit a character until you submit your payment"
+    )
+    run_status["status_type"] = "action_needed"
+    run_status["payment_required"] = True
+    run_status["action"] = {
+        "url": reverse("accounting_registration", args=[registration.uuid]),
+        "label": _("Submit your payment"),
+        "label_long": _(
+            "Submit your payment to complete your registration: you will then be able to create or choose "
+            "your character"
+        ),
+    }
 
 
 def _registration_messages(

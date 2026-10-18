@@ -7,7 +7,7 @@ The accounting directory contains the financial core, handling all payment proce
 
 **balance.py**: Member balance calculation utilities. Calculates run accounting with revenue/costs/balance, processes expenses, inflows, outflows, payments, refunds, tokens, credits, and generates association-wide financial reports.
 
-**base.py**: Base accounting utilities and payment gateway integration. Checks registration provisional status, decrypts payment details, and handles pre-save operations for payment and collection accounting items.
+**base.py**: Base accounting utilities and payment gateway integration. Checks registration provisional and payment-required status, decrypts payment details, and handles pre-save operations for payment and collection accounting items.
 
 **gateway.py**: Payment gateway integration for PayPal, Stripe, Redsys, SumUp, and Satispay. Handles payment form generation, webhook processing, signature verification, and transaction processing for multiple payment providers.
 

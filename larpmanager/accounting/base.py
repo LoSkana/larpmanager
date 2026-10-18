@@ -37,7 +37,11 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     AccountingItemTransaction,
     Collection,
+    PaymentInvoice,
+    PaymentStatus,
+    PaymentType,
 )
+from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import get_payment_details_path
 from larpmanager.utils.larpmanager.tasks import notify_admins
 
@@ -82,6 +86,65 @@ def is_registration_provisional(
     # Check if payment feature is enabled and registration has outstanding balance
     # Registration is provisional if it has a positive total price but zero or negative payment
     return bool("payment" in features and instance.tot_iscr > 0 >= instance.tot_payed)
+
+
+def is_registration_payment_pending(
+    registration: Registration,
+    event_id: int | None = None,
+    features: dict | None = None,
+    context: dict | None = None,
+) -> bool:
+    """Check if a registration is blocked from character actions until a payment is made.
+
+    With the require_payment event config, a registration with a price is pending until it has a
+    registration invoice submitted, confirmed or checked, or any payment item recorded.
+
+    Args:
+        registration: Registration instance to check
+        event_id: Optional event id, will be retrieved from run basic cache if None
+        features: Optional event features dict, will query if None
+        context: Optional dict for common data, may contain payment_invoices_dict
+
+    Returns:
+        bool: True if the registration still needs a payment, False otherwise
+
+    """
+    if context is None:
+        context = {}
+
+    if not event_id:
+        event_id = get_run_event_id(registration.run_id, context=context)
+
+    if not features:
+        features = get_event_features(event_id)
+
+    if "payment" not in features or not get_event_config(event_id, "require_payment", context=context):
+        return False
+
+    # Free, awaiting approval or waiting list registrations are never blocked
+    if not registration.tot_iscr or registration.tot_iscr <= 0 or registration.pending:
+        return False
+    if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
+        return False
+
+    paid_statuses = {PaymentStatus.SUBMITTED, PaymentStatus.CONFIRMED, PaymentStatus.CHECKED}
+    payment_invoices_dict = context.get("payment_invoices_dict")
+    if payment_invoices_dict is not None and registration.id in payment_invoices_dict:
+        has_invoice = any(
+            invoice.status in paid_statuses and invoice.typ == PaymentType.REGISTRATION
+            for invoice in payment_invoices_dict[registration.id]
+        )
+    else:
+        has_invoice = PaymentInvoice.objects.filter(
+            idx=registration.id,
+            member_id=registration.member_id,
+            typ=PaymentType.REGISTRATION,
+            status__in=paid_statuses,
+        ).exists()
+    if has_invoice:
+        return False
+
+    return not AccountingItemPayment.objects.filter(registration_id=registration.id).exists()
 
 
 def get_payment_details(association: Association) -> dict:

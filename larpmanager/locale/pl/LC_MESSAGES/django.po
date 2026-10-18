@@ -3467,6 +3467,9 @@ msgstr "Usuń prolog"
 msgid "Replacing names"
 msgstr "Zastępowanie nazw"
 
+msgid "Require payment"
+msgstr "Wymagaj płatności"
+
 msgid "Restore Preview"
 msgstr "Podgląd przywracania"
 
@@ -4502,6 +4505,9 @@ msgstr "Brak wyników"
 msgid "Signup cancellation"
 msgstr "Anulowanie rejestracji"
 
+msgid "Submit your payment"
+msgstr "Wyślij płatność"
+
 msgid "The delivery's name"
 msgstr "Nazwa przesyłki"
 
@@ -5247,6 +5253,9 @@ msgstr "Przywróć usunięte obiekty"
 
 msgid "Registration conditions"
 msgstr "Warunki rejestracji"
+
+msgid "Registration incomplete"
+msgstr "Rejestracja niekompletna"
 
 msgid "Registration is closed."
 msgstr "Rejestracja została zamknięta."
@@ -13498,6 +13507,13 @@ msgstr ""
 "dostępna podczas rejestracji."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Dokończ rejestrację, wysyłając płatność, zanim utworzysz, wybierzesz lub "
+"zmodyfikujesz postać"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -13869,6 +13885,13 @@ msgstr ""
 "powiadomić nas o dokonaniu płatności."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Wyślij płatność, aby dokończyć rejestrację: potem będziesz mógł utworzyć lub"
+" wybrać swoją postać"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -14074,6 +14097,13 @@ msgid ""
 msgstr ""
 "Zostałeś zaproszony do udziału w roli <strong>%(role.name)s</strong> podczas"
 " wydarzenia <strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Twoja rejestracja nie jest zakończona: nie możesz tworzyć, wybierać ani "
+"modyfikować postaci, dopóki nie wyślesz płatności"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -14846,6 +14876,13 @@ msgstr ""
 "Jeśli włączone, umożliwia zarządzanie wieloma systemami doświadczenia dla "
 "wydarzenia. Każdą zdolność i każde przyznanie punktów można przypisać do "
 "konkretnego systemu."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Jeśli włączone, uczestnicy nie mogą tworzyć, wybierać ani modyfikować "
+"postaci ani ustawiać preferencji Casting, dopóki nie wyślą płatności."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

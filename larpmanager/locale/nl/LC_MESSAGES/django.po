@@ -3467,6 +3467,9 @@ msgstr "Proloog verwijderen"
 msgid "Replacing names"
 msgstr "Namen vervangen"
 
+msgid "Require payment"
+msgstr "Betaling vereisen"
+
 msgid "Restore Preview"
 msgstr "Voorbeeld van herstel"
 
@@ -4502,6 +4505,9 @@ msgstr "Resultaten niet aanwezig"
 msgid "Signup cancellation"
 msgstr "Annulering inschrijving"
 
+msgid "Submit your payment"
+msgstr "Dien je betaling in"
+
 msgid "The delivery's name"
 msgstr "De naam van de zending"
 
@@ -5247,6 +5253,9 @@ msgstr "Herstel verwijderde objecten"
 
 msgid "Registration conditions"
 msgstr "Inschrijvingsvoorwaarden"
+
+msgid "Registration incomplete"
+msgstr "Inschrijving onvolledig"
 
 msgid "Registration is closed."
 msgstr "De inschrijving is gesloten."
@@ -13655,6 +13664,13 @@ msgstr ""
 " in de registratie."
 
 msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+"Rond je inschrijving af door je betaling in te dienen voordat je een "
+"personage aanmaakt, kiest of bewerkt"
+
+msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
@@ -14025,6 +14041,13 @@ msgstr ""
 "formulier om ons op de hoogte te stellen van je betaling."
 
 msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
+msgstr ""
+"Dien je betaling in om je inschrijving af te ronden: daarna kun je je "
+"personage aanmaken of kiezen"
+
+msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -14231,6 +14254,13 @@ msgstr ""
 "Je bent uitgenodigd om deel te nemen in de rol "
 "<strong>%(role.name)s</strong> tijdens het evenement "
 "<strong>%(event)s</strong>."
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+"Je inschrijving is niet compleet: je kunt geen personage aanmaken, kiezen of"
+" bewerken totdat je je betaling hebt ingediend"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -15011,6 +15041,14 @@ msgstr ""
 "Indien ingeschakeld, kun je meerdere ervaringssystemen voor het evenement "
 "beheren. Elke vaardigheid en toekenning kan aan een specifiek systeem worden"
 " gekoppeld."
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+"Als dit is ingeschakeld, kunnen deelnemers geen personage aanmaken, kiezen "
+"of bewerken, of casting-voorkeuren instellen, totdat ze een betaling hebben "
+"ingediend."
 
 msgid ""
 "If enabled, participants may add abilities themselves, by selecting from "

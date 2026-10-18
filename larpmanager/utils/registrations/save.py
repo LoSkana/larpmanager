@@ -27,7 +27,7 @@ from django.db import models, transaction
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.accounting.base import is_registration_payment_pending, is_registration_provisional
 from larpmanager.cache.discount import (
     clear_member_reservation,
     get_member_expired_reservations,
@@ -149,8 +149,13 @@ def save_registration(
         # Save the updated registration instance
         registration.save()
 
+        # Characters are not assigned while the registration still needs a payment
+        payment_pending = is_registration_payment_pending(
+            registration, event_id=event.id, features=context["features"], context=context
+        )
+
         # Handle special feature processing based on context flags
-        if "user_character" in context["features"]:
+        if "user_character" in context["features"] and not payment_pending:
             check_assign_character(context)
         if "bring_friend" in context["features"]:
             save_registration_bring_friend(context, form, registration)

@@ -1837,6 +1837,14 @@ msgid ""
 "received."
 msgstr ""
 
+msgid "Require payment"
+msgstr ""
+
+msgid ""
+"If enabled, participants cannot create, choose or edit a character, or set "
+"casting preferences, until they have submitted a payment."
+msgstr ""
+
 msgid "Disable Tokens"
 msgstr ""
 
@@ -12688,6 +12696,11 @@ msgstr ""
 msgid "Select your casting preferences!"
 msgstr ""
 
+msgid ""
+"Complete your registration by submitting your payment, before creating, "
+"choosing or editing a character"
+msgstr ""
+
 msgid "Discounts only applicable with new registrations"
 msgstr ""
 
@@ -12752,6 +12765,22 @@ msgstr ""
 
 msgid ""
 "Your registration is provisional: complete the payment to confirm your spot"
+msgstr ""
+
+msgid "Registration incomplete"
+msgstr ""
+
+msgid ""
+"Your registration is not complete: you cannot create, choose or edit a "
+"character until you submit your payment"
+msgstr ""
+
+msgid "Submit your payment"
+msgstr ""
+
+msgid ""
+"Submit your payment to complete your registration: you will then be able to "
+"create or choose your character"
 msgstr ""
 
 msgid "Registration confirmed"

@@ -1249,6 +1249,15 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
+            if "character" in self.params["features"]:
+                # Option to block character handling until a payment is submitted
+                require_payment_label = _("Require payment")
+                require_payment_help_text = _(
+                    "If enabled, participants cannot create, choose or edit a character, or set casting preferences, "
+                    "until they have submitted a payment.",
+                )
+                self.add_configs("require_payment", ConfigType.BOOL, require_payment_label, require_payment_help_text)
+
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 

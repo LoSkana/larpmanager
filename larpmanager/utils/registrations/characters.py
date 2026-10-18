@@ -21,8 +21,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import is_registration_payment_pending
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
@@ -32,10 +35,11 @@ from larpmanager.models.writing import (
     get_event_class_parent,
     get_event_elements,
 )
-from larpmanager.utils.core.exceptions import PendingApprovalError, SignupError, WaitingError
+from larpmanager.utils.core.exceptions import PendingApprovalError, RedirectError, SignupError, WaitingError
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+    from django.http import HttpRequest
 
     from larpmanager.models.event import Run
     from larpmanager.models.member import Member
@@ -71,6 +75,27 @@ def registration_find(run: Run, member: Member) -> Registration | None:
     except ObjectDoesNotExist:
         # No active registration found for this user and run
         return None
+
+
+def check_registration_payment(request: HttpRequest, context: dict) -> None:
+    """Redirect to the payment page if the registration still needs a payment to handle characters.
+
+    Raises:
+        RedirectError: If the require_payment config is active and no payment was submitted yet
+
+    """
+    registration = context.get("registration")
+    if not registration or not is_registration_payment_pending(
+        registration, event_id=context["event"].id, features=context["features"], context=context
+    ):
+        return
+
+    messages.error(
+        request,
+        _("Complete your registration by submitting your payment, before creating, choosing or editing a character"),
+    )
+    view_name = "accounting_registration"
+    raise RedirectError(view_name, kwargs={"registration_uuid": registration.uuid})
 
 
 def check_character_maximum(event_id: int, member: Any) -> tuple[bool, int]:
