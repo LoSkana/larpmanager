@@ -84,6 +84,7 @@ from larpmanager.utils.registrations.characters import (
     check_character_maximum,
     get_character_play_max,
     get_player_characters,
+    lock_characters_taken_in_run,
 )
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.character import (
@@ -920,15 +921,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
         )
 
         # Refuse characters already played by someone else in this run
-        if (
-            RegistrationCharacterRel.objects.filter(
-                character_id=character_id,
-                registration__run_id=context["run"].id,
-                registration__cancellation_date__isnull=True,
-            )
-            .exclude(registration_id=registration_id)
-            .exists()
-        ):
+        if lock_characters_taken_in_run([character_id], context["run"].id, registration_id):
             messages.error(request, _("This character is already played by another participant"))
             return redirect("character_list", event_slug=event_slug)
 

@@ -250,20 +250,48 @@ def check_assign_character(context: dict) -> None:
         ),
     )
 
-    # Filter to get assignable characters (active and not already assigned)
-    assignable_characters = [
-        char for char in characters if char.id not in inactive_character_ids and char.id not in assigned_character_ids
-    ]
-    if not assignable_characters:
-        return
+    with transaction.atomic():
+        # Skip characters already played by someone else in the run
+        taken_ids = lock_characters_taken_in_run(character_ids, registration.run_id, registration.id)
 
-    # Leave the choice to the player when there are more candidates than free slots
-    if len(assignable_characters) > free_slots:
-        return
+        # Filter to get assignable characters (active and not already assigned)
+        assignable_characters = [
+            char
+            for char in characters
+            if char.id not in inactive_character_ids
+            and char.id not in assigned_character_ids
+            and char.id not in taken_ids
+        ]
+        if not assignable_characters:
+            return
 
-    # Auto-assign the remaining characters
-    for character in assignable_characters:
-        RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
+        # Leave the choice to the player when there are more candidates than free slots
+        if len(assignable_characters) > free_slots:
+            return
+
+        # Auto-assign the remaining characters
+        for character in assignable_characters:
+            RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
+
+
+def lock_characters_taken_in_run(
+    character_ids: list[int], run_id: int, exclude_registration_id: int | None = None
+) -> set[int]:
+    """Lock the characters and return the ids already played by an active registration of the run.
+
+    Must be called inside a transaction: the lock serialises concurrent assignments of the same characters.
+    """
+    list(Character.objects.select_for_update().filter(pk__in=character_ids).order_by("pk").values_list("pk", flat=True))
+
+    taken = RegistrationCharacterRel.objects.filter(
+        character_id__in=character_ids,
+        registration__run_id=run_id,
+        registration__cancellation_date__isnull=True,
+        registration__deleted__isnull=True,
+    )
+    if exclude_registration_id:
+        taken = taken.exclude(registration_id=exclude_registration_id)
+    return set(taken.values_list("character_id", flat=True))
 
 
 def assign_created_character(context: dict, character: Character) -> None:
@@ -308,6 +336,7 @@ def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
             Q(registration__run__event__parent_id=parent_id) | Q(registration__run__event_id=parent_id),
             registration__member_id=member_id,
             registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
         )
         .exclude(registration__run__event_id=event_id)
         .select_related("character")
@@ -332,6 +361,7 @@ def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
             character_id__in=characters.keys(),
             registration__run_id=run_id,
             registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
         ).values_list("character_id", flat=True)
     )
 
@@ -349,14 +379,7 @@ def assign_campaign_character(registration: Registration, candidate: dict) -> No
     """
     character = candidate["character"]
     with transaction.atomic():
-        # Lock the character to serialise concurrent assignments
-        Character.objects.select_for_update().get(pk=character.pk)
-
-        if RegistrationCharacterRel.objects.filter(
-            character=character,
-            registration__run_id=registration.run_id,
-            registration__cancellation_date__isnull=True,
-        ).exists():
+        if lock_characters_taken_in_run([character.pk], registration.run_id):
             return
 
         new_rel = RegistrationCharacterRel.objects.create(registration=registration, character=character)
