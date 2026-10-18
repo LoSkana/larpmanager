@@ -149,9 +149,10 @@ def save_registration(
         # Save the updated registration instance
         registration.save()
 
-        # Assign the campaign character chosen on signup, skipping registrations awaiting approval
+        # Assign the campaign character chosen on signup, skipping registrations awaiting approval or in waiting list
         campaign_candidate = form.cleaned_data.get("campaign_character")
-        if campaign_candidate and not registration.pending:
+        is_waiting = registration.ticket and registration.ticket.tier == TicketTier.WAITING
+        if campaign_candidate and not registration.pending and not is_waiting:
             assign_campaign_character(registration, campaign_candidate)
 
         # Handle special feature processing based on context flags. When the campaign choice is offered,

@@ -295,16 +295,24 @@ def lock_characters_taken_in_run(
 
 
 def assign_created_character(context: dict, character: Character) -> None:
-    """Assign a character just created by the player to their signup, if a play slot is free."""
+    """Assign a character just created by the player to their signup, if a play slot is free and nobody else plays it."""
     registration = get_player_signup(context)
     if not registration or registration.pending or not character.is_active:
         return
 
-    # Skip if player already plays the maximum number of characters
-    if registration.rcrs.count() >= get_character_play_max(context["event"].id, context):
-        return
+    play_max = get_character_play_max(context["event"].id, context)
 
-    RegistrationCharacterRel.objects.get_or_create(character_id=character.id, registration=registration)
+    with transaction.atomic():
+        # Lock the registration, so concurrent saves cannot exceed the number of playable characters
+        Registration.objects.select_for_update().filter(pk=registration.id).first()
+        assigned_ids = set(registration.rcrs.values_list("character_id", flat=True))
+        if character.id in assigned_ids or len(assigned_ids) >= play_max:
+            return
+
+        if lock_characters_taken_in_run([character.id], registration.run_id, registration.id):
+            return
+
+        RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
 
 
 def get_campaign_characters(member_id: int, run_id: int) -> list[dict]:
