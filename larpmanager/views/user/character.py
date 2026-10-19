@@ -82,6 +82,7 @@ from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.registrations.characters import (
     check_assign_character,
     check_character_maximum,
+    check_character_payment_lock,
     get_character_play_max,
     get_player_characters,
 )
@@ -295,6 +296,7 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     """
     # Get event and run context with signup and status validation
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+    check_character_payment_lock(context)
 
     registration = context.get("registration")
     if not registration:
@@ -715,6 +717,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
+    check_character_payment_lock(context)
 
     context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.CHARACTER)
 
@@ -813,6 +816,7 @@ def _character_list_sort(context: dict) -> None:
 def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return JSON list of player's characters for an event."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
+    check_character_payment_lock(context)
 
     context["list"] = get_player_characters(context["member"], context["event"].id)
 
@@ -826,6 +830,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
+    check_character_payment_lock(context)
 
     check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     if check:

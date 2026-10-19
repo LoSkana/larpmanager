@@ -3704,6 +3704,9 @@ msgstr "Προτεραιότητα πληρωμής"
 msgid "Payment reminder"
 msgstr "Υπενθύμιση πληρωμής"
 
+msgid "Payment required"
+msgstr "Απαιτείται πληρωμή"
+
 msgid "Pending approval"
 msgstr "Εκκρεμεί έγκριση"
 
@@ -4799,6 +4802,9 @@ msgstr "Παραδομένες συλλογές"
 
 msgid "Complete sheet (Test)"
 msgstr "Πλήρες φύλλο (Δοκιμή)"
+
+msgid "Complete your payment"
+msgstr "Ολοκλήρωσε την πληρωμή σου"
 
 msgid "Complete your profile"
 msgstr "Ολοκλήρωσε το προφίλ σου"
@@ -11325,6 +11331,13 @@ msgstr ""
 "φαίνονται σωστές."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Ολοκλήρωσε την πληρωμή σου για να οριστικοποιήσεις την εγγραφή σου και να "
+"αποκτήσεις πρόσβαση στον χαρακτήρα σου!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13342,6 +13355,13 @@ msgid ""
 msgstr ""
 "Έχεις ήδη πληρώσει τη συνδρομή σου για το τρέχον έτος, οπότε καλύπτεσαι ήδη "
 "για αυτή την εκδήλωση!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Η εγγραφή σου δεν έχει ολοκληρωθεί ακόμα: ολοκλήρωσε την πληρωμή σου για να "
+"δημιουργήσεις ή να επιλέξεις τον χαρακτήρα σου"
 
 #, python-format
 msgid ""
@@ -15476,6 +15496,14 @@ msgstr ""
 "Δεν υπάρχει έγκυρη ανάθεση με τους τρέχοντες περιορισμούς: έλεγξε τους "
 "συμμετέχοντες που περιλαμβάνονται και τους διαθέσιμους χαρακτήρες, μετά "
 "τρέξε ξανά τον αλγόριθμο"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Αν είναι ενεργό, οι παίκτες μπορούν να δημιουργήσουν, να επιλέξουν ή να δουν"
+" τους χαρακτήρες τους μόνο αφού ανεβάσουν αποδεικτικό πληρωμής (ή κάνουν "
+"πληρωμή) για την εγγραφή τους."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

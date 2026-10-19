@@ -23,7 +23,9 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
     Character,
@@ -32,7 +34,7 @@ from larpmanager.models.writing import (
     get_event_class_parent,
     get_event_elements,
 )
-from larpmanager.utils.core.exceptions import PendingApprovalError, SignupError, WaitingError
+from larpmanager.utils.core.exceptions import PaymentProofError, PendingApprovalError, SignupError, WaitingError
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -198,6 +200,55 @@ def check_signup(context: dict) -> None:
     # Check if registration is in waiting list
     if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
         raise WaitingError(context["run"].get_slug())
+
+
+def is_character_access_locked(registration: Registration | None, features: dict | set, context: dict) -> bool:
+    """Return whether character access is locked until the registration is paid.
+
+    Lifted by any payment received or any registration payment proof submitted.
+    The result is cached in the context per registration.
+    """
+    if not registration or "payment" not in features:
+        return False
+
+    cache = context.setdefault("character_access_locked", {})
+    if registration.id not in cache:
+        cache[registration.id] = _compute_character_access_locked(registration, context)
+    return cache[registration.id]
+
+
+def _compute_character_access_locked(registration: Registration, context: dict) -> bool:
+    """Compute the character access lock for a registration."""
+    event_id = get_run_basic_cache(registration.run_id, context=context)["event_id"]
+    if not get_event_config(event_id, "user_character_payment_required", context=context):
+        return False
+
+    # Nothing to pay, or a payment already received
+    if not registration.tot_iscr or registration.tot_payed:
+        return False
+
+    proof_statuses = {PaymentStatus.SUBMITTED, PaymentStatus.CONFIRMED, PaymentStatus.CHECKED}
+    payment_invoices_dict = context.get("payment_invoices_dict")
+    if payment_invoices_dict is not None:
+        return not any(
+            invoice.status in proof_statuses and invoice.typ == PaymentType.REGISTRATION
+            for invoice in payment_invoices_dict.get(registration.id, [])
+        )
+    return not PaymentInvoice.objects.filter(
+        registration_id=registration.id,
+        typ=PaymentType.REGISTRATION,
+        status__in=proof_statuses,
+    ).exists()
+
+
+def check_character_payment_lock(context: dict) -> None:
+    """Raise if the player cannot access characters until the registration payment is completed."""
+    if context.get("staff"):
+        return
+
+    registration = get_player_signup(context)
+    if is_character_access_locked(registration, context.get("features", {}), context):
+        raise PaymentProofError(str(registration.uuid))
 
 
 def check_assign_character(context: dict) -> None:

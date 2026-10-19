@@ -1666,6 +1666,14 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
+msgid "Payment required"
+msgstr ""
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after "
+"uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+
 msgid "Automatic faction assignment"
 msgstr ""
 
@@ -3687,6 +3695,11 @@ msgid "%(name)s not visible at this time"
 msgstr ""
 
 msgid "You're not allowed to sign up!"
+msgstr ""
+
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
 msgstr ""
 
 msgid "Bank Statement"
@@ -12616,6 +12629,14 @@ msgstr ""
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available."
+msgstr ""
+
+msgid "Complete your payment"
+msgstr ""
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
 msgstr ""
 
 msgid "Your character is"
