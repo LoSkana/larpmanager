@@ -3704,6 +3704,9 @@ msgstr "Prioridade de pagamento"
 msgid "Payment reminder"
 msgstr "Lembrete de pagamento"
 
+msgid "Payment required"
+msgstr "Pagamento necessário"
+
 msgid "Pending approval"
 msgstr "A aguardar aprovação"
 
@@ -5580,6 +5583,9 @@ msgstr "Atualizar os teus dados pessoais"
 
 msgid "Upload of photo and video"
 msgstr "Carregamento de fotos e vídeos"
+
+msgid "Upload your payment proof"
+msgstr "Carrega o teu comprovativo de pagamento"
 
 msgid "Use of third party assets"
 msgstr "Utilização de recursos de terceiros"
@@ -11715,6 +11721,13 @@ msgstr ""
 "e-mail recente."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Carrega o teu comprovativo de pagamento para concluíres a tua inscrição e "
+"acederes à tua personagem!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13369,6 +13382,13 @@ msgid ""
 msgstr ""
 "O teu pagamento para estas inscrições no evento está atualmente em análise. "
 "Não precisas de fazer nada."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"A tua inscrição ainda não está concluída: carrega o teu comprovativo de "
+"pagamento para criares ou escolheres a tua personagem"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15206,6 +15226,14 @@ msgstr ""
 "Não existe atribuição válida com as restrições atuais: verifica os "
 "participantes incluídos e os personagens disponíveis, depois corre o "
 "algoritmo novamente"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Se esta opção estiver ativa, os jogadores só podem criar, escolher ou aceder"
+" às suas personagens depois de carregarem um comprovativo de pagamento (ou "
+"de efetuarem um pagamento) da sua inscrição."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

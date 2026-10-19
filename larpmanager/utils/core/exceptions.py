@@ -106,6 +106,20 @@ class PendingApprovalError(Exception):
         self.slug = slug
 
 
+class PaymentProofError(Exception):
+    """Exception raised when character access requires a payment proof not yet uploaded.
+
+    Attributes:
+        registration_uuid (str): UUID of the registration awaiting payment
+
+    """
+
+    def __init__(self, registration_uuid: str) -> None:
+        """Initialize with registration uuid."""
+        super().__init__()
+        self.registration_uuid = registration_uuid
+
+
 class HiddenError(Exception):
     """Exception raised when trying to access hidden content.
 

@@ -3704,6 +3704,9 @@ msgstr "Priorytet płatności"
 msgid "Payment reminder"
 msgstr "Przypomnienie o płatności"
 
+msgid "Payment required"
+msgstr "Wymagana płatność"
+
 msgid "Pending approval"
 msgstr "Oczekuje na zatwierdzenie"
 
@@ -5580,6 +5583,9 @@ msgstr "Zaktualizuj swoje dane osobowe"
 
 msgid "Upload of photo and video"
 msgstr "Przesyłanie zdjęć i filmów"
+
+msgid "Upload your payment proof"
+msgstr "Prześlij potwierdzenie płatności"
 
 msgid "Use of third party assets"
 msgstr "Korzystanie z aktywów stron trzecich"
@@ -11698,6 +11704,13 @@ msgstr ""
 "ostatniego e-maila."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Prześlij potwierdzenie płatności, aby dokończyć rejestrację i uzyskać dostęp"
+" do swojej postaci!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13349,6 +13362,13 @@ msgid ""
 msgstr ""
 "Twoja płatność za te zgłoszenia na wydarzenia jest obecnie sprawdzana. Nie "
 "musisz nic robić."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Twoja rejestracja nie jest jeszcze zakończona: prześlij potwierdzenie "
+"płatności, aby utworzyć lub wybrać swoją postać"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15199,6 +15219,14 @@ msgstr ""
 "Brak poprawnego przypisania przy obecnych ograniczeniach: sprawdź "
 "uwzględnionych uczestników i dostępne postacie, a następnie uruchom algorytm"
 " ponownie"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Jeśli ta opcja jest włączona, gracze mogą tworzyć, wybierać swoje postacie "
+"lub uzyskiwać do nich dostęp dopiero po przesłaniu potwierdzenia płatności "
+"(lub dokonaniu płatności) za swoją rejestrację."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

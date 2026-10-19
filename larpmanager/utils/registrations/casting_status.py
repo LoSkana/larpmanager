@@ -35,6 +35,7 @@ from larpmanager.utils.registrations.characters import (
     get_character_play_max,
     get_player_characters_ids,
     get_player_pending_characters,
+    is_character_access_locked,
 )
 
 if TYPE_CHECKING:
@@ -63,6 +64,17 @@ def registration_status_characters(
         context = {}
 
     character_rels_dict = context.get("character_rels_dict")
+
+    # Hide every character link until the payment proof is uploaded
+    if is_character_access_locked(registration, features, context):
+        run_status["character_locked"] = {
+            "url": reverse("accounting_registration", args=[registration.uuid]),
+            "label": _("Upload your payment proof"),
+            "label_long": _(
+                "Your registration is not completed yet: upload your payment proof to create or choose your character"
+            ),
+        }
+        return
 
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:

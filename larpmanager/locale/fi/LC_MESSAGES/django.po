@@ -3704,6 +3704,9 @@ msgstr "Maksujen etusijajärjestys"
 msgid "Payment reminder"
 msgstr "Maksumuistutus"
 
+msgid "Payment required"
+msgstr "Maksu vaaditaan"
+
 msgid "Pending approval"
 msgstr "Odottaa hyväksyntää"
 
@@ -5580,6 +5583,9 @@ msgstr "Päivitä henkilötietosi"
 
 msgid "Upload of photo and video"
 msgstr "Valokuvan ja videon lataaminen"
+
+msgid "Upload your payment proof"
+msgstr "Lataa maksutositteesi"
 
 msgid "Use of third party assets"
 msgstr "Kolmannen osapuolen omaisuuden käyttö"
@@ -11620,6 +11626,13 @@ msgstr ""
 "sähköpostiviestistä löytyvää linkkiä."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Lataa maksutositteesi viimeistelläksesi ilmoittautumisesi ja päästäksesi "
+"hahmoosi!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13259,6 +13272,13 @@ msgid ""
 msgstr ""
 "Näiden tapahtumailmoittautumisten maksusi on parhaillaan tarkastettavana. "
 "Sinun ei tarvitse tehdä mitään."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Ilmoittautumisesi ei ole vielä valmis: lataa maksutositteesi, jotta voit "
+"luoda tai valita hahmosi"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15102,6 +15122,14 @@ msgid ""
 msgstr ""
 "Nykyisillä rajoituksilla ei löydy kelvollista jakoa: tarkista mukana olevat "
 "osallistujat ja käytettävissä olevat hahmot, ja aja algoritmi uudelleen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Jos tämä on käytössä, pelaajat voivat luoda, valita tai avata hahmonsa "
+"vasta, kun he ovat ladanneet ilmoittautumisensa maksutositteen (tai "
+"maksaneet)."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

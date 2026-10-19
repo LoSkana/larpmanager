@@ -3704,6 +3704,9 @@ msgstr "Betalingsprioriteit"
 msgid "Payment reminder"
 msgstr "Betalingsherinnering"
 
+msgid "Payment required"
+msgstr "Betaling vereist"
+
 msgid "Pending approval"
 msgstr "In afwachting van goedkeuring"
 
@@ -5580,6 +5583,9 @@ msgstr "Werk je persoonlijke gegevens bij"
 
 msgid "Upload of photo and video"
 msgstr "Foto's en video's uploaden"
+
+msgid "Upload your payment proof"
+msgstr "Upload je betalingsbewijs"
 
 msgid "Use of third party assets"
 msgstr "Gebruik van activa van derden"
@@ -11844,6 +11850,13 @@ msgstr ""
 "Deze afmeldlink is niet meer geldig. Gebruik de link uit een recente e-mail."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Upload je betalingsbewijs om je inschrijving af te ronden en toegang te "
+"krijgen tot je personage!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13506,6 +13519,13 @@ msgid ""
 msgstr ""
 "Je betaling voor deze evenementaanmeldingen wordt momenteel gecontroleerd. "
 "Je hoeft hiervoor niets te doen."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Je inschrijving is nog niet afgerond: upload je betalingsbewijs om je "
+"personage aan te maken of te kiezen"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15370,6 +15390,14 @@ msgstr ""
 "Er bestaat geen geldige toewijzing met de huidige beperkingen: controleer de"
 " opgenomen deelnemers en de beschikbare personages en voer het algoritme "
 "daarna opnieuw uit"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Als dit is ingeschakeld, kunnen spelers hun personages pas aanmaken, kiezen "
+"of openen nadat ze een betalingsbewijs hebben geüpload (of een betaling "
+"hebben gedaan) voor hun inschrijving."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

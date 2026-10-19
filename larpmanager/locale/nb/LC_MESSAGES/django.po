@@ -3704,6 +3704,9 @@ msgstr "Betalingsprioritet"
 msgid "Payment reminder"
 msgstr "Betalingspåminnelse"
 
+msgid "Payment required"
+msgstr "Betaling kreves"
+
 msgid "Pending approval"
 msgstr "Venter på godkjenning"
 
@@ -5580,6 +5583,9 @@ msgstr "Oppdater dine personopplysninger"
 
 msgid "Upload of photo and video"
 msgstr "Opplasting av bilder og videoer"
+
+msgid "Upload your payment proof"
+msgstr "Last opp betalingsbeviset ditt"
 
 msgid "Use of third party assets"
 msgstr "Bruk av tredjeparts eiendeler"
@@ -11623,6 +11629,13 @@ msgstr ""
 "mottatt e-post."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Last opp betalingsbeviset ditt for å fullføre påmeldingen og få tilgang til "
+"karakteren din!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13274,6 +13287,13 @@ msgid ""
 msgstr ""
 "Betalingen din for disse påmeldingene til arrangementene blir for øyeblikket"
 " behandlet. Du trenger ikke å gjøre noe."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Påmeldingen din er ikke fullført ennå: last opp betalingsbeviset ditt for å "
+"opprette eller velge karakteren din"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15105,6 +15125,14 @@ msgid ""
 msgstr ""
 "Ingen gyldig tildeling finnes med gjeldende begrensninger: sjekk inkluderte "
 "deltakere og tilgjengelige karakterer, kjør så algoritmen igjen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Hvis dette er aktivert, kan spillerne opprette, velge eller få tilgang til "
+"karakterene sine først etter at de har lastet opp betalingsbevis (eller "
+"betalt) for påmeldingen sin."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

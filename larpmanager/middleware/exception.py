@@ -38,6 +38,7 @@ from larpmanager.utils.core.exceptions import (
     MainPageError,
     MembershipError,
     NotFoundError,
+    PaymentProofError,
     PendingApprovalError,
     RedirectError,
     ReturnNowError,
@@ -128,6 +129,16 @@ class ExceptionHandlingMiddleware:
                     _("Your signup request is awaiting organizer approval!"),
                     "register",
                     [ex.slug],
+                ),
+            ),
+            (
+                PaymentProofError,
+                lambda ex: self._redirect_with_message(
+                    request,
+                    _("Upload your payment proof to complete your registration and access your character!"),
+                    "accounting_registration",
+                    [ex.registration_uuid],
+                    message_level="warning",
                 ),
             ),
             # Content visibility and access errors

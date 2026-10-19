@@ -3704,6 +3704,9 @@ msgstr "Priorita platby"
 msgid "Payment reminder"
 msgstr "Upomínka k platbě"
 
+msgid "Payment required"
+msgstr "Vyžadována platba"
+
 msgid "Pending approval"
 msgstr "Čeká se na schválení"
 
@@ -5580,6 +5583,9 @@ msgstr "Aktualizuj své osobní údaje"
 
 msgid "Upload of photo and video"
 msgstr "Nahrávání fotografií a videí"
+
+msgid "Upload your payment proof"
+msgstr "Nahraj doklad o platbě"
 
 msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
@@ -11453,6 +11459,12 @@ msgstr ""
 " posledních e-mailů."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Nahraj doklad o platbě pro dokončení registrace a přístup ke své postavě!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13078,6 +13090,13 @@ msgid ""
 msgstr ""
 "Tvá platba za tyto registrace na akce se v současné době prověřuje. Z tvé "
 "strany není třeba nic podnikat."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Tvoje registrace ještě není dokončená: nahraj doklad o platbě a pak si budeš"
+" moct vytvořit nebo vybrat postavu"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -14891,6 +14910,13 @@ msgid ""
 msgstr ""
 "Žádné platné přiřazení neexistuje s aktuálními omezeními: zkontroluj "
 "zahrnuté účastníky a dostupné postavy, pak spusť algoritmus znovu"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Pokud je zapnuto, hráči můžou vytvořit, vybrat nebo zobrazit své postavy až "
+"po nahrání dokladu o platbě (nebo provedení platby) za svou registraci."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

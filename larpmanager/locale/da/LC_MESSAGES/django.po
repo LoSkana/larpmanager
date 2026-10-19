@@ -3704,6 +3704,9 @@ msgstr "Betalingsprioritet"
 msgid "Payment reminder"
 msgstr "Betalingspåmindelse"
 
+msgid "Payment required"
+msgstr "Betaling påkrævet"
+
 msgid "Pending approval"
 msgstr "Afventer godkendelse"
 
@@ -5580,6 +5583,9 @@ msgstr "Opdater dine personoplysninger"
 
 msgid "Upload of photo and video"
 msgstr "Upload af billeder og videoer"
+
+msgid "Upload your payment proof"
+msgstr "Upload din betalingskvittering"
 
 msgid "Use of third party assets"
 msgstr "Brug af tredjepartsaktiver"
@@ -11550,6 +11556,13 @@ msgstr ""
 "nyere e-mail."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Upload din betalingskvittering for at gøre din tilmelding færdig og få "
+"adgang til din karakter!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13201,6 +13214,13 @@ msgid ""
 msgstr ""
 "Din betaling for disse eventtilmeldinger er i øjeblikket under gennemgang. "
 "Du behøver ikke gøre noget."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Din tilmelding er ikke færdig endnu: upload din betalingskvittering for at "
+"oprette eller vælge din karakter"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15018,6 +15038,14 @@ msgid ""
 msgstr ""
 "Ingen gyldig tildeling findes med de nuværende begrænsninger: tjek "
 "deltagerne og de tilgængelige karakterer, og kør algoritmen igen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Hvis det er slået til, kan spillerne først oprette, vælge eller åbne deres "
+"karakterer, når de har uploadet en betalingskvittering (eller betalt) for "
+"deres tilmelding."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

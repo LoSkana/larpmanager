@@ -3704,6 +3704,9 @@ msgstr "Priorité de paiement"
 msgid "Payment reminder"
 msgstr "Rappel de paiement"
 
+msgid "Payment required"
+msgstr "Paiement requis"
+
 msgid "Pending approval"
 msgstr "En attente de validation"
 
@@ -5580,6 +5583,9 @@ msgstr "Mets à jour tes données personnelles"
 
 msgid "Upload of photo and video"
 msgstr "Téléversement de photos et de vidéos"
+
+msgid "Upload your payment proof"
+msgstr "Téléverse ta preuve de paiement"
 
 msgid "Use of third party assets"
 msgstr "Utilisation d'actifs de tiers"
@@ -11938,6 +11944,13 @@ msgstr ""
 "dans un e-mail récent."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Téléverse ta preuve de paiement pour finaliser ton inscription et accéder à "
+"ton personnage !"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13604,6 +13617,13 @@ msgid ""
 msgstr ""
 "Ton paiement pour ces inscriptions à des événements est en cours de "
 "vérification. Tu n'as rien à faire."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Ton inscription n'est pas encore finalisée : téléverse ta preuve de paiement"
+" pour créer ou choisir ton personnage"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15492,6 +15512,14 @@ msgstr ""
 "Aucune affectation valide n'existe avec les contraintes actuelles : vérifie "
 "les participants inclus et les personnages disponibles, puis relance "
 "l'algorithme"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Si cette option est activée, les joueurs peuvent créer, choisir ou accéder à"
+" leurs personnages uniquement après avoir téléversé une preuve de paiement "
+"(ou effectué un paiement) pour leur inscription."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

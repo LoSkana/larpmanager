@@ -3704,6 +3704,9 @@ msgstr "Betalningsprioritet"
 msgid "Payment reminder"
 msgstr "Betalningspåminnelse"
 
+msgid "Payment required"
+msgstr "Betalning krävs"
+
 msgid "Pending approval"
 msgstr "Väntar på godkännande"
 
@@ -5580,6 +5583,9 @@ msgstr "Uppdatera dina personuppgifter"
 
 msgid "Upload of photo and video"
 msgstr "Ladda upp foton och videor"
+
+msgid "Upload your payment proof"
+msgstr "Ladda upp ditt betalningsbevis"
 
 msgid "Use of third party assets"
 msgstr "Användning av tredje parts tillgångar"
@@ -11601,6 +11607,13 @@ msgstr ""
 " istället länken i ett av de senaste e-postmeddelandena."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Ladda upp ditt betalningsbevis för att slutföra din anmälan och komma åt din"
+" karaktär!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13254,6 +13267,13 @@ msgid ""
 msgstr ""
 "Din betalning för dessa evenemangsanmälningar granskas just nu. Du behöver "
 "inte göra något."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Din anmälan är inte slutförd än: ladda upp ditt betalningsbevis för att "
+"skapa eller välja din karaktär"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15084,6 +15104,14 @@ msgstr ""
 "Ingen giltig tilldelning finns med nuvarande begränsningar: kontrollera de "
 "inkluderade deltagarna och tillgängliga karaktärerna, kör sedan algoritmen "
 "igen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Om detta är aktiverat kan spelare skapa, välja eller komma åt sina "
+"karaktärer först efter att de har laddat upp ett betalningsbevis (eller "
+"gjort en betalning) för sin anmälan."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

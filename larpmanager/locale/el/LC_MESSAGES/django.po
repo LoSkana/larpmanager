@@ -3704,6 +3704,9 @@ msgstr "Προτεραιότητα πληρωμής"
 msgid "Payment reminder"
 msgstr "Υπενθύμιση πληρωμής"
 
+msgid "Payment required"
+msgstr "Απαιτείται πληρωμή"
+
 msgid "Pending approval"
 msgstr "Εκκρεμεί έγκριση"
 
@@ -5580,6 +5583,9 @@ msgstr "Ενημέρωσε τα προσωπικά σου στοιχεία"
 
 msgid "Upload of photo and video"
 msgstr "Ανέβασμα φωτογραφιών και βίντεο"
+
+msgid "Upload your payment proof"
+msgstr "Ανέβασε το αποδεικτικό πληρωμής σου"
 
 msgid "Use of third party assets"
 msgstr "Χρήση περιουσιακών στοιχείων τρίτων"
@@ -11939,6 +11945,13 @@ msgstr ""
 " τον σύνδεσμο από ένα πρόσφατο email."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"Ανέβασε το αποδεικτικό πληρωμής σου για να ολοκληρώσεις την εγγραφή σου και "
+"να δεις τον χαρακτήρα σου!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13600,6 +13613,13 @@ msgid ""
 msgstr ""
 "Η πληρωμή σου για αυτές τις εγγραφές στο event βρίσκεται υπό έλεγχο. Δεν "
 "χρειάζεται να κάνεις κάτι."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Η εγγραφή σου δεν έχει ολοκληρωθεί ακόμα: ανέβασε το αποδεικτικό πληρωμής "
+"σου για να δημιουργήσεις ή να επιλέξεις τον χαρακτήρα σου"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15476,6 +15496,14 @@ msgstr ""
 "Δεν υπάρχει έγκυρη ανάθεση με τους τρέχοντες περιορισμούς: έλεγξε τους "
 "συμμετέχοντες που περιλαμβάνονται και τους διαθέσιμους χαρακτήρες, μετά "
 "τρέξε ξανά τον αλγόριθμο"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Αν είναι ενεργό, οι παίκτες μπορούν να δημιουργήσουν, να επιλέξουν ή να δουν"
+" τους χαρακτήρες τους μόνο αφού ανεβάσουν αποδεικτικό πληρωμής (ή κάνουν "
+"πληρωμή) για την εγγραφή τους."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

@@ -130,7 +130,7 @@ def _add_registration_items(
                     active=active in ("event_payments", "event_payments_registration"),
                 )
             )
-        if getattr(registration, "character", None):
+        if getattr(registration, "character", None) and not run_status.get("character_locked"):
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),

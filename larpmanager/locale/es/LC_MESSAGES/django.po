@@ -3704,6 +3704,9 @@ msgstr "Prioridad de pago"
 msgid "Payment reminder"
 msgstr "Recordatorio de pago"
 
+msgid "Payment required"
+msgstr "Pago requerido"
+
 msgid "Pending approval"
 msgstr "Pendiente de aprobación"
 
@@ -5580,6 +5583,9 @@ msgstr "Actualiza tus datos personales"
 
 msgid "Upload of photo and video"
 msgstr "Subir fotos y vídeos"
+
+msgid "Upload your payment proof"
+msgstr "Sube tu comprobante de pago"
 
 msgid "Use of third party assets"
 msgstr "Uso de recursos de terceros"
@@ -11839,6 +11845,13 @@ msgstr ""
 "reciente."
 
 msgid ""
+"Upload your payment proof to complete your registration and access your "
+"character!"
+msgstr ""
+"¡Sube tu comprobante de pago para completar tu inscripción y acceder a tu "
+"personaje!"
+
+msgid ""
 "All association members have already registered for a future session of this"
 " event."
 msgstr ""
@@ -13502,6 +13515,13 @@ msgid ""
 msgstr ""
 "Tu pago por las inscripciones a estos eventos se está revisando en estos "
 "momentos. No tienes que hacer nada."
+
+msgid ""
+"Your registration is not completed yet: upload your payment proof to create "
+"or choose your character"
+msgstr ""
+"Tu inscripción aún no está completa: sube tu comprobante de pago para crear "
+"o elegir tu personaje"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
@@ -15361,6 +15381,14 @@ msgstr ""
 "No existe una asignación válida con las restricciones actuales: revisa los "
 "participantes incluidos y los personajes disponibles, y vuelve a ejecutar el"
 " algoritmo"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Si está activado, los jugadores pueden crear, elegir o acceder a sus "
+"personajes solo después de subir un comprobante de pago (o hacer un pago) de"
+" su inscripción."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
