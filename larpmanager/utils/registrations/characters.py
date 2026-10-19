@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
-from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
     Character,
@@ -203,24 +203,22 @@ def check_signup(context: dict) -> None:
 
 
 def is_character_access_locked(registration: Registration | None, features: dict | set, context: dict) -> bool:
-    """Return whether the player cannot access characters until a payment is performed / submitted.
+    """Return whether character access is locked until the registration is paid.
 
-    The lock applies only when the event requires it, and is lifted by any payment received,
-    any registration payment invoice submitted (even if not yet approved), any payment item
-    recorded for the registration, or when there is nothing to pay.
-
-    Args:
-        registration: The player registration, if any
-        features: Dictionary of enabled event features
-        context: Context dictionary, optionally containing payment_invoices_dict
-
-    Returns:
-        bool: True if character access is locked
-
+    Lifted by any payment received or any registration payment proof submitted.
+    The result is cached in the context per registration.
     """
     if not registration or "payment" not in features:
         return False
 
+    cache = context.setdefault("character_access_locked", {})
+    if registration.id not in cache:
+        cache[registration.id] = _compute_character_access_locked(registration, context)
+    return cache[registration.id]
+
+
+def _compute_character_access_locked(registration: Registration, context: dict) -> bool:
+    """Compute the character access lock for a registration."""
     event_id = get_run_basic_cache(registration.run_id, context=context)["event_id"]
     if not get_event_config(event_id, "user_character_payment_required", context=context):
         return False
@@ -232,21 +230,15 @@ def is_character_access_locked(registration: Registration | None, features: dict
     proof_statuses = {PaymentStatus.SUBMITTED, PaymentStatus.CONFIRMED, PaymentStatus.CHECKED}
     payment_invoices_dict = context.get("payment_invoices_dict")
     if payment_invoices_dict is not None:
-        has_proof = any(
+        return not any(
             invoice.status in proof_statuses and invoice.typ == PaymentType.REGISTRATION
             for invoice in payment_invoices_dict.get(registration.id, [])
         )
-    else:
-        has_proof = PaymentInvoice.objects.filter(
-            registration_id=registration.id,
-            typ=PaymentType.REGISTRATION,
-            status__in=proof_statuses,
-        ).exists()
-    if has_proof:
-        return False
-
-    # Payment items recorded for the registration (e.g. manual, tokens or credits)
-    return not AccountingItemPayment.objects.filter(registration_id=registration.id).exists()
+    return not PaymentInvoice.objects.filter(
+        registration_id=registration.id,
+        typ=PaymentType.REGISTRATION,
+        status__in=proof_statuses,
+    ).exists()
 
 
 def check_character_payment_lock(context: dict) -> None:

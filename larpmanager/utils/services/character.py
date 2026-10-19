@@ -723,7 +723,7 @@ def get_char_check(
                 raise Http404(msg)
             # Non-player users see only public fields, never the full sheet
             return
-        # Player cannot access the own character until the payment proof is uploaded
+        # Player cannot access their own character until the payment proof is uploaded
         check_character_payment_lock(context)
         if context["char"].get("locked", False):
             # Locked: player sees public fields only (no full sheet)

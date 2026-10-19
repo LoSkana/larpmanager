@@ -3690,16 +3690,16 @@ msgstr ""
 msgid "Your signup request is awaiting organizer approval!"
 msgstr ""
 
-msgid ""
-"Complete your payment to finalize your registration and access your "
-"character!"
-msgstr ""
-
 #, python-format
 msgid "%(name)s not visible at this time"
 msgstr ""
 
 msgid "You're not allowed to sign up!"
+msgstr ""
+
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
 msgstr ""
 
 msgid "Bank Statement"
