@@ -4803,6 +4803,9 @@ msgstr "Insamlingar levererade"
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
 
+msgid "Complete your payment"
+msgstr "Slutför din betalning"
+
 msgid "Complete your profile"
 msgstr "Fyll i din profil"
 
@@ -5583,9 +5586,6 @@ msgstr "Uppdatera dina personuppgifter"
 
 msgid "Upload of photo and video"
 msgstr "Ladda upp foton och videor"
-
-msgid "Upload your payment proof"
-msgstr "Ladda upp ditt betalningsbevis"
 
 msgid "Use of third party assets"
 msgstr "Användning av tredje parts tillgångar"
@@ -11018,6 +11018,13 @@ msgstr ""
 "Svara på följande frågor. Markera *alla* svar som du tycker verkar korrekta."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Slutför din betalning för att bekräfta din anmälan och få tillgång till din "
+"karaktär!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11605,13 +11612,6 @@ msgid ""
 msgstr ""
 "Den här länken för att avsluta prenumerationen är inte längre giltig. Använd"
 " istället länken i ett av de senaste e-postmeddelandena."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Ladda upp ditt betalningsbevis för att slutföra din anmälan och komma åt din"
-" karaktär!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13010,6 +13010,13 @@ msgstr ""
 "Du har redan betalat din medlemsavgift för innevarande år, så den gäller "
 "redan för detta evenemang!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Din anmälan är inte klar än: slutför din betalning för att skapa eller välja"
+" din karaktär"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13267,13 +13274,6 @@ msgid ""
 msgstr ""
 "Din betalning för dessa evenemangsanmälningar granskas just nu. Du behöver "
 "inte göra något."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Din anmälan är inte slutförd än: ladda upp ditt betalningsbevis för att "
-"skapa eller välja din karaktär"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

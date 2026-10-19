@@ -28,6 +28,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.registrations.characters import is_character_access_locked
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -130,7 +131,8 @@ def _add_registration_items(
                     active=active in ("event_payments", "event_payments_registration"),
                 )
             )
-        if getattr(registration, "character", None) and not run_status.get("character_locked"):
+        character_locked = not context.get("staff") and is_character_access_locked(registration, features, context)
+        if getattr(registration, "character", None) and not character_locked:
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),
@@ -142,6 +144,7 @@ def _add_registration_items(
             )
         if (
             "casting" in features
+            and not character_locked
             and context.get("show_character")
             and registration.ticket
             and registration.ticket.tier != "w"

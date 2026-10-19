@@ -816,6 +816,7 @@ def _character_list_sort(context: dict) -> None:
 def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return JSON list of player's characters for an event."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
+    check_character_payment_lock(context)
 
     context["list"] = get_player_characters(context["member"], context["event"].id)
 

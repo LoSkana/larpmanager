@@ -4803,6 +4803,9 @@ msgstr "Inzamelingen afgeleverd"
 msgid "Complete sheet (Test)"
 msgstr "Volledig karakterblad (Test)"
 
+msgid "Complete your payment"
+msgstr "Rond je betaling af"
+
 msgid "Complete your profile"
 msgstr "Maak je profiel compleet"
 
@@ -5583,9 +5586,6 @@ msgstr "Werk je persoonlijke gegevens bij"
 
 msgid "Upload of photo and video"
 msgstr "Foto's en video's uploaden"
-
-msgid "Upload your payment proof"
-msgstr "Upload je betalingsbewijs"
 
 msgid "Use of third party assets"
 msgstr "Gebruik van activa van derden"
@@ -11247,6 +11247,13 @@ msgstr ""
 "lijken."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Rond je betaling af om je inschrijving te voltooien en toegang te krijgen "
+"tot je personage!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11848,13 +11855,6 @@ msgid ""
 "email."
 msgstr ""
 "Deze afmeldlink is niet meer geldig. Gebruik de link uit een recente e-mail."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Upload je betalingsbewijs om je inschrijving af te ronden en toegang te "
-"krijgen tot je personage!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13262,6 +13262,13 @@ msgstr ""
 "Je hebt je lidmaatschapsgeld voor het lopende jaar al betaald, dus je bent "
 "al gedekt voor dit evenement!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Je inschrijving is nog niet voltooid: rond je betaling af om je personage "
+"aan te maken of te kiezen"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13519,13 +13526,6 @@ msgid ""
 msgstr ""
 "Je betaling voor deze evenementaanmeldingen wordt momenteel gecontroleerd. "
 "Je hoeft hiervoor niets te doen."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Je inschrijving is nog niet afgerond: upload je betalingsbewijs om je "
-"personage aan te maken of te kiezen"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

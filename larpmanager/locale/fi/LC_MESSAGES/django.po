@@ -4803,6 +4803,9 @@ msgstr "Toimitetut keräykset"
 msgid "Complete sheet (Test)"
 msgstr "Täydellinen lomake (Testi)"
 
+msgid "Complete your payment"
+msgstr "Viimeistele maksusi"
+
 msgid "Complete your profile"
 msgstr "Täydennä profiiliasi"
 
@@ -5583,9 +5586,6 @@ msgstr "Päivitä henkilötietosi"
 
 msgid "Upload of photo and video"
 msgstr "Valokuvan ja videon lataaminen"
-
-msgid "Upload your payment proof"
-msgstr "Lataa maksutositteesi"
 
 msgid "Use of third party assets"
 msgstr "Kolmannen osapuolen omaisuuden käyttö"
@@ -11045,6 +11045,13 @@ msgstr ""
 "vaikuttavat oikeilta."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Viimeistele maksusi, niin ilmoittautumisesi vahvistuu ja pääset käsiksi "
+"hahmoosi!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11624,13 +11631,6 @@ msgid ""
 msgstr ""
 "Tämä tilauksen peruutuslinkki ei ole enää voimassa. Käytäthän tuoreesta "
 "sähköpostiviestistä löytyvää linkkiä."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Lataa maksutositteesi viimeistelläksesi ilmoittautumisesi ja päästäksesi "
-"hahmoosi!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13016,6 +13016,13 @@ msgstr ""
 "Olet jo maksanut jäsenmaksusi kuluvalta vuodelta, joten jäsenyytesi kattaa "
 "myös tämän tapahtuman!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Ilmoittautumisesi ei ole vielä valmis: viimeistele maksusi, niin voit luoda "
+"tai valita hahmosi"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13272,13 +13279,6 @@ msgid ""
 msgstr ""
 "Näiden tapahtumailmoittautumisten maksusi on parhaillaan tarkastettavana. "
 "Sinun ei tarvitse tehdä mitään."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Ilmoittautumisesi ei ole vielä valmis: lataa maksutositteesi, jotta voit "
-"luoda tai valita hahmosi"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

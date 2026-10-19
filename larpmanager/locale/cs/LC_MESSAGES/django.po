@@ -4803,6 +4803,9 @@ msgstr "Dodané sbírky"
 msgid "Complete sheet (Test)"
 msgstr "Kompletní list (Test)"
 
+msgid "Complete your payment"
+msgstr "Dokonči platbu"
+
 msgid "Complete your profile"
 msgstr "Doplň svůj profil"
 
@@ -5583,9 +5586,6 @@ msgstr "Aktualizuj své osobní údaje"
 
 msgid "Upload of photo and video"
 msgstr "Nahrávání fotografií a videí"
-
-msgid "Upload your payment proof"
-msgstr "Nahraj doklad o platbě"
 
 msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
@@ -10892,6 +10892,13 @@ msgstr ""
 "správné."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Dokonči platbu, abys dokončil svou registraci a získal přístup ke své "
+"postavě!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11457,12 +11464,6 @@ msgid ""
 msgstr ""
 "Tento odkaz pro odhlášení již není platný. Použij prosím odkaz z některého z"
 " posledních e-mailů."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Nahraj doklad o platbě pro dokončení registrace a přístup ke své postavě!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -12835,6 +12836,13 @@ msgstr ""
 "Již jsi zaplatil/a členský poplatek na aktuální rok, takže máš pro tuto akci"
 " vše pokryto!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Tvoje registrace ještě není dokončená: dokonči platbu, abys mohl vytvořit "
+"nebo vybrat svou postavu"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13090,13 +13098,6 @@ msgid ""
 msgstr ""
 "Tvá platba za tyto registrace na akce se v současné době prověřuje. Z tvé "
 "strany není třeba nic podnikat."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Tvoje registrace ještě není dokončená: nahraj doklad o platbě a pak si budeš"
-" moct vytvořit nebo vybrat postavu"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

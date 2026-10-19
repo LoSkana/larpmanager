@@ -135,7 +135,7 @@ class ExceptionHandlingMiddleware:
                 PaymentProofError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    _("Upload your payment proof to complete your registration and access your character!"),
+                    _("Complete your payment to finalize your registration and access your character!"),
                     "accounting_registration",
                     [ex.registration_uuid],
                     message_level="warning",

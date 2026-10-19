@@ -3691,7 +3691,7 @@ msgid "Your signup request is awaiting organizer approval!"
 msgstr ""
 
 msgid ""
-"Upload your payment proof to complete your registration and access your "
+"Complete your payment to finalize your registration and access your "
 "character!"
 msgstr ""
 
@@ -12631,12 +12631,12 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available."
 msgstr ""
 
-msgid "Upload your payment proof"
+msgid "Complete your payment"
 msgstr ""
 
 msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
 msgstr ""
 
 msgid "Your character is"

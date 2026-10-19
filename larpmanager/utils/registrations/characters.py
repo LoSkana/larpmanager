@@ -25,7 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
-from larpmanager.models.accounting import PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
     Character,
@@ -202,12 +202,12 @@ def check_signup(context: dict) -> None:
         raise WaitingError(context["run"].get_slug())
 
 
-def is_character_access_locked(registration: Registration | None, features: dict, context: dict) -> bool:
+def is_character_access_locked(registration: Registration | None, features: dict | set, context: dict) -> bool:
     """Return whether the player cannot access characters until a payment is performed / submitted.
 
-    The lock applies only when the event requires it, and is lifted by any payment received
-    or any registration payment invoice submitted (even if not yet approved), or when
-    there is nothing to pay.
+    The lock applies only when the event requires it, and is lifted by any payment received,
+    any registration payment invoice submitted (even if not yet approved), any payment item
+    recorded for the registration, or when there is nothing to pay.
 
     Args:
         registration: The player registration, if any
@@ -232,20 +232,25 @@ def is_character_access_locked(registration: Registration | None, features: dict
     proof_statuses = {PaymentStatus.SUBMITTED, PaymentStatus.CONFIRMED, PaymentStatus.CHECKED}
     payment_invoices_dict = context.get("payment_invoices_dict")
     if payment_invoices_dict is not None:
-        return not any(
+        has_proof = any(
             invoice.status in proof_statuses and invoice.typ == PaymentType.REGISTRATION
             for invoice in payment_invoices_dict.get(registration.id, [])
         )
+    else:
+        has_proof = PaymentInvoice.objects.filter(
+            registration_id=registration.id,
+            typ=PaymentType.REGISTRATION,
+            status__in=proof_statuses,
+        ).exists()
+    if has_proof:
+        return False
 
-    return not PaymentInvoice.objects.filter(
-        registration_id=registration.id,
-        typ=PaymentType.REGISTRATION,
-        status__in=proof_statuses,
-    ).exists()
+    # Payment items recorded for the registration (e.g. manual, tokens or credits)
+    return not AccountingItemPayment.objects.filter(registration_id=registration.id).exists()
 
 
 def check_character_payment_lock(context: dict) -> None:
-    """Raise if the player cannot access characters until a payment proof is uploaded."""
+    """Raise if the player cannot access characters until the registration payment is completed."""
     if context.get("staff"):
         return
 

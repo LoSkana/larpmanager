@@ -107,7 +107,7 @@ class PendingApprovalError(Exception):
 
 
 class PaymentProofError(Exception):
-    """Exception raised when character access requires a payment proof not yet uploaded.
+    """Exception raised when character access requires a registration payment not yet completed.
 
     Attributes:
         registration_uuid (str): UUID of the registration awaiting payment

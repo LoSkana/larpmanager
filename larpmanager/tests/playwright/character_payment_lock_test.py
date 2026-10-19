@@ -94,12 +94,12 @@ def setup_event(page: Any, live_server: Any) -> None:
 def check_locked(page: Any, live_server: Any) -> None:
     """Check character links are hidden, and character pages redirect to the payment."""
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator(".event-card-char"), "upload your payment proof to create or choose")
+    expect_normalized(page, page.locator(".event-card-char"), "complete your payment to create or choose")
     expect(page.locator("#sidebar").get_by_role("link", name="Create your character")).to_have_count(0)
 
     go_to(page, live_server, "/test/character/create/")
     expect(page).to_have_url(re.compile(r"/(accounting/registration|test/payments)/"))
-    expect_normalized(page, page.locator("#one"), "upload your payment proof to create or choose your character")
+    expect_normalized(page, page.locator("#one"), "complete your payment to create or choose your character")
 
     go_to(page, live_server, "/test/character/list/")
     expect(page).to_have_url(re.compile(r"/(accounting/registration|test/payments)/"))

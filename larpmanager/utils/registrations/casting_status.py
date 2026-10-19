@@ -65,13 +65,13 @@ def registration_status_characters(
 
     character_rels_dict = context.get("character_rels_dict")
 
-    # Hide every character link until the payment proof is uploaded
+    # Hide every character link until the registration payment is completed
     if is_character_access_locked(registration, features, context):
         run_status["character_locked"] = {
             "url": reverse("accounting_registration", args=[registration.uuid]),
-            "label": _("Upload your payment proof"),
+            "label": _("Complete your payment"),
             "label_long": _(
-                "Your registration is not completed yet: upload your payment proof to create or choose your character"
+                "Your registration is not completed yet: complete your payment to create or choose your character"
             ),
         }
         return

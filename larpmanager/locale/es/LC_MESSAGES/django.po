@@ -4803,6 +4803,9 @@ msgstr "Colectas entregadas"
 msgid "Complete sheet (Test)"
 msgstr "Hoja completa (Test)"
 
+msgid "Complete your payment"
+msgstr "Completa tu pago"
+
 msgid "Complete your profile"
 msgstr "Completa tu perfil"
 
@@ -5583,9 +5586,6 @@ msgstr "Actualiza tus datos personales"
 
 msgid "Upload of photo and video"
 msgstr "Subir fotos y vídeos"
-
-msgid "Upload your payment proof"
-msgstr "Sube tu comprobante de pago"
 
 msgid "Use of third party assets"
 msgstr "Uso de recursos de terceros"
@@ -11237,6 +11237,12 @@ msgstr ""
 "parezcan correctas."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"¡Completa tu pago para finalizar tu inscripción y acceder a tu personaje!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11843,13 +11849,6 @@ msgid ""
 msgstr ""
 "Este enlace para darte de baja ya no es válido. Usa el enlace de un correo "
 "reciente."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"¡Sube tu comprobante de pago para completar tu inscripción y acceder a tu "
-"personaje!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13258,6 +13257,13 @@ msgstr ""
 "Ya has pagado tu cuota social para este año, por lo que ya estás cubierto "
 "para este evento!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Tu inscripción aún no está completada: completa tu pago para crear o elegir "
+"tu personaje"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13515,13 +13521,6 @@ msgid ""
 msgstr ""
 "Tu pago por las inscripciones a estos eventos se está revisando en estos "
 "momentos. No tienes que hacer nada."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Tu inscripción aún no está completa: sube tu comprobante de pago para crear "
-"o elegir tu personaje"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

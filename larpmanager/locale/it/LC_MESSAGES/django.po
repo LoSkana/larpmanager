@@ -4803,6 +4803,9 @@ msgstr "Collette consegnate"
 msgid "Complete sheet (Test)"
 msgstr "Scheda completa (Test)"
 
+msgid "Complete your payment"
+msgstr "Completa il pagamento"
+
 msgid "Complete your profile"
 msgstr "Completa il tuo profilo"
 
@@ -5583,9 +5586,6 @@ msgstr "Aggiorna i tuoi dati personali"
 
 msgid "Upload of photo and video"
 msgstr "Caricamento di foto e video"
-
-msgid "Upload your payment proof"
-msgstr "Carica la ricevuta di pagamento"
 
 msgid "Use of third party assets"
 msgstr "Utilizzo di beni di terzi"
@@ -11249,6 +11249,13 @@ msgstr ""
 "sembrano corrette."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Completa il pagamento per finalizzare la tua iscrizione e accedere al tuo "
+"personaggio!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11853,13 +11860,6 @@ msgid ""
 msgstr ""
 "Questo link per annullare l'iscrizione non è più valido. Usa il link "
 "contenuto in un'e-mail recente."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Carica la ricevuta di pagamento per completare la tua iscrizione e accedere "
-"al tuo personaggio!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13266,6 +13266,13 @@ msgstr ""
 "Hai già pagato la tua quota sociale per l'anno in corso, per cui sei già "
 "coperto per questo evento!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"La tua iscrizione non è ancora completa: completa il pagamento per creare o "
+"scegliere il tuo personaggio"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13523,13 +13530,6 @@ msgid ""
 msgstr ""
 "Il tuo pagamento relativo alle iscrizioni a questi eventi è attualmente in "
 "fase di verifica. Non devi fare nulla."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"La tua iscrizione non è ancora completa: carica la ricevuta di pagamento per"
-" creare o scegliere il tuo personaggio"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

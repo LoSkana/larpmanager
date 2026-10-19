@@ -4803,6 +4803,9 @@ msgstr "Leverede indsamlinger"
 msgid "Complete sheet (Test)"
 msgstr "Komplet ark (test)"
 
+msgid "Complete your payment"
+msgstr "Gennemfør din betaling"
+
 msgid "Complete your profile"
 msgstr "Fuldfør din profil"
 
@@ -5583,9 +5586,6 @@ msgstr "Opdater dine personoplysninger"
 
 msgid "Upload of photo and video"
 msgstr "Upload af billeder og videoer"
-
-msgid "Upload your payment proof"
-msgstr "Upload din betalingskvittering"
 
 msgid "Use of third party assets"
 msgstr "Brug af tredjepartsaktiver"
@@ -10966,6 +10966,13 @@ msgid ""
 msgstr "Besvar følgende spørgsmål. Vælg *alle* de svar, der virker korrekte."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Gennemfør din betaling for at færdiggøre din tilmelding og få adgang til din"
+" karakter!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11554,13 +11561,6 @@ msgid ""
 msgstr ""
 "Dette afmeldingslink er ikke længere gyldigt. Brug venligst linket fra en "
 "nyere e-mail."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Upload din betalingskvittering for at gøre din tilmelding færdig og få "
-"adgang til din karakter!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -12957,6 +12957,13 @@ msgstr ""
 "Du har allerede betalt dit kontingent for det aktuelle år, så du er allerede"
 " dækket til dette event!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Din tilmelding er ikke gennemført endnu: gennemfør din betaling for at "
+"oprette eller vælge din karakter"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13214,13 +13221,6 @@ msgid ""
 msgstr ""
 "Din betaling for disse eventtilmeldinger er i øjeblikket under gennemgang. "
 "Du behøver ikke gøre noget."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Din tilmelding er ikke færdig endnu: upload din betalingskvittering for at "
-"oprette eller vælge din karakter"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"

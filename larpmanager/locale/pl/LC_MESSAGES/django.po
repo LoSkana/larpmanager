@@ -4803,6 +4803,9 @@ msgstr "Przekazane zbiórki"
 msgid "Complete sheet (Test)"
 msgstr "Kompletny arkusz (test)"
 
+msgid "Complete your payment"
+msgstr "Dokończ płatność"
+
 msgid "Complete your profile"
 msgstr "Uzupełnij swój profil"
 
@@ -5583,9 +5586,6 @@ msgstr "Zaktualizuj swoje dane osobowe"
 
 msgid "Upload of photo and video"
 msgstr "Przesyłanie zdjęć i filmów"
-
-msgid "Upload your payment proof"
-msgstr "Prześlij potwierdzenie płatności"
 
 msgid "Use of third party assets"
 msgstr "Korzystanie z aktywów stron trzecich"
@@ -11105,6 +11105,13 @@ msgstr ""
 "się poprawne."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Dokończ płatność, aby sfinalizować rejestrację i uzyskać dostęp do swojej "
+"postaci!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -11702,13 +11709,6 @@ msgid ""
 msgstr ""
 "Ten link do rezygnacji z subskrypcji już nie działa. Skorzystaj z linku z "
 "ostatniego e-maila."
-
-msgid ""
-"Upload your payment proof to complete your registration and access your "
-"character!"
-msgstr ""
-"Prześlij potwierdzenie płatności, aby dokończyć rejestrację i uzyskać dostęp"
-" do swojej postaci!"
 
 msgid ""
 "All association members have already registered for a future session of this"
@@ -13106,6 +13106,13 @@ msgstr ""
 "Opłaciłeś już składki za bieżący rok, więc spełniasz już warunek "
 "uczestnictwa w tym wydarzeniu!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Twoja rejestracja nie jest jeszcze zakończona: dokończ płatność, aby "
+"stworzyć lub wybrać swoją postać"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13362,13 +13369,6 @@ msgid ""
 msgstr ""
 "Twoja płatność za te zgłoszenia na wydarzenia jest obecnie sprawdzana. Nie "
 "musisz nic robić."
-
-msgid ""
-"Your registration is not completed yet: upload your payment proof to create "
-"or choose your character"
-msgstr ""
-"Twoja rejestracja nie jest jeszcze zakończona: prześlij potwierdzenie "
-"płatności, aby utworzyć lub wybrać swoją postać"
 
 msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
