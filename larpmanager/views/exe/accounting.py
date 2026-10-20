@@ -23,6 +23,7 @@ from datetime import date
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -928,17 +929,18 @@ def exe_refunds_confirm(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     # Retrieve the specific refund request by number
     backend_get(context, RefundRequest, refund_uuid)
 
-    # Verify the refund request is in the correct status for confirmation
-    if context["el"].status == RefundStatus.REQUEST:
-        # Update status to indicate the refund has been paid
-        context["el"].status = RefundStatus.PAYED
-    else:
-        # Prevent duplicate processing of already confirmed requests
-        msg = "already done"
-        raise Http404(msg)
+    # Lock the request so concurrent confirmations cannot both deliver it
+    with transaction.atomic():
+        refund = RefundRequest.objects.select_for_update().get(pk=context["el"].pk)
 
-    # Persist the status change to the database
-    context["el"].save()
+        # Prevent duplicate processing of already confirmed requests
+        if refund.status != RefundStatus.REQUEST:
+            msg = "already done"
+            raise Http404(msg)
+
+        # Update status to indicate the refund has been paid
+        refund.status = RefundStatus.PAYED
+        refund.save()
 
     # Show success message to the user and redirect to refunds list
     messages.success(request, _("Element approved!"))

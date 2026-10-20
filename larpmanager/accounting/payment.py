@@ -761,8 +761,9 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         Creates accounting item when refund status changes to PAYED
 
     Note:
-        Uses idempotency check to prevent duplicate accounting entries
-        if signal fires multiple times.
+        Idempotency relies on the REQUEST -> PAYED transition: each refund request
+        creates its accounting item only once, even when several requests share
+        member and value.
 
     """
     if not refund_request.pk:
@@ -777,18 +778,6 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         return
 
     if refund_request.status != RefundStatus.PAYED:
-        return
-
-    # Check if accounting item already exists for this refund (idempotency)
-    existing_item = AccountingItemOther.objects.filter(
-        member_id=refund_request.member_id,
-        value=refund_request.value,
-        oth=OtherChoices.REFUND,
-        association_id=refund_request.association_id,
-        descr=f"Delivered refund of {refund_request.value:.2f}",
-    ).exists()
-
-    if existing_item:
         return
 
     accounting_item = AccountingItemOther()
