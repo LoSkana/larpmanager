@@ -226,7 +226,7 @@
                     {% endif %}
                 {% endfor %}
             </table>
-            {% if not list %}
+            {% if not tokens_count %}
                 <p class="no-elements-available">{% trans "No participants have been issued tokens yet." %}</p>
             {% endif %}
         </div>
@@ -243,18 +243,18 @@
                     </tr>
                 </thead>
                 {% for el in list %}
-                    {% if el.credits %}
+                    {% if el.credit %}
                         <tr id="credits_{{ el.uuid }}">
                             <td>
                                 <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>{{ el }}</td>
-                            <td>{{ el.credits }}</td>
+                            <td>{{ el.credit }}</td>
                         </tr>
                     {% endif %}
                 {% endfor %}
             </table>
-            {% if not list %}
+            {% if not credits_count %}
                 <p class="no-elements-available">{% trans "No participants have been issued credits yet." %}</p>
             {% endif %}
         </div>

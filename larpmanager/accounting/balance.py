@@ -672,7 +672,9 @@ def association_accounting(context: dict) -> None:
 def association_accounting_summary(context: dict) -> dict:
     """Computes association global financial position."""
     # Initialize member balance tracking
-    context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})
+    context.update(
+        {"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0, "tokens_count": 0, "credits_count": 0}
+    )
 
     # Gather all members with non-zero tokens or credits
     for membership in (
@@ -690,6 +692,8 @@ def association_accounting_summary(context: dict) -> dict:
         # Accumulate total tokens and credits outstanding
         context["tokens_sum"] += membership.tokens
         context["credits_sum"] += membership.credit
+        context["tokens_count"] += 1 if membership.tokens else 0
+        context["credits_count"] += 1 if membership.credit else 0
 
     # Fetch all non-draft, non-cancelled runs for the association
     context["runs"] = (

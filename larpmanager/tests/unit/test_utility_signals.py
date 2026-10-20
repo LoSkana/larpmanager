@@ -31,6 +31,9 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     AccountingItemPayment,
+    OtherChoices,
+    RefundRequest,
+    RefundStatus,
 )
 from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
@@ -417,6 +420,31 @@ class TestUtilitySignals(BaseTestCase):
         # Verify refund was saved successfully
         refund.refresh_from_db()
         self.assertIsNotNone(refund.id)
+
+    def test_refund_requests_same_value_each_create_refund_item(self) -> None:
+        """Test that each delivered refund request creates its own item, even with the same value"""
+        member = self.get_member()
+        association = self.get_association()
+
+        for _index in range(2):
+            refund = RefundRequest.objects.create(
+                member=member,
+                value=Decimal("160.00"),
+                details="Test refund request",
+                association=association,
+            )
+            refund.status = RefundStatus.PAYED
+            refund.save()
+            # Saving again once delivered must not duplicate the item
+            refund.save()
+
+        refund_items = AccountingItemOther.objects.filter(
+            member=member,
+            association=association,
+            oth=OtherChoices.REFUND,
+            value=Decimal("160.00"),
+        )
+        self.assertEqual(refund_items.count(), 2)
 
     def test_collection_pre_save_validates_collection(self) -> None:
         """Test that Collection pre_save signal validates collection"""
