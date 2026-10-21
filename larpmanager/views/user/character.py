@@ -53,6 +53,7 @@ from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
 from larpmanager.forms.writing import PlayerRelationshipForm
+from larpmanager.mail.registration import notify_character_full_options
 from larpmanager.models.event import EventTextType
 from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import QuestionApplicable
@@ -82,8 +83,13 @@ from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.registrations.characters import (
     check_assign_character,
     check_character_maximum,
+    get_character_full_options,
+    get_character_new_full_options,
+    get_character_new_full_options_error,
+    get_character_option_ids,
     get_character_play_max,
     get_player_characters,
+    get_player_signup,
 )
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.character import (
@@ -402,20 +408,22 @@ def character_form(
 
             draft_key = draft_element_key(context, "character", instance, request)
             character, success_message = _save_character(context, form, success_message)
-            clear_draft(context["member"], draft_key)
+            # Not saved when the newly chosen options have no spots left: show the form again
+            if character is not None:
+                clear_draft(context["member"], draft_key)
 
-            # Display success message to user
-            if success_message:
-                messages.success(request, success_message)
+                # Display success message to user
+                if success_message:
+                    messages.success(request, success_message)
 
-            # Determine character number for redirect
-            character_uuid = None
-            if isinstance(character, Character):
-                character_uuid = character.uuid
-            elif isinstance(character, RegistrationCharacterRel):
-                character_uuid = character.character.uuid
-            # Redirect to character detail page
-            return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
+                # Determine character number for redirect
+                character_uuid = None
+                if isinstance(character, Character):
+                    character_uuid = character.uuid
+                elif isinstance(character, RegistrationCharacterRel):
+                    character_uuid = character.character.uuid
+                # Redirect to character detail page
+                return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
     else:
         # Initialize empty form for GET requests
         form = form_class(instance=instance, context=context)
@@ -455,10 +463,14 @@ def _save_character(
     form: CharacterForm,
     success_message: str,
 ) -> str:
-    """Saves a character with retry behaviour."""
+    """Saves a character with retry behaviour, returning None if its new options have no spots left."""
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
     character = form.instance
+    # Options chosen before the save, which keep their spot even if now over the limit
+    previous_option_ids = (
+        get_character_option_ids(character.pk) if isinstance(character, Character) and character.pk else set()
+    )
     for retry_attempt in range(max_retries):
         try:
             # Save character data within atomic transaction
@@ -468,7 +480,22 @@ def _save_character(
                     character.player = context["member"]
 
                 character = form.save()
-                check_assign_character(context)
+
+                # Refuse newly chosen options taken meanwhile by other characters of the run
+                full_options = (
+                    get_character_new_full_options(context["run"].id, character.id, previous_option_ids)
+                    if isinstance(character, Character)
+                    else []
+                )
+                if full_options:
+                    transaction.set_rollback(True)
+                    form.add_error(None, get_character_new_full_options_error(full_options))
+                    return None, None
+
+                blocked = check_assign_character(context)
+                registration = get_player_signup(context) if blocked else None
+                for blocked_character, full_options in blocked:
+                    notify_character_full_options(registration, blocked_character, full_options, context.get("request"))
             # Success - break out of retry loop
             break
         except IntegrityError as e:
@@ -936,11 +963,11 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
             return redirect("character_list", event_slug=event_slug)
 
         # All slots taken: allow replacing the played character, if it belongs to the player
-        if len(assigned) >= play_max:
-            if not _can_replace_character(context, play_max, assigned):
-                messages.warning(request, _("You already play the maximum number of characters"))
-                return redirect("character_list", event_slug=event_slug)
+        replace = len(assigned) >= play_max
+        if _is_assign_refused(request, context, character_id, assigned, play_max, replace=replace):
+            return redirect("character_list", event_slug=event_slug)
 
+        if replace:
             _replace_character(assigned[0], character_id)
             messages.success(request, _("Changed character!"))
             return redirect("character_list", event_slug=event_slug)
@@ -950,6 +977,32 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
+
+
+def _is_assign_refused(
+    request: HttpRequest,
+    context: dict,
+    character_id: int,
+    assigned: list,
+    play_max: int,
+    *,
+    replace: bool,
+) -> bool:
+    """Check slots and option spots for the assignment, notifying the player when it is refused."""
+    if replace and not _can_replace_character(context, play_max, assigned):
+        messages.warning(request, _("You already play the maximum number of characters"))
+        return True
+
+    # Refuse characters whose limited options have no spots left in this run
+    replaced_ids = [assigned[0].character_id] if replace else []
+    full_options = get_character_full_options(context["run"].id, character_id, replaced_ids, lock=True)
+    if full_options:
+        notify_character_full_options(
+            context["registration"], Character.objects.get(pk=character_id), full_options, request
+        )
+        return True
+
+    return False
 
 
 def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None:
