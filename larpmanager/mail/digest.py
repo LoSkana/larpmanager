@@ -30,6 +30,8 @@ from django.utils.translation import activate, gettext_lazy as _
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_member_config
 from larpmanager.mail.templates import (
+    get_character_full_options_organizer_email,
+    get_character_full_options_organizer_text,
     get_help_email,
     get_invoice_email,
     get_notify_refund_email,
@@ -49,6 +51,7 @@ from larpmanager.models.association import Association
 from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
+from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import get_exec_language
 from larpmanager.utils.core.headers import get_url, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
@@ -60,7 +63,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def my_send_digest_email(
+def my_send_digest_email(  # noqa: C901
     member: Member,
     run: Run,
     instance: Any,
@@ -131,6 +134,9 @@ def my_send_digest_email(
 
         elif notification_type == NotificationType.INVOICE_APPROVAL:
             subject, body = get_invoice_email(instance)
+
+        elif notification_type == NotificationType.CHARACTER_OPTION_FULL:
+            subject, body = get_character_full_options_organizer_email(instance, run)
 
         else:
             # This should never happen, but just in case
@@ -373,6 +379,7 @@ def generate_summary_email(run: Run, notifications: list) -> str:
         ("request_registrations", _digest_request_registrations),
         ("all_payments", partial(_digest_payments, association_id=association_id)),
         ("invoice_approvals", partial(_digest_invoices, association_id=association_id)),
+        ("character_options_full", _digest_character_options_full),
     ]
 
     # Process each notification group using its handler
@@ -400,6 +407,7 @@ def _digest_organize_notifications(notifications: list) -> dict:
         NotificationType.PAYMENT_CREDIT: "all_payments",
         NotificationType.PAYMENT_TOKEN: "all_payments",
         NotificationType.INVOICE_APPROVAL: "invoice_approvals",
+        NotificationType.CHARACTER_OPTION_FULL: "character_options_full",
     }
 
     # Group notifications by type using the mapping
@@ -413,6 +421,24 @@ def _digest_organize_notifications(notifications: list) -> dict:
         process[key].append(notification)
 
     return process
+
+
+def _digest_character_options_full(
+    run: Run,
+    email_body: str,
+    character_options_full: list,
+    currency_symbol: str,  # noqa: ARG001
+) -> str:
+    """Generate email content for digest characters not assigned since their options have no spots left."""
+    character_ids = {notification.object_id for notification in character_options_full}
+    characters = Character.objects.filter(pk__in=character_ids).select_related("player")
+    email_body += "<h4>" + _("Characters not assigned for options without spots") + f": {len(characters)}" + "</h4>"
+    email_body += "<ul>"
+    for character in characters:
+        email_body += "<li>" + get_character_full_options_organizer_text(character, run) + "</li>"
+    email_body += "</ul>"
+
+    return email_body
 
 
 def _digest_invoices(

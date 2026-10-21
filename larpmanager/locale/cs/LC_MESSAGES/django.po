@@ -2956,6 +2956,10 @@ msgid "for %(event)s"
 msgstr "pro %(event)s"
 
 #, python-format
+msgid "to %(player)s"
+msgstr "hráči %(player)s"
+
+#, python-format
 msgid "%(name)s total"
 msgstr "Celkem %(name)s"
 
@@ -4115,6 +4119,9 @@ msgstr "Tvoje registrace"
 
 msgid "already delivered"
 msgstr "již dodané"
+
+msgid "no spots left for"
+msgstr "žádná volná místa pro"
 
 #, python-format
 msgid "%(name)s available"
@@ -6822,6 +6829,10 @@ msgstr "<b>%(number)s</b> členů ke schválení"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> náhrady k dodání"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Postava nepřiřazena pro %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Město, kde ses narodil/a (celý název)"
 
@@ -6940,6 +6951,10 @@ msgstr "Počet udělených zkušenostních bodů"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasuj pro nové vedení!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Postava nepřiřazena: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontroluj platnost fiskálního kódu"
@@ -8226,6 +8241,9 @@ msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
 msgid "Character not found, or not playing in this event"
 msgstr "Postava nebyla nalezena nebo se této akce neúčastní"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Postavy nepřiřazeny kvůli možnostem bez volných míst"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Vyber si postavu, kterou budeš hrát na této akci!"
 
@@ -8274,11 +8292,18 @@ msgstr "Zvol, které platební metody mohou účastníci používat"
 msgid "Switch between Organization and Events management"
 msgstr "Přepínání mezi správou organizací a událostí"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Postavu %(character)s nebylo možné přiřadit"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Maximální počet použití (0 pro neomezený počet použití)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Registrační kód není v současné době aktivní"
+
+msgid "The spots of its options are now available again."
+msgstr "Místa pro její možnosti jsou nyní znovu k dispozici."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "V tuto chvíli nejsou naplánovány žádné nové relace."
@@ -10255,6 +10280,12 @@ msgid ""
 msgstr ""
 "Aktivuj a nakonfiguruj pokročilé funkce pro svou organizaci a události"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Postavu %(character)s nelze přiřadit: žádná volná místa pro %(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr "Inventář postavy není povolen pro tuto akci: obrať se na organizátory"
@@ -10812,6 +10843,11 @@ msgstr ""
 "přidej kontejner."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Vyber prosím pro postavu jiné možnosti, nebo kontaktuj organizátory."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11219,6 +11255,14 @@ msgid ""
 msgstr ""
 "Byla zpracována refundace ve výši %(amount).2f %(elements)s z důvodu "
 "„%(reason)s“."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Postava %(character)s přiřazena, ale překračuje dostupná místa pro "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12279,11 +12323,6 @@ msgid ""
 msgstr ""
 "Všimni si, že existující prvky se stejným názvem budou přepsány nahranými "
 "daty."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr "Nepovinné - maximální počet výběrů ve všech postavách (0 = neomezeně)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -13820,6 +13859,13 @@ msgid ""
 msgstr ""
 "Je-li povoleno, přidá pole, ve kterém může účastník uvést prvky, kterým se "
 "chce zcela vyhnout."
+
+msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Volitelné - Maximální počet postav přiřazených účastníkům každého běhu, "
+"které ji mohou vybrat (0 = neomezeně)"
 
 msgid ""
 "Staff members who are allowed to be able to see the responses of "

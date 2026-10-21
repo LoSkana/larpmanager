@@ -846,6 +846,9 @@ def _save_registration_edit(
 
     save_log(context, Registration, registration, registration_uuid)
 
+    for warning in form.full_options_warnings:
+        messages.warning(request, warning)
+
     # Save registration-specific questions and answers
     form.save_registration_questions(registration)
 

@@ -53,6 +53,7 @@ from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
 from larpmanager.forms.registration import RegistrationCharacterRelForm
 from larpmanager.forms.writing import PlayerRelationshipForm
+from larpmanager.mail.registration import notify_character_full_options
 from larpmanager.models.event import EventTextType
 from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import QuestionApplicable
@@ -82,8 +83,10 @@ from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.registrations.characters import (
     check_assign_character,
     check_character_maximum,
+    get_character_full_options,
     get_character_play_max,
     get_player_characters,
+    get_player_signup,
 )
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.character import (
@@ -468,7 +471,10 @@ def _save_character(
                     character.player = context["member"]
 
                 character = form.save()
-                check_assign_character(context)
+                for blocked_character, full_options in check_assign_character(context):
+                    notify_character_full_options(
+                        get_player_signup(context), blocked_character, full_options, context.get("request")
+                    )
             # Success - break out of retry loop
             break
         except IntegrityError as e:
@@ -936,11 +942,11 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
             return redirect("character_list", event_slug=event_slug)
 
         # All slots taken: allow replacing the played character, if it belongs to the player
-        if len(assigned) >= play_max:
-            if not _can_replace_character(context, play_max, assigned):
-                messages.warning(request, _("You already play the maximum number of characters"))
-                return redirect("character_list", event_slug=event_slug)
+        replace = len(assigned) >= play_max
+        if _is_assign_refused(request, context, character_id, assigned, play_max, replace=replace):
+            return redirect("character_list", event_slug=event_slug)
 
+        if replace:
             _replace_character(assigned[0], character_id)
             messages.success(request, _("Changed character!"))
             return redirect("character_list", event_slug=event_slug)
@@ -950,6 +956,32 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
+
+
+def _is_assign_refused(
+    request: HttpRequest,
+    context: dict,
+    character_id: int,
+    assigned: list,
+    play_max: int,
+    *,
+    replace: bool,
+) -> bool:
+    """Check slots and option spots for the assignment, notifying the player when it is refused."""
+    if replace and not _can_replace_character(context, play_max, assigned):
+        messages.warning(request, _("You already play the maximum number of characters"))
+        return True
+
+    # Refuse characters whose limited options have no spots left in this run
+    replaced_ids = [assigned[0].character_id] if replace else []
+    full_options = get_character_full_options(context["run"].id, character_id, replaced_ids, lock=True)
+    if full_options:
+        notify_character_full_options(
+            context["registration"], Character.objects.get(pk=character_id), full_options, request
+        )
+        return True
+
+    return False
 
 
 def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None:

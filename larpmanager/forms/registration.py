@@ -69,6 +69,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction, get_event_elements
 from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
 from larpmanager.utils.registrations.signals import get_reduced_available_count
 
 if TYPE_CHECKING:
@@ -830,6 +831,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """
         super().__init__(*args, **kwargs)
 
+        # Warnings for characters assigned over the spots of their options, filled on save
+        self.full_options_warnings: list[str] = []
+
         # Extract run and event from params
         self.run = self.params["run"]
         self.event_id = self.params["run"].event_id
@@ -1117,9 +1121,14 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         for ch in old - new:
             RegistrationCharacterRel.objects.filter(character_id=ch, registration_id=instance.pk).delete()
 
-        # Add newly selected characters
+        # Add newly selected characters, warning about those exceeding the spots of their options
         for ch in new - old:
             RegistrationCharacterRel.objects.create(character_id=ch, registration_id=instance.pk)
+            full_options = get_character_full_options(instance.run_id, ch)
+            if full_options:
+                self.full_options_warnings.append(
+                    get_character_full_options_warning(Character.objects.get(pk=ch), full_options)
+                )
         return None
 
     def clean_characters_new(self) -> Any:

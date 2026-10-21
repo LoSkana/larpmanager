@@ -34,7 +34,7 @@ from larpmanager.cache.discount import (
     get_member_reservations,
 )
 from larpmanager.mail.base import bring_friend_instructions
-from larpmanager.mail.registration import update_registration_status_bkg
+from larpmanager.mail.registration import notify_character_full_options, update_registration_status_bkg
 from larpmanager.models.accounting import AccountingItemDiscount, AccountingItemOther, Discount, OtherChoices
 from larpmanager.models.event import Event, Run
 from larpmanager.models.registration import Registration, TicketTier
@@ -151,7 +151,8 @@ def save_registration(
 
         # Handle special feature processing based on context flags
         if "user_character" in context["features"]:
-            check_assign_character(context)
+            for character, full_options in check_assign_character(context):
+                notify_character_full_options(registration, character, full_options, context.get("request"))
         if "bring_friend" in context["features"]:
             save_registration_bring_friend(context, form, registration)
 

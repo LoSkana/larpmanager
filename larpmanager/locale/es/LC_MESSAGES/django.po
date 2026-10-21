@@ -2956,6 +2956,10 @@ msgid "for %(event)s"
 msgstr "para %(event)s"
 
 #, python-format
+msgid "to %(player)s"
+msgstr "a %(player)s"
+
+#, python-format
 msgid "%(name)s total"
 msgstr "%(name)s en total"
 
@@ -4115,6 +4119,9 @@ msgstr "Tu inscripción"
 
 msgid "already delivered"
 msgstr "ya entregado"
+
+msgid "no spots left for"
+msgstr "no quedan plazas para"
 
 #, python-format
 msgid "%(name)s available"
@@ -6822,6 +6829,10 @@ msgstr "<b>%(number)s</b> miembros a aprobar"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> reembolsos a entregar"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Personaje no asignado para %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Ciudad donde naciste (nombre completo)"
 
@@ -6940,6 +6951,10 @@ msgstr "Cantidad de puntos de experiencia otorgados"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Vota para la nueva junta ejecutiva!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Personaje no asignado: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Comprueba la validez del código fiscal"
@@ -8234,6 +8249,9 @@ msgstr "Imagen de fondo en todas las páginas del evento"
 msgid "Character not found, or not playing in this event"
 msgstr "Personaje no encontrado o no participa en este evento"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Personajes no asignados por opciones sin plazas"
+
 msgid "Choose the character you will play in this event!"
 msgstr "¡Elige el personaje que interpretarás en este evento!"
 
@@ -8284,11 +8302,18 @@ msgstr "Selecciona los métodos de pago que pueden utilizar los participantes"
 msgid "Switch between Organization and Events management"
 msgstr "Cambia entre la gestión de la Organización y la de los Eventos"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "No se ha podido asignar el personaje %(character)s"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "El número máximo de usos (0 para usos ilimitados)"
 
 msgid "The registration code is not active at the moment"
 msgstr "El código de registro no está activo en este momento"
+
+msgid "The spots of its options are now available again."
+msgstr "Las plazas de sus opciones vuelven a estar disponibles."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "No hay nuevas sesiones programadas en este momento."
@@ -10534,6 +10559,13 @@ msgid ""
 "Activate and configure advanced features for your organization and events"
 msgstr "Activa y configura funciones avanzadas para tu organización y eventos"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"No se puede asignar el personaje %(character)s: no quedan plazas para "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -11154,6 +11186,12 @@ msgstr ""
 "añadir un contenedor."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr ""
+"Elige otras opciones para el personaje o contacta con los organizadores."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11593,6 +11631,14 @@ msgid ""
 "processed."
 msgstr ""
 "Se ha tramitado un reembolso de %(amount).2f %(elements)s por «%(reason)s»."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Personaje %(character)s asignado, pero supera las plazas disponibles para "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12690,13 +12736,6 @@ msgid ""
 msgstr ""
 "Ten en cuenta que los elementos existentes con el mismo nombre se "
 "sobrescribirán con los datos cargados."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Opcional - Número máximo de veces que se puede seleccionar en todos los "
-"personajes (0 = ilimitado)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14252,6 +14291,13 @@ msgid ""
 msgstr ""
 "Si se activa, añade un campo en el que el participante puede indicar qué "
 "elementos desea evitar por completo."
+
+msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Opcional - Número máximo de personajes asignados a participantes de cada "
+"edición que pueden seleccionarla (0 = ilimitado)"
 
 msgid ""
 "Staff members who are allowed to be able to see the responses of "

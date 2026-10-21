@@ -18,11 +18,15 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import logging
 import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
@@ -40,7 +44,14 @@ from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.registrations.characters import get_character_full_options_message
 from larpmanager.utils.registrations.context import get_checkin_qr_path
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+    from larpmanager.models.form import WritingOption
+    from larpmanager.models.writing import Character
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +172,38 @@ def update_registration_status(instance: Any) -> None:
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_UPDATE,
             )
+
+
+def notify_character_full_options(
+    registration: Registration,
+    character: Character,
+    full_options: list[WritingOption],
+    request: HttpRequest | None = None,
+) -> None:
+    """Notify that a character was not assigned since its limited options have no spots left.
+
+    The player sees an error on screen when a request is available, otherwise receives an
+    email; the organizers are always notified (through their digest, if enabled).
+    """
+    if request:
+        messages.error(request, get_character_full_options_message(character, full_options))
+    else:
+        activate(registration.member.language)
+        email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
+            "event": registration.run,
+        }
+        email_body = "<p>" + escape(get_character_full_options_message(character, full_options)) + "</p>"
+        email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
+        email_body += "</p>"
+        my_send_mail(email_subject, email_body, registration.member, registration.run)
+
+    for organizer in get_event_organizers(registration.run_id):
+        my_send_digest_email(
+            member=organizer,
+            run=registration.run,
+            instance=character,
+            notification_type=NotificationType.CHARACTER_OPTION_FULL,
+        )
 
 
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:

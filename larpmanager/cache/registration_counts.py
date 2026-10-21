@@ -26,15 +26,16 @@ function from signals.py, so keeping both in one module would create an import c
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.core.cache import cache
 from django.db.models import Count
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration_lookup import get_active_registrations
-from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
-from larpmanager.models.registration import TicketTier
-from larpmanager.models.writing import Character
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationChoice, WritingChoice
+from larpmanager.models.registration import RegistrationCharacterRel, TicketTier
 
 
 def cache_registration_counts_key(run_id: int) -> str:
@@ -71,6 +72,13 @@ def get_registration_counts(run_id: int, event_id: int, *, reset_cache: bool = F
         cache.set(cache_key, cached_counts, timeout=60 * 5)
 
     return cached_counts
+
+
+def get_run_assigned_character_ids(run_id: int) -> Any:
+    """Return a queryset of ids of characters assigned to active registrations of the run."""
+    return RegistrationCharacterRel.objects.filter(
+        registration__in=get_active_registrations(run_id),
+    ).values_list("character_id", flat=True)
 
 
 def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1) -> None:
@@ -171,10 +179,11 @@ def update_registration_counts(run_id: int, event_id: int) -> dict[str, int]:
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
 
-    # Count character writing choices for this event
-    character_ids = Character.objects.filter(event_id=event_id).values_list("id", flat=True)
-
-    writing_choices = WritingChoice.objects.filter(element_id__in=character_ids)
+    # Count character writing choices, only for characters assigned to this run
+    writing_choices = WritingChoice.objects.filter(
+        element_id__in=get_run_assigned_character_ids(run_id),
+        question__applicable=QuestionApplicable.CHARACTER,
+    )
     for choice_data in writing_choices.values("option_id").annotate(total=Count("option_id")):
         counts[f"option_char_{choice_data['option_id']}"] = choice_data["total"]
 

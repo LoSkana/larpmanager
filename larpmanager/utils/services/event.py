@@ -48,6 +48,7 @@ from larpmanager.cache.run import reset_cache_config_run, reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
+from larpmanager.mail.registration import notify_character_full_options
 from larpmanager.models.access import EventRole, get_event_organizers_by_event
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, Run
@@ -66,6 +67,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_class_parent, get_event_elements
 from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.registrations.characters import get_character_full_options
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -633,6 +635,12 @@ def assign_previous_campaign_character(registration: Any) -> None:
 
     # Only proceed if previous character exists and is active
     if not previous_character_relation or not previous_character_relation.character.is_active:
+        return
+
+    # Skip the character if its limited options have no spots left in this run
+    full_options = get_character_full_options(registration.run_id, previous_character_relation.character_id)
+    if full_options:
+        notify_character_full_options(registration, previous_character_relation.character, full_options)
         return
 
     new_character_relation = RegistrationCharacterRel.objects.create(

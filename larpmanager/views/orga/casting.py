@@ -47,6 +47,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_elements
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_time_diff_today
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
     casting_details,
@@ -162,8 +163,14 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
                 if mirror_enabled and character.mirror:
                     entity_id = character.mirror_id
 
-                # Create character assignment relationship
+                # Create character assignment relationship, warning if it exceeds the spots of its options
                 RegistrationCharacterRel.objects.create(character_id=entity_id, registration=registration)
+                full_options = get_character_full_options(registration.run_id, entity_id)
+                if full_options:
+                    messages.warning(
+                        request,
+                        get_character_full_options_warning(Character.objects.get(pk=entity_id), full_options),
+                    )
             else:
                 trait = get_element_event(context, entity_uuid, Trait)
                 # Create trait assignment for non-character types

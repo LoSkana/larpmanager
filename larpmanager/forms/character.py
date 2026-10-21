@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions, get_character_dependencies
-from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.registration_counts import get_registration_counts, get_run_assigned_character_ids
 from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.forms.base import BaseModelForm, get_question_key
@@ -144,6 +144,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Option counts of the run, kept to check the availability of the default options
         self.registration_counts: dict = {}
 
+        # Option limits apply only to characters taking the spots of the run
+        self.takes_run_spot = False
+
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
@@ -237,6 +240,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         params_run = self.params.get("run")
         registration_counts = get_registration_counts(params_run.id, params_run.event_id)
         self.registration_counts = registration_counts
+        self.takes_run_spot = self._takes_run_spot(params_run.id)
 
         # Initialize field categorization sets
         fields_default = {"event"}
@@ -700,11 +704,39 @@ class CharacterForm(WritingForm, BaseWritingForm):
             return False
 
         max_available = option.get("max_available") or 0
-        if max_available <= 0:
+        if max_available <= 0 or not self.takes_run_spot:
             return True
 
         taken = (self.registration_counts or {}).get(self.get_option_key_count(option), 0)
         return taken < max_available
+
+    def _takes_run_spot(self, run_id: int) -> bool:
+        """Check if the character takes option spots: assigned to the run, or auto-assigned on save."""
+        if self.instance.pk and (get_run_assigned_character_ids(run_id).filter(character_id=self.instance.pk).exists()):
+            return True
+
+        # Characters of players with an active registration are auto-assigned on save
+        return (
+            not self.orga
+            and "user_character" in self.params.get("features", [])
+            and bool(self.params.get("registration"))
+        )
+
+    def check_option(
+        self,
+        previously_chosen_options: list | None,
+        display_name: str,
+        option: dict,
+        registration_count_by_option: dict,
+        question_uuid: str | None = None,
+    ) -> tuple[str, bool, int | None]:
+        """Check option availability, only for characters taking the spots of the run."""
+        if not self.takes_run_spot:
+            return display_name, True, None
+
+        return super().check_option(
+            previously_chosen_options, display_name, option, registration_count_by_option, question_uuid
+        )
 
     def _option_allowed_ticket(self, option: dict) -> bool:
         """Check that the ticket of the player is one of those the option is restricted to."""

@@ -22,8 +22,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.registration_counts import get_run_assigned_character_ids
+from larpmanager.models.form import QuestionApplicable, WritingChoice, WritingOption
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import (
     Character,
@@ -35,6 +39,8 @@ from larpmanager.models.writing import (
 from larpmanager.utils.core.exceptions import PendingApprovalError, SignupError, WaitingError
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from django.db.models import QuerySet
 
     from larpmanager.models.event import Run
@@ -200,26 +206,97 @@ def check_signup(context: dict) -> None:
         raise WaitingError(context["run"].get_slug())
 
 
-def check_assign_character(context: dict) -> None:
+def get_character_full_options(
+    run_id: int,
+    character_id: int,
+    exclude_character_ids: Iterable[int] = (),
+    *,
+    lock: bool = False,
+) -> list[WritingOption]:
+    """Return the limited options of the character with no spots left in the run.
+
+    Spots are taken only by the characters assigned to active registrations of the run.
+
+    Args:
+        run_id: Run the character would be assigned to
+        character_id: Character to check
+        exclude_character_ids: Characters to ignore in the count (e.g. being replaced)
+        lock: Lock the option rows, to be used inside a transaction
+
+    Returns:
+        List of the options exceeding their max_available
+
+    """
+    option_ids = WritingChoice.objects.filter(
+        element_id=character_id,
+        question__applicable=QuestionApplicable.CHARACTER,
+    ).values_list("option_id", flat=True)
+
+    options_query = WritingOption.objects.filter(pk__in=option_ids, max_available__gt=0)
+    if lock:
+        options_query = options_query.select_for_update(of=("self",))
+    options = list(options_query.select_related("question").order_by("question__order", "order"))
+    if not options:
+        return []
+
+    # Count the spots taken by the other characters assigned to the run
+    excluded_ids = {character_id, *exclude_character_ids}
+    used = dict(
+        WritingChoice.objects.filter(
+            option_id__in=[option.id for option in options],
+            element_id__in=get_run_assigned_character_ids(run_id),
+        )
+        .exclude(element_id__in=excluded_ids)
+        .values("option_id")
+        .annotate(total=Count("option_id"))
+        .values_list("option_id", "total"),
+    )
+
+    return [option for option in options if used.get(option.id, 0) >= option.max_available]
+
+
+def format_full_options(options: list[WritingOption]) -> str:
+    """Return the full options as a readable list of question and option names."""
+    return ", ".join(f"{option.question.name}: {option.name}" for option in options)
+
+
+def get_character_full_options_message(character: Character, options: list[WritingOption]) -> str:
+    """Return the message explaining that the character options have no spots left."""
+    return _("Character %(character)s cannot be assigned: no spots left for %(options)s") % {
+        "character": character.name,
+        "options": format_full_options(options),
+    }
+
+
+def get_character_full_options_warning(character: Character, options: list[WritingOption]) -> str:
+    """Return the warning for a character assigned over the spots of its options."""
+    return _("Character %(character)s assigned, but exceeds the spots available for %(options)s") % {
+        "character": character.name,
+        "options": format_full_options(options),
+    }
+
+
+def check_assign_character(context: dict) -> list[tuple[Character, list[WritingOption]]]:
     """Check and assign characters to player signup.
 
     Automatically assigns available characters to a player's signup up to the number of
     characters playable at the same time (character_play_max), skipping characters that
     are inactive or already assigned to this registration. When the player owns more
     assignable characters than free slots, nothing is assigned: the choice is left to
-    the player on the character list page.
+    the player on the character list page. Characters whose limited options have no
+    spots left in the run are not assigned.
 
     Args:
         context: Context dictionary containing event data
 
     Returns:
-        None: Function performs side effects only
+        List of the characters not assigned for full options, with those options
 
     """
     # Get registration
     registration = get_player_signup(context)
     if not registration:
-        return
+        return []
 
     # Get the number of characters the player can play at the same time
     character_play_max = get_character_play_max(context["event"].id, context)
@@ -230,12 +307,12 @@ def check_assign_character(context: dict) -> None:
     # Skip if player already plays the maximum number of characters
     free_slots = character_play_max - len(assigned_character_ids)
     if free_slots <= 0:
-        return
+        return []
 
     # Get all characters belonging to this player for the event
     characters = get_player_characters(context["member"], context["event"].id)
     if not characters:
-        return
+        return []
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     character_ids = [char.id for char in characters]
@@ -251,12 +328,19 @@ def check_assign_character(context: dict) -> None:
         char for char in characters if char.id not in inactive_character_ids and char.id not in assigned_character_ids
     ]
     if not assignable_characters:
-        return
+        return []
 
     # Leave the choice to the player when there are more candidates than free slots
     if len(assignable_characters) > free_slots:
-        return
+        return []
 
-    # Auto-assign the remaining characters
+    # Auto-assign the remaining characters, skipping those with full options
+    blocked = []
     for character in assignable_characters:
+        full_options = get_character_full_options(registration.run_id, character.id, lock=True)
+        if full_options:
+            blocked.append((character, full_options))
+            continue
         RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
+
+    return blocked
