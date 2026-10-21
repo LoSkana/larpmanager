@@ -26,7 +26,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -361,6 +361,11 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
 def ensure_timezone_aware(dt: datetime) -> datetime:
     """Ensure a datetime object is timezone-aware, treating naive values as UTC."""
     return dt if timezone.is_aware(dt) else timezone.make_aware(dt, UTC)
+
+
+def local_day_start(day: date) -> datetime:
+    """Return the aware datetime at midnight of the given day in the current timezone."""
+    return timezone.make_aware(datetime.combine(day, time.min))
 
 
 def get_time_diff(start_datetime: date, end_datetime: date) -> int:

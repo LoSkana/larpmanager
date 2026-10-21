@@ -68,7 +68,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.checks import check_association_context
-from larpmanager.utils.core.common import get_object_uuid
+from larpmanager.utils.core.common import get_object_uuid, local_day_start
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
@@ -1102,6 +1102,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Define date range for the selected year
     start = date(year, 1, 1)
     end = date(year + 1, 1, 1)
+    start_datetime = local_day_start(start)
+    end_datetime = local_day_start(end)
 
     # Calculate total membership fees for the year
     context["memberships"] = get_sum(
@@ -1113,8 +1115,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
             year=year + 1,
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1122,8 +1124,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     context["donations"] = get_sum(
         AccountingItemDonation.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1132,14 +1134,14 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         AccountingItemPayment.objects.filter(
             association_id=context["association_id"],
             pay=PaymentChoices.MONEY,
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     ) - get_sum(
         AccountingItemTransaction.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1169,8 +1171,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     context["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
             oth=OtherChoices.REFUND,
         ),
     )
@@ -1183,8 +1185,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     for el in (
         AccountingItemExpense.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
             is_approved=True,
         )
         .values("balance")

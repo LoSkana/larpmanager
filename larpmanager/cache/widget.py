@@ -25,6 +25,7 @@ from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Count, Max, Subquery
 from django.http import Http404
 from django.utils import timezone
@@ -865,6 +866,16 @@ def clear_widget_cache_for_association(association_id: int) -> None:
 
     # Clear association-level widgets
     clear_widget_cache_association(association_id)
+
+
+def on_association_pre_save_timezone_reset_widgets(instance: Association) -> None:
+    """Clear widget caches of the association runs after commit when its timezone changes."""
+    if not instance.pk:
+        return
+    previous_timezone = Association.objects.filter(pk=instance.pk).values_list("timezone", flat=True).first()
+    if previous_timezone is not None and previous_timezone != instance.timezone:
+        association_id = instance.pk
+        transaction.on_commit(lambda: clear_widget_cache_for_association(association_id))
 
 
 def reset_widgets(instance: Any) -> None:

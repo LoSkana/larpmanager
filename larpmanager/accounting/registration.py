@@ -600,7 +600,7 @@ def get_date_surcharge(registration: Registration | None, event_id: int) -> int:
 
     reference_date = timezone.localdate()
     if registration and registration.created:
-        reference_date = registration.created
+        reference_date = timezone.localtime(registration.created).date()
 
     applicable_surcharges = RegistrationSurcharge.objects.filter(event_id=event_id, date__lt=reference_date)
     if not applicable_surcharges:
