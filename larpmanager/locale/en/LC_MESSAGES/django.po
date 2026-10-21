@@ -3919,6 +3919,14 @@ msgstr ""
 msgid "The currency you want to use for all payments and pricing"
 msgstr ""
 
+msgid "Timezone"
+msgstr ""
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration "
+"opening"
+msgstr ""
+
 msgid "Promotional image"
 msgstr ""
 

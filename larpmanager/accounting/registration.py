@@ -236,7 +236,7 @@ def quota_check(registration: Registration, start: date, alert: int, association
         return
 
     registration.days_event = get_time_diff_today(start)
-    registration.tot_days = get_time_diff(start, registration.created.date())
+    registration.tot_days = get_time_diff(start, timezone.localtime(registration.created).date())
 
     quota_share = Decimal(1.0 / registration.quotas)
     quota_share_ratio = Decimal(0)
@@ -348,7 +348,7 @@ def _set_installment_fallback(
 
     elif not cumulative_amount:
         # No installments configured at all: use registration date as deadline
-        registration.deadline = get_time_diff_today(registration.created.date())
+        registration.deadline = get_time_diff_today(timezone.localtime(registration.created).date())
         registration.quota = registration.tot_iscr - registration.tot_payed
 
     elif registration.tot_iscr > registration.tot_payed and registration.quota == 0:
@@ -439,7 +439,7 @@ def _get_deadline_installment(
 
 def get_payment_deadline(registration: Registration, days_to_add: int, association_id: int) -> int:
     """Calculate payment deadline based on registration and membership dates."""
-    days_since_registration = get_time_diff_today(registration.created.date())
+    days_since_registration = get_time_diff_today(timezone.localtime(registration.created).date())
     if not hasattr(registration, "membership"):
         registration.membership = get_user_membership(registration.member, association_id)
     if registration.membership.date:
@@ -598,7 +598,7 @@ def get_date_surcharge(registration: Registration | None, event_id: int) -> int:
         if ticket_tier in (TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC):
             return 0
 
-    reference_date = timezone.now().date()
+    reference_date = timezone.localdate()
     if registration and registration.created:
         reference_date = registration.created
 

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import zoneinfo
 from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
@@ -62,6 +63,18 @@ class Currency(models.TextChoices):
     CAD = "c", "CAD"
     JPY = "j", "JPY"
     SEK = "s", "SEK"
+
+
+DEFAULT_TIMEZONE = "Europe/Rome"
+
+
+def timezone_choices() -> list[tuple[str, str]]:
+    """Return the selectable IANA timezones, sorted by name."""
+    names = {
+        name for name in zoneinfo.available_timezones() if "/" in name and not name.startswith(("Etc/", "SystemV/"))
+    }
+    names.add("UTC")
+    return [(name, name.replace("_", " ")) for name in sorted(names)]
 
 
 class AssociationPlan(models.TextChoices):
@@ -177,6 +190,14 @@ class Association(UuidMixin, BaseModel):
         null=True,
         verbose_name=_("Payment currency"),
         help_text=_("The currency you want to use for all payments and pricing"),
+    )
+
+    timezone = models.CharField(
+        max_length=64,
+        choices=timezone_choices,
+        default=DEFAULT_TIMEZONE,
+        verbose_name=_("Timezone"),
+        help_text=_("Timezone used to enter and display dates and times, such as the registration opening"),
     )
 
     promoter = models.ImageField(

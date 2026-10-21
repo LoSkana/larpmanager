@@ -152,7 +152,7 @@ def _init_regs(
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
     if registration.run.start:
-        if registration.run.start < timezone.now().date():
+        if registration.run.start < timezone.localdate():
             return
         context["registration_years"][registration.run.start.year] = 1
 
@@ -292,7 +292,7 @@ def _info_membership(context: dict, member: Member) -> None:
         return
 
     # Get current year for membership calculations
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -389,7 +389,7 @@ def get_membership_fee_for_reg(
     ):
         return 0
 
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
     event_year = run.start.year
     if event_year < current_year:
         return 0

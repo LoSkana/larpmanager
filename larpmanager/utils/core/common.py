@@ -359,8 +359,8 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
 
 
 def ensure_timezone_aware(dt: datetime) -> datetime:
-    """Ensure a datetime object is timezone-aware."""
-    return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
+    """Ensure a datetime object is timezone-aware, treating naive values as UTC."""
+    return dt if timezone.is_aware(dt) else timezone.make_aware(dt, UTC)
 
 
 def get_time_diff(start_datetime: date, end_datetime: date) -> int:
@@ -377,7 +377,7 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if isinstance(target_date, datetime):
         target_date = target_date.date()
 
-    return get_time_diff(target_date, timezone.now().date())
+    return get_time_diff(target_date, timezone.localdate())
 
 
 def generate_number(length: int) -> str:

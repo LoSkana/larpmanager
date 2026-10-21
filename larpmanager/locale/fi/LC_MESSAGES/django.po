@@ -1436,6 +1436,9 @@ msgstr "Toimitettu"
 msgid "Template"
 msgstr "Malli"
 
+msgid "Timezone"
+msgstr "Aikavyöhyke"
+
 msgid "Transfer"
 msgstr "Siirto"
 
@@ -11868,6 +11871,13 @@ msgid ""
 msgstr ""
 "Näkyy rekisteröitymispyynnön sivulla ja lisätään pyynnön vastaanottamista "
 "koskevaan vahvistussähköpostiin"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Aikavyöhyke, jota käytetään päivämäärien ja kellonaikojen syöttämiseen ja "
+"näyttämiseen, esimerkiksi ilmoittautumisen avautumisessa"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

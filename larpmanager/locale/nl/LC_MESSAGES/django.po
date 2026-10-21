@@ -1436,6 +1436,9 @@ msgstr "Geleverd"
 msgid "Template"
 msgstr "Sjabloon"
 
+msgid "Timezone"
+msgstr "Tijdzone"
+
 msgid "Transfer"
 msgstr "Overdracht"
 
@@ -12097,6 +12100,13 @@ msgid ""
 msgstr ""
 "Wordt weergegeven op de aanmeldingspagina en toegevoegd aan het "
 "bevestigingsmailtje dat je krijgt als je aanvraag is ontvangen"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Tijdzone die je gebruikt om datums en tijden in te voeren en weer te geven, "
+"zoals de opening van de inschrijvingen"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

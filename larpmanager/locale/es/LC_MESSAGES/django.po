@@ -1436,6 +1436,9 @@ msgstr "Suministrado"
 msgid "Template"
 msgstr "Plantilla"
 
+msgid "Timezone"
+msgstr "Zona horaria"
+
 msgid "Transfer"
 msgstr "Transferencia"
 
@@ -12093,6 +12096,13 @@ msgid ""
 msgstr ""
 "Aparece en la página de solicitud de registro y se incluye en el correo de "
 "confirmación de recepción de la solicitud"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Zona horaria que se usa para introducir y mostrar fechas y horas, como la "
+"apertura de inscripciones"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

@@ -1436,6 +1436,9 @@ msgstr "Dostarczone"
 msgid "Template"
 msgstr "Szablon"
 
+msgid "Timezone"
+msgstr "Strefa czasowa"
+
 msgid "Transfer"
 msgstr "Transfer"
 
@@ -11947,6 +11950,13 @@ msgid ""
 msgstr ""
 "Wyświetlane na stronie zgłoszenia rejestracji i dodawane do e-maila z "
 "potwierdzeniem otrzymania zgłoszenia"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Strefa czasowa używana do wprowadzania i wyświetlania dat i godzin, np. "
+"otwarcia zapisów"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

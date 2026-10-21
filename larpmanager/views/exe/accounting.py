@@ -1049,10 +1049,10 @@ def check_year(request: HttpRequest, context: dict) -> int:
     """
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
-    context["years"] = list(range(timezone.now().year, association.created.year - 1, -1))
+    context["years"] = list(range(timezone.localdate().year, association.created.year - 1, -1))
 
     if not context["years"]:
-        context["years"] = [timezone.now().year]
+        context["years"] = [timezone.localdate().year]
 
     # Process POST data if present
     if request.POST:

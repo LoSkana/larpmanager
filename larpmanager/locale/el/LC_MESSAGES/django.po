@@ -1436,6 +1436,9 @@ msgstr "Παρεχόμενο"
 msgid "Template"
 msgstr "Πρότυπο"
 
+msgid "Timezone"
+msgstr "Ζώνη ώρας"
+
 msgid "Transfer"
 msgstr "Μεταφορά"
 
@@ -12193,6 +12196,13 @@ msgid ""
 msgstr ""
 "Εμφανίζεται στη σελίδα αιτήματος εγγραφής και προστίθεται στο email "
 "επιβεβαίωσης λήψης αιτήματος"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Ζώνη ώρας που χρησιμοποιείται για την εισαγωγή και την εμφάνιση ημερομηνιών "
+"και ωρών, όπως το άνοιγμα των εγγραφών"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

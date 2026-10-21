@@ -43,6 +43,7 @@ from django.db.models.functions import Cast, Coalesce
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.accounting import (
@@ -511,8 +512,8 @@ def _prepare_data_json(
 
     # Map field names to lambda functions for data extraction and formatting
     field_to_formatter = {
-        "created": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
-        "payment_date": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
+        "created": lambda model_object: timezone.localtime(model_object.created).strftime("%d/%m/%Y"),
+        "payment_date": lambda model_object: timezone.localtime(model_object.created).strftime("%d/%m/%Y"),
         "member": lambda model_object: str(model_object.member),
         "run": lambda model_object: str(model_object.run) if model_object.run else "",
         "descr": lambda model_object: str(model_object.descr),

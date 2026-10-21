@@ -418,7 +418,7 @@ class ShuttleServiceForm(BaseModelForm):
         """Initialize form with default time value if not provided."""
         super().__init__(*args, **kwargs)
         # ~ if 'date' not in self.initial or not self.initial['date']:
-        # ~ self.initial['date'] = timezone.now().date().isoformat()
+        # ~ self.initial['date'] = timezone.localdate().isoformat()
         # ~ else:
         # ~ self.initial['date'] = self.instance.date.isoformat()
 

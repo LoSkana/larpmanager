@@ -1436,6 +1436,9 @@ msgstr "Fourni"
 msgid "Template"
 msgstr "Modèle"
 
+msgid "Timezone"
+msgstr "Fuseau horaire"
+
 msgid "Transfer"
 msgstr "Transfert"
 
@@ -12193,6 +12196,13 @@ msgid ""
 msgstr ""
 "Affiché sur la page de demande d'inscription et ajouté à l'e-mail de "
 "confirmation de réception de la demande"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Fuseau horaire utilisé pour saisir et afficher les dates et heures, comme "
+"l'ouverture des inscriptions"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

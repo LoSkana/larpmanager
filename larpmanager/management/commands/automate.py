@@ -36,7 +36,12 @@ from django.utils import dateparse, timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
-from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
+from larpmanager.cache.basic import (
+    get_association_basic_cache,
+    get_run_association_id,
+    get_run_basic_cache,
+    get_run_event_id,
+)
 from larpmanager.cache.config import get_association_config, get_event_config, save_single_config_by_id
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration_lookup import get_active_registrations
@@ -68,7 +73,7 @@ from larpmanager.models.member import Badge, Member, Membership, MembershipStatu
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
-from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.core.common import ensure_timezone_aware, get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
@@ -145,8 +150,9 @@ class Command(BaseCommand):
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
         for association in Association.objects.all():
-            self.check_association(association)
-            self.check_free_plan_summary(association)
+            with timezone.override(association.timezone):
+                self.check_association(association)
+                self.check_free_plan_summary(association)
 
         # Perform standard system-wide maintenance checks
         # These checks run regardless of feature flags
@@ -171,18 +177,20 @@ class Command(BaseCommand):
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             event_features = get_event_features(run.event_id)
+            run_cache = get_run_basic_cache(run.id)
 
-            # Check and process deadline notifications
-            if "deadlines" in event_features:
-                self.check_deadline(run)
+            with timezone.override(get_association_basic_cache(run_cache["association_id"])["timezone"]):
+                # Check and process deadline notifications
+                if "deadlines" in event_features:
+                    self.check_deadline(run)
 
-            # Update run-specific accounting records
-            if "record_acc" in event_features:
-                check_run_accounting(run)
+                # Update run-specific accounting records
+                if "record_acc" in event_features:
+                    check_run_accounting(run)
 
-            # Generate background PDF documents for the run
-            if "print_pdf" in event_features:
-                print_run_bkg(get_run_basic_cache(run.id)["association_slug"], run.get_slug())
+                # Generate background PDF documents for the run
+                if "print_pdf" in event_features:
+                    print_run_bkg(run_cache["association_slug"], run.get_slug())
 
     def check_association(self, association: Association) -> None:
         """Run all feature-specific automation checks for a single association."""
@@ -287,7 +295,7 @@ class Command(BaseCommand):
         if AssociationConfig.objects.filter(association=association, name=Command._FIRST_EVENT_SUMMARY_KEY).exists():
             return
 
-        today = timezone.now().date()
+        today = timezone.localdate()
         for run in Run.objects.filter(event__association=association, end__lt=today).select_related("event"):
             registration_count = get_active_registrations(run.id).count()
             if registration_count <= Command._FREE_SUMMARY_MIN_REGISTRATIONS:
@@ -321,8 +329,8 @@ class Command(BaseCommand):
         if association.demo_type_id is not None:
             return
 
-        today = timezone.now().date()
-        created = association.created.date()
+        today = timezone.localdate()
+        created = timezone.localtime(association.created).date()
 
         if today.year == created.year:
             # Skip anniversary in the year the association was created
@@ -383,7 +391,7 @@ class Command(BaseCommand):
         For each qualifying run, lists its own registration count plus the
         registration counts of the same association's other previous unpaid runs.
         """
-        cutoff = timezone.now().date() - relativedelta(months=Command._LM_PAYMENT_REMINDER_MONTHS)
+        cutoff = timezone.localdate() - relativedelta(months=Command._LM_PAYMENT_REMINDER_MONTHS)
         due_runs = (
             Run.objects.filter(paid__isnull=True, end__lte=cutoff)
             .exclude(plan__in=[AssociationPlan.FREE, None])
@@ -484,6 +492,7 @@ class Command(BaseCommand):
                 warning_date = dateparse.parse_datetime(warning_config.value)
                 if not warning_date:
                     continue
+                warning_date = ensure_timezone_aware(warning_date)
                 days_since_warning = (now - warning_date).days
                 admin_notice_threshold = Command._WARNING_GRACE_DAYS - Command._ADMIN_NOTICE_DAYS_BEFORE
                 if days_since_warning >= admin_notice_threshold:
@@ -543,7 +552,8 @@ class Command(BaseCommand):
         exec_lines = "".join(f"<li>{m.user.get_full_name()} &lt;{m.user.email}&gt;</li>" for m in executives)
         events = list(Event.objects.filter(association=association).values("name", "slug", "created"))
         event_lines = "".join(
-            f"<li>{e['name']} ({e['slug']}) - created {e['created'].strftime('%Y-%m-%d')}</li>" for e in events
+            f"<li>{e['name']} ({e['slug']}) - created {timezone.localtime(e['created']).strftime('%Y-%m-%d')}</li>"
+            for e in events
         )
         registration_count = Registration.objects.filter(run__event__association=association).count()
         delete_url = f"https://larpmanager.com/lm/clean/{association.slug}/"
@@ -557,7 +567,7 @@ class Command(BaseCommand):
             <ul>
                 <li>Name: {association.name}</li>
                 <li>Slug: {association.slug}</li>
-                <li>Created: {association.created.strftime("%Y-%m-%d")}</li>
+                <li>Created: {timezone.localtime(association.created).strftime("%Y-%m-%d")}</li>
                 <li>Contact email: {association.main_mail or "-"}</li>
                 <li>Total registrations: {registration_count}</li>
             </ul>
@@ -726,7 +736,7 @@ class Command(BaseCommand):
         processed_staff_events = set()
 
         # Process past events for participation and staff/organizer roles
-        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
+        for run in Run.objects.filter(end__lt=timezone.localdate(), event__association=association):
             # Process regular player registrations
             registrations = get_active_registrations(run.id)
             for registration in registrations.exclude(
@@ -1181,7 +1191,7 @@ class Command(BaseCommand):
 
         """
         # Get current year for membership fee validation
-        current_year = timezone.now().year
+        current_year = timezone.localdate().year
 
         # Skip if registration is not for current year
         if current_year != registration.run.end.year:

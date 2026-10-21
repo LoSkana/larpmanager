@@ -25,12 +25,13 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.contrib.auth import logout
 from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.utils.translation import get_language
 
 from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.skin import get_cache_skin
-from larpmanager.models.association import AssociationTextType
+from larpmanager.models.association import DEFAULT_TIMEZONE, AssociationTextType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -50,8 +51,14 @@ class AssociationIdentifyMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
-        """Process request through association middleware."""
-        return self.get_association_info(request) or self.get_response(request)
+        """Process request through association middleware, activating the association timezone."""
+        response = self.get_association_info(request)
+        if response:
+            return response
+
+        association_data = getattr(request, "association", None) or {}
+        with timezone.override(association_data.get("timezone", DEFAULT_TIMEZONE)):
+            return self.get_response(request)
 
     @classmethod
     def get_association_info(cls, request: HttpRequest) -> HttpResponse | None:

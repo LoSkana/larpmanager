@@ -61,7 +61,7 @@ def get_event_staff_member_ids(event_id: int) -> set:
 def get_membership_fee_year(association_id: int, year: Any = None) -> set:
     """Get set of member IDs who paid membership fee for given year."""
     if not year:
-        year = timezone.now().year
+        year = timezone.localdate().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
             "member_id",

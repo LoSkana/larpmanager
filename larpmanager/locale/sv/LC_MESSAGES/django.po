@@ -1436,6 +1436,9 @@ msgstr "Medföljer"
 msgid "Template"
 msgstr "Mall"
 
+msgid "Timezone"
+msgstr "Tidszon"
+
 msgid "Transfer"
 msgstr "Överföring"
 
@@ -11850,6 +11853,13 @@ msgid ""
 msgstr ""
 "Visas på sidan för registreringsförfrågan och läggs till i bekräftelsemejlet"
 " om mottagen förfrågan"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Tidszon som används för att ange och visa datum och tider, till exempel när "
+"anmälan öppnar"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

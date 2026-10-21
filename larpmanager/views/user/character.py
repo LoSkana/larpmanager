@@ -784,7 +784,7 @@ def _character_list_last_run(context: dict, char_ids: list[int]) -> None:
             character_id__in=char_ids,
             registration__member_id=context["member"].id,
             registration__cancellation_date__isnull=True,
-            registration__run__end__lt=timezone.now().date(),
+            registration__run__end__lt=timezone.localdate(),
         )
         .select_related("registration__run", "registration__run__event")
         .order_by("character_id", "-registration__run__end")

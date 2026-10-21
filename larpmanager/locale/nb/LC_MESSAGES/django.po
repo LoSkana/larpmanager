@@ -1436,6 +1436,9 @@ msgstr "Levert"
 msgid "Template"
 msgstr "Mal"
 
+msgid "Timezone"
+msgstr "Tidssone"
+
 msgid "Transfer"
 msgstr "Overføring"
 
@@ -11873,6 +11876,13 @@ msgid ""
 msgstr ""
 "Vises på siden for påmeldingsforespørselen og legges til i bekreftelses-e-"
 "posten om mottatt forespørsel"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Tidssone som brukes til å legge inn og vise datoer og klokkeslett, for "
+"eksempel når påmeldingen åpner"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

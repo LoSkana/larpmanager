@@ -1436,6 +1436,9 @@ msgstr "Dodáno"
 msgid "Template"
 msgstr "Šablona"
 
+msgid "Timezone"
+msgstr "Časové pásmo"
+
 msgid "Transfer"
 msgstr "Přenos"
 
@@ -11698,6 +11701,13 @@ msgid ""
 msgstr ""
 "Zobrazuje se na stránce žádosti o registraci a je uvedeno v potvrzovacím "
 "e-mailu o přijetí žádosti"
+
+msgid ""
+"Timezone used to enter and display dates and times, such as the registration"
+" opening"
+msgstr ""
+"Časové pásmo pro zadávání a zobrazování dat a časů, třeba otevření "
+"registrací"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

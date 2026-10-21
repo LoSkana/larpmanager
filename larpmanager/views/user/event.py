@@ -846,13 +846,13 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             context["past"].append(run)
 
     # Whether the run being viewed is itself still scheduled to happen
-    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.now().date()
+    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.localdate()
 
     # Determine if search engines should index this page
     context["no_robots"] = (
         context["run"].development != DevelopStatus.SHOW
         or not context["run"].end
-        or timezone.now().date() > context["run"].end
+        or timezone.localdate() > context["run"].end
     )
 
     set_sold_tickets(context)
