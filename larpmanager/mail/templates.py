@@ -42,6 +42,7 @@ from larpmanager.utils.registrations.questions import get_ranking_names
 if TYPE_CHECKING:
     from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
     from larpmanager.models.event import Run
+    from larpmanager.models.form import WritingOption
     from larpmanager.models.registration import Registration
     from larpmanager.models.writing import Character
 
@@ -163,13 +164,16 @@ def get_character_full_options_organizer_email(character: Character, run: Run) -
     return email_subject, email_body
 
 
-def get_character_full_options_organizer_text(character: Character, run: Run) -> str:
+def get_character_full_options_organizer_text(
+    character: Character, run: Run, full_options: list[WritingOption] | None = None
+) -> str:
     """Return the description of a character not assigned since its options have no spots left."""
     text = _("The character %(character)s could not be assigned") % {"character": escape(character.name)}
     if character.player:
         text += " " + _("to %(player)s") % {"player": escape(str(character.player))}
 
-    full_options = get_character_full_options(run.id, character.id)
+    if full_options is None:
+        full_options = get_character_full_options(run.id, character.id)
     if not full_options:
         return text + ". " + _("The spots of its options are now available again.")
 

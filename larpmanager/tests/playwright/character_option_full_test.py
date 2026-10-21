@@ -130,7 +130,12 @@ def create_character(page: Any, live_server: Any, name: str, option: str, *, ano
     fill_tinymce(page, "id_text", f"sheet of {name}")
 
     # the limited option is still free: only assigned characters take its spot
-    expect(page.locator("#main_form label", has_text="bunker")).to_contain_text("1 available")
+    bunker_label = page.locator("#main_form label", has_text="bunker")
+    if another:
+        # no free slot, so the character is not auto-assigned and its options are not limited
+        expect(bunker_label).not_to_contain_text("available")
+    else:
+        expect(bunker_label).to_contain_text("1 available")
     click_option(page.locator("#main_form label", has_text=option).locator("input"))
     submit_confirm(page)
 

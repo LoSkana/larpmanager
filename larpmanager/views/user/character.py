@@ -471,10 +471,10 @@ def _save_character(
                     character.player = context["member"]
 
                 character = form.save()
-                for blocked_character, full_options in check_assign_character(context):
-                    notify_character_full_options(
-                        get_player_signup(context), blocked_character, full_options, context.get("request")
-                    )
+                blocked = check_assign_character(context)
+                registration = get_player_signup(context) if blocked else None
+                for blocked_character, full_options in blocked:
+                    notify_character_full_options(registration, blocked_character, full_options, context.get("request"))
             # Success - break out of retry loop
             break
         except IntegrityError as e:

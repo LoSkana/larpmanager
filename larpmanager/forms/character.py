@@ -82,6 +82,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import save_version
+from larpmanager.utils.registrations.characters import will_auto_assign_character
 from larpmanager.utils.services.experience import calculate_character_experience_points
 
 
@@ -715,12 +716,10 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if self.instance.pk and (get_run_assigned_character_ids(run_id).filter(character_id=self.instance.pk).exists()):
             return True
 
-        # Characters of players with an active registration are auto-assigned on save
-        return (
-            not self.orga
-            and "user_character" in self.params.get("features", [])
-            and bool(self.params.get("registration"))
-        )
+        # Characters of players are auto-assigned on save, if they fit in the free slots
+        if self.orga or "user_character" not in self.params.get("features", []):
+            return False
+        return will_auto_assign_character(self.params, self.instance.pk)
 
     def check_option(
         self,

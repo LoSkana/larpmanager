@@ -22,6 +22,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
@@ -637,16 +638,19 @@ def assign_previous_campaign_character(registration: Any) -> None:
     if not previous_character_relation or not previous_character_relation.character.is_active:
         return
 
-    # Skip the character if its limited options have no spots left in this run
-    full_options = get_character_full_options(registration.run_id, previous_character_relation.character_id)
-    if full_options:
-        notify_character_full_options(registration, previous_character_relation.character, full_options)
-        return
+    with transaction.atomic():
+        # Skip the character if its limited options have no spots left in this run
+        full_options = get_character_full_options(
+            registration.run_id, previous_character_relation.character_id, lock=True
+        )
+        if full_options:
+            notify_character_full_options(registration, previous_character_relation.character, full_options)
+            return
 
-    new_character_relation = RegistrationCharacterRel.objects.create(
-        registration=registration,
-        character=previous_character_relation.character,
-    )
+        new_character_relation = RegistrationCharacterRel.objects.create(
+            registration=registration,
+            character=previous_character_relation.character,
+        )
 
     # Copy custom character attributes from previous run
     for custom_attribute_name in ["name", "pronoun", "song", "public", "private"]:

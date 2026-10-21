@@ -55,6 +55,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import get_exec_language
 from larpmanager.utils.core.headers import get_url, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.registrations.characters import get_characters_full_options
 from larpmanager.utils.users.member import queue_executive_notification, queue_organizer_notification
 
 if TYPE_CHECKING:
@@ -431,11 +432,13 @@ def _digest_character_options_full(
 ) -> str:
     """Generate email content for digest characters not assigned since their options have no spots left."""
     character_ids = {notification.object_id for notification in character_options_full}
-    characters = Character.objects.filter(pk__in=character_ids).select_related("player")
+    characters = list(Character.objects.filter(pk__in=character_ids).select_related("player"))
+    full_options = get_characters_full_options(run.id, character_ids)
     email_body += "<h4>" + _("Characters not assigned for options without spots") + f": {len(characters)}" + "</h4>"
     email_body += "<ul>"
     for character in characters:
-        email_body += "<li>" + get_character_full_options_organizer_text(character, run) + "</li>"
+        character_text = get_character_full_options_organizer_text(character, run, full_options.get(character.id, []))
+        email_body += "<li>" + character_text + "</li>"
     email_body += "</ul>"
 
     return email_body

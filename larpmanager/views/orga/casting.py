@@ -158,19 +158,15 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
             # Handle character assignment
             if "quest_type" not in context:
                 character = get_element_event(context, entity_uuid, Character)
-                entity_id = character.id
                 # Check for mirror character redirection
                 if mirror_enabled and character.mirror:
-                    entity_id = character.mirror_id
+                    character = character.mirror
 
                 # Create character assignment relationship, warning if it exceeds the spots of its options
-                RegistrationCharacterRel.objects.create(character_id=entity_id, registration=registration)
-                full_options = get_character_full_options(registration.run_id, entity_id)
+                RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
+                full_options = get_character_full_options(registration.run_id, character.id)
                 if full_options:
-                    messages.warning(
-                        request,
-                        get_character_full_options_warning(Character.objects.get(pk=entity_id), full_options),
-                    )
+                    messages.warning(request, get_character_full_options_warning(character, full_options))
             else:
                 trait = get_element_event(context, entity_uuid, Trait)
                 # Create trait assignment for non-character types

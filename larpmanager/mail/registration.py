@@ -32,7 +32,7 @@ from django.utils.translation import activate, gettext_lazy as _
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
@@ -42,6 +42,7 @@ from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterConfig
 from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
 from larpmanager.utils.registrations.characters import get_character_full_options_message
@@ -51,7 +52,6 @@ if TYPE_CHECKING:
     from django.http import HttpRequest
 
     from larpmanager.models.form import WritingOption
-    from larpmanager.models.writing import Character
 
 logger = logging.getLogger(__name__)
 
@@ -183,11 +183,20 @@ def notify_character_full_options(
     """Notify that a character was not assigned since its limited options have no spots left.
 
     The player sees an error on screen when a request is available, otherwise receives an
-    email; the organizers are always notified (through their digest, if enabled).
+    email; the organizers are notified (through their digest, if enabled). Emails are sent
+    only once for the same character, run and full options.
     """
     if request:
         messages.error(request, get_character_full_options_message(character, full_options))
-    else:
+
+    # Skip the emails if already sent for the same full options
+    notified_key = _full_options_notified_key(registration.run_id)
+    notified_options = ",".join(str(option.id) for option in sorted(full_options, key=lambda option: option.id))
+    if CharacterConfig.objects.filter(character=character, name=notified_key, value=notified_options).exists():
+        return
+    save_single_config(character, notified_key, notified_options)
+
+    if not request:
         activate(registration.member.language)
         email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
             "event": registration.run,
@@ -204,6 +213,18 @@ def notify_character_full_options(
             instance=character,
             notification_type=NotificationType.CHARACTER_OPTION_FULL,
         )
+
+
+def _full_options_notified_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options already notified for the run."""
+    return f"full_options_notified_{run_id}"
+
+
+def clear_character_full_options_notified(character_id: int, run_id: int) -> None:
+    """Forget the full options notified for the character in the run, so a new block is notified again."""
+    CharacterConfig.objects.filter(
+        character_id=character_id, name=_full_options_notified_key(run_id), deleted=None
+    ).delete()
 
 
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:

@@ -42,9 +42,13 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.registrations.characters import check_assign_character, get_character_full_options
+from larpmanager.utils.registrations.characters import (
+    check_assign_character,
+    get_character_full_options,
+    get_characters_full_options,
+)
 
 
 @pytest.mark.django_db
@@ -144,6 +148,16 @@ class TestCharacterOptionAvailability(BaseTestCase):
 
         assert get_character_full_options(self.run.id, candidate.id, [played.id]) == []
 
+    def test_batch_full_options_per_character(self) -> None:
+        taken = self._character("Taken", self.bunker)
+        self._assign(taken)
+        candidate = self._character("Candidate", self.bunker)
+        free = self._character("Free", self.wasteland)
+
+        full_options = get_characters_full_options(self.run.id, [taken.id, candidate.id, free.id])
+
+        assert full_options == {candidate.id: [self.bunker]}
+
     def test_unlimited_option_never_full(self) -> None:
         self._assign(self._character("Taken", self.wasteland))
         candidate = self._character("Candidate", self.wasteland)
@@ -154,14 +168,15 @@ class TestCharacterOptionAvailability(BaseTestCase):
         context = {
             "event": self.event,
             "run": self.run,
-            "member": self.get_member(),
+            "member": character.player or self.get_member(),
             "features": {"character", "user_character"},
             "association_id": self.event.association_id,
+            "elementTyp": Character,
         }
         if registration:
             context["registration"] = registration
         data = {"name": character.name, get_question_key(self.origin): str(option.uuid)}
-        return CharacterForm(data, instance=character, context=context)
+        return CharacterForm(data, instance=character if character.pk else None, context=context)
 
     def test_unassigned_character_can_pick_full_option(self) -> None:
         self._assign(self._character("Taken", self.bunker))
@@ -177,6 +192,35 @@ class TestCharacterOptionAvailability(BaseTestCase):
         registration = self.create_registration(member=member, run=self.run)
 
         form = self._form(self._character("Free", player=member), self.bunker, registration)
+
+        assert not form.is_valid()
+
+    def test_player_with_more_characters_than_slots_can_pick_full_option(self) -> None:
+        # with more candidates than free slots the choice is left to the player, nothing is auto-assigned
+        self._assign(self._character("Taken", self.bunker))
+        member = self._member()
+        registration = self.create_registration(member=member, run=self.run)
+        self._character("Other", player=member)
+
+        form = self._form(self._character("Free", player=member), self.bunker, registration)
+
+        assert form.is_valid(), form.errors
+
+    def test_new_character_without_free_slots_can_pick_full_option(self) -> None:
+        self._assign(self._character("Taken", self.bunker))
+        member = self._member()
+        registration = self._assign(self._character("Played", player=member), member=member)
+
+        form = self._form(Character(event=self.event, name="New", player=member), self.bunker, registration)
+
+        assert form.is_valid(), form.errors
+
+    def test_new_character_with_free_slot_cannot_pick_full_option(self) -> None:
+        self._assign(self._character("Taken", self.bunker))
+        member = self._member()
+        registration = self.create_registration(member=member, run=self.run)
+
+        form = self._form(Character(event=self.event, name="New", player=member), self.bunker, registration)
 
         assert not form.is_valid()
 
@@ -242,3 +286,45 @@ class TestCharacterOptionAvailability(BaseTestCase):
 
         mock_messages.error.assert_called_once()
         mock_send_mail.assert_not_called()
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers")
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_notify_emails_only_once_for_same_options(
+        self, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        mock_organizers.return_value = [self._member()]
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+        limited = WritingOption.objects.create(
+            event=self.event, question=self.origin, name="Vault", order=3, max_available=1
+        )
+
+        notify_character_full_options(registration, candidate, [self.bunker])
+        notify_character_full_options(registration, candidate, [self.bunker])
+        assert mock_send_mail.call_count == 1
+        assert mock_digest.call_count == 1
+
+        # A different set of full options is notified again
+        notify_character_full_options(registration, candidate, [self.bunker, limited])
+        assert mock_send_mail.call_count == 2
+        assert mock_digest.call_count == 2
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers", return_value=[])
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_assignment_clears_notified_options(
+        self, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+        notify_character_full_options(registration, candidate, [self.bunker])
+        assert CharacterConfig.objects.filter(character=candidate, name=f"full_options_notified_{self.run.id}").exists()
+
+        RegistrationCharacterRel.objects.create(registration=registration, character=candidate)
+
+        assert not CharacterConfig.objects.filter(
+            character=candidate, name=f"full_options_notified_{self.run.id}"
+        ).exists()

@@ -22,7 +22,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
@@ -227,32 +226,69 @@ def get_character_full_options(
         List of the options exceeding their max_available
 
     """
-    option_ids = WritingChoice.objects.filter(
-        element_id=character_id,
-        question__applicable=QuestionApplicable.CHARACTER,
-    ).values_list("option_id", flat=True)
+    return get_characters_full_options(run_id, [character_id], exclude_character_ids, lock=lock).get(character_id, [])
 
-    options_query = WritingOption.objects.filter(pk__in=option_ids, max_available__gt=0)
+
+def get_characters_full_options(
+    run_id: int,
+    character_ids: Iterable[int],
+    exclude_character_ids: Iterable[int] = (),
+    *,
+    lock: bool = False,
+) -> dict[int, list[WritingOption]]:
+    """Return, for each character, its limited options with no spots left in the run.
+
+    Each character is ignored in the count of its own options.
+
+    Args:
+        run_id: Run the characters would be assigned to
+        character_ids: Characters to check
+        exclude_character_ids: Characters to ignore in the count (e.g. being replaced)
+        lock: Lock the option rows, to be used inside a transaction
+
+    Returns:
+        Dict of character id to the list of its options exceeding their max_available
+
+    """
+    character_option_ids: dict[int, set[int]] = {}
+    for element_id, option_id in WritingChoice.objects.filter(
+        element_id__in=list(character_ids),
+        question__applicable=QuestionApplicable.CHARACTER,
+    ).values_list("element_id", "option_id"):
+        character_option_ids.setdefault(element_id, set()).add(option_id)
+
+    all_option_ids = set().union(*character_option_ids.values())
+    options_query = WritingOption.objects.filter(pk__in=all_option_ids, max_available__gt=0)
     if lock:
         options_query = options_query.select_for_update(of=("self",))
     options = list(options_query.select_related("question").order_by("question__order", "order"))
     if not options:
-        return []
+        return {}
 
-    # Count the spots taken by the other characters assigned to the run
-    excluded_ids = {character_id, *exclude_character_ids}
-    used = dict(
+    # Characters taking the spots of each option in the run
+    option_takers: dict[int, set[int]] = {}
+    for option_id, element_id in (
         WritingChoice.objects.filter(
             option_id__in=[option.id for option in options],
             element_id__in=get_run_assigned_character_ids(run_id),
         )
-        .exclude(element_id__in=excluded_ids)
-        .values("option_id")
-        .annotate(total=Count("option_id"))
-        .values_list("option_id", "total"),
-    )
+        .exclude(element_id__in=list(exclude_character_ids))
+        .values_list("option_id", "element_id")
+    ):
+        option_takers.setdefault(option_id, set()).add(element_id)
 
-    return [option for option in options if used.get(option.id, 0) >= option.max_available]
+    full_options = {}
+    for character_id, option_ids in character_option_ids.items():
+        character_full = [
+            option
+            for option in options
+            if option.id in option_ids
+            and len(option_takers.get(option.id, set()) - {character_id}) >= option.max_available
+        ]
+        if character_full:
+            full_options[character_id] = character_full
+
+    return full_options
 
 
 def format_full_options(options: list[WritingOption]) -> str:
@@ -274,6 +310,75 @@ def get_character_full_options_warning(character: Character, options: list[Writi
         "character": character.name,
         "options": format_full_options(options),
     }
+
+
+def _get_assignable_characters(context: dict, registration: Registration) -> tuple[list[Character], int]:
+    """Return the active player characters not yet assigned to the registration, with the free slots.
+
+    Args:
+        context: Context dictionary containing event and member data
+        registration: Registration of the player
+
+    Returns:
+        Tuple of the assignable characters and the number of free slots (character_play_max)
+
+    """
+    # Get the number of characters the player can play at the same time
+    character_play_max = get_character_play_max(context["event"].id, context)
+
+    # Get currently assigned character IDs for this registration
+    assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
+
+    # Skip if player already plays the maximum number of characters
+    free_slots = character_play_max - len(assigned_character_ids)
+    if free_slots <= 0:
+        return [], free_slots
+
+    # Get all characters belonging to this player for the event
+    characters = get_player_characters(context["member"], context["event"].id)
+    if not characters:
+        return [], free_slots
+
+    # Get IDs of inactive characters (those with CharacterConfig inactive=True)
+    character_ids = [char.id for char in characters]
+    inactive_character_ids = set(
+        CharacterConfig.objects.filter(character_id__in=character_ids, name="inactive", value="True").values_list(
+            "character_id",
+            flat=True,
+        ),
+    )
+
+    # Filter to get assignable characters (active and not already assigned)
+    assignable_characters = [
+        char for char in characters if char.id not in inactive_character_ids and char.id not in assigned_character_ids
+    ]
+    return assignable_characters, free_slots
+
+
+def will_auto_assign_character(context: dict, character_id: int | None) -> bool:
+    """Check if the character will be auto-assigned to the player signup on save.
+
+    Args:
+        context: Context dictionary containing event and member data
+        character_id: Character to check, None for a character about to be created
+
+    Returns:
+        True if the assignable characters, including this one, fit in the free slots
+
+    """
+    registration = get_player_signup(context)
+    if not registration:
+        return False
+
+    assignable_characters, free_slots = _get_assignable_characters(context, registration)
+    candidates = len(assignable_characters)
+    if character_id is None:
+        # The new character is one more candidate
+        candidates += 1
+    elif character_id not in {char.id for char in assignable_characters}:
+        return False
+
+    return 0 < candidates <= free_slots
 
 
 def check_assign_character(context: dict) -> list[tuple[Character, list[WritingOption]]]:
@@ -298,35 +403,7 @@ def check_assign_character(context: dict) -> list[tuple[Character, list[WritingO
     if not registration:
         return []
 
-    # Get the number of characters the player can play at the same time
-    character_play_max = get_character_play_max(context["event"].id, context)
-
-    # Get currently assigned character IDs for this registration
-    assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
-
-    # Skip if player already plays the maximum number of characters
-    free_slots = character_play_max - len(assigned_character_ids)
-    if free_slots <= 0:
-        return []
-
-    # Get all characters belonging to this player for the event
-    characters = get_player_characters(context["member"], context["event"].id)
-    if not characters:
-        return []
-
-    # Get IDs of inactive characters (those with CharacterConfig inactive=True)
-    character_ids = [char.id for char in characters]
-    inactive_character_ids = set(
-        CharacterConfig.objects.filter(character_id__in=character_ids, name="inactive", value="True").values_list(
-            "character_id",
-            flat=True,
-        ),
-    )
-
-    # Filter to get assignable characters (active and not already assigned)
-    assignable_characters = [
-        char for char in characters if char.id not in inactive_character_ids and char.id not in assigned_character_ids
-    ]
+    assignable_characters, free_slots = _get_assignable_characters(context, registration)
     if not assignable_characters:
         return []
 

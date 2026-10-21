@@ -200,6 +200,7 @@ from larpmanager.mail.member import (
     send_membership_payment_notification_email,
 )
 from larpmanager.mail.registration import (
+    clear_character_full_options_notified,
     send_character_assignment_email,
     send_pre_registration_confirmation_email,
     send_registration_cancellation_email,
@@ -1536,6 +1537,9 @@ def post_save_registration_character_rel_savereg(
 
     if created:
         send_character_assignment_email(instance)
+
+    # The character got a spot: notify again if it is blocked in the future
+    clear_character_full_options_notified(instance.character_id, instance.registration.run_id)
 
     # Schedule publication cast sync
     publish_registration(instance.registration_id)

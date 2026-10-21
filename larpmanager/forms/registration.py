@@ -1115,7 +1115,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get current and new character sets
         old = set(self.get_init_multi_character())
-        new = set(self.cleaned_data["characters_new"].values_list("pk", flat=True))
+        new_characters = {character.pk: character for character in self.cleaned_data["characters_new"]}
+        new = set(new_characters)
 
         # Remove characters no longer selected
         for ch in old - new:
@@ -1126,9 +1127,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             RegistrationCharacterRel.objects.create(character_id=ch, registration_id=instance.pk)
             full_options = get_character_full_options(instance.run_id, ch)
             if full_options:
-                self.full_options_warnings.append(
-                    get_character_full_options_warning(Character.objects.get(pk=ch), full_options)
-                )
+                self.full_options_warnings.append(get_character_full_options_warning(new_characters[ch], full_options))
         return None
 
     def clean_characters_new(self) -> Any:
