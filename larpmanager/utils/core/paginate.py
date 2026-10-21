@@ -513,7 +513,9 @@ def _prepare_data_json(
     # Map field names to lambda functions for data extraction and formatting
     field_to_formatter = {
         "created": lambda model_object: timezone.localtime(model_object.created).strftime("%d/%m/%Y"),
-        "payment_date": lambda model_object: timezone.localtime(model_object.created).strftime("%d/%m/%Y"),
+        "payment_date": lambda model_object: (
+            model_object.payment_date.strftime("%d/%m/%Y") if model_object.payment_date else ""
+        ),
         "member": lambda model_object: str(model_object.member),
         "run": lambda model_object: str(model_object.run) if model_object.run else "",
         "descr": lambda model_object: str(model_object.descr),

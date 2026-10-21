@@ -197,7 +197,7 @@ class Association(UuidMixin, BaseModel):
         choices=timezone_choices,
         default=DEFAULT_TIMEZONE,
         verbose_name=_("Timezone"),
-        help_text=_("Timezone used to enter and display dates and times, such as the registration opening"),
+        help_text=_("Timezone used to enter and display dates and times"),
     )
 
     promoter = models.ImageField(

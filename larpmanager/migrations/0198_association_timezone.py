@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
             field=models.CharField(
                 choices=larpmanager.models.association.timezone_choices,
                 default="Europe/Rome",
-                help_text="Timezone used to enter and display dates and times, such as the registration opening",
+                help_text="Timezone used to enter and display dates and times",
                 max_length=64,
                 verbose_name="Timezone",
             ),

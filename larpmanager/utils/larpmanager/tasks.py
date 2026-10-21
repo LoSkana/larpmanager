@@ -20,7 +20,6 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import logging
 import re
 import traceback
@@ -110,20 +109,14 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
-            # Skip scheduling if an identical pending task already exists, whatever its timezone
+            kwargs[TIMEZONE_KWARG] = timezone.get_current_timezone_name()
+            # Skip scheduling if an identical pending task already exists
             if skip_duplicates:
                 from background_task.models import Task  # noqa: PLC0415
 
                 filtered_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
-                expected_params = json.loads(json.dumps([list(args), filtered_kwargs]))
-                args_prefix = "[" + json.dumps(list(args), sort_keys=True) + ", "
-                pending_tasks = Task.objects.filter(task_name=background_task.name, task_params__startswith=args_prefix)
-                for task in pending_tasks.only("task_params"):
-                    task_args, task_kwargs = task.params()
-                    task_kwargs.pop(TIMEZONE_KWARG, None)
-                    if [task_args, task_kwargs] == expected_params:
-                        return None
-            kwargs[TIMEZONE_KWARG] = timezone.get_current_timezone_name()
+                if Task.objects.get_task(background_task.name, args=list(args), kwargs=filtered_kwargs).exists():
+                    return None
             # Schedule function as background task
             return background_task(*args, **kwargs)
 

@@ -116,7 +116,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
     tolerance = int(get_association_config(association_id, "deadline_tolerance"))
 
     # Check membership feature
-    now = timezone.now()
+    now = timezone.localtime()
     uses_membership = "membership" in get_association_features(association_id)
 
     # Load memberships and fees
@@ -281,7 +281,9 @@ def deadlines_membership(
     if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
         if registration_created:
             # Calculate days elapsed since registration creation
-            is_delayed = (current_datetime.date() - registration_created.date()).days > tolerance_days
+            is_delayed = (
+                current_datetime.date() - timezone.localtime(registration_created).date()
+            ).days > tolerance_days
         else:
             # No registration (e.g. event staff): classify by proximity to event start instead
             is_delayed = current_datetime.date() + timedelta(days=tolerance_days) > event_run.start

@@ -8413,6 +8413,11 @@ msgstr ""
 msgid "This member has not registered for any events yet."
 msgstr "Αυτό το μέλος δεν έχει εγγραφεί ακόμη σε κανένα event."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Ζώνη ώρας που χρησιμοποιείται για την εισαγωγή και την εμφάνιση ημερομηνιών "
+"και ωρών"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Συνολικό ποσό τελών συμμετοχής που μειώθηκε μέσω εκπτώσεων"
 
@@ -12196,13 +12201,6 @@ msgid ""
 msgstr ""
 "Εμφανίζεται στη σελίδα αιτήματος εγγραφής και προστίθεται στο email "
 "επιβεβαίωσης λήψης αιτήματος"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Ζώνη ώρας που χρησιμοποιείται για την εισαγωγή και την εμφάνιση ημερομηνιών "
-"και ωρών, όπως το άνοιγμα των εγγραφών"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

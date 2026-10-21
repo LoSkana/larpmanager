@@ -663,7 +663,7 @@ def association_accounting(context: dict) -> None:
 
     # Build year range dictionary from current year to association creation
     association = Association.objects.only("created").get(pk=context["association_id"])
-    start_year = int(association.created.year)
+    start_year = int(timezone.localtime(association.created).year)
     end_year = int(timezone.localdate().year)
     context["sum_year"] = {}
     while end_year >= start_year:

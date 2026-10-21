@@ -8403,6 +8403,9 @@ msgstr "Deze functie is beschikbaar voor tickets die niet in afwachting zijn!"
 msgid "This member has not registered for any events yet."
 msgstr "Dit lid heeft zich nog niet voor evenementen aangemeld."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tijdzone waarin je datums en tijden invoert en ziet"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
 
@@ -12100,13 +12103,6 @@ msgid ""
 msgstr ""
 "Wordt weergegeven op de aanmeldingspagina en toegevoegd aan het "
 "bevestigingsmailtje dat je krijgt als je aanvraag is ontvangen"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Tijdzone die je gebruikt om datums en tijden in te voeren en weer te geven, "
-"zoals de opening van de inschrijvingen"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

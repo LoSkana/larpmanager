@@ -21,7 +21,7 @@
 import csv
 import logging
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import date
 from typing import Any
 
 from django.contrib import messages
@@ -81,6 +81,7 @@ from larpmanager.utils.core.common import (
     get_assoc_member,
     get_help_question_member,
     get_object_uuid,
+    local_day_start,
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
@@ -759,7 +760,7 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
 
     # Set current year and calculate year start date
     context["year"] = timezone.localdate().year
-    start = datetime(context["year"], 1, 1, tzinfo=UTC)
+    start = local_day_start(date(context["year"], 1, 1))
 
     # Build cache of member enrollment dates from accounting items
     cache = {}

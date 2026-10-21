@@ -8410,6 +8410,10 @@ msgstr ""
 msgid "This member has not registered for any events yet."
 msgstr "Ce membre ne s'est encore inscrit à aucun événement."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Fuseau horaire utilisé pour saisir et afficher les dates et les heures"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Total des frais de participation réduits par des remises"
 
@@ -12196,13 +12200,6 @@ msgid ""
 msgstr ""
 "Affiché sur la page de demande d'inscription et ajouté à l'e-mail de "
 "confirmation de réception de la demande"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Fuseau horaire utilisé pour saisir et afficher les dates et heures, comme "
-"l'ouverture des inscriptions"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

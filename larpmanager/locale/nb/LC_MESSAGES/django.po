@@ -8390,6 +8390,9 @@ msgstr "Denne funksjonen er tilgjengelig for billetter som ikke er ventende!"
 msgid "This member has not registered for any events yet."
 msgstr "Dette medlemmet har ikke meldt seg på noen arrangementer ennå."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tidssone som brukes til å legge inn og vise datoer og klokkeslett"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deltakeravgifter redusert gjennom rabatter"
 
@@ -11876,13 +11879,6 @@ msgid ""
 msgstr ""
 "Vises på siden for påmeldingsforespørselen og legges til i bekreftelses-e-"
 "posten om mottatt forespørsel"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Tidssone som brukes til å legge inn og vise datoer og klokkeslett, for "
-"eksempel når påmeldingen åpner"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

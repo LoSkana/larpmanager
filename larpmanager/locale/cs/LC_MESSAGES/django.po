@@ -8390,6 +8390,9 @@ msgstr "Tato funkce je k dispozici pro vstupenky mimo čekací listinu!"
 msgid "This member has not registered for any events yet."
 msgstr "Tento člen se zatím nepřihlásil na žádnou akci."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Časové pásmo, ve kterém zadáváš a zobrazuješ data a časy"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
 
@@ -11701,13 +11704,6 @@ msgid ""
 msgstr ""
 "Zobrazuje se na stránce žádosti o registraci a je uvedeno v potvrzovacím "
 "e-mailu o přijetí žádosti"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Časové pásmo pro zadávání a zobrazování dat a časů, třeba otevření "
-"registrací"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

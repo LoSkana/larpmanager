@@ -8392,6 +8392,11 @@ msgstr ""
 msgid "This member has not registered for any events yet."
 msgstr "Tämä jäsen ei ole vielä ilmoittautunut mihinkään tapahtumiin."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Aikavyöhyke, jota käytetään päivämäärien ja kellonaikojen syöttämiseen ja "
+"näyttämiseen"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Osallistumismaksujen kokonaismäärä alennettu alennusten avulla"
 
@@ -11871,13 +11876,6 @@ msgid ""
 msgstr ""
 "Näkyy rekisteröitymispyynnön sivulla ja lisätään pyynnön vastaanottamista "
 "koskevaan vahvistussähköpostiin"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Aikavyöhyke, jota käytetään päivämäärien ja kellonaikojen syöttämiseen ja "
-"näyttämiseen, esimerkiksi ilmoittautumisen avautumisessa"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

@@ -3922,9 +3922,7 @@ msgstr ""
 msgid "Timezone"
 msgstr ""
 
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration "
-"opening"
+msgid "Timezone used to enter and display dates and times"
 msgstr ""
 
 msgid "Promotional image"

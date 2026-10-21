@@ -8403,6 +8403,9 @@ msgstr ""
 msgid "This member has not registered for any events yet."
 msgstr "Este miembro aún no se ha apuntado a ningún evento."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Zona horaria que se usa para introducir y mostrar fechas y horas"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"
 
@@ -12096,13 +12099,6 @@ msgid ""
 msgstr ""
 "Aparece en la página de solicitud de registro y se incluye en el correo de "
 "confirmación de recepción de la solicitud"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Zona horaria que se usa para introducir y mostrar fechas y horas, como la "
-"apertura de inscripciones"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

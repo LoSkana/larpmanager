@@ -8402,6 +8402,9 @@ msgstr "Questa funzione è disponibile per i biglietti non in attesa!"
 msgid "This member has not registered for any events yet."
 msgstr "Questo membro non si è ancora iscritto a nessun evento."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Fuso orario usato per inserire e visualizzare date e orari"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Quote di partecipazione totali ridotte grazie agli sconti"
 
@@ -12105,13 +12108,6 @@ msgid ""
 msgstr ""
 "Viene visualizzato nella pagina di richiesta di registrazione e aggiunto "
 "all'e-mail di conferma di ricezione della richiesta"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Fuso orario usato per inserire e mostrare date e orari, come l'apertura "
-"delle iscrizioni"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "

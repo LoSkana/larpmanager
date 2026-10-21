@@ -8392,6 +8392,9 @@ msgstr ""
 msgid "This member has not registered for any events yet."
 msgstr "Dette medlem har endnu ikke tilmeldt sig nogen events."
 
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tidszone, der bruges til at indtaste og vise datoer og klokkeslæt"
+
 msgid "Total participation fees reduced through discounts"
 msgstr "Samlet deltagergebyr reduceret gennem rabatter"
 
@@ -11804,13 +11807,6 @@ msgid ""
 msgstr ""
 "Vises på siden for tilmeldingsanmodning og tilføjes i bekræftelsesmailen for"
 " modtaget anmodning"
-
-msgid ""
-"Timezone used to enter and display dates and times, such as the registration"
-" opening"
-msgstr ""
-"Tidszone, der bruges til at indtaste og vise datoer og klokkeslæt, f.eks. "
-"når tilmeldingen åbner"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "
