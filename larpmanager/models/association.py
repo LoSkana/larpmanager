@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import zoneinfo
+from functools import cache
 from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
@@ -68,6 +69,7 @@ class Currency(models.TextChoices):
 DEFAULT_TIMEZONE = "Europe/Rome"
 
 
+@cache
 def timezone_choices() -> list[tuple[str, str]]:
     """Return the selectable IANA timezones, sorted by name."""
     names = {

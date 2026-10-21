@@ -378,9 +378,9 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if not target_date:
         return -1
 
-    # Convert datetime to date if necessary
+    # Convert datetime to local date if necessary
     if isinstance(target_date, datetime):
-        target_date = target_date.date()
+        target_date = timezone.localtime(target_date).date()
 
     return get_time_diff(target_date, timezone.localdate())
 
@@ -722,15 +722,6 @@ def format_email_skipped(recipient: object) -> str:
     if not recipient.skipped:
         return ""
     return labels.get(recipient.skipped, recipient.skipped)
-
-
-def get_now() -> datetime:
-    """Get current time - if executed in debug/test, without timezone, add it."""
-    now = timezone.now()
-    if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
-        # If timezone.now() returns naive, make it aware
-        now = now.replace(tzinfo=UTC)
-    return now
 
 
 def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:

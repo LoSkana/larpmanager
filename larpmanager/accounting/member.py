@@ -46,7 +46,6 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, MemberConfig, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.common import get_now
 
 
 def info_accounting(context: dict) -> None:
@@ -337,7 +336,7 @@ def _info_membership(context: dict, member: Member) -> None:
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = get_now() < membership_deadline_date
+        context["grazing"] = timezone.now() < membership_deadline_date
 
 
 def membership_fee_pending_config_name(association_id: int, year: int) -> str:
