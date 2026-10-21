@@ -99,6 +99,11 @@ class TestCharacterOptionAvailability(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=character)
         return registration
 
+    def _notify(self, *args: object, **kwargs: object) -> None:
+        """Notify the full options, running the callbacks scheduled on commit."""
+        with self.captureOnCommitCallbacks(execute=True):
+            notify_character_full_options(*args, **kwargs)
+
     def _counts(self, run: object | None = None) -> dict:
         run = run or self.run
         return get_registration_counts(run.id, run.event_id, reset_cache=True)
@@ -123,12 +128,12 @@ class TestCharacterOptionAvailability(BaseTestCase):
         assert self._counts().get(f"option_char_{self.bunker.id}", 0) == 0
         assert self._counts(other_run)[f"option_char_{self.bunker.id}"] == 1
 
-    def test_waiting_registration_not_counted(self) -> None:
+    def test_waiting_registration_counted(self) -> None:
         registration = self._assign(self._character("Waiting", self.bunker))
         registration.ticket = self.ticket(event=self.event, tier=TicketTier.WAITING)
         registration.save()
 
-        assert self._counts().get(f"option_char_{self.bunker.id}", 0) == 0
+        assert self._counts()[f"option_char_{self.bunker.id}"] == 1
 
     def test_cancelled_registration_not_counted(self) -> None:
         registration = self._assign(self._character("Gone", self.bunker))
@@ -271,7 +276,7 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
 
-        notify_character_full_options(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
 
         mock_send_mail.assert_called_once()
         assert mock_send_mail.call_args.args[2] == member
@@ -290,7 +295,7 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
 
-        notify_character_full_options(registration, candidate, [self.bunker], request=SimpleNamespace())
+        self._notify(registration, candidate, [self.bunker], request=SimpleNamespace())
 
         mock_messages.error.assert_called_once()
         mock_send_mail.assert_not_called()
@@ -307,8 +312,8 @@ class TestCharacterOptionAvailability(BaseTestCase):
         registration = self.create_registration(member=member, run=self.run)
         request = SimpleNamespace()
 
-        notify_character_full_options(registration, candidate, [self.bunker], request=request)
-        notify_character_full_options(registration, candidate, [self.bunker], request=request)
+        self._notify(registration, candidate, [self.bunker], request=request)
+        self._notify(registration, candidate, [self.bunker], request=request)
 
         mock_messages.error.assert_called_once()
 
@@ -326,13 +331,13 @@ class TestCharacterOptionAvailability(BaseTestCase):
             event=self.event, question=self.origin, name="Vault", order=3, max_available=1
         )
 
-        notify_character_full_options(registration, candidate, [self.bunker])
-        notify_character_full_options(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
         assert mock_send_mail.call_count == 1
         assert mock_digest.call_count == 1
 
         # A different set of full options is notified again
-        notify_character_full_options(registration, candidate, [self.bunker, limited])
+        self._notify(registration, candidate, [self.bunker, limited])
         assert mock_send_mail.call_count == 2
         assert mock_digest.call_count == 2
 
@@ -345,7 +350,7 @@ class TestCharacterOptionAvailability(BaseTestCase):
         member = self._member()
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
-        notify_character_full_options(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
         assert CharacterConfig.objects.filter(character=candidate, name=f"full_options_notified_{self.run.id}").exists()
 
         RegistrationCharacterRel.objects.create(registration=registration, character=candidate)
@@ -366,12 +371,12 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
 
-        notify_character_full_options(registration, candidate, [self.bunker], request=SimpleNamespace())
+        self._notify(registration, candidate, [self.bunker], request=SimpleNamespace())
         mock_send_mail.assert_not_called()
         assert mock_digest.call_count == 1
 
         # Without a request the player is emailed, the organizers are not notified again
-        notify_character_full_options(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
         mock_send_mail.assert_called_once()
         assert mock_digest.call_count == 1
 
@@ -385,8 +390,26 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
         relation = RegistrationCharacterRel.objects.create(registration=registration, character=candidate)
-        notify_character_full_options(registration, candidate, [self.bunker])
+        self._notify(registration, candidate, [self.bunker])
 
         relation.delete()
 
         assert CharacterConfig.objects.filter(character=candidate, name=f"full_options_notified_{self.run.id}").exists()
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers")
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_notify_waits_for_commit(
+        self, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        mock_organizers.return_value = [self._member()]
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+
+        with self.captureOnCommitCallbacks(execute=False) as callbacks:
+            notify_character_full_options(registration, candidate, [self.bunker])
+
+        mock_send_mail.assert_not_called()
+        mock_digest.assert_not_called()
+        assert callbacks
