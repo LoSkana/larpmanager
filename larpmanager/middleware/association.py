@@ -52,7 +52,8 @@ class AssociationIdentifyMiddleware:
 
     def __call__(self, request: HttpRequest) -> HttpResponse:
         """Process request through association middleware, activating the association timezone."""
-        response = self.get_association_info(request)
+        with timezone.override(DEFAULT_TIMEZONE):
+            response = self.get_association_info(request)
         if response:
             return response
 
