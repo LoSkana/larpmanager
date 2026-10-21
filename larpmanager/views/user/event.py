@@ -143,7 +143,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
-        cutoff_date = timezone.now() - timedelta(days=3)
+        cutoff_date = timezone.localdate() - timedelta(days=3)
 
         member = context["member"]
 
@@ -153,7 +153,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
             member=member,
-            run__end__gte=cutoff_date.date(),  # Only future/recent runs
+            run__end__gte=cutoff_date,  # Only future/recent runs
         ).select_related("ticket", "run")
 
         # Create lookup dictionary for O(1) access to user registrations
@@ -441,7 +441,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
     # Cache to track processed events and set reference date (3 days ago)
     cache = {}
-    ref = (timezone.now() - timedelta(days=3)).date()
+    ref = timezone.localdate() - timedelta(days=3)
 
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
@@ -825,7 +825,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get all runs for the event and set reference date (3 days ago)
     runs = Run.objects.filter(event=context["event"]).exclude(id=context["run"].id)
-    ref = timezone.now() - timedelta(days=3)
+    ref = timezone.localdate() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking
     features_map = {context["event"].id: context["features"]}
@@ -840,7 +840,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         run.status = registration_status(context, run, context["member"])
 
         # Categorize run as coming (recent) or past based on end date
-        if run.end > ref.date():
+        if run.end > ref:
             context["coming"].append(run)
         else:
             context["past"].append(run)

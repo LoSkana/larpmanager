@@ -766,12 +766,12 @@ def get_coming_runs(association_id: int | None, *, future: bool = True, include_
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = timezone.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
+        reference_date = timezone.localdate() - timedelta(days=3)
+        runs = runs.filter(end__gte=reference_date).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = timezone.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
+        reference_date = timezone.localdate() + timedelta(days=3)
+        runs = runs.filter(end__lte=reference_date).order_by("-end")
 
     return runs
 

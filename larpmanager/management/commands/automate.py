@@ -177,9 +177,8 @@ class Command(BaseCommand):
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             event_features = get_event_features(run.event_id)
-            run_cache = get_run_basic_cache(run.id)
 
-            with timezone.override(get_association_basic_cache(run_cache["association_id"])["timezone"]):
+            with timezone.override(get_association_basic_cache(get_run_association_id(run.id))["timezone"]):
                 # Check and process deadline notifications
                 if "deadlines" in event_features:
                     self.check_deadline(run)
@@ -190,7 +189,7 @@ class Command(BaseCommand):
 
                 # Generate background PDF documents for the run
                 if "print_pdf" in event_features:
-                    print_run_bkg(run_cache["association_slug"], run.get_slug())
+                    print_run_bkg(get_run_basic_cache(run.id)["association_slug"], run.get_slug())
 
     def check_association(self, association: Association) -> None:
         """Run all feature-specific automation checks for a single association."""
@@ -1068,11 +1067,11 @@ class Command(BaseCommand):
         registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        minimum_start_date = timezone.now() + timedelta(days=3)
+        minimum_start_date = timezone.localdate() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
-            run__start__lte=minimum_start_date.date(),
+            run__start__lte=minimum_start_date,
         )
 
         # Process each qualifying registration for reminder emails
@@ -1277,8 +1276,8 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        reference_date = timezone.now() - timedelta(days=7)
-        if not run.start or run.start < reference_date.date():
+        reference_date = timezone.localdate() - timedelta(days=7)
+        if not run.start or run.start < reference_date:
             return
 
         # Get deadline interval configuration for the association
