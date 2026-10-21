@@ -1539,7 +1539,8 @@ def post_save_registration_character_rel_savereg(
         send_character_assignment_email(instance)
 
     # The character got a spot: notify again if it is blocked in the future
-    clear_character_full_options_notified(instance.character_id, instance.registration.run_id)
+    if not instance.deleted:
+        clear_character_full_options_notified(instance.character_id, instance.registration.run_id)
 
     # Schedule publication cast sync
     publish_registration(instance.registration_id)

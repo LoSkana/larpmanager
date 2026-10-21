@@ -128,6 +128,11 @@ def save_registration(
             # Generate redeem code for gifted registrations
             if gifted:
                 registration.redeem_code = my_uuid(16)
+
+        # Let the save signals show their notifications on screen, instead of emailing the player
+        registration._notify_request = context.get("request")  # noqa: SLF001
+
+        if is_new:
             registration.save()
 
         # Determine if registration should be provisional

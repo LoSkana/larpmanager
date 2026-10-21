@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.member import NotificationType
-from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.registration import RegistrationCharacterRel, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.registrations.characters import (
@@ -121,6 +121,13 @@ class TestCharacterOptionAvailability(BaseTestCase):
 
         assert self._counts().get(f"option_char_{self.bunker.id}", 0) == 0
         assert self._counts(other_run)[f"option_char_{self.bunker.id}"] == 1
+
+    def test_waiting_registration_not_counted(self) -> None:
+        registration = self._assign(self._character("Waiting", self.bunker))
+        registration.ticket = self.ticket(event=self.event, tier=TicketTier.WAITING)
+        registration.save()
+
+        assert self._counts().get(f"option_char_{self.bunker.id}", 0) == 0
 
     def test_cancelled_registration_not_counted(self) -> None:
         registration = self._assign(self._character("Gone", self.bunker))
@@ -328,3 +335,40 @@ class TestCharacterOptionAvailability(BaseTestCase):
         assert not CharacterConfig.objects.filter(
             character=candidate, name=f"full_options_notified_{self.run.id}"
         ).exists()
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers")
+    @patch("larpmanager.mail.registration.my_send_mail")
+    @patch("larpmanager.mail.registration.messages")
+    def test_notify_on_screen_then_emails_player(
+        self, mock_messages: object, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        mock_organizers.return_value = [self._member()]
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+
+        notify_character_full_options(registration, candidate, [self.bunker], request=object())
+        mock_send_mail.assert_not_called()
+        assert mock_digest.call_count == 1
+
+        # Without a request the player is emailed, the organizers are not notified again
+        notify_character_full_options(registration, candidate, [self.bunker])
+        mock_send_mail.assert_called_once()
+        assert mock_digest.call_count == 1
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers", return_value=[])
+    @patch("larpmanager.mail.registration.my_send_mail")
+    def test_unassignment_keeps_notified_options(
+        self, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+        relation = RegistrationCharacterRel.objects.create(registration=registration, character=candidate)
+        notify_character_full_options(registration, candidate, [self.bunker])
+
+        relation.delete()
+
+        assert CharacterConfig.objects.filter(character=candidate, name=f"full_options_notified_{self.run.id}").exists()

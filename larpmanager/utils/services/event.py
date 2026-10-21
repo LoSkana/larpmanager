@@ -644,7 +644,12 @@ def assign_previous_campaign_character(registration: Any) -> None:
             registration.run_id, previous_character_relation.character_id, lock=True
         )
         if full_options:
-            notify_character_full_options(registration, previous_character_relation.character, full_options)
+            notify_character_full_options(
+                registration,
+                previous_character_relation.character,
+                full_options,
+                getattr(registration, "_notify_request", None),
+            )
             return
 
         new_character_relation = RegistrationCharacterRel.objects.create(

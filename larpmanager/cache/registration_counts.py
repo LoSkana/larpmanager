@@ -75,10 +75,14 @@ def get_registration_counts(run_id: int, event_id: int, *, reset_cache: bool = F
 
 
 def get_run_assigned_character_ids(run_id: int) -> Any:
-    """Return a queryset of ids of characters assigned to active registrations of the run."""
-    return RegistrationCharacterRel.objects.filter(
-        registration__in=get_active_registrations(run_id),
-    ).values_list("character_id", flat=True)
+    """Return a queryset of ids of characters assigned to active, non waiting registrations of the run."""
+    return (
+        RegistrationCharacterRel.objects.filter(
+            registration__in=get_active_registrations(run_id),
+        )
+        .exclude(registration__ticket__tier=TicketTier.WAITING)
+        .values_list("character_id", flat=True)
+    )
 
 
 def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1) -> None:

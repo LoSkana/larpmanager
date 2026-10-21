@@ -32,7 +32,12 @@ from django.utils.translation import activate, gettext_lazy as _
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
-from larpmanager.cache.config import get_association_config, get_event_config, save_single_config
+from larpmanager.cache.config import (
+    get_association_config,
+    get_event_config,
+    reset_element_configs,
+    save_single_config,
+)
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
@@ -183,20 +188,17 @@ def notify_character_full_options(
     """Notify that a character was not assigned since its limited options have no spots left.
 
     The player sees an error on screen when a request is available, otherwise receives an
-    email; the organizers are notified (through their digest, if enabled). Emails are sent
-    only once for the same character, run and full options.
+    email; the organizers are notified (through their digest, if enabled). Player and
+    organizers are notified only once for the same character, run and full options.
     """
     if request:
         messages.error(request, get_character_full_options_message(character, full_options))
 
-    # Skip the emails if already sent for the same full options
-    notified_key = _full_options_notified_key(registration.run_id)
     notified_options = ",".join(str(option.id) for option in sorted(full_options, key=lambda option: option.id))
-    if CharacterConfig.objects.filter(character=character, name=notified_key, value=notified_options).exists():
-        return
-    save_single_config(character, notified_key, notified_options)
 
-    if not request:
+    if not request and _mark_full_options_notified(
+        character, _full_options_emailed_key(registration.run_id), notified_options
+    ):
         activate(registration.member.language)
         email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
             "event": registration.run,
@@ -205,6 +207,9 @@ def notify_character_full_options(
         email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
         email_body += "</p>"
         my_send_mail(email_subject, email_body, registration.member, registration.run)
+
+    if not _mark_full_options_notified(character, _full_options_notified_key(registration.run_id), notified_options):
+        return
 
     for organizer in get_event_organizers(registration.run_id):
         my_send_digest_email(
@@ -215,16 +220,33 @@ def notify_character_full_options(
         )
 
 
+def _mark_full_options_notified(character: Character, config_name: str, notified_options: str) -> bool:
+    """Store the full options notified in the character config, returning False if already stored."""
+    if CharacterConfig.objects.filter(character=character, name=config_name, value=notified_options).exists():
+        return False
+    save_single_config(character, config_name, notified_options)
+    return True
+
+
 def _full_options_notified_key(run_id: int) -> str:
-    """Return the name of the character config storing the full options already notified for the run."""
+    """Return the name of the character config storing the full options notified to organizers for the run."""
     return f"full_options_notified_{run_id}"
+
+
+def _full_options_emailed_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options emailed to the player for the run."""
+    return f"full_options_emailed_{run_id}"
 
 
 def clear_character_full_options_notified(character_id: int, run_id: int) -> None:
     """Forget the full options notified for the character in the run, so a new block is notified again."""
-    CharacterConfig.objects.filter(
-        character_id=character_id, name=_full_options_notified_key(run_id), deleted=None
+    deleted_count, _deleted_by_model = CharacterConfig.objects.filter(
+        character_id=character_id,
+        name__in=[_full_options_notified_key(run_id), _full_options_emailed_key(run_id)],
+        deleted=None,
     ).delete()
+    if deleted_count:
+        reset_element_configs(character_id, "character")
 
 
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
