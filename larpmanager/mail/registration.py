@@ -27,13 +27,14 @@ from typing import TYPE_CHECKING, Any
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import escape
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _, override
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import (
     get_association_config,
+    get_element_configs,
     get_event_config,
     reset_element_configs,
     save_single_config,
@@ -189,24 +190,30 @@ def notify_character_full_options(
 
     The player sees an error on screen when a request is available, otherwise receives an
     email; the organizers are notified (through their digest, if enabled). Player and
-    organizers are notified only once for the same character, run and full options.
+    organizers are notified only once for the same character, run and full options; the
+    on-screen error is shown only once per request.
     """
-    if request:
-        messages.error(request, get_character_full_options_message(character, full_options))
-
     notified_options = ",".join(str(option.id) for option in sorted(full_options, key=lambda option: option.id))
+
+    if request:
+        shown = getattr(request, "_full_options_shown", set())
+        shown_key = (character.id, notified_options)
+        if shown_key not in shown:
+            messages.error(request, get_character_full_options_message(character, full_options))
+            shown.add(shown_key)
+            request._full_options_shown = shown  # noqa: SLF001
 
     if not request and _mark_full_options_notified(
         character, _full_options_emailed_key(registration.run_id), notified_options
     ):
-        activate(registration.member.language)
-        email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
-            "event": registration.run,
-        }
-        email_body = "<p>" + escape(get_character_full_options_message(character, full_options)) + "</p>"
-        email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
-        email_body += "</p>"
-        my_send_mail(email_subject, email_body, registration.member, registration.run)
+        with override(registration.member.language):
+            email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
+                "event": registration.run,
+            }
+            email_body = "<p>" + escape(get_character_full_options_message(character, full_options)) + "</p>"
+            email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
+            email_body += "</p>"
+            my_send_mail(email_subject, email_body, registration.member, registration.run)
 
     if not _mark_full_options_notified(character, _full_options_notified_key(registration.run_id), notified_options):
         return
@@ -240,9 +247,15 @@ def _full_options_emailed_key(run_id: int) -> str:
 
 def clear_character_full_options_notified(character_id: int, run_id: int) -> None:
     """Forget the full options notified for the character in the run, so a new block is notified again."""
+    config_names = [_full_options_notified_key(run_id), _full_options_emailed_key(run_id)]
+    # Check the cached configs first, to avoid a query on every assignment save
+    character_configs = get_element_configs(character_id, "character")
+    if not any(config_name in character_configs for config_name in config_names):
+        return
+
     deleted_count, _deleted_by_model = CharacterConfig.objects.filter(
         character_id=character_id,
-        name__in=[_full_options_notified_key(run_id), _full_options_emailed_key(run_id)],
+        name__in=config_names,
         deleted=None,
     ).delete()
     if deleted_count:

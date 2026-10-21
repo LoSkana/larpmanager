@@ -20,6 +20,7 @@
 
 """Unit tests for the availability of limited character options, counted on the characters assigned to the run."""
 
+from types import SimpleNamespace
 from unittest.mock import patch
 
 import pytest
@@ -289,10 +290,27 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
 
-        notify_character_full_options(registration, candidate, [self.bunker], request=object())
+        notify_character_full_options(registration, candidate, [self.bunker], request=SimpleNamespace())
 
         mock_messages.error.assert_called_once()
         mock_send_mail.assert_not_called()
+
+    @patch("larpmanager.mail.registration.my_send_digest_email")
+    @patch("larpmanager.mail.registration.get_event_organizers", return_value=[])
+    @patch("larpmanager.mail.registration.my_send_mail")
+    @patch("larpmanager.mail.registration.messages")
+    def test_notify_with_request_shows_error_once_per_request(
+        self, mock_messages: object, mock_send_mail: object, mock_organizers: object, mock_digest: object
+    ) -> None:
+        member = self._member()
+        candidate = self._character("Candidate", self.bunker, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+        request = SimpleNamespace()
+
+        notify_character_full_options(registration, candidate, [self.bunker], request=request)
+        notify_character_full_options(registration, candidate, [self.bunker], request=request)
+
+        mock_messages.error.assert_called_once()
 
     @patch("larpmanager.mail.registration.my_send_digest_email")
     @patch("larpmanager.mail.registration.get_event_organizers")
@@ -348,7 +366,7 @@ class TestCharacterOptionAvailability(BaseTestCase):
         candidate = self._character("Candidate", self.bunker, player=member)
         registration = self.create_registration(member=member, run=self.run)
 
-        notify_character_full_options(registration, candidate, [self.bunker], request=object())
+        notify_character_full_options(registration, candidate, [self.bunker], request=SimpleNamespace())
         mock_send_mail.assert_not_called()
         assert mock_digest.call_count == 1
 

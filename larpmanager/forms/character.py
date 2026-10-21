@@ -711,7 +711,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
     def takes_run_spot(self) -> bool:
         """Check if the character takes option spots: assigned to the run, or auto-assigned on save."""
         run_id = self.params["run"].id
-        if self.instance.pk and (get_run_assigned_character_ids(run_id).filter(character_id=self.instance.pk).exists()):
+        if self.instance.pk and get_run_assigned_character_ids(run_id).filter(character_id=self.instance.pk).exists():
             return True
 
         # Characters of players are auto-assigned on save, if they fit in the free slots

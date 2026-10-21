@@ -26,7 +26,7 @@ function from signals.py, so keeping both in one module would create an import c
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
 from django.core.cache import cache
 from django.db.models import Count
@@ -36,6 +36,9 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import RegistrationCharacterRel, TicketTier
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 
 def cache_registration_counts_key(run_id: int) -> str:
@@ -74,7 +77,7 @@ def get_registration_counts(run_id: int, event_id: int, *, reset_cache: bool = F
     return cached_counts
 
 
-def get_run_assigned_character_ids(run_id: int) -> Any:
+def get_run_assigned_character_ids(run_id: int) -> QuerySet[int]:
     """Return a queryset of ids of characters assigned to active, non waiting registrations of the run."""
     return (
         RegistrationCharacterRel.objects.filter(
