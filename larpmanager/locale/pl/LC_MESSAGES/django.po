@@ -9422,6 +9422,10 @@ msgstr ""
 "Na razie nie ma żadnych wydarzeń. Utwórz swoje pierwsze wydarzenie, klikając"
 " przycisk powyżej."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Brak wolnych miejsc dla %(options)s, wybierz inne opcje"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opcjonalnie - Rozszerzony opis (wyświetlany małym szarym tekstem)"
 

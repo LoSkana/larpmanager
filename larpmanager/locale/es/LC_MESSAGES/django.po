@@ -9468,6 +9468,10 @@ msgstr "Nombres de las personas o equipos que organizan y dirigen este evento"
 msgid "No events yet. Create your first event using the button above."
 msgstr "Aún no hay eventos. Crea tu primer evento con el botón de arriba."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "No quedan plazas para %(options)s, elige otras opciones"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opcional - Descripción ampliada (aparece en texto gris pequeño)"
 

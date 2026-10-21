@@ -291,6 +291,30 @@ def get_characters_full_options(
     return full_options
 
 
+def get_character_option_ids(character_id: int) -> set[int]:
+    """Return the ids of the options chosen by the character."""
+    return set(
+        WritingChoice.objects.filter(
+            element_id=character_id,
+            question__applicable=QuestionApplicable.CHARACTER,
+        ).values_list("option_id", flat=True)
+    )
+
+
+def get_character_new_full_options(
+    run_id: int, character_id: int, previous_option_ids: set[int]
+) -> list[WritingOption]:
+    """Return the options newly chosen by a character assigned to the run, with no spots left.
+
+    The option rows are locked, so it must be called inside a transaction.
+    """
+    if not get_run_assigned_character_ids(run_id).filter(character_id=character_id).exists():
+        return []
+
+    full_options = get_character_full_options(run_id, character_id, lock=True)
+    return [option for option in full_options if option.id not in previous_option_ids]
+
+
 def format_full_options(options: list[WritingOption]) -> str:
     """Return the full options as a readable list of question and option names."""
     return ", ".join(f"{option.question.name}: {option.name}" for option in options)
@@ -300,6 +324,13 @@ def get_character_full_options_message(character: Character, options: list[Writi
     """Return the message explaining that the character options have no spots left."""
     return _("Character %(character)s cannot be assigned: no spots left for %(options)s") % {
         "character": character.name,
+        "options": format_full_options(options),
+    }
+
+
+def get_character_new_full_options_error(options: list[WritingOption]) -> str:
+    """Return the error for options chosen meanwhile by other characters, until no spots were left."""
+    return _("No spots left for %(options)s, please choose different options") % {
         "options": format_full_options(options),
     }
 

@@ -12723,6 +12723,10 @@ msgid ""
 msgstr ""
 
 #, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr ""
+
+#, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
 "%(options)s"

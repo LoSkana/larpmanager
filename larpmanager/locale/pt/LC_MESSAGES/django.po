@@ -9392,6 +9392,10 @@ msgid "No events yet. Create your first event using the button above."
 msgstr ""
 "Ainda não há eventos. Cria o teu primeiro evento usando o botão acima."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Já não há vagas para %(options)s, por favor escolhe outras opções"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opcional - Descrição alargada (apresentada em texto cinzento pequeno)"
 

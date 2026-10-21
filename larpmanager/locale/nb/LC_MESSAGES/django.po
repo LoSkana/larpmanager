@@ -9391,6 +9391,10 @@ msgstr ""
 "Ingen arrangementer ennå. Opprett ditt første arrangement ved å klikke på "
 "knappen ovenfor."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Ingen plasser igjen for %(options)s, velg andre alternativer"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
 

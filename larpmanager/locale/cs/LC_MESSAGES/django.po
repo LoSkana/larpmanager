@@ -9358,6 +9358,10 @@ msgstr ""
 "Zatím nejsou žádné události. Vytvoř si svou první událost pomocí tlačítka "
 "výše."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Pro %(options)s už nejsou volná místa, vyber si prosím jiné možnosti"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
 

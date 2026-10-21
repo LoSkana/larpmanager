@@ -9508,6 +9508,10 @@ msgstr ""
 "Δεν υπάρχουν ακόμη εκδηλώσεις. Δημιούργησε την πρώτη σου εκδήλωση με το "
 "παραπάνω κουμπί."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Non ci sono più posti per %(options)s, scegli opzioni diverse"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Προαιρετικό - Εκτεταμένη περιγραφή (εμφανίζεται με μικρό γκρι κείμενο)"

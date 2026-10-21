@@ -1192,6 +1192,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         if hasattr(self, "_single_ticket"):
             self.instance.ticket_id = self._single_ticket["id"]
 
+        # Let the save signals add their warnings, shown to the organizer
+        self.instance._full_options_warnings = self.full_options_warnings  # noqa: SLF001
+
         # Call parent save method to get the instance
         return super(BaseRegistrationForm, self).save(commit=commit)
 

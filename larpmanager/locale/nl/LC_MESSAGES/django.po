@@ -9462,6 +9462,10 @@ msgstr ""
 "Er zijn nog geen evenementen. Maak je eerste evenement aan via de knop "
 "hierboven."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Geen plekken meer vrij voor %(options)s, kies andere opties"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Optioneel - Uitgebreide beschrijving (weergegeven in kleine grijze tekst)"

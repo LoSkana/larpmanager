@@ -84,6 +84,9 @@ from larpmanager.utils.registrations.characters import (
     check_assign_character,
     check_character_maximum,
     get_character_full_options,
+    get_character_new_full_options,
+    get_character_new_full_options_error,
+    get_character_option_ids,
     get_character_play_max,
     get_player_characters,
     get_player_signup,
@@ -405,20 +408,22 @@ def character_form(
 
             draft_key = draft_element_key(context, "character", instance, request)
             character, success_message = _save_character(context, form, success_message)
-            clear_draft(context["member"], draft_key)
+            # Not saved when the newly chosen options have no spots left: show the form again
+            if character is not None:
+                clear_draft(context["member"], draft_key)
 
-            # Display success message to user
-            if success_message:
-                messages.success(request, success_message)
+                # Display success message to user
+                if success_message:
+                    messages.success(request, success_message)
 
-            # Determine character number for redirect
-            character_uuid = None
-            if isinstance(character, Character):
-                character_uuid = character.uuid
-            elif isinstance(character, RegistrationCharacterRel):
-                character_uuid = character.character.uuid
-            # Redirect to character detail page
-            return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
+                # Determine character number for redirect
+                character_uuid = None
+                if isinstance(character, Character):
+                    character_uuid = character.uuid
+                elif isinstance(character, RegistrationCharacterRel):
+                    character_uuid = character.character.uuid
+                # Redirect to character detail page
+                return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
     else:
         # Initialize empty form for GET requests
         form = form_class(instance=instance, context=context)
@@ -458,10 +463,14 @@ def _save_character(
     form: CharacterForm,
     success_message: str,
 ) -> str:
-    """Saves a character with retry behaviour."""
+    """Saves a character with retry behaviour, returning None if its new options have no spots left."""
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
     character = form.instance
+    # Options chosen before the save, which keep their spot even if now over the limit
+    previous_option_ids = (
+        get_character_option_ids(character.pk) if isinstance(character, Character) and character.pk else set()
+    )
     for retry_attempt in range(max_retries):
         try:
             # Save character data within atomic transaction
@@ -471,6 +480,18 @@ def _save_character(
                     character.player = context["member"]
 
                 character = form.save()
+
+                # Refuse newly chosen options taken meanwhile by other characters of the run
+                full_options = (
+                    get_character_new_full_options(context["run"].id, character.id, previous_option_ids)
+                    if isinstance(character, Character)
+                    else []
+                )
+                if full_options:
+                    transaction.set_rollback(True)
+                    form.add_error(None, get_character_new_full_options_error(full_options))
+                    return None, None
+
                 blocked = check_assign_character(context)
                 registration = get_player_signup(context) if blocked else None
                 for blocked_character, full_options in blocked:

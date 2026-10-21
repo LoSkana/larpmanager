@@ -9398,6 +9398,10 @@ msgstr ""
 "Tapahtumia ei ole vielä. Luo ensimmäinen tapahtumasi yllä olevan painikkeen "
 "avulla."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Ei enää paikkoja vaihtoehdoille %(options)s, valitse muut vaihtoehdot"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Valinnainen - Laajennettu kuvaus (näytetään pienellä harmaalla tekstillä)"

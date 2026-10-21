@@ -68,7 +68,10 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_class_parent, get_event_elements
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.registrations.characters import get_character_full_options
+from larpmanager.utils.registrations.characters import (
+    get_character_full_options,
+    get_character_full_options_message,
+)
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -650,6 +653,12 @@ def assign_previous_campaign_character(registration: Any) -> None:
                 full_options,
                 getattr(registration, "_notify_request", None),
             )
+            # Warn the organizer saving the registration, if any
+            organizer_warnings = getattr(registration, "_full_options_warnings", None)
+            if organizer_warnings is not None:
+                organizer_warnings.append(
+                    get_character_full_options_message(previous_character_relation.character, full_options)
+                )
             return
 
         new_character_relation = RegistrationCharacterRel.objects.create(

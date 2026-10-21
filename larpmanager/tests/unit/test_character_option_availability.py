@@ -25,6 +25,7 @@ from unittest.mock import patch
 
 import pytest
 from django.core.cache import cache
+from django.db import transaction
 from django.utils import timezone
 
 from larpmanager.cache.registration_counts import get_registration_counts
@@ -48,6 +49,7 @@ from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.registrations.characters import (
     check_assign_character,
     get_character_full_options,
+    get_character_new_full_options,
     get_characters_full_options,
 )
 
@@ -170,6 +172,29 @@ class TestCharacterOptionAvailability(BaseTestCase):
         full_options = get_characters_full_options(self.run.id, [taken.id, candidate.id, free.id])
 
         assert full_options == {candidate.id: [self.bunker]}
+
+    def test_new_full_options_detected_for_assigned_character(self) -> None:
+        self._assign(self._character("Taken", self.bunker))
+        character = self._character("Played", self.bunker)
+        self._assign(character)
+
+        with transaction.atomic():
+            assert get_character_new_full_options(self.run.id, character.id, set()) == [self.bunker]
+
+    def test_new_full_options_keep_previous_options(self) -> None:
+        self._assign(self._character("Taken", self.bunker))
+        character = self._character("Played", self.bunker)
+        self._assign(character)
+
+        with transaction.atomic():
+            assert get_character_new_full_options(self.run.id, character.id, {self.bunker.id}) == []
+
+    def test_new_full_options_ignore_unassigned_character(self) -> None:
+        self._assign(self._character("Taken", self.bunker))
+        character = self._character("Free", self.bunker)
+
+        with transaction.atomic():
+            assert get_character_new_full_options(self.run.id, character.id, set()) == []
 
     def test_unlimited_option_never_full(self) -> None:
         self._assign(self._character("Taken", self.wasteland))

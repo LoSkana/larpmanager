@@ -9376,6 +9376,10 @@ msgstr "Namn på de personer eller team som organiserar och driver evenemanget"
 msgid "No events yet. Create your first event using the button above."
 msgstr "Inga evenemang ännu. Skapa ditt första evenemang med knappen ovan."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Inga platser kvar för %(options)s, välj andra alternativ"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 
