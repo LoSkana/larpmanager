@@ -4882,9 +4882,6 @@ msgstr "Inscreve-te no evento"
 msgid "Registration complete"
 msgstr "Inscrição concluída"
 
-msgid "Registration is open!"
-msgstr "As inscrições estão abertas!"
-
 msgid "Registration not open"
 msgstr "Inscrições não abertas"
 
@@ -5250,6 +5247,9 @@ msgstr "Condições de inscrição"
 
 msgid "Registration is closed."
 msgstr "As inscrições estão encerradas."
+
+msgid "Registrations are open!"
+msgstr "As inscrições estão abertas!"
 
 msgid "Registrations not open!"
 msgstr "As inscrições ainda não estão abertas!"
@@ -5666,6 +5666,9 @@ msgstr "Recibo já confirmado."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Inscrição em %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "As inscrições ainda não estão abertas"
 
 msgid "Select one or more options"
 msgstr "Seleciona uma ou mais opções"
@@ -6272,10 +6275,6 @@ msgstr "Corrige o erro abaixo."
 msgid "Quests without traits: %(list)s"
 msgstr "Quests sem traits: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "As inscrições abrem em: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Relações da tua personagem"
 
@@ -6395,10 +6394,6 @@ msgstr "Página %(number)s de %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Corrige os erros abaixo."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "As inscrições encerram em: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Item de pedido de reembolso adicionado"
@@ -7652,6 +7647,10 @@ msgstr "Pedido de inscrição recusado para %(event)s"
 msgid "Registration request received for %(event)s"
 msgstr "Pedido de inscrição recebido para %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "As inscrições fecham em %(date)s às %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Seleciona um Badge acima para gerir os seus membros."
 
@@ -8071,6 +8070,10 @@ msgstr "Inscrição cancelada para %(event)s por %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Inscrição de %(member)s copiada para %(event)s"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "As inscrições abrem em %(date)s às %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Consultar informações dos participantes relacionadas com Safety"

@@ -4882,9 +4882,6 @@ msgstr "Meld je aan voor het evenement"
 msgid "Registration complete"
 msgstr "Registratie voltooid"
 
-msgid "Registration is open!"
-msgstr "Inschrijvingen zijn geopend!"
-
 msgid "Registration not open"
 msgstr "Registratie niet geopend"
 
@@ -5250,6 +5247,9 @@ msgstr "Inschrijvingsvoorwaarden"
 
 msgid "Registration is closed."
 msgstr "De inschrijving is gesloten."
+
+msgid "Registrations are open!"
+msgstr "Inschrijvingen zijn open!"
 
 msgid "Registrations not open!"
 msgstr "De inschrijvingen zijn nog niet geopend!"
@@ -5666,6 +5666,9 @@ msgstr "Betalingsbewijs al bevestigd."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Inschrijving voor %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "Inschrijvingen nog niet open"
 
 msgid "Select one or more options"
 msgstr "Kies één of meerdere opties"
@@ -6272,10 +6275,6 @@ msgstr "Corrigeer de fout hieronder."
 msgid "Quests without traits: %(list)s"
 msgstr "Quests zonder Traits: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "De inschrijving begint op: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Relaties van je personage"
 
@@ -6395,10 +6394,6 @@ msgstr "Pagina %(number)s van %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Corrigeer de fouten hieronder."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "De inschrijving sluit op: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Terugbetalingsverzoekitem toegevoegd"
@@ -7653,6 +7648,10 @@ msgstr "Registratieverzoek voor %(event)s afgewezen"
 msgid "Registration request received for %(event)s"
 msgstr "Er is een aanmeldingsverzoek ontvangen voor %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "Inschrijvingen sluiten op %(date)s om %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Kies hierboven een badge om de leden ervan te beheren."
 
@@ -8078,6 +8077,10 @@ msgstr "De aanmelding voor %(event)s is geannuleerd door %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "De aanmelding voor %(member)s is naar %(event)s gekopieerd"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "Inschrijvingen openen op %(date)s om %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Bekijk Safety-gerelateerde informatie van deelnemers"

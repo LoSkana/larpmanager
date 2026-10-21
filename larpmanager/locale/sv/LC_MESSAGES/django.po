@@ -4882,9 +4882,6 @@ msgstr "Anmäl dig till evenemanget"
 msgid "Registration complete"
 msgstr "Registreringen är klar"
 
-msgid "Registration is open!"
-msgstr "Registreringarna är öppna!"
-
 msgid "Registration not open"
 msgstr "Registreringen är inte öppen"
 
@@ -5250,6 +5247,9 @@ msgstr "Registreringsvillkor"
 
 msgid "Registration is closed."
 msgstr "Anmälan är stängd."
+
+msgid "Registrations are open!"
+msgstr "Anmälningarna är öppna!"
 
 msgid "Registrations not open!"
 msgstr "Registreringen är ännu inte öppen!"
@@ -5666,6 +5666,9 @@ msgstr "Kvittot är redan bekräftat."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Anmälan till %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "Anmälningarna har inte öppnat än"
 
 msgid "Select one or more options"
 msgstr "Välj ett eller flera alternativ"
@@ -6272,10 +6275,6 @@ msgstr "Vänligen rätta till felet nedan."
 msgid "Quests without traits: %(list)s"
 msgstr "Quests utan Traits: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "Anmälan öppnar den: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Din karaktärs relationer"
 
@@ -6395,10 +6394,6 @@ msgstr "Sida %(number)s av %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Vänligen korrigera felen nedan."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "Anmälningstiden går ut den: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Ersättningspost tillagd"
@@ -7652,6 +7647,10 @@ msgstr "Registreringsbegäran avvisad för %(event)s"
 msgid "Registration request received for %(event)s"
 msgstr "Anmälan har mottagits för %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "Anmälningarna stänger den %(date)s kl. %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Välj en badge ovan för att hantera dess medlemmar."
 
@@ -8071,6 +8070,10 @@ msgstr "Anmälan till %(event)s har avbokats av %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Anmälan för %(member)s har kopierats till %(event)s"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "Anmälningarna öppnar den %(date)s kl. %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Granska deltagarnas Safety-relaterade information"
