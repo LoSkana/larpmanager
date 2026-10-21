@@ -51,8 +51,8 @@ def test_user_signup_simple(pw_page: Any) -> None:
 def signup(live_server: Any, page: Any) -> None:
     # sign up
     go_to(page, live_server, "/")
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
-    page.get_by_role("link", name="Registration is open!").click()
+    expect_normalized(page, page.locator("#one"), "Registrations are open!")
+    page.get_by_role("link", name="Registrations are open!").click()
     submit_register(page)
 
     # test mails

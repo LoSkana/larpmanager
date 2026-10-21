@@ -12811,26 +12811,26 @@ msgid ""
 "If you have made a wire transfer, please upload its receipt for processing"
 msgstr ""
 
+msgid "Registrations closed"
+msgstr ""
+
 msgid "Registrations for this event are currently closed"
 msgstr ""
 
-msgid "Registration is open!"
+msgid "Registrations are open!"
 msgstr ""
 
 msgid "Registrations are open: sign up now to secure your spot!"
 msgstr ""
 
-msgid "Registrations not open!"
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr ""
+
+msgid "Registrations not yet open"
 msgstr ""
 
 msgid "Registrations for this event have not opened yet"
-msgstr ""
-
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr ""
-
-msgid "Registrations closed"
 msgstr ""
 
 msgid "Sign up as a reserve!"
@@ -12848,7 +12848,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Registration closes on: %(date)s"
+msgid "Registrations close on %(date)s at %(time)s"
 msgstr ""
 
 msgid "Pre-registration confirmed!"
@@ -13876,6 +13876,9 @@ msgstr ""
 
 #, python-format
 msgid "Your registration for %(event)s has been cancelled."
+msgstr ""
+
+msgid "Registrations not open!"
 msgstr ""
 
 msgid "You cannot redeem a membership, you are already a member!"

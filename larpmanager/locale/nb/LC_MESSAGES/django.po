@@ -4882,9 +4882,6 @@ msgstr "Meld deg på arrangementet"
 msgid "Registration complete"
 msgstr "Registreringen er fullført"
 
-msgid "Registration is open!"
-msgstr "Registreringen er åpen!"
-
 msgid "Registration not open"
 msgstr "Registreringen er ikke åpen"
 
@@ -5250,6 +5247,9 @@ msgstr "Registreringsvilkår"
 
 msgid "Registration is closed."
 msgstr "Påmeldingen er stengt."
+
+msgid "Registrations are open!"
+msgstr "Påmeldingen er åpen!"
 
 msgid "Registrations not open!"
 msgstr "Registreringen er ennå ikke åpnet!"
@@ -5666,6 +5666,9 @@ msgstr "Kvitteringen er allerede bekreftet."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Påmelding til %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "Påmeldingen er ikke åpen ennå"
 
 msgid "Select one or more options"
 msgstr "Velg ett eller flere alternativer"
@@ -6272,10 +6275,6 @@ msgstr "Vennligst rett opp feilen nedenfor."
 msgid "Quests without traits: %(list)s"
 msgstr "Quest uten Trait: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "Påmeldingen åpner den: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Karakterens relasjoner"
 
@@ -6395,10 +6394,6 @@ msgstr "Side %(number)s av %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Vennligst rett opp feilene nedenfor."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "Påmeldingsfristen utløper: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Refusjonsforespørsel-element lagt til"
@@ -7653,6 +7648,10 @@ msgstr "Registreringsforespørselen for %(event)s ble avslått"
 msgid "Registration request received for %(event)s"
 msgstr "Det er mottatt en registreringsforespørsel for %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "Påmeldingen stenger %(date)s kl. %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Velg en badge ovenfor for å administrere medlemmene i den."
 
@@ -8071,6 +8070,10 @@ msgstr "Registreringen for %(event)s er kansellert av %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Påmelding for %(member)s er kopiert til %(event)s"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "Påmeldingen åpner %(date)s kl. %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Gjennomgå deltakernes Safety-relaterte informasjon"

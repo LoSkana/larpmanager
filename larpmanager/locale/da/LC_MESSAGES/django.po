@@ -4882,9 +4882,6 @@ msgstr "Tilmeld dig eventet"
 msgid "Registration complete"
 msgstr "Tilmelding fuldført"
 
-msgid "Registration is open!"
-msgstr "Registrering er åben!"
-
 msgid "Registration not open"
 msgstr "Tilmelding ikke åben"
 
@@ -5250,6 +5247,9 @@ msgstr "Tilmeldingsbetingelser"
 
 msgid "Registration is closed."
 msgstr "Tilmelding er lukket."
+
+msgid "Registrations are open!"
+msgstr "Tilmeldingen er åben!"
 
 msgid "Registrations not open!"
 msgstr "Registreringer er ikke åbne!"
@@ -5666,6 +5666,9 @@ msgstr "Kvittering allerede bekræftet."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Tilmelding til %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "Tilmeldingen er ikke åben endnu"
 
 msgid "Select one or more options"
 msgstr "Vælg en eller flere muligheder"
@@ -6272,10 +6275,6 @@ msgstr "Ret venligst fejlen nedenfor."
 msgid "Quests without traits: %(list)s"
 msgstr "Quests uden Traits: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "Registrering åbner den: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Relationer for din karakter"
 
@@ -6395,10 +6394,6 @@ msgstr "Side %(number)s af %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Ret venligst fejlene nedenfor."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "Registrering lukker den: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Punkt til refusionsanmodning tilføjet"
@@ -7652,6 +7647,10 @@ msgstr "Anmodning om tilmelding afvist til %(event)s"
 msgid "Registration request received for %(event)s"
 msgstr "Anmodning om tilmelding modtaget til %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "Tilmeldingen lukker den %(date)s kl. %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Vælg et Badge ovenfor for at administrere dets medlemmer."
 
@@ -8070,6 +8069,10 @@ msgstr "Tilmelding annulleret for %(event)s af %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Tilmelding for %(member)s kopieret til %(event)s"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "Tilmeldingen åbner den %(date)s kl. %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Gennemse deltagernes Safety-relaterede oplysninger"

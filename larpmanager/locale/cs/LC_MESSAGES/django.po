@@ -4882,9 +4882,6 @@ msgstr "Přihlas se na akci"
 msgid "Registration complete"
 msgstr "Registrace dokončena"
 
-msgid "Registration is open!"
-msgstr "Registrace jsou otevřené!"
-
 msgid "Registration not open"
 msgstr "Registrace není otevřena"
 
@@ -5250,6 +5247,9 @@ msgstr "Registrační podmínky"
 
 msgid "Registration is closed."
 msgstr "Registrace je uzavřena."
+
+msgid "Registrations are open!"
+msgstr "Registrace jsou otevřené!"
 
 msgid "Registrations not open!"
 msgstr "Registrace ještě není otevřena!"
@@ -5666,6 +5666,9 @@ msgstr "Účtenka již byla potvrzena."
 #, python-format
 msgid "Registration for %(event)s"
 msgstr "Registrace na %(event)s"
+
+msgid "Registrations not yet open"
+msgstr "Registrace zatím nejsou otevřené"
 
 msgid "Select one or more options"
 msgstr "Vyber jednu nebo více možností"
@@ -6272,10 +6275,6 @@ msgstr "Oprav prosím níže uvedenou chybu."
 msgid "Quests without traits: %(list)s"
 msgstr "Questy bez Traitů: %(list)s"
 
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr "Registrace začíná dne: %(date)s"
-
 msgid "Relationships of your character"
 msgstr "Vztahy tvé postavy"
 
@@ -6395,10 +6394,6 @@ msgstr "Strana %(number)s z %(num_pages)s"
 
 msgid "Please correct the errors below."
 msgstr "Oprav prosím níže uvedené chyby."
-
-#, python-format
-msgid "Registration closes on: %(date)s"
-msgstr "Uzávěrka registrace je dne: %(date)s"
 
 msgid "Reimbursement request item added"
 msgstr "Přidána položka žádosti o vrácení peněz"
@@ -7653,6 +7648,10 @@ msgstr "Žádost o registraci pro %(event)s byla zamítnuta"
 msgid "Registration request received for %(event)s"
 msgstr "Byla přijata žádost o registraci na %(event)s"
 
+#, python-format
+msgid "Registrations close on %(date)s at %(time)s"
+msgstr "Registrace se uzavírají %(date)s v %(time)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Vyber badge výše a spravuj jeho členy."
 
@@ -8071,6 +8070,10 @@ msgstr "Zrušení registrace na %(event)s uživatelem %(user)s"
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Registrace %(member)s byla zkopírována do %(event)s"
+
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr "Registrace se otevřou %(date)s v %(time)s"
 
 msgid "Review participants' safety-related information"
 msgstr "Zkontrolovat informace účastníků související se Safety"
