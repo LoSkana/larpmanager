@@ -25,6 +25,7 @@ from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Count, Max, Subquery
 from django.http import Http404
 from django.utils import timezone
@@ -143,7 +144,7 @@ def _compute_registration_status(run: Run) -> str:
 
     if status_code == "future":
         if opening_datetime:
-            formatted_opening_date = opening_datetime.strftime(format_datetime)
+            formatted_opening_date = timezone.localtime(opening_datetime).strftime(format_datetime)
             return _("Registrations opening on: %(date)s") % {"date": formatted_opening_date}
         return _("Registrations opening not set")
 
@@ -428,7 +429,7 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     runs_to_conclude = Run.objects.filter(
         event__association_id=association_id,
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=timezone.now().date(),
+        end__lt=timezone.localdate(),
     )
     count = runs_to_conclude.count()
     if count > 0:
@@ -513,7 +514,7 @@ def _get_exe_otp_actions_data(association_id: int) -> dict:
     if missing_executives:
         result["otp_missing_executives"] = {"count": len(missing_executives), "names": missing_executives}
 
-    one_month_ago = timezone.now().date() - timedelta(days=30)
+    one_month_ago = timezone.localdate() - timedelta(days=30)
     organizer_roles = (
         EventRole.objects.filter(event__association_id=association_id, number=1, event__runs__end__gte=one_month_ago)
         .distinct()
@@ -544,7 +545,7 @@ def _is_ildb_token_expired(association_id: int) -> bool:
     if not expire_val:
         return False
     try:
-        return date.fromisoformat(expire_val) < timezone.now().date()
+        return date.fromisoformat(expire_val) < timezone.localdate()
     except ValueError:
         return False
 
@@ -555,7 +556,7 @@ def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
     team_id = get_association_config(association_id, ILDB_TEAM_CONFIG_KEY)
     if not api_key or not team_id:
         return []
-    one_month_ago = timezone.now().date() - timedelta(days=30)
+    one_month_ago = timezone.localdate() - timedelta(days=30)
     candidate_runs = Run.objects.filter(event__association_id=association_id, end__gte=one_month_ago).order_by("end")
     unpublished = []
     for run in candidate_runs:
@@ -737,7 +738,7 @@ def _init_orga_actions_writing(data: dict, run: Run, context: dict) -> None:
 
 def _init_milestones_widget_cache(run: Run) -> dict:
     """Compute 5 most urgent non-completed milestones for widget cache."""
-    today = timezone.now().date()
+    today = timezone.localdate()
     milestones = (
         Milestone.objects.filter(event_id=run.event_id)
         .exclude(status=MilestoneStatus.COMPLETED)
@@ -865,6 +866,16 @@ def clear_widget_cache_for_association(association_id: int) -> None:
 
     # Clear association-level widgets
     clear_widget_cache_association(association_id)
+
+
+def on_association_pre_save_timezone_reset_widgets(instance: Association) -> None:
+    """Clear widget caches of the association runs after commit when its timezone changes."""
+    if not instance.pk:
+        return
+    previous_timezone = Association.objects.filter(pk=instance.pk).values_list("timezone", flat=True).first()
+    if previous_timezone is not None and previous_timezone != instance.timezone:
+        association_id = instance.pk
+        transaction.on_commit(lambda: clear_widget_cache_for_association(association_id))
 
 
 def reset_widgets(instance: Any) -> None:

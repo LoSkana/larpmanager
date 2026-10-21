@@ -1436,6 +1436,9 @@ msgstr "Geleverd"
 msgid "Template"
 msgstr "Sjabloon"
 
+msgid "Timezone"
+msgstr "Tijdzone"
+
 msgid "Transfer"
 msgstr "Overdracht"
 
@@ -8399,6 +8402,9 @@ msgstr "Deze functie is beschikbaar voor tickets die niet in afwachting zijn!"
 
 msgid "This member has not registered for any events yet."
 msgstr "Dit lid heeft zich nog niet voor evenementen aangemeld."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tijdzone waarin je datums en tijden invoert en ziet"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"

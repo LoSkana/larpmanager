@@ -621,8 +621,8 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
         .order_by("-end")
     )
     if past:
-        reference_date = timezone.now() - timedelta(days=30)
-        runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
+        reference_date = timezone.localdate() - timedelta(days=30)
+        runs = runs.filter(end__gte=reference_date, development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:

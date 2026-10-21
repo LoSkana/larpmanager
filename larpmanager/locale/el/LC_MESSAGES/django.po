@@ -1436,6 +1436,9 @@ msgstr "Παρεχόμενο"
 msgid "Template"
 msgstr "Πρότυπο"
 
+msgid "Timezone"
+msgstr "Ζώνη ώρας"
+
 msgid "Transfer"
 msgstr "Μεταφορά"
 
@@ -8409,6 +8412,11 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Αυτό το μέλος δεν έχει εγγραφεί ακόμη σε κανένα event."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Ζώνη ώρας που χρησιμοποιείται για την εισαγωγή και την εμφάνιση ημερομηνιών "
+"και ωρών"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Συνολικό ποσό τελών συμμετοχής που μειώθηκε μέσω εκπτώσεων"

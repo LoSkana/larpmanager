@@ -1436,6 +1436,9 @@ msgstr "Dodáno"
 msgid "Template"
 msgstr "Šablona"
 
+msgid "Timezone"
+msgstr "Časové pásmo"
+
 msgid "Transfer"
 msgstr "Přenos"
 
@@ -8386,6 +8389,9 @@ msgstr "Tato funkce je k dispozici pro vstupenky mimo čekací listinu!"
 
 msgid "This member has not registered for any events yet."
 msgstr "Tento člen se zatím nepřihlásil na žádnou akci."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Časové pásmo, ve kterém zadáváš a zobrazuješ data a časy"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"

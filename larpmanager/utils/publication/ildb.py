@@ -118,7 +118,7 @@ def _ensure_ildb_expire(association: Association, api_key: str) -> None:
     stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG)
     expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG)
     if stored_hash != key_hash or not expire_val:
-        expire_date = (timezone.now() + timedelta(days=270)).date().isoformat()
+        expire_date = (timezone.localdate() + timedelta(days=270)).isoformat()
         save_single_config(association, ILDB_EXPIRE_CONFIG, expire_date)
         save_single_config(association, ILDB_KEY_HASH_CONFIG, key_hash)
 

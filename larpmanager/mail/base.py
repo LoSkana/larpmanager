@@ -68,7 +68,7 @@ def check_holiday() -> bool:
 
     """
     # Get current date
-    today = timezone.now().date()
+    today = timezone.localdate()
 
     # Check holidays in major countries
     for country_code in ["US", "IT", "CN", "UK"]:

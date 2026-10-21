@@ -40,4 +40,16 @@
 {% endblock landing_final %}
 {% block js2 %}
     <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+    {% if not form.is_bound %}
+        <script>
+            // Prefill the timezone with the browser one, when it is among the available choices
+            (function () {
+                var select = document.getElementById("id_timezone");
+                var browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                if (select && browserTimezone && select.querySelector('option[value="' + browserTimezone + '"]')) {
+                    select.value = browserTimezone;
+                }
+            })();
+        </script>
+    {% endif %}
 {% endblock js2 %}

@@ -34,6 +34,7 @@ from django.db.models import Prefetch
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -1245,7 +1246,7 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
             r.accounting_refunds = refunds[r.id]
         get_accounting_refund(r)
 
-        r.days = get_time_diff(context["run"].end, r.cancellation_date.date())
+        r.days = get_time_diff(context["run"].end, timezone.localtime(r.cancellation_date).date())
     return render(request, "larpmanager/orga/accounting/cancellations.html", context)
 
 
