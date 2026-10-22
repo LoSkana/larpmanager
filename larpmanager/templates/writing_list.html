@@ -20,9 +20,7 @@
         </div>
     </div>
     {% for item in split_lists %}
-        {% if item.count and not item.list %}
-            {# skip empty counted lists #}
-        {% else %}
+        {% if item.list or not item.count %}
             {% if item.title and item.list %}
                 <hr />
                 {% if item.hidden %}
