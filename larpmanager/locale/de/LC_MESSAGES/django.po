@@ -10753,6 +10753,12 @@ msgstr ""
 "weiter:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Diese Zahlung wurde bereits abgeschlossen, dir wurde nichts erneut "
+"berechnet."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Gesamtbetrag der bis zu diesem Datum zu erhaltenden Zahlungen (0 = alles "

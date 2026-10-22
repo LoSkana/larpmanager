@@ -10727,6 +10727,10 @@ msgstr ""
 "παραλήπτη:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Αυτή η πληρωμή έχει ήδη ολοκληρωθεί, δεν χρεώθηκες ξανά."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Συνολικό ποσό πληρωμής που πρέπει να ληφθεί έως αυτή την ημερομηνία (0 = όλο"

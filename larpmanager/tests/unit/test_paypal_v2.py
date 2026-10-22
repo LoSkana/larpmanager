@@ -32,6 +32,7 @@ from django.urls import reverse
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.gateway.paypal_v2 import (
+    PaypalV2AlreadyPaidError,
     PaypalV2CaptureRejectedError,
     get_paypal_v2_cancel_error,
     get_paypal_v2_form,
@@ -48,7 +49,7 @@ from larpmanager.mail.accounting import notify_gateway_not_configured
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.base import PaymentMethod
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.views.user.accounting import _get_cancelled_invoice
+from larpmanager.views.user.accounting import _get_cancelled_invoice, accounting_paypal_go
 
 PAYPAL_MODULE = "larpmanager.accounting.gateway.paypal_v2"
 
@@ -323,6 +324,7 @@ class TestPaypalV2(BaseTestCase):
             content_type="application/json",
             HTTP_PAYPAL_TRANSMISSION_ID="transmission",
             HTTP_PAYPAL_TRANSMISSION_SIG="signature",
+            HTTP_PAYPAL_CERT_URL="https://api.paypal.com/v1/notifications/certs/CERT-1",
         )
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
@@ -464,6 +466,69 @@ class TestPaypalV2(BaseTestCase):
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
         mock_notify.assert_called_once()
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_foreign_cert_url(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a webhook with a certificate url outside PayPal is rejected without calling PayPal"""
+        mock_context.return_value = self.context
+        request = self._webhook_request()
+        request.META["HTTP_PAYPAL_CERT_URL"] = "https://paypal.com.evil.example/cert"
+
+        self.assertFalse(paypal_v2_webhook(request))
+        mock_post.assert_not_called()
+
+    @patch(f"{PAYPAL_MODULE}.notify_admins")
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_capture_without_custom_id(
+        self, mock_post: Any, mock_context: Any, _mock_update: Any, mock_notify: Any
+    ) -> None:
+        """Test a capture without custom id, from another integration, is ignored without notifying admins"""
+        mock_context.return_value = self.context
+        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+        capture = {**_capture(), "custom_id": ""}
+
+        self.assertTrue(paypal_v2_webhook(self._webhook_request(capture=capture)))
+
+        mock_notify.assert_not_called()
+
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_capture_skipped_when_key_already_paid(self, mock_post: Any, mock_request: Any) -> None:
+        """Test an approved order is not captured when the invoice key was paid with another invoice"""
+        PaymentInvoice.objects.create(
+            member_id=self.invoice.member_id,
+            association_id=self.invoice.association_id,
+            method=_method("wire"),
+            typ=self.invoice.typ,
+            cod="WIRECOD",
+            key=self.invoice.key,
+            status=PaymentStatus.CHECKED,
+        )
+
+        with self.assertRaises(PaypalV2AlreadyPaidError):
+            paypal_v2_capture(self.context, self.invoice)
+
+        mock_post.assert_not_called()
+        mock_request.assert_not_called()
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+
+    def test_go_blocked_while_capture_pending(self) -> None:
+        """Test the redirect to PayPal is refused while a capture of the invoice key is pending"""
+        set_paypal_v2_pending(self.invoice)
+        request = RequestFactory().get("/")
+        request.user = self.invoice.member.user
+        request.association = {"id": self.invoice.association_id}
+        request._messages = MagicMock()
+
+        response = accounting_paypal_go(request, self.invoice.uuid)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse("accounting"))
 
 
 class TestGatewayConfiguration(BaseTestCase):

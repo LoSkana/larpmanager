@@ -598,6 +598,6 @@ def notify_gateway_not_configured(invoice: PaymentInvoice, missing_keys: list[st
             body += "<br /><br />" + _(
                 "Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
                 "or disable the payment method."
-            ) % {"url": get_url("manage/methods/", invoice)}
+            ) % {"url": get_url("manage/methods/", association)}
             my_send_mail(subject, body, executive, association)
     return True

@@ -10531,6 +10531,10 @@ msgid ""
 msgstr "Zbiórka jest gotowa do przekazania, podaj ten link odbiorcy:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Ta płatność została już zrealizowana, nie obciążyliśmy cię ponownie."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Całkowita kwota płatności do otrzymania do tego dnia (0 = wszystkie zaległe)"

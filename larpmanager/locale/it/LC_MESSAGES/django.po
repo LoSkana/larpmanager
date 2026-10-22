@@ -10645,6 +10645,12 @@ msgstr ""
 "La colletta è pronta per essere consegnata, dai questo link al destinatario:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Questo pagamento è già stato completato, non ti è stato addebitato nulla di "
+"nuovo."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Ammontare totale di pagamento da ricevere entro questa data (0 = tutto il "

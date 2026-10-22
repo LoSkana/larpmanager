@@ -10400,6 +10400,11 @@ msgstr ""
 "Indsamlingen er klar til at blive leveret. Giv dette link til modtageren:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Denne betaling er allerede gennemført, og du er ikke blevet opkrævet igen."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Samlet betalingsbeløb, der skal modtages inden denne dato (0 = alt "

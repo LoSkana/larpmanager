@@ -10492,6 +10492,10 @@ msgid ""
 msgstr "Keräys on valmis toimitettavaksi, anna tämä linkki vastaanottajalle:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Tämä maksu on jo suoritettu, sinua ei ole veloitettu uudelleen."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Tähän päivämäärään mennessä vastaanotettavan maksun kokonaismäärä (0 = "

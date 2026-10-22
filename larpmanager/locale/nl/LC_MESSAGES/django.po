@@ -10648,6 +10648,11 @@ msgstr ""
 "ontvanger:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Deze betaling is al voltooid, er is je niets opnieuw in rekening gebracht."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Totaalbedrag van de betaling te ontvangen tegen deze datum (0 = alles "

@@ -42,9 +42,11 @@ from larpmanager.accounting.gateway import GatewayError, payment_error_info
 from larpmanager.accounting.gateway.paypal_v2 import (
     PAYPAL_V2_COMPLETED,
     PAYPAL_V2_PENDING,
+    PaypalV2AlreadyPaidError,
     PaypalV2CaptureRejectedError,
     get_paypal_v2_cancel_error,
     is_paypal_v2_order_id,
+    is_paypal_v2_pending,
     paypal_v2_capture,
     paypal_v2_redirect_url,
     paypal_v2_webhook,
@@ -979,6 +981,14 @@ def accounting_paypal_go(request: HttpRequest, invoice_uuid: str) -> HttpRespons
     if not invoice:
         raise Http404
 
+    # A page opened before a capture went pending must not start a second payment
+    if is_paypal_v2_pending(invoice):
+        messages.warning(
+            request,
+            _("The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it."),
+        )
+        return redirect("accounting")
+
     approve_url = paypal_v2_redirect_url(invoice.uuid)
     if not approve_url:
         messages.warning(request, _("The payment session has expired. Please start the payment again."))
@@ -1016,6 +1026,10 @@ def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpRes
 
     try:
         capture_status = paypal_v2_capture(context, invoice, order_id)
+    except PaypalV2AlreadyPaidError:
+        logger.warning("PayPal order not captured, invoice key already paid - invoice %s", invoice.cod)
+        messages.info(request, _("This payment has already been completed, you have not been charged again."))
+        return redirect("accounting")
     except PaypalV2CaptureRejectedError as err:
         # PayPal holds the money: the payer must not retry, the organizers reconcile it by hand
         logger.exception("PayPal capture not accepted - invoice %s", invoice.cod)
@@ -1251,7 +1265,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
         update_payment_details(context)
         try:
             satispay_status = satispay_verify(context, inv.cod)
-        except (KeyError, HTTPError, OSError):
+        except (KeyError, ValueError, HTTPError, OSError):
             logger.exception("Satispay status check failed - invoice %s", inv.cod)
             satispay_status = None
 

@@ -10351,6 +10351,10 @@ msgid ""
 msgstr "Sbírka je připravena k doručení, předej příjemci tento odkaz:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Tato platba již byla dokončena, znovu ti nebylo nic účtováno."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr ""
 "Celková částka platby, kterou je třeba obdržet do tohoto data (0 = všechny "

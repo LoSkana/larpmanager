@@ -31,6 +31,7 @@ import time
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import TYPE_CHECKING
+from urllib.parse import urlparse
 
 import requests
 from django.conf import settings as conf_settings
@@ -86,6 +87,26 @@ def paypal_v2_amount(amount: Decimal, currency: str) -> str:
 
 class PaypalV2CaptureRejectedError(GatewayError):
     """Raised when PayPal completed a capture that cannot be registered on the invoice."""
+
+
+class PaypalV2AlreadyPaidError(GatewayError):
+    """Raised when the invoice key was already paid through another invoice, so the order is not captured."""
+
+
+def is_invoice_key_paid(invoice: PaymentInvoice) -> bool:
+    """Return whether another invoice of the same key and member has already been paid."""
+    if not invoice.key:
+        return False
+    return (
+        PaymentInvoice.objects.filter(
+            key=invoice.key,
+            member_id=invoice.member_id,
+            association_id=invoice.association_id,
+            status__in=(PaymentStatus.CHECKED, PaymentStatus.CONFIRMED),
+        )
+        .exclude(pk=invoice.pk)
+        .exists()
+    )
 
 
 def _paypal_v2_pending_key(invoice: PaymentInvoice) -> str:
@@ -310,12 +331,18 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
     Raises:
         GatewayError: If PayPal refuses the capture or cannot be reached
         PaypalV2CaptureRejectedError: If PayPal completed the capture but it does not match the invoice
+        PaypalV2AlreadyPaidError: If the invoice key was already paid through another invoice
 
     """
     order_id = order_id or invoice.txn_id
     if not order_id:
         msg = f"No PayPal order on invoice {invoice.cod}"
         raise GatewayError(msg)
+
+    # An approved order is charged only on capture: skip it if the key was paid in the meantime
+    if is_invoice_key_paid(invoice):
+        msg = f"Invoice key of {invoice.cod} already paid, PayPal order {order_id} not captured"
+        raise PaypalV2AlreadyPaidError(msg)
 
     if order_id != invoice.txn_id:
         _paypal_v2_check_order_invoice(context, invoice, order_id)
@@ -379,11 +406,22 @@ def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: st
         return False
 
 
+def _is_paypal_cert_url(cert_url: str) -> bool:
+    """Return whether a webhook certificate url is served over https by a PayPal domain."""
+    parsed_url = urlparse(cert_url)
+    host = parsed_url.hostname or ""
+    return parsed_url.scheme == "https" and (host == "paypal.com" or host.endswith(".paypal.com"))
+
+
 def _paypal_v2_check_webhook_signature(request: HttpRequest, context: dict, raw_event: str) -> bool:
     """Check a PayPal webhook notification is signed, notifying admins once a day of failed verifications."""
     # Requests without the PayPal signature headers are not worth a verification call
     if not request.headers.get("Paypal-Transmission-Id") or not request.headers.get("Paypal-Transmission-Sig"):
         logger.error("PayPal webhook: missing signature headers")
+        return False
+
+    if not _is_paypal_cert_url(request.headers.get("Paypal-Cert-Url", "")):
+        logger.error("PayPal webhook: invalid certificate url")
         return False
 
     if _paypal_v2_verify_webhook(request, context, raw_event):
@@ -402,7 +440,50 @@ def _paypal_v2_check_webhook_signature(request: HttpRequest, context: dict, raw_
     return False
 
 
-def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple validation checks require multiple returns
+def _paypal_v2_handle_capture_event(context: dict, event_type: str, capture: dict) -> None:
+    """Register a completed capture on its invoice, or release the invoice key of a denied one."""
+    custom_id = capture.get("custom_id")
+    # Our orders always carry the invoice uuid, captures without it come from other integrations
+    if not custom_id:
+        logger.info("PayPal webhook: capture %s without custom id ignored", capture.get("id"))
+        return
+
+    invoice = PaymentInvoice.objects.filter(
+        uuid=custom_id,
+        association_id=context["association_id"],
+        method__slug="paypal_v2",
+    ).first()
+    if not invoice:
+        logger.error("PayPal webhook: Invoice not found: %s", custom_id)
+        # PayPal may have settled money that no invoice tracks, it must be reconciled by hand
+        notify_admins(
+            f"PayPal webhook - invoice not found - {capture.get('id')}",
+            f"Association: {context['association_id']}<br />\n"
+            f"Event: {escape(event_type)}<br />\n"
+            f"Resource: {escape(json.dumps(capture))}",
+        )
+        return
+
+    # A settled capture, denied or completed, lets the invoice key be paid again
+    clear_paypal_v2_pending(invoice)
+    if event_type == "PAYMENT.CAPTURE.DENIED":
+        return
+
+    if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
+        return
+
+    # Rejected captures (wrong currency or amount) must be reconciled by hand, retrying them would not help
+    if not _paypal_v2_receive_capture(context, invoice, capture):
+        logger.error("PayPal webhook: capture %s not accepted for invoice %s", capture.get("id"), invoice.cod)
+        notify_admins(
+            f"PayPal webhook - capture not accepted - {capture.get('id')}",
+            f"Association: {context['association_id']}<br />\n"
+            f"Invoice: {escape(invoice.cod)}<br />\n"
+            f"Resource: {escape(json.dumps(capture))}",
+        )
+
+
+def paypal_v2_webhook(request: HttpRequest) -> bool:
     """Handle PayPal webhook notifications, registering completed captures and releasing denied ones.
 
     Returns:
@@ -434,40 +515,7 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
     if event_type not in ("PAYMENT.CAPTURE.COMPLETED", "PAYMENT.CAPTURE.DENIED"):
         return True
 
-    capture = event.get("resource", {})
-    invoice = PaymentInvoice.objects.filter(
-        uuid=capture.get("custom_id") or "",
-        association_id=context["association_id"],
-        method__slug="paypal_v2",
-    ).first()
-    if not invoice:
-        logger.error("PayPal webhook: Invoice not found: %s", capture.get("custom_id"))
-        # PayPal may have settled money that no invoice tracks, it must be reconciled by hand
-        notify_admins(
-            f"PayPal webhook - invoice not found - {capture.get('id')}",
-            f"Association: {context['association_id']}<br />\n"
-            f"Event: {escape(event_type)}<br />\n"
-            f"Resource: {escape(json.dumps(capture))}",
-        )
-        return True
-
-    # A settled capture, denied or completed, lets the invoice key be paid again
-    clear_paypal_v2_pending(invoice)
-    if event_type == "PAYMENT.CAPTURE.DENIED":
-        return True
-
-    if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
-        return True
-
-    # Rejected captures (wrong currency or amount) must be reconciled by hand, retrying them would not help
-    if not _paypal_v2_receive_capture(context, invoice, capture):
-        logger.error("PayPal webhook: capture %s not accepted for invoice %s", capture.get("id"), invoice.cod)
-        notify_admins(
-            f"PayPal webhook - capture not accepted - {capture.get('id')}",
-            f"Association: {context['association_id']}<br />\n"
-            f"Invoice: {escape(invoice.cod)}<br />\n"
-            f"Resource: {escape(json.dumps(capture))}",
-        )
+    _paypal_v2_handle_capture_event(context, event_type, event.get("resource", {}))
     return True
 
 

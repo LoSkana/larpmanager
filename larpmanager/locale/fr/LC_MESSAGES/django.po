@@ -10729,6 +10729,12 @@ msgid ""
 msgstr "La cagnotte est prête à être remise, donne ce lien au destinataire :"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Ce paiement a déjà été effectué, aucun montant ne t'a été débité une seconde"
+" fois."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr "Montant total du paiement à recevoir à cette date (0 = tout est dû)"
 

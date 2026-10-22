@@ -10450,6 +10450,10 @@ msgid ""
 msgstr "Insamlingen är klar att överlämnas, ge denna länk till mottagaren:"
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Den här betalningen är redan genomförd, du har inte debiterats igen."
+
+msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
 msgstr "Totalt belopp som ska mottas senast detta datum (0 = allt utestående)"
 

@@ -13467,6 +13467,10 @@ msgid "The payment session has expired. Please start the payment again."
 msgstr ""
 
 msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+
+msgid ""
 "The payment was received by PayPal but could not be registered "
 "automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
