@@ -165,6 +165,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/characters/")
+    check_status_tables(page)
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_que_u4").click()
@@ -193,6 +194,22 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u5"), "long text")
     expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()
+
+def check_status_tables(page: Any) -> None:
+    """Check characters split by approval status, with not signed up ones hidden behind a toggle."""
+    expect(page.get_by_role("heading", name="Proposed (1)")).to_be_visible()
+    not_signed_up = page.locator(".chars_not_signed_up")
+    expect(not_signed_up).to_be_hidden()
+    page.get_by_role("link", name="Not signed up (1)").click()
+    expect(not_signed_up).to_be_visible()
+    expect(not_signed_up.locator("tbody tr")).to_have_count(1)
+    # player column shown by default, with the profile popup
+    page.locator('[id="u2"]').locator(".post_popup_member").click()
+    expect(page.locator("#lm-modal")).to_contain_text("Admin Test")
+    expect(page.locator("#lm-modal")).to_contain_text("Email")
+    page.keyboard.press("Escape")
+    page.locator("#lm-modal").wait_for(state="hidden")
+
 
 def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)

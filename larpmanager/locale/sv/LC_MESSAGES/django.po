@@ -2819,6 +2819,9 @@ msgstr "Kommande sessioner"
 msgid "Not completed"
 msgstr "Ej slutfört"
 
+msgid "Not signed up"
+msgstr "Inte anmäld"
+
 msgid "Number events"
 msgstr "Antal evenemang"
 

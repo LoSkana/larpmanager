@@ -13028,6 +13028,9 @@ msgstr ""
 msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
 
+msgid "Not signed up"
+msgstr ""
+
 msgid "Characters not participating"
 msgstr ""
 

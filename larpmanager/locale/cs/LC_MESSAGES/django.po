@@ -2819,6 +2819,9 @@ msgstr "Další zasedání"
 msgid "Not completed"
 msgstr "Není dokončeno"
 
+msgid "Not signed up"
+msgstr "Bez přihlášky"
+
 msgid "Number events"
 msgstr "Počet událostí"
 

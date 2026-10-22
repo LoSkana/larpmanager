@@ -895,8 +895,10 @@ function refreshDatatables() {
         const savedStates = {};
         let $emptyAnchor = null;
 
-        // page was empty (no tables) but now has content: replace the whole content wrapper
-        if (!$('table.go_datatable').length && $newTables.length) {
+        // page was empty (no tables) or gained new tables: replace the whole content wrapper
+        const oldIds = $('table.go_datatable').map(function() { return this.id; }).get();
+        const hasNewTables = $newTables.filter(function() { return this.id && !oldIds.includes(this.id); }).length > 0;
+        if ((!oldIds.length && $newTables.length) || hasNewTables) {
             const $page = $('[class^="page_"], [class*=" page_"]').first();
             const $newPage = $newDoc.find('[class^="page_"], [class*=" page_"]').first();
             if ($page.length && $newPage.length) {
@@ -913,9 +915,10 @@ function refreshDatatables() {
             }
         }
 
-        // nearest heading right before a table (skipping <hr>), or empty set
+        // nearest heading right before a table or its .split_list wrapper (skipping <hr>), or empty set
         function headingFor($table) {
-            let node = $table[0].previousElementSibling;
+            const $wrapper = $table.parent('.split_list');
+            let node = ($wrapper.length ? $wrapper[0] : $table[0]).previousElementSibling;
             while (node && node.tagName === 'HR') node = node.previousElementSibling;
             return node && node.tagName === 'H2' ? $(node) : $();
         }
