@@ -3422,6 +3422,9 @@ msgstr "Samlet saldo"
 msgid "Parent campaign"
 msgstr "Overordnet kampagne"
 
+msgid "Pay with PayPal"
+msgstr "Betal med PayPal"
+
 msgid "Payment Methods"
 msgstr "Betalingsmetoder"
 
@@ -6028,6 +6031,9 @@ msgstr "PDF-regenerering er startet!"
 
 msgid "Payment awaiting verification"
 msgstr "Betaling afventer bekræftelse"
+
+msgid "Payment method not configured"
+msgstr "Betalingsmetode ikke konfigureret"
 
 msgid "Payments to approve reminders"
 msgstr "Påmindelser om betalinger, der skal godkendes"
@@ -12522,6 +12528,13 @@ msgstr ""
 "standardstørrelsen)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Betalingen er ikke bekræftet endnu: den bliver registreret, så snart PayPal "
+"bekræfter den."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13661,6 +13674,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Udfyld dem i <a href='%(url)s'>indstillingerne for betalingsmetoder</a>, "
+"eller deaktiver betalingsmetoden."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14009,6 +14030,13 @@ msgid ""
 msgstr ""
 "Kun de valgte elementer bliver kopieret: elementer med samme navn "
 "overskrives, mens alle andre bevares."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Denne betalingsmetode er midlertidigt utilgængelig. Vælg en anden "
+"betalingsmetode, eller kontakt arrangørerne."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14796,6 +14824,14 @@ msgid ""
 msgstr ""
 "Denne guild blev ændret i et andet vindue: dine ændringer her er ikke blevet"
 " gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"En deltager forsøgte at betale med <b>%(method)s</b>, men betalingen kunne "
+"ikke starte, fordi disse indstillinger mangler: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

@@ -3422,6 +3422,9 @@ msgstr "Γενικό υπόλοιπο"
 msgid "Parent campaign"
 msgstr "Γονική καμπάνια"
 
+msgid "Pay with PayPal"
+msgstr "Πλήρωσε με PayPal"
+
 msgid "Payment Methods"
 msgstr "Μέθοδοι πληρωμής"
 
@@ -6028,6 +6031,9 @@ msgstr "Η επαναδημιουργία PDF ξεκίνησε!"
 
 msgid "Payment awaiting verification"
 msgstr "Η πληρωμή περιμένει επαλήθευση"
+
+msgid "Payment method not configured"
+msgstr "Η μέθοδος πληρωμής δεν έχει ρυθμιστεί"
 
 msgid "Payments to approve reminders"
 msgstr "Υπενθυμίσεις πληρωμών προς έγκριση"
@@ -12918,6 +12924,13 @@ msgstr ""
 "κανονικό μέγεθος)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Η πληρωμή δεν έχει επιβεβαιωθεί ακόμα: θα καταχωριστεί μόλις την "
+"επιβεβαιώσει το PayPal."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14062,6 +14075,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Συμπλήρωσέ τες στις <a href='%(url)s'>ρυθμίσεις μεθόδων πληρωμής</a> ή "
+"απενεργοποίησε τη μέθοδο πληρωμής."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14412,6 +14433,13 @@ msgid ""
 msgstr ""
 "Θα αντιγραφούν μόνο τα επιλεγμένα στοιχεία: στοιχεία με το ίδιο όνομα "
 "αντικαθίστανται, ενώ όλα τα υπόλοιπα διατηρούνται."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Αυτή η μέθοδος πληρωμής δεν είναι προσωρινά διαθέσιμη. Διάλεξε άλλη μέθοδο "
+"πληρωμής ή επικοινώνησε με τους διοργανωτές."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -15237,6 +15265,15 @@ msgstr ""
 "Αυτή η συντεχνία τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν "
 "έχουν αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά "
 "ανανέωσε τη σελίδα."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Ένας συμμετέχων προσπάθησε να πληρώσει με <b>%(method)s</b>, αλλά η πληρωμή "
+"δεν μπόρεσε να ξεκινήσει επειδή λείπουν αυτές οι ρυθμίσεις: "
+"<b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

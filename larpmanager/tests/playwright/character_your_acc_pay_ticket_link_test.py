@@ -280,6 +280,32 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/accounting/pay/test/paypal/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
+    check_paypal_v2_not_configured(page, live_server)
+
+
+def check_paypal_v2_not_configured(page: Any, live_server: Any) -> None:
+    # legacy paypal is not offered, the new one is
+    go_to(page, live_server, "/manage/methods/")
+    expect(page.get_by_role("checkbox", name="Paypal (legacy)")).to_have_count(0)
+    page.get_by_role("checkbox", name="Paypal", exact=True).check()
+    page.locator("#id_paypal_v2_descr").wait_for(state="visible")
+    page.locator("#id_paypal_v2_descr").fill("paypal new")
+    page.locator("#id_paypal_v2_fee").fill("3")
+    page.locator("#id_paypal_v2_client_id").fill("client")
+    page.locator("#id_paypal_v2_secret").fill("secret")
+    # blank once stripped, so the webhook id is saved as missing
+    page.locator("#id_paypal_v2_webhook_id").fill(" ")
+    submit_confirm(page)
+
+    # without credentials the payment is not started
+    go_to(page, live_server, "/accounting/pay/test/paypal_v2/")
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "This payment method is temporarily unavailable. Please choose another payment method, or contact the organizers.",
+    )
+    expect(page.get_by_role("link", name="Pay with PayPal")).to_have_count(0)
+
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions

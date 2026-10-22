@@ -2,7 +2,12 @@
 <p>
     {% trans "You are about to make a payment of:" %} <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
 </p>
-{% if method == 'redsys' %}
+{% if gateway_error %}
+    <p class="redderized">
+        {% trans "This payment method is temporarily unavailable. Please choose another payment method, or contact the organizers." %}
+    </p>
+{% endif %}
+{% if method == 'redsys' and not gateway_error %}
     <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
         <input type="hidden"
                name="Ds_SignatureVersion"
@@ -16,7 +21,7 @@
         <input type="submit" value="{% trans "Submit" %}">
     </form>
 {% endif %}
-{% if method == 'sumup' %}
+{% if method == 'sumup' and not gateway_error %}
     <div id="sumup-card"></div>
     <script type="text/javascript"
             src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
@@ -32,8 +37,10 @@
       });
     </script>
 {% endif %}
-{% if method == 'stripe' %}<script>window.location.replace("{{ stripe_ck.url }}");</script>{% endif %}
-{% if method == 'satispay' %}
+{% if method == 'stripe' and not gateway_error %}
+    <script>window.location.replace("{{ stripe_ck.url }}");</script>
+{% endif %}
+{% if method == 'satispay' and not gateway_error %}
     <br />
     <br />
     <a href="https://online.satispay.com/pay/{{ pay_id }}?redirect_url={{ redirect }}">
@@ -43,7 +50,7 @@
              class="satispay-button" />
     </a>
 {% endif %}
-{% if method == 'paypal' %}
+{% if method == 'paypal' and not gateway_error %}
     <div class="paypal">
         <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
         {{ paypal_form.render }}
@@ -163,6 +170,14 @@
              src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
              alt="paypal me button" />
     </a>
+{% endif %}
+{% if method == 'paypal_v2' and not gateway_error %}
+    <div class="paypal-v2">
+        <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
+        <a class="button paypal-v2-button" href="{{ paypal_url }}">
+            <i class="fa-brands fa-paypal"></i> {% trans "Pay with PayPal" %}
+        </a>
+    </div>
 {% endif %}
 <script>
 

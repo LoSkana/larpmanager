@@ -19,7 +19,7 @@
     profile: payment_methods/873326d033b74568bb9e79d1e96762cf.png
 - model: larpmanager.paymentmethod
   fields:
-    name: Paypal
+    name: Paypal (legacy)
     slug: paypal
     instructions: "<ol>\r\n<li>You need to have a <strong>Business account&nbsp;</strong>(request\
       \ it if you don't already have it)</li>\r\n<li>In <strong>PAYPAL_ID,&nbsp;</strong>put\
@@ -103,3 +103,20 @@
     fields: key_id
     nationality: it
     profile: payment_methods/24037547097e4bd3b530de38eaaf4ce3.png
+- model: larpmanager.paymentmethod
+  fields:
+    name: Paypal
+    slug: paypal_v2
+    instructions: "<ol>\r\n<li>You need to have a <strong>Business account&nbsp;</strong>(request\
+      \ it if you don't already have it)</li>\r\n<li>Open the following page: https://developer.paypal.com/dashboard/applications/live</li>\r\
+      \n<li>Log in with your PayPal credentials</li>\r\n<li>Click on Create App, enter\
+      \ any name and confirm</li>\r\n<li>Copy the Client ID in <strong>PAYPAL V2\
+      \ CLIENT ID</strong></li>\r\n<li>Copy the Secret key in <strong>PAYPAL V2 SECRET</strong></li>\r\
+      \n<li>In the app page, under Webhooks, click on Add Webhook</li>\r\n<li>As\
+      \ link put \"https://&lt;slug&gt;.larpmanager.com/accounting/webhook/paypal\"\
+      \ (&lt;slug&gt; is the subdomain of your organization)</li>\r\n<li>Select\
+      \ the event \"Payment capture completed\" and save</li>\r\n<li>Copy the\
+      \ Webhook ID in <strong>PAYPAL V2 WEBHOOK ID</strong></li>\r\n</ol>"
+    fields: client_id, secret, webhook_id
+    nationality: null
+    profile: payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png

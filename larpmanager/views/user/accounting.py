@@ -32,11 +32,18 @@ from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+from larpmanager.accounting.gateway import GatewayError, payment_error_info
+from larpmanager.accounting.gateway.paypal_v2 import (
+    PAYPAL_V2_COMPLETED,
+    PAYPAL_V2_PENDING,
+    get_paypal_v2_cancel_error,
+    paypal_v2_capture,
+    paypal_v2_webhook,
+)
 from larpmanager.accounting.gateway.redsys import redsys_webhook
 from larpmanager.accounting.gateway.satispay import satispay_verify, satispay_webhook
 from larpmanager.accounting.gateway.stripe import get_stripe_cancel_error, stripe_webhook
@@ -938,6 +945,59 @@ def accounting_webhook_stripe(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"res": "ok"})
 
 
+@csrf_exempt
+def accounting_webhook_paypal(request: HttpRequest) -> JsonResponse:
+    """Handle PayPal webhook notifications."""
+    paypal_v2_webhook(request)
+    return JsonResponse({"res": "ok"})
+
+
+@login_required
+def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
+    """Capture the PayPal order the user has just approved, then complete the payment."""
+    invoice = (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+            method__slug="paypal_v2",
+        )
+        .select_related("method")
+        .first()
+    )
+    if not invoice:
+        raise Http404
+
+    if invoice.status != PaymentStatus.CREATED:
+        return redirect("accounting_payed", registration_uuid=invoice.uuid)
+
+    payment_details = fetch_payment_details(request.association["id"])
+    try:
+        capture_status = paypal_v2_capture(payment_details, invoice)
+    except GatewayError as err:
+        logger.exception("PayPal capture failed - invoice %s", invoice.cod)
+        notify_admins(
+            f"PayPal capture failed - {request.association['slug']} - {request.user}",
+            payment_error_info(request, payment_details, invoice, str(err)),
+        )
+        capture_status = None
+
+    if capture_status == PAYPAL_V2_COMPLETED:
+        return redirect("accounting_payed", registration_uuid=invoice.uuid)
+
+    if capture_status == PAYPAL_V2_PENDING:
+        messages.warning(
+            request,
+            _("The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it."),
+        )
+        return redirect("accounting")
+
+    messages.warning(
+        request, _("The payment was not completed. Please try again later or choose another payment method.")
+    )
+    return redirect("accounting")
+
+
 @login_required
 @require_POST
 def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonResponse:
@@ -958,7 +1018,7 @@ def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonRespo
     response_body = request.POST.get("body", "")[:2000]
     notify_admins(
         f"SumUp payment {response_type} - {request.association['slug']} - {request.user}",
-        _payment_cancelled_info(
+        payment_error_info(
             request,
             fetch_payment_details(request.association["id"]),
             invoice,
@@ -1012,69 +1072,29 @@ def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
     return invoices.filter(status=PaymentStatus.CREATED).order_by("-created").first()
 
 
-def _payment_cancelled_info(
-    request: HttpRequest,
-    payment_details: dict,
-    invoice: PaymentInvoice | None,
-    gateway_error: str | None,
-) -> str:
-    """Collect request, member, invoice and gateway details useful to debug a cancelled payment."""
-    member = request.user.member
-    lines = [
-        f"Association: {request.association['slug']} ({request.association['id']})",
-        f"Member: {member} - {request.user.email} ({member.id})",
-        f"Path: {request.get_full_path()}",
-        f"Referer: {request.META.get('HTTP_REFERER', '')}",
-        f"User agent: {request.META.get('HTTP_USER_AGENT', '')}",
-        f"Language: {request.META.get('HTTP_ACCEPT_LANGUAGE', '')}",
-    ]
-
-    if gateway_error:
-        lines += ["", f"Gateway error: {gateway_error}"]
-
-    if invoice:
-        lines += [
-            "",
-            f"Invoice: {invoice.uuid} - created {invoice.created}",
-            f"Status: {invoice.get_status_display()}",
-            f"Method: {invoice.method.slug}",
-            f"Type: {invoice.get_typ_display()}",
-            f"Amount: {invoice.mc_gross}",
-            f"Causal: {invoice.causal}",
-            f"Cod: {invoice.cod}",
-            f"Registration: {invoice.registration_id}",
-        ]
-
-    # Gateway configuration, without exposing secrets
-    stripe_key = payment_details.get("stripe_sk_api") or ""
-    stripe_mode = "live" if stripe_key.startswith(("sk_live", "rk_live")) else "test" if stripe_key else "missing"
-    lines += [
-        "",
-        f"Currency: {payment_details.get('payment_currency', '')}",
-        f"Stripe key: {stripe_mode}",
-        f"Stripe webhook secret: {'set' if payment_details.get('stripe_webhook_secret') else 'missing'}",
-        f"PayPal id: {payment_details.get('paypal_id', '')}",
-    ]
-    return "<br />\n".join(escape(line) for line in lines)
-
-
 @login_required
 def accounting_cancelled(request: HttpRequest) -> HttpResponse:
     """Handle cancelled payment: notify admins on gateway errors and redirect to accounting page."""
     payment_details = fetch_payment_details(request.association["id"])
     invoice = _get_cancelled_invoice(request)
 
-    # Only Stripe lets us tell a user cancellation from a gateway error
+    # Only Stripe and PayPal let us tell a user cancellation from a gateway error
     gateway_error = None
-    if invoice and invoice.method.slug == "stripe" and payment_details.get("stripe_sk_api"):
-        gateway_error = get_stripe_cancel_error(payment_details, invoice)
-        if not gateway_error:
-            messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
-            return redirect("accounting")
+    cancel_error_checks = {
+        "stripe": ("stripe_sk_api", get_stripe_cancel_error),
+        "paypal_v2": ("paypal_v2_secret", get_paypal_v2_cancel_error),
+    }
+    if invoice and invoice.method.slug in cancel_error_checks:
+        required_key, get_cancel_error = cancel_error_checks[invoice.method.slug]
+        if payment_details.get(required_key):
+            gateway_error = get_cancel_error(payment_details, invoice)
+            if not gateway_error:
+                messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+                return redirect("accounting")
 
     notify_admins(
         f"Payment cancelled - {request.association['slug']} - {request.user}",
-        _payment_cancelled_info(request, payment_details, invoice, gateway_error),
+        payment_error_info(request, payment_details, invoice, gateway_error),
     )
 
     mes = _("The payment was not completed. Please try again later or choose another payment method.")

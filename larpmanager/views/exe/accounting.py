@@ -1256,7 +1256,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     context["todo"] = (
         PaymentInvoice.objects.filter(association_id=context["association_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
-        .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
+        .exclude(method__slug__in=["redsys", "satispay", "paypal", "paypal_v2", "stripe", "sumup"])
         .select_related("method")
     )
 

@@ -3422,6 +3422,9 @@ msgstr "Totalbalanse"
 msgid "Parent campaign"
 msgstr "Foreldrekampanje"
 
+msgid "Pay with PayPal"
+msgstr "Betal med PayPal"
+
 msgid "Payment Methods"
 msgstr "Betalingsmetoder"
 
@@ -6028,6 +6031,9 @@ msgstr "PDF-regenerering har startet!"
 
 msgid "Payment awaiting verification"
 msgstr "Betaling venter på bekreftelse"
+
+msgid "Payment method not configured"
+msgstr "Betalingsmåten er ikke konfigurert"
 
 msgid "Payments to approve reminders"
 msgstr "Påminnelser om betalinger som venter på godkjenning"
@@ -12593,6 +12599,13 @@ msgstr ""
 "Størrelse på rollenavnet og titlene, i prosent (100 er standardstørrelsen)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Betalingen er ikke bekreftet ennå: den blir registrert så snart PayPal "
+"bekrefter den."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13736,6 +13749,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Fyll dem ut i <a href='%(url)s'>innstillingene for betalingsmåter</a>, eller"
+" deaktiver betalingsmåten."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14082,6 +14103,13 @@ msgid ""
 msgstr ""
 "Bare de valgte elementene blir kopiert: elementer med samme navn blir "
 "overskrevet, alle andre beholdes."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Denne betalingsmåten er midlertidig utilgjengelig. Velg en annen "
+"betalingsmåte, eller kontakt arrangørene."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14881,6 +14909,14 @@ msgid ""
 msgstr ""
 "Dette lauget ble endret i et annet vindu: endringene dine her er ikke "
 "lagret. Kopier teksten du vil beholde, og last deretter siden på nytt."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"En deltaker prøvde å betale med <b>%(method)s</b>, men betalingen kunne ikke"
+" starte fordi disse innstillingene mangler: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

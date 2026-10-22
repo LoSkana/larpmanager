@@ -3422,6 +3422,9 @@ msgstr "Totaalsaldo"
 msgid "Parent campaign"
 msgstr "Bovenliggende campagne"
 
+msgid "Pay with PayPal"
+msgstr "Betalen met PayPal"
+
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
@@ -6028,6 +6031,9 @@ msgstr "PDF-regeneratie is gestart!"
 
 msgid "Payment awaiting verification"
 msgstr "Betaling wacht op verificatie"
+
+msgid "Payment method not configured"
+msgstr "Betaalmethode niet geconfigureerd"
 
 msgid "Payments to approve reminders"
 msgstr "Herinneringen voor goed te keuren betalingen"
@@ -12826,6 +12832,13 @@ msgstr ""
 " de standaardgrootte)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"De betaling is nog niet bevestigd: hij wordt geregistreerd zodra PayPal hem "
+"bevestigt."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13969,6 +13982,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Vul ze aan in de <a href='%(url)s'>instellingen van de betaalmethoden</a>, "
+"of schakel de betaalmethode uit."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14319,6 +14340,13 @@ msgid ""
 msgstr ""
 "Alleen de geselecteerde elementen worden gekopieerd: elementen met dezelfde "
 "naam worden overschreven, alle andere blijven behouden."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Deze betaalmethode is tijdelijk niet beschikbaar. Kies een andere "
+"betaalmethode of neem contact op met de organisatoren."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -15132,6 +15160,14 @@ msgid ""
 msgstr ""
 "Deze guild is in een ander venster gewijzigd: je wijzigingen hier zijn niet "
 "opgeslagen. Kopieer de tekst die je wilt behouden en laad de pagina opnieuw."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Een deelnemer probeerde te betalen met <b>%(method)s</b>, maar de betaling "
+"kon niet starten omdat deze instellingen ontbreken: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

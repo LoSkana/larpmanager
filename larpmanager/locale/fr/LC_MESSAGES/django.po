@@ -3422,6 +3422,9 @@ msgstr "Bilan global"
 msgid "Parent campaign"
 msgstr "Campagne mère"
 
+msgid "Pay with PayPal"
+msgstr "Payer avec PayPal"
+
 msgid "Payment Methods"
 msgstr "Modes de paiement"
 
@@ -6028,6 +6031,9 @@ msgstr "La régénération du PDF a commencé !"
 
 msgid "Payment awaiting verification"
 msgstr "Paiement en attente de vérification"
+
+msgid "Payment method not configured"
+msgstr "Moyen de paiement non configuré"
 
 msgid "Payments to approve reminders"
 msgstr "Rappels des paiements à approuver"
@@ -12920,6 +12926,13 @@ msgstr ""
 "la taille standard)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Le paiement n'a pas encore été confirmé : il sera enregistré dès que PayPal "
+"le confirmera."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14070,6 +14083,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Complète-les dans les <a href='%(url)s'>paramètres des moyens de "
+"paiement</a>, ou désactive le moyen de paiement."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14424,6 +14445,13 @@ msgid ""
 msgstr ""
 "Seuls les éléments sélectionnés seront copiés : les éléments portant le même"
 " nom sont écrasés, tous les autres sont conservés."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Ce moyen de paiement est temporairement indisponible. Choisis un autre moyen"
+" de paiement ou contacte les organisateurs."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -15250,6 +15278,14 @@ msgstr ""
 "Cette guilde a été modifiée dans une autre fenêtre : tes modifications ici "
 "n’ont pas été enregistrées. Copie le texte que tu veux conserver, puis "
 "recharge la page."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Un participant a essayé de payer avec <b>%(method)s</b>, mais le paiement "
+"n'a pas pu démarrer car ces paramètres sont manquants : <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
