@@ -354,8 +354,10 @@ def _prepare_gateway_form(
     # Gateways enabled without their credentials cannot start a payment
     missing_keys = missing_gateway_keys(payment_method_slug, context)
     if missing_keys:
-        _gateway_failed(request, context, invoice, f"Gateway not configured, missing: {', '.join(missing_keys)}")
-        notify_gateway_not_configured(invoice, missing_keys)
+        # Admins are notified together with the executives, at most once a day
+        first_today = notify_gateway_not_configured(invoice, missing_keys)
+        error = f"Gateway not configured, missing: {', '.join(missing_keys)}"
+        _gateway_failed(request, context, invoice, error, notify=first_today)
         return
 
     try:
@@ -369,13 +371,16 @@ def _prepare_gateway_form(
         context["gateway_error"] = True
 
 
-def _gateway_failed(request: HttpRequest, context: dict, invoice: PaymentInvoice, error: str) -> None:
-    """Notify admins of a gateway that could not start a payment, and flag it in the context."""
+def _gateway_failed(
+    request: HttpRequest, context: dict, invoice: PaymentInvoice, error: str, *, notify: bool = True
+) -> None:
+    """Log a gateway that could not start a payment, notify admins if requested, and flag it in the context."""
     logger.error("Payment gateway %s error for invoice %s: %s", invoice.method.slug, invoice.cod, error)
-    notify_admins(
-        f"Payment gateway error - {invoice.method.slug} - {request.association['slug']}",
-        payment_error_info(request, context, invoice, error),
-    )
+    if notify:
+        notify_admins(
+            f"Payment gateway error - {invoice.method.slug} - {request.association['slug']}",
+            payment_error_info(request, context, invoice, error),
+        )
     context["gateway_error"] = True
 
 

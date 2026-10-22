@@ -26,6 +26,7 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
@@ -41,6 +42,7 @@ from larpmanager.accounting.gateway.paypal_v2 import (
     PAYPAL_V2_COMPLETED,
     PAYPAL_V2_PENDING,
     get_paypal_v2_cancel_error,
+    is_paypal_v2_order_id,
     paypal_v2_capture,
     paypal_v2_webhook,
 )
@@ -84,7 +86,12 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import fetch_payment_details, get_context, get_event_context
+from larpmanager.utils.core.base import (
+    fetch_payment_details,
+    get_context,
+    get_event_context,
+    update_payment_details,
+)
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     get_collection_partecipate,
@@ -96,6 +103,9 @@ from larpmanager.utils.registrations.status import _status_payment, registration
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 
 logger = logging.getLogger(__name__)
+
+# Minimum interval between two admin notifications of SumUp errors on the same invoice
+SUMUP_ERROR_NOTIFY_SECONDS = 3600
 
 
 @login_required
@@ -947,8 +957,9 @@ def accounting_webhook_stripe(request: HttpRequest) -> JsonResponse:
 
 @csrf_exempt
 def accounting_webhook_paypal(request: HttpRequest) -> JsonResponse:
-    """Handle PayPal webhook notifications."""
-    paypal_v2_webhook(request)
+    """Handle PayPal webhook notifications, answering with an error to have PayPal retry failed ones."""
+    if not paypal_v2_webhook(request):
+        return JsonResponse({"res": "ko"}, status=400)
     return JsonResponse({"res": "ok"})
 
 
@@ -971,14 +982,21 @@ def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpRes
     if invoice.status != PaymentStatus.CREATED:
         return redirect("accounting_payed", registration_uuid=invoice.uuid)
 
-    payment_details = fetch_payment_details(request.association["id"])
+    context = get_context(request)
+    update_payment_details(context)
+
+    # PayPal appends the approved order id to the return url
+    order_id = request.GET.get("token")
+    if not is_paypal_v2_order_id(order_id):
+        order_id = None
+
     try:
-        capture_status = paypal_v2_capture(payment_details, invoice)
+        capture_status = paypal_v2_capture(context, invoice, order_id)
     except GatewayError as err:
         logger.exception("PayPal capture failed - invoice %s", invoice.cod)
         notify_admins(
             f"PayPal capture failed - {request.association['slug']} - {request.user}",
-            payment_error_info(request, payment_details, invoice, str(err)),
+            payment_error_info(request, context, invoice, str(err)),
         )
         capture_status = None
 
@@ -1013,6 +1031,10 @@ def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonRespo
     )
     if not invoice:
         raise Http404
+
+    # Notify at most once in a while for each invoice, the widget can report errors repeatedly
+    if not cache.add(f"sumup_error_{invoice.uuid}", 1, timeout=SUMUP_ERROR_NOTIFY_SECONDS):
+        return JsonResponse({"res": "ok"})
 
     response_type = request.POST.get("type", "")[:50]
     response_body = request.POST.get("body", "")[:2000]
@@ -1074,7 +1096,7 @@ def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
 
 @login_required
 def accounting_cancelled(request: HttpRequest) -> HttpResponse:
-    """Handle cancelled payment: notify admins on gateway errors and redirect to accounting page."""
+    """Handle cancelled payment: notify admins on detected gateway errors and redirect to accounting page."""
     payment_details = fetch_payment_details(request.association["id"])
     invoice = _get_cancelled_invoice(request)
 
@@ -1088,9 +1110,10 @@ def accounting_cancelled(request: HttpRequest) -> HttpResponse:
         required_key, get_cancel_error = cancel_error_checks[invoice.method.slug]
         if payment_details.get(required_key):
             gateway_error = get_cancel_error(payment_details, invoice)
-            if not gateway_error:
-                messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
-                return redirect("accounting")
+
+    if not gateway_error:
+        messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+        return redirect("accounting")
 
     notify_admins(
         f"Payment cancelled - {request.association['slug']} - {request.user}",

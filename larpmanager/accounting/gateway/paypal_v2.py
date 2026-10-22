@@ -25,6 +25,7 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import re
 from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
@@ -57,6 +58,22 @@ PAYPAL_V2_BOUNCE_SECONDS = 15
 # Capture statuses of a completed payment, and of a payment PayPal still has to settle
 PAYPAL_V2_COMPLETED = "COMPLETED"
 PAYPAL_V2_PENDING = "PENDING"
+
+# Currencies PayPal accepts only without decimals
+PAYPAL_V2_ZERO_DECIMAL_CURRENCIES = {"HUF", "JPY", "TWD"}
+
+PAYPAL_V2_ORDER_ID_RE = re.compile(r"[A-Za-z0-9-]{1,64}")
+
+
+def is_paypal_v2_order_id(order_id: str | None) -> bool:
+    """Return whether a string has the shape of a PayPal order id."""
+    return bool(order_id and PAYPAL_V2_ORDER_ID_RE.fullmatch(order_id))
+
+
+def paypal_v2_amount(amount: Decimal, currency: str) -> str:
+    """Format an amount with the decimals PayPal requires for the currency."""
+    precision = Decimal(1) if currency.upper() in PAYPAL_V2_ZERO_DECIMAL_CURRENCIES else Decimal("0.01")
+    return str(amount.quantize(precision))
 
 
 def paypal_v2_api_url(path: str) -> str:
@@ -141,7 +158,7 @@ def get_paypal_v2_form(request: HttpRequest, context: dict, invoice: PaymentInvo
                 "description": invoice.causal[:127],
                 "amount": {
                     "currency_code": context["payment_currency"],
-                    "value": str(amount.quantize(Decimal("0.01"))),
+                    "value": paypal_v2_amount(amount, context["payment_currency"]),
                 },
             },
         ],
@@ -202,8 +219,34 @@ def _paypal_v2_receive_capture(context: dict, invoice: PaymentInvoice, capture: 
     )
 
 
-def paypal_v2_capture(context: dict, invoice: PaymentInvoice) -> str:
+def _paypal_v2_check_order_invoice(context: dict, invoice: PaymentInvoice, order_id: str) -> None:
+    """Ensure a PayPal order was created for the invoice.
+
+    Raises:
+        GatewayError: If the order cannot be read or belongs to another invoice
+
+    """
+    response = _paypal_v2_request(context, "GET", f"/v2/checkout/orders/{order_id}")
+    if response.status_code != 200:  # noqa: PLR2004 - HTTP OK
+        msg = f"PayPal order {order_id} retrieval failed with status {response.status_code}: {response.text}"
+        raise GatewayError(msg)
+
+    try:
+        custom_id = response.json()["purchase_units"][0].get("custom_id")
+    except (ValueError, KeyError, IndexError) as err:
+        msg = f"Invalid PayPal order response for order {order_id}: {response.text}"
+        raise GatewayError(msg) from err
+
+    if custom_id != str(invoice.uuid):
+        msg = f"PayPal order {order_id} does not belong to invoice {invoice.cod}"
+        raise GatewayError(msg)
+
+
+def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | None = None) -> str:
     """Capture the PayPal order of an invoice the user has just approved.
+
+    The order defaults to the last one created for the invoice; any other order is
+    checked to belong to the invoice before being captured.
 
     Returns:
         The capture status (COMPLETED, PENDING, DECLINED, ...)
@@ -212,10 +255,13 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice) -> str:
         GatewayError: If PayPal refuses the capture or cannot be reached
 
     """
-    order_id = invoice.txn_id
+    order_id = order_id or invoice.txn_id
     if not order_id:
         msg = f"No PayPal order on invoice {invoice.cod}"
         raise GatewayError(msg)
+
+    if order_id != invoice.txn_id:
+        _paypal_v2_check_order_invoice(context, invoice, order_id)
 
     response = _paypal_v2_request(context, "POST", f"/v2/checkout/orders/{order_id}/capture")
 
@@ -241,7 +287,7 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice) -> str:
     return status
 
 
-def _paypal_v2_verify_webhook(request: HttpRequest, context: dict) -> bool:
+def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: str) -> bool:
     """Verify the signature of a PayPal webhook notification through the PayPal API."""
     headers = {
         "auth_algo": request.headers.get("Paypal-Auth-Algo", ""),
@@ -253,7 +299,7 @@ def _paypal_v2_verify_webhook(request: HttpRequest, context: dict) -> bool:
     }
 
     # Embed the raw event: re-serializing it could alter the signed payload
-    body = json.dumps(headers)[:-1] + ', "webhook_event": ' + request.body.decode("utf-8") + "}"
+    body = json.dumps(headers)[:-1] + ', "webhook_event": ' + raw_event + "}"
 
     try:
         response = requests.post(
@@ -275,7 +321,7 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
     """Handle PayPal webhook notifications, registering completed captures.
 
     Returns:
-        True if the notification was processed, False if it was rejected or ignored
+        True if the notification was processed or ignored, False if it failed and PayPal should retry it
 
     """
     context = get_context(request)
@@ -284,18 +330,24 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         logger.error("PayPal webhook: not configured for association %s", context["association_id"])
         return False
 
-    if not _paypal_v2_verify_webhook(request, context):
+    try:
+        raw_event = request.body.decode("utf-8")
+    except UnicodeDecodeError:
+        logger.exception("PayPal webhook: invalid payload encoding")
+        return False
+
+    if not _paypal_v2_verify_webhook(request, context, raw_event):
         logger.error("PayPal webhook: signature verification failed")
         return False
 
     try:
-        event = json.loads(request.body)
+        event = json.loads(raw_event)
     except ValueError:
         logger.exception("PayPal webhook: invalid payload")
         return False
 
     if event.get("event_type") != "PAYMENT.CAPTURE.COMPLETED":
-        return False
+        return True
 
     capture = event.get("resource", {})
     try:
@@ -306,7 +358,7 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         )
     except ObjectDoesNotExist:
         logger.exception("PayPal webhook: Invoice not found: %s", capture.get("invoice_id"))
-        return False
+        return True
 
     if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return True

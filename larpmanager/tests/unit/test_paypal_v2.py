@@ -31,6 +31,7 @@ from django.test import RequestFactory
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.gateway.paypal_v2 import (
     get_paypal_v2_form,
+    paypal_v2_amount,
     paypal_v2_capture,
     paypal_v2_webhook,
 )
@@ -118,6 +119,11 @@ class TestPaypalV2(BaseTestCase):
         self.assertEqual(payload["purchase_units"][0]["invoice_id"], "PAYPALV2COD")
         self.assertEqual(payload["purchase_units"][0]["amount"], {"currency_code": "EUR", "value": "100.00"})
 
+    def test_amount_currency_decimals(self) -> None:
+        """Test amounts use the decimals PayPal requires for the currency"""
+        self.assertEqual(paypal_v2_amount(Decimal("100.5"), "EUR"), "100.50")
+        self.assertEqual(paypal_v2_amount(Decimal(5000), "JPY"), "5000")
+
     @patch(f"{PAYPAL_MODULE}.requests.post")
     def test_form_auth_failure_raises(self, mock_post: Any) -> None:
         """Test invalid credentials raise a gateway error"""
@@ -140,6 +146,33 @@ class TestPaypalV2(BaseTestCase):
         self.assertEqual(self.invoice.status, PaymentStatus.CHECKED)
         self.assertEqual(self.invoice.txn_id, "CAPTURE1")
         self.assertEqual(self.invoice.mc_fee, Decimal("3.75"))
+
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_capture_returned_order(self, mock_post: Any, mock_request: Any) -> None:
+        """Test the order returned by PayPal is captured when it belongs to the invoice"""
+        mock_post.return_value = _token_response()
+        order = {"id": "ORDER0", "purchase_units": [{"custom_id": str(self.invoice.uuid)}]}
+        mock_request.side_effect = [_response(200, order), _response(201, _order(_capture()))]
+
+        status = paypal_v2_capture(self.context, self.invoice, "ORDER0")
+
+        self.assertEqual(status, "COMPLETED")
+        self.assertIn("/v2/checkout/orders/ORDER0/capture", mock_request.call_args.args[1])
+
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_capture_foreign_order(self, mock_post: Any, mock_request: Any) -> None:
+        """Test an order created for another invoice is not captured"""
+        mock_post.return_value = _token_response()
+        mock_request.return_value = _response(200, {"id": "ORDER9", "purchase_units": [{"custom_id": "other"}]})
+
+        with self.assertRaises(GatewayError):
+            paypal_v2_capture(self.context, self.invoice, "ORDER9")
+
+        mock_request.assert_called_once()
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
     @patch(f"{PAYPAL_MODULE}.requests.request")
     @patch(f"{PAYPAL_MODULE}.requests.post")
@@ -195,9 +228,9 @@ class TestPaypalV2(BaseTestCase):
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
-    def _webhook_request(self) -> Any:
-        """Build a PayPal webhook request for a completed capture."""
-        event = {"event_type": "PAYMENT.CAPTURE.COMPLETED", "resource": _capture()}
+    def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED") -> Any:
+        """Build a PayPal webhook request for a capture event."""
+        event = {"event_type": event_type, "resource": _capture()}
         return RequestFactory().post(
             "/accounting/webhook/paypal", data=json.dumps(event), content_type="application/json"
         )
@@ -214,6 +247,28 @@ class TestPaypalV2(BaseTestCase):
 
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_other_event(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a verified webhook of another event type is acknowledged without changes"""
+        mock_context.return_value = self.context
+        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+
+        self.assertTrue(paypal_v2_webhook(self._webhook_request("PAYMENT.CAPTURE.REFUNDED")))
+
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    def test_webhook_invalid_encoding(self, mock_context: Any, _mock_update: Any) -> None:
+        """Test a webhook body that is not utf-8 is rejected"""
+        mock_context.return_value = self.context
+        request = RequestFactory().post("/accounting/webhook/paypal", data=b"\xff\xfe", content_type="application/json")
+
+        self.assertFalse(paypal_v2_webhook(request))
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
@@ -246,6 +301,23 @@ class TestGatewayConfiguration(BaseTestCase):
             ["paypal_v2_secret", "paypal_v2_webhook_id"],
         )
         self.assertEqual(missing_gateway_keys("wire", {}), [])
+
+    @patch("larpmanager.accounting.payment.notify_gateway_not_configured", return_value=False)
+    @patch("larpmanager.accounting.payment.payment_error_info", return_value="info")
+    @patch("larpmanager.accounting.payment.notify_admins")
+    def test_unconfigured_gateway_notifies_admins_once(
+        self, mock_notify: Any, _mock_info: Any, _mock_notify_exe: Any
+    ) -> None:
+        """Test admins are not notified again of a gateway already reported today"""
+        invoice = self.payment_invoice(method=_method("stripe"))
+        request = MagicMock()
+        request.association = {"slug": "test", "id": invoice.association_id}
+        context = {"stripe_sk_api": "sk"}
+
+        _prepare_gateway_form(request, context, invoice, Decimal(100), "stripe", require_receipt=False)
+
+        self.assertTrue(context["gateway_error"])
+        mock_notify.assert_not_called()
 
     @patch("larpmanager.accounting.payment.notify_gateway_not_configured")
     @patch("larpmanager.accounting.payment.get_stripe_form")

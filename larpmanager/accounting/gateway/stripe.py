@@ -120,8 +120,10 @@ def get_stripe_cancel_error(context: dict, invoice: PaymentInvoice) -> str | Non
     user came back too quickly after its creation to have actually seen the checkout page.
     """
     session_id = cache.get(stripe_session_key(invoice.uuid))
+    # Session expired or cache flushed: nothing to inspect, treat it as a user cancellation
     if not session_id:
-        return "Checkout session not found in cache"
+        logger.warning("Stripe cancel: checkout session not found in cache - invoice %s", invoice.cod)
+        return None
 
     stripe.api_key = context["stripe_sk_api"]
     try:
