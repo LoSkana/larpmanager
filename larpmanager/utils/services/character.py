@@ -950,8 +950,8 @@ def reset_campaign_character_status(relation: RegistrationCharacterRel) -> bool:
     """Move an approved campaign character back to revision when assigned to a new run.
 
     Runs only when the campaign and user_character features and the
-    reset_character_status config are enabled, and only for characters already
-    played in a previous run. Returns True if the status was changed.
+    user_character_approval and reset_character_status configs are enabled, and only
+    for characters already played in a previous run. Returns True if the status was changed.
     """
     character = relation.character
     if character.status != CharacterStatus.APPROVED:
@@ -961,8 +961,9 @@ def reset_campaign_character_status(relation: RegistrationCharacterRel) -> bool:
     if "campaign" not in features or "user_character" not in features:
         return False
 
-    if not get_event_config(character.event_id, "reset_character_status"):
-        return False
+    for config in ["user_character_approval", "reset_character_status"]:
+        if not get_event_config(character.event_id, config):
+            return False
 
     played_before = (
         RegistrationCharacterRel.objects.filter(

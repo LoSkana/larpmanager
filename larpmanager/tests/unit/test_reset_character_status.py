@@ -29,6 +29,7 @@ from larpmanager.models.event import EventConfig, Run
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.views.user.character import _replace_character
 
 FEATURES_PATH = "larpmanager.utils.services.character.get_event_features"
 
@@ -54,8 +55,10 @@ class TestResetCharacterStatus(BaseTestCase):
         RegistrationCharacterRel.objects.create(registration=registration, character=self.character)
         self.character.refresh_from_db()
 
-    def _enable_config(self) -> None:
+    def _enable_config(self, *, approval: bool = True) -> None:
         EventConfig.objects.create(event=self.parent, name="reset_character_status", value="True")
+        if approval:
+            EventConfig.objects.create(event=self.parent, name="user_character_approval", value="True")
 
     def test_returning_character_reset_to_revision(self) -> None:
         self._enable_config()
@@ -77,3 +80,21 @@ class TestResetCharacterStatus(BaseTestCase):
             self._assign(self.first_run)
             self._assign(self.second_run)
         assert self.character.status == CharacterStatus.APPROVED
+
+    def test_no_reset_without_approval(self) -> None:
+        self._enable_config(approval=False)
+        with patch(FEATURES_PATH, return_value={"campaign", "user_character"}):
+            self._assign(self.first_run)
+            self._assign(self.second_run)
+        assert self.character.status == CharacterStatus.APPROVED
+
+    def test_replaced_character_reset_to_revision(self) -> None:
+        self._enable_config()
+        with patch(FEATURES_PATH, return_value={"campaign", "user_character"}):
+            self._assign(self.first_run)
+            other = Character.objects.create(event=self.parent, name="Other", number=2, player=self.member)
+            registration = self.create_registration(member=self.member, run=self.second_run)
+            relation = RegistrationCharacterRel.objects.create(registration=registration, character=other)
+            _replace_character(relation, self.character.id)
+        self.character.refresh_from_db()
+        assert self.character.status == CharacterStatus.REVIEW

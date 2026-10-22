@@ -43,7 +43,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image, UnidentifiedImageError
 
-from larpmanager.cache.character import get_event_cache_all, update_event_cache_all
+from larpmanager.cache.character import clear_event_cache_all_runs, get_event_cache_all, update_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.experience import get_event_exp_systems
@@ -100,6 +100,7 @@ from larpmanager.utils.services.character import (
     get_character_sheet,
     get_character_sheet_factions,
     get_character_sheet_guilds,
+    reset_campaign_character_status,
 )
 from larpmanager.utils.services.experience import (
     add_char_addit,
@@ -467,6 +468,7 @@ def _save_character(
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
     character = form.instance
+    is_new = not character.pk
     # Options chosen before the save, which keep their spot even if now over the limit
     previous_option_ids = (
         get_character_option_ids(character.pk) if isinstance(character, Character) and character.pk else set()
@@ -489,6 +491,12 @@ def _save_character(
                 )
                 if full_options:
                     transaction.set_rollback(True)
+                    # Drop the cached data and the primary key of the discarded save
+                    clear_event_cache_all_runs(character.event_id)
+                    if is_new:
+                        character.pk = None
+                        character.number = None
+                        character._state.adding = True  # noqa: SLF001
                     form.add_error(None, get_character_new_full_options_error(full_options))
                     return None, None
 
@@ -1010,12 +1018,16 @@ def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None
 
     The relation is updated in place instead of being recreated, so the registration is never
     left without a character (which would trigger the campaign auto-assignment again).
+    Approved campaign characters are sent back to revision, as on a new assignment.
     """
     rel.character_id = character_id
     for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
         setattr(rel, custom_field, None)
     rel.custom_profile = None
     rel.save()
+
+    if reset_campaign_character_status(rel):
+        rel.character.save()
 
 
 def _can_replace_character(context: dict, play_max: int, assigned: list) -> bool:
