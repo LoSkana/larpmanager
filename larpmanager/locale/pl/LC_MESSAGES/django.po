@@ -2819,6 +2819,9 @@ msgstr "Następne sesje"
 msgid "Not completed"
 msgstr "Nieukończone"
 
+msgid "Not signed up"
+msgstr "Nie zapisano"
+
 msgid "Number events"
 msgstr "Liczba wydarzeń"
 

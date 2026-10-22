@@ -20,42 +20,55 @@
         </div>
     </div>
     {% for item in split_lists %}
-        {% if item.title and item.list %}
-            <hr />
-            <h2>{{ item.title }}</h2>
-        {% endif %}
-        <table id="writing_list_{{ run.uuid }}_{{ typ }}_{{ forloop.counter }}"
-               class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% if reorder_model %} row_reorder{% endif %}"
-               {% block table_reorder_attrs %}
-               {% endblock table_reorder_attrs %}
-               {% if reorder_model %}data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}" data-reorder-model="{{ reorder_model }}"{% endif %}>
-            <thead>
-                <th></th>
-                {% if reorder_model %}<th></th>{% endif %}
-                {% block thead %}
-                {% endblock thead %}
-            </thead>
-            <tbody>
-                {% with list=item.list %}
-                    {% for el in list %}
-                        <tr id="{{ el.uuid }}">
-                            <td></td>
-                            {% if reorder_model %}
-                                <td class="reorder-handle">
-                                    <i class="fa-solid fa-grip-vertical"></i>
-                                </td>
-                            {% endif %}
-                            {% block tr_content %}
-                            {% endblock tr_content %}
-                        </tr>
-                    {% endfor %}
-                {% endwith %}
-            </tbody>
-        </table>
-        {% if not item.list and not item.title %}
-            <p class="no-elements-available">
-                <i>{% trans "No elements are currently available" %}</i>
-            </p>
+        {% if item.list or not item.count %}
+            {% if item.title and item.list %}
+                <hr />
+                {% if item.hidden %}
+                    <h2>
+                        <a href="#" class="my_toggle" tog="{{ item.hidden }}">{{ item.title }} ({{ item.list|length }})</a>
+                    </h2>
+                {% else %}
+                    <h2>
+                        {{ item.title }}
+                        {% if item.count %}({{ item.list|length }}){% endif %}
+                    </h2>
+                {% endif %}
+            {% endif %}
+            <div class="split_list{% if item.hidden %} {{ item.hidden }} hide{% endif %}">
+                <table id="writing_list_{{ run.uuid }}_{{ typ }}_{{ forloop.counter }}"
+                       class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% if reorder_model %} row_reorder{% endif %}"
+                       {% block table_reorder_attrs %}
+                       {% endblock table_reorder_attrs %}
+                       {% if reorder_model %}data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}" data-reorder-model="{{ reorder_model }}"{% endif %}>
+                    <thead>
+                        <th></th>
+                        {% if reorder_model %}<th></th>{% endif %}
+                        {% block thead %}
+                        {% endblock thead %}
+                    </thead>
+                    <tbody>
+                        {% with list=item.list %}
+                            {% for el in list %}
+                                <tr id="{{ el.uuid }}">
+                                    <td></td>
+                                    {% if reorder_model %}
+                                        <td class="reorder-handle">
+                                            <i class="fa-solid fa-grip-vertical"></i>
+                                        </td>
+                                    {% endif %}
+                                    {% block tr_content %}
+                                    {% endblock tr_content %}
+                                </tr>
+                            {% endfor %}
+                        {% endwith %}
+                    </tbody>
+                </table>
+            </div>
+            {% if not item.list and not item.title %}
+                <p class="no-elements-available">
+                    <i>{% trans "No elements are currently available" %}</i>
+                </p>
+            {% endif %}
         {% endif %}
     {% endfor %}
     {% block additional %}

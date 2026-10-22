@@ -642,6 +642,10 @@ function initToggles() {
                 window.jump_to('.' + k);
             }
             $(this).addClass('select');
+            // datatables built while hidden need their column widths recomputed
+            el.find('table.go_datatable').each(function() {
+                if (window.datatables && window.datatables[this.id]) window.datatables[this.id].columns.adjust();
+            });
         } else {
             $(this).removeClass('select');
         }
@@ -895,12 +899,20 @@ function refreshDatatables() {
         const savedStates = {};
         let $emptyAnchor = null;
 
-        // page was empty (no tables) but now has content: replace the whole content wrapper
-        if (!$('table.go_datatable').length && $newTables.length) {
+        // page was empty (no tables) or gained new tables: replace the whole content wrapper
+        const oldIds = $('table.go_datatable').map(function() { return this.id; }).get();
+        const hasNewTables = $newTables.filter(function() { return this.id && !oldIds.includes(this.id); }).length > 0;
+        if ((!oldIds.length && $newTables.length) || hasNewTables) {
             const $page = $('[class^="page_"], [class*=" page_"]').first();
             const $newPage = $newDoc.find('[class^="page_"], [class*=" page_"]').first();
             if ($page.length && $newPage.length) {
+                // keep the hidden split lists the user opened
+                const openTogs = $page.find('.my_toggle.select').map(function() { return $(this).attr('tog'); }).get();
                 $page.html($newPage.html());
+                openTogs.forEach(function(tog) {
+                    $page.find('.' + tog).show();
+                    $page.find('.my_toggle[tog="' + tog + '"]').addClass('select').each(function() { syncToggleAria(this); });
+                });
                 // rebuild column index map from the freshly injected table headers
                 if (typeof window.buildHideColumnsIndexMap === 'function') window.buildHideColumnsIndexMap();
                 // do NOT suppress trigger togs: apply default column visibility (hidden columns)
@@ -913,9 +925,10 @@ function refreshDatatables() {
             }
         }
 
-        // nearest heading right before a table (skipping <hr>), or empty set
+        // nearest heading right before a table or its .split_list wrapper (skipping <hr>), or empty set
         function headingFor($table) {
-            let node = $table[0].previousElementSibling;
+            const $wrapper = $table.parent('.split_list');
+            let node = ($wrapper.length ? $wrapper[0] : $table[0]).previousElementSibling;
             while (node && node.tagName === 'HR') node = node.previousElementSibling;
             return node && node.tagName === 'H2' ? $(node) : $();
         }
@@ -956,16 +969,23 @@ function refreshDatatables() {
                 const $newHeading = $newTable.length ? headingFor($newTable) : $();
                 if ($oldHeading.length && $newHeading.length) {
                     $oldHeading.html($newHeading.html());
+                    // keep the select state of a toggle whose list is open
+                    $oldHeading.find('.my_toggle').each(function() {
+                        $(this).toggleClass('select', $('.' + $(this).attr('tog')).is(':visible'));
+                        syncToggleAria(this);
+                    });
                 }
             } else {
                 // no rows left in new page (group/last element deleted): remove table and heading
-                const $anchorRef = $oldHeading.length ? $oldHeading : $oldTable;
+                const $oldWrapper = $oldTable.parent('.split_list');
+                const $oldBlock = $oldWrapper.length ? $oldWrapper : $oldTable;
+                const $anchorRef = $oldHeading.length ? $oldHeading : $oldBlock;
                 if (!$emptyAnchor) $emptyAnchor = $('<span>').insertBefore($anchorRef);
                 // remove a leading <hr> separator if it belongs to this block
                 const prev = $anchorRef[0].previousElementSibling;
                 if (prev && prev.tagName === 'HR') prev.remove();
                 $oldHeading.remove();
-                $oldTable.remove();
+                $oldBlock.remove();
             }
         });
 

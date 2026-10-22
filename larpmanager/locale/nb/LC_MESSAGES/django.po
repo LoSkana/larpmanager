@@ -2819,6 +2819,9 @@ msgstr "Neste økter"
 msgid "Not completed"
 msgstr "Ikke fullført"
 
+msgid "Not signed up"
+msgstr "Ikke påmeldt"
+
 msgid "Number events"
 msgstr "Antall arrangementer"
 

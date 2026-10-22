@@ -13031,6 +13031,9 @@ msgstr ""
 msgid "Characters not participating"
 msgstr ""
 
+msgid "Not signed up"
+msgstr ""
+
 msgid "Place of birth not included in the ISTAT list"
 msgstr ""
 
