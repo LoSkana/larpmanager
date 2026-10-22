@@ -684,18 +684,19 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     # Split signed up characters by approval status, with a hidden list for those not signed up
     if split_by_status:
         all_chars = list(context["list"])
-        signed_up = [c for c in all_chars if c.has_registration]
-        context["split_lists"] = [
-            {"title": label, "list": [c for c in signed_up if c.status == value]}
-            for value, label in CharacterStatus.choices
-        ]
-        context["split_lists"].append(
-            {
-                "title": _("Not signed up"),
-                "list": [c for c in all_chars if not c.has_registration],
-                "hidden": "chars_not_signed_up",
-            },
-        )
+        if all_chars:
+            signed_up = [c for c in all_chars if c.has_registration]
+            context["split_lists"] = [
+                {"title": label, "list": [c for c in signed_up if c.status == value]}
+                for value, label in CharacterStatus.choices
+            ]
+            context["split_lists"].append(
+                {
+                    "title": _("Not signed up"),
+                    "list": [c for c in all_chars if not c.has_registration],
+                    "hidden": "chars_not_signed_up",
+                },
+            )
     # Split list by registration status if config is enabled
     elif "campaign" in context["features"] and context["campaign_split_registration"]:
         all_chars = list(context["list"])

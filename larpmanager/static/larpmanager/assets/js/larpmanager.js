@@ -642,6 +642,10 @@ function initToggles() {
                 window.jump_to('.' + k);
             }
             $(this).addClass('select');
+            // datatables built while hidden need their column widths recomputed
+            el.find('table.go_datatable').each(function() {
+                if (window.datatables && window.datatables[this.id]) window.datatables[this.id].columns.adjust();
+            });
         } else {
             $(this).removeClass('select');
         }
@@ -902,7 +906,13 @@ function refreshDatatables() {
             const $page = $('[class^="page_"], [class*=" page_"]').first();
             const $newPage = $newDoc.find('[class^="page_"], [class*=" page_"]').first();
             if ($page.length && $newPage.length) {
+                // keep the hidden split lists the user opened
+                const openTogs = $page.find('.my_toggle.select').map(function() { return $(this).attr('tog'); }).get();
                 $page.html($newPage.html());
+                openTogs.forEach(function(tog) {
+                    $page.find('.' + tog).show();
+                    $page.find('.my_toggle[tog="' + tog + '"]').addClass('select').each(function() { syncToggleAria(this); });
+                });
                 // rebuild column index map from the freshly injected table headers
                 if (typeof window.buildHideColumnsIndexMap === 'function') window.buildHideColumnsIndexMap();
                 // do NOT suppress trigger togs: apply default column visibility (hidden columns)
@@ -962,13 +972,15 @@ function refreshDatatables() {
                 }
             } else {
                 // no rows left in new page (group/last element deleted): remove table and heading
-                const $anchorRef = $oldHeading.length ? $oldHeading : $oldTable;
+                const $oldWrapper = $oldTable.parent('.split_list');
+                const $oldBlock = $oldWrapper.length ? $oldWrapper : $oldTable;
+                const $anchorRef = $oldHeading.length ? $oldHeading : $oldBlock;
                 if (!$emptyAnchor) $emptyAnchor = $('<span>').insertBefore($anchorRef);
                 // remove a leading <hr> separator if it belongs to this block
                 const prev = $anchorRef[0].previousElementSibling;
                 if (prev && prev.tagName === 'HR') prev.remove();
                 $oldHeading.remove();
-                $oldTable.remove();
+                $oldBlock.remove();
             }
         });
 

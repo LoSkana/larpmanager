@@ -195,6 +195,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()
 
+
 def check_status_tables(page: Any) -> None:
     """Check characters split by approval status, with not signed up ones hidden behind a toggle."""
     expect(page.get_by_role("heading", name="Proposed (1)")).to_be_visible()
