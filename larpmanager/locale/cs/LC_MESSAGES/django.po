@@ -9413,6 +9413,9 @@ msgstr ""
 msgid "Participants can now submit donations, and you can review them."
 msgstr "Účastníci nyní mohou odesílat dary a ty je můžeš zkontrolovat."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr "Platba byla zrušena. Můžeš to zkusit znovu, kdykoli budeš chtít."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Registrace na akci <i>%(run)s</i> ještě nejsou otevřené!"
@@ -9596,9 +9599,6 @@ msgstr "Asistent je momentálně nedostupný, zkus to prosím později."
 
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr "Název volání, napsaný velkými písmeny v popisech schopností"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr "Platba nebyla dokončena. Kontaktuj nás a zjisti, proč."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "Budou ti automaticky odečteny při registraci do nové události!"
@@ -11948,6 +11948,13 @@ msgstr ""
 "Procento DPH, které se vypočítá ze součtu nákladů registračních možností."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"Platba nebyla dokončena. Zkus to prosím později nebo si vyber jiný způsob "
+"platby."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -12625,6 +12632,13 @@ msgid ""
 "registrations (0 = unlimited)"
 msgstr ""
 "Nepovinné - maximální počet výběrů ve všech registracích (0 = neomezeně)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"Platba zatím nebyla potvrzena: zaregistrujeme ji, jakmile ji Satispay "
+"potvrdí."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

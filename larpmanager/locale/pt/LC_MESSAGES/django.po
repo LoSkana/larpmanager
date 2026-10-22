@@ -9451,6 +9451,10 @@ msgstr "Não existem itens disponíveis no armazém para atribuir a esta área."
 msgid "Participants can now submit donations, and you can review them."
 msgstr "Os participantes podem agora submeter donativos, e tu podes revê-los."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr ""
+"O pagamento foi cancelado. Podes tentar novamente sempre que quiseres."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "As inscrições para o evento <i>%(run)s</i> ainda não estão abertas!"
@@ -9663,9 +9667,6 @@ msgstr ""
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr ""
 "O nome da chamada, escrito em maiúsculas nas descrições das habilidades"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr "O pagamento não foi concluído. Contacta-nos para saberes porquê."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "Serão usados automaticamente quando te inscreveres num novo evento!"
@@ -12225,6 +12226,13 @@ msgstr ""
 "inscrição."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"O pagamento não foi concluído. Tenta novamente mais tarde ou escolhe outro "
+"método de pagamento."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -12913,6 +12921,13 @@ msgid ""
 msgstr ""
 "Opcional - Número máximo de vezes que pode ser selecionada em todas as "
 "inscrições (0 = ilimitado)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"O pagamento ainda não foi confirmado: será registado assim que a Satispay o "
+"confirmar."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

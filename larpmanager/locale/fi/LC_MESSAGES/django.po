@@ -9460,6 +9460,9 @@ msgstr ""
 msgid "Participants can now submit donations, and you can review them."
 msgstr "Osallistujat voivat nyt lähettää lahjoituksia, ja voit tarkistaa ne."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr "Maksu peruttiin. Voit yrittää uudelleen milloin haluat."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Ilmoittautuminen tapahtumaan <i>%(run)s</i> ei ole vielä alkanut!"
@@ -9658,9 +9661,6 @@ msgstr ""
 
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr "Huudon nimi, joka kirjoitetaan isoilla kirjaimilla kykyjen kuvauksiin"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr "Maksua ei suoritettu. Ota yhteyttä meihin selvittääksesi miksi."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "Niitä käytetään automaattisesti, kun ilmoittaudut uuteen tapahtumaan!"
@@ -12127,6 +12127,13 @@ msgstr ""
 "Ilmoittautumisvaihtoehtojen kustannusten summasta laskettava ALV-prosentti."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"Maksu ei mennyt läpi. Yritä myöhemmin uudelleen tai valitse toinen "
+"maksutapa."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -12806,6 +12813,13 @@ msgid ""
 msgstr ""
 "Valinnainen - Enimmäismäärä, kuinka monta kertaa se voidaan valita kaikissa "
 "ilmoittautumisissa (0 = rajoittamaton)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"Maksua ei ole vielä vahvistettu: se kirjataan heti, kun Satispay vahvistaa "
+"sen."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

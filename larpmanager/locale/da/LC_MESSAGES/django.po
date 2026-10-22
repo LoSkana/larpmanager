@@ -9407,6 +9407,9 @@ msgstr "Der er ingen genstande på lageret, som kan tildeles dette område."
 msgid "Participants can now submit donations, and you can review them."
 msgstr "Deltagerne kan nu indsende donationer, og du kan gennemse dem."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr "Betalingen blev annulleret. Du kan prøve igen, når du vil."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Tilmeldingerne til eventet <i>%(run)s</i> er endnu ikke åbne!"
@@ -9599,11 +9602,6 @@ msgstr "Assistenten er midlertidigt utilgængelig. Prøv igen senere."
 
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr "Kaldets navn, skrevet med store bogstaver i evnebeskrivelserne"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr ""
-"Betalingen blev ikke gennemført. Kontakt os venligst for at finde ud af "
-"hvorfor."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "De bruges automatisk, når du tilmelder dig et nyt event!"
@@ -12059,6 +12057,13 @@ msgstr ""
 "tilmeldingsmulighederne."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"Betalingen blev ikke gennemført. Prøv igen senere, eller vælg en anden "
+"betalingsmetode."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -12746,6 +12751,13 @@ msgid ""
 msgstr ""
 "Valgfrit - Maksimalt antal gange, den kan vælges på tværs af alle "
 "tilmeldinger (0 = ubegrænset)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"Betalingen er ikke bekræftet endnu: den bliver registreret, så snart "
+"Satispay bekræfter den."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
