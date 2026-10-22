@@ -36,6 +36,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from httpx import HTTPError
 
 from larpmanager.accounting.gateway import GatewayError, payment_error_info
 from larpmanager.accounting.gateway.paypal_v2 import (
@@ -1106,7 +1107,7 @@ def accounting_cancelled(request: HttpRequest) -> HttpResponse:
         "stripe": ("stripe_sk_api", get_stripe_cancel_error),
         "paypal_v2": ("paypal_v2_secret", get_paypal_v2_cancel_error),
     }
-    if invoice and invoice.method.slug in cancel_error_checks:
+    if invoice and invoice.status == PaymentStatus.CREATED and invoice.method.slug in cancel_error_checks:
         required_key, get_cancel_error = cancel_error_checks[invoice.method.slug]
         if payment_details.get(required_key):
             gateway_error = get_cancel_error(payment_details, invoice)
@@ -1199,9 +1200,10 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
 
     # Satispay redirects here whatever the outcome, check the actual payment status
     if inv and inv.method.slug == "satispay" and inv.status == PaymentStatus.CREATED:
+        update_payment_details(context)
         try:
             satispay_status = satispay_verify(context, inv.cod)
-        except Exception:
+        except (KeyError, HTTPError, OSError):
             logger.exception("Satispay status check failed - invoice %s", inv.cod)
             satispay_status = None
 

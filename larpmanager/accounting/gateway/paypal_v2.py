@@ -363,7 +363,10 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
     if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return True
 
-    return _paypal_v2_receive_capture(context, invoice, capture)
+    # Rejected captures (wrong currency or amount) are logged, retrying them would not help
+    if not _paypal_v2_receive_capture(context, invoice, capture):
+        logger.error("PayPal webhook: capture %s not accepted for invoice %s", capture.get("id"), invoice.cod)
+    return True
 
 
 def get_paypal_v2_cancel_error(context: dict, invoice: PaymentInvoice) -> str | None:

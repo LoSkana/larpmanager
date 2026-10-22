@@ -228,9 +228,9 @@ class TestPaypalV2(BaseTestCase):
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
-    def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED") -> Any:
+    def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED", capture: dict | None = None) -> Any:
         """Build a PayPal webhook request for a capture event."""
-        event = {"event_type": event_type, "resource": _capture()}
+        event = {"event_type": event_type, "resource": capture or _capture()}
         return RequestFactory().post(
             "/accounting/webhook/paypal", data=json.dumps(event), content_type="application/json"
         )
@@ -285,6 +285,19 @@ class TestPaypalV2(BaseTestCase):
         verify_body = json.loads(mock_post.call_args.kwargs["data"])
         self.assertEqual(verify_body["webhook_id"], "webhook")
         self.assertEqual(verify_body["webhook_event"]["resource"]["id"], "CAPTURE1")
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_rejected_capture(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a capture in another currency is acknowledged, so PayPal does not retry it"""
+        mock_context.return_value = self.context
+        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+
+        self.assertTrue(paypal_v2_webhook(self._webhook_request(capture=_capture(currency="USD"))))
+
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
 
 class TestGatewayConfiguration(BaseTestCase):

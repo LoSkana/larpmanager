@@ -116,8 +116,9 @@ def get_stripe_form(
 def get_stripe_cancel_error(context: dict, invoice: PaymentInvoice) -> str | None:
     """Return the gateway error behind a cancelled checkout, or None if the user cancelled it.
 
-    A checkout is considered failed if its payment intent has a payment error, or if the
-    user came back too quickly after its creation to have actually seen the checkout page.
+    A checkout is considered failed if its payment intent has a non-card payment error
+    (card declines are the payer's issue), or if the user came back too quickly after its
+    creation to have actually seen the checkout page.
     """
     session_id = cache.get(stripe_session_key(invoice.uuid))
     # Session expired or cache flushed: nothing to inspect, treat it as a user cancellation
@@ -132,8 +133,8 @@ def get_stripe_cancel_error(context: dict, invoice: PaymentInvoice) -> str | Non
         return f"Stripe API error retrieving session {session_id}: {err}"
 
     payment_intent = session.payment_intent
-    if payment_intent and payment_intent.last_payment_error:
-        payment_error = payment_intent.last_payment_error
+    payment_error = payment_intent.last_payment_error if payment_intent else None
+    if payment_error and getattr(payment_error, "type", "") != "card_error":
         error_code = getattr(payment_error, "code", "")
         decline_code = getattr(payment_error, "decline_code", "")
         error_message = getattr(payment_error, "message", "")

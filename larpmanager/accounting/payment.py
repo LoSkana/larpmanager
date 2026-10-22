@@ -32,7 +32,6 @@ import stripe
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction
 from django.db.models import F
-from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -366,9 +365,6 @@ def _prepare_gateway_form(
         )
     except (GatewayError, stripe.StripeError) as err:
         _gateway_failed(request, context, invoice, str(err))
-    except Http404:
-        # Raised by gateways that already notified admins of the error
-        context["gateway_error"] = True
 
 
 def _gateway_failed(
