@@ -38,7 +38,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import round_decimal
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys, payment_error_info
 from larpmanager.accounting.gateway.paypal import get_paypal_form
-from larpmanager.accounting.gateway.paypal_v2 import get_paypal_v2_form
+from larpmanager.accounting.gateway.paypal_v2 import get_paypal_v2_form, is_paypal_v2_pending
 from larpmanager.accounting.gateway.redsys import get_redsys_form
 from larpmanager.accounting.gateway.satispay import get_satispay_form
 from larpmanager.accounting.gateway.stripe import get_stripe_form
@@ -350,6 +350,11 @@ def _prepare_gateway_form(
         payment_method_slug: Payment method identifier
         require_receipt: Whether receipt upload is required
     """
+    # A PayPal capture still to be settled blocks any new payment of the same invoice key
+    if is_paypal_v2_pending(invoice):
+        context["payment_pending"] = True
+        return
+
     # Gateways enabled without their credentials cannot start a payment
     missing_keys = missing_gateway_keys(payment_method_slug, context)
     if missing_keys:
@@ -457,12 +462,13 @@ def get_payment_form(
     # Retrieve payment method configuration
     payment_method: PaymentMethod = PaymentMethod.objects.get(slug=payment_method_slug)
 
-    # Attempt to retrieve existing invoice by key if provided
+    # Attempt to retrieve existing invoice by key if provided, a different method gets its own invoice
     invoice: PaymentInvoice | None = None
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(
                 key=invoice_key,
+                method=payment_method,
                 status=PaymentStatus.CREATED,
                 member=context["member"],
                 association_id=association_id,
@@ -481,8 +487,7 @@ def get_payment_form(
         invoice.member = context["member"]
         invoice.association_id = association_id
     else:
-        # Update existing invoice with current payment method and type
-        invoice.method = payment_method
+        # Update existing invoice with current payment type
         invoice.typ = payment_type
 
     # Update payment context and invoice data with current details

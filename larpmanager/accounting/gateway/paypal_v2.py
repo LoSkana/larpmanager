@@ -26,7 +26,7 @@ import hashlib
 import json
 import logging
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
@@ -36,13 +36,17 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
+from larpmanager.models.member import MemberConfig
 from larpmanager.utils.core.base import get_context, update_payment_details
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
+    from django.db.models import QuerySet
     from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
@@ -55,8 +59,8 @@ PAYPAL_V2_TIMEOUT = 30
 # Cancellations faster than this after the order creation are treated as gateway errors
 PAYPAL_V2_BOUNCE_SECONDS = 5
 
-# How long a pending capture blocks new orders on its invoice, PayPal can take days to settle it
-PAYPAL_V2_PENDING_TIMEOUT = 7 * 24 * 3600
+# How long a pending capture blocks new payments of the same invoice key, PayPal can take days to settle it
+PAYPAL_V2_PENDING_TIMEOUT = timedelta(days=7)
 
 # Capture statuses of a completed payment, and of a payment PayPal still has to settle
 PAYPAL_V2_COMPLETED = "COMPLETED"
@@ -79,9 +83,38 @@ def paypal_v2_amount(amount: Decimal, currency: str) -> str:
     return str(amount.quantize(precision))
 
 
-def paypal_v2_pending_key(invoice_uuid: str) -> str:
-    """Return the cache key flagging an invoice with a pending PayPal capture."""
-    return f"paypal_v2_pending_{invoice_uuid}"
+def _paypal_v2_pending_name(invoice: PaymentInvoice) -> str:
+    """Return the member config name flagging a pending PayPal capture on the invoice key."""
+    return f"paypal_v2_pending_{invoice.key or invoice.uuid}"
+
+
+def _paypal_v2_pending_configs(invoice: PaymentInvoice) -> QuerySet[MemberConfig]:
+    """Return the member config flagging a pending PayPal capture on the invoice key."""
+    return MemberConfig.objects.filter(
+        member_id=invoice.member_id,
+        name=_paypal_v2_pending_name(invoice),
+        deleted__isnull=True,
+    )
+
+
+def is_paypal_v2_pending(invoice: PaymentInvoice) -> bool:
+    """Return whether a PayPal capture of the invoice key is still waiting to be settled."""
+    return _paypal_v2_pending_configs(invoice).filter(updated__gte=timezone.now() - PAYPAL_V2_PENDING_TIMEOUT).exists()
+
+
+def set_paypal_v2_pending(invoice: PaymentInvoice) -> None:
+    """Flag the invoice key with a pending PayPal capture, blocking new payments until it is settled."""
+    MemberConfig.objects.update_or_create(
+        member_id=invoice.member_id,
+        name=_paypal_v2_pending_name(invoice),
+        deleted=None,
+        defaults={"value": str(invoice.uuid)},
+    )
+
+
+def clear_paypal_v2_pending(invoice: PaymentInvoice) -> None:
+    """Release the pending PayPal capture flag of the invoice key."""
+    _paypal_v2_pending_configs(invoice).delete()
 
 
 def paypal_v2_api_url(path: str) -> str:
@@ -153,16 +186,10 @@ def _paypal_v2_request(context: dict, method: str, path: str, payload: dict | No
 def get_paypal_v2_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create a PayPal order for the invoice and add the PayPal approval url to the context.
 
-    No order is created while a previous capture of the invoice is pending, to avoid double payments.
-
     Raises:
         GatewayError: If PayPal refuses the order or cannot be reached
 
     """
-    if cache.get(paypal_v2_pending_key(invoice.uuid)):
-        context["paypal_pending"] = True
-        return
-
     payload = {
         "intent": "CAPTURE",
         "purchase_units": [
@@ -295,7 +322,7 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
 
     status = capture.get("status", "")
     if status == PAYPAL_V2_PENDING:
-        cache.set(paypal_v2_pending_key(invoice.uuid), 1, timeout=PAYPAL_V2_PENDING_TIMEOUT)
+        set_paypal_v2_pending(invoice)
     if status == PAYPAL_V2_COMPLETED and not _paypal_v2_receive_capture(context, invoice, capture):
         msg = f"PayPal capture {capture.get('id')} of order {order_id} not accepted for invoice {invoice.cod}"
         raise GatewayError(msg)
@@ -305,6 +332,10 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
 
 def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: str) -> bool:
     """Verify the signature of a PayPal webhook notification through the PayPal API."""
+    # Requests without the PayPal signature headers are not worth a verification call
+    if not request.headers.get("Paypal-Transmission-Id") or not request.headers.get("Paypal-Transmission-Sig"):
+        return False
+
     headers = {
         "auth_algo": request.headers.get("Paypal-Auth-Algo", ""),
         "cert_url": request.headers.get("Paypal-Cert-Url", ""),
@@ -375,11 +406,18 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         )
     except ObjectDoesNotExist:
         logger.exception("PayPal webhook: Invoice not found: %s", capture.get("invoice_id"))
+        # PayPal may have settled money that no invoice tracks, it must be reconciled by hand
+        notify_admins(
+            f"PayPal webhook - invoice not found - {capture.get('id')}",
+            f"Association: {context['association_id']}<br />\n"
+            f"Event: {escape(event_type)}<br />\n"
+            f"Resource: {escape(json.dumps(capture))}",
+        )
         return True
 
-    # A denied pending capture lets the invoice be paid again
+    # A settled capture, denied or completed, lets the invoice key be paid again
+    clear_paypal_v2_pending(invoice)
     if event_type == "PAYMENT.CAPTURE.DENIED":
-        cache.delete(paypal_v2_pending_key(invoice.uuid))
         return True
 
     if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):

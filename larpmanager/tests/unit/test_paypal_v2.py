@@ -21,27 +21,32 @@
 """Tests for the PayPal Orders v2 gateway and the gateway configuration check"""
 
 import json
+from datetime import timedelta
 from decimal import Decimal
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 from django.core.cache import cache
 from django.test import RequestFactory
+from django.utils import timezone
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.gateway.paypal_v2 import (
     get_paypal_v2_form,
+    is_paypal_v2_pending,
     paypal_v2_amount,
     paypal_v2_capture,
-    paypal_v2_pending_key,
     paypal_v2_webhook,
+    set_paypal_v2_pending,
 )
-from larpmanager.accounting.payment import _prepare_gateway_form
+from larpmanager.accounting.payment import _prepare_gateway_form, get_payment_form
 from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.mail.accounting import notify_gateway_not_configured
-from larpmanager.models.accounting import PaymentStatus
+from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.base import PaymentMethod
+from larpmanager.models.member import MemberConfig
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.views.user.accounting import _get_cancelled_invoice
 
 PAYPAL_MODULE = "larpmanager.accounting.gateway.paypal_v2"
 
@@ -90,7 +95,7 @@ class TestPaypalV2(BaseTestCase):
         super().setUp()
         cache.clear()
         self.invoice = self.payment_invoice(
-            method=_method("paypal_v2"), cod="PAYPALV2COD", txn_id="ORDER1", mc_fee=Decimal(0)
+            method=_method("paypal_v2"), cod="PAYPALV2COD", txn_id="ORDER1", mc_fee=Decimal(0), key="REG_1"
         )
         self.invoice.save()
         self.context = {
@@ -229,28 +234,55 @@ class TestPaypalV2(BaseTestCase):
         self.assertEqual(status, "PENDING")
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+        self.assertTrue(is_paypal_v2_pending(self.invoice))
 
-    @patch(f"{PAYPAL_MODULE}.requests.request")
-    @patch(f"{PAYPAL_MODULE}.requests.post")
-    def test_form_skipped_while_capture_pending(self, mock_post: Any, mock_request: Any) -> None:
-        """Test no new order is created for an invoice with a pending capture"""
-        mock_post.return_value = _token_response()
-        mock_request.return_value = _response(201, _order(_capture(status="PENDING")))
-        paypal_v2_capture(self.context, self.invoice)
-        mock_request.reset_mock()
+    @patch("larpmanager.accounting.payment.get_stripe_form")
+    def test_payment_blocked_while_capture_pending(self, mock_form: Any) -> None:
+        """Test a pending capture blocks any payment method on the same invoice key"""
+        set_paypal_v2_pending(self.invoice)
+        stripe_invoice = PaymentInvoice.objects.create(
+            member_id=self.invoice.member_id,
+            association_id=self.invoice.association_id,
+            method=_method("stripe"),
+            typ=self.invoice.typ,
+            cod="STRIPECOD",
+            key="REG_1",
+        )
+        context = {"stripe_sk_api": "sk", "stripe_webhook_secret": "whsec"}
 
-        get_paypal_v2_form(RequestFactory().get("/"), self.context, self.invoice, Decimal(100))
+        _prepare_gateway_form(MagicMock(), context, stripe_invoice, Decimal(100), "stripe", require_receipt=False)
 
-        self.assertTrue(self.context["paypal_pending"])
-        self.assertNotIn("paypal_url", self.context)
-        mock_request.assert_not_called()
+        self.assertTrue(context["payment_pending"])
+        mock_form.assert_not_called()
+
+    def test_pending_flag_expires(self) -> None:
+        """Test a pending capture older than the timeout no longer blocks payments"""
+        set_paypal_v2_pending(self.invoice)
+        MemberConfig.objects.filter(name="paypal_v2_pending_REG_1").update(updated=timezone.now() - timedelta(days=8))
+
+        self.assertFalse(is_paypal_v2_pending(self.invoice))
 
     def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED", capture: dict | None = None) -> Any:
         """Build a PayPal webhook request for a capture event."""
         event = {"event_type": event_type, "resource": capture or _capture()}
         return RequestFactory().post(
-            "/accounting/webhook/paypal", data=json.dumps(event), content_type="application/json"
+            "/accounting/webhook/paypal",
+            data=json.dumps(event),
+            content_type="application/json",
+            HTTP_PAYPAL_TRANSMISSION_ID="transmission",
+            HTTP_PAYPAL_TRANSMISSION_SIG="signature",
         )
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_missing_signature_headers(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a webhook without the PayPal signature headers is rejected without calling PayPal"""
+        mock_context.return_value = self.context
+        request = RequestFactory().post("/accounting/webhook/paypal", data="{}", content_type="application/json")
+
+        self.assertFalse(paypal_v2_webhook(request))
+        mock_post.assert_not_called()
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
@@ -294,7 +326,13 @@ class TestPaypalV2(BaseTestCase):
     def test_webhook_invalid_encoding(self, mock_context: Any, _mock_update: Any) -> None:
         """Test a webhook body that is not utf-8 is rejected"""
         mock_context.return_value = self.context
-        request = RequestFactory().post("/accounting/webhook/paypal", data=b"\xff\xfe", content_type="application/json")
+        request = RequestFactory().post(
+            "/accounting/webhook/paypal",
+            data=b"\xff\xfe",
+            content_type="application/json",
+            HTTP_PAYPAL_TRANSMISSION_ID="transmission",
+            HTTP_PAYPAL_TRANSMISSION_SIG="signature",
+        )
 
         self.assertFalse(paypal_v2_webhook(request))
 
@@ -302,14 +340,16 @@ class TestPaypalV2(BaseTestCase):
     @patch(f"{PAYPAL_MODULE}.get_context")
     @patch(f"{PAYPAL_MODULE}.requests.post")
     def test_webhook_completed(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
-        """Test a verified capture webhook marks the invoice as checked"""
+        """Test a verified capture webhook marks the invoice as checked and releases its pending flag"""
         mock_context.return_value = self.context
         mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+        set_paypal_v2_pending(self.invoice)
 
         self.assertTrue(paypal_v2_webhook(self._webhook_request()))
 
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CHECKED)
+        self.assertFalse(is_paypal_v2_pending(self.invoice))
         verify_body = json.loads(mock_post.call_args.kwargs["data"])
         self.assertEqual(verify_body["webhook_id"], "webhook")
         self.assertEqual(verify_body["webhook_event"]["resource"]["id"], "CAPTURE1")
@@ -318,16 +358,34 @@ class TestPaypalV2(BaseTestCase):
     @patch(f"{PAYPAL_MODULE}.get_context")
     @patch(f"{PAYPAL_MODULE}.requests.post")
     def test_webhook_denied_releases_pending(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
-        """Test a denied capture webhook lets the invoice create new orders again"""
+        """Test a denied capture webhook lets the invoice key be paid again"""
         mock_context.return_value = self.context
         mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
-        cache.set(paypal_v2_pending_key(self.invoice.uuid), 1)
+        set_paypal_v2_pending(self.invoice)
 
         self.assertTrue(paypal_v2_webhook(self._webhook_request("PAYMENT.CAPTURE.DENIED", _capture(status="DECLINED"))))
 
-        self.assertIsNone(cache.get(paypal_v2_pending_key(self.invoice.uuid)))
+        self.assertFalse(is_paypal_v2_pending(self.invoice))
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+
+    @patch(f"{PAYPAL_MODULE}.notify_admins")
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_invoice_not_found(
+        self, mock_post: Any, mock_context: Any, _mock_update: Any, mock_notify: Any
+    ) -> None:
+        """Test a capture of an unknown invoice is acknowledged and reported to admins"""
+        mock_context.return_value = self.context
+        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+        capture = {**_capture(), "invoice_id": "UNKNOWNCOD"}
+
+        self.assertTrue(paypal_v2_webhook(self._webhook_request(capture=capture)))
+
+        mock_notify.assert_called_once()
+        self.assertIn("CAPTURE1", mock_notify.call_args.args[0])
+        self.assertIn("UNKNOWNCOD", mock_notify.call_args.args[1])
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
@@ -457,3 +515,64 @@ class TestPaymentSettingsLegacyMethods(BaseTestCase):
         association.payment_methods.add(_method("paypal"))
 
         self.assertIn("paypal", self._offered_slugs(association))
+
+
+@patch("larpmanager.accounting.payment._prepare_gateway_form")
+@patch("larpmanager.accounting.payment.get_association_config", return_value=False)
+@patch("larpmanager.accounting.payment.update_invoice_gross_fee", return_value=Decimal(100))
+@patch("larpmanager.accounting.payment.set_data_invoice")
+@patch("larpmanager.accounting.payment.update_payment_details")
+class TestInvoiceReuse(BaseTestCase):
+    """Test invoices are reused by key only for the same payment method"""
+
+    def _payment_invoice(self, method_slug: str) -> Any:
+        """Run the payment form for the method and return the invoice it prepared."""
+        member = self.get_member()
+        form = MagicMock()
+        form.cleaned_data = {"amount": Decimal(100), "method": method_slug}
+        context = {"association_id": self.get_association().id, "member": member}
+        get_payment_form(MagicMock(), form, "r", context, "REG_1")
+        return context["invoice"]
+
+    def test_same_method_reuses_invoice(self, *_mocks: Any) -> None:
+        """Test a retry with the same method maps to the same invoice"""
+        invoice = self.payment_invoice(method=_method("paypal_v2"), key="REG_1")
+        invoice.save()
+
+        self.assertEqual(self._payment_invoice("paypal_v2").pk, invoice.pk)
+
+    def test_other_method_gets_new_invoice(self, *_mocks: Any) -> None:
+        """Test switching method does not take over the invoice of the previous method"""
+        invoice = self.payment_invoice(method=_method("paypal_v2"), key="REG_1")
+        invoice.save()
+        _method("stripe")
+
+        new_invoice = self._payment_invoice("stripe")
+
+        self.assertNotEqual(new_invoice.pk, invoice.pk)
+        invoice.refresh_from_db()
+        self.assertEqual(invoice.method.slug, "paypal_v2")
+
+
+class TestCancelledInvoice(BaseTestCase):
+    """Test the invoice inspected on a cancelled payment"""
+
+    def _request(self, query: str = "") -> Any:
+        """Build a cancelled payment request of the test member."""
+        request = RequestFactory().get(f"/accounting/cancelled/{query}")
+        request.user = self.get_member().user
+        request.association = {"id": self.get_association().id}
+        return request
+
+    def test_invoice_from_url(self) -> None:
+        """Test the invoice named in the url is returned"""
+        invoice = self.payment_invoice(method=_method("stripe"))
+        invoice.save()
+
+        self.assertEqual(_get_cancelled_invoice(self._request(f"?invoice={invoice.uuid}")), invoice)
+
+    def test_no_invoice_without_url(self) -> None:
+        """Test no pending invoice is guessed when the url does not name one"""
+        self.payment_invoice(method=_method("stripe")).save()
+
+        self.assertIsNone(_get_cancelled_invoice(self._request()))

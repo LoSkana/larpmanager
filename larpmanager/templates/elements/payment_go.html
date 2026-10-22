@@ -7,181 +7,181 @@
         {% trans "This payment method is temporarily unavailable. Please choose another payment method, or contact the organizers." %}
     </p>
 {% endif %}
-{% if method == 'redsys' and not gateway_error %}
-    <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
-        <input type="hidden"
-               name="Ds_SignatureVersion"
-               value="{{ redsys_form.Ds_SignatureVersion }}" />
-        <input type="hidden"
-               name="Ds_MerchantParameters"
-               value="{{ redsys_form.Ds_MerchantParameters }}" />
-        <input type="hidden"
-               name="Ds_Signature"
-               value="{{ redsys_form.Ds_Signature }}" />
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
-{% endif %}
-{% if method == 'sumup' and not gateway_error %}
-    <div id="sumup-card"></div>
-    <script type="text/javascript"
-            src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
-    <script type="text/javascript">
-      SumUpCard.mount({
-        checkoutId: '{{ sumup_checkout_id }}',
-        showAmount: true,
-        onResponse: function (type, body) {
-          if (type === 'error' || type === 'fail') {
-            $.post("{% url 'accounting_sumup_error' invoice.uuid %}", {type: type, body: JSON.stringify(body)});
-          }
-        },
-      });
-    </script>
-{% endif %}
-{% if method == 'stripe' and not gateway_error %}
-    <script>window.location.replace("{{ stripe_ck.url }}");</script>
-{% endif %}
-{% if method == 'satispay' and not gateway_error %}
-    <br />
-    <br />
-    <a href="https://online.satispay.com/pay/{{ pay_id }}?redirect_url={{ redirect }}">
-        <img src="https://online.satispay.com/images/en-pay-red.svg"
-             alt="Pay with Satispay"
-             id="pay-with-satispay"
-             class="satispay-button" />
-    </a>
-{% endif %}
-{% if method == 'paypal' and not gateway_error %}
-    <div class="paypal">
-        <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
-        {{ paypal_form.render }}
-    </div>
-{% endif %}
-{% if method == 'any' %}
-    <p>
-        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
-    </p>
-    <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
-          method="post"
-          class="accounting_submit">
-        {% csrf_token %}
-        <table class="mob">
-            {{ any_form.as_table }}
-        </table>
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
-{% endif %}
-{% if method == 'wire' %}
-    <p>
-        <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered!" %}</i></b>
-    </p>
-    <hr />
-    <p>
-        <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank." %}
-    </p>
-    <p>
-        <i>{% trans "Copy the payment reference exactly as shown (in colored text)." %}</i>
-    </p>
-    <ul>
-        <li>
-            <b>{% trans "Payment reference" %}</b>: <span class="causal">{{ invoice.causal }}</span>
-        </li>
-        <li>
-            <b>{% trans "Amount" %}</b>: {{ invoice.mc_gross|format_decimal }} {{ payment_currency }}
-        </li>
-        <li>
-            <b>{% trans "Beneficiary" %}</b>: {{ wire_payee }}
-        </li>
-        <li>
-            <b>IBAN</b>: {{ wire_iban }}
-        </li>
-        {% if wire_bic %}
-            <li>
-                <b>BIC</b>: {{ wire_bic }}
-            </li>
+{% if payment_pending %}
+    <p>{% trans "The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it." %}</p>
+{% else %}
+    {% if not gateway_error %}
+        {% if method == 'redsys' %}
+            <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
+                <input type="hidden"
+                       name="Ds_SignatureVersion"
+                       value="{{ redsys_form.Ds_SignatureVersion }}" />
+                <input type="hidden"
+                       name="Ds_MerchantParameters"
+                       value="{{ redsys_form.Ds_MerchantParameters }}" />
+                <input type="hidden"
+                       name="Ds_Signature"
+                       value="{{ redsys_form.Ds_Signature }}" />
+                <input type="submit" value="{% trans "Submit" %}">
+            </form>
         {% endif %}
-        {% if wire_swift %}
-            <li>
-                <b>SWIFT</b>: {{ wire_swift }}
-            </li>
+        {% if method == 'sumup' %}
+            <div id="sumup-card"></div>
+            <script type="text/javascript"
+                    src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+            <script type="text/javascript">
+              SumUpCard.mount({
+                checkoutId: '{{ sumup_checkout_id }}',
+                showAmount: true,
+                onResponse: function (type, body) {
+                  if (type === 'error' || type === 'fail') {
+                    $.post("{% url 'accounting_sumup_error' invoice.uuid %}", {type: type, body: JSON.stringify(body)});
+                  }
+                },
+              });
+            </script>
         {% endif %}
-        {% if wire_bank_address %}
-            <li>
-                <b>{% trans "Bank address" %}</b>: {{ wire_bank_address }}
-            </li>
-        {% endif %}
-    </ul>
-    <hr />
-    <p>
-        <b>(2)</b>
-        {% if require_receipt %}
-            {% trans "Once the transfer is confirmed, upload the payment receipt below. You can upload a file in PDF format or an image." %}
-        {% else %}
-            {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment." %}
-        {% endif %}
-    </p>
-    <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
-          enctype="multipart/form-data"
-          method="post"
-          class="accounting_submit">
-        {% csrf_token %}
-        <br />
-        {{ wire_form.as_p }}
-        <br />
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
-{% endif %}
-{% if method == 'paypal_nf' %}
-    <p>{% trans "Follow the steps below:" %}</p>
-    <p>
-        <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}
-    </p>
-    <p>
-        <b>(2)</b> {% trans "Copy and paste all the coloured text below exactly into the notes field." %}
-        <b>({% trans "this is important!" %})</b>
-    </p>
-    <p class="causal">{{ invoice.causal }}</p>
-    <p>
-        <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'." %}
-    </p>
-    <p>
-        <b>(4)</b>
-        {% if require_receipt %}
-            {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal." %}
-        {% else %}
-            {% trans "Once you have made the payment, return to this page and submit the form below to notify us of your payment." %}
-        {% endif %}
-    </p>
-    <hr />
-    <form action="{% url 'accounting_submit' 'paypal_nf' invoice.uuid request.path %}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        {{ wire_form.as_p }}
-        <input type="submit" value="{% trans "Submit" %}">
-    </form>
-    <hr />
-    <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
-    </p>
-    <hr />
-    <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"
-       target="_blank">
-        <img id="paypal-me-img"
-             src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
-             alt="paypal me button" />
-    </a>
-{% endif %}
-{% if method == 'paypal_v2' and not gateway_error %}
-    <div class="paypal-v2">
-        {% if paypal_pending %}
-            <p>{% trans "The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it." %}</p>
-        {% else %}
-            <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
-            <a class="button paypal-v2-button" href="{{ paypal_url }}">
-                <i class="fa-brands fa-paypal"></i> {% trans "Pay with PayPal" %}
+        {% if method == 'stripe' %}<script>window.location.replace("{{ stripe_ck.url }}");</script>{% endif %}
+        {% if method == 'satispay' %}
+            <br />
+            <br />
+            <a href="https://online.satispay.com/pay/{{ pay_id }}?redirect_url={{ redirect }}">
+                <img src="https://online.satispay.com/images/en-pay-red.svg"
+                     alt="Pay with Satispay"
+                     id="pay-with-satispay"
+                     class="satispay-button" />
             </a>
         {% endif %}
-    </div>
+        {% if method == 'paypal' %}
+            <div class="paypal">
+                <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
+                {{ paypal_form.render }}
+            </div>
+        {% endif %}
+        {% if method == 'paypal_v2' %}
+            <div class="paypal-v2">
+                <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
+                <a class="button paypal-v2-button" href="{{ paypal_url }}">
+                    <i class="fa-brands fa-paypal"></i> {% trans "Pay with PayPal" %}
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
+    {% if method == 'any' %}
+        <p>
+            {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
+        </p>
+        <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
+              method="post"
+              class="accounting_submit">
+            {% csrf_token %}
+            <table class="mob">
+                {{ any_form.as_table }}
+            </table>
+            <input type="submit" value="{% trans "Submit" %}">
+        </form>
+    {% endif %}
+    {% if method == 'wire' %}
+        <p>
+            <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered!" %}</i></b>
+        </p>
+        <hr />
+        <p>
+            <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank." %}
+        </p>
+        <p>
+            <i>{% trans "Copy the payment reference exactly as shown (in colored text)." %}</i>
+        </p>
+        <ul>
+            <li>
+                <b>{% trans "Payment reference" %}</b>: <span class="causal">{{ invoice.causal }}</span>
+            </li>
+            <li>
+                <b>{% trans "Amount" %}</b>: {{ invoice.mc_gross|format_decimal }} {{ payment_currency }}
+            </li>
+            <li>
+                <b>{% trans "Beneficiary" %}</b>: {{ wire_payee }}
+            </li>
+            <li>
+                <b>IBAN</b>: {{ wire_iban }}
+            </li>
+            {% if wire_bic %}
+                <li>
+                    <b>BIC</b>: {{ wire_bic }}
+                </li>
+            {% endif %}
+            {% if wire_swift %}
+                <li>
+                    <b>SWIFT</b>: {{ wire_swift }}
+                </li>
+            {% endif %}
+            {% if wire_bank_address %}
+                <li>
+                    <b>{% trans "Bank address" %}</b>: {{ wire_bank_address }}
+                </li>
+            {% endif %}
+        </ul>
+        <hr />
+        <p>
+            <b>(2)</b>
+            {% if require_receipt %}
+                {% trans "Once the transfer is confirmed, upload the payment receipt below. You can upload a file in PDF format or an image." %}
+            {% else %}
+                {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment." %}
+            {% endif %}
+        </p>
+        <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
+              enctype="multipart/form-data"
+              method="post"
+              class="accounting_submit">
+            {% csrf_token %}
+            <br />
+            {{ wire_form.as_p }}
+            <br />
+            <input type="submit" value="{% trans "Submit" %}">
+        </form>
+    {% endif %}
+    {% if method == 'paypal_nf' %}
+        <p>{% trans "Follow the steps below:" %}</p>
+        <p>
+            <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}
+        </p>
+        <p>
+            <b>(2)</b> {% trans "Copy and paste all the coloured text below exactly into the notes field." %}
+            <b>({% trans "this is important!" %})</b>
+        </p>
+        <p class="causal">{{ invoice.causal }}</p>
+        <p>
+            <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'." %}
+        </p>
+        <p>
+            <b>(4)</b>
+            {% if require_receipt %}
+                {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal." %}
+            {% else %}
+                {% trans "Once you have made the payment, return to this page and submit the form below to notify us of your payment." %}
+            {% endif %}
+        </p>
+        <hr />
+        <form action="{% url 'accounting_submit' 'paypal_nf' invoice.uuid request.path %}"
+              enctype="multipart/form-data"
+              method="post">
+            {% csrf_token %}
+            {{ wire_form.as_p }}
+            <input type="submit" value="{% trans "Submit" %}">
+        </form>
+        <hr />
+        <p>
+            <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
+        </p>
+        <hr />
+        <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"
+           target="_blank">
+            <img id="paypal-me-img"
+                 src="{% static 'larpmanager/assets/img/paypal_me.png' %}"
+                 alt="paypal me button" />
+        </a>
+    {% endif %}
 {% endif %}
 <script>
 

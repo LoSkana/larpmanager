@@ -1080,19 +1080,20 @@ def accounting_wait(request: HttpRequest) -> HttpResponse:
 
 
 def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
-    """Return the cancelled invoice from the gateway url, or the latest one still pending."""
-    invoices = PaymentInvoice.objects.filter(
-        member=request.user.member,
-        association_id=request.association["id"],
-    ).select_related("method")
-
+    """Return the cancelled invoice named in the gateway url, if it belongs to the user."""
     invoice_uuid = request.GET.get("invoice")
-    if invoice_uuid:
-        invoice = invoices.filter(uuid=invoice_uuid).first()
-        if invoice:
-            return invoice
+    if not invoice_uuid:
+        return None
 
-    return invoices.filter(status=PaymentStatus.CREATED).order_by("-created").first()
+    return (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+        )
+        .select_related("method")
+        .first()
+    )
 
 
 @login_required
