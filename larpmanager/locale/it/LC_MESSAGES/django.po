@@ -2588,6 +2588,9 @@ msgstr "Richiesta di:"
 msgid "Requirements"
 msgstr "Requisiti"
 
+msgid "Reset status"
+msgstr "Reimposta stato"
+
 msgid "Rotate right"
 msgstr "Ruota a destra"
 
@@ -2954,6 +2957,10 @@ msgstr "Il tuo ID squadra."
 #, python-format
 msgid "for %(event)s"
 msgstr "per %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "a %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4115,6 +4122,9 @@ msgstr "La tua registrazione"
 
 msgid "already delivered"
 msgstr "già consegnato"
+
+msgid "no spots left for"
+msgstr "posti esauriti per"
 
 #, python-format
 msgid "%(name)s available"
@@ -6817,6 +6827,10 @@ msgstr "<b>%(number)s</b> membri da approvare"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> rimborsi da consegnare"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Personaggio non assegnato per %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Città in cui sei nato/a (nome completo)"
 
@@ -6935,6 +6949,10 @@ msgstr "Quantità di punti esperienza assegnati"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Esprimi il tuo voto per il nuovo Direttivo!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Personaggio non assegnato: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Verifica la validità del codice fiscale"
@@ -8235,6 +8253,9 @@ msgstr "Immagine di sfondo visualizzata su tutte le pagine dell'evento"
 msgid "Character not found, or not playing in this event"
 msgstr "Personaggio non trovato o non partecipante a questo evento"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Personaggi non assegnati per opzioni senza posti disponibili"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Scegli il personaggio che interpreterai in questo evento!"
 
@@ -8284,11 +8305,18 @@ msgstr "Seleziona i metodi di pagamento che i partecipanti possono utilizzare"
 msgid "Switch between Organization and Events management"
 msgstr "Passa dalla gestione dell'Organizzazione a quella degli Eventi"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Non è stato possibile assegnare il personaggio %(character)s"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Il numero massimo di utilizzi (0 per utilizzi illimitati)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Il codice di iscrizione non è attivo al momento"
+
+msgid "The spots of its options are now available again."
+msgstr "I posti delle sue opzioni sono di nuovo disponibili."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Al momento non sono previste nuove sessioni."
@@ -9445,6 +9473,10 @@ msgstr ""
 "Non ci sono ancora eventi. Crea il tuo primo evento cliccando sul pulsante "
 "qui sopra."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Non ci sono più posti per %(options)s, scegli altre opzioni"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Opzionale - Descrizione estesa (visualizzata in piccolo testo grigio)"
 
@@ -10543,6 +10575,13 @@ msgstr ""
 "Attiva e configura funzionalità avanzate per la tua organizzazione e i tuoi "
 "eventi"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Il personaggio %(character)s non può essere assegnato: posti esauriti per "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -11168,6 +11207,13 @@ msgstr ""
 "sopra per aggiungere un contenitore."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr ""
+"Scegli opzioni diverse per il personaggio, oppure contatta gli "
+"organizzatori."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11605,6 +11651,14 @@ msgid ""
 "processed."
 msgstr ""
 "È stato elaborato un rimborso di %(amount).2f %(elements)s per '%(reason)s'."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Personaggio %(character)s assegnato, ma supera i posti disponibili per "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12703,13 +12757,6 @@ msgid ""
 msgstr ""
 "Nota che gli elementi esistenti con lo stesso nome saranno sovrascritti con "
 "i dati caricati."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Opzionale - Numero massimo di volte che può essere selezionato tra tutti i "
-"personaggi (0 = illimitato)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14261,6 +14308,13 @@ msgstr ""
 "elementi desidera evitare del tutto."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Facoltativo - Numero massimo di personaggi, assegnati ai partecipanti di "
+"ogni sessione, che possono selezionarla (0 = illimitato)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -15040,6 +15094,14 @@ msgid ""
 msgstr ""
 "Abilita lo sconto 'porta un amico'. Un partecipante può fornire il proprio "
 "codice univoco a un nuovo iscritto, garantendo a entrambi un prezzo scontato"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Se attivo, quando un personaggio approvato già giocato in una sessione "
+"precedente viene assegnato a una nuova sessione, il suo stato torna a "
+"revisione."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

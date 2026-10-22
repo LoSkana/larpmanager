@@ -946,6 +946,41 @@ def update_character_referenced_chars_background(character_id: int) -> None:
     update_character_referenced_chars(character_id)
 
 
+def reset_campaign_character_status(relation: RegistrationCharacterRel) -> bool:
+    """Move an approved campaign character back to revision when assigned to a new run.
+
+    Runs only when the campaign and user_character features and the
+    user_character_approval and reset_character_status configs are enabled, and only
+    for characters already played in a previous run. Returns True if the status was changed.
+    """
+    character = relation.character
+    if character.status != CharacterStatus.APPROVED:
+        return False
+
+    features = get_event_features(character.event_id)
+    if "campaign" not in features or "user_character" not in features:
+        return False
+
+    for config in ["user_character_approval", "reset_character_status"]:
+        if not get_event_config(character.event_id, config):
+            return False
+
+    played_before = (
+        RegistrationCharacterRel.objects.filter(
+            character_id=character.id,
+            registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
+        )
+        .exclude(registration__run_id=relation.registration.run_id)
+        .exists()
+    )
+    if not played_before:
+        return False
+
+    character.status = CharacterStatus.REVIEW
+    return True
+
+
 def auto_assign_character_faction(character: Character) -> None:
     """Auto-assign a character to a faction matching one of its chosen options.
 

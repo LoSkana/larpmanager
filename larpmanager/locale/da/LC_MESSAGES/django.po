@@ -2588,6 +2588,9 @@ msgstr "Anmodning for:"
 msgid "Requirements"
 msgstr "Krav"
 
+msgid "Reset status"
+msgstr "Nulstil status"
+
 msgid "Rotate right"
 msgstr "Roter til højre"
 
@@ -2954,6 +2957,10 @@ msgstr "Dit team-id."
 #, python-format
 msgid "for %(event)s"
 msgstr "for %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "til %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4115,6 +4122,9 @@ msgstr "Din registrering"
 
 msgid "already delivered"
 msgstr "allerede leveret"
+
+msgid "no spots left for"
+msgstr "ingen pladser tilbage til"
 
 #, python-format
 msgid "%(name)s available"
@@ -6817,6 +6827,10 @@ msgstr "<b>%(number)s</b> medlemmer til godkendelse"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> refusioner til udbetaling"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Karakter ikke tildelt for %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Byen, hvor du blev født (fuldt navn)"
 
@@ -6935,6 +6949,10 @@ msgstr "Antal tildelte erfaringspoint"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Afgiv din stemme til den nye ledelse!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Karakter ikke tildelt: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollér gyldigheden af skattekoden"
@@ -8229,6 +8247,9 @@ msgstr "Baggrundsbillede, der vises på alle eventsider"
 msgid "Character not found, or not playing in this event"
 msgstr "Karakter ikke fundet eller spiller ikke i dette event"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Karakterer ikke tildelt for muligheder uden pladser"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Vælg den karakter, du vil spille til dette event!"
 
@@ -8278,11 +8299,18 @@ msgstr "Vælg hvilke betalingsmetoder deltagerne kan bruge"
 msgid "Switch between Organization and Events management"
 msgstr "Skift mellem administration af organisation og events"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Karakteren %(character)s kunne ikke tildeles"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Det maksimale antal anvendelser (0 for ubegrænset brug)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Tilmeldingskoden er ikke aktiv i øjeblikket"
+
+msgid "The spots of its options are now available again."
+msgstr "Pladserne til dens muligheder er nu ledige igen."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Der er ingen nye sessioner planlagt på nuværende tidspunkt."
@@ -9335,6 +9363,11 @@ msgstr ""
 msgid "No events yet. Create your first event using the button above."
 msgstr "Ingen events endnu. Opret dit første event med knappen ovenfor."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr ""
+"Der er ikke flere pladser til %(options)s, vælg venligst andre muligheder"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valgfrit - Udvidet beskrivelse (vises med lille grå tekst)"
 
@@ -10302,6 +10335,13 @@ msgstr ""
 "Aktivér og konfigurér avancerede funktioner for din organisation og dine "
 "events"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Karakteren %(character)s kan ikke tildeles: ingen pladser tilbage til "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -10894,6 +10934,11 @@ msgstr ""
 "tilføje en beholder."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Vælg andre muligheder til karakteren, eller kontakt arrangørerne."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11311,6 +11356,14 @@ msgid ""
 msgstr ""
 "En refusion på %(amount).2f %(elements)s for '%(reason)s' er blevet "
 "behandlet."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Karakteren %(character)s er tildelt, men overskrider de ledige pladser til "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12395,13 +12448,6 @@ msgid ""
 msgstr ""
 "Bemærk, at eksisterende elementer med samme navn overskrives med de "
 "uploadede data."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Valgfrit - Maksimalt antal gange, den kan vælges på tværs af alle karakterer"
-" (0 = ubegrænset)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -13948,6 +13994,13 @@ msgstr ""
 "elementer de helt vil undgå."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Valgfrit - Maksimalt antal karakterer tildelt deltagere i hver afvikling, "
+"som kan vælge den (0 = ubegrænset)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14711,6 +14764,14 @@ msgid ""
 msgstr ""
 "Aktiverer 'tag en ven med'-rabat. En deltager kan give sin unikke kode til "
 "en ny tilmeldt, så begge får en rabat"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Hvis det er slået til, bliver status for en godkendt karakter, der allerede "
+"er spillet i en tidligere run, sat tilbage til revision, når den tildeles en"
+" ny run."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

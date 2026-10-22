@@ -1070,6 +1070,20 @@ class OrgaConfigForm(ConfigForm):
                 auto_faction_help_text,
             )
 
+        # Status reset of returning characters, only relevant if the campaign feature is active
+        if "campaign" in self.params["features"]:
+            reset_status_label = _("Reset status")
+            reset_status_help_text = _(
+                "If enabled, when an approved character already played in a previous run is assigned to a new "
+                "run, its status is set back to revision.",
+            )
+            self.add_configs(
+                "reset_character_status",
+                ConfigType.BOOL,
+                reset_status_label,
+                reset_status_help_text,
+            )
+
     def set_config_guild(self) -> None:
         """Configure guild-related form fields for event settings."""
         if "guild" not in self.params["features"]:

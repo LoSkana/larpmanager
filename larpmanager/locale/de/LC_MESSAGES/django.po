@@ -2588,6 +2588,9 @@ msgstr "Antrag auf:"
 msgid "Requirements"
 msgstr "Anforderungen"
 
+msgid "Reset status"
+msgstr "Status zurücksetzen"
+
 msgid "Rotate right"
 msgstr "Nach rechts drehen"
 
@@ -2954,6 +2957,10 @@ msgstr "Deine Team-ID."
 #, python-format
 msgid "for %(event)s"
 msgstr "für %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "an %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4115,6 +4122,9 @@ msgstr "Deine Anmeldung"
 
 msgid "already delivered"
 msgstr "bereits geliefert"
+
+msgid "no spots left for"
+msgstr "keine Plätze mehr frei für"
 
 #, python-format
 msgid "%(name)s available"
@@ -6817,6 +6827,10 @@ msgstr "<b>%(number)s</b> zuzulassende Mitglieder"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> zu liefernde Erstattungen"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Charakter für %(event)s nicht zugewiesen"
+
 msgid "City where you were born (full name)"
 msgstr "Stadt, in der du geboren wurdest (vollständiger Name)"
 
@@ -6935,6 +6949,10 @@ msgstr "Anzahl der gutgeschriebenen Erfahrungspunkte"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Gib deine Stimme für den neuen Vorstand ab!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Charakter nicht zugewiesen: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Prüfe die Gültigkeit der Steueridentifikationsnummer"
@@ -8239,6 +8257,9 @@ msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten angezeigt wird"
 msgid "Character not found, or not playing in this event"
 msgstr "Charakter nicht gefunden oder spielt nicht bei diesem Event"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Charaktere für Optionen ohne freie Plätze nicht zugewiesen"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Wähle den Charakter, den du bei diesem Event spielen wirst!"
 
@@ -8289,11 +8310,18 @@ msgstr "Wähle, welche Zahlungsmethoden die Teilnehmer verwenden können"
 msgid "Switch between Organization and Events management"
 msgstr "Wechsle zwischen Organisation und Ereignisverwaltung"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Der Charakter %(character)s konnte nicht zugewiesen werden"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Die maximale Anzahl der Nutzungen (0 für unbegrenzte Nutzungen)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Der Registrierungscode ist zur Zeit nicht aktiv"
+
+msgid "The spots of its options are now available again."
+msgstr "Die Plätze seiner Optionen sind jetzt wieder verfügbar."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Zurzeit sind keine neuen Sitzungen geplant."
@@ -9492,6 +9520,10 @@ msgstr ""
 "Noch keine Veranstaltungen. Erstelle deine erste Veranstaltung über die "
 "Schaltfläche oben."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Keine Plätze mehr frei für %(options)s, bitte wähle andere Optionen"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Optional - Erweiterte Beschreibung (wird in kleinem grauen Text angezeigt)"
@@ -10648,6 +10680,13 @@ msgstr ""
 "Aktiviere und konfiguriere erweiterte Funktionen für deine Organisation und "
 "deine Veranstaltungen"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Charakter %(character)s kann nicht zugewiesen werden: keine Plätze mehr frei"
+" für %(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -11277,6 +11316,13 @@ msgstr ""
 "oben, um einen Container hinzuzufügen."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr ""
+"Bitte wähle andere Optionen für den Charakter oder kontaktiere die "
+"Organisatoren."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11722,6 +11768,14 @@ msgid ""
 msgstr ""
 "Eine Rückerstattung in Höhe von %(amount).2f %(elements)s wegen '%(reason)s'"
 " wurde bearbeitet."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Charakter %(character)s zugewiesen, überschreitet aber die verfügbaren "
+"Plätze für %(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12822,13 +12876,6 @@ msgid ""
 msgstr ""
 "Beachte, dass bestehende Elemente mit demselben Namen mit den hochgeladenen "
 "Daten überschrieben werden."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Optional - Maximale Anzahl, wie oft es über alle Charaktere hinweg "
-"ausgewählt werden kann (0 = unbegrenzt)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14388,6 +14435,13 @@ msgstr ""
 "kann, welche Elemente er vollständig vermeiden möchte."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Optional - Maximale Anzahl an Charakteren, die Teilnehmenden jedes Runs "
+"zugewiesen werden und diese Option wählen können (0 = unbegrenzt)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -15184,6 +15238,14 @@ msgstr ""
 "Ermöglicht die Ermäßigung 'Bring a Friend'. Ein Teilnehmer kann seinen "
 "einmaligen Code an einen neuen Teilnehmer weitergeben, so dass beide einen "
 "ermäßigten Preis erhalten"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Wenn aktiviert, wird der Status eines genehmigten Charakters, der bereits in"
+" einem vorherigen Run gespielt wurde, wieder auf Überarbeitung gesetzt, "
+"sobald er einem neuen Run zugewiesen wird."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

@@ -1675,6 +1675,14 @@ msgid ""
 "chosen options."
 msgstr ""
 
+msgid "Reset status"
+msgstr ""
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+
 msgid "Guilds"
 msgstr ""
 
@@ -3114,6 +3122,9 @@ msgstr ""
 msgid "Go to event dashboard"
 msgstr ""
 
+msgid "Characters not assigned for options without spots"
+msgstr ""
+
 msgid "Payments Awaiting Approval"
 msgstr ""
 
@@ -3297,6 +3308,14 @@ msgid "cancel your registration"
 msgstr ""
 
 msgid "If you no longer wish to attend, you can"
+msgstr ""
+
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr ""
+
+msgid ""
+"Please choose different options for the character, or contact the organizers."
 msgstr ""
 
 #, python-format
@@ -3543,6 +3562,24 @@ msgid "Registration request for %(event)s by %(user)s"
 msgstr ""
 
 msgid "The user has submitted a request to register for this event."
+msgstr ""
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr ""
+
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr ""
+
+#, python-format
+msgid "to %(player)s"
+msgstr ""
+
+msgid "The spots of its options are now available again."
+msgstr ""
+
+msgid "no spots left for"
 msgstr ""
 
 #, python-format
@@ -4476,8 +4513,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
+"Optional - Maximum number of characters assigned to participants of each run "
+"that can select it (0 = unlimited)"
 msgstr ""
 
 msgid ""
@@ -12688,6 +12725,21 @@ msgstr ""
 msgid "Select your casting preferences!"
 msgstr ""
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr ""
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+
 msgid "Discounts only applicable with new registrations"
 msgstr ""
 
@@ -13534,13 +13586,13 @@ msgstr ""
 msgid "You already play this character"
 msgstr ""
 
-msgid "You already play the maximum number of characters"
-msgstr ""
-
 msgid "Changed character!"
 msgstr ""
 
 msgid "Assigned character!"
+msgstr ""
+
+msgid "You already play the maximum number of characters"
 msgstr ""
 
 msgid ""
