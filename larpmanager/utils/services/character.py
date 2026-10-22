@@ -969,6 +969,7 @@ def reset_campaign_character_status(relation: RegistrationCharacterRel) -> bool:
         RegistrationCharacterRel.objects.filter(
             character_id=character.id,
             registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
         )
         .exclude(registration__run_id=relation.registration.run_id)
         .exists()

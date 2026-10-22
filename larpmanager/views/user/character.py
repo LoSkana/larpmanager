@@ -491,19 +491,23 @@ def _save_character(
                 )
                 if full_options:
                     transaction.set_rollback(True)
-                    # Drop the cached data and the primary key of the discarded save
-                    clear_event_cache_all_runs(character.event_id)
-                    if is_new:
-                        character.pk = None
-                        character.number = None
-                        character._state.adding = True  # noqa: SLF001
-                    form.add_error(None, get_character_new_full_options_error(full_options))
-                    return None, None
+                else:
+                    blocked = check_assign_character(context)
+                    registration = get_player_signup(context) if blocked else None
+                    for blocked_character, blocked_options in blocked:
+                        notify_character_full_options(
+                            registration, blocked_character, blocked_options, context.get("request")
+                        )
 
-                blocked = check_assign_character(context)
-                registration = get_player_signup(context) if blocked else None
-                for blocked_character, full_options in blocked:
-                    notify_character_full_options(registration, blocked_character, full_options, context.get("request"))
+            if full_options:
+                # Drop the cached data and the primary key of the discarded save
+                clear_event_cache_all_runs(character.event_id)
+                if is_new:
+                    character.pk = None
+                    character.number = None
+                    character._state.adding = True  # noqa: SLF001
+                form.add_error(None, get_character_new_full_options_error(full_options))
+                return None, None
             # Success - break out of retry loop
             break
         except IntegrityError as e:
