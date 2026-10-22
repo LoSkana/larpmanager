@@ -9641,6 +9641,9 @@ msgstr ""
 "Bekijk alle geannuleerde aanmeldingen en houd de status van de terugbetaling"
 " bij"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "De betaalsessie is verlopen. Start de betaling opnieuw."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Het schrijfelement waarop deze vraag van toepassing is, toegestane waarden "

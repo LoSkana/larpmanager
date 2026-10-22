@@ -21,21 +21,24 @@
 """Tests for the PayPal Orders v2 gateway and the gateway configuration check"""
 
 import json
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 from typing import Any
 from unittest.mock import MagicMock, patch
 
 from django.core.cache import cache
 from django.test import RequestFactory
+from django.urls import reverse
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.gateway.paypal_v2 import (
     PaypalV2CaptureRejectedError,
+    get_paypal_v2_cancel_error,
     get_paypal_v2_form,
     is_paypal_v2_pending,
     paypal_v2_amount,
     paypal_v2_capture,
+    paypal_v2_redirect_url,
     paypal_v2_webhook,
     set_paypal_v2_pending,
 )
@@ -120,7 +123,8 @@ class TestPaypalV2(BaseTestCase):
 
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.txn_id, "ORDER2")
-        self.assertEqual(self.context["paypal_url"], "https://paypal.test/approve")
+        self.assertEqual(self.context["paypal_url"], reverse("accounting_paypal_go", args=[self.invoice.uuid]))
+        self.assertEqual(paypal_v2_redirect_url(self.invoice.uuid), "https://paypal.test/approve")
         payload = mock_request.call_args.kwargs["json"]
         self.assertRegex(payload["purchase_units"][0]["invoice_id"], r"^PAYPALV2COD-[0-9a-f]{8}$")
         self.assertEqual(payload["purchase_units"][0]["custom_id"], str(self.invoice.uuid))
@@ -236,6 +240,46 @@ class TestPaypalV2(BaseTestCase):
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
         self.assertTrue(is_paypal_v2_pending(self.invoice))
 
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_capture_completed_releases_pending(self, mock_post: Any, mock_request: Any) -> None:
+        """Test a previously pending capture that settles on return lets the invoice key be paid again"""
+        mock_post.return_value = _token_response()
+        mock_request.return_value = _response(201, _order(_capture()))
+        set_paypal_v2_pending(self.invoice)
+
+        paypal_v2_capture(self.context, self.invoice)
+
+        self.assertFalse(is_paypal_v2_pending(self.invoice))
+
+    def test_redirect_url_missing(self) -> None:
+        """Test no approval url is returned for an invoice without a PayPal order"""
+        self.assertIsNone(paypal_v2_redirect_url(self.invoice.uuid))
+
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_cancel_error_quick_return_after_redirect(self, mock_post: Any, mock_request: Any) -> None:
+        """Test a return right after the redirect to PayPal is reported as a gateway error"""
+        mock_post.return_value = _token_response()
+        created = (datetime.now(UTC) - timedelta(minutes=10)).isoformat().replace("+00:00", "Z")
+        mock_request.return_value = _response(200, {"id": "ORDER1", "status": "CREATED", "create_time": created})
+        cache.set(f"paypal_v2_approve_{self.invoice.uuid}", "https://paypal.test/approve")
+        paypal_v2_redirect_url(self.invoice.uuid)
+
+        error = get_paypal_v2_cancel_error(self.context, self.invoice)
+
+        self.assertIn("after redirect", error)
+
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_cancel_by_user(self, mock_post: Any, mock_request: Any) -> None:
+        """Test a return long after the order creation, without a recorded redirect, is a user cancellation"""
+        mock_post.return_value = _token_response()
+        created = (datetime.now(UTC) - timedelta(minutes=10)).isoformat().replace("+00:00", "Z")
+        mock_request.return_value = _response(200, {"id": "ORDER1", "status": "CREATED", "create_time": created})
+
+        self.assertIsNone(get_paypal_v2_cancel_error(self.context, self.invoice))
+
     @patch("larpmanager.accounting.payment.get_stripe_form")
     def test_payment_blocked_while_capture_pending(self, mock_form: Any) -> None:
         """Test a pending capture blocks any payment method on the same invoice key"""
@@ -292,18 +336,27 @@ class TestPaypalV2(BaseTestCase):
         self.assertFalse(paypal_v2_webhook(request))
         mock_post.assert_not_called()
 
+    @patch(f"{PAYPAL_MODULE}.notify_admins")
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
     @patch(f"{PAYPAL_MODULE}.requests.post")
-    def test_webhook_invalid_signature(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
-        """Test a webhook with an invalid signature is ignored"""
+    def test_webhook_invalid_signature(
+        self, mock_post: Any, mock_context: Any, _mock_update: Any, mock_notify: Any
+    ) -> None:
+        """Test a webhook with an invalid signature is ignored and reported to admins once a day"""
         mock_context.return_value = self.context
-        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "FAILURE"})]
+        mock_post.side_effect = [
+            _token_response(),
+            _response(200, {"verification_status": "FAILURE"}),
+            _response(200, {"verification_status": "FAILURE"}),
+        ]
 
+        self.assertFalse(paypal_v2_webhook(self._webhook_request()))
         self.assertFalse(paypal_v2_webhook(self._webhook_request()))
 
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+        mock_notify.assert_called_once()
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")

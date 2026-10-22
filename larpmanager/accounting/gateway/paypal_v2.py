@@ -27,6 +27,7 @@ import json
 import logging
 import re
 import secrets
+import time
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import TYPE_CHECKING
@@ -35,7 +36,6 @@ import requests
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.urls import reverse
-from django.utils import timezone
 from django.utils.html import escape
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
@@ -63,6 +63,9 @@ PAYPAL_V2_PENDING_TIMEOUT = timedelta(days=7)
 # Capture statuses of a completed payment, and of a payment PayPal still has to settle
 PAYPAL_V2_COMPLETED = "COMPLETED"
 PAYPAL_V2_PENDING = "PENDING"
+
+# How long the PayPal approval url of an invoice and the time the user was sent to it are kept
+PAYPAL_V2_REDIRECT_TIMEOUT = 3 * 3600
 
 # Currencies PayPal accepts only without decimals
 PAYPAL_V2_ZERO_DECIMAL_CURRENCIES = {"HUF", "JPY", "TWD"}
@@ -106,6 +109,24 @@ def set_paypal_v2_pending(invoice: PaymentInvoice) -> None:
 def clear_paypal_v2_pending(invoice: PaymentInvoice) -> None:
     """Release the pending PayPal capture flag of the invoice key."""
     cache.delete(_paypal_v2_pending_key(invoice))
+
+
+def _paypal_v2_approve_key(invoice_uuid: str) -> str:
+    """Return the cache key holding the PayPal approval url of an invoice."""
+    return f"paypal_v2_approve_{invoice_uuid}"
+
+
+def _paypal_v2_redirect_key(invoice_uuid: str) -> str:
+    """Return the cache key holding the time the user was sent to PayPal to pay an invoice."""
+    return f"paypal_v2_redirect_{invoice_uuid}"
+
+
+def paypal_v2_redirect_url(invoice_uuid: str) -> str | None:
+    """Return the PayPal approval url of an invoice, recording the time the user is sent to it."""
+    approve_url = cache.get(_paypal_v2_approve_key(invoice_uuid))
+    if approve_url:
+        cache.set(_paypal_v2_redirect_key(invoice_uuid), time.time(), timeout=PAYPAL_V2_REDIRECT_TIMEOUT)
+    return approve_url
 
 
 def paypal_v2_api_url(path: str) -> str:
@@ -219,7 +240,9 @@ def get_paypal_v2_form(request: HttpRequest, context: dict, invoice: PaymentInvo
         msg = f"Invalid PayPal order response: {response.text}"
         raise GatewayError(msg) from err
 
-    context["paypal_url"] = approve_url
+    # The user reaches PayPal through our redirect, to time how long they stayed there
+    cache.set(_paypal_v2_approve_key(invoice.uuid), approve_url, timeout=PAYPAL_V2_REDIRECT_TIMEOUT)
+    context["paypal_url"] = reverse("accounting_paypal_go", args=[invoice.uuid])
 
     # Track the order on the invoice, to capture it on return
     invoice.txn_id = order["id"]
@@ -316,6 +339,9 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
     status = capture.get("status", "")
     if status == PAYPAL_V2_PENDING:
         set_paypal_v2_pending(invoice)
+    if status == PAYPAL_V2_COMPLETED:
+        # A capture previously pending may have settled before its webhook arrived
+        clear_paypal_v2_pending(invoice)
     if status == PAYPAL_V2_COMPLETED and not _paypal_v2_receive_capture(context, invoice, capture):
         msg = f"PayPal capture {capture.get('id')} of order {order_id} not accepted for invoice {invoice.cod}"
         raise PaypalV2CaptureRejectedError(msg)
@@ -325,10 +351,6 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
 
 def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: str) -> bool:
     """Verify the signature of a PayPal webhook notification through the PayPal API."""
-    # Requests without the PayPal signature headers are not worth a verification call
-    if not request.headers.get("Paypal-Transmission-Id") or not request.headers.get("Paypal-Transmission-Sig"):
-        return False
-
     headers = {
         "auth_algo": request.headers.get("Paypal-Auth-Algo", ""),
         "cert_url": request.headers.get("Paypal-Cert-Url", ""),
@@ -357,6 +379,29 @@ def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: st
         return False
 
 
+def _paypal_v2_check_webhook_signature(request: HttpRequest, context: dict, raw_event: str) -> bool:
+    """Check a PayPal webhook notification is signed, notifying admins once a day of failed verifications."""
+    # Requests without the PayPal signature headers are not worth a verification call
+    if not request.headers.get("Paypal-Transmission-Id") or not request.headers.get("Paypal-Transmission-Sig"):
+        logger.error("PayPal webhook: missing signature headers")
+        return False
+
+    if _paypal_v2_verify_webhook(request, context, raw_event):
+        return True
+
+    logger.error("PayPal webhook: signature verification failed")
+    # Usually a wrong webhook id: payments are not registered until it is fixed
+    cache_key = f"paypal_v2_webhook_failed_{context['association_id']}"
+    if cache.add(cache_key, 1, timeout=conf_settings.CACHE_TIMEOUT_1_DAY):
+        notify_admins(
+            f"PayPal webhook - signature verification failed - {context['association_id']}",
+            f"Association: {context['association_id']}<br />\n"
+            f"Webhook id: {escape(context['paypal_v2_webhook_id'])}<br />\n"
+            f"Event: {escape(raw_event[:2000])}",
+        )
+    return False
+
+
 def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple validation checks require multiple returns
     """Handle PayPal webhook notifications, registering completed captures and releasing denied ones.
 
@@ -376,8 +421,7 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         logger.exception("PayPal webhook: invalid payload encoding")
         return False
 
-    if not _paypal_v2_verify_webhook(request, context, raw_event):
-        logger.error("PayPal webhook: signature verification failed")
+    if not _paypal_v2_check_webhook_signature(request, context, raw_event):
         return False
 
     try:
@@ -431,7 +475,8 @@ def get_paypal_v2_cancel_error(context: dict, invoice: PaymentInvoice) -> str | 
     """Return the gateway error behind a cancelled PayPal order, or None if the user cancelled it.
 
     An order is considered failed if PayPal cannot return it, or if the user came back
-    too quickly after its creation to have actually seen the PayPal page.
+    too quickly after being sent to PayPal (or after the order creation, if unknown)
+    to have actually seen the PayPal page.
     """
     order_id = invoice.txn_id
     if not order_id:
@@ -447,12 +492,15 @@ def get_paypal_v2_cancel_error(context: dict, invoice: PaymentInvoice) -> str | 
 
     try:
         order = response.json()
-        created = datetime.fromisoformat(order["create_time"])
+        redirected = cache.get(_paypal_v2_redirect_key(invoice.uuid))
+        # Compare epoch timestamps: PayPal times are timezone aware, ours are not
+        started = redirected or datetime.fromisoformat(order["create_time"]).timestamp()
     except (ValueError, KeyError):
         return None
 
-    elapsed_seconds = int((timezone.now() - created).total_seconds())
+    elapsed_seconds = int(time.time() - started)
     if elapsed_seconds < PAYPAL_V2_BOUNCE_SECONDS:
-        return f"Order {order_id} ({order.get('status')}) cancelled {elapsed_seconds} seconds after creation"
+        since = "redirect" if redirected else "creation"
+        return f"Order {order_id} ({order.get('status')}) cancelled {elapsed_seconds} seconds after {since}"
 
     return None

@@ -9539,6 +9539,9 @@ msgstr ""
 "Granska alla avbokade anmälningar och följ upp återbetalningsstatusen för "
 "dem"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Betalningssessionen har gått ut. Starta betalningen igen."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Det skrivmoment som frågan gäller för, tillåtna värden är"
 

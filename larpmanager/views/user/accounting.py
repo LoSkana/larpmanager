@@ -46,6 +46,7 @@ from larpmanager.accounting.gateway.paypal_v2 import (
     get_paypal_v2_cancel_error,
     is_paypal_v2_order_id,
     paypal_v2_capture,
+    paypal_v2_redirect_url,
     paypal_v2_webhook,
 )
 from larpmanager.accounting.gateway.redsys import redsys_webhook
@@ -106,8 +107,8 @@ from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 
 logger = logging.getLogger(__name__)
 
-# Minimum interval between two admin notifications of SumUp errors on the same invoice
-SUMUP_ERROR_NOTIFY_SECONDS = 3600
+# Minimum interval between two admin notifications of payment errors on the same invoice
+PAYMENT_ERROR_NOTIFY_SECONDS = 3600
 
 
 @login_required
@@ -966,6 +967,27 @@ def accounting_webhook_paypal(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
+def accounting_paypal_go(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
+    """Send the user to the PayPal page of the invoice order."""
+    invoice = PaymentInvoice.objects.filter(
+        uuid=invoice_uuid,
+        member=request.user.member,
+        association_id=request.association["id"],
+        method__slug="paypal_v2",
+        status=PaymentStatus.CREATED,
+    ).first()
+    if not invoice:
+        raise Http404
+
+    approve_url = paypal_v2_redirect_url(invoice.uuid)
+    if not approve_url:
+        messages.warning(request, _("The payment session has expired. Please start the payment again."))
+        return redirect("accounting")
+
+    return HttpResponseRedirect(approve_url)
+
+
+@login_required
 def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Capture the PayPal order the user has just approved, then complete the payment."""
     invoice = (
@@ -1017,6 +1039,13 @@ def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpRes
         )
         capture_status = None
 
+    # Declined or voided captures are not expected right after the approval
+    if capture_status not in (PAYPAL_V2_COMPLETED, PAYPAL_V2_PENDING, None):
+        notify_admins(
+            f"PayPal capture {capture_status} - {request.association['slug']} - {request.user}",
+            payment_error_info(request, context, invoice, f"Capture status: {capture_status}"),
+        )
+
     if capture_status == PAYPAL_V2_COMPLETED:
         return redirect("accounting_payed", registration_uuid=invoice.uuid)
 
@@ -1050,7 +1079,7 @@ def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonRespo
         raise Http404
 
     # Notify at most once in a while for each invoice, the widget can report errors repeatedly
-    if not cache.add(f"sumup_error_{invoice.uuid}", 1, timeout=SUMUP_ERROR_NOTIFY_SECONDS):
+    if not cache.add(f"sumup_error_{invoice.uuid}", 1, timeout=PAYMENT_ERROR_NOTIFY_SECONDS):
         return JsonResponse({"res": "ok"})
 
     response_type = request.POST.get("type", "")[:50]
@@ -1133,10 +1162,12 @@ def accounting_cancelled(request: HttpRequest) -> HttpResponse:
         messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
         return redirect("accounting")
 
-    notify_admins(
-        f"Payment cancelled - {request.association['slug']} - {request.user}",
-        payment_error_info(request, payment_details, invoice, gateway_error),
-    )
+    # Notify at most once in a while for each invoice, the page can be reloaded
+    if cache.add(f"payment_cancel_error_{invoice.uuid}", 1, timeout=PAYMENT_ERROR_NOTIFY_SECONDS):
+        notify_admins(
+            f"Payment cancelled - {request.association['slug']} - {request.user}",
+            payment_error_info(request, payment_details, invoice, gateway_error),
+        )
 
     mes = _("The payment was not completed. Please try again later or choose another payment method.")
     messages.warning(request, mes)

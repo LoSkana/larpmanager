@@ -9639,6 +9639,9 @@ msgstr ""
 "Controlla tutte le iscrizioni annullate e verifica lo stato dei relativi "
 "rimborsi"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "La sessione di pagamento è scaduta. Avvia di nuovo il pagamento."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "L'elemento di scrittura a cui si applica questa domanda, i valori ammessi "

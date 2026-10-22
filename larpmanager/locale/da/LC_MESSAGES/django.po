@@ -9511,6 +9511,9 @@ msgstr ""
 msgid "Review all cancelled registrations and track their refund status"
 msgstr "Gennemse alle annullerede tilmeldinger, og følg deres refusionsstatus"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Betalingssessionen er udløbet. Start betalingen igen."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Skriveelementet, dette spørgsmål gælder for, tilladte værdier er"
 

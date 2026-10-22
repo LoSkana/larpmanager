@@ -9560,6 +9560,9 @@ msgstr ""
 "Gjennomgå alle kansellerte registreringer og følg med på statusen for "
 "refusjonene"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Betalingsøkten har utløpt. Start betalingen på nytt."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Skriveelementet dette spørsmålet gjelder for, tillatte verdier er"
 

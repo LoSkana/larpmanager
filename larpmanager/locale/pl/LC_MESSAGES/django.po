@@ -9587,6 +9587,9 @@ msgstr ""
 "Przejrzyj wszystkie anulowane rejestracje i sprawdź, na jakim etapie jest "
 "zwrot kosztów"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Sesja płatności wygasła. Rozpocznij płatność ponownie."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Element pisarstwa, którego dotyczy to pytanie, dozwolone wartości to"
 

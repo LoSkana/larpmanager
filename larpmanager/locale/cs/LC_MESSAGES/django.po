@@ -9508,6 +9508,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Zkontroluj všechny zrušené registrace a sleduj stav jejich vrácení peněz"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Platební relace vypršela. Spusť prosím platbu znovu."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Prvek zápisu, na který se tato otázka vztahuje, má tyto přípustné hodnoty"

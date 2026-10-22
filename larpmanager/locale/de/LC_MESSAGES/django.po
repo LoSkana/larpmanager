@@ -9707,6 +9707,9 @@ msgstr ""
 "Überprüfe alle stornierten Anmeldungen und verfolge den Stand der "
 "Rückerstattungen"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Die Zahlungssitzung ist abgelaufen. Bitte starte die Zahlung erneut."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Das Schriftelement, auf das sich diese Frage bezieht, darf folgende Werte "

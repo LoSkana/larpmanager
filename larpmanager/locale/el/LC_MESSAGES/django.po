@@ -9703,6 +9703,9 @@ msgstr ""
 "Έλεγξε όλες τις ακυρωμένες εγγραφές και παρακολούθησε την κατάσταση "
 "επιστροφής τους"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Η συνεδρία πληρωμής έληξε. Ξεκίνα ξανά την πληρωμή."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Το στοιχείο συγγραφής στο οποίο εφαρμόζεται αυτή η ερώτηση, οι επιτρεπόμενες"

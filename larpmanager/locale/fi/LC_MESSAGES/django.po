@@ -9565,6 +9565,9 @@ msgstr ""
 "Tarkista kaikki peruutetut ilmoittautumiset ja seuraa niiden hyvitysten "
 "tilaa"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Maksuistunto on vanhentunut. Aloita maksu uudelleen."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Kirjoituselementti, jota tämä kysymys koskee, sallitut arvot ovat seuraavat"

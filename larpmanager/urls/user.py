@@ -295,6 +295,11 @@ urlpatterns = [
         name="accounting_webhook_paypal",
     ),
     path(
+        "accounting/paypal/go/<str:invoice_uuid>/",
+        views_ua.accounting_paypal_go,
+        name="accounting_paypal_go",
+    ),
+    path(
         "accounting/paypal/return/<str:invoice_uuid>/",
         views_ua.accounting_paypal_return,
         name="accounting_paypal_return",
