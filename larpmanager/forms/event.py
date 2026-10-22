@@ -947,6 +947,18 @@ class OrgaConfigForm(ConfigForm):
             independent_factions_help_text,
         )
 
+        disable_auto_assign_label = _("Disable automatic assignment")
+        disable_auto_assign_help_text = _(
+            "If enabled, upon registration participants are not automatically assigned the character they "
+            "played in the previous run.",
+        )
+        self.add_configs(
+            "campaign_disable_auto_assign",
+            ConfigType.BOOL,
+            disable_auto_assign_label,
+            disable_auto_assign_help_text,
+        )
+
     def set_config_experience(self) -> None:
         """Configure the experience points settings, if the experience feature is enabled."""
         if "experience" not in self.params["features"]:
@@ -1068,6 +1080,20 @@ class OrgaConfigForm(ConfigForm):
                 ConfigType.BOOL,
                 auto_faction_label,
                 auto_faction_help_text,
+            )
+
+        # Status reset of returning characters, only relevant if the campaign feature is active
+        if "campaign" in self.params["features"]:
+            reset_status_label = _("Reset status")
+            reset_status_help_text = _(
+                "If enabled, when an approved character already played in a previous run is assigned to a new "
+                "run, its status is set back to revision.",
+            )
+            self.add_configs(
+                "reset_character_status",
+                ConfigType.BOOL,
+                reset_status_label,
+                reset_status_help_text,
             )
 
     def set_config_guild(self) -> None:

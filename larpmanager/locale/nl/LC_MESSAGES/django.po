@@ -2588,6 +2588,9 @@ msgstr "Verzoek om:"
 msgid "Requirements"
 msgstr "Vereisten"
 
+msgid "Reset status"
+msgstr "Status resetten"
+
 msgid "Rotate right"
 msgstr "Rechtsom draaien"
 
@@ -2954,6 +2957,10 @@ msgstr "Je team-ID."
 #, python-format
 msgid "for %(event)s"
 msgstr "voor %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "aan %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4115,6 +4122,9 @@ msgstr "Je inschrijving"
 
 msgid "already delivered"
 msgstr "reeds geleverd"
+
+msgid "no spots left for"
+msgstr "geen plekken meer voor"
 
 #, python-format
 msgid "%(name)s available"
@@ -5892,6 +5902,9 @@ msgstr "Vertraging in profielcompilatie"
 msgid "Describe how we can help you"
 msgstr "Beschrijf hoe we je kunnen helpen"
 
+msgid "Disable automatic assignment"
+msgstr "Automatische toewijzing uitschakelen"
+
 msgid "Disable event-level approval"
 msgstr "Goedkeuring op gebeurtenisniveau uitschakelen"
 
@@ -6818,6 +6831,10 @@ msgstr "<b>%(number)s</b> leden om goed te keuren"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> restituties te leveren"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Personage niet toegewezen voor %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Plaats waar je geboren bent (volledige naam)"
 
@@ -6936,6 +6953,10 @@ msgstr "Aantal toegekende ervaringspunten"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor het nieuwe bestuur!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Personage niet toegewezen: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Controleer de geldigheid van de fiscale code"
@@ -8236,6 +8257,9 @@ msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"
 msgid "Character not found, or not playing in this event"
 msgstr "Personage niet gevonden of speelt niet mee in dit evenement"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Personages niet toegewezen voor opties zonder plekken"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Kies het personage dat je in dit evenement gaat spelen!"
 
@@ -8285,6 +8309,10 @@ msgstr "Selecteer welke betalingsmethoden deelnemers kunnen gebruiken"
 msgid "Switch between Organization and Events management"
 msgstr "Schakel tussen Organisatie- en Evenementenbeheer"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Het personage %(character)s kon niet worden toegewezen"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr ""
 "Het maximale aantal keer dat de code gebruikt kan worden (0 voor onbeperkt "
@@ -8292,6 +8320,9 @@ msgstr ""
 
 msgid "The registration code is not active at the moment"
 msgstr "De registratiecode is momenteel niet actief"
+
+msgid "The spots of its options are now available again."
+msgstr "De plekken van de bijbehorende opties zijn nu weer beschikbaar."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Er zijn op dit moment geen nieuwe sessies gepland."
@@ -9440,6 +9471,10 @@ msgstr ""
 "Er zijn nog geen evenementen. Maak je eerste evenement aan via de knop "
 "hierboven."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Geen plekken meer vrij voor %(options)s, kies andere opties"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Optioneel - Uitgebreide beschrijving (weergegeven in kleine grijze tekst)"
@@ -10547,6 +10582,13 @@ msgstr ""
 "Geavanceerde functies voor je organisatie en evenementen activeren en "
 "configureren"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Personage %(character)s kan niet worden toegewezen: geen plekken meer voor "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -11166,6 +11208,13 @@ msgstr ""
 "om een container toe te voegen."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr ""
+"Kies andere opties voor het personage, of neem contact op met de "
+"organisatoren."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11603,6 +11652,14 @@ msgid ""
 msgstr ""
 "Er is een terugbetaling van %(amount).2f %(elements)s verwerkt vanwege "
 "'%(reason)s'."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Personage %(character)s toegewezen, maar overschrijdt de beschikbare plekken"
+" voor %(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12698,13 +12755,6 @@ msgid ""
 msgstr ""
 "Merk op dat bestaande elementen met dezelfde naam worden overschreven met de"
 " geüploade gegevens."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Optioneel - Maximum aantal keren dat het kan worden geselecteerd over alle "
-"karakters (0 = onbeperkt)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14257,6 +14307,13 @@ msgstr ""
 "aangeven welke elementen diegene volledig wil vermijden."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Optioneel - Maximaal aantal personages, toegewezen aan deelnemers van elke "
+"run, dat deze optie kan selecteren (0 = onbeperkt)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14607,6 +14664,13 @@ msgid ""
 msgstr ""
 "Voor bankoverschrijvingen ga je naar de <a href='%(url)s'>betaalpagina</a> "
 "om de gegevens te bekijken (inclusief IBAN en betalingsreferentie)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Als dit is ingeschakeld, krijgen deelnemers bij hun inschrijving niet "
+"automatisch het personage toegewezen dat ze in de vorige editie speelden."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
@@ -15044,6 +15108,14 @@ msgid ""
 msgstr ""
 "Maakt 'breng een vriend mee'-korting mogelijk. Een deelnemer kan zijn unieke"
 " code doorgeven aan een nieuwe inschrijver, waardoor beiden korting krijgen"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Als dit is ingeschakeld en een goedgekeurd personage dat al in een vorige "
+"run is gespeeld aan een nieuwe run wordt toegewezen, wordt de status "
+"teruggezet naar revisie."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

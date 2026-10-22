@@ -296,6 +296,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
                 window.location.href = e.data.redirect_url;
             } else {
                 window.closeLmModal();
+                showFrameMessages(e.data.messages);
                 if (typeof onClose === 'function') setTimeout(onClose, 300);
             }
         }
@@ -308,6 +309,21 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         window.removeEventListener('message', onIframeMessage);
         restoreTitle();
     }, { once: true });
+}
+
+// Show as toasts the messages forwarded by a form saved inside a modal iframe.
+function showFrameMessages(messages) {
+    (messages || []).forEach(function(message) {
+        $.toast({
+            text: message.text,
+            showHideTransition: 'slide',
+            icon: message.icon,
+            position: 'top-center',
+            textAlign: 'center',
+            // errors stay until closed, others hide after 5 seconds
+            hideAfter: message.icon === 'error' ? false : 5000
+        });
+    });
 }
 
 // Toggle the mobile sidebar visibility and swap the open/close buttons.

@@ -902,6 +902,7 @@ class NotificationType(models.TextChoices):
     PAYMENT_CREDIT = "payment_credit", "Credit Payment"
     PAYMENT_TOKEN = "payment_token", "Token Payment"
     INVOICE_APPROVAL = "invoice_approval", "Invoice Awaiting Approval"
+    CHARACTER_OPTION_FULL = "character_option_full", "Character Option Full"
 
     # Association-level notifications (sent to association executives)
     HELP_QUESTION = "help_question", "Help Question"

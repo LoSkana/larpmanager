@@ -34,6 +34,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
+from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -181,7 +182,13 @@ class TestCharacterOptionDefaults(BaseTestCase):
         self.scout.max_available = 1
         self.scout.save()
 
-        form = CharacterForm(self._data(self.bunker), instance=self._character(), context=self._context())
+        # only characters assigned to the run are subject to the option limits
+        character = self._character()
+        RegistrationCharacterRel.objects.create(
+            registration=self.create_registration(run=self.run), character=character
+        )
+
+        form = CharacterForm(self._data(self.bunker), instance=character, context=self._context())
         form.registration_counts = {form.get_option_key_count({"id": self.scout.id}): 1}
 
         assert form.is_valid(), form.errors
@@ -189,6 +196,18 @@ class TestCharacterOptionDefaults(BaseTestCase):
 
         assert not WritingChoice.objects.filter(element_id=character.id, option=self.scout).exists()
         assert WritingChoice.objects.filter(element_id=character.id, option=self.guard).exists()
+
+    def test_sold_out_default_kept_for_unassigned_character(self) -> None:
+        self.scout.max_available = 1
+        self.scout.save()
+
+        form = CharacterForm(self._data(self.bunker), instance=self._character(), context=self._context())
+        form.registration_counts = {form.get_option_key_count({"id": self.scout.id}): 1}
+
+        assert form.is_valid(), form.errors
+        character = form.save()
+
+        assert WritingChoice.objects.filter(element_id=character.id, option=self.scout).exists()
 
     def test_default_restricted_to_another_ticket_skipped(self) -> None:
         # the option is reserved to a ticket the player does not hold, so the next default is used
