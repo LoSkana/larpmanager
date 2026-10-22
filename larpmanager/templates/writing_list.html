@@ -20,17 +20,20 @@
         </div>
     </div>
     {% for item in split_lists %}
-        {% if item.title and not item.list %}
-            {# skip empty titled lists #}
+        {% if item.count and not item.list %}
+            {# skip empty counted lists #}
         {% else %}
-            {% if item.title %}
+            {% if item.title and item.list %}
                 <hr />
                 {% if item.hidden %}
                     <h2>
                         <a href="#" class="my_toggle" tog="{{ item.hidden }}">{{ item.title }} ({{ item.list|length }})</a>
                     </h2>
                 {% else %}
-                    <h2>{{ item.title }} ({{ item.list|length }})</h2>
+                    <h2>
+                        {{ item.title }}
+                        {% if item.count %}({{ item.list|length }}){% endif %}
+                    </h2>
                 {% endif %}
             {% endif %}
             <div class="split_list{% if item.hidden %} {{ item.hidden }} hide{% endif %}">
@@ -63,7 +66,7 @@
                     </tbody>
                 </table>
             </div>
-            {% if not item.list %}
+            {% if not item.list and not item.title %}
                 <p class="no-elements-available">
                     <i>{% trans "No elements are currently available" %}</i>
                 </p>

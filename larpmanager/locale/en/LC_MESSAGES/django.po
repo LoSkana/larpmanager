@@ -13028,10 +13028,10 @@ msgstr ""
 msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
 
-msgid "Not signed up"
+msgid "Characters not participating"
 msgstr ""
 
-msgid "Characters not participating"
+msgid "Not signed up"
 msgstr ""
 
 msgid "Place of birth not included in the ISTAT list"

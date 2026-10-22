@@ -969,6 +969,11 @@ function refreshDatatables() {
                 const $newHeading = $newTable.length ? headingFor($newTable) : $();
                 if ($oldHeading.length && $newHeading.length) {
                     $oldHeading.html($newHeading.html());
+                    // keep the select state of a toggle whose list is open
+                    $oldHeading.find('.my_toggle').each(function() {
+                        $(this).toggleClass('select', $('.' + $(this).attr('tog')).is(':visible'));
+                        syncToggleAria(this);
+                    });
                 }
             } else {
                 // no rows left in new page (group/last element deleted): remove table and heading
