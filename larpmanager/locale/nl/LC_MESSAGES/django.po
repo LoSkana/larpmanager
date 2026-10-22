@@ -2588,6 +2588,9 @@ msgstr "Verzoek om:"
 msgid "Requirements"
 msgstr "Vereisten"
 
+msgid "Reset status"
+msgstr "Status resetten"
+
 msgid "Rotate right"
 msgstr "Rechtsom draaien"
 
@@ -15092,6 +15095,14 @@ msgid ""
 msgstr ""
 "Maakt 'breng een vriend mee'-korting mogelijk. Een deelnemer kan zijn unieke"
 " code doorgeven aan een nieuwe inschrijver, waardoor beiden korting krijgen"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Als dit is ingeschakeld en een goedgekeurd personage dat al in een vorige "
+"run is gespeeld aan een nieuwe run wordt toegewezen, wordt de status "
+"teruggezet naar revisie."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

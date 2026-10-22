@@ -2588,6 +2588,9 @@ msgstr "Forespørsel om:"
 msgid "Requirements"
 msgstr "Krav"
 
+msgid "Reset status"
+msgstr "Tilbakestill status"
+
 msgid "Rotate right"
 msgstr "Roter høyre"
 
@@ -14842,6 +14845,14 @@ msgid ""
 msgstr ""
 "Muliggjør 'ta med en venn'-rabatt. En deltaker kan gi sin unike kode til en "
 "ny deltaker, slik at begge får rabatt"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Hvis aktivert, og en godkjent karakter som allerede er spilt i en tidligere "
+"gjennomføring blir tildelt en ny gjennomføring, settes statusen tilbake til "
+"revisjon."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

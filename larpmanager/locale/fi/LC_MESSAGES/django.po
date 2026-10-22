@@ -2588,6 +2588,9 @@ msgstr "Pyyntö:"
 msgid "Requirements"
 msgstr "Vaatimukset"
 
+msgid "Reset status"
+msgstr "Nollaa tila"
+
 msgid "Rotate right"
 msgstr "Pyöritä oikealle"
 
@@ -14829,6 +14832,13 @@ msgstr ""
 "Ottaa käyttöön 'tuo ystävä' -alennuksen. Osallistuja voi antaa "
 "ainutlaatuisen koodinsa uudelle ilmoittautujalle, jolloin molemmat saavat "
 "alennetun hinnan"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Jos tämä on käytössä, hyväksytyn hahmon tila palautetaan tarkistukseen, kun "
+"hahmo, jota on jo pelattu aiemmassa ajossa, määritetään uuteen ajoon."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

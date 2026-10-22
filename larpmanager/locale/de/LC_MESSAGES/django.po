@@ -2588,6 +2588,9 @@ msgstr "Antrag auf:"
 msgid "Requirements"
 msgstr "Anforderungen"
 
+msgid "Reset status"
+msgstr "Status zurücksetzen"
+
 msgid "Rotate right"
 msgstr "Nach rechts drehen"
 
@@ -15232,6 +15235,14 @@ msgstr ""
 "Ermöglicht die Ermäßigung 'Bring a Friend'. Ein Teilnehmer kann seinen "
 "einmaligen Code an einen neuen Teilnehmer weitergeben, so dass beide einen "
 "ermäßigten Preis erhalten"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Wenn aktiviert, wird der Status eines genehmigten Charakters, der bereits in"
+" einem vorherigen Run gespielt wurde, wieder auf Überarbeitung gesetzt, "
+"sobald er einem neuen Run zugewiesen wird."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

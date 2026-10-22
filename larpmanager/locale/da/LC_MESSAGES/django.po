@@ -2588,6 +2588,9 @@ msgstr "Anmodning for:"
 msgid "Requirements"
 msgstr "Krav"
 
+msgid "Reset status"
+msgstr "Nulstil status"
+
 msgid "Rotate right"
 msgstr "Roter til højre"
 
@@ -14758,6 +14761,14 @@ msgid ""
 msgstr ""
 "Aktiverer 'tag en ven med'-rabat. En deltager kan give sin unikke kode til "
 "en ny tilmeldt, så begge får en rabat"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Hvis det er slået til, bliver status for en godkendt karakter, der allerede "
+"er spillet i en tidligere run, sat tilbage til revision, når den tildeles en"
+" ny run."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

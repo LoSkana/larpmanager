@@ -2588,6 +2588,9 @@ msgstr "Wniosek o:"
 msgid "Requirements"
 msgstr "Wymagania"
 
+msgid "Reset status"
+msgstr "Resetuj status"
+
 msgid "Rotate right"
 msgstr "Obrót w prawo"
 
@@ -14924,6 +14927,14 @@ msgid ""
 msgstr ""
 "Włącza zniżkę „przyprowadź znajomego”. Uczestnik może przekazać swój "
 "unikalny kod nowemu rejestrującemu się, zapewniając obu osobom niższą cenę"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Jeśli ta opcja jest włączona, to gdy zatwierdzona postać, która grała już w "
+"poprzedniej edycji, zostanie przypisana do nowej edycji, jej status wraca do"
+" rewizji."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

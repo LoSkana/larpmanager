@@ -2588,6 +2588,9 @@ msgstr "Pedido de:"
 msgid "Requirements"
 msgstr "Requisitos"
 
+msgid "Reset status"
+msgstr "Redefinir estado"
+
 msgid "Rotate right"
 msgstr "Rodar para a direita"
 
@@ -14935,6 +14938,13 @@ msgid ""
 msgstr ""
 "Ativa o desconto 'traz um amigo'. Um participante pode fornecer o seu código"
 " único a uma nova pessoa inscrita, concedendo um preço com desconto a ambos"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Se ativado, quando um personagem aprovado que já foi jogado numa sessão "
+"anterior for atribuído a uma nova sessão, o seu estado volta para revisão."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

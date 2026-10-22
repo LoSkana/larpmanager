@@ -350,6 +350,7 @@ from larpmanager.utils.services.association import (
 from larpmanager.utils.services.character import (
     auto_assign_character_faction,
     count_distinct_text_links,
+    reset_campaign_character_status,
     update_character_referenced_chars_background,
 )
 from larpmanager.utils.services.event import (
@@ -1531,8 +1532,16 @@ def post_save_registration_character_rel_savereg(
 
     # Auto-assign player if character creation is active and character has no player
     features = get_event_features(instance.character.event_id)
+    character_changed = False
     if "user_character" in features and not instance.character.player:
         instance.character.player = instance.registration.member
+        character_changed = True
+
+    # Send approved campaign characters back to revision, if configured
+    if created and reset_campaign_character_status(instance):
+        character_changed = True
+
+    if character_changed:
         instance.character.save()
 
     if created:

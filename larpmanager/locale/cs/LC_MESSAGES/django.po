@@ -2588,6 +2588,9 @@ msgstr "Žádost o:"
 msgid "Requirements"
 msgstr "Požadavky"
 
+msgid "Reset status"
+msgstr "Resetovat stav"
+
 msgid "Rotate right"
 msgstr "Otočit vpravo"
 
@@ -14634,6 +14637,13 @@ msgid ""
 msgstr ""
 "Umožňuje slevu 'přiveď kamaráda'. Účastník může poskytnout svůj jedinečný "
 "kód novému registrovanému, čímž oběma poskytne slevu"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Pokud je zapnuto, při přiřazení schválené postavy, která už hrála v "
+"předchozím běhu, k novému běhu se její stav vrátí na revizi."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

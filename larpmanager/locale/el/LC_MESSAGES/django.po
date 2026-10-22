@@ -2588,6 +2588,9 @@ msgstr "Αίτημα για:"
 msgid "Requirements"
 msgstr "Απαιτήσεις"
 
+msgid "Reset status"
+msgstr "Επαναφορά κατάστασης"
+
 msgid "Rotate right"
 msgstr "Περιστροφή δεξιά"
 
@@ -15195,6 +15198,14 @@ msgstr ""
 "Ενεργοποιεί την έκπτωση «φέρε έναν φίλο». Ένας συμμετέχων μπορεί να δώσει "
 "τον μοναδικό κωδικό του σε έναν νέο εγγραφόμενο, προσφέροντας και στους δύο "
 "μειωμένη τιμή."
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Αν είναι ενεργό, όταν ένας εγκεκριμένος χαρακτήρας που έχει ήδη παιχτεί σε "
+"προηγούμενο run ανατίθεται σε νέο run, η κατάστασή του επιστρέφει σε "
+"αναθεώρηση."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "

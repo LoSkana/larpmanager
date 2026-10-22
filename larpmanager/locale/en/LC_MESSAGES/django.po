@@ -1675,6 +1675,14 @@ msgid ""
 "chosen options."
 msgstr ""
 
+msgid "Reset status"
+msgstr ""
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+
 msgid "Guilds"
 msgstr ""
 
