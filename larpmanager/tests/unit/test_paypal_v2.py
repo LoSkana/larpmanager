@@ -28,10 +28,10 @@ from unittest.mock import MagicMock, patch
 
 from django.core.cache import cache
 from django.test import RequestFactory
-from django.utils import timezone
 
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.gateway.paypal_v2 import (
+    PaypalV2CaptureRejectedError,
     get_paypal_v2_form,
     is_paypal_v2_pending,
     paypal_v2_amount,
@@ -44,7 +44,6 @@ from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.mail.accounting import notify_gateway_not_configured
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.models.base import PaymentMethod
-from larpmanager.models.member import MemberConfig
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.views.user.accounting import _get_cancelled_invoice
 
@@ -123,7 +122,8 @@ class TestPaypalV2(BaseTestCase):
         self.assertEqual(self.invoice.txn_id, "ORDER2")
         self.assertEqual(self.context["paypal_url"], "https://paypal.test/approve")
         payload = mock_request.call_args.kwargs["json"]
-        self.assertEqual(payload["purchase_units"][0]["invoice_id"], "PAYPALV2COD")
+        self.assertRegex(payload["purchase_units"][0]["invoice_id"], r"^PAYPALV2COD-[0-9a-f]{8}$")
+        self.assertEqual(payload["purchase_units"][0]["custom_id"], str(self.invoice.uuid))
         self.assertEqual(payload["purchase_units"][0]["amount"], {"currency_code": "EUR", "value": "100.00"})
 
     def test_amount_currency_decimals(self) -> None:
@@ -188,7 +188,7 @@ class TestPaypalV2(BaseTestCase):
         mock_post.return_value = _token_response()
         mock_request.return_value = _response(201, _order(_capture(currency="USD")))
 
-        with self.assertRaises(GatewayError):
+        with self.assertRaises(PaypalV2CaptureRejectedError):
             paypal_v2_capture(self.context, self.invoice)
 
         self.invoice.refresh_from_db()
@@ -201,7 +201,7 @@ class TestPaypalV2(BaseTestCase):
         mock_post.return_value = _token_response()
         mock_request.return_value = _response(201, _order(_capture(value="10.00")))
 
-        with self.assertRaises(GatewayError):
+        with self.assertRaises(PaypalV2CaptureRejectedError):
             paypal_v2_capture(self.context, self.invoice)
 
         self.invoice.refresh_from_db()
@@ -256,15 +256,23 @@ class TestPaypalV2(BaseTestCase):
         mock_form.assert_not_called()
 
     def test_pending_flag_expires(self) -> None:
-        """Test a pending capture older than the timeout no longer blocks payments"""
-        set_paypal_v2_pending(self.invoice)
-        MemberConfig.objects.filter(name="paypal_v2_pending_REG_1").update(updated=timezone.now() - timedelta(days=8))
+        """Test a pending capture flag expires after the timeout"""
+        with patch(f"{PAYPAL_MODULE}.cache") as mock_cache:
+            set_paypal_v2_pending(self.invoice)
 
-        self.assertFalse(is_paypal_v2_pending(self.invoice))
+        self.assertEqual(mock_cache.set.call_args.kwargs["timeout"], int(timedelta(days=7).total_seconds()))
+
+    def test_pending_flag_long_key(self) -> None:
+        """Test a pending capture can be flagged on an arbitrarily long invoice key"""
+        self.invoice.key = "k" * 500
+
+        set_paypal_v2_pending(self.invoice)
+
+        self.assertTrue(is_paypal_v2_pending(self.invoice))
 
     def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED", capture: dict | None = None) -> Any:
         """Build a PayPal webhook request for a capture event."""
-        event = {"event_type": event_type, "resource": capture or _capture()}
+        event = {"event_type": event_type, "resource": {"custom_id": str(self.invoice.uuid), **(capture or _capture())}}
         return RequestFactory().post(
             "/accounting/webhook/paypal",
             data=json.dumps(event),
@@ -379,19 +387,22 @@ class TestPaypalV2(BaseTestCase):
         """Test a capture of an unknown invoice is acknowledged and reported to admins"""
         mock_context.return_value = self.context
         mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
-        capture = {**_capture(), "invoice_id": "UNKNOWNCOD"}
+        capture = {**_capture(), "custom_id": "UNKNOWNUUID"}
 
         self.assertTrue(paypal_v2_webhook(self._webhook_request(capture=capture)))
 
         mock_notify.assert_called_once()
         self.assertIn("CAPTURE1", mock_notify.call_args.args[0])
-        self.assertIn("UNKNOWNCOD", mock_notify.call_args.args[1])
+        self.assertIn("UNKNOWNUUID", mock_notify.call_args.args[1])
 
+    @patch(f"{PAYPAL_MODULE}.notify_admins")
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
     @patch(f"{PAYPAL_MODULE}.requests.post")
-    def test_webhook_rejected_capture(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
-        """Test a capture in another currency is acknowledged, so PayPal does not retry it"""
+    def test_webhook_rejected_capture(
+        self, mock_post: Any, mock_context: Any, _mock_update: Any, mock_notify: Any
+    ) -> None:
+        """Test a capture in another currency is acknowledged and reported, so PayPal does not retry it"""
         mock_context.return_value = self.context
         mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
 
@@ -399,6 +410,7 @@ class TestPaypalV2(BaseTestCase):
 
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
+        mock_notify.assert_called_once()
 
 
 class TestGatewayConfiguration(BaseTestCase):

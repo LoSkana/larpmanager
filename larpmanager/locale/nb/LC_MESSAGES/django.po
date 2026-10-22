@@ -14839,6 +14839,13 @@ msgstr ""
 "ny deltaker, slik at begge får rabatt"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Betalingen ble mottatt av PayPal, men kunne ikke registreres automatisk: "
+"arrangørene vil sjekke den. Ikke betal på nytt."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""

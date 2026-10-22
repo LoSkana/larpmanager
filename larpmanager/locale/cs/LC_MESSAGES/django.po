@@ -14630,6 +14630,13 @@ msgstr ""
 "kód novému registrovanému, čímž oběma poskytne slevu"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Platbu PayPal přijal, ale nepodařilo se ji automaticky zaznamenat: "
+"organizátoři ji ověří. Prosím, neplať znovu."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""

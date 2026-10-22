@@ -15082,6 +15082,13 @@ msgstr ""
 "codice univoco a un nuovo iscritto, garantendo a entrambi un prezzo scontato"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Il pagamento è stato ricevuto da PayPal ma non è stato possibile registrarlo"
+" automaticamente: gli organizzatori lo verificheranno. Non pagare di nuovo."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""

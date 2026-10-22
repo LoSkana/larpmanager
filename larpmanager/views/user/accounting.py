@@ -42,6 +42,7 @@ from larpmanager.accounting.gateway import GatewayError, payment_error_info
 from larpmanager.accounting.gateway.paypal_v2 import (
     PAYPAL_V2_COMPLETED,
     PAYPAL_V2_PENDING,
+    PaypalV2CaptureRejectedError,
     get_paypal_v2_cancel_error,
     is_paypal_v2_order_id,
     paypal_v2_capture,
@@ -993,6 +994,21 @@ def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpRes
 
     try:
         capture_status = paypal_v2_capture(context, invoice, order_id)
+    except PaypalV2CaptureRejectedError as err:
+        # PayPal holds the money: the payer must not retry, the organizers reconcile it by hand
+        logger.exception("PayPal capture not accepted - invoice %s", invoice.cod)
+        notify_admins(
+            f"PayPal capture not accepted - {request.association['slug']} - {request.user}",
+            payment_error_info(request, context, invoice, str(err)),
+        )
+        messages.warning(
+            request,
+            _(
+                "The payment was received by PayPal but could not be registered automatically: "
+                "the organizers will verify it. Please do not pay again."
+            ),
+        )
+        return redirect("accounting")
     except GatewayError as err:
         logger.exception("PayPal capture failed - invoice %s", invoice.cod)
         notify_admins(

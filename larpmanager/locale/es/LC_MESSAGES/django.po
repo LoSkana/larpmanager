@@ -15079,6 +15079,13 @@ msgstr ""
 "precio"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"PayPal recibió el pago, pero no se pudo registrar automáticamente: los "
+"organizadores lo comprobarán. Por favor, no vuelvas a pagar."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""

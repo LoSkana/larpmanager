@@ -26,6 +26,7 @@ import hashlib
 import json
 import logging
 import re
+import secrets
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import TYPE_CHECKING
@@ -33,7 +34,6 @@ from typing import TYPE_CHECKING
 import requests
 from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import escape
@@ -41,12 +41,10 @@ from django.utils.html import escape
 from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
-from larpmanager.models.member import MemberConfig
 from larpmanager.utils.core.base import get_context, update_payment_details
 from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
-    from django.db.models import QuerySet
     from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
@@ -83,43 +81,36 @@ def paypal_v2_amount(amount: Decimal, currency: str) -> str:
     return str(amount.quantize(precision))
 
 
-def _paypal_v2_pending_name(invoice: PaymentInvoice) -> str:
-    """Return the member config name flagging a pending PayPal capture on the invoice key."""
-    return f"paypal_v2_pending_{invoice.key or invoice.uuid}"
+class PaypalV2CaptureRejectedError(GatewayError):
+    """Raised when PayPal completed a capture that cannot be registered on the invoice."""
 
 
-def _paypal_v2_pending_configs(invoice: PaymentInvoice) -> QuerySet[MemberConfig]:
-    """Return the member config flagging a pending PayPal capture on the invoice key."""
-    return MemberConfig.objects.filter(
-        member_id=invoice.member_id,
-        name=_paypal_v2_pending_name(invoice),
-        deleted__isnull=True,
-    )
+def _paypal_v2_pending_key(invoice: PaymentInvoice) -> str:
+    """Return the cache key flagging a pending PayPal capture on the invoice key."""
+    key_hash = hashlib.sha256(str(invoice.key or invoice.uuid).encode()).hexdigest()[:32]
+    return f"paypal_v2_pending_{invoice.member_id}_{key_hash}"
 
 
 def is_paypal_v2_pending(invoice: PaymentInvoice) -> bool:
     """Return whether a PayPal capture of the invoice key is still waiting to be settled."""
-    return _paypal_v2_pending_configs(invoice).filter(updated__gte=timezone.now() - PAYPAL_V2_PENDING_TIMEOUT).exists()
+    return cache.get(_paypal_v2_pending_key(invoice)) is not None
 
 
 def set_paypal_v2_pending(invoice: PaymentInvoice) -> None:
     """Flag the invoice key with a pending PayPal capture, blocking new payments until it is settled."""
-    MemberConfig.objects.update_or_create(
-        member_id=invoice.member_id,
-        name=_paypal_v2_pending_name(invoice),
-        deleted=None,
-        defaults={"value": str(invoice.uuid)},
+    cache.set(
+        _paypal_v2_pending_key(invoice), str(invoice.uuid), timeout=int(PAYPAL_V2_PENDING_TIMEOUT.total_seconds())
     )
 
 
 def clear_paypal_v2_pending(invoice: PaymentInvoice) -> None:
     """Release the pending PayPal capture flag of the invoice key."""
-    _paypal_v2_pending_configs(invoice).delete()
+    cache.delete(_paypal_v2_pending_key(invoice))
 
 
 def paypal_v2_api_url(path: str) -> str:
     """Return the full PayPal API url of a path, sandbox or live according to settings."""
-    base_url = PAYPAL_V2_SANDBOX_URL if getattr(conf_settings, "PAYPAL_TEST", True) else PAYPAL_V2_LIVE_URL
+    base_url = PAYPAL_V2_SANDBOX_URL if conf_settings.PAYPAL_TEST else PAYPAL_V2_LIVE_URL
     return base_url + path
 
 
@@ -194,7 +185,8 @@ def get_paypal_v2_form(request: HttpRequest, context: dict, invoice: PaymentInvo
         "intent": "CAPTURE",
         "purchase_units": [
             {
-                "invoice_id": invoice.cod,
+                # PayPal refuses invoice ids already used by a capture, each order gets its own
+                "invoice_id": f"{invoice.cod}-{secrets.token_hex(4)}",
                 "custom_id": str(invoice.uuid),
                 "description": invoice.causal[:127],
                 "amount": {
@@ -294,6 +286,7 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
 
     Raises:
         GatewayError: If PayPal refuses the capture or cannot be reached
+        PaypalV2CaptureRejectedError: If PayPal completed the capture but it does not match the invoice
 
     """
     order_id = order_id or invoice.txn_id
@@ -325,7 +318,7 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
         set_paypal_v2_pending(invoice)
     if status == PAYPAL_V2_COMPLETED and not _paypal_v2_receive_capture(context, invoice, capture):
         msg = f"PayPal capture {capture.get('id')} of order {order_id} not accepted for invoice {invoice.cod}"
-        raise GatewayError(msg)
+        raise PaypalV2CaptureRejectedError(msg)
 
     return status
 
@@ -398,14 +391,13 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         return True
 
     capture = event.get("resource", {})
-    try:
-        invoice = PaymentInvoice.objects.get(
-            cod=capture.get("invoice_id"),
-            association_id=context["association_id"],
-            method__slug="paypal_v2",
-        )
-    except ObjectDoesNotExist:
-        logger.exception("PayPal webhook: Invoice not found: %s", capture.get("invoice_id"))
+    invoice = PaymentInvoice.objects.filter(
+        uuid=capture.get("custom_id") or "",
+        association_id=context["association_id"],
+        method__slug="paypal_v2",
+    ).first()
+    if not invoice:
+        logger.error("PayPal webhook: Invoice not found: %s", capture.get("custom_id"))
         # PayPal may have settled money that no invoice tracks, it must be reconciled by hand
         notify_admins(
             f"PayPal webhook - invoice not found - {capture.get('id')}",
@@ -423,9 +415,15 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
     if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):
         return True
 
-    # Rejected captures (wrong currency or amount) are logged, retrying them would not help
+    # Rejected captures (wrong currency or amount) must be reconciled by hand, retrying them would not help
     if not _paypal_v2_receive_capture(context, invoice, capture):
         logger.error("PayPal webhook: capture %s not accepted for invoice %s", capture.get("id"), invoice.cod)
+        notify_admins(
+            f"PayPal webhook - capture not accepted - {capture.get('id')}",
+            f"Association: {context['association_id']}<br />\n"
+            f"Invoice: {escape(invoice.cod)}<br />\n"
+            f"Resource: {escape(json.dumps(capture))}",
+        )
     return True
 
 
