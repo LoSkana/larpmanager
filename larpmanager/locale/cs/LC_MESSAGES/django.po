@@ -3422,6 +3422,9 @@ msgstr "Souhrnná bilance"
 msgid "Parent campaign"
 msgstr "Nadřazená kampaň"
 
+msgid "Pay with PayPal"
+msgstr "Zaplatit přes PayPal"
+
 msgid "Payment Methods"
 msgstr "Způsoby platby"
 
@@ -6028,6 +6031,9 @@ msgstr "Regenerování PDF bylo spuštěno!"
 
 msgid "Payment awaiting verification"
 msgstr "Platba čeká na ověření"
+
+msgid "Payment method not configured"
+msgstr "Platební metoda není nastavená"
 
 msgid "Payments to approve reminders"
 msgstr "Připomínky plateb ke schválení"
@@ -9502,6 +9508,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Zkontroluj všechny zrušené registrace a sleduj stav jejich vrácení peněz"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Platební relace vypršela. Spusť prosím platbu znovu."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Prvek zápisu, na který se tato otázka vztahuje, má tyto přípustné hodnoty"
@@ -10340,6 +10349,10 @@ msgstr "Zobraz náhled vykresleného listu tohoto prvku, tak jak ho uvidí hrá�
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient:"
 msgstr "Sbírka je připravena k doručení, předej příjemci tento odkaz:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Tato platba již byla dokončena, znovu ti nebylo nic účtováno."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12404,6 +12417,12 @@ msgstr ""
 "Velikost jména postavy a nadpisů v procentech (100 je standardní velikost)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Platba zatím nebyla potvrzena: zaznamenáme ji, jakmile ji PayPal potvrdí."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13540,6 +13559,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Doplň je v <a href='%(url)s'>nastavení platebních metod</a>, nebo platební "
+"metodu vypni."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -13887,6 +13914,13 @@ msgid ""
 msgstr ""
 "Zkopírují se pouze vybrané prvky: prvky se stejným názvem budou přepsány, "
 "všechny ostatní zůstanou zachovány."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Tahle platební metoda je dočasně nedostupná. Vyber si prosím jinou platební "
+"metodu, nebo kontaktuj organizátory."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14603,6 +14637,13 @@ msgstr ""
 "kód novému registrovanému, čímž oběma poskytne slevu"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Platbu PayPal přijal, ale nepodařilo se ji automaticky zaznamenat: "
+"organizátoři ji ověří. Prosím, neplať znovu."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -14673,6 +14714,14 @@ msgid ""
 msgstr ""
 "Tento spolek byl změněn v jiném okně: tvoje změny zde nebyly uloženy. "
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Účastník se pokusil zaplatit pomocí <b>%(method)s</b>, ale platbu nešlo "
+"zahájit, protože chybí tato nastavení: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

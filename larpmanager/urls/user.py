@@ -290,6 +290,21 @@ urlpatterns = [
         name="accounting_webhook_stripe",
     ),
     path(
+        "accounting/webhook/paypal",
+        views_ua.accounting_webhook_paypal,
+        name="accounting_webhook_paypal",
+    ),
+    path(
+        "accounting/paypal/go/<str:invoice_uuid>/",
+        views_ua.accounting_paypal_go,
+        name="accounting_paypal_go",
+    ),
+    path(
+        "accounting/paypal/return/<str:invoice_uuid>/",
+        views_ua.accounting_paypal_return,
+        name="accounting_paypal_return",
+    ),
+    path(
         "accounting/sumup/error/<str:invoice_uuid>/",
         views_ua.accounting_sumup_error,
         name="accounting_sumup_error",

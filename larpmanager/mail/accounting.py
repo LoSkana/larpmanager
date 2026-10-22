@@ -21,6 +21,9 @@
 import logging
 from typing import Any
 
+from django.conf import settings as conf_settings
+from django.core.cache import cache
+from django.utils import translation
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.basic import get_run_event_id
@@ -36,7 +39,7 @@ from larpmanager.mail.templates import (
     get_pay_token_email,
     get_token_credit_name,
 )
-from larpmanager.models.access import get_event_organizers, get_event_organizers_by_event
+from larpmanager.models.access import get_association_executives, get_event_organizers, get_event_organizers_by_event
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -48,6 +51,7 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
     PaymentType,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member, Membership, NotificationType
 from larpmanager.utils.core.headers import get_url, hdr
@@ -565,3 +569,35 @@ def _receipt_attachment_path(accounting_item: Any) -> dict:
         return {}
     else:
         return {"attachment_path": path, "attachment_name": name}
+
+
+def notify_gateway_not_configured(invoice: PaymentInvoice, missing_keys: list[str]) -> bool:
+    """Notify association executives that a payment method is enabled without its required settings.
+
+    Sent at most once a day for each association and payment method.
+
+    Returns:
+        True if the notification was sent, False if it was already sent today
+
+    """
+    method = invoice.method
+    cache_key = f"gateway_not_configured_{invoice.association_id}_{method.slug}"
+    if not cache.add(cache_key, 1, timeout=conf_settings.CACHE_TIMEOUT_1_DAY):
+        return False
+
+    association = Association.objects.get(pk=invoice.association_id)
+    missing_fields = ", ".join(key.removeprefix(f"{method.slug}_") for key in missing_keys)
+    # Sent during the participant request: restore its language afterwards
+    for executive in get_association_executives(association):
+        with translation.override(executive.language):
+            subject = hdr(association) + _("Payment method not configured") + f": {method.name}"
+            body = _(
+                "A participant tried to pay with <b>%(method)s</b>, but the payment could not start because "
+                "these settings are missing: <b>%(fields)s</b>."
+            ) % {"method": method.name, "fields": missing_fields}
+            body += "<br /><br />" + _(
+                "Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+                "or disable the payment method."
+            ) % {"url": get_url("manage/methods/", association)}
+            my_send_mail(subject, body, executive, association)
+    return True

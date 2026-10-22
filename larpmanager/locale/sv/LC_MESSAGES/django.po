@@ -3422,6 +3422,9 @@ msgstr "Övergripande saldo"
 msgid "Parent campaign"
 msgstr "Överordnad kampanj"
 
+msgid "Pay with PayPal"
+msgstr "Betala med PayPal"
+
 msgid "Payment Methods"
 msgstr "Betalningsmetoder"
 
@@ -6028,6 +6031,9 @@ msgstr "PDF-omgenerering har startat!"
 
 msgid "Payment awaiting verification"
 msgstr "Betalning väntar på verifiering"
+
+msgid "Payment method not configured"
+msgstr "Betalningsmetoden är inte konfigurerad"
 
 msgid "Payments to approve reminders"
 msgstr "Påminnelser om betalningar att godkänna"
@@ -9533,6 +9539,9 @@ msgstr ""
 "Granska alla avbokade anmälningar och följ upp återbetalningsstatusen för "
 "dem"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Betalningssessionen har gått ut. Starta betalningen igen."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Det skrivmoment som frågan gäller för, tillåtna värden är"
 
@@ -10439,6 +10448,10 @@ msgstr ""
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient:"
 msgstr "Insamlingen är klar att överlämnas, ge denna länk till mottagaren:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Den här betalningen är redan genomförd, du har inte debiterats igen."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12576,6 +12589,13 @@ msgstr ""
 "standardstorleken)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Betalningen har inte bekräftats än: den registreras så snart PayPal "
+"bekräftar den."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13717,6 +13737,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Fyll i dem i <a href='%(url)s'>inställningarna för betalningsmetoder</a>, "
+"eller inaktivera betalningsmetoden."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14066,6 +14094,13 @@ msgid ""
 msgstr ""
 "Endast de valda elementen kopieras: element med samma namn skrivs över, alla"
 " andra behålls."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Den här betalningsmetoden är tillfälligt otillgänglig. Välj en annan "
+"betalningsmetod eller kontakta arrangörerna."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14790,6 +14825,13 @@ msgstr ""
 " en ny anmälare, vilket ger båda ett rabatterat pris"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Betalningen togs emot av PayPal men kunde inte registreras automatiskt: "
+"arrangörerna kommer att kontrollera den. Betala inte igen."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -14860,6 +14902,14 @@ msgid ""
 msgstr ""
 "Det här gillet ändrades i ett annat fönster: dina ändringar här har inte "
 "sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"En deltagare försökte betala med <b>%(method)s</b>, men betalningen kunde "
+"inte startas eftersom de här inställningarna saknas: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

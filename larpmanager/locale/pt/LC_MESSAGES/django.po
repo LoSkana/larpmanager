@@ -3422,6 +3422,9 @@ msgstr "Saldo total"
 msgid "Parent campaign"
 msgstr "Campanha principal"
 
+msgid "Pay with PayPal"
+msgstr "Pagar com PayPal"
+
 msgid "Payment Methods"
 msgstr "Métodos de pagamento"
 
@@ -6028,6 +6031,9 @@ msgstr "A regeneração do PDF começou!"
 
 msgid "Payment awaiting verification"
 msgstr "Pagamento a aguardar verificação"
+
+msgid "Payment method not configured"
+msgstr "Método de pagamento não configurado"
 
 msgid "Payments to approve reminders"
 msgstr "Lembretes de pagamentos a aprovar"
@@ -9556,6 +9562,9 @@ msgstr ""
 "Revê todas as inscrições canceladas e acompanha o respetivo estado de "
 "reembolso"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "A sessão de pagamento expirou. Inicia o pagamento novamente."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "O elemento de escrita a que esta pergunta se aplica, os valores permitidos "
@@ -10515,6 +10524,10 @@ msgstr ""
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient:"
 msgstr "A coleta está pronta para ser entregue, dá este link ao destinatário:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Este pagamento já foi concluído, não te foi cobrado novamente."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12691,6 +12704,13 @@ msgstr ""
 " padrão)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"O pagamento ainda não foi confirmado: ele será registrado assim que o PayPal"
+" o confirmar."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13833,6 +13853,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Preencha-as nas <a href='%(url)s'>configurações dos métodos de pagamento</a>"
+" ou desative o método de pagamento."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14181,6 +14209,13 @@ msgid ""
 msgstr ""
 "Apenas os elementos selecionados serão copiados: os elementos com o mesmo "
 "nome serão substituídos, todos os outros serão mantidos."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Este método de pagamento está temporariamente indisponível. Escolha outro "
+"método de pagamento ou entre em contato com os organizadores."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14905,6 +14940,14 @@ msgstr ""
 " único a uma nova pessoa inscrita, concedendo um preço com desconto a ambos"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"O pagamento foi recebido pelo PayPal, mas não pôde ser registrado "
+"automaticamente: os organizadores vão verificá-lo. Por favor, não pague "
+"novamente."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -14976,6 +15019,14 @@ msgid ""
 msgstr ""
 "Esta guilda foi modificada noutra janela: as tuas alterações aqui não foram "
 "guardadas. Copia o texto que queres manter e depois recarrega a página."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Um participante tentou pagar com <b>%(method)s</b>, mas o pagamento não pôde"
+" ser iniciado porque faltam estas configurações: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

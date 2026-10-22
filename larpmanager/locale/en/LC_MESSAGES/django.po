@@ -3018,6 +3018,21 @@ msgstr ""
 msgid "The collection is growing!"
 msgstr ""
 
+msgid "Payment method not configured"
+msgstr ""
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not "
+"start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+
+#, python-format
+msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+
 msgid "Welcome to LarpManager!"
 msgstr ""
 
@@ -5995,7 +6010,20 @@ msgstr ""
 msgid "You are about to make a payment of:"
 msgstr ""
 
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+
 msgid "Follow the link below to complete your payment on the PayPal platform."
+msgstr ""
+
+msgid "Pay with PayPal"
 msgstr ""
 
 msgid ""
@@ -13435,15 +13463,27 @@ msgstr ""
 msgid "The collection has been delivered!"
 msgstr ""
 
-msgid "The payment has not been completed"
+msgid "The payment session has expired. Please start the payment again."
 msgstr ""
 
-msgid "The payment was cancelled. You can try again whenever you want."
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+
+msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
 
 msgid ""
 "The payment was not completed. Please try again later or choose another "
 "payment method."
+msgstr ""
+
+msgid "The payment has not been completed"
+msgstr ""
+
+msgid "The payment was cancelled. You can try again whenever you want."
 msgstr ""
 
 msgid "As a final step, we ask you to complete your profile."

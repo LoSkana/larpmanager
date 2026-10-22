@@ -3422,6 +3422,9 @@ msgstr "Kokonaissaldo"
 msgid "Parent campaign"
 msgstr "Emokampanja"
 
+msgid "Pay with PayPal"
+msgstr "Maksa PayPalilla"
+
 msgid "Payment Methods"
 msgstr "Maksutavat"
 
@@ -6028,6 +6031,9 @@ msgstr "PDF:n uudelleenluonti on aloitettu!"
 
 msgid "Payment awaiting verification"
 msgstr "Maksu odottaa tarkistusta"
+
+msgid "Payment method not configured"
+msgstr "Maksutapaa ei ole määritetty"
 
 msgid "Payments to approve reminders"
 msgstr "Muistutukset hyväksyttävistä maksuista"
@@ -9559,6 +9565,9 @@ msgstr ""
 "Tarkista kaikki peruutetut ilmoittautumiset ja seuraa niiden hyvitysten "
 "tilaa"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "Maksuistunto on vanhentunut. Aloita maksu uudelleen."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Kirjoituselementti, jota tämä kysymys koskee, sallitut arvot ovat seuraavat"
@@ -10481,6 +10490,10 @@ msgstr ""
 msgid ""
 "The collection is ready to be delivered, give this link to the recipient:"
 msgstr "Keräys on valmis toimitettavaksi, anna tämä linkki vastaanottajalle:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Tämä maksu on jo suoritettu, sinua ei ole veloitettu uudelleen."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12585,6 +12598,13 @@ msgid ""
 msgstr "Hahmon nimen ja otsikoiden koko prosentteina (100 on normaali koko)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Maksua ei ole vielä vahvistettu: se kirjataan heti, kun PayPal vahvistaa "
+"sen."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13722,6 +13742,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Täydennä ne <a href='%(url)s'>maksutapojen asetuksissa</a> tai poista "
+"maksutapa käytöstä."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14069,6 +14097,13 @@ msgid ""
 msgstr ""
 "Vain valitut elementit kopioidaan: samannimiset elementit korvataan, kaikki "
 "muut säilytetään."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Tämä maksutapa ei ole tilapäisesti käytettävissä. Valitse toinen maksutapa "
+"tai ota yhteyttä järjestäjiin."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -14799,6 +14834,13 @@ msgstr ""
 "alennetun hinnan"
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"PayPal on vastaanottanut maksun, mutta sitä ei voitu kirjata "
+"automaattisesti: järjestäjät tarkistavat sen. Älä maksa uudelleen."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -14872,6 +14914,14 @@ msgstr ""
 "Tätä kiltaa muokattiin toisessa ikkunassa: täällä tekemäsi muutokset eivät "
 "ole tallentuneet. Kopioi teksti, jonka haluat säilyttää, ja lataa sitten "
 "sivu uudelleen."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Osallistuja yritti maksaa maksutavalla <b>%(method)s</b>, mutta maksua ei "
+"voitu aloittaa, koska nämä asetukset puuttuvat: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

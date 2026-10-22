@@ -5125,7 +5125,7 @@ INSERT INTO public.django_migrations VALUES (245, 'larpmanager', '0193_member_fl
 INSERT INTO public.django_migrations VALUES (246, 'larpmanager', '0194_alter_associationconfig_value_alter_config_value_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (247, 'larpmanager', '0195_callexp', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (248, 'larpmanager', '0196_accountingitemdiscount_registration', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (249, 'larpmanager', '0197_registrationquestion_ranking', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (249, 'larpmanager', '0197_alter_registrationquestion_max_length_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (250, 'otp_static', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (251, 'otp_static', '0002_throttling', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (252, 'otp_static', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
@@ -5139,7 +5139,6 @@ INSERT INTO public.django_migrations VALUES (259, 'socialaccount', '0003_extra_d
 INSERT INTO public.django_migrations VALUES (260, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (261, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (262, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (263, 'larpmanager', '0197_alter_registrationquestion_max_length_and_more', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Orga', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1', NULL);
 
@@ -5206,7 +5205,7 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 75
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (3, 1, 108);
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (4, 1, 55);
 
-INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, 'usd2nxvr8egcos4hco1j2otuhada4vg2', 1);
+INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, '4pnfatqbof63ktw96jqopyskd1vu5hy5', 1);
 
 INSERT INTO public.larpmanager_characterconfig VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'text_links', '0', 1);
 
@@ -5479,10 +5478,10 @@ INSERT INTO public.larpmanager_inventory_owners VALUES (1, 1, 1);
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test@test.it', 'a');
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', 'a');
 
-INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'sf2pneb0i91bij836aq3k4gkwzdzir6m', NULL);
-INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', '38980415jgprsiy9zxvkxqtdbmtitkur', NULL);
-INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'p1nek6ekgrwpk924fqc1nb55h2thezuy', NULL);
-INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', 'kzvx0qp9x5c4sbc0pwt4omw1gl1zmmkn', NULL);
+INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'ttagfj1miy82c9q6bw6sun79df1ywp9d', NULL);
+INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'j4uhwbu494upepdss98otgpukqgnt7r2', NULL);
+INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'bdxuzgxnbvum2tabnitpscx6s7cdg40y', NULL);
+INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', '7erf97022gsaahln28ii6byj0rfh47i6', NULL);
 
 INSERT INTO public.larpmanager_membership VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 4);
 INSERT INTO public.larpmanager_membership VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 2);
@@ -5491,7 +5490,7 @@ INSERT INTO public.larpmanager_membership VALUES (3, NULL, false, '2025-01-01 00
 INSERT INTO public.larpmanager_paymentmethod VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Wire', 'wire', '<p><strong>Beneficiary: </strong>Name of the recipient account holder.&nbsp;</p>
 <p><strong>IBAN</strong>: International Bank Account Number of the recipient account (27-character long)</p><p><strong>BIC</strong>: Optional</p>', 'payee, iban, bic', 'payment_methods/ac81a0b8942e41a8bbcefa197ccfb3d8.png', 'u1', NULL);
 INSERT INTO public.larpmanager_paymentmethod VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Freeform', 'any', '<p>No need for data; the participant will upload a text of any kind.&nbsp;</p>', '', 'payment_methods/873326d033b74568bb9e79d1e96762cf.png', 'u2', NULL);
-INSERT INTO public.larpmanager_paymentmethod VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Paypal', 'paypal', '<ol>
+INSERT INTO public.larpmanager_paymentmethod VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Paypal (legacy)', 'paypal', '<ol>
 <li>You need to have a <strong>Business account&nbsp;</strong>(request it if you don''t already have it)</li>
 <li>In <strong>PAYPAL_ID,&nbsp;</strong>put the email of your account (that you use to login).&nbsp;</li>
 <li>Open the following page: https://developer.paypal.com</li>
@@ -5537,6 +5536,18 @@ INSERT INTO public.larpmanager_paymentmethod VALUES (7, NULL, false, '2025-01-01
 <li class="TrT0Xe">Your PayPal name will show up under the Profile section (as shown in the image below)</li>
 </ol>', 'handle', 'payment_methods/7_3b97971f5d8747b1bd225266243b5179.png', 'u7', NULL);
 INSERT INTO public.larpmanager_paymentmethod VALUES (8, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Satispay', 'satispay', '<p>Follow the instructions at: https://developers.satispay.com/reference/keyid, using the authentication token provided by your Dashboard</p>', 'key_id', 'payment_methods/24037547097e4bd3b530de38eaaf4ce3.png', 'u8', 'it');
+INSERT INTO public.larpmanager_paymentmethod VALUES (9, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Paypal', 'paypal_v2', '<ol>
+<li>You need to have a <strong>Business account&nbsp;</strong>(request it if you don''t already have it)</li>
+<li>Open the following page: https://developer.paypal.com/dashboard/applications/live</li>
+<li>Log in with your PayPal credentials</li>
+<li>Click on Create App, enter any name and confirm</li>
+<li>Copy the Client ID in <strong>PAYPAL V2 CLIENT ID</strong></li>
+<li>Copy the Secret key in <strong>PAYPAL V2 SECRET</strong></li>
+<li>In the app page, under Webhooks, click on Add Webhook</li>
+<li>As link put "https://&lt;slug&gt;.larpmanager.com/accounting/webhook/paypal" (&lt;slug&gt; is the subdomain of your organization)</li>
+<li>Select the events "Payment capture completed" and "Payment capture denied" and save</li>
+<li>Copy the Webhook ID in <strong>PAYPAL V2 WEBHOOK ID</strong></li>
+</ol>', 'client_id, secret, webhook_id', 'payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png', 'u9', NULL);
 
 INSERT INTO public.larpmanager_permissionmodule VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Writing', 'pen-nib', 50, 'writing');
 INSERT INTO public.larpmanager_permissionmodule VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Accounting', 'calculator', 40, 'accounting');
@@ -5561,7 +5572,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1', false);
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'jqnmgzt3x0bft0upvzxvrdasvlyoijsu');
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'd1lrnkpwmdildjzeneaui31jk6nvg2i4');
 
 INSERT INTO public.larpmanager_writingquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'name', 'Test Larp - Name', 'Name', '', 1, 'm', 'c', 'c,s,r,a', 1000, true, 1, 'c', 'u1');
 INSERT INTO public.larpmanager_writingquestion VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'teaser', 'Test Larp - Presentation', 'Presentation', '', 2, 'o', 'c', 'c,s,r,a', 10000, true, 1, 'c', 'u2');
@@ -5597,7 +5608,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 263, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 262, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -5861,7 +5872,7 @@ SELECT pg_catalog.setval('public.larpmanager_onetimecontent_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.larpmanager_paymentinvoice_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.larpmanager_paymentmethod_id_seq', 8, true);
+SELECT pg_catalog.setval('public.larpmanager_paymentmethod_id_seq', 9, true);
 
 SELECT pg_catalog.setval('public.larpmanager_permissionmodule_id_seq', 18, true);
 
