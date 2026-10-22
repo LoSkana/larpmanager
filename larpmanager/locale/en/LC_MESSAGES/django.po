@@ -13438,10 +13438,20 @@ msgstr ""
 msgid "The payment has not been completed"
 msgstr ""
 
-msgid "The payment was not completed. Please contact us to find out why."
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr ""
+
+msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
 msgstr ""
 
 msgid "As a final step, we ask you to complete your profile."
+msgstr ""
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
 msgstr ""
 
 msgid "You have completed the payment!"

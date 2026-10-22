@@ -9579,6 +9579,9 @@ msgstr ""
 "Οι συμμετέχοντες μπορούν πλέον να υποβάλουν δωρεές και μπορείς να τις "
 "εξετάσεις."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr "Η πληρωμή ακυρώθηκε. Μπορείς να δοκιμάσεις ξανά όποτε θέλεις."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Οι εγγραφές για την εκδήλωση <i>%(run)s</i> δεν είναι ακόμη ανοιχτές!"
@@ -9809,10 +9812,6 @@ msgstr "Ο βοηθός είναι προσωρινά μη διαθέσιμος,
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr ""
 "Το όνομα της κλήσης, γραμμένο με κεφαλαία στις περιγραφές των ικανοτήτων"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr ""
-"Η πληρωμή δεν ολοκληρώθηκε. Επικοινώνησε μαζί μας για να μάθεις γιατί."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "Θα χρησιμοποιηθούν αυτόματα όταν εγγραφείς σε νέο event!"
@@ -12454,6 +12453,13 @@ msgstr ""
 "εγγραφής."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"Η πληρωμή δεν ολοκληρώθηκε. Δοκίμασε ξανά αργότερα ή επίλεξε άλλον τρόπο "
+"πληρωμής."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -13144,6 +13150,13 @@ msgid ""
 msgstr ""
 "Προαιρετικό - Μέγιστος αριθμός φορών που μπορεί να επιλεγεί σε όλες τις "
 "εγγραφές (0 = απεριόριστο)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"Η πληρωμή δεν έχει επιβεβαιωθεί ακόμα: θα καταχωριστεί μόλις την "
+"επιβεβαιώσει το Satispay."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

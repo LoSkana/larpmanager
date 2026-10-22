@@ -25,8 +25,9 @@
         checkoutId: '{{ sumup_checkout_id }}',
         showAmount: true,
         onResponse: function (type, body) {
-          // console.log('Type', type);
-          // console.log('Body', body);
+          if (type === 'error' || type === 'fail') {
+            $.post("{% url 'accounting_sumup_error' invoice.uuid %}", {type: type, body: JSON.stringify(body)});
+          }
         },
       });
     </script>

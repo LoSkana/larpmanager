@@ -9429,6 +9429,9 @@ msgstr "Det finns inga artiklar i lagret som kan tilldelas detta område."
 msgid "Participants can now submit donations, and you can review them."
 msgstr "Deltagarna kan nu skicka in donationer, och du kan granska dem."
 
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr "Betalningen avbröts. Du kan försöka igen när du vill."
+
 #, python-format
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Anmälningarna till evenemanget <i>%(run)s</i> har ännu inte öppnats!"
@@ -9631,9 +9634,6 @@ msgstr ""
 
 msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr "Anropets namn, skrivet med versaler i förmågornas beskrivningar"
-
-msgid "The payment was not completed. Please contact us to find out why."
-msgstr "Betalningen slutfördes inte. Kontakta oss för att ta reda på varför."
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr ""
@@ -12111,6 +12111,13 @@ msgstr ""
 "registreringsalternativen."
 
 msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
+msgstr ""
+"Betalningen slutfördes inte. Försök igen senare eller välj ett annat "
+"betalningssätt."
+
+msgid ""
 "View a full financial overview of the event, broken down by revenue, costs, "
 "and balance"
 msgstr ""
@@ -12799,6 +12806,13 @@ msgid ""
 msgstr ""
 "Valfritt - Maximalt antal gånger det kan väljas för alla registreringar (0 ="
 " obegränsat)"
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
+msgstr ""
+"Betalningen har inte bekräftats än: den registreras så snart Satispay "
+"bekräftar den."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

@@ -27,8 +27,11 @@ from decimal import Decimal
 from typing import TYPE_CHECKING
 
 import stripe
+from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.utils import timezone
 
 from larpmanager.accounting.gateway import CURRENCY_TO_CENTS_MULTIPLIER
 from larpmanager.accounting.invoice import invoice_received_money
@@ -39,6 +42,14 @@ if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 logger = logging.getLogger(__name__)
+
+# Cancellations faster than this after the checkout creation are treated as gateway errors
+STRIPE_BOUNCE_SECONDS = 15
+
+
+def stripe_session_key(invoice_uuid: str) -> str:
+    """Return the cache key holding the checkout session id of an invoice."""
+    return f"stripe_session_{invoice_uuid}"
 
 
 def get_stripe_form(
@@ -88,8 +99,11 @@ def get_stripe_form(
         ],
         mode="payment",
         success_url=request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
-        cancel_url=request.build_absolute_uri(reverse("accounting_cancelled")),
+        cancel_url=request.build_absolute_uri(reverse("accounting_cancelled")) + f"?invoice={invoice.uuid}",
     )
+
+    # Session ids exceed the txn_id length, keep them in cache for the session lifetime
+    cache.set(stripe_session_key(invoice.uuid), checkout_session.id, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Add checkout session to context for template rendering
     context["stripe_ck"] = checkout_session
@@ -97,6 +111,40 @@ def get_stripe_form(
     # Store price ID in invoice for payment tracking
     invoice.cod = stripe_price.id
     invoice.save()
+
+
+def get_stripe_cancel_error(context: dict, invoice: PaymentInvoice) -> str | None:
+    """Return the gateway error behind a cancelled checkout, or None if the user cancelled it.
+
+    A checkout is considered failed if its payment intent has a payment error, or if the
+    user came back too quickly after its creation to have actually seen the checkout page.
+    """
+    session_id = cache.get(stripe_session_key(invoice.uuid))
+    if not session_id:
+        return "Checkout session not found in cache"
+
+    stripe.api_key = context["stripe_sk_api"]
+    try:
+        session = stripe.checkout.Session.retrieve(session_id, expand=["payment_intent"])
+    except stripe.StripeError as err:
+        return f"Stripe API error retrieving session {session_id}: {err}"
+
+    payment_intent = session.payment_intent
+    if payment_intent and payment_intent.last_payment_error:
+        payment_error = payment_intent.last_payment_error
+        error_code = getattr(payment_error, "code", "")
+        decline_code = getattr(payment_error, "decline_code", "")
+        error_message = getattr(payment_error, "message", "")
+        return (
+            f"Session {session_id}, payment intent {payment_intent.id} ({payment_intent.status}): "
+            f"{error_code} {decline_code} - {error_message}"
+        )
+
+    elapsed_seconds = int(timezone.now().timestamp()) - session.created
+    if elapsed_seconds < STRIPE_BOUNCE_SECONDS:
+        return f"Session {session_id} ({session.status}) cancelled {elapsed_seconds} seconds after creation"
+
+    return None
 
 
 def stripe_webhook(request: HttpRequest) -> HttpResponse | bool:
