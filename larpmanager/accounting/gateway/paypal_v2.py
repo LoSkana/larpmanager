@@ -37,7 +37,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
 
-from larpmanager.accounting.gateway import GatewayError
+from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.core.base import get_context, update_payment_details
@@ -53,7 +53,10 @@ PAYPAL_V2_SANDBOX_URL = "https://api-m.sandbox.paypal.com"
 PAYPAL_V2_TIMEOUT = 30
 
 # Cancellations faster than this after the order creation are treated as gateway errors
-PAYPAL_V2_BOUNCE_SECONDS = 15
+PAYPAL_V2_BOUNCE_SECONDS = 5
+
+# How long a pending capture blocks new orders on its invoice, PayPal can take days to settle it
+PAYPAL_V2_PENDING_TIMEOUT = 7 * 24 * 3600
 
 # Capture statuses of a completed payment, and of a payment PayPal still has to settle
 PAYPAL_V2_COMPLETED = "COMPLETED"
@@ -74,6 +77,11 @@ def paypal_v2_amount(amount: Decimal, currency: str) -> str:
     """Format an amount with the decimals PayPal requires for the currency."""
     precision = Decimal(1) if currency.upper() in PAYPAL_V2_ZERO_DECIMAL_CURRENCIES else Decimal("0.01")
     return str(amount.quantize(precision))
+
+
+def paypal_v2_pending_key(invoice_uuid: str) -> str:
+    """Return the cache key flagging an invoice with a pending PayPal capture."""
+    return f"paypal_v2_pending_{invoice_uuid}"
 
 
 def paypal_v2_api_url(path: str) -> str:
@@ -145,10 +153,16 @@ def _paypal_v2_request(context: dict, method: str, path: str, payload: dict | No
 def get_paypal_v2_form(request: HttpRequest, context: dict, invoice: PaymentInvoice, amount: Decimal) -> None:
     """Create a PayPal order for the invoice and add the PayPal approval url to the context.
 
+    No order is created while a previous capture of the invoice is pending, to avoid double payments.
+
     Raises:
         GatewayError: If PayPal refuses the order or cannot be reached
 
     """
+    if cache.get(paypal_v2_pending_key(invoice.uuid)):
+        context["paypal_pending"] = True
+        return
+
     payload = {
         "intent": "CAPTURE",
         "purchase_units": [
@@ -280,6 +294,8 @@ def paypal_v2_capture(context: dict, invoice: PaymentInvoice, order_id: str | No
         raise GatewayError(msg) from err
 
     status = capture.get("status", "")
+    if status == PAYPAL_V2_PENDING:
+        cache.set(paypal_v2_pending_key(invoice.uuid), 1, timeout=PAYPAL_V2_PENDING_TIMEOUT)
     if status == PAYPAL_V2_COMPLETED and not _paypal_v2_receive_capture(context, invoice, capture):
         msg = f"PayPal capture {capture.get('id')} of order {order_id} not accepted for invoice {invoice.cod}"
         raise GatewayError(msg)
@@ -318,7 +334,7 @@ def _paypal_v2_verify_webhook(request: HttpRequest, context: dict, raw_event: st
 
 
 def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple validation checks require multiple returns
-    """Handle PayPal webhook notifications, registering completed captures.
+    """Handle PayPal webhook notifications, registering completed captures and releasing denied ones.
 
     Returns:
         True if the notification was processed or ignored, False if it failed and PayPal should retry it
@@ -326,7 +342,7 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
     """
     context = get_context(request)
     update_payment_details(context)
-    if not context.get("paypal_v2_webhook_id"):
+    if missing_gateway_keys("paypal_v2", context):
         logger.error("PayPal webhook: not configured for association %s", context["association_id"])
         return False
 
@@ -346,7 +362,8 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         logger.exception("PayPal webhook: invalid payload")
         return False
 
-    if event.get("event_type") != "PAYMENT.CAPTURE.COMPLETED":
+    event_type = event.get("event_type")
+    if event_type not in ("PAYMENT.CAPTURE.COMPLETED", "PAYMENT.CAPTURE.DENIED"):
         return True
 
     capture = event.get("resource", {})
@@ -358,6 +375,11 @@ def paypal_v2_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple
         )
     except ObjectDoesNotExist:
         logger.exception("PayPal webhook: Invoice not found: %s", capture.get("invoice_id"))
+        return True
+
+    # A denied pending capture lets the invoice be paid again
+    if event_type == "PAYMENT.CAPTURE.DENIED":
+        cache.delete(paypal_v2_pending_key(invoice.uuid))
         return True
 
     if invoice.status in (PaymentStatus.CHECKED, PaymentStatus.CONFIRMED):

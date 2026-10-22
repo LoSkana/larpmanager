@@ -173,10 +173,14 @@
 {% endif %}
 {% if method == 'paypal_v2' and not gateway_error %}
     <div class="paypal-v2">
-        <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
-        <a class="button paypal-v2-button" href="{{ paypal_url }}">
-            <i class="fa-brands fa-paypal"></i> {% trans "Pay with PayPal" %}
-        </a>
+        {% if paypal_pending %}
+            <p>{% trans "The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it." %}</p>
+        {% else %}
+            <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
+            <a class="button paypal-v2-button" href="{{ paypal_url }}">
+                <i class="fa-brands fa-paypal"></i> {% trans "Pay with PayPal" %}
+            </a>
+        {% endif %}
     </div>
 {% endif %}
 <script>

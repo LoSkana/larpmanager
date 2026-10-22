@@ -6078,6 +6078,11 @@ msgid ""
 "be processed!"
 msgstr ""
 
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+
 msgid "Pay with PayPal"
 msgstr ""
 
@@ -13456,11 +13461,6 @@ msgid "This collection has already been redeemed"
 msgstr ""
 
 msgid "The collection has been delivered!"
-msgstr ""
-
-msgid ""
-"The payment has not been confirmed yet: it will be registered as soon as "
-"PayPal confirms it."
 msgstr ""
 
 msgid ""

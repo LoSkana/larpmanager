@@ -5205,7 +5205,7 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 75
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (3, 1, 108);
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (4, 1, 55);
 
-INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, 'enwwfhnyqr6n5zhn8o93uzb3ba54gmx3', 1);
+INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, '4pnfatqbof63ktw96jqopyskd1vu5hy5', 1);
 
 INSERT INTO public.larpmanager_characterconfig VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'text_links', '0', 1);
 
@@ -5478,10 +5478,10 @@ INSERT INTO public.larpmanager_inventory_owners VALUES (1, 1, 1);
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test@test.it', 'a');
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', 'a');
 
-INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', '6ncvejcl1n03e1z6xchlavlo6l8rda8a', NULL);
-INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', '68r5twf8hkfou59wz2fp9r5h4lzqi8jr', NULL);
-INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'yfb6su0wm1hfzq9dthcqukvltw22ryca', NULL);
-INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', 'fztjfzuppjzd74n4gsvvyi9xeig1kaq4', NULL);
+INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'ttagfj1miy82c9q6bw6sun79df1ywp9d', NULL);
+INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'j4uhwbu494upepdss98otgpukqgnt7r2', NULL);
+INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'bdxuzgxnbvum2tabnitpscx6s7cdg40y', NULL);
+INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', '7erf97022gsaahln28ii6byj0rfh47i6', NULL);
 
 INSERT INTO public.larpmanager_membership VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 4);
 INSERT INTO public.larpmanager_membership VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 2);
@@ -5545,7 +5545,7 @@ INSERT INTO public.larpmanager_paymentmethod VALUES (9, NULL, false, '2025-01-01
 <li>Copy the Secret key in <strong>PAYPAL V2 SECRET</strong></li>
 <li>In the app page, under Webhooks, click on Add Webhook</li>
 <li>As link put "https://&lt;slug&gt;.larpmanager.com/accounting/webhook/paypal" (&lt;slug&gt; is the subdomain of your organization)</li>
-<li>Select the event "Payment capture completed" and save</li>
+<li>Select the events "Payment capture completed" and "Payment capture denied" and save</li>
 <li>Copy the Webhook ID in <strong>PAYPAL V2 WEBHOOK ID</strong></li>
 </ol>', 'client_id, secret, webhook_id', 'payment_methods/aba0f22f1f3b4cc8bfb7ca092ad0ba6e.png', 'u9', NULL);
 
@@ -5572,7 +5572,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1', false);
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'hco28igvjrav27aivfri6mb9ssh31rs3');
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'd1lrnkpwmdildjzeneaui31jk6nvg2i4');
 
 INSERT INTO public.larpmanager_writingquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'name', 'Test Larp - Name', 'Name', '', 1, 'm', 'c', 'c,s,r,a', 1000, true, 1, 'c', 'u1');
 INSERT INTO public.larpmanager_writingquestion VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'teaser', 'Test Larp - Presentation', 'Presentation', '', 2, 'o', 'c', 'c,s,r,a', 10000, true, 1, 'c', 'u2');

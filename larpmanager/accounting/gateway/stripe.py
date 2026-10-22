@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 # Cancellations faster than this after the checkout creation are treated as gateway errors
-STRIPE_BOUNCE_SECONDS = 15
+STRIPE_BOUNCE_SECONDS = 5
 
 
 def stripe_session_key(invoice_uuid: str) -> str:

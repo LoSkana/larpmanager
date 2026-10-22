@@ -33,9 +33,11 @@ from larpmanager.accounting.gateway.paypal_v2 import (
     get_paypal_v2_form,
     paypal_v2_amount,
     paypal_v2_capture,
+    paypal_v2_pending_key,
     paypal_v2_webhook,
 )
 from larpmanager.accounting.payment import _prepare_gateway_form
+from larpmanager.forms.accounting import ExePaymentSettingsForm
 from larpmanager.mail.accounting import notify_gateway_not_configured
 from larpmanager.models.accounting import PaymentStatus
 from larpmanager.models.base import PaymentMethod
@@ -228,6 +230,21 @@ class TestPaypalV2(BaseTestCase):
         self.invoice.refresh_from_db()
         self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
+    @patch(f"{PAYPAL_MODULE}.requests.request")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_form_skipped_while_capture_pending(self, mock_post: Any, mock_request: Any) -> None:
+        """Test no new order is created for an invoice with a pending capture"""
+        mock_post.return_value = _token_response()
+        mock_request.return_value = _response(201, _order(_capture(status="PENDING")))
+        paypal_v2_capture(self.context, self.invoice)
+        mock_request.reset_mock()
+
+        get_paypal_v2_form(RequestFactory().get("/"), self.context, self.invoice, Decimal(100))
+
+        self.assertTrue(self.context["paypal_pending"])
+        self.assertNotIn("paypal_url", self.context)
+        mock_request.assert_not_called()
+
     def _webhook_request(self, event_type: str = "PAYMENT.CAPTURE.COMPLETED", capture: dict | None = None) -> Any:
         """Build a PayPal webhook request for a capture event."""
         event = {"event_type": event_type, "resource": capture or _capture()}
@@ -263,6 +280,17 @@ class TestPaypalV2(BaseTestCase):
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_missing_credentials(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a webhook is rejected without calling PayPal when the credentials are incomplete"""
+        del self.context["paypal_v2_secret"]
+        mock_context.return_value = self.context
+
+        self.assertFalse(paypal_v2_webhook(self._webhook_request()))
+        mock_post.assert_not_called()
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
     def test_webhook_invalid_encoding(self, mock_context: Any, _mock_update: Any) -> None:
         """Test a webhook body that is not utf-8 is rejected"""
         mock_context.return_value = self.context
@@ -285,6 +313,21 @@ class TestPaypalV2(BaseTestCase):
         verify_body = json.loads(mock_post.call_args.kwargs["data"])
         self.assertEqual(verify_body["webhook_id"], "webhook")
         self.assertEqual(verify_body["webhook_event"]["resource"]["id"], "CAPTURE1")
+
+    @patch(f"{PAYPAL_MODULE}.update_payment_details")
+    @patch(f"{PAYPAL_MODULE}.get_context")
+    @patch(f"{PAYPAL_MODULE}.requests.post")
+    def test_webhook_denied_releases_pending(self, mock_post: Any, mock_context: Any, _mock_update: Any) -> None:
+        """Test a denied capture webhook lets the invoice create new orders again"""
+        mock_context.return_value = self.context
+        mock_post.side_effect = [_token_response(), _response(200, {"verification_status": "SUCCESS"})]
+        cache.set(paypal_v2_pending_key(self.invoice.uuid), 1)
+
+        self.assertTrue(paypal_v2_webhook(self._webhook_request("PAYMENT.CAPTURE.DENIED", _capture(status="DECLINED"))))
+
+        self.assertIsNone(cache.get(paypal_v2_pending_key(self.invoice.uuid)))
+        self.invoice.refresh_from_db()
+        self.assertEqual(self.invoice.status, PaymentStatus.CREATED)
 
     @patch(f"{PAYPAL_MODULE}.update_payment_details")
     @patch(f"{PAYPAL_MODULE}.get_context")
@@ -386,3 +429,31 @@ class TestGatewayConfiguration(BaseTestCase):
         self.assertTrue(context["gateway_error"])
         mock_notify.assert_called_once()
         self.assertEqual(mock_info.call_args.args[3], "invalid_client")
+
+
+class TestPaymentSettingsLegacyMethods(BaseTestCase):
+    """Test legacy payment methods are offered only to associations already using them"""
+
+    def _offered_slugs(self, association: Any) -> set[str]:
+        """Return the slugs of the payment methods offered by the settings form."""
+        form = ExePaymentSettingsForm(instance=association, context={"association_id": association.id})
+        return set(form.fields["payment_methods"].queryset.values_list("slug", flat=True))
+
+    def test_legacy_paypal_hidden_when_not_enabled(self) -> None:
+        """Test legacy PayPal is not offered to associations without it"""
+        association = self.get_association()
+        _method("paypal")
+        _method("paypal_v2")
+        association.payment_methods.remove(*association.payment_methods.filter(slug="paypal"))
+
+        offered = self._offered_slugs(association)
+
+        self.assertNotIn("paypal", offered)
+        self.assertIn("paypal_v2", offered)
+
+    def test_legacy_paypal_offered_when_enabled(self) -> None:
+        """Test legacy PayPal stays offered to associations that have it enabled"""
+        association = self.get_association()
+        association.payment_methods.add(_method("paypal"))
+
+        self.assertIn("paypal", self._offered_slugs(association))

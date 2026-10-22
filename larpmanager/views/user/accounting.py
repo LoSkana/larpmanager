@@ -1210,7 +1210,10 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
         if satispay_status == "CANCELED":
             messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
             return redirect("accounting")
-        if satispay_status == "PENDING":
+
+        # Not registered yet: still pending, status unreadable, or rejected by the checks
+        inv.refresh_from_db(fields=["status"])
+        if inv.status == PaymentStatus.CREATED:
             messages.warning(
                 request,
                 _("The payment has not been confirmed yet: it will be registered as soon as Satispay confirms it."),
