@@ -5899,6 +5899,9 @@ msgstr "Zpoždění při sestavování profilu"
 msgid "Describe how we can help you"
 msgstr "Popiš, jak ti můžeme pomoci"
 
+msgid "Disable automatic assignment"
+msgstr "Vypnout automatické přiřazení"
+
 msgid "Disable event-level approval"
 msgstr "Zakaž schvalování na úrovni událostí"
 
@@ -14219,6 +14222,13 @@ msgstr ""
 "V případě bankovních převodů navštiv <a href='%(url)s'>stránku pro "
 "platby</a>, kde najdeš podrobné informace (včetně čísla IBAN a referenčního "
 "čísla platby)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Pokud je zapnuto, účastníkům se při registraci automaticky nepřiřadí "
+"postava, kterou hráli v předchozím běhu."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "

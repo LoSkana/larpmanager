@@ -5899,6 +5899,9 @@ msgstr "Vertraging in profielcompilatie"
 msgid "Describe how we can help you"
 msgstr "Beschrijf hoe we je kunnen helpen"
 
+msgid "Disable automatic assignment"
+msgstr "Automatische toewijzing uitschakelen"
+
 msgid "Disable event-level approval"
 msgstr "Goedkeuring op gebeurtenisniveau uitschakelen"
 
@@ -14658,6 +14661,13 @@ msgid ""
 msgstr ""
 "Voor bankoverschrijvingen ga je naar de <a href='%(url)s'>betaalpagina</a> "
 "om de gegevens te bekijken (inclusief IBAN en betalingsreferentie)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Als dit is ingeschakeld, krijgen deelnemers bij hun inschrijving niet "
+"automatisch het personage toegewezen dat ze in de vorige editie speelden."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "

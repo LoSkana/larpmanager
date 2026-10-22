@@ -5899,6 +5899,9 @@ msgstr "Ritardo nella compilazione del profilo"
 msgid "Describe how we can help you"
 msgstr "Descrivi come possiamo aiutarti"
 
+msgid "Disable automatic assignment"
+msgstr "Disabilita assegnazione automatica"
+
 msgid "Disable event-level approval"
 msgstr "Disattiva l'approvazione a livello di evento"
 
@@ -14658,6 +14661,14 @@ msgid ""
 msgstr ""
 "Per i bonifici bancari, vai alla <a href='%(url)s'>pagina dei pagamenti</a> "
 "per vedere i dettagli (compresi l'IBAN e la causale)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Se abilitato, al momento dell'iscrizione ai partecipanti non viene assegnato"
+" automaticamente il personaggio che hanno interpretato nella replica "
+"precedente."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "

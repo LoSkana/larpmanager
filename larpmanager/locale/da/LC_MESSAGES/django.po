@@ -5899,6 +5899,9 @@ msgstr "Forsinkelse i udfyldelse af profil"
 msgid "Describe how we can help you"
 msgstr "Beskriv, hvordan vi kan hjælpe dig"
 
+msgid "Disable automatic assignment"
+msgstr "Deaktiver automatisk tildeling"
+
 msgid "Disable event-level approval"
 msgstr "Deaktivér godkendelse på eventniveau"
 
@@ -14342,6 +14345,13 @@ msgid ""
 msgstr ""
 "Ved bankoverførsler kan du besøge <a href='%(url)s'>betalingssiden</a> for "
 "at se oplysninger (herunder IBAN og betalingsreference)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Hvis aktiveret, får deltagerne ved tilmelding ikke automatisk tildelt den "
+"karakter, de spillede i den forrige afvikling."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "

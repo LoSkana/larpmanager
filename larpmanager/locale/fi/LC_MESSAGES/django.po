@@ -5899,6 +5899,9 @@ msgstr "Viive profiilin laatimisessa"
 msgid "Describe how we can help you"
 msgstr "Kuvaile, miten voimme auttaa sinua"
 
+msgid "Disable automatic assignment"
+msgstr "Poista automaattinen jako käytöstä"
+
 msgid "Disable event-level approval"
 msgstr "Poista tapahtumakohtainen hyväksyntä käytöstä"
 
@@ -14404,6 +14407,13 @@ msgid ""
 msgstr ""
 "Pankkisiirtojen osalta voit tarkastella yksityiskohtia (mukaan lukien IBAN-"
 "numero ja maksuviite) <a href='%(url)s'>maksusivulla</a>."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Jos tämä on käytössä, osallistujille ei ilmoittautumisen yhteydessä anneta "
+"automaattisesti hahmoa, jota he pelasivat edellisellä pelikerralla."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "

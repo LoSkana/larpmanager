@@ -1562,6 +1562,14 @@ msgstr ""
 msgid "If enabled, do not use the parent event's factions."
 msgstr ""
 
+msgid "Disable automatic assignment"
+msgstr ""
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+
 msgid "Experience points"
 msgstr ""
 

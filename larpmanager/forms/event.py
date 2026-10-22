@@ -947,6 +947,18 @@ class OrgaConfigForm(ConfigForm):
             independent_factions_help_text,
         )
 
+        disable_auto_assign_label = _("Disable automatic assignment")
+        disable_auto_assign_help_text = _(
+            "If enabled, upon registration participants are not automatically assigned the character they "
+            "played in the previous run.",
+        )
+        self.add_configs(
+            "campaign_disable_auto_assign",
+            ConfigType.BOOL,
+            disable_auto_assign_label,
+            disable_auto_assign_help_text,
+        )
+
     def set_config_experience(self) -> None:
         """Configure the experience points settings, if the experience feature is enabled."""
         if "experience" not in self.params["features"]:

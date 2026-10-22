@@ -31,7 +31,7 @@ from larpmanager.cache.basic import _get_event_parent_id, get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
-from larpmanager.cache.config import reset_event_configs, reset_run_configs
+from larpmanager.cache.config import get_event_config, reset_event_configs, reset_run_configs
 from larpmanager.cache.event_text import clear_event_text_cache
 from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
@@ -600,6 +600,7 @@ def assign_previous_campaign_character(registration: Any) -> None:
 
     Note:
         - Only works for campaign events with a parent event
+        - Skipped if the campaign_disable_auto_assign config is enabled
         - Skips cancelled registrations
         - Preserves custom character attributes from previous run
         - Does nothing if character already assigned to current run
@@ -614,6 +615,10 @@ def assign_previous_campaign_character(registration: Any) -> None:
     parent_id = run_cache["parent_id"]
     event_id = run_cache["event_id"]
     if "campaign" not in get_event_features(event_id) or not parent_id:
+        return
+
+    # Skip if automatic assignment is disabled for the campaign
+    if get_event_config(event_id, "campaign_disable_auto_assign"):
         return
 
     # Skip if member already has a character assigned to this run

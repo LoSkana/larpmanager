@@ -5899,6 +5899,9 @@ msgstr "Verzögerung beim Ausfüllen des Profils"
 msgid "Describe how we can help you"
 msgstr "Beschreibe, wie wir dir helfen können"
 
+msgid "Disable automatic assignment"
+msgstr "Automatische Zuweisung deaktivieren"
+
 msgid "Disable event-level approval"
 msgstr "Genehmigung auf Ereignisebene deaktivieren"
 
@@ -14791,6 +14794,13 @@ msgid ""
 msgstr ""
 "Für Banküberweisungen ruf bitte die <a href='%(url)s'>Zahlungsseite</a> auf,"
 " um die Details (einschließlich IBAN und Verwendungszweck) einzusehen."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Wenn aktiviert, wird Teilnehmenden bei der Anmeldung nicht automatisch der "
+"Charakter zugewiesen, den sie im vorherigen Durchlauf gespielt haben."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
