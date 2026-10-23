@@ -5000,9 +5000,6 @@ msgstr "Skräddarsydd e-postserver"
 msgid "Disable free abilities"
 msgstr "Inaktivera fria förmågor"
 
-msgid "Event deletion request"
-msgstr "Begäran om radering av evenemang"
-
 msgid "Expenses collaborators"
 msgstr "Medarbetarnas utgifter"
 
@@ -6194,6 +6191,9 @@ msgstr "De övriga fälten är valfria."
 msgid "The total registration fee is:"
 msgstr "Den totala anmälningsavgiften är:"
 
+msgid "To confirm, type the full name"
+msgstr "Skriv hela namnet för att bekräfta"
+
 msgid "Type of accommodation included"
 msgstr "Typ av boende som ingår"
 
@@ -6292,6 +6292,9 @@ msgstr "Tilläggsavgift till biljett"
 
 msgid "The date when this event begins"
 msgstr "Datum då händelsen börjar"
+
+msgid "The name entered does not match"
+msgstr "Namnet du angav stämmer inte"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt belopp av registrerade penninginflöden"
@@ -8670,6 +8673,9 @@ msgid "This page lets you add or edit an inventory pool type."
 msgstr ""
 "På den här sidan kan du lägga till eller redigera en typ av inventariepool."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varning: den här åtgärden är farlig och kan inte ångras"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
 
@@ -8691,6 +8697,9 @@ msgstr "Innehållet i medlemsansökan är ifyllt med användardata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Skapa minst en biljettyp för anmälningar till evenemang"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Raderingen har startat, det kan ta några minuter innan den är klar"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vill du låta användare göra frivilliga donationer?"
@@ -12576,6 +12585,13 @@ msgstr ""
 "standardstorleken)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Den här sessionen och all dess data (anmälningar, bokföring osv.) kommer att"
+" raderas permanent."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14030,6 +14046,13 @@ msgstr ""
 "Tecknen för för- och efternamn stämmer inte överens (kom ihåg att ange rätt "
 "för- och efternamn i legal_name)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"Eventet och all dess data (anmälningar, karaktärer, texter, bokföring osv.) "
+"kommer att raderas permanent."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -14940,14 +14963,6 @@ msgid ""
 msgstr ""
 "Normalt visas alla karaktärsfält (offentliga eller privata); med den här "
 "inställningen kan du välja vilka som ska visas vid varje tillfälle."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din förfrågan har registrerats. Eftersom det rör sig om en känslig fråga "
-"kommer vårt team att granska den manuellt. Vi återkommer till dig så snart "
-"som möjligt."
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

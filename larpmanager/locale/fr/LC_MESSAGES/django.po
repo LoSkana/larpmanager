@@ -5000,9 +5000,6 @@ msgstr "Serveur de messagerie personnalisé"
 msgid "Disable free abilities"
 msgstr "Désactiver les capacités gratuites"
 
-msgid "Event deletion request"
-msgstr "Demande de suppression d'un événement"
-
 msgid "Expenses collaborators"
 msgstr "Dépenses des collaborateurs"
 
@@ -6194,6 +6191,9 @@ msgstr "Les autres champs sont facultatifs."
 msgid "The total registration fee is:"
 msgstr "Le montant total des droits d'inscription est de:"
 
+msgid "To confirm, type the full name"
+msgstr "Pour confirmer, saisis le nom complet"
+
 msgid "Type of accommodation included"
 msgstr "Type de logement inclus"
 
@@ -6292,6 +6292,9 @@ msgstr "Supplément appliqué au billet"
 
 msgid "The date when this event begins"
 msgstr "Date de début de l'événement"
+
+msgid "The name entered does not match"
+msgstr "Le nom saisi ne correspond pas"
 
 msgid "Total of recorded money inflows"
 msgstr "Total des entrées d'argent enregistrées"
@@ -8711,6 +8714,9 @@ msgid "This page lets you add or edit an inventory pool type."
 msgstr ""
 "Cette page te permet d’ajouter ou de modifier un type de pool d’inventaire."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Attention : cette action est dangereuse et irréversible"
+
 msgid "Whether this content is currently available for access"
 msgstr "Si ce contenu est actuellement disponible pour l'accès"
 
@@ -8735,6 +8741,9 @@ msgstr ""
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Crée au moins un type de billet pour les inscriptions aux événements"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Suppression lancée, cela peut prendre quelques minutes"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr ""
@@ -12920,6 +12929,13 @@ msgstr ""
 "la taille standard)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Cette session et toutes ses données (inscriptions, comptabilité, etc.) "
+"seront définitivement supprimées."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14388,6 +14404,13 @@ msgstr ""
 "Les caractères utilisés pour le prénom et le nom ne correspondent pas (pense"
 " à saisir le prénom et le nom corrects dans « legal_name »)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"L'événement et toutes ses données (inscriptions, personnages, textes, "
+"comptabilité, etc.) seront définitivement supprimés."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -15336,14 +15359,6 @@ msgstr ""
 "Normalement, tous les champs de personnage (publics ou privés) sont affichés"
 " ; avec cette configuration, tu peux sélectionner ceux à afficher à tout "
 "moment."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Ta demande a bien été enregistrée ; compte tenu du caractère délicat de la "
-"tâche demandée, notre équipe va l'examiner manuellement ; on te tiendra au "
-"courant dès que possible"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

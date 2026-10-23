@@ -5000,9 +5000,6 @@ msgstr "Προσαρμοσμένος διακομιστής email"
 msgid "Disable free abilities"
 msgstr "Απενεργοποίηση δωρεάν ικανοτήτων"
 
-msgid "Event deletion request"
-msgstr "Αίτημα διαγραφής εκδήλωσης"
-
 msgid "Expenses collaborators"
 msgstr "Έξοδα συνεργατών"
 
@@ -6194,6 +6191,9 @@ msgstr "Τα υπόλοιπα πεδία είναι προαιρετικά."
 msgid "The total registration fee is:"
 msgstr "Το συνολικό κόστος εγγραφής είναι:"
 
+msgid "To confirm, type the full name"
+msgstr "Για επιβεβαίωση, πληκτρολόγησε το πλήρες όνομα"
+
 msgid "Type of accommodation included"
 msgstr "Τύπος διαμονής που περιλαμβάνεται"
 
@@ -6292,6 +6292,9 @@ msgstr "Προσαύξηση που εφαρμόζεται στο εισιτήρ
 
 msgid "The date when this event begins"
 msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσης"
+
+msgid "The name entered does not match"
+msgstr "Το όνομα που έγραψες δεν ταιριάζει"
 
 msgid "Total of recorded money inflows"
 msgstr "Συνολικό ποσό καταγεγραμμένων χρηματικών εισροών"
@@ -8713,6 +8716,9 @@ msgstr ""
 "Αυτή η σελίδα σού επιτρέπει να προσθέσεις ή να επεξεργαστείς έναν τύπο Pool "
 "απογραφής."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Προσοχή: αυτή η ενέργεια είναι επικίνδυνη και δεν μπορεί να αναιρεθεί"
+
 msgid "Whether this content is currently available for access"
 msgstr "Αν αυτό το περιεχόμενο είναι διαθέσιμο για πρόσβαση αυτή τη στιγμή"
 
@@ -8736,6 +8742,10 @@ msgstr "Περιεχόμενο της αίτησης μέλους συμπληρ
 msgid "Create at least one ticket type for event registrations"
 msgstr ""
 "Δημιούργησε τουλάχιστον έναν τύπο εισιτηρίου για τις εγγραφές στο event"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+"Η διαγραφή ξεκίνησε, μπορεί να χρειαστούν μερικά λεπτά για να ολοκληρωθεί"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Θέλεις να επιτρέπεις στους χρήστες να κάνουν εθελοντικές δωρεές;"
@@ -12918,6 +12928,13 @@ msgstr ""
 "κανονικό μέγεθος)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Αυτή η συνεδρία και όλα τα δεδομένα της (εγγραφές, λογιστικά κ.λπ.) θα "
+"διαγραφούν οριστικά."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14377,6 +14394,13 @@ msgstr ""
 "Τα σύμβολα για όνομα και επώνυμο δεν ταιριάζουν (θυμήσου να εισαγάγεις το "
 "σωστό όνομα και επώνυμο στο legal_name)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"Η εκδήλωση και όλα τα δεδομένα της (εγγραφές, χαρακτήρες, κείμενα, λογιστικά"
+" κ.λπ.) θα διαγραφούν οριστικά."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -15323,14 +15347,6 @@ msgid ""
 msgstr ""
 "Κανονικά εμφανίζονται όλα τα πεδία χαρακτήρα (δημόσια ή ιδιωτικά)· με αυτή "
 "τη διαμόρφωση μπορείς να επιλέξεις ποια θα εμφανίζονται κάθε στιγμή."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Το αίτημά σου καταγράφηκε· λόγω της ευαισθησίας της ενέργειας που ζητήθηκε, "
-"η ομάδα μας θα το εξετάσει χειροκίνητα· θα σε ενημερώσουμε το συντομότερο "
-"δυνατό"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

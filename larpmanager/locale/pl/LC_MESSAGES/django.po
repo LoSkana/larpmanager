@@ -5000,9 +5000,6 @@ msgstr "Dostosowany serwer pocztowy"
 msgid "Disable free abilities"
 msgstr "Wyłącz darmowe umiejętności"
 
-msgid "Event deletion request"
-msgstr "Żądanie usunięcia wydarzenia"
-
 msgid "Expenses collaborators"
 msgstr "Wydatki współpracowników"
 
@@ -6194,6 +6191,9 @@ msgstr "Pozostałe pola są opcjonalne."
 msgid "The total registration fee is:"
 msgstr "Całkowita opłata rejestracyjna wynosi:"
 
+msgid "To confirm, type the full name"
+msgstr "Aby potwierdzić, wpisz pełną nazwę"
+
 msgid "Type of accommodation included"
 msgstr "Rodzaj zakwaterowania zawarty"
 
@@ -6292,6 +6292,9 @@ msgstr "Dopłata zastosowana do biletu"
 
 msgid "The date when this event begins"
 msgstr "Data rozpoczęcia wydarzenia"
+
+msgid "The name entered does not match"
+msgstr "Wpisana nazwa nie pasuje"
 
 msgid "Total of recorded money inflows"
 msgstr "Suma zarejestrowanych wpływów pieniężnych"
@@ -8677,6 +8680,9 @@ msgstr "To zaproszenie zostało wysłane na inny adres e-mail."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Ta strona pozwala dodać lub edytować typ Pool ekwipunku."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Uwaga: ta operacja jest niebezpieczna i nie można jej cofnąć"
+
 msgid "Whether this content is currently available for access"
 msgstr "Czy ta zawartość jest obecnie dostępna"
 
@@ -8698,6 +8704,9 @@ msgstr "Treść wniosku o członkostwo wypełniona danymi użytkownika"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Utwórz co najmniej jeden typ biletu dla rejestracji na wydarzenia"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Usuwanie rozpoczęte, zakończenie może potrwać kilka minut"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Czy chcesz pozwolić użytkownikom na dobrowolne darowizny?"
@@ -12670,6 +12679,13 @@ msgstr ""
 "rozmiar)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Ta sesja i wszystkie jej dane (rejestracje, księgowość itp.) zostaną trwale "
+"usunięte."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14126,6 +14142,13 @@ msgstr ""
 "Symbole imienia i nazwiska nie zgadzają się (pamiętaj, żeby wpisać poprawne "
 "imię i nazwisko w polu „legal_name”)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"Wydarzenie i wszystkie jego dane (rejestracje, postacie, teksty, księgowość "
+"itp.) zostaną trwale usunięte."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -15050,13 +15073,6 @@ msgstr ""
 "Zwykle wyświetlane są wszystkie pola postaci (publiczne lub prywatne); "
 "dzięki tej konfiguracji możesz wybrać, które z nich mają być wyświetlane w "
 "danym momencie."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Twoje zgłoszenie zostało zarejestrowane; ze względu na delikatny charakter "
-"zlecenia nasz zespół sprawdzi je ręcznie; damy ci znać jak najszybciej"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

@@ -5000,9 +5000,6 @@ msgstr "Tilpasset mailserver"
 msgid "Disable free abilities"
 msgstr "Deaktivér gratis evner"
 
-msgid "Event deletion request"
-msgstr "Anmodning om sletning af event"
-
 msgid "Expenses collaborators"
 msgstr "Samarbejdspartneres udgifter"
 
@@ -6194,6 +6191,9 @@ msgstr "De øvrige felter er valgfrie."
 msgid "The total registration fee is:"
 msgstr "Det samlede tilmeldingsgebyr er:"
 
+msgid "To confirm, type the full name"
+msgstr "For at bekræfte skal du skrive det fulde navn"
+
 msgid "Type of accommodation included"
 msgstr "Type indkvartering inkluderet"
 
@@ -6292,6 +6292,9 @@ msgstr "Tillæg anvendt på billetten"
 
 msgid "The date when this event begins"
 msgstr "Datoen, hvor dette event begynder"
+
+msgid "The name entered does not match"
+msgstr "Det indtastede navn stemmer ikke overens"
 
 msgid "Total of recorded money inflows"
 msgstr "Samlet beløb for registrerede pengeindbetalinger"
@@ -8666,6 +8669,9 @@ msgstr "Denne invitation blev sendt til en anden e-mailadresse."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Denne side lader dig tilføje eller redigere en inventar-Pool-type."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Advarsel: denne handling er farlig og kan ikke fortrydes"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om dette indhold i øjeblikket er tilgængeligt"
 
@@ -8687,6 +8693,9 @@ msgstr "Indholdet af medlemsanmodningen udfyldt med brugerdata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Opret mindst én billettype til eventregistreringer"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Sletningen er startet, det kan tage et par minutter at blive færdig"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vil du lade brugere give frivillige donationer?"
@@ -12522,6 +12531,13 @@ msgstr ""
 "standardstørrelsen)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Denne session og alle dens data (tilmeldinger, regnskab osv.) bliver slettet"
+" permanent."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -13973,6 +13989,13 @@ msgstr ""
 "Symboler for for- og efternavn matcher ikke (husk at indtaste korrekt for- "
 "og efternavn i legal_name)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"Eventet og alle dets data (tilmeldinger, karakterer, tekster, regnskab osv.)"
+" bliver slettet permanent."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -14875,13 +14898,6 @@ msgid ""
 msgstr ""
 "Normalt vises alle karakterfelter (offentlige eller private); med denne "
 "konfiguration kan du vælge, hvilke der skal vises på et givet tidspunkt."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din anmodning er registreret; på grund af opgavens følsomme karakter vil "
-"vores team gennemgå den manuelt; vi giver dig besked hurtigst muligt"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

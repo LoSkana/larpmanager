@@ -5000,9 +5000,6 @@ msgstr "Mukautettu sähköpostipalvelin"
 msgid "Disable free abilities"
 msgstr "Poista ilmaiset kyvyt käytöstä"
 
-msgid "Event deletion request"
-msgstr "Tapahtuman poistopyyntö"
-
 msgid "Expenses collaborators"
 msgstr "Yhteistyökumppanien kulut"
 
@@ -6194,6 +6191,9 @@ msgstr "Muut kentät ovat valinnaisia."
 msgid "The total registration fee is:"
 msgstr "Ilmoittautumismaksu on yhteensä:"
 
+msgid "To confirm, type the full name"
+msgstr "Vahvista kirjoittamalla koko nimi"
+
 msgid "Type of accommodation included"
 msgstr "Sisältyvä majoitustyyppi"
 
@@ -6292,6 +6292,9 @@ msgstr "Lippuun sovellettu lisämaksu"
 
 msgid "The date when this event begins"
 msgstr "Päivämäärä, jolloin tapahtuma alkaa"
+
+msgid "The name entered does not match"
+msgstr "Syöttämäsi nimi ei täsmää"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
@@ -8674,6 +8677,9 @@ msgstr "Tämä kutsu lähetettiin eri sähköpostiosoitteeseen."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Tällä sivulla voit lisätä tai muokata inventaario-Poolin tyyppiä."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varoitus: tämä toiminto on vaarallinen eikä sitä voi perua"
+
 msgid "Whether this content is currently available for access"
 msgstr "Onko tämä sisältö tällä hetkellä saatavilla"
 
@@ -8695,6 +8701,9 @@ msgstr "Käyttäjätiedoilla täytetyn jäsenyyspyynnön sisältö"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Luo vähintään yksi lipputyyppi tapahtumien rekisteröintiä varten"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Poisto aloitettu, sen valmistuminen voi kestää muutaman minuutin"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Haluatko sallia käyttäjien tehdä vapaaehtoisia lahjoituksia?"
@@ -12585,6 +12594,13 @@ msgid ""
 msgstr "Hahmon nimen ja otsikoiden koko prosentteina (100 on normaali koko)."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) will be "
+"permanently deleted."
+msgstr ""
+"Tämä sessio ja kaikki sen tiedot (ilmoittautumiset, kirjanpito jne.) "
+"poistetaan pysyvästi."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14034,6 +14050,13 @@ msgstr ""
 "Etunimen ja sukunimen merkit eivät täsmää (muista syöttää oikeat etu- ja "
 "sukunimet kenttään legal_name)"
 
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) will be permanently deleted."
+msgstr ""
+"Tapahtuma ja kaikki sen tiedot (ilmoittautumiset, hahmot, tekstit, "
+"kirjanpito jne.) poistetaan pysyvästi."
+
 #, python-format
 msgid ""
 "Would you like to request a reimbursement? <a "
@@ -14957,14 +14980,6 @@ msgid ""
 msgstr ""
 "Yleensä kaikki hahmokentät (julkiset tai yksityiset) näytetään; tällä "
 "asetuksella voit valita, mitkä niistä näytetään kulloinkin."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Pyyntösi on kirjattu järjestelmään; pyydetyn tehtävän arkaluonteisuuden "
-"vuoksi tiimimme tarkastaa sen manuaalisesti; ilmoitamme sinulle asiasta "
-"mahdollisimman pian"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

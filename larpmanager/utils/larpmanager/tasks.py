@@ -923,9 +923,9 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
 # DELETION
 
 
-@background(schedule=0)
+@background_auto(schedule=0)
 def delete_run_task(run_uuid: str) -> None:
-    """Delete the event (and all its runs) identified by this run uuid.
+    """Delete the run identified by this uuid, or its whole event if it is the only run.
 
     Nulls out parent FK on child events first to prevent cascade-deleting them.
     """
@@ -934,6 +934,9 @@ def delete_run_task(run_uuid: str) -> None:
     except Run.DoesNotExist:
         return
     event = run.event
+    if Run.objects.filter(event_id=event.id).exclude(pk=run.pk).exists():
+        run.delete()
+        return
     Event.objects.filter(parent=event).update(parent=None)
     event.delete()
 

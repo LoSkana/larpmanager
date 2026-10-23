@@ -1,0 +1,78 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block body_class %}
+    {% if frame %}floating_iframe outer_delete{% endif %}
+{% endblock body_class %}
+{% block title %}
+    {% trans "Delete" %} - {{ el.search }}
+{% endblock title %}
+{% block info %}
+    {% if not frame %}{{ block.super }}{% endif %}
+{% endblock info %}
+{% block content %}
+    <form method="post" id="events_delete_form">
+        {% csrf_token %}
+        {% if frame %}<input type="hidden" name="frame" value="1">{% endif %}
+        <div class="form_container{% if frame %} auto_resize{% endif %}">
+            <p class="delete-confirm-message redderized">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <strong>{% trans "Warning: this action is dangerous and cannot be undone" %}</strong>
+            </p>
+            <p>
+                {% if delete_event %}
+                    {% trans "The event and all its data (registrations, characters, writings, accounting, etc.) will be permanently deleted." %}
+                {% else %}
+                    {% trans "This session and all its data (registrations, accounting, etc.) will be permanently deleted." %}
+                {% endif %}
+            </p>
+            <table class="mob">
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <td>{{ el.search }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Start" %}</th>
+                    <td>{{ el.start|date:"d/m/Y"|default:"-" }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "End" %}</th>
+                    <td>{{ el.end|date:"d/m/Y"|default:"-" }}</td>
+                </tr>
+                <tr>
+                    <th>{% trans "Registrations" %}</th>
+                    <td>{{ registration_count }}</td>
+                </tr>
+            </table>
+            <p>
+                {% trans "To confirm, type the full name" %}: <strong id="events_delete_name">{{ el.search }}</strong>
+            </p>
+            {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
+            <input type="text"
+                   name="confirm_name"
+                   id="id_confirm_name"
+                   autocomplete="off"
+                   required>
+            <div class="form-actions">
+                <input type="submit"
+                       value="{% trans "Confirm" %}"
+                       class="btn-save"
+                       id="events_delete_submit"
+                       disabled>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+    {% if frame %}
+        {% include "elements/helpers/iframe_resize.js" %}
+    {% endif %}
+    <script>
+    $(document).ready(function() {
+        const expected = $('#events_delete_name').text().trim();
+        $('#id_confirm_name').on('input', function() {
+            $('#events_delete_submit').prop('disabled', $(this).val().trim() !== expected);
+        });
+    });
+    </script>
+{% endblock js %}
