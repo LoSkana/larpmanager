@@ -1538,7 +1538,7 @@ def lm_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     registration_count = Registration.objects.filter(run__event_id=run.event_id).count()
 
     if request.method == "POST":
-        delete_run_task(str(run.uuid))
+        delete_run_task(str(run.uuid), whole_event=True)
         return redirect("lm_events_delete_wait", run_uuid=run_uuid)
 
     context = get_context(request, check_main_site=True)

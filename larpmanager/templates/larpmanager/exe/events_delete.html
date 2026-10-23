@@ -13,6 +13,9 @@
     <form method="post" id="events_delete_form">
         {% csrf_token %}
         {% if frame %}<input type="hidden" name="frame" value="1">{% endif %}
+        <input type="hidden"
+               name="delete_event"
+               value="{% if delete_event %}1{% else %}0{% endif %}">
         <div class="form_container{% if frame %} auto_resize{% endif %}">
             <p class="delete-confirm-message redderized">
                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -20,32 +23,20 @@
             </p>
             <p>
                 {% if delete_event %}
-                    {% trans "The event and all its data (registrations, characters, writings, accounting, etc.) will be permanently deleted." %}
+                    {% trans "The event and all its data (registrations, characters, writings, accounting, etc.) <b>will be permanently deleted</b>." %}
                 {% else %}
-                    {% trans "This session and all its data (registrations, accounting, etc.) will be permanently deleted." %}
+                    {% trans "This session and all its data (registrations, accounting, etc.) <b>will be permanently deleted</b>." %}
                 {% endif %}
             </p>
-            <table class="mob">
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <td>{{ el.search }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Start" %}</th>
-                    <td>{{ el.start|date:"d/m/Y"|default:"-" }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "End" %}</th>
-                    <td>{{ el.end|date:"d/m/Y"|default:"-" }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Registrations" %}</th>
-                    <td>{{ registration_count }}</td>
-                </tr>
-            </table>
+            <br />
+            <p>
+                {% trans "Recovery of deleted data will <b>not</b> be available. <i>If you're not sure of what you're doing, please contact the system admins</i>." %}
+            </p>
+            <br />
             <p>
                 {% trans "To confirm, type the full name" %}: <strong id="events_delete_name">{{ el.search }}</strong>
             </p>
+            <br />
             {% if error_message %}<p class="errorlist">{{ error_message }}</p>{% endif %}
             <input type="text"
                    name="confirm_name"

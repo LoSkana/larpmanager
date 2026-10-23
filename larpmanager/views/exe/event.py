@@ -45,13 +45,14 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.registration import Registration
+from larpmanager.utils.auth.permission import is_association_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_form, exe_new
-from larpmanager.utils.larpmanager.tasks import delete_run_task
+from larpmanager.utils.larpmanager.tasks import delete_run_task, is_last_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -74,7 +75,7 @@ def exe_events(request: HttpRequest) -> HttpResponse:
         run.registration_status = _get_registration_status(run)
         run.registration_counts = _get_registration_counts(run)
 
-    context["can_delete"] = 1 in context.get("association_role", {})
+    context["can_delete"] = is_association_admin(context)
 
     return render(request, "larpmanager/exe/events.html", context)
 
@@ -309,7 +310,7 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     warning page asking to type the full run name; on POST checks the name and deletes.
     """
     context = check_association_context(request, "exe_events")
-    if 1 not in context.get("association_role", {}):
+    if not is_association_admin(context):
         raise UserPermissionError
 
     backend_get(context, Run, run_uuid, "event")
@@ -318,15 +319,18 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
     context["frame"] = is_frame
     context["registration_count"] = Registration.objects.filter(run=run).count()
-    context["delete_event"] = not Run.objects.filter(event_id=run.event_id).exclude(pk=run.pk).exists()
+    context["delete_event"] = is_last_run(run)
 
     if request.method == "POST":
-        if request.POST.get("confirm_name", "").strip() == run.search.strip():
-            delete_run_task(str(run.uuid))
+        if (request.POST.get("delete_event") == "1") != context["delete_event"]:
+            context["error_message"] = _("The event sessions have changed, please review and confirm again")
+        elif request.POST.get("confirm_name", "").strip() == run.search.strip():
+            delete_run_task(str(run.uuid), whole_event=context["delete_event"])
             messages.success(request, _("Deletion started, it may take a few minutes to complete"))
             if is_frame:
                 return render(request, "elements/dashboard/form_success.html", context)
             return redirect("exe_events")
-        context["error_message"] = _("The name entered does not match")
+        else:
+            context["error_message"] = _("The name entered does not match")
 
     return render(request, "larpmanager/exe/events_delete.html", context)
