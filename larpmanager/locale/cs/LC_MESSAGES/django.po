@@ -8006,6 +8006,9 @@ msgstr "Zobraz seznam akcí, na které ses přihlásil/a"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Vítej na přístrojovém panelu své organizace!"
 
+msgid "You can create more characters for this event!"
+msgstr "Pro tuto událost můžeš vytvořit další postavy!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Nyní můžeš přidávat skladové kontejnery a položky"
 

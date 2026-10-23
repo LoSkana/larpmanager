@@ -8010,6 +8010,9 @@ msgstr "Visualizza l'elenco degli eventi a cui sei iscritto"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Benvenuto nella dashboard della tua organizzazione!"
 
+msgid "You can create more characters for this event!"
+msgstr "Puoi creare altri personaggi per questo evento!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Ora puoi aggiungere contenitori e oggetti di magazzino"
 

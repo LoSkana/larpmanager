@@ -8012,6 +8012,9 @@ msgstr "Δες τη λίστα των εκδηλώσεων στις οποίες
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Καλωσήρθες στο dashboard του οργανισμού σου!"
 
+msgid "You can create more characters for this event!"
+msgstr "Μπορείς να δημιουργήσεις κι άλλους χαρακτήρες για αυτή την εκδήλωση!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Τώρα μπορείς να προσθέσεις δοχεία και αντικείμενα αποθήκης"
 

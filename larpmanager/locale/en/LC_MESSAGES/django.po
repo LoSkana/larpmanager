@@ -12648,6 +12648,9 @@ msgstr ""
 msgid "Create another character"
 msgstr ""
 
+msgid "You can create more characters for this event!"
+msgstr ""
+
 msgid "Create another character!"
 msgstr ""
 

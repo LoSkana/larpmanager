@@ -8006,6 +8006,9 @@ msgstr "Se listen over arrangementer du er påmeldt til"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Velkommen til dashbordet i organisasjonen din!"
 
+msgid "You can create more characters for this event!"
+msgstr "Du kan lage flere karakterer til dette arrangementet!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Du kan nå legge til lagerbeholdere og -varer"
 

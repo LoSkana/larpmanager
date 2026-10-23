@@ -8005,6 +8005,9 @@ msgstr "Tarkastele luetteloa tapahtumista, joihin olet ilmoittautunut"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Tervetuloa organisaatiosi kojelautaan!"
 
+msgid "You can create more characters for this event!"
+msgstr "Voit luoda lisää hahmoja tähän tapahtumaan!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Voit nyt lisätä varastokontteja ja -esineitä"
 

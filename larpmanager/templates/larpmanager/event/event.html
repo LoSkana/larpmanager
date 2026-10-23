@@ -70,27 +70,32 @@
                                 </a>
                             </p>
                         {% endif %}
-                        {% if run_status.character_create %}
-                            <p class="char-entry-links">
-                                <a href="{{ run_status.character_create.url }}"
-                                   title="{{ run_status.character_create.tooltip }}">
-                                    <i class="{{ run_status.character_create.icon }}"></i> {{ run_status.character_create.label }}
+                    </div>
+                {% endif %}
+                {% if run_status.character_create %}
+                    {% with create=run_status.character_create %}
+                        <div class="event-card event-card-char event-card-create">
+                            <h3>
+                                <a href="{{ create.url }}"><i class="fa-solid fa-user-plus"></i> {% trans "New character" %}</a>
+                            </h3>
+                            <p>{{ create.label_long }}</p>
+                            <p>
+                                <a href="{{ create.url }}"
+                                   title="{{ create.tooltip }}"
+                                   class="reg-action-link">
+                                    <i class="{{ create.icon }}"></i> {{ create.label }}
                                 </a>
                             </p>
-                        {% endif %}
-                    </div>
-                {% elif run_status.character_create %}
-                    <div class="event-card event-card-char">
-                        <h3>
-                            <a href="{{ run_status.character_create.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
-                        </h3>
-                        <p class="char-entry-links">
-                            <a href="{{ run_status.character_create.url }}"
-                               title="{{ run_status.character_create.tooltip }}">
-                                <i class="{{ run_status.character_create.icon }}"></i> {{ run_status.character_create.label }}
-                            </a>
-                        </p>
-                    </div>
+                            {% if create.options_availability %}
+                                <p>
+                                    {% for opt in create.options_availability %}
+                                        {% include "elements/comma.html" %}
+                                        <i>{{ opt.name }}</i> ({{ opt.available }})
+                                    {% endfor %}
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
                 {% endif %}
                 {% for character_action in run_status.character_actions %}
                     <div class="event-card event-card-char">
