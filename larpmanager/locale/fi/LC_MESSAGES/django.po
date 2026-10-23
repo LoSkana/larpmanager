@@ -5000,9 +5000,6 @@ msgstr "Mukautettu sähköpostipalvelin"
 msgid "Disable free abilities"
 msgstr "Poista ilmaiset kyvyt käytöstä"
 
-msgid "Event deletion request"
-msgstr "Tapahtuman poistopyyntö"
-
 msgid "Expenses collaborators"
 msgstr "Yhteistyökumppanien kulut"
 
@@ -6194,6 +6191,9 @@ msgstr "Muut kentät ovat valinnaisia."
 msgid "The total registration fee is:"
 msgstr "Ilmoittautumismaksu on yhteensä:"
 
+msgid "To confirm, type the full name"
+msgstr "Vahvista kirjoittamalla koko nimi"
+
 msgid "Type of accommodation included"
 msgstr "Sisältyvä majoitustyyppi"
 
@@ -6292,6 +6292,9 @@ msgstr "Lippuun sovellettu lisämaksu"
 
 msgid "The date when this event begins"
 msgstr "Päivämäärä, jolloin tapahtuma alkaa"
+
+msgid "The name entered does not match"
+msgstr "Syöttämäsi nimi ei täsmää"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
@@ -7768,6 +7771,9 @@ msgstr "Hallitse organisaation pääasetuksia"
 msgid "No participants have been issued tokens yet."
 msgstr "Osallistujille ei ole vielä jaettu tokeneita."
 
+msgid "Permanently delete this session of the event"
+msgstr "Poista tämä tapahtuman istunto pysyvästi"
+
 msgid "Please verify the following payment details:"
 msgstr "Tarkista seuraavat maksutiedot:"
 
@@ -8370,6 +8376,9 @@ msgstr "Maksa %(amount)s%(currency)s %(counter)s päivän kuluessa"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Poista tämä tapahtuma ja kaikki sen istunnot pysyvästi"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
 
@@ -8677,6 +8686,9 @@ msgstr "Tämä kutsu lähetettiin eri sähköpostiosoitteeseen."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Tällä sivulla voit lisätä tai muokata inventaario-Poolin tyyppiä."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varoitus: tämä toiminto on vaarallinen eikä sitä voi perua"
+
 msgid "Whether this content is currently available for access"
 msgstr "Onko tämä sisältö tällä hetkellä saatavilla"
 
@@ -8698,6 +8710,9 @@ msgstr "Käyttäjätiedoilla täytetyn jäsenyyspyynnön sisältö"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Luo vähintään yksi lipputyyppi tapahtumien rekisteröintiä varten"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Poisto aloitettu, sen valmistuminen voi kestää muutaman minuutin"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Haluatko sallia käyttäjien tehdä vapaaehtoisia lahjoituksia?"
@@ -9561,6 +9576,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Tarkista kaikki peruutetut ilmoittautumiset ja seuraa niiden hyvitysten "
 "tilaa"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Tapahtuman sessiot ovat muuttuneet, tarkista ja vahvista ne uudelleen"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -13196,6 +13214,13 @@ msgstr ""
 "organisaatiosi kanssa."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Tämä sessio ja kaikki sen tiedot (ilmoittautumiset, kirjanpito jne.) "
+"<b>poistetaan pysyvästi</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14308,6 +14333,13 @@ msgstr ""
 "osallistuja on osoitettu tiettyihin ryhmittymiin."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Tapahtuma ja kaikki sen tiedot (ilmoittautumiset, hahmot, tekstit, "
+"kirjanpito jne.) <b>poistetaan pysyvästi</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14877,6 +14909,13 @@ msgstr ""
 "sivu uudelleen."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Poistettuja tietoja <b>ei</b> voi palauttaa. <i>Jos et ole varma, mitä olet "
+"tekemässä, ota yhteyttä järjestelmän ylläpitäjiin</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -14960,14 +14999,6 @@ msgid ""
 msgstr ""
 "Yleensä kaikki hahmokentät (julkiset tai yksityiset) näytetään; tällä "
 "asetuksella voit valita, mitkä niistä näytetään kulloinkin."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Pyyntösi on kirjattu järjestelmään; pyydetyn tehtävän arkaluonteisuuden "
-"vuoksi tiimimme tarkastaa sen manuaalisesti; ilmoitamme sinulle asiasta "
-"mahdollisimman pian"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

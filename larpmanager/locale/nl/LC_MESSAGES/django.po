@@ -5000,9 +5000,6 @@ msgstr "Aangepaste mailserver"
 msgid "Disable free abilities"
 msgstr "Gratis vaardigheden uitschakelen"
 
-msgid "Event deletion request"
-msgstr "Verzoek om verwijdering van het evenement"
-
 msgid "Expenses collaborators"
 msgstr "Onkosten medewerkers"
 
@@ -6194,6 +6191,9 @@ msgstr "De andere velden zijn optioneel."
 msgid "The total registration fee is:"
 msgstr "Het totale inschrijfgeld is:"
 
+msgid "To confirm, type the full name"
+msgstr "Typ de volledige naam om te bevestigen"
+
 msgid "Type of accommodation included"
 msgstr "Soort inbegrepen accommodatie"
 
@@ -6292,6 +6292,9 @@ msgstr "Toeslag op het ticket"
 
 msgid "The date when this event begins"
 msgstr "De datum waarop dit evenement begint"
+
+msgid "The name entered does not match"
+msgstr "De ingevoerde naam komt niet overeen"
 
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstromingen"
@@ -7769,6 +7772,9 @@ msgstr "Beheer de belangrijkste instellingen van de organisatie"
 msgid "No participants have been issued tokens yet."
 msgstr "Er zijn nog geen tokens uitgegeven aan deelnemers."
 
+msgid "Permanently delete this session of the event"
+msgstr "Verwijder deze sessie van het evenement permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Controleer even de volgende betalingsgegevens:"
 
@@ -8380,6 +8386,9 @@ msgstr "Betaal %(amount)s%(currency)s binnen %(counter)s dagen"
 msgid "Payment for this event is complete and up to date!"
 msgstr "De betaling voor dit evenement is voltooid en helemaal in orde!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Verwijder dit evenement en al zijn sessies permanent"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede personage in de relatie (bestemming)"
 
@@ -8691,6 +8700,9 @@ msgstr "Deze uitnodiging is naar een ander e-mailadres gestuurd."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Op deze pagina kun je een type inventarispool toevoegen of bewerken."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Let op: deze actie is gevaarlijk en kan niet ongedaan worden gemaakt"
+
 msgid "Whether this content is currently available for access"
 msgstr "Of deze inhoud momenteel beschikbaar is voor toegang"
 
@@ -8712,6 +8724,10 @@ msgstr "Inhoud van de lidmaatschapsaanvraag gevuld met gebruikersgegevens"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Maak ten minste één type ticket voor evenementregistraties"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+"Verwijdering gestart, het kan een paar minuten duren voordat dit voltooid is"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Wil je gebruikers vrijwillige donaties laten doen?"
@@ -9637,6 +9653,11 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Bekijk alle geannuleerde aanmeldingen en houd de status van de terugbetaling"
 " bij"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr ""
+"De sessies van het evenement zijn gewijzigd, controleer en bevestig ze "
+"opnieuw"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -13442,6 +13463,13 @@ msgstr ""
 "organisatie te delen."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Deze sessie en al haar gegevens (inschrijvingen, boekhouding, enz.) "
+"<b>worden permanent verwijderd</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14561,6 +14589,13 @@ msgstr ""
 "zichtbaar zijn als de deelnemer aan bepaalde facties is toegewezen."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Het evenement en al zijn gegevens (inschrijvingen, personages, teksten, "
+"boekhouding, enz.) <b>worden permanent verwijderd</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -15137,6 +15172,13 @@ msgstr ""
 "opgeslagen. Kopieer de tekst die je wilt behouden en laad de pagina opnieuw."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Herstel van verwijderde gegevens is <b>niet</b> mogelijk. <i>Weet je niet "
+"zeker wat je doet? Neem dan contact op met de systeembeheerders</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -15219,14 +15261,6 @@ msgid ""
 msgstr ""
 "Normaal worden alle personagevelden (openbaar of privé) getoond; met deze "
 "configuratie kun je kiezen welke je op een bepaald moment wilt weergeven."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Je verzoek is geregistreerd; omdat het om een gevoelige kwestie gaat, zal "
-"ons team het handmatig beoordelen; we laten je zo snel mogelijk weten hoe "
-"het verder gaat"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

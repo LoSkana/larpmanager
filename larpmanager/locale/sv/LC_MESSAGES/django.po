@@ -5000,9 +5000,6 @@ msgstr "Skräddarsydd e-postserver"
 msgid "Disable free abilities"
 msgstr "Inaktivera fria förmågor"
 
-msgid "Event deletion request"
-msgstr "Begäran om radering av evenemang"
-
 msgid "Expenses collaborators"
 msgstr "Medarbetarnas utgifter"
 
@@ -6194,6 +6191,9 @@ msgstr "De övriga fälten är valfria."
 msgid "The total registration fee is:"
 msgstr "Den totala anmälningsavgiften är:"
 
+msgid "To confirm, type the full name"
+msgstr "Skriv hela namnet för att bekräfta"
+
 msgid "Type of accommodation included"
 msgstr "Typ av boende som ingår"
 
@@ -6292,6 +6292,9 @@ msgstr "Tilläggsavgift till biljett"
 
 msgid "The date when this event begins"
 msgstr "Datum då händelsen börjar"
+
+msgid "The name entered does not match"
+msgstr "Namnet du angav stämmer inte"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt belopp av registrerade penninginflöden"
@@ -7768,6 +7771,9 @@ msgstr "Hantera organisationens huvudinställningar"
 msgid "No participants have been issued tokens yet."
 msgstr "Inga deltagare har fått några tokens ännu."
 
+msgid "Permanently delete this session of the event"
+msgstr "Radera den här sessionen av evenemanget permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Vänligen kontrollera följande betalningsuppgifter:"
 
@@ -8372,6 +8378,9 @@ msgstr "Betala %(amount)s%(currency)s inom %(counter)s dagar"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalningen för detta evenemang är genomförd och i ordning!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Radera det här evenemanget och alla dess sessioner permanent"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i relationen (destination)"
 
@@ -8673,6 +8682,9 @@ msgid "This page lets you add or edit an inventory pool type."
 msgstr ""
 "På den här sidan kan du lägga till eller redigera en typ av inventariepool."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varning: den här åtgärden är farlig och kan inte ångras"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
 
@@ -8694,6 +8706,9 @@ msgstr "Innehållet i medlemsansökan är ifyllt med användardata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Skapa minst en biljettyp för anmälningar till evenemang"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Raderingen har startat, det kan ta några minuter innan den är klar"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vill du låta användare göra frivilliga donationer?"
@@ -9535,6 +9550,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Granska alla avbokade anmälningar och följ upp återbetalningsstatusen för "
 "dem"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Evenemangets sessioner har ändrats, granska och bekräfta igen"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Det skrivmoment som frågan gäller för, tillåtna värden är"
@@ -13191,6 +13209,13 @@ msgstr ""
 "personuppgifter med din organisation."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Den här sessionen och all dess data (anmälningar, bokföring osv.) <b>kommer "
+"att raderas permanent</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14304,6 +14329,13 @@ msgstr ""
 "deltagaren tillhör vissa fraktioner."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Evenemanget och all dess data (anmälningar, karaktärer, texter, bokföring "
+"osv.) <b>kommer att raderas permanent</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14865,6 +14897,13 @@ msgstr ""
 "sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Återställning av raderad data kommer <b>inte</b> att vara möjlig. <i>Om du "
+"inte är säker på vad du gör, kontakta systemadministratörerna</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -14943,14 +14982,6 @@ msgid ""
 msgstr ""
 "Normalt visas alla karaktärsfält (offentliga eller privata); med den här "
 "inställningen kan du välja vilka som ska visas vid varje tillfälle."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din förfrågan har registrerats. Eftersom det rör sig om en känslig fråga "
-"kommer vårt team att granska den manuellt. Vi återkommer till dig så snart "
-"som möjligt."
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

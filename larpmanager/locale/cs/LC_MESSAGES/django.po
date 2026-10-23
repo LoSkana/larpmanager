@@ -5000,9 +5000,6 @@ msgstr "Přizpůsobený poštovní server"
 msgid "Disable free abilities"
 msgstr "Vypnout bezplatné schopnosti"
 
-msgid "Event deletion request"
-msgstr "Žádost o odstranění události"
-
 msgid "Expenses collaborators"
 msgstr "Výdaje spolupracovníků"
 
@@ -6194,6 +6191,9 @@ msgstr "Ostatní pole jsou nepovinná."
 msgid "The total registration fee is:"
 msgstr "Celkový registrační poplatek je:"
 
+msgid "To confirm, type the full name"
+msgstr "Pro potvrzení napiš celý název"
+
 msgid "Type of accommodation included"
 msgstr "Typ ubytování v ceně"
 
@@ -6292,6 +6292,9 @@ msgstr "Příplatek k lístku"
 
 msgid "The date when this event begins"
 msgstr "Datum zahájení této události"
+
+msgid "The name entered does not match"
+msgstr "Zadaný název se neshoduje"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
@@ -7769,6 +7772,9 @@ msgstr "Spravuj hlavní nastavení organizace"
 msgid "No participants have been issued tokens yet."
 msgstr "Žádnému z účastníků zatím nebyly vydány žetony."
 
+msgid "Permanently delete this session of the event"
+msgstr "Trvale smazat tento termín události"
+
 msgid "Please verify the following payment details:"
 msgstr "Prosím, zkontroluj následující platební údaje:"
 
@@ -8369,6 +8375,9 @@ msgstr "Zaplať %(amount)s%(currency)s do %(counter)s dnů"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Platba za tuto akci je uhrazena a v pořádku!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Trvale smazat tuto událost a všechny její termíny"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"
 
@@ -8671,6 +8680,9 @@ msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Tato stránka ti umožňuje přidat nebo upravit typ inventárního poolu."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varování: tato akce je nebezpečná a nelze ji vrátit zpět"
+
 msgid "Whether this content is currently available for access"
 msgstr "Zda je tento obsah aktuálně k dispozici pro přístup"
 
@@ -8692,6 +8704,9 @@ msgstr "Obsah žádosti o členství vyplněný údaji uživatele"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Vytvoř alespoň jeden typ vstupenky pro registrace na událost"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Mazání bylo zahájeno, dokončení může trvat několik minut"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Chceš uživatelům umožnit dobrovolné dary?"
@@ -9504,6 +9519,9 @@ msgstr "Uveď co nejpřesnější místo nebo adresu pro vyzvednutí."
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Zkontroluj všechny zrušené registrace a sleduj stav jejich vrácení peněz"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Běhy akce se změnily, zkontroluj je prosím a potvrď znovu"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -13015,6 +13033,13 @@ msgstr ""
 "Člen už musel potvrdit souhlas se sdílením osobních údajů s tvou organizací."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Tento běh a všechna jeho data (registrace, účetnictví atd.) <b>budou trvale "
+"smazána</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14123,6 +14148,13 @@ msgstr ""
 "tehdy, když je účastník přiřazen k určitým frakcím."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Akce a všechna její data (registrace, postavy, texty, účetnictví atd.) "
+"<b>budou trvale smazána</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14678,6 +14710,13 @@ msgstr ""
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Obnovení smazaných dat <b>nebude</b> možné. <i>Pokud si nejsi jistý, co "
+"děláš, kontaktuj prosím správce systému</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -14754,13 +14793,6 @@ msgid ""
 msgstr ""
 "Normálně se zobrazují všechna pole postavy (veřejná i soukromá); s touto "
 "konfigurací můžeš vybrat, která se mají kdy zobrazit."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Tvůj požadavek byl zaevidován; vzhledem k citlivosti požadovaného úkolu jej "
-"náš tým posoudí ručně; dáme ti vědět co nejdříve."
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

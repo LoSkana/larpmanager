@@ -7354,6 +7354,33 @@ msgstr ""
 msgid "No events yet. Create your first event using the button above."
 msgstr ""
 
+msgid "Permanently delete this event and all its sessions"
+msgstr ""
+
+msgid "Permanently delete this session of the event"
+msgstr ""
+
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr ""
+
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting, "
+"etc.) <b>will be permanently deleted</b>."
+msgstr ""
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure "
+"of what you're doing, please contact the system admins</i>."
+msgstr ""
+
+msgid "To confirm, type the full name"
+msgstr ""
+
 msgid ""
 "Review LarpManager usage costs broken down by event, including subscription "
 "plans and registration fees"
@@ -13157,12 +13184,13 @@ msgstr ""
 msgid "Advanced mode activated! All features are now available."
 msgstr ""
 
-msgid "Event deletion request"
+msgid "The event sessions have changed, please review and confirm again"
 msgstr ""
 
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+
+msgid "The name entered does not match"
 msgstr ""
 
 msgid "Member approved!"

@@ -5000,9 +5000,6 @@ msgstr "Tilpasset mailserver"
 msgid "Disable free abilities"
 msgstr "Deaktivér gratis evner"
 
-msgid "Event deletion request"
-msgstr "Anmodning om sletning af event"
-
 msgid "Expenses collaborators"
 msgstr "Samarbejdspartneres udgifter"
 
@@ -6194,6 +6191,9 @@ msgstr "De øvrige felter er valgfrie."
 msgid "The total registration fee is:"
 msgstr "Det samlede tilmeldingsgebyr er:"
 
+msgid "To confirm, type the full name"
+msgstr "For at bekræfte skal du skrive det fulde navn"
+
 msgid "Type of accommodation included"
 msgstr "Type indkvartering inkluderet"
 
@@ -6292,6 +6292,9 @@ msgstr "Tillæg anvendt på billetten"
 
 msgid "The date when this event begins"
 msgstr "Datoen, hvor dette event begynder"
+
+msgid "The name entered does not match"
+msgstr "Det indtastede navn stemmer ikke overens"
 
 msgid "Total of recorded money inflows"
 msgstr "Samlet beløb for registrerede pengeindbetalinger"
@@ -7768,6 +7771,9 @@ msgstr "Administrer organisationens hovedindstillinger"
 msgid "No participants have been issued tokens yet."
 msgstr "Der er endnu ikke udstedt tokens til nogen deltagere."
 
+msgid "Permanently delete this session of the event"
+msgstr "Slet denne session af begivenheden permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Bekræft venligst følgende betalingsoplysninger:"
 
@@ -8370,6 +8376,9 @@ msgstr "Betal %(amount)s%(currency)s inden for %(counter)s dage"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalingen for dette event er fuldført og ajour!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Slet denne begivenhed og alle dens sessioner permanent"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Anden karakter i relationen (destination)"
 
@@ -8669,6 +8678,9 @@ msgstr "Denne invitation blev sendt til en anden e-mailadresse."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Denne side lader dig tilføje eller redigere en inventar-Pool-type."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Advarsel: denne handling er farlig og kan ikke fortrydes"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om dette indhold i øjeblikket er tilgængeligt"
 
@@ -8690,6 +8702,9 @@ msgstr "Indholdet af medlemsanmodningen udfyldt med brugerdata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Opret mindst én billettype til eventregistreringer"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Sletningen er startet, det kan tage et par minutter at blive færdig"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vil du lade brugere give frivillige donationer?"
@@ -9507,6 +9522,9 @@ msgstr ""
 
 msgid "Review all cancelled registrations and track their refund status"
 msgstr "Gennemse alle annullerede tilmeldinger, og følg deres refusionsstatus"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Eventets sessioner er blevet ændret, gennemgå og bekræft igen"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr "Skriveelementet, dette spørgsmål gælder for, tilladte værdier er"
@@ -13136,6 +13154,13 @@ msgstr ""
 "personoplysninger med din organisation."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Denne session og alle dens data (tilmeldinger, regnskab osv.) <b>bliver "
+"slettet permanent</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14245,6 +14270,13 @@ msgstr ""
 "hvis deltageren er tildelt bestemte faktioner."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Eventet og alle dets data (tilmeldinger, karakterer, tekster, regnskab osv.)"
+" <b>bliver slettet permanent</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14801,6 +14833,13 @@ msgstr ""
 " gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Gendannelse af slettede data vil <b>ikke</b> være mulig. <i>Hvis du ikke er "
+"sikker på, hvad du laver, så kontakt systemadministratorerne</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -14878,13 +14917,6 @@ msgid ""
 msgstr ""
 "Normalt vises alle karakterfelter (offentlige eller private); med denne "
 "konfiguration kan du vælge, hvilke der skal vises på et givet tidspunkt."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din anmodning er registreret; på grund af opgavens følsomme karakter vil "
-"vores team gennemgå den manuelt; vi giver dig besked hurtigst muligt"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

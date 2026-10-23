@@ -429,6 +429,11 @@ class AssociationText(UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         return f"{self.get_typ_display()} {self.get_language_display()}"
 
+    def get_display_name(self) -> str:
+        """Return the display name combining language and type."""
+        # noinspection PyUnresolvedReferences
+        return f"{self.get_language_display()} - {self.get_typ_display()}"
+
     class Meta:
         constraints: ClassVar[list] = [
             UniqueConstraint(

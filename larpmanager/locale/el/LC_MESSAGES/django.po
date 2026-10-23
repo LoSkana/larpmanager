@@ -5000,9 +5000,6 @@ msgstr "Προσαρμοσμένος διακομιστής email"
 msgid "Disable free abilities"
 msgstr "Απενεργοποίηση δωρεάν ικανοτήτων"
 
-msgid "Event deletion request"
-msgstr "Αίτημα διαγραφής εκδήλωσης"
-
 msgid "Expenses collaborators"
 msgstr "Έξοδα συνεργατών"
 
@@ -6194,6 +6191,9 @@ msgstr "Τα υπόλοιπα πεδία είναι προαιρετικά."
 msgid "The total registration fee is:"
 msgstr "Το συνολικό κόστος εγγραφής είναι:"
 
+msgid "To confirm, type the full name"
+msgstr "Για επιβεβαίωση, πληκτρολόγησε το πλήρες όνομα"
+
 msgid "Type of accommodation included"
 msgstr "Τύπος διαμονής που περιλαμβάνεται"
 
@@ -6292,6 +6292,9 @@ msgstr "Προσαύξηση που εφαρμόζεται στο εισιτήρ
 
 msgid "The date when this event begins"
 msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσης"
+
+msgid "The name entered does not match"
+msgstr "Το όνομα που έγραψες δεν ταιριάζει"
 
 msgid "Total of recorded money inflows"
 msgstr "Συνολικό ποσό καταγεγραμμένων χρηματικών εισροών"
@@ -7770,6 +7773,9 @@ msgstr "Διαχειρίσου τις κύριες ρυθμίσεις του ο�
 msgid "No participants have been issued tokens yet."
 msgstr "Δεν έχουν εκδοθεί ακόμη token σε συμμετέχοντες."
 
+msgid "Permanently delete this session of the event"
+msgstr "Διάγραψε οριστικά αυτή τη συνεδρία της εκδήλωσης"
+
 msgid "Please verify the following payment details:"
 msgstr "Επαλήθευσε τα παρακάτω στοιχεία πληρωμής:"
 
@@ -8390,6 +8396,9 @@ msgid "Payment for this event is complete and up to date!"
 msgstr ""
 "Η πληρωμή για αυτή την εκδήλωση έχει ολοκληρωθεί και είναι τακτοποιημένη!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Διάγραψε οριστικά αυτή την εκδήλωση και όλες τις συνεδρίες της"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Δεύτερος χαρακτήρας στη σχέση (προορισμός)"
 
@@ -8716,6 +8725,9 @@ msgstr ""
 "Αυτή η σελίδα σού επιτρέπει να προσθέσεις ή να επεξεργαστείς έναν τύπο Pool "
 "απογραφής."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Προσοχή: αυτή η ενέργεια είναι επικίνδυνη και δεν μπορεί να αναιρεθεί"
+
 msgid "Whether this content is currently available for access"
 msgstr "Αν αυτό το περιεχόμενο είναι διαθέσιμο για πρόσβαση αυτή τη στιγμή"
 
@@ -8739,6 +8751,10 @@ msgstr "Περιεχόμενο της αίτησης μέλους συμπληρ
 msgid "Create at least one ticket type for event registrations"
 msgstr ""
 "Δημιούργησε τουλάχιστον έναν τύπο εισιτηρίου για τις εγγραφές στο event"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+"Η διαγραφή ξεκίνησε, μπορεί να χρειαστούν μερικά λεπτά για να ολοκληρωθεί"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Θέλεις να επιτρέπεις στους χρήστες να κάνουν εθελοντικές δωρεές;"
@@ -9699,6 +9715,10 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Έλεγξε όλες τις ακυρωμένες εγγραφές και παρακολούθησε την κατάσταση "
 "επιστροφής τους"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr ""
+"Οι συνεδρίες της εκδήλωσης έχουν αλλάξει, έλεγξέ τες και επιβεβαίωσε ξανά"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -13536,6 +13556,13 @@ msgstr ""
 "κοινοποίηση προσωπικών δεδομένων στον οργανισμό σου."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Αυτή η συνεδρία και όλα τα δεδομένα της (εγγραφές, λογιστικά κ.λπ.) <b>θα "
+"διαγραφούν οριστικά</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14658,6 +14685,13 @@ msgstr ""
 "αν ο συμμετέχων έχει ανατεθεί σε συγκεκριμένες παρατάξεις."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Η εκδήλωση και όλα τα δεδομένα της (εγγραφές, χαρακτήρες, κείμενα, λογιστικά"
+" κ.λπ.) <b>θα διαγραφούν οριστικά</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -15242,6 +15276,14 @@ msgstr ""
 "ανανέωσε τη σελίδα."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Η ανάκτηση των διαγραμμένων δεδομένων <b>δεν</b> θα είναι δυνατή. <i>Αν δεν "
+"είσαι σίγουρος για το τι κάνεις, επικοινώνησε με τους διαχειριστές του "
+"συστήματος</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -15326,14 +15368,6 @@ msgid ""
 msgstr ""
 "Κανονικά εμφανίζονται όλα τα πεδία χαρακτήρα (δημόσια ή ιδιωτικά)· με αυτή "
 "τη διαμόρφωση μπορείς να επιλέξεις ποια θα εμφανίζονται κάθε στιγμή."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Το αίτημά σου καταγράφηκε· λόγω της ευαισθησίας της ενέργειας που ζητήθηκε, "
-"η ομάδα μας θα το εξετάσει χειροκίνητα· θα σε ενημερώσουμε το συντομότερο "
-"δυνατό"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "

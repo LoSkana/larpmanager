@@ -34,11 +34,12 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import validate_email
+from django.db import transaction
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.basic import get_event_association_id, get_run_association_id
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id, reset_event_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
@@ -923,19 +924,37 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
 # DELETION
 
 
-@background(schedule=0)
-def delete_run_task(run_uuid: str) -> None:
-    """Delete the event (and all its runs) identified by this run uuid.
+def is_last_run(run: Run) -> bool:
+    """Return True if the run is the only one left in its event."""
+    return not Run.objects.filter(event_id=run.event_id).exclude(pk=run.pk).exists()
 
+
+@background_auto(schedule=0)
+def delete_run_task(run_uuid: str, *, whole_event: bool = False) -> None:
+    """Delete the run identified by this uuid, or its whole event.
+
+    The event is deleted if whole_event is set or if the run is the last one left; the event
+    row is locked so concurrent deletions of sibling runs never leave an event without runs.
     Nulls out parent FK on child events first to prevent cascade-deleting them.
     """
-    try:
-        run = Run.objects.select_related("event").get(uuid=run_uuid)
-    except Run.DoesNotExist:
-        return
-    event = run.event
-    Event.objects.filter(parent=event).update(parent=None)
-    event.delete()
+    from larpmanager.cache.character import clear_event_cache_all_runs  # noqa: PLC0415
+
+    with transaction.atomic():
+        try:
+            run = Run.objects.get(uuid=run_uuid)
+        except Run.DoesNotExist:
+            return
+        event = Event.objects.select_for_update().get(pk=run.event_id)
+        if not whole_event and not is_last_run(run):
+            run.delete()
+            return
+        child_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+        Event.objects.filter(id__in=child_ids).update(parent=None)
+        event.delete()
+
+    for child_id in child_ids:
+        reset_event_basic_cache(child_id)
+        clear_event_cache_all_runs(child_id)
 
 
 @background(schedule=0)

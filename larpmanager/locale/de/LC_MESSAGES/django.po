@@ -5000,9 +5000,6 @@ msgstr "Kundenspezifischer Mail-Server"
 msgid "Disable free abilities"
 msgstr "Kostenlose Fähigkeiten deaktivieren"
 
-msgid "Event deletion request"
-msgstr "Antrag auf Löschung eines Ereignisses"
-
 msgid "Expenses collaborators"
 msgstr "Ausgaben der Mitarbeitenden"
 
@@ -6194,6 +6191,9 @@ msgstr "Die anderen Felder sind optional."
 msgid "The total registration fee is:"
 msgstr "Die gesamte Teilnahmegebühr beträgt:"
 
+msgid "To confirm, type the full name"
+msgstr "Gib zur Bestätigung den vollständigen Namen ein"
+
 msgid "Type of accommodation included"
 msgstr "Art der Unterkunft inklusive"
 
@@ -6292,6 +6292,9 @@ msgstr "Aufpreis zum Ticket"
 
 msgid "The date when this event begins"
 msgstr "Das Datum, an dem das Ereignis beginnt"
+
+msgid "The name entered does not match"
+msgstr "Der eingegebene Name stimmt nicht überein"
 
 msgid "Total of recorded money inflows"
 msgstr "Summe der erfassten Geldzuflüsse"
@@ -7770,6 +7773,9 @@ msgstr "Verwalte die Haupteinstellungen der Organisation"
 msgid "No participants have been issued tokens yet."
 msgstr "Bisher wurden noch keine Token an Teilnehmer ausgegeben."
 
+msgid "Permanently delete this session of the event"
+msgstr "Lösche diese Sitzung der Veranstaltung endgültig"
+
 msgid "Please verify the following payment details:"
 msgstr "Bitte überprüfe die folgenden Zahlungsdaten:"
 
@@ -8383,6 +8389,9 @@ msgstr "Bezahle %(amount)s%(currency)s innerhalb von %(counter)s Tagen"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Die Bezahlung für diese Veranstaltung ist abgeschlossen und bezahlt!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Lösche diese Veranstaltung und alle ihre Sitzungen endgültig"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Zweiter Charakter in der Beziehung (Ziel)"
 
@@ -8710,6 +8719,11 @@ msgid "This page lets you add or edit an inventory pool type."
 msgstr ""
 "Auf dieser Seite kannst du einen Inventarpooltyp hinzufügen oder bearbeiten."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr ""
+"Achtung: Diese Aktion ist gefährlich und kann nicht rückgängig gemacht "
+"werden"
+
 msgid "Whether this content is currently available for access"
 msgstr "ob dieser Inhalt derzeit für den Zugriff verfügbar ist"
 
@@ -8735,6 +8749,10 @@ msgstr "Inhalt des mit Benutzerdaten gefüllten Mitgliedsantrags"
 msgid "Create at least one ticket type for event registrations"
 msgstr ""
 "Erstelle mindestens einen Ticket-Typ für Veranstaltungsregistrierungen"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+"Löschung gestartet, es kann einige Minuten dauern, bis sie abgeschlossen ist"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Möchtest du Nutzern erlauben, freiwillige Spenden zu leisten?"
@@ -9703,6 +9721,11 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Überprüfe alle stornierten Anmeldungen und verfolge den Stand der "
 "Rückerstattungen"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr ""
+"Die Sessions des Events haben sich geändert, bitte überprüfe und bestätige "
+"sie erneut"
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -13568,6 +13591,13 @@ msgstr ""
 "an deine Organisation bereits bestätigt haben."
 
 msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Diese Session und alle zugehörigen Daten (Anmeldungen, Buchhaltung usw.) "
+"<b>werden endgültig gelöscht</b>."
+
+msgid ""
 "Track candidate vote counts and view the list of members who have already "
 "voted in the current year"
 msgstr ""
@@ -14692,6 +14722,13 @@ msgstr ""
 "der Teilnehmende bestimmten Fraktionen zugewiesen ist."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Das Event und alle zugehörigen Daten (Anmeldungen, Charaktere, Texte, "
+"Buchhaltung usw.) <b>werden endgültig gelöscht</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -15282,6 +15319,14 @@ msgstr ""
 "lade dann die Seite neu."
 
 msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Gelöschte Daten können <b>nicht</b> wiederhergestellt werden. <i>Wenn du dir"
+" nicht sicher bist, was du tust, wende dich bitte an die "
+"Systemadministratoren</i>."
+
+msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
 "forms, questions, and correct answers for participants to complete"
 msgstr ""
@@ -15367,14 +15412,6 @@ msgstr ""
 "Normalerweise werden alle Charakterfelder (öffentlich oder privat) "
 "angezeigt; mit dieser Konfiguration kannst du auswählen, welche davon "
 "jeweils angezeigt werden."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Deine Anfrage wurde erfasst; da es sich um eine heikle Angelegenheit "
-"handelt, wird unser Team sie manuell prüfen; wir melden uns so schnell wie "
-"möglich bei dir"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "
