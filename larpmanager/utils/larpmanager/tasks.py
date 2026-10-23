@@ -941,7 +941,7 @@ def delete_run_task(run_uuid: str, *, whole_event: bool = False) -> None:
 
     with transaction.atomic():
         try:
-            run = Run.objects.select_related("event").get(uuid=run_uuid)
+            run = Run.objects.get(uuid=run_uuid)
         except Run.DoesNotExist:
             return
         event = Event.objects.select_for_update().get(pk=run.event_id)

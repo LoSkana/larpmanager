@@ -44,7 +44,6 @@ from larpmanager.models.event import (
     RegistrationStatus,
     Run,
 )
-from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.permission import is_association_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.checks import check_association_context
@@ -318,7 +317,6 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
 
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
     context["frame"] = is_frame
-    context["registration_count"] = Registration.objects.filter(run=run).count()
     context["delete_event"] = is_last_run(run)
 
     if request.method == "POST":
