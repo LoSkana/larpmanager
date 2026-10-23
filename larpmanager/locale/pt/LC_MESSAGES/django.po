@@ -8006,6 +8006,9 @@ msgstr "Ver a lista de eventos em que estás inscrito"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Bem-vindo ao painel da tua organização!"
 
+msgid "You can create more characters for this event!"
+msgstr "Podes criar mais personagens para este evento!"
+
 msgid "You can now add warehouse containers and items"
 msgstr "Agora podes adicionar contentores e itens de armazém"
 

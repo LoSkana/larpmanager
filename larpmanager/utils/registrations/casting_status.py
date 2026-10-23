@@ -265,8 +265,10 @@ def _status_approval(
         run_status["character_create"] = {
             "url": reverse("character_create", args=[run.get_slug()]),
             "label": _("Create another character"),
+            "label_long": _("You can create more characters for this event!"),
             "tooltip": _("Create another character!"),
             "icon": "fa-solid fa-wand-magic-sparkles",
+            "options_availability": get_character_options_availability(run),
         }
     # Show character creation action if user can create more characters
     elif not reached_maximum:
