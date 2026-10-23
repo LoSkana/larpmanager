@@ -7772,6 +7772,9 @@ msgstr "Spravuj hlavní nastavení organizace"
 msgid "No participants have been issued tokens yet."
 msgstr "Žádnému z účastníků zatím nebyly vydány žetony."
 
+msgid "Permanently delete this session of the event"
+msgstr "Trvale smazat tento termín události"
+
 msgid "Please verify the following payment details:"
 msgstr "Prosím, zkontroluj následující platební údaje:"
 
@@ -8368,6 +8371,9 @@ msgstr "Zaplať %(amount)s%(currency)s do %(counter)s dnů"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Platba za tuto akci je uhrazena a v pořádku!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Trvale smazat tuto událost a všechny její termíny"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"

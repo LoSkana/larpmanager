@@ -7773,6 +7773,9 @@ msgstr "Διαχειρίσου τις κύριες ρυθμίσεις του ο�
 msgid "No participants have been issued tokens yet."
 msgstr "Δεν έχουν εκδοθεί ακόμη token σε συμμετέχοντες."
 
+msgid "Permanently delete this session of the event"
+msgstr "Διάγραψε οριστικά αυτή τη συνεδρία της εκδήλωσης"
+
 msgid "Please verify the following payment details:"
 msgstr "Επαλήθευσε τα παρακάτω στοιχεία πληρωμής:"
 
@@ -8389,6 +8392,9 @@ msgstr "Πλήρωσε %(amount)s%(currency)s εντός %(counter)s ημερώ�
 msgid "Payment for this event is complete and up to date!"
 msgstr ""
 "Η πληρωμή για αυτή την εκδήλωση έχει ολοκληρωθεί και είναι τακτοποιημένη!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Διάγραψε οριστικά αυτή την εκδήλωση και όλες τις συνεδρίες της"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Δεύτερος χαρακτήρας στη σχέση (προορισμός)"

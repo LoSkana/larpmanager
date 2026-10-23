@@ -7771,6 +7771,9 @@ msgstr "Administrer organisationens hovedindstillinger"
 msgid "No participants have been issued tokens yet."
 msgstr "Der er endnu ikke udstedt tokens til nogen deltagere."
 
+msgid "Permanently delete this session of the event"
+msgstr "Slet denne session af begivenheden permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Bekræft venligst følgende betalingsoplysninger:"
 
@@ -8369,6 +8372,9 @@ msgstr "Betal %(amount)s%(currency)s inden for %(counter)s dage"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalingen for dette event er fuldført og ajour!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Slet denne begivenhed og alle dens sessioner permanent"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Anden karakter i relationen (destination)"

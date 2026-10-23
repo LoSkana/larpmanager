@@ -7772,6 +7772,9 @@ msgstr "Beheer de belangrijkste instellingen van de organisatie"
 msgid "No participants have been issued tokens yet."
 msgstr "Er zijn nog geen tokens uitgegeven aan deelnemers."
 
+msgid "Permanently delete this session of the event"
+msgstr "Verwijder deze sessie van het evenement permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Controleer even de volgende betalingsgegevens:"
 
@@ -8379,6 +8382,9 @@ msgstr "Betaal %(amount)s%(currency)s binnen %(counter)s dagen"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "De betaling voor dit evenement is voltooid en helemaal in orde!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Verwijder dit evenement en al zijn sessies permanent"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede personage in de relatie (bestemming)"

@@ -7771,6 +7771,9 @@ msgstr "Hallitse organisaation pääasetuksia"
 msgid "No participants have been issued tokens yet."
 msgstr "Osallistujille ei ole vielä jaettu tokeneita."
 
+msgid "Permanently delete this session of the event"
+msgstr "Poista tämä tapahtuman istunto pysyvästi"
+
 msgid "Please verify the following payment details:"
 msgstr "Tarkista seuraavat maksutiedot:"
 
@@ -8369,6 +8372,9 @@ msgstr "Maksa %(amount)s%(currency)s %(counter)s päivän kuluessa"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Poista tämä tapahtuma ja kaikki sen istunnot pysyvästi"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"

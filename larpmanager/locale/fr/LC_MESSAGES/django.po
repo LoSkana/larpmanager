@@ -7780,6 +7780,9 @@ msgstr "Gère les paramètres principaux de l’organisation"
 msgid "No participants have been issued tokens yet."
 msgstr "Aucun participant n'a encore reçu de jetons."
 
+msgid "Permanently delete this session of the event"
+msgstr "Supprime définitivement cette session de l'événement"
+
 msgid "Please verify the following payment details:"
 msgstr "Vérifie les informations de paiement suivantes :"
 
@@ -8386,6 +8389,9 @@ msgstr "Règle %(amount)s%(currency)s dans les %(counter)s jours"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Le paiement pour cet événement est bien effectué et à jour !"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Supprime définitivement cet événement et toutes ses sessions"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Deuxième personnage de la relation (destination)"

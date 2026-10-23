@@ -7,7 +7,13 @@
     {% trans "Delete" %} - {{ el.search }}
 {% endblock title %}
 {% block info %}
-    {% if not frame %}{{ block.super }}{% endif %}
+    {% if not frame %}
+        {% if delete_event %}
+            {% trans "Permanently delete this event and all its sessions" %}
+        {% else %}
+            {% trans "Permanently delete this session of the event" %}
+        {% endif %}
+    {% endif %}
 {% endblock info %}
 {% block content %}
     <form method="post" id="events_delete_form">

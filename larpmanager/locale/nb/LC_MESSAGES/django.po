@@ -7772,6 +7772,9 @@ msgstr "Administrer organisasjonens hovedinnstillinger"
 msgid "No participants have been issued tokens yet."
 msgstr "Det er foreløpig ikke utstedt noen tokens til deltakerne."
 
+msgid "Permanently delete this session of the event"
+msgstr "Slett denne økten av arrangementet permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Vennligst bekreft følgende betalingsopplysninger:"
 
@@ -8368,6 +8371,9 @@ msgstr "Betal %(amount)s%(currency)s innen %(counter)s dager"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalingen for dette arrangementet er gjennomført og i orden!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Slett dette arrangementet og alle øktene permanent"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre karakter i relasjonen (destinasjon)"

@@ -7771,6 +7771,9 @@ msgstr "Hantera organisationens huvudinställningar"
 msgid "No participants have been issued tokens yet."
 msgstr "Inga deltagare har fått några tokens ännu."
 
+msgid "Permanently delete this session of the event"
+msgstr "Radera den här sessionen av evenemanget permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Vänligen kontrollera följande betalningsuppgifter:"
 
@@ -8371,6 +8374,9 @@ msgstr "Betala %(amount)s%(currency)s inom %(counter)s dagar"
 
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalningen för detta evenemang är genomförd och i ordning!"
+
+msgid "Permanently delete this event and all its sessions"
+msgstr "Radera det här evenemanget och alla dess sessioner permanent"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i relationen (destination)"

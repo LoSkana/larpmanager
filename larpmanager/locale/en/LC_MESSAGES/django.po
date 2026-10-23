@@ -7354,6 +7354,12 @@ msgstr ""
 msgid "No events yet. Create your first event using the button above."
 msgstr ""
 
+msgid "Permanently delete this event and all its sessions"
+msgstr ""
+
+msgid "Permanently delete this session of the event"
+msgstr ""
+
 msgid "Warning: this action is dangerous and cannot be undone"
 msgstr ""
 
