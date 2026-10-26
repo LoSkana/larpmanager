@@ -3707,6 +3707,9 @@ msgstr "Prioridad de pago"
 msgid "Payment reminder"
 msgstr "Recordatorio de pago"
 
+msgid "Payment required"
+msgstr "Pago requerido"
+
 msgid "Pending approval"
 msgstr "Pendiente de aprobación"
 
@@ -4802,6 +4805,9 @@ msgstr "Colectas entregadas"
 
 msgid "Complete sheet (Test)"
 msgstr "Hoja completa (Test)"
+
+msgid "Complete your payment"
+msgstr "Completa tu pago"
 
 msgid "Complete your profile"
 msgstr "Completa tu perfil"
@@ -11259,6 +11265,12 @@ msgstr ""
 "parezcan correctas."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"¡Completa tu pago para finalizar tu inscripción y acceder a tu personaje!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13286,6 +13298,13 @@ msgid ""
 msgstr ""
 "Ya has pagado tu cuota social para este año, por lo que ya estás cubierto "
 "para este evento!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Tu inscripción aún no está completada: completa tu pago para crear o elegir "
+"tu personaje"
 
 #, python-format
 msgid ""
@@ -15417,6 +15436,14 @@ msgstr ""
 "No existe una asignación válida con las restricciones actuales: revisa los "
 "participantes incluidos y los personajes disponibles, y vuelve a ejecutar el"
 " algoritmo"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Si está activado, los jugadores pueden crear, elegir o acceder a sus "
+"personajes solo después de subir un comprobante de pago (o hacer un pago) de"
+" su inscripción."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

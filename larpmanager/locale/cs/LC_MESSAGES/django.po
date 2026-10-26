@@ -3707,6 +3707,9 @@ msgstr "Priorita platby"
 msgid "Payment reminder"
 msgstr "Upomínka k platbě"
 
+msgid "Payment required"
+msgstr "Vyžadována platba"
+
 msgid "Pending approval"
 msgstr "Čeká se na schválení"
 
@@ -4802,6 +4805,9 @@ msgstr "Dodané sbírky"
 
 msgid "Complete sheet (Test)"
 msgstr "Kompletní list (Test)"
+
+msgid "Complete your payment"
+msgstr "Dokonči platbu"
 
 msgid "Complete your profile"
 msgstr "Doplň svůj profil"
@@ -10916,6 +10922,13 @@ msgstr ""
 "správné."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Dokonči platbu, abys dokončil svou registraci a získal přístup ke své "
+"postavě!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -12866,6 +12879,13 @@ msgid ""
 msgstr ""
 "Již jsi zaplatil/a členský poplatek na aktuální rok, takže máš pro tuto akci"
 " vše pokryto!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Tvoje registrace ještě není dokončená: dokonči platbu, abys mohl vytvořit "
+"nebo vybrat svou postavu"
 
 #, python-format
 msgid ""
@@ -14949,6 +14969,13 @@ msgid ""
 msgstr ""
 "Žádné platné přiřazení neexistuje s aktuálními omezeními: zkontroluj "
 "zahrnuté účastníky a dostupné postavy, pak spusť algoritmus znovu"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Pokud je zapnuto, hráči můžou vytvořit, vybrat nebo zobrazit své postavy až "
+"po nahrání dokladu o platbě (nebo provedení platby) za svou registraci."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

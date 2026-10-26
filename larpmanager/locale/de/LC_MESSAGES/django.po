@@ -3707,6 +3707,9 @@ msgstr "Priorität der Zahlung"
 msgid "Payment reminder"
 msgstr "Zahlungserinnerung"
 
+msgid "Payment required"
+msgstr "Zahlung erforderlich"
+
 msgid "Pending approval"
 msgstr "Wartet auf Genehmigung"
 
@@ -4802,6 +4805,9 @@ msgstr "Übergebene Geldsammlungen"
 
 msgid "Complete sheet (Test)"
 msgstr "Vollständiger Bogen (Test)"
+
+msgid "Complete your payment"
+msgstr "Schließe deine Zahlung ab"
 
 msgid "Complete your profile"
 msgstr "Vervollständige dein Profil"
@@ -11386,6 +11392,13 @@ msgstr ""
 " erscheinen."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Schließe deine Zahlung ab, um deine Anmeldung abzuschließen und auf deinen "
+"Charakter zuzugreifen!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13422,6 +13435,13 @@ msgid ""
 msgstr ""
 "Da du deinen Mitgliedsbeitrag für das laufende Jahr bereits bezahlt hast, "
 "bist du für diese Veranstaltung bereits berechtigt!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Deine Anmeldung ist noch nicht abgeschlossen: Schließe deine Zahlung ab, um "
+"deinen Charakter zu erstellen oder auszuwählen"
 
 #, python-format
 msgid ""
@@ -15581,6 +15601,14 @@ msgstr ""
 "Mit den aktuellen Einschränkungen gibt es keine gültige Zuweisung: Überprüfe"
 " die einbezogenen Teilnehmenden und die verfügbaren Charaktere und führe den"
 " Algorithmus dann erneut aus"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Wenn aktiviert, können Spieler ihre Charaktere erst erstellen, auswählen "
+"oder darauf zugreifen, nachdem sie einen Zahlungsnachweis für ihre Anmeldung"
+" hochgeladen (oder eine Zahlung getätigt) haben."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

@@ -43,6 +43,19 @@
                         </div>
                     {% endif %}
                 </div>
+                {% if run_status.character_locked %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <a href="{{ run_status.character_locked.url }}"><i class="fa-solid fa-lock"></i> {% trans "Character" %}</a>
+                        </h3>
+                        <p>{{ run_status.character_locked.label_long }}</p>
+                        <p>
+                            <a href="{{ run_status.character_locked.url }}">
+                                <i class="fa-solid fa-upload"></i> {{ run_status.character_locked.label }}
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
                 {% if run_status.character_links %}
                     <div class="event-card event-card-char">
                         <h3>

@@ -3707,6 +3707,9 @@ msgstr "Maksujen etusijajärjestys"
 msgid "Payment reminder"
 msgstr "Maksumuistutus"
 
+msgid "Payment required"
+msgstr "Maksu vaaditaan"
+
 msgid "Pending approval"
 msgstr "Odottaa hyväksyntää"
 
@@ -4802,6 +4805,9 @@ msgstr "Toimitetut keräykset"
 
 msgid "Complete sheet (Test)"
 msgstr "Täydellinen lomake (Testi)"
+
+msgid "Complete your payment"
+msgstr "Viimeistele maksusi"
 
 msgid "Complete your profile"
 msgstr "Täydennä profiiliasi"
@@ -11071,6 +11077,13 @@ msgstr ""
 "vaikuttavat oikeilta."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Viimeistele maksusi, niin ilmoittautumisesi vahvistuu ja pääset käsiksi "
+"hahmoosi!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13048,6 +13061,13 @@ msgid ""
 msgstr ""
 "Olet jo maksanut jäsenmaksusi kuluvalta vuodelta, joten jäsenyytesi kattaa "
 "myös tämän tapahtuman!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Ilmoittautumisesi ei ole vielä valmis: viimeistele maksusi, niin voit luoda "
+"tai valita hahmosi"
 
 #, python-format
 msgid ""
@@ -15161,6 +15181,14 @@ msgid ""
 msgstr ""
 "Nykyisillä rajoituksilla ei löydy kelvollista jakoa: tarkista mukana olevat "
 "osallistujat ja käytettävissä olevat hahmot, ja aja algoritmi uudelleen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Jos tämä on käytössä, pelaajat voivat luoda, valita tai avata hahmonsa "
+"vasta, kun he ovat ladanneet ilmoittautumisensa maksutositteen (tai "
+"maksaneet)."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

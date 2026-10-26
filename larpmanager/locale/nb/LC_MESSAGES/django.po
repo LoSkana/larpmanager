@@ -3707,6 +3707,9 @@ msgstr "Betalingsprioritet"
 msgid "Payment reminder"
 msgstr "Betalingspåminnelse"
 
+msgid "Payment required"
+msgstr "Betaling kreves"
+
 msgid "Pending approval"
 msgstr "Venter på godkjenning"
 
@@ -4802,6 +4805,9 @@ msgstr "Leverte innsamlinger"
 
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
+
+msgid "Complete your payment"
+msgstr "Fullfør betalingen"
 
 msgid "Complete your profile"
 msgstr "Fullfør profilen din"
@@ -11058,6 +11064,13 @@ msgid ""
 msgstr "Svar på følgende spørsmål. Velg *alle* svar som du synes er riktige."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Fullfør betalingen for å fullføre påmeldingen din og få tilgang til "
+"karakteren din!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13058,6 +13071,13 @@ msgid ""
 msgstr ""
 "Du har allerede betalt medlemskontingenten for inneværende år, så du er "
 "allerede dekket for dette arrangementet!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Påmeldingen din er ikke fullført ennå: fullfør betalingen for å opprette "
+"eller velge karakteren din"
 
 #, python-format
 msgid ""
@@ -15162,6 +15182,14 @@ msgid ""
 msgstr ""
 "Ingen gyldig tildeling finnes med gjeldende begrensninger: sjekk inkluderte "
 "deltakere og tilgjengelige karakterer, kjør så algoritmen igjen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Hvis dette er aktivert, kan spillerne opprette, velge eller få tilgang til "
+"karakterene sine først etter at de har lastet opp betalingsbevis (eller "
+"betalt) for påmeldingen sin."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

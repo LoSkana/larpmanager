@@ -3707,6 +3707,9 @@ msgstr "Betalingsprioriteit"
 msgid "Payment reminder"
 msgstr "Betalingsherinnering"
 
+msgid "Payment required"
+msgstr "Betaling vereist"
+
 msgid "Pending approval"
 msgstr "In afwachting van goedkeuring"
 
@@ -4802,6 +4805,9 @@ msgstr "Inzamelingen afgeleverd"
 
 msgid "Complete sheet (Test)"
 msgstr "Volledig karakterblad (Test)"
+
+msgid "Complete your payment"
+msgstr "Rond je betaling af"
 
 msgid "Complete your profile"
 msgstr "Maak je profiel compleet"
@@ -11273,6 +11279,13 @@ msgstr ""
 "lijken."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Rond je betaling af om je inschrijving te voltooien en toegang te krijgen "
+"tot je personage!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -13294,6 +13307,13 @@ msgid ""
 msgstr ""
 "Je hebt je lidmaatschapsgeld voor het lopende jaar al betaald, dus je bent "
 "al gedekt voor dit evenement!"
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Je inschrijving is nog niet voltooid: rond je betaling af om je personage "
+"aan te maken of te kiezen"
 
 #, python-format
 msgid ""
@@ -15429,6 +15449,14 @@ msgstr ""
 "Er bestaat geen geldige toewijzing met de huidige beperkingen: controleer de"
 " opgenomen deelnemers en de beschikbare personages en voer het algoritme "
 "daarna opnieuw uit"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Als dit is ingeschakeld, kunnen spelers hun personages pas aanmaken, kiezen "
+"of openen nadat ze een betalingsbewijs hebben geüpload (of een betaling "
+"hebben gedaan) voor hun inschrijving."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
