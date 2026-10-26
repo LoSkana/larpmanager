@@ -48,6 +48,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.writing import get_event_class_parent
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
 from larpmanager.utils.registrations.questions import get_transferred_answer_text
 
 if TYPE_CHECKING:
@@ -555,6 +556,14 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")
+
+        # Warn about characters exceeding the spots of their options in the target run
+        for char in source_characters:
+            if char.event_id != character_event_id:
+                continue
+            full_options = get_character_full_options(target_run.id, char.id)
+            if full_options:
+                result["warnings"].append(str(get_character_full_options_warning(char, full_options)))
 
 
 def _validate_ticket(registration: Registration, result: dict[str, list[str]], target_run: Run) -> None:

@@ -2591,6 +2591,9 @@ msgstr "Forespørsel om:"
 msgid "Requirements"
 msgstr "Krav"
 
+msgid "Reset status"
+msgstr "Tilbakestill status"
+
 msgid "Rotate right"
 msgstr "Roter høyre"
 
@@ -2960,6 +2963,10 @@ msgstr "Team-ID-en din."
 #, python-format
 msgid "for %(event)s"
 msgstr "for %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "til %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4127,6 +4134,9 @@ msgstr "Din registrering"
 
 msgid "already delivered"
 msgstr "allerede levert"
+
+msgid "no spots left for"
+msgstr "ingen plasser igjen for"
 
 #, python-format
 msgid "%(name)s available"
@@ -5904,6 +5914,9 @@ msgstr "Forsinkelse i utfyllingen av profilen"
 msgid "Describe how we can help you"
 msgstr "Beskriv hvordan vi kan hjelpe deg"
 
+msgid "Disable automatic assignment"
+msgstr "Deaktiver automatisk tildeling"
+
 msgid "Disable event-level approval"
 msgstr "Deaktiver godkjenning på hendelsesnivå"
 
@@ -6838,6 +6851,10 @@ msgstr "<b>%(number)s</b> medlemmer som skal godkjennes"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> refusjoner som skal leveres"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Karakter ikke tildelt for %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Byen du ble født i (fullt navn)"
 
@@ -6956,6 +6973,10 @@ msgstr "Antall tildelte erfaringspoeng"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Gi din stemme til det nye styret!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Karakter ikke tildelt: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontroller gyldigheten av skattekoden"
@@ -8256,6 +8277,9 @@ msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
 msgid "Character not found, or not playing in this event"
 msgstr "Karakteren ble ikke funnet, eller spiller ikke i dette arrangementet"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Karakterer ikke tildelt for alternativer uten ledige plasser"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Velg karakteren du skal spille i dette arrangementet!"
 
@@ -8304,11 +8328,18 @@ msgstr "Velg hvilke betalingsmetoder deltakerne kan bruke"
 msgid "Switch between Organization and Events management"
 msgstr "Bytt mellom administrasjon av organisasjonen og arrangementer"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Karakteren %(character)s kunne ikke tildeles"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Maksimalt antall bruk (0 for ubegrenset bruk)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Registreringskoden er ikke aktiv for øyeblikket"
+
+msgid "The spots of its options are now available again."
+msgstr "Plassene for alternativene er nå ledige igjen."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Det er ingen nye økter planlagt for øyeblikket."
@@ -9408,6 +9439,10 @@ msgstr ""
 "Ingen arrangementer ennå. Opprett ditt første arrangement ved å klikke på "
 "knappen ovenfor."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Ingen plasser igjen for %(options)s, velg andre alternativer"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valgfritt - Utvidet beskrivelse (vises med liten grå tekst)"
 
@@ -10422,6 +10457,13 @@ msgstr ""
 "Aktiver og konfigurer avanserte funksjoner for organisasjonen og "
 "arrangementene dine"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Karakteren %(character)s kan ikke tildeles: ingen plasser igjen for "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -11008,6 +11050,11 @@ msgstr ""
 "for å legge til en container."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Velg andre alternativer for karakteren, eller kontakt arrangørene."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr "Gjør klar demoen din, dette tar noen sekunder. Ikke lukk denne siden!"
@@ -11437,6 +11484,14 @@ msgid ""
 msgstr ""
 "En refusjon på %(amount).2f %(elements)s for «%(reason)s» er blitt "
 "behandlet."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Karakteren %(character)s er tildelt, men overskrider de ledige plassene for "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12529,13 +12584,6 @@ msgid ""
 msgstr ""
 "Merk at eksisterende elementer med samme navn vil bli overskrevet med de "
 "opplastede dataene."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Valgfritt - Maksimalt antall ganger det kan velges på tvers av alle "
-"karakterer (0 = ubegrenset)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14120,6 +14168,13 @@ msgstr ""
 "elementer de vil unngå helt."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Valgfritt - Maks antall karakterer tildelt deltakere på hver gjennomføring "
+"som kan velge dette (0 = ubegrenset)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14481,6 +14536,13 @@ msgid ""
 msgstr ""
 "For bankoverføringer kan du gå til <a href='%(url)s'>betalingssiden</a> for "
 "å se detaljene (inkludert IBAN og betalingsreferanse)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Hvis aktivert, blir deltakerne ikke automatisk tildelt rollen de spilte i "
+"forrige gjennomføring når de melder seg på."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
@@ -14909,6 +14971,14 @@ msgid ""
 msgstr ""
 "Muliggjør 'ta med en venn'-rabatt. En deltaker kan gi sin unike kode til en "
 "ny deltaker, slik at begge får rabatt"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Hvis aktivert, og en godkjent karakter som allerede er spilt i en tidligere "
+"gjennomføring blir tildelt en ny gjennomføring, settes statusen tilbake til "
+"revisjon."
 
 msgid ""
 "The payment was received by PayPal but could not be registered "

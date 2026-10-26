@@ -2591,6 +2591,9 @@ msgstr "Begäran om:"
 msgid "Requirements"
 msgstr "Krav"
 
+msgid "Reset status"
+msgstr "Återställ status"
+
 msgid "Rotate right"
 msgstr "Rotera höger"
 
@@ -2960,6 +2963,10 @@ msgstr "Ditt team-ID."
 #, python-format
 msgid "for %(event)s"
 msgstr "för %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "till %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4127,6 +4134,9 @@ msgstr "Din registrering"
 
 msgid "already delivered"
 msgstr "redan levererat"
+
+msgid "no spots left for"
+msgstr "inga platser kvar för"
 
 #, python-format
 msgid "%(name)s available"
@@ -5904,6 +5914,9 @@ msgstr "Försening i sammanställning av profil"
 msgid "Describe how we can help you"
 msgstr "Beskriv hur vi kan hjälpa dig"
 
+msgid "Disable automatic assignment"
+msgstr "Inaktivera automatisk tilldelning"
+
 msgid "Disable event-level approval"
 msgstr "Inaktivera godkännande på händelsenivå"
 
@@ -6838,6 +6851,10 @@ msgstr "<b>%(number)s</b> medlemmar att godkänna"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> återbetalningar att leverera"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Karaktär inte tilldelad för %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Stad där du föddes (fullständigt namn)"
 
@@ -6956,6 +6973,10 @@ msgstr "Antal tilldelade erfarenhetspoäng"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya direktionen!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Karaktär inte tilldelad: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Kontrollera att skattekoden är giltig"
@@ -8258,6 +8279,9 @@ msgstr "Bakgrundsbild visas på alla evenemangssidor"
 msgid "Character not found, or not playing in this event"
 msgstr "Karaktären hittades inte eller deltar inte i detta event"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Karaktärer har inte tilldelats för alternativ utan platser"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Välj karaktären du kommer att spela i det här evenemanget!"
 
@@ -8306,11 +8330,18 @@ msgstr "Välj vilka betalningsmetoder deltagarna kan använda"
 msgid "Switch between Organization and Events management"
 msgstr "Växla mellan organisations- och evenemangshantering"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Karaktären %(character)s kunde inte tilldelas"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Maximalt antal användningar (0 för obegränsat antal)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Registreringskoden är inte aktiv för närvarande"
+
+msgid "The spots of its options are now available again."
+msgstr "Platserna för dess alternativ är nu tillgängliga igen."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Det finns inga nya sessioner inplanerade för närvarande."
@@ -9393,6 +9424,10 @@ msgstr "Namn på de personer eller team som organiserar och driver evenemanget"
 msgid "No events yet. Create your first event using the button above."
 msgstr "Inga evenemang ännu. Skapa ditt första evenemang med knappen ovan."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Inga platser kvar för %(options)s, välj andra alternativ"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Valfritt - Utökad beskrivning (visas i liten grå text)"
 
@@ -10397,6 +10432,13 @@ msgstr ""
 "Aktivera och konfigurera avancerade funktioner för din organisation och dina"
 " evenemang"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Karaktären %(character)s kan inte tilldelas: inga platser kvar för "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -10992,6 +11034,11 @@ msgstr ""
 " en behållare."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Välj andra alternativ för karaktären eller kontakta arrangörerna."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11414,6 +11461,14 @@ msgid ""
 msgstr ""
 "En återbetalning på %(amount).2f %(elements)s för ”%(reason)s” har "
 "genomförts."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Karaktären %(character)s har tilldelats, men överskrider de tillgängliga "
+"platserna för %(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12512,13 +12567,6 @@ msgstr ""
 "de uppladdade uppgifterna."
 
 msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Valfritt – Maximalt antal gånger det kan väljas för alla karaktärer (0 = "
-"obegränsat)"
-
-msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
 " for this event"
 msgstr ""
@@ -12635,8 +12683,8 @@ msgid ""
 "The payment has not been confirmed yet: it will be registered as soon as "
 "PayPal confirms it."
 msgstr ""
-"Betalningen har inte bekräftats än: den registreras så snart PayPal "
-"bekräftar den."
+"Betalningen är inte bekräftad än: den registreras så snart PayPal bekräftar "
+"den."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -14102,6 +14150,13 @@ msgstr ""
 "vill undvika helt och hållet."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Valfritt - Maximalt antal karaktärer som kan tilldelas deltagarna i varje "
+"omgång som kan välja det (0 = obegränsat)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14462,6 +14517,13 @@ msgid ""
 msgstr ""
 "För banköverföringar, gå till <a href='%(url)s'>betalningssidan</a> för att "
 "se detaljerna (inklusive IBAN och betalningsreferens)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Om detta är aktiverat tilldelas deltagarna vid anmälan inte automatiskt den "
+"karaktär de spelade i förra omgången."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
@@ -14887,6 +14949,14 @@ msgid ""
 msgstr ""
 "Möjliggör rabatt för 'ta med en vän'. En deltagare kan ge sin unika kod till"
 " en ny anmälare, vilket ger båda ett rabatterat pris"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Om det här är aktiverat och en godkänd karaktär som redan spelats i en "
+"tidigare omgång tilldelas en ny omgång, sätts dess status tillbaka till "
+"revidering."
 
 msgid ""
 "The payment was received by PayPal but could not be registered "

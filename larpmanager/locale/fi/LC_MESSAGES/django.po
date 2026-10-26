@@ -2591,6 +2591,9 @@ msgstr "Pyyntö:"
 msgid "Requirements"
 msgstr "Vaatimukset"
 
+msgid "Reset status"
+msgstr "Nollaa tila"
+
 msgid "Rotate right"
 msgstr "Pyöritä oikealle"
 
@@ -2960,6 +2963,10 @@ msgstr "Tiimisi tunniste."
 #, python-format
 msgid "for %(event)s"
 msgstr "%(event)s osalta"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "osallistujalle %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4127,6 +4134,9 @@ msgstr "Ilmoittautumisesi"
 
 msgid "already delivered"
 msgstr "jo jaettu"
+
+msgid "no spots left for"
+msgstr "ei vapaita paikkoja vaihtoehdoille"
 
 #, python-format
 msgid "%(name)s available"
@@ -5904,6 +5914,9 @@ msgstr "Viive profiilin laatimisessa"
 msgid "Describe how we can help you"
 msgstr "Kuvaile, miten voimme auttaa sinua"
 
+msgid "Disable automatic assignment"
+msgstr "Poista automaattinen jako käytöstä"
+
 msgid "Disable event-level approval"
 msgstr "Poista tapahtumakohtainen hyväksyntä käytöstä"
 
@@ -6838,6 +6851,10 @@ msgstr "<b>%(number)s</b> hyväksyttävät jäsenet"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> toimitettavat palautukset"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Hahmoa ei määritetty tapahtumaan %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Kaupunki, jossa synnyit (koko nimi)"
 
@@ -6956,6 +6973,10 @@ msgstr "Annetut kokemuspisteet"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Äänestä uutta johtokuntaa!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Hahmoa ei määritetty: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Tarkista verokoodin voimassaolo"
@@ -8257,6 +8278,9 @@ msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
 msgid "Character not found, or not playing in this event"
 msgstr "Hahmoa ei löytynyt tai se ei pelaa tässä tapahtumassa"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Hahmoja ei määritetty vaihtoehdoille, joissa ei ole vapaita paikkoja"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Valitse hahmo, jota pelaat tässä tapahtumassa!"
 
@@ -8305,11 +8329,18 @@ msgstr "Valitse, mitä maksutapoja osallistujat voivat käyttää"
 msgid "Switch between Organization and Events management"
 msgstr "Vaihda organisaation ja tapahtumien hallinnan välillä"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Hahmoa %(character)s ei voitu määrittää"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Käyttökertojen enimmäismäärä (0 tarkoittaa rajatonta käyttöä)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Ilmoittautumiskoodi ei ole aktiivinen tällä hetkellä"
+
+msgid "The spots of its options are now available again."
+msgstr "Sen vaihtoehtojen paikat ovat nyt taas vapaina."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "Tällä hetkellä ei ole uusia istuntoja."
@@ -9417,6 +9448,10 @@ msgstr ""
 "Tapahtumia ei ole vielä. Luo ensimmäinen tapahtumasi yllä olevan painikkeen "
 "avulla."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Ei enää paikkoja vaihtoehdoille %(options)s, valitse muut vaihtoehdot"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr ""
 "Valinnainen - Laajennettu kuvaus (näytetään pienellä harmaalla tekstillä)"
@@ -10440,6 +10475,13 @@ msgstr ""
 "Aktivoi ja määritä edistyneet ominaisuudet organisaatiollesi ja "
 "tapahtumillesi"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Hahmoa %(character)s ei voi määrittää: ei vapaita paikkoja vaihtoehdoille "
+"%(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
@@ -10531,7 +10573,7 @@ msgstr "Keräys on valmis toimitettavaksi, anna tämä linkki vastaanottajalle:"
 
 msgid ""
 "This payment has already been completed, you have not been charged again."
-msgstr "Tämä maksu on jo suoritettu, eikä sinulta ole veloitettu uudelleen."
+msgstr "Tämä maksu on jo suoritettu, eikä sinua veloitettu uudelleen."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -11022,6 +11064,11 @@ msgstr ""
 " avulla."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Valitse hahmolle eri vaihtoehdot tai ota yhteyttä järjestäjiin."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11440,6 +11487,14 @@ msgid ""
 msgstr ""
 "Korvaus, jonka määrä on %(amount).2f %(elements)s, on käsitelty syystä "
 "'%(reason)s'."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Hahmo %(character)s määritetty, mutta se ylittää vapaiden paikkojen määrän "
+"vaihtoehdoille %(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12524,13 +12579,6 @@ msgid ""
 msgstr ""
 "Huomaa, että olemassa olevat samannimiset elementit korvataan ladatuilla "
 "tiedoilla."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr ""
-"Valinnainen – Enimmäismäärä, kuinka monta kertaa se voidaan valita kaikissa "
-"hahmoissa (0 = rajoittamaton)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -14108,6 +14156,13 @@ msgstr ""
 "elementtejä hän haluaa välttää kokonaan."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Valinnainen - Hahmojen enimmäismäärä, joka voidaan määrittää kunkin "
+"pelikerran osallistujille, jotka voivat valita sen (0 = rajoittamaton)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14470,6 +14525,13 @@ msgid ""
 msgstr ""
 "Pankkisiirtojen osalta voit tarkastella yksityiskohtia (mukaan lukien IBAN-"
 "numero ja maksuviite) <a href='%(url)s'>maksusivulla</a>."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Jos tämä on käytössä, osallistujille ei ilmoittautumisen yhteydessä anneta "
+"automaattisesti hahmoa, jota he pelasivat edellisellä pelikerralla."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
@@ -14898,6 +14960,13 @@ msgstr ""
 "Ottaa käyttöön 'tuo ystävä' -alennuksen. Osallistuja voi antaa "
 "ainutlaatuisen koodinsa uudelle ilmoittautujalle, jolloin molemmat saavat "
 "alennetun hinnan"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Jos tämä on käytössä, hyväksytyn hahmon tila palautetaan tarkistukseen, kun "
+"hahmo, jota on jo pelattu aiemmassa ajossa, määritetään uuteen ajoon."
 
 msgid ""
 "The payment was received by PayPal but could not be registered "

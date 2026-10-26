@@ -36,12 +36,15 @@ from larpmanager.models.association import Association
 from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationChoice, RegistrationQuestionType
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_run
+from larpmanager.utils.registrations.characters import format_full_options, get_character_full_options
 from larpmanager.utils.registrations.questions import get_ranking_names
 
 if TYPE_CHECKING:
     from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
     from larpmanager.models.event import Run
+    from larpmanager.models.form import WritingOption
     from larpmanager.models.registration import Registration
+    from larpmanager.models.writing import Character
 
 
 def format_decimal_amount(value: float) -> str:
@@ -152,6 +155,29 @@ def get_registration_request_new_organizer_email(instance: Registration, email_c
     email_subject = hdr_run(instance.run_id) + _("Registration request for %(event)s by %(user)s") % email_context
     email_body = _("The user has submitted a request to register for this event.")
     return email_subject, email_body
+
+
+def get_character_full_options_organizer_email(character: Character, run: Run) -> tuple[str, str]:
+    """Generate email subject and body for a character not assigned since its options have no spots left."""
+    email_subject = hdr_run(run.id) + _("Character not assigned: %(character)s") % {"character": character.name}
+    email_body = "<p>" + get_character_full_options_organizer_text(character, run) + "</p>"
+    return email_subject, email_body
+
+
+def get_character_full_options_organizer_text(
+    character: Character, run: Run, full_options: list[WritingOption] | None = None
+) -> str:
+    """Return the description of a character not assigned since its options have no spots left."""
+    text = _("The character %(character)s could not be assigned") % {"character": escape(character.name)}
+    if character.player:
+        text += " " + _("to %(player)s") % {"player": escape(str(character.player))}
+
+    if full_options is None:
+        full_options = get_character_full_options(run.id, character.id)
+    if not full_options:
+        return text + ". " + _("The spots of its options are now available again.")
+
+    return text + ", " + _("no spots left for") + ": " + escape(format_full_options(full_options))
 
 
 def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:

@@ -33,6 +33,7 @@ from larpmanager.utils.io.upload.constants import MAX_COMMA_VALUES, MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
 from larpmanager.utils.io.upload.parsing import _is_missing, _to_decimal, _to_int
 from larpmanager.utils.io.upload.writing import _assign_choice_answer, _get_questions
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
 
 if TYPE_CHECKING:
     from django.forms import Form
@@ -263,5 +264,10 @@ def _reg_assign_characters(
             error_logs.append(f"ERR - character already assigned: {character_name}")
             continue
 
-        # Create the character assignment relationship
-        RegistrationCharacterRel.objects.get_or_create(registration=registration, character=character)
+        # Create the character assignment relationship, warning if it exceeds the spots of its options
+        _relation, created = RegistrationCharacterRel.objects.get_or_create(
+            registration=registration, character=character
+        )
+        full_options = get_character_full_options(registration.run_id, character.id) if created else []
+        if full_options:
+            error_logs.append(f"WARN - {get_character_full_options_warning(character, full_options)}")

@@ -12,10 +12,20 @@
 {% endblock css %}
 {% block content %}
 {% endblock content %}
+{% block messages_toast %}
+{% endblock messages_toast %}
 {% block js2 %}
     <script>
     if (window.parent) {
-        window.parent.postMessage({type: 'dashboard_form_saved'{% if redirect_url %}, redirect_url: '{{ redirect_url }}'{% endif %}}, '*');
+        // Forward warnings and errors to the parent page, since this page is never shown
+        var messages = [
+            {% for message in messages %}
+                {% if message.level_tag == "warning" or message.level_tag == "error" %}
+                    {text: '{% filter escapejs %}{{ message }}{% endfilter %}', icon: '{{ message.level_tag }}'},
+                {% endif %}
+            {% endfor %}
+        ];
+        window.parent.postMessage({type: 'dashboard_form_saved', messages: messages{% if redirect_url %}, redirect_url: '{{ redirect_url }}'{% endif %}}, '*');
     }
     </script>
 {% endblock js2 %}
