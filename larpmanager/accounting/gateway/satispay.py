@@ -362,7 +362,7 @@ def satispay_check(context: dict) -> None:
         satispay_verify(context, invoice.cod)
 
 
-def satispay_verify(context: dict, payment_code: str) -> None:
+def satispay_verify(context: dict, payment_code: str) -> str | None:  # noqa: PLR0911 - Multiple validation checks require multiple returns
     """Verify Satispay payment status and process if accepted.
 
     This function verifies a Satispay payment by checking the payment status
@@ -373,7 +373,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
         payment_code: Payment code/identifier to verify against Satispay API
 
     Returns:
-        None: Function performs side effects but returns nothing
+        The Satispay payment status (PENDING, ACCEPTED, CANCELED), or None if it could not be read
 
     Note:
         Logs warnings for various error conditions and returns early on failures.
@@ -388,17 +388,17 @@ def satispay_verify(context: dict, payment_code: str) -> None:
         invoice = PaymentInvoice.objects.get(cod=payment_code)
     except ObjectDoesNotExist:
         logger.warning("Not found - invoice %s", payment_code)
-        return
+        return None
 
     # Validate that invoice uses Satispay payment method
     if invoice.method.slug != "satispay":
         logger.warning("Wrong slug method - invoice %s", payment_code)
-        return
+        return None
 
     # Check if payment is still in created status (not already processed)
     if invoice.status != PaymentStatus.CREATED:
         logger.warning("Already confirmed - invoice %s", payment_code)
-        return
+        return None
 
     # Load Satispay API credentials and private key for authentication
     key_id = context["satispay_key_id"]
@@ -410,7 +410,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
     # Validate API response status code
     expected_success_code = 200
     if response.status_code != expected_success_code:
-        return
+        return None
 
     # Parse response and extract payment details
     try:
@@ -422,7 +422,7 @@ def satispay_verify(context: dict, payment_code: str) -> None:
         error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
         logger.exception(error_msg)
         notify_admins("Satispay verification JSON error", error_msg)
-        return
+        return None
 
     # Verify currency if available
     expected_currency = context.get("payment_currency")
@@ -433,11 +433,13 @@ def satispay_verify(context: dict, payment_code: str) -> None:
             payment_currency,
             invoice.cod,
         )
-        return
+        return None
 
     # Process payment if Satispay marked it as accepted
     if payment_status == "ACCEPTED":
         invoice_received_money(invoice.cod, payment_amount, expected_amount=invoice.mc_gross, payment_method="satispay")
+
+    return payment_status
 
 
 def satispay_webhook(request: HttpRequest) -> None:

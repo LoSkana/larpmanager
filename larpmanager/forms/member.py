@@ -866,7 +866,7 @@ class ExeMembershipFeeForm(BaseForm):
         member = self.cleaned_data["member"]
         if not member:
             return member
-        year = timezone.now().year
+        year = timezone.localdate().year
         association_id = self.params.get("association_id")
 
         # Check if membership fee already exists for this association and year

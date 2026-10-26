@@ -23,7 +23,7 @@ from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import formats, timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
@@ -34,7 +34,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.event import PreRegistration, RegistrationStatus, Run
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
-from larpmanager.utils.core.common import format_datetime, get_time_diff_today
+from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.core.exceptions import RewokedMembershipError
 from larpmanager.utils.registrations.availability import registration_available
 from larpmanager.utils.registrations.casting_status import registration_status_characters
@@ -70,7 +70,7 @@ def _status_membership_fee(
     if not fee:
         return False
 
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
     # Check if event is in current year and if membership fee has been paid
     if not run.start or run.start.year != current_year:
         return False
@@ -445,7 +445,7 @@ def _set_membership_context(
 
     membership_fee_separated = get_association_config(association_id, "membership_fee_separated")
     if membership_fee_separated:
-        if timezone.now().year != event_year:
+        if timezone.localdate().year != event_year:
             context["membership_fee"] = "future"
         else:
             context["membership_fee"] = "todo"
@@ -535,14 +535,14 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     # Handle closed status
     if status == RegistrationStatus.CLOSED:
         run_status["open"] = False
-        run_status["text"] = _("Registration closed")
+        run_status["text"] = _("Registrations closed")
         run_status["text_long"] = _("Registrations for this event are currently closed")
         return run_status
 
     # Handle external registration - redirect is handled in view layer
     if status == RegistrationStatus.EXTERNAL:
         run_status["open"] = True
-        run_status["text"] = _("Registration is open!")
+        run_status["text"] = _("Registrations are open!")
         run_status["text_long"] = _("Registrations are open: sign up now to secure your spot!")
         run_status["url"] = register_url
         return run_status
@@ -560,17 +560,22 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
     if run.registration_status == RegistrationStatus.FUTURE:
         current_datetime = timezone.now()
 
-        run_status["open"] = False
-        run_status["text"] = run_status.get("text") or _("Registrations not open!")
-        run_status["text_long"] = run_status.get("text_long") or _("Registrations for this event have not opened yet")
-
-        if not run.registration_open:
+        if run.registration_open and run.registration_open > current_datetime:
+            run_status["open"] = False
+            opening_text = _("Registrations will open on %(date)s at %(time)s") % {
+                "date": formats.date_format(timezone.localtime(run.registration_open), "j E Y"),
+                "time": timezone.localtime(run.registration_open).strftime("%H:%M"),
+            }
+            run_status["text"] = run_status.get("text") or opening_text
+            run_status["text_long"] = run_status.get("text_long") or opening_text
             return run_status
 
-        if run.registration_open > current_datetime:
-            run_status["details"] = _("Registration opens on: %(date)s") % {
-                "date": run.registration_open.strftime(format_datetime),
-            }
+        if not run.registration_open:
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations not yet open")
+            run_status["text_long"] = run_status.get("text_long") or _(
+                "Registrations for this event have not opened yet"
+            )
             return run_status
 
     if run.registration_status == RegistrationStatus.CLOSING:
@@ -586,7 +591,7 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
 
     # signup open, not already signed in
     messages = {
-        "primary": _("Registration is open!"),
+        "primary": _("Registrations are open!"),
         "filler": _("Sign up as a reserve!"),
         "waiting": _("Join the waiting list!"),
     }
@@ -611,15 +616,16 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         run_status["text_long"] = selected_message_long
         run_status["url"] = register_url
         if run.registration_status == RegistrationStatus.CLOSING and run.registration_open:
-            closing_details = _("Registration closes on: %(date)s") % {
-                "date": run.registration_open.strftime(format_datetime),
+            closing_details = _("Registrations close on %(date)s at %(time)s") % {
+                "date": formats.date_format(timezone.localtime(run.registration_open), "j E Y"),
+                "time": timezone.localtime(run.registration_open).strftime("%H:%M"),
             }
             if run_status.get("details"):
                 run_status["details"] += " - " + closing_details
             else:
                 run_status["details"] = closing_details
     else:
-        run_status["text"] = _("Registration closed")
+        run_status["text"] = _("Registrations closed")
         run_status["text_long"] = _("Registrations for this event are currently closed")
 
     return run_status

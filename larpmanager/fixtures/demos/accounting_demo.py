@@ -28,7 +28,6 @@ event accounting overview is fully populated.
 from __future__ import annotations
 
 import datetime
-from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -263,7 +262,7 @@ def _create_discount(event: Event, run: Any) -> Discount:
 
 def _build_installments(event: Event, tickets: dict[str, RegistrationTicket]) -> None:
     applicable = [tickets["standard"], tickets["new_player"], tickets["waiting"]]
-    today = datetime.datetime.now(tz=UTC).date()
+    today = timezone.localdate()
 
     deposit = RegistrationInstallment.objects.create(
         event=event, number=1, amount=30, date_deadline=today - datetime.timedelta(days=25)
@@ -521,7 +520,7 @@ def _build_staff_accounting(event: Event, association: Association) -> None:
         is_approved=True,
     )
 
-    today = datetime.datetime.now(tz=UTC).date()
+    today = timezone.localdate()
     AccountingItemOutflow.objects.create(
         association=association,
         run=run,
@@ -657,7 +656,7 @@ def build_accounting_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.start = timezone.localdate() + datetime.timedelta(days=60)
     run.end = run.start + datetime.timedelta(days=2)
     run.save()
 

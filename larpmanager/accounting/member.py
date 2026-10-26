@@ -22,7 +22,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -46,7 +46,6 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, MemberConfig, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.common import get_now
 
 
 def info_accounting(context: dict) -> None:
@@ -152,7 +151,7 @@ def _init_regs(
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
     if registration.run.start:
-        if registration.run.start < timezone.now().date():
+        if registration.run.start < timezone.localdate():
             return
         context["registration_years"][registration.run.start.year] = 1
 
@@ -292,7 +291,7 @@ def _info_membership(context: dict, member: Member) -> None:
         return
 
     # Get current year for membership calculations
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -328,14 +327,16 @@ def _info_membership(context: dict, member: Member) -> None:
         # Build full date string with current year
         membership_day += f"-{current_year}"
 
-        # Parse and make aware with explicit UTC
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=UTC)
+        # Parse and make aware in the current timezone
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(
+            tzinfo=timezone.get_current_timezone(),
+        )
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = get_now() < membership_deadline_date
+        context["grazing"] = timezone.now() < membership_deadline_date
 
 
 def membership_fee_pending_config_name(association_id: int, year: int) -> str:
@@ -389,7 +390,7 @@ def get_membership_fee_for_reg(
     ):
         return 0
 
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
     event_year = run.start.year
     if event_year < current_year:
         return 0

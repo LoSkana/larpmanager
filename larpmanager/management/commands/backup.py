@@ -60,7 +60,7 @@ class Command(BaseCommand):
 
         """
         # Get current date for organizing backup files by date
-        now_date = timezone.now().date()
+        now_date = timezone.localdate()
 
         # Process all runs that are not done or cancelled
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):

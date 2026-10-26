@@ -433,6 +433,7 @@ body.association.new_v22 .user_resize {
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  text-align: left;
 }
 
 .event-fact {

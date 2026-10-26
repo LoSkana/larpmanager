@@ -20,7 +20,6 @@
 import contextlib
 import html
 import re
-from datetime import UTC, datetime
 from functools import cached_property
 from typing import Any, ClassVar
 
@@ -30,6 +29,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
@@ -1356,7 +1356,7 @@ class OrgaCharacterForm(CharacterForm):
             # Remove character assignments for runs that haven't started yet
             RegistrationCharacterRel.objects.filter(
                 character=instance,
-                registration__run__start__gte=datetime.now(tz=UTC).date(),
+                registration__run__start__gte=timezone.localdate(),
             ).delete()
         else:
             # Character is active - remove CharacterConfig if it exists

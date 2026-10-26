@@ -23,11 +23,12 @@ from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.middleware.base import is_ajax
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
@@ -38,6 +39,7 @@ from larpmanager.utils.core.exceptions import (
     MainPageError,
     MembershipError,
     NotFoundError,
+    PaymentProofError,
     PendingApprovalError,
     RedirectError,
     ReturnNowError,
@@ -50,6 +52,15 @@ from larpmanager.utils.core.exceptions import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+# Character endpoints answering with JSON, that cannot follow a redirect
+_JSON_URL_NAMES = {
+    "character_list_json",
+    "character_abilities_json",
+    "character_inventory_json",
+    "character_profile_upload",
+    "character_profile_rotate",
+}
 
 
 class ExceptionHandlingMiddleware:
@@ -130,6 +141,7 @@ class ExceptionHandlingMiddleware:
                     [ex.slug],
                 ),
             ),
+            (PaymentProofError, lambda ex: self._handle_payment_proof_error(request, ex)),
             # Content visibility and access errors
             (
                 HiddenError,
@@ -183,6 +195,21 @@ class ExceptionHandlingMiddleware:
         """Add a message to the request and redirect to a named view."""
         getattr(messages, message_level)(request, message_text)
         return redirect(reverse(view_name, args=view_args))
+
+    @staticmethod
+    def _handle_payment_proof_error(request: HttpRequest, exception: PaymentProofError) -> HttpResponse:
+        """Deny JSON requests, otherwise redirect the player to the registration payment."""
+        message_text = _("Complete your payment to finalize your registration and access your character!")
+        url_name = getattr(request.resolver_match, "url_name", "") or ""
+        if is_ajax(request) or url_name in _JSON_URL_NAMES:
+            return JsonResponse({"res": "ko", "error": str(message_text)}, status=403)
+        return ExceptionHandlingMiddleware._redirect_with_message(
+            request,
+            message_text,
+            "accounting_registration",
+            [exception.registration_uuid],
+            message_level="warning",
+        )
 
     @staticmethod
     def _handle_feature_error(request: HttpRequest, exception: FeatureError) -> HttpResponse:

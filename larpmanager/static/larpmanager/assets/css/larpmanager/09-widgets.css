@@ -287,6 +287,10 @@ body.manage.new_v20 #one .inner {
   margin: 0;
 }
 
+#id_confirm_name {
+  margin: 0 auto;
+}
+
 .new_v20 #payment_form {
   width: 100%;
 }

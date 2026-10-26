@@ -62,6 +62,7 @@ from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
+from larpmanager.utils.registrations.characters import check_character_payment_lock
 from larpmanager.utils.services.event import has_access_character
 from larpmanager.utils.services.experience import add_char_addit, get_character_calls
 
@@ -722,6 +723,8 @@ def get_char_check(
                 raise Http404(msg)
             # Non-player users see only public fields, never the full sheet
             return
+        # Player cannot access their own character until the payment proof is uploaded
+        check_character_payment_lock(context)
         if context["char"].get("locked", False):
             # Locked: player sees public fields only (no full sheet)
             return

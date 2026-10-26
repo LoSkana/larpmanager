@@ -267,7 +267,7 @@ def process_membership_status_updates(membership: Membership) -> None:
 
         # Set current date if not already set
         if not membership.date:
-            membership.date = timezone.now().date()
+            membership.date = timezone.localdate()
 
     # Handle EMPTY status: clear card number and date
     if membership.status == MembershipStatus.EMPTY:

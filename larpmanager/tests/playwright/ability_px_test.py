@@ -271,7 +271,7 @@ def rules(page: Any) -> None:
 def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
-    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("link", name="Registrations are open!").click()
     submit_register(page)
 
     # Assign char

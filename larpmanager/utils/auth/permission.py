@@ -56,6 +56,11 @@ def auto_assign_event_permission_number(event_permission: Any) -> None:
         event_permission.number = max_number + 10
 
 
+def is_association_admin(context: dict) -> bool:
+    """Return True if the user holds the main association role (number 1)."""
+    return 1 in context.get("association_role", {})
+
+
 def get_association_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str, int], list[str]]:
     """Get association roles and permissions for the current user.
 
