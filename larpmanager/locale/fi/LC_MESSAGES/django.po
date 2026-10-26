@@ -2822,6 +2822,9 @@ msgstr "Seuraavat istunnot"
 msgid "Not completed"
 msgstr "Ei suoritettu"
 
+msgid "Not signed up"
+msgstr "Ei ilmoittautunut"
+
 msgid "Number events"
 msgstr "Tapahtumien lukumäärä"
 

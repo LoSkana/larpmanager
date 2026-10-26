@@ -1434,7 +1434,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     """
     # Check organizer permissions for registration management
-    context = check_event_context(request, event_slug, "orga_registrations")
+    context = check_event_context(request, event_slug, ["orga_registrations", "orga_characters"])
     member_uuid = request.POST.get("mid")
 
     # Validate member existence
@@ -1443,8 +1443,14 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    # Verify member has an active registration for this event
-    if not get_active_registrations(context["run"].id).filter(member=member).exists():
+    # Verify member has an active registration for this event, or plays one of its characters
+    is_registered = get_active_registrations(context["run"].id).filter(member=member).exists()
+    if (
+        not is_registered
+        and not Character.objects.filter(
+            event_id=get_event_class_parent(context["event"].id, Character, context=context), player=member
+        ).exists()
+    ):
         return JsonResponse({"k": 0})
 
     # Build member information HTML starting with name and profile

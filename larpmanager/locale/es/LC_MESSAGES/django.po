@@ -2822,6 +2822,9 @@ msgstr "Próximas sesiones"
 msgid "Not completed"
 msgstr "No completados"
 
+msgid "Not signed up"
+msgstr "No inscrito"
+
 msgid "Number events"
 msgstr "Número de eventos"
 
