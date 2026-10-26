@@ -46,6 +46,15 @@
                     {% endif %}
                 </p>
             {% endif %}
+            {% if primary_faction_filter %}
+                <div class="faction-chips" id="primary-faction-chips">
+                    {% for f in primary_faction_filter %}
+                        <span class="faction-chip"
+                              data-number="{{ f.number }}"
+                              onclick="toggle_primary_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
             {% if faction_filter %}
                 <div class="faction-chips" id="faction-chips">
                     {% for f in faction_filter %}
@@ -124,6 +133,7 @@
     })();
 
     var preferences = [];
+    var active_primary_factions = [];
     var active_factions = [];
     var dragged_idx = null;
 
@@ -139,6 +149,13 @@
         if (search) {
             var haystack = ('#' + c.number + ' ' + c.name + ' ' + c.title).toLowerCase();
             if (haystack.indexOf(search) < 0) return false;
+        }
+        if (active_primary_factions.length > 0) {
+            var in_primary = false;
+            for (var j = 0; j < active_primary_factions.length; j++) {
+                if (c.factions.indexOf(active_primary_factions[j]) >= 0) in_primary = true;
+            }
+            if (!in_primary) return false;
         }
         if (active_factions.length > 0) {
             for (var i = 0; i < active_factions.length; i++) {
@@ -291,16 +308,24 @@
         check_preferences();
     }
 
-    function toggle_faction_chip(el, uuid) {
-        var idx = active_factions.indexOf(uuid);
+    function toggle_chip(el, number, active_list) {
+        var idx = active_list.indexOf(number);
         if (idx >= 0) {
-            active_factions.splice(idx, 1);
+            active_list.splice(idx, 1);
             el.classList.remove('active');
         } else {
-            active_factions.push(uuid);
+            active_list.push(number);
             el.classList.add('active');
         }
         render_char_list();
+    }
+
+    function toggle_primary_faction_chip(el, number) {
+        toggle_chip(el, number, active_primary_factions);
+    }
+
+    function toggle_faction_chip(el, number) {
+        toggle_chip(el, number, active_factions);
     }
 
     function update_hidden_inputs() {
