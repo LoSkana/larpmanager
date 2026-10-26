@@ -67,41 +67,44 @@
                 <input type="text" id="search" placeholder="{% trans "Insert" %}" />
             </div>
         </div>
-        {% if factions and factions|length > 1 %}
-            <div id="factions" class="c nav hide factions">
-                <div class="user_resize">
-                    {% for fnum in factions_typ.s %}
-                        {% with factions|get:fnum as f %}
-                            {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
-                        {% endwith %}
-                    {% endfor %}
-                    {% if factions_typ.t %}
-                        <br />
-                        <br />
-                        {% for fnum in factions_typ.t %}
+        <div class="search-filters">
+            {% if factions and factions|length > 1 %}
+                <div id="factions" class="c nav hide factions search-filter">
+                    <div class="user_resize">
+                        {% for fnum in factions_typ.s %}
                             {% with factions|get:fnum as f %}
                                 {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
                             {% endwith %}
                         {% endfor %}
-                    {% endif %}
+                        {% if factions_typ.t %}
+                            <br />
+                            <br />
+                            {% for fnum in factions_typ.t %}
+                                {% with factions|get:fnum as f %}
+                                    {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-        {% for idq, options_id in searchable.items %}
-            <div class="c nav hide custom_field_{{ idq }}">
+            {% endif %}
+            {% for idq, options_id in searchable.items %}
+                <div class="c nav hide custom_field_{{ idq }} search-filter">
+                    <div class="user_resize">
+                        {% with questions|get:idq as question %}<span class="search-filter-label">{{ question.name }}:</span>{% endwith %}
+                        {% for ido in options_id %}
+                            {% with options|get:ido as option %}
+                                <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <div id="spec" class="c nav hide spec search-filter">
                 <div class="user_resize">
-                    {% for ido in options_id %}
-                        {% with options|get:ido as option %}
-                            <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
-                        {% endwith %}
-                    {% endfor %}
+                    {% trans "Player:" %}
+                    <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
                 </div>
-            </div>
-        {% endfor %}
-        <div id="spec" class="c nav hide spec">
-            <div class="user_resize">
-                {% trans "Player:" %}
-                <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
             </div>
         </div>
         <div class="hide link_list">

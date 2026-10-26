@@ -946,3 +946,27 @@ form .plot {
   padding: 0;
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Character search filters
+   --------------------------------------------------------------------------- */
+
+.search-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+
+.search-filters .search-filter {
+  flex: 0 1 auto;
+}
+
+.search-filters .search-filter .user_resize {
+  width: auto;
+}
+
+.search-filter-label {
+  font-weight: bold;
+  margin-right: 0.3em;
+}
