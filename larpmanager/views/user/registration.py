@@ -468,6 +468,7 @@ def register(
         # Validate form and save registration if valid
         elif form.is_valid():
             draft_key = draft_element_key(context, "registration", registration, request)
+            context["request"] = request
             saved_registration = save_registration(
                 context,
                 form,

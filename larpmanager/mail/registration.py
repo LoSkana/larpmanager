@@ -18,17 +18,28 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import logging
 import time
-from typing import Any
+from functools import partial
+from typing import TYPE_CHECKING, Any
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import activate, gettext_lazy as _
+from django.db import IntegrityError, transaction
+from django.utils.html import escape
+from django.utils.translation import activate, gettext_lazy as _, override
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import (
+    get_association_config,
+    get_element_configs,
+    get_event_config,
+    reset_element_configs,
+)
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
@@ -38,9 +49,16 @@ from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterConfig
 from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.registrations.characters import get_character_full_options_message
 from larpmanager.utils.registrations.context import get_checkin_qr_path
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+    from larpmanager.models.form import WritingOption
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +179,118 @@ def update_registration_status(instance: Any) -> None:
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_UPDATE,
             )
+
+
+def notify_character_full_options(
+    registration: Registration,
+    character: Character,
+    full_options: list[WritingOption],
+    request: HttpRequest | None = None,
+) -> None:
+    """Notify that a character was not assigned since its limited options have no spots left.
+
+    The player sees an error on screen when a request is available, otherwise receives an
+    email; the organizers are notified (through their digest, if enabled). Player and
+    organizers are notified only once for the same character, run and full options, after
+    the transaction commits; the on-screen error is shown only once per request.
+    """
+    notified_options = ",".join(str(option.id) for option in sorted(full_options, key=lambda option: option.id))
+
+    if request:
+        shown = getattr(request, "_full_options_shown", set())
+        shown_key = (character.id, notified_options)
+        if shown_key not in shown:
+            messages.error(request, get_character_full_options_message(character, full_options))
+            shown.add(shown_key)
+            request._full_options_shown = shown  # noqa: SLF001
+
+    if not request and _mark_full_options_notified(
+        character, _full_options_emailed_key(registration.run_id), notified_options
+    ):
+        transaction.on_commit(partial(_email_player_full_options, registration, character, full_options))
+
+    if not _mark_full_options_notified(character, _full_options_notified_key(registration.run_id), notified_options):
+        return
+
+    transaction.on_commit(partial(_notify_organizers_full_options, registration, character))
+
+
+def _email_player_full_options(
+    registration: Registration, character: Character, full_options: list[WritingOption]
+) -> None:
+    """Email the player that the character was not assigned since its options have no spots left."""
+    with override(registration.member.language):
+        email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
+            "event": registration.run,
+        }
+        email_body = "<p>" + escape(get_character_full_options_message(character, full_options)) + "</p>"
+        email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
+        email_body += "</p>"
+        my_send_mail(email_subject, email_body, registration.member, registration.run)
+
+
+def _notify_organizers_full_options(registration: Registration, character: Character) -> None:
+    """Notify the organizers of the run about a character blocked by options without spots."""
+    for organizer in get_event_organizers(registration.run_id):
+        my_send_digest_email(
+            member=organizer,
+            run=registration.run,
+            instance=character,
+            notification_type=NotificationType.CHARACTER_OPTION_FULL,
+        )
+
+
+def _mark_full_options_notified(character: Character, config_name: str, notified_options: str) -> bool:
+    """Store the full options notified in the character config, returning False if already stored.
+
+    The config row is locked, so concurrent requests store (and notify) the same options only once.
+    """
+    try:
+        with transaction.atomic():
+            config = CharacterConfig.objects.select_for_update().filter(character=character, name=config_name).first()
+            if config and config.value == notified_options:
+                return False
+            if config:
+                config.value = notified_options
+                config.save()
+            else:
+                CharacterConfig.objects.create(character=character, name=config_name, value=notified_options)
+    except IntegrityError:
+        # A concurrent request stored the config first
+        return False
+
+    # Reset the cache again on commit, in case it was filled with the previous configs meanwhile
+    transaction.on_commit(partial(reset_element_configs, character.id, "character"))
+    return True
+
+
+def _full_options_notified_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options notified to organizers for the run."""
+    return f"full_options_notified_{run_id}"
+
+
+def _full_options_emailed_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options emailed to the player for the run."""
+    return f"full_options_emailed_{run_id}"
+
+
+def clear_character_full_options_notified(character_id: int, run_id: int) -> None:
+    """Forget the full options notified for the character in the run, so a new block is notified again."""
+    config_names = [_full_options_notified_key(run_id), _full_options_emailed_key(run_id)]
+    # Check the cached configs first, to avoid a query on every assignment save
+    character_configs = get_element_configs(character_id, "character")
+    if not any(config_name in character_configs for config_name in config_names):
+        return
+
+    deleted_count, _deleted_by_model = CharacterConfig.objects.filter(
+        character_id=character_id,
+        name__in=config_names,
+        deleted=None,
+    ).delete()
+    if deleted_count:
+        reset_element_configs(character_id, "character")
+        # Reset again on commit, in case it was filled with the previous configs meanwhile
+        transaction.on_commit(partial(reset_element_configs, character_id, "character"))
 
 
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:

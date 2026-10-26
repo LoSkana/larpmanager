@@ -431,7 +431,10 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
     max_available = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
-        help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
+        help_text=_(
+            "Optional - Maximum number of characters assigned to participants of each run that can select it "
+            "(0 = unlimited)"
+        ),
     )
 
     requirements = models.ManyToManyField(

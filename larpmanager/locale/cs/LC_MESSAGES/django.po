@@ -2591,6 +2591,9 @@ msgstr "Žádost o:"
 msgid "Requirements"
 msgstr "Požadavky"
 
+msgid "Reset status"
+msgstr "Resetovat stav"
+
 msgid "Rotate right"
 msgstr "Otočit vpravo"
 
@@ -2960,6 +2963,10 @@ msgstr "ID tvého týmu."
 #, python-format
 msgid "for %(event)s"
 msgstr "pro %(event)s"
+
+#, python-format
+msgid "to %(player)s"
+msgstr "hráči %(player)s"
 
 #, python-format
 msgid "%(name)s total"
@@ -4124,6 +4131,9 @@ msgstr "Tvoje registrace"
 
 msgid "already delivered"
 msgstr "již dodané"
+
+msgid "no spots left for"
+msgstr "žádná volná místa pro"
 
 #, python-format
 msgid "%(name)s available"
@@ -5901,6 +5911,9 @@ msgstr "Zpoždění při sestavování profilu"
 msgid "Describe how we can help you"
 msgstr "Popiš, jak ti můžeme pomoci"
 
+msgid "Disable automatic assignment"
+msgstr "Vypnout automatické přiřazení"
+
 msgid "Disable event-level approval"
 msgstr "Zakaž schvalování na úrovni událostí"
 
@@ -6832,6 +6845,10 @@ msgstr "<b>%(number)s</b> členů ke schválení"
 msgid "<b>%(number)s</b> refunds to deliver"
 msgstr "<b>%(number)s</b> náhrady k dodání"
 
+#, python-format
+msgid "Character not assigned for %(event)s"
+msgstr "Postava nepřiřazena pro %(event)s"
+
 msgid "City where you were born (full name)"
 msgstr "Město, kde ses narodil/a (celý název)"
 
@@ -6950,6 +6967,10 @@ msgstr "Počet udělených zkušenostních bodů"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasuj pro nové vedení!"
+
+#, python-format
+msgid "Character not assigned: %(character)s"
+msgstr "Postava nepřiřazena: %(character)s"
 
 msgid "Check the validity of the fiscal code"
 msgstr "Zkontroluj platnost fiskálního kódu"
@@ -8250,6 +8271,9 @@ msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
 msgid "Character not found, or not playing in this event"
 msgstr "Postava nebyla nalezena nebo se této akce neúčastní"
 
+msgid "Characters not assigned for options without spots"
+msgstr "Postavy nepřiřazeny kvůli možnostem bez volných míst"
+
 msgid "Choose the character you will play in this event!"
 msgstr "Vyber si postavu, kterou budeš hrát na této akci!"
 
@@ -8298,11 +8322,18 @@ msgstr "Zvol, které platební metody mohou účastníci používat"
 msgid "Switch between Organization and Events management"
 msgstr "Přepínání mezi správou organizací a událostí"
 
+#, python-format
+msgid "The character %(character)s could not be assigned"
+msgstr "Postavu %(character)s nebylo možné přiřadit"
+
 msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr "Maximální počet použití (0 pro neomezený počet použití)"
 
 msgid "The registration code is not active at the moment"
 msgstr "Registrační kód není v současné době aktivní"
+
+msgid "The spots of its options are now available again."
+msgstr "Místa pro její možnosti jsou nyní znovu k dispozici."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "V tuto chvíli nejsou naplánovány žádné nové relace."
@@ -9369,6 +9400,10 @@ msgstr ""
 "Zatím nejsou žádné události. Vytvoř si svou první událost pomocí tlačítka "
 "výše."
 
+#, python-format
+msgid "No spots left for %(options)s, please choose different options"
+msgstr "Pro %(options)s už nejsou volná místa, vyber si prosím jiné možnosti"
+
 msgid "Optional - Extended description (displayed in small gray text)"
 msgstr "Nepovinné - rozšířený popis (zobrazuje se malým šedým textem)"
 
@@ -10294,6 +10329,12 @@ msgid ""
 msgstr ""
 "Aktivuj a nakonfiguruj pokročilé funkce pro svou organizaci a události"
 
+#, python-format
+msgid ""
+"Character %(character)s cannot be assigned: no spots left for %(options)s"
+msgstr ""
+"Postavu %(character)s nelze přiřadit: žádná volná místa pro %(options)s"
+
 msgid ""
 "Character inventory is not enabled for this event: contact the organizers"
 msgstr "Inventář postavy není povolen pro tuto akci: obrať se na organizátory"
@@ -10851,6 +10892,11 @@ msgstr ""
 "přidej kontejner."
 
 msgid ""
+"Please choose different options for the character, or contact the "
+"organizers."
+msgstr "Vyber prosím pro postavu jiné možnosti, nebo kontaktuj organizátory."
+
+msgid ""
 "Preparing your demo, this takes a few seconds. Please do not close this "
 "page!"
 msgstr ""
@@ -11265,6 +11311,14 @@ msgid ""
 msgstr ""
 "Byla zpracována refundace ve výši %(amount).2f %(elements)s z důvodu "
 "„%(reason)s“."
+
+#, python-format
+msgid ""
+"Character %(character)s assigned, but exceeds the spots available for "
+"%(options)s"
+msgstr ""
+"Postava %(character)s přiřazena, ale překračuje dostupná místa pro "
+"%(options)s"
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -12332,11 +12386,6 @@ msgid ""
 msgstr ""
 "Všimni si, že existující prvky se stejným názvem budou přepsány nahranými "
 "daty."
-
-msgid ""
-"Optional - Maximum number of times it can be selected across all characters "
-"(0 = unlimited)"
-msgstr "Nepovinné - maximální počet výběrů ve všech postavách (0 = neomezeně)"
 
 msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
@@ -13896,6 +13945,13 @@ msgstr ""
 "chce zcela vyhnout."
 
 msgid ""
+"Optional - Maximum number of characters assigned to participants of each run"
+" that can select it (0 = unlimited)"
+msgstr ""
+"Volitelné - Maximální počet postav přiřazených účastníkům každého běhu, "
+"které ji mohou vybrat (0 = neomezeně)"
+
+msgid ""
 "Staff members who are allowed to be able to see the responses of "
 "participants (leave blank to let everyone see)"
 msgstr ""
@@ -14247,6 +14303,13 @@ msgstr ""
 "V případě bankovních převodů navštiv <a href='%(url)s'>stránku pro "
 "platby</a>, kde najdeš podrobné informace (včetně čísla IBAN a referenčního "
 "čísla platby)."
+
+msgid ""
+"If enabled, upon registration participants are not automatically assigned "
+"the character they played in the previous run."
+msgstr ""
+"Pokud je zapnuto, účastníkům se při registraci automaticky nepřiřadí "
+"postava, kterou hráli v předchozím běhu."
 
 msgid ""
 "No surcharges have been configured for this event yet. Use the button above "
@@ -14665,6 +14728,13 @@ msgid ""
 msgstr ""
 "Umožňuje slevu 'přiveď kamaráda'. Účastník může poskytnout svůj jedinečný "
 "kód novému registrovanému, čímž oběma poskytne slevu"
+
+msgid ""
+"If enabled, when an approved character already played in a previous run is "
+"assigned to a new run, its status is set back to revision."
+msgstr ""
+"Pokud je zapnuto, při přiřazení schválené postavy, která už hrála v "
+"předchozím běhu, k novému běhu se její stav vrátí na revizi."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
