@@ -51,11 +51,10 @@ from cryptography.hazmat.primitives.serialization import (
 )
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.http import Http404, HttpRequest
 from django.urls import reverse
 from httpx import URL, AsyncClient, Auth, Client, Headers, Request, Response
 
-from larpmanager.accounting.gateway import CURRENCY_TO_CENTS_MULTIPLIER
+from larpmanager.accounting.gateway import CURRENCY_TO_CENTS_MULTIPLIER, GatewayError
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.core.base import get_context, update_payment_details
@@ -64,6 +63,8 @@ from larpmanager.utils.larpmanager.tasks import notify_admins
 if TYPE_CHECKING:
     from collections.abc import Generator
     from os import PathLike
+
+    from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -284,7 +285,7 @@ def get_satispay_form(request: HttpRequest, context: dict, invoice: PaymentInvoi
         redirect URL, callback URL, and payment ID
 
     Raises:
-        Http404: If Satispay API call fails or returns non-200 status code
+        GatewayError: If Satispay API call fails or returns non-200 status code
 
     """
     # Build redirect and callback URLs for payment flow
@@ -316,20 +317,18 @@ def get_satispay_form(request: HttpRequest, context: dict, invoice: PaymentInvoi
     # Validate API response and handle errors
     expected_success_status_code = 200
     if satispay_response.status_code != expected_success_status_code:
-        notify_admins("satispay ko", str(satispay_response.content))
-        msg = "something went wrong :( "
-        raise Http404(msg)
+        msg = (
+            f"Satispay payment creation failed with status {satispay_response.status_code}: {satispay_response.content}"
+        )
+        raise GatewayError(msg)
 
     # Parse response and update invoice with payment ID
     try:
         response_data = json.loads(satispay_response.content)
         invoice_id = response_data["id"]
     except (json.JSONDecodeError, KeyError) as e:
-        error_msg = f"Failed to parse Satispay response: {e}\nResponse: {satispay_response.content}"
-        logger.exception(error_msg)
-        notify_admins("Satispay JSON parsing error", error_msg)
-        msg = "Invalid response from payment gateway"
-        raise Http404(msg) from e
+        msg = f"Failed to parse Satispay response: {e}\nResponse: {satispay_response.content}"
+        raise GatewayError(msg) from e
 
     with transaction.atomic():
         invoice.cod = invoice_id

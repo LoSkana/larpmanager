@@ -3435,6 +3435,9 @@ msgstr "Bilancio complessivo"
 msgid "Parent campaign"
 msgstr "Campagna principale"
 
+msgid "Pay with PayPal"
+msgstr "Paga con PayPal"
+
 msgid "Payment Methods"
 msgstr "Metodi pagamento"
 
@@ -6050,6 +6053,9 @@ msgstr "La rigenerazione del PDF è iniziata!"
 
 msgid "Payment awaiting verification"
 msgstr "Pagamento in attesa di verifica"
+
+msgid "Payment method not configured"
+msgstr "Metodo di pagamento non configurato"
 
 msgid "Payments to approve reminders"
 msgstr "Promemoria pagamenti da approvare"
@@ -9705,6 +9711,9 @@ msgid "The event sessions have changed, please review and confirm again"
 msgstr ""
 "Le sessioni dell'evento sono cambiate, controllale e conferma di nuovo"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "La sessione di pagamento è scaduta. Avvia di nuovo il pagamento."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "L'elemento di scrittura a cui si applica questa domanda, i valori ammessi "
@@ -10713,6 +10722,11 @@ msgid ""
 "The collection is ready to be delivered, give this link to the recipient:"
 msgstr ""
 "La colletta è pronta per essere consegnata, dai questo link al destinatario:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr ""
+"Questo pagamento è già stato completato, non ti è stato addebitato di nuovo."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12924,6 +12938,13 @@ msgstr ""
 "dimensione standard)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"Il pagamento non è ancora stato confermato: verrà registrato appena PayPal "
+"lo conferma."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14080,6 +14101,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Completale nelle <a href='%(url)s'>impostazioni dei metodi di pagamento</a>,"
+" oppure disattiva il metodo di pagamento."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14436,6 +14465,13 @@ msgid ""
 msgstr ""
 "Verranno copiati solo gli elementi selezionati: gli elementi con lo stesso "
 "nome verranno sovrascritti, tutti gli altri saranno mantenuti."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Questo metodo di pagamento è temporaneamente non disponibile. Scegli un "
+"altro metodo di pagamento, oppure contatta gli organizzatori."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -15192,6 +15228,13 @@ msgstr ""
 "revisione."
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"Il pagamento è stato ricevuto da PayPal ma non è stato possibile registrarlo"
+" automaticamente: gli organizzatori lo verificheranno. Non pagare di nuovo."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -15275,6 +15318,14 @@ msgstr ""
 "Il recupero dei dati eliminati <b>non</b> sarà disponibile. <i>Se non sei "
 "sicuro di quello che stai facendo, contatta gli amministratori di "
 "sistema</i>."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Un partecipante ha provato a pagare con <b>%(method)s</b>, ma il pagamento "
+"non è potuto partire perché mancano queste impostazioni: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

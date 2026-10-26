@@ -459,6 +459,9 @@ SELECT2_I18N_AVAILABLE_LANGUAGES = ['en']
 
 # paypal
 
+# Sandbox PayPal environment, set to False in production
+PAYPAL_TEST = True
+
 PAYPAL_BUY_BUTTON_IMAGE = 'https://www.paypalobjects.com/digitalassets/c/website/marketing/apac/C2/logos-buttons/44_Yellow_CheckOut_Pill_Button.png'
 
 # compressor

@@ -440,6 +440,11 @@ form .plot {
   width: auto;
 }
 
+.paypal-v2-button {
+  display: inline-block;
+  margin-top: 1em;
+}
+
 /*** MOBILE ***/
 
 @media screen and (max-width: 1200px) {

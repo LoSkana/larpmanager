@@ -3435,6 +3435,9 @@ msgstr "Totaalsaldo"
 msgid "Parent campaign"
 msgstr "Bovenliggende campagne"
 
+msgid "Pay with PayPal"
+msgstr "Betalen met PayPal"
+
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
@@ -6050,6 +6053,9 @@ msgstr "PDF-regeneratie is gestart!"
 
 msgid "Payment awaiting verification"
 msgstr "Betaling wacht op verificatie"
+
+msgid "Payment method not configured"
+msgstr "Betaalmethode niet geconfigureerd"
 
 msgid "Payments to approve reminders"
 msgstr "Herinneringen voor goed te keuren betalingen"
@@ -9709,6 +9715,9 @@ msgstr ""
 "De sessies van het evenement zijn gewijzigd, controleer en bevestig ze "
 "opnieuw"
 
+msgid "The payment session has expired. Please start the payment again."
+msgstr "De betaalsessie is verlopen. Start de betaling opnieuw."
+
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
 "Het schrijfelement waarop deze vraag van toepassing is, toegestane waarden "
@@ -10718,6 +10727,10 @@ msgid ""
 msgstr ""
 "De inzameling is klaar om te worden overhandigd, geef deze link aan de "
 "ontvanger:"
+
+msgid ""
+"This payment has already been completed, you have not been charged again."
+msgstr "Deze betaling is al voltooid, er is niets opnieuw afgeschreven."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -12922,6 +12935,13 @@ msgstr ""
 " de standaardgrootte)."
 
 msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"PayPal confirms it."
+msgstr ""
+"De betaling is nog niet bevestigd: ze wordt geregistreerd zodra PayPal haar "
+"bevestigt."
+
+msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
 msgstr ""
@@ -14079,6 +14099,14 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Please complete them in the <a href='%(url)s'>payment methods settings</a>, "
+"or disable the payment method."
+msgstr ""
+"Vul ze in bij de <a href='%(url)s'>instellingen voor betaalmethoden</a>, of "
+"schakel de betaalmethode uit."
+
+#, python-format
+msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
@@ -14436,6 +14464,13 @@ msgid ""
 msgstr ""
 "Alleen de geselecteerde elementen worden gekopieerd: elementen met dezelfde "
 "naam worden overschreven, alle andere blijven behouden."
+
+msgid ""
+"This payment method is temporarily unavailable. Please choose another "
+"payment method, or contact the organizers."
+msgstr ""
+"Deze betaalmethode is tijdelijk niet beschikbaar. Kies een andere "
+"betaalmethode of neem contact op met de organisatoren."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -15198,6 +15233,13 @@ msgstr ""
 "teruggezet naar revisie."
 
 msgid ""
+"The payment was received by PayPal but could not be registered "
+"automatically: the organizers will verify it. Please do not pay again."
+msgstr ""
+"PayPal heeft de betaling ontvangen, maar die kon niet automatisch worden "
+"geregistreerd: de organisatoren controleren het. Betaal niet opnieuw."
+
+msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
 "staff next to the character's name when selecting characters."
 msgstr ""
@@ -15278,6 +15320,14 @@ msgid ""
 msgstr ""
 "Herstel van verwijderde gegevens is <b>niet</b> mogelijk. <i>Weet je niet "
 "zeker wat je doet? Neem dan contact op met de systeembeheerders</i>."
+
+#, python-format
+msgid ""
+"A participant tried to pay with <b>%(method)s</b>, but the payment could not"
+" start because these settings are missing: <b>%(fields)s</b>."
+msgstr ""
+"Een deelnemer probeerde te betalen met <b>%(method)s</b>, maar de betaling "
+"kon niet starten omdat deze instellingen ontbreken: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "

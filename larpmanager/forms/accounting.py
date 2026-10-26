@@ -27,6 +27,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.accounting.gateway import LEGACY_PAYMENT_METHODS
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
@@ -699,9 +700,17 @@ class ExePaymentSettingsForm(BaseModelForm):
             models.Q(nationality__isnull=True) | models.Q(nationality="") | models.Q(nationality=assoc_nationality)
         )
 
-        self.fields["payment_methods"].queryset = PaymentMethod.objects.filter(nationality_filter).order_by("id")
+        # Legacy methods are offered only to associations that still have them enabled
+        enabled_slugs = set(self.instance.payment_methods.values_list("slug", flat=True)) if self.instance.pk else set()
+        available_methods = (
+            PaymentMethod.objects.filter(nationality_filter)
+            .exclude(slug__in=[slug for slug in LEGACY_PAYMENT_METHODS if slug not in enabled_slugs])
+            .order_by("id")
+        )
 
-        self.methods = PaymentMethod.objects.filter(nationality_filter).order_by("id")
+        self.fields["payment_methods"].queryset = available_methods
+
+        self.methods = available_methods
         self.section_descriptions = {}
         for el in self.methods:
             self.section_descriptions[el.name] = el.instructions
