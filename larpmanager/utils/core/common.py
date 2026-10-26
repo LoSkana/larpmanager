@@ -26,7 +26,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -359,8 +359,13 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
 
 
 def ensure_timezone_aware(dt: datetime) -> datetime:
-    """Ensure a datetime object is timezone-aware."""
-    return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
+    """Ensure a datetime object is timezone-aware, treating naive values as UTC."""
+    return dt if timezone.is_aware(dt) else timezone.make_aware(dt, UTC)
+
+
+def local_day_start(day: date) -> datetime:
+    """Return the aware datetime at midnight of the given day in the current timezone."""
+    return timezone.make_aware(datetime.combine(day, time.min))
 
 
 def get_time_diff(start_datetime: date, end_datetime: date) -> int:
@@ -373,11 +378,11 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if not target_date:
         return -1
 
-    # Convert datetime to date if necessary
+    # Convert datetime to local date if necessary
     if isinstance(target_date, datetime):
-        target_date = target_date.date()
+        target_date = timezone.localtime(target_date).date()
 
-    return get_time_diff(target_date, timezone.now().date())
+    return get_time_diff(target_date, timezone.localdate())
 
 
 def generate_number(length: int) -> str:
@@ -719,15 +724,6 @@ def format_email_skipped(recipient: object) -> str:
     return labels.get(recipient.skipped, recipient.skipped)
 
 
-def get_now() -> datetime:
-    """Get current time - if executed in debug/test, without timezone, add it."""
-    now = timezone.now()
-    if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
-        # If timezone.now() returns naive, make it aware
-        now = now.replace(tzinfo=UTC)
-    return now
-
-
 def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
     """Get display name for a choice field value."""
     for choice_key, display_name in choices:
@@ -761,12 +757,12 @@ def get_coming_runs(association_id: int | None, *, future: bool = True, include_
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = timezone.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
+        reference_date = timezone.localdate() - timedelta(days=3)
+        runs = runs.filter(end__gte=reference_date).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = timezone.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
+        reference_date = timezone.localdate() + timedelta(days=3)
+        runs = runs.filter(end__lte=reference_date).order_by("-end")
 
     return runs
 

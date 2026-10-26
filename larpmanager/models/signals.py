@@ -174,7 +174,12 @@ from larpmanager.cache.run import (
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
 from larpmanager.cache.warehouse import on_warehouse_item_assignment_changed, on_warehouse_item_tags_m2m_changed
-from larpmanager.cache.widget import clear_widget_cache_association, clear_widget_cache_for_event, reset_widgets
+from larpmanager.cache.widget import (
+    clear_widget_cache_association,
+    clear_widget_cache_for_event,
+    on_association_pre_save_timezone_reset_widgets,
+    reset_widgets,
+)
 from larpmanager.cache.writing import clear_relationship_tags_cache
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
@@ -680,9 +685,10 @@ def post_save_association_translation(sender: type, instance: object, created: b
 
 @receiver(pre_save, sender=Association)
 def pre_save_association_set_skin_features(sender: type, instance: Association, **kwargs: Any) -> None:
-    """Prepare association skin features and encryption key before saving."""
+    """Prepare association skin features and encryption key, and reset widgets on timezone change."""
     prepare_association_skin_features(instance)
     generate_association_encryption_key(instance)
+    on_association_pre_save_timezone_reset_widgets(instance)
 
 
 @receiver(post_save, sender=Association)

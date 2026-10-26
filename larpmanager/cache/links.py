@@ -84,7 +84,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    cutoff_date = (timezone.now() - timedelta(days=10)).date()
+    cutoff_date = timezone.localdate() - timedelta(days=10)
     member = context["member"]
     association_id = context["association_id"]
     navigation_context = {}

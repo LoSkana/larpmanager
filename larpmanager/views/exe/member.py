@@ -21,7 +21,7 @@
 import csv
 import logging
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import date
 from typing import Any
 
 from django.contrib import messages
@@ -81,6 +81,7 @@ from larpmanager.utils.core.common import (
     get_assoc_member,
     get_help_question_member,
     get_object_uuid,
+    local_day_start,
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
@@ -141,13 +142,13 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     fees = set(
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
-            year=timezone.now().year,
+            year=timezone.localdate().year,
         ).values_list("member_id", flat=True),
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.now().date()).values_list(
+        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.localdate()).values_list(
             "pk",
             "search",
         ),
@@ -758,8 +759,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_enrolment")
 
     # Set current year and calculate year start date
-    context["year"] = timezone.now().year
-    start = datetime(context["year"], 1, 1, tzinfo=UTC)
+    context["year"] = timezone.localdate().year
+    start = local_day_start(date(context["year"], 1, 1))
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
@@ -864,7 +865,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     )
 
     # Generate current date string for filename
-    context["date"] = timezone.now().date().strftime("%Y-%m-%d")
+    context["date"] = timezone.localdate().strftime("%Y-%m-%d")
 
     # Generate the PDF file using the context data
     fp = print_volunteer_registry(context)
@@ -893,7 +894,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
-    context["year"] = timezone.now().year
+    context["year"] = timezone.localdate().year
     association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
@@ -1220,7 +1221,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
             # Define formatting callbacks for each field
             "callbacks": {
                 "body": format_email_body,
-                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "sent": lambda el: timezone.localtime(el.sent).strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
                 "skipped": format_email_skipped,
             },

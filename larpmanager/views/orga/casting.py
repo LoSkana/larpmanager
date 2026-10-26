@@ -584,7 +584,7 @@ def _get_player_info(players: dict, registration: Registration) -> None:
         players[registration.member.uuid]["prior"] = registration.ticket.casting_priority
 
     # Calculate registration days (number of days from registration creation)
-    players[registration.member.uuid]["reg_days"] = -get_time_diff_today(registration.created.date()) + 1
+    players[registration.member.uuid]["reg_days"] = -get_time_diff_today(registration.created) + 1
 
     # Calculate payment days (number of days from full payment, default to 1 if unpaid)
     players[registration.member.uuid]["pay_days"] = (

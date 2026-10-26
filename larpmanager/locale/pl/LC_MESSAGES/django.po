@@ -1436,6 +1436,9 @@ msgstr "Dostarczone"
 msgid "Template"
 msgstr "Szablon"
 
+msgid "Timezone"
+msgstr "Strefa czasowa"
+
 msgid "Transfer"
 msgstr "Transfer"
 
@@ -8403,6 +8406,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Ten członek nie zapisał się jeszcze na żadne wydarzenia."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Strefa czasowa używana do wprowadzania i wyświetlania dat i godzin"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Całkowite opłaty za uczestnictwo obniżone dzięki zniżkom"

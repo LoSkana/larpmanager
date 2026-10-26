@@ -1436,6 +1436,9 @@ msgstr "Toimitettu"
 msgid "Template"
 msgstr "Malli"
 
+msgid "Timezone"
+msgstr "Aikavyöhyke"
+
 msgid "Transfer"
 msgstr "Siirto"
 
@@ -8400,6 +8403,11 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Tämä jäsen ei ole vielä ilmoittautunut mihinkään tapahtumiin."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Aikavyöhyke, jota käytetään päivämäärien ja kellonaikojen syöttämiseen ja "
+"näyttämiseen"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Osallistumismaksujen kokonaismäärä alennettu alennusten avulla"

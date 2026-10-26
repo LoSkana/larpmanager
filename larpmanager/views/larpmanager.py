@@ -99,6 +99,7 @@ from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.chat import get_chat_answer
 from larpmanager.utils.larpmanager.tasks import (
@@ -640,7 +641,7 @@ def _recent_session_demo(request: HttpRequest) -> tuple[str, str] | None:
         return None
 
     created = parse_datetime(recent.get("created", "") or "")
-    if not created or (timezone.now() - created).total_seconds() > DEMO_SESSION_REUSE_SECONDS:
+    if not created or (timezone.now() - ensure_timezone_aware(created)).total_seconds() > DEMO_SESSION_REUSE_SECONDS:
         return None
 
     if not Association.objects.filter(slug=recent["slug"]).exists():
@@ -1367,7 +1368,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     context["totals"] = {}
 
     # Calculate yearly payment totals from current year to oldest
-    for year in list(range(timezone.now().year, que["oldest_date"].year - 1, -1)):
+    for year in list(range(timezone.localdate().year, que["oldest_date"].year - 1, -1)):
         start_of_year = date(year, 1, 1)
         end_of_year = date(year, 12, 31)
 

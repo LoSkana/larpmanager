@@ -25,6 +25,7 @@ from typing import Any
 
 from django.conf import settings as conf_settings
 from django.db import transaction
+from django.utils import timezone
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import AccountingItemDonation, AccountingItemMembership, AccountingItemPayment
@@ -41,7 +42,7 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
     Returns a tuple of (absolute filesystem path, user-facing attachment filename).
     The on-disk filename uses the internal cod; the attachment name uses a human-readable format.
     """
-    year = accounting_item.created.year
+    year = timezone.localtime(accounting_item.created).year
     receipt_number_key = f"receipt_last_number_{year}"
 
     with transaction.atomic():

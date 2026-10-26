@@ -21,6 +21,7 @@
 import io
 import xml.etree.ElementTree as ET
 from typing import IO, Any
+from zoneinfo import ZoneInfo
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -29,6 +30,9 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.models.accounting import ElectronicInvoice, PaymentInvoice
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.tasks import background_auto
+
+# Italian electronic invoices are always dated in Italian local time
+ITALY_TIMEZONE = ZoneInfo("Europe/Rome")
 
 
 @background_auto(queue="e-invoice")
@@ -52,7 +56,7 @@ def process_payment(invoice_id: int) -> None:
         # Create new electronic invoice if none exists
         electronic_invoice = ElectronicInvoice(
             inv=payment_invoice,
-            year=timezone.now().year,
+            year=timezone.localtime(timezone.now(), ITALY_TIMEZONE).year,
             association=payment_invoice.association,
         )
         electronic_invoice.save()
@@ -269,7 +273,9 @@ def _einvoice_body(einvoice: Any, invoice: Any, xml_root: Any) -> None:
     # Set document metadata: type, currency, date, and invoice number
     ET.SubElement(general_document_data, "TipoDocumento").text = "TD01"
     ET.SubElement(general_document_data, "Divisa").text = "EUR"
-    ET.SubElement(general_document_data, "Data").text = einvoice.created.strftime("%Y-%m-%d")
+    ET.SubElement(general_document_data, "Data").text = timezone.localtime(einvoice.created, ITALY_TIMEZONE).strftime(
+        "%Y-%m-%d"
+    )
     ET.SubElement(general_document_data, "Numero").text = "F" + str(einvoice.number).zfill(8)
 
     # Create goods/services section and line item details

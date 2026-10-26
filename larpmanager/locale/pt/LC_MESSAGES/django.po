@@ -1436,6 +1436,9 @@ msgstr "Fornecido"
 msgid "Template"
 msgstr "Modelo"
 
+msgid "Timezone"
+msgstr "Fuso horário"
+
 msgid "Transfer"
 msgstr "Transferir"
 
@@ -8403,6 +8406,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Este membro ainda não se inscreveu em nenhum evento."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Fuso horário usado para inserir e exibir datas e horários"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Total de taxas de participação reduzidas através de descontos"

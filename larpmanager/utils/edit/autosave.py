@@ -27,6 +27,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 
 from larpmanager.cache.config import get_event_config
+from larpmanager.utils.core.common import ensure_timezone_aware
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, QueryDict
@@ -162,7 +163,7 @@ def pop_draft(member: Member, element_key: str, instance_updated: datetime | Non
     cache.delete(draft_key)
 
     if instance_updated is not None:
-        saved_at = datetime.fromisoformat(draft["saved_at"])
+        saved_at = ensure_timezone_aware(datetime.fromisoformat(draft["saved_at"]))
         if saved_at <= instance_updated:
             return None
 

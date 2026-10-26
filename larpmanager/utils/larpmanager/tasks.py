@@ -60,6 +60,9 @@ logger = logging.getLogger(__name__)
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
+# Kwarg carrying the timezone active at scheduling time into background tasks
+TIMEZONE_KWARG = "active_timezone"
+
 
 def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **background_kwargs: Any) -> Any:
     """Conditionally run functions as background tasks.
@@ -88,8 +91,15 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
             or schedules it as a background task based on configuration.
 
         """
+
+        @wraps(original_function)
+        def run_in_timezone(*args: Any, active_timezone: str | None = None, **kwargs: Any) -> Any:
+            """Run the function under the timezone that was active when the task was scheduled."""
+            with timezone.override(active_timezone):
+                return original_function(*args, **kwargs)
+
         # Create background task from the original function
-        background_task = background(schedule=schedule, **background_kwargs)(original_function)
+        background_task = background(schedule=schedule, **background_kwargs)(run_in_timezone)
 
         @wraps(original_function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -100,6 +110,7 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
+            kwargs[TIMEZONE_KWARG] = timezone.get_current_timezone_name()
             # Skip scheduling if an identical pending task already exists
             if skip_duplicates:
                 from background_task.models import Task  # noqa: PLC0415

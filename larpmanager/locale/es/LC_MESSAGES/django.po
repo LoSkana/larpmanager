@@ -1436,6 +1436,9 @@ msgstr "Suministrado"
 msgid "Template"
 msgstr "Plantilla"
 
+msgid "Timezone"
+msgstr "Zona horaria"
+
 msgid "Transfer"
 msgstr "Transferencia"
 
@@ -8411,6 +8414,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Este miembro aún no se ha apuntado a ningún evento."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Zona horaria que se usa para introducir y mostrar fechas y horas"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"

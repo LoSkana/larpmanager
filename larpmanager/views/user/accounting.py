@@ -573,7 +573,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = timezone.now().year
+    year = timezone.localdate().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -1368,6 +1368,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in get_event_runs(e.id):
-            if future and r.end < timezone.now().date():
+            if future and r.end < timezone.localdate():
                 continue
             ls[r.id] = r

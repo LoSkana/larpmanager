@@ -1436,6 +1436,9 @@ msgstr "Medföljer"
 msgid "Template"
 msgstr "Mall"
 
+msgid "Timezone"
+msgstr "Tidszon"
+
 msgid "Transfer"
 msgstr "Överföring"
 
@@ -8402,6 +8405,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Den här medlemmen har ännu inte anmält sig till några evenemang."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tidszon som används för att ange och visa datum och tider"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
