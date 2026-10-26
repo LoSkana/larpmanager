@@ -59,12 +59,12 @@ def get_association_basic_cache(association_id: int, *, context: dict | None = N
 
     cache_key = association_basic_cache_key(association_id)
     data = cache.get(cache_key)
-    if data is not None and "domain" not in data:
+    if data is not None and "timezone" not in data:
         data = None
     if data is None:
         association = (
             Association.all_objects.select_related("skin")
-            .only("payment_currency", "slug", "name", "skin__domain")
+            .only("payment_currency", "slug", "name", "timezone", "skin__domain")
             .get(id=association_id)
         )
         if not association.payment_currency:
@@ -74,6 +74,7 @@ def get_association_basic_cache(association_id: int, *, context: dict | None = N
             "slug": association.slug,
             "name": association.name,
             "domain": association.skin.domain,
+            "timezone": association.timezone,
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 

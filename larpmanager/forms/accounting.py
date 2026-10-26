@@ -251,7 +251,7 @@ class ExeOutflowForm(BaseModelForm):
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = timezone.now().date().isoformat()
+            self.initial["payment_date"] = timezone.localdate().isoformat()
             # ~ else:
             # ~ self.initial['payment_date'] = self.instance.payment_date.isoformat()
 
@@ -295,7 +295,7 @@ class ExeInflowForm(BaseModelForm):
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = timezone.now().date().isoformat()
+            self.initial["payment_date"] = timezone.localdate().isoformat()
 
         # Invoice field is always required
         self.fields["invoice"].required = True

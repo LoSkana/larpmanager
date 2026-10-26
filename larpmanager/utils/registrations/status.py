@@ -70,7 +70,7 @@ def _status_membership_fee(
     if not fee:
         return False
 
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
     # Check if event is in current year and if membership fee has been paid
     if not run.start or run.start.year != current_year:
         return False
@@ -445,7 +445,7 @@ def _set_membership_context(
 
     membership_fee_separated = get_association_config(association_id, "membership_fee_separated")
     if membership_fee_separated:
-        if timezone.now().year != event_year:
+        if timezone.localdate().year != event_year:
             context["membership_fee"] = "future"
         else:
             context["membership_fee"] = "todo"
@@ -563,8 +563,8 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         if run.registration_open and run.registration_open > current_datetime:
             run_status["open"] = False
             opening_text = _("Registrations will open on %(date)s at %(time)s") % {
-                "date": formats.date_format(run.registration_open, "j E Y"),
-                "time": run.registration_open.strftime("%H:%M"),
+                "date": formats.date_format(timezone.localtime(run.registration_open), "j E Y"),
+                "time": timezone.localtime(run.registration_open).strftime("%H:%M"),
             }
             run_status["text"] = run_status.get("text") or opening_text
             run_status["text_long"] = run_status.get("text_long") or opening_text
@@ -617,8 +617,8 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         run_status["url"] = register_url
         if run.registration_status == RegistrationStatus.CLOSING and run.registration_open:
             closing_details = _("Registrations close on %(date)s at %(time)s") % {
-                "date": formats.date_format(run.registration_open, "j E Y"),
-                "time": run.registration_open.strftime("%H:%M"),
+                "date": formats.date_format(timezone.localtime(run.registration_open), "j E Y"),
+                "time": timezone.localtime(run.registration_open).strftime("%H:%M"),
             }
             if run_status.get("details"):
                 run_status["details"] += " - " + closing_details

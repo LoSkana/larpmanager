@@ -35,6 +35,7 @@ from larpmanager.utils.registrations.characters import (
     get_character_play_max,
     get_player_characters_ids,
     get_player_pending_characters,
+    is_character_access_locked,
 )
 
 if TYPE_CHECKING:
@@ -63,6 +64,17 @@ def registration_status_characters(
         context = {}
 
     character_rels_dict = context.get("character_rels_dict")
+
+    # Hide every character link until the registration payment is completed
+    if is_character_access_locked(registration, features, context):
+        run_status["character_locked"] = {
+            "url": reverse("accounting_registration", args=[registration.uuid]),
+            "label": _("Complete your payment"),
+            "label_long": _(
+                "Your registration is not completed yet: complete your payment to create or choose your character"
+            ),
+        }
+        return
 
     # Get character relationships either from provided dict or database query
     if character_rels_dict is not None:
@@ -265,8 +277,10 @@ def _status_approval(
         run_status["character_create"] = {
             "url": reverse("character_create", args=[run.get_slug()]),
             "label": _("Create another character"),
+            "label_long": _("You can create more characters for this event!"),
             "tooltip": _("Create another character!"),
             "icon": "fa-solid fa-wand-magic-sparkles",
+            "options_availability": get_character_options_availability(run),
         }
     # Show character creation action if user can create more characters
     elif not reached_maximum:

@@ -1436,6 +1436,9 @@ msgstr "Παρεχόμενο"
 msgid "Template"
 msgstr "Πρότυπο"
 
+msgid "Timezone"
+msgstr "Ζώνη ώρας"
+
 msgid "Transfer"
 msgstr "Μεταφορά"
 
@@ -2819,6 +2822,9 @@ msgstr "Επόμενες συνεδρίες"
 msgid "Not completed"
 msgstr "Δεν ολοκληρώθηκαν"
 
+msgid "Not signed up"
+msgstr "Χωρίς εγγραφή"
+
 msgid "Number events"
 msgstr "Αριθμός εκδηλώσεων"
 
@@ -3706,6 +3712,9 @@ msgstr "Προτεραιότητα πληρωμής"
 
 msgid "Payment reminder"
 msgstr "Υπενθύμιση πληρωμής"
+
+msgid "Payment required"
+msgstr "Απαιτείται πληρωμή"
 
 msgid "Pending approval"
 msgstr "Εκκρεμεί έγκριση"
@@ -4803,6 +4812,9 @@ msgstr "Παραδομένες συλλογές"
 msgid "Complete sheet (Test)"
 msgstr "Πλήρες φύλλο (Δοκιμή)"
 
+msgid "Complete your payment"
+msgstr "Ολοκλήρωσε την πληρωμή σου"
+
 msgid "Complete your profile"
 msgstr "Ολοκλήρωσε το προφίλ σου"
 
@@ -5002,9 +5014,6 @@ msgstr "Προσαρμοσμένος διακομιστής email"
 
 msgid "Disable free abilities"
 msgstr "Απενεργοποίηση δωρεάν ικανοτήτων"
-
-msgid "Event deletion request"
-msgstr "Αίτημα διαγραφής εκδήλωσης"
 
 msgid "Expenses collaborators"
 msgstr "Έξοδα συνεργατών"
@@ -6200,6 +6209,9 @@ msgstr "Τα υπόλοιπα πεδία είναι προαιρετικά."
 msgid "The total registration fee is:"
 msgstr "Το συνολικό κόστος εγγραφής είναι:"
 
+msgid "To confirm, type the full name"
+msgstr "Για επιβεβαίωση, πληκτρολόγησε το πλήρες όνομα"
+
 msgid "Type of accommodation included"
 msgstr "Τύπος διαμονής που περιλαμβάνεται"
 
@@ -6298,6 +6310,9 @@ msgstr "Προσαύξηση που εφαρμόζεται στο εισιτήρ
 
 msgid "The date when this event begins"
 msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσης"
+
+msgid "The name entered does not match"
+msgstr "Το όνομα που έγραψες δεν ταιριάζει"
 
 msgid "Total of recorded money inflows"
 msgstr "Συνολικό ποσό καταγεγραμμένων χρηματικών εισροών"
@@ -7776,6 +7791,9 @@ msgstr "Διαχειρίσου τις κύριες ρυθμίσεις του ο�
 msgid "No participants have been issued tokens yet."
 msgstr "Δεν έχουν εκδοθεί ακόμη token σε συμμετέχοντες."
 
+msgid "Permanently delete this session of the event"
+msgstr "Διάγραψε οριστικά αυτή τη συνεδρία της εκδήλωσης"
+
 msgid "Please verify the following payment details:"
 msgstr "Επαλήθευσε τα παρακάτω στοιχεία πληρωμής:"
 
@@ -8017,6 +8035,9 @@ msgstr "Δες τη λίστα των εκδηλώσεων στις οποίες
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Καλωσήρθες στο dashboard του οργανισμού σου!"
+
+msgid "You can create more characters for this event!"
+msgstr "Μπορείς να δημιουργήσεις κι άλλους χαρακτήρες για αυτή την εκδήλωση!"
 
 msgid "You can now add warehouse containers and items"
 msgstr "Τώρα μπορείς να προσθέσεις δοχεία και αντικείμενα αποθήκης"
@@ -8393,6 +8414,9 @@ msgid "Payment for this event is complete and up to date!"
 msgstr ""
 "Η πληρωμή για αυτή την εκδήλωση έχει ολοκληρωθεί και είναι τακτοποιημένη!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Διάγραψε οριστικά αυτή την εκδήλωση και όλες τις συνεδρίες της"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Δεύτερος χαρακτήρας στη σχέση (προορισμός)"
 
@@ -8415,6 +8439,11 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Αυτό το μέλος δεν έχει εγγραφεί ακόμη σε κανένα event."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr ""
+"Ζώνη ώρας που χρησιμοποιείται για την εισαγωγή και την εμφάνιση ημερομηνιών "
+"και ωρών"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Συνολικό ποσό τελών συμμετοχής που μειώθηκε μέσω εκπτώσεων"
@@ -8719,6 +8748,9 @@ msgstr ""
 "Αυτή η σελίδα σού επιτρέπει να προσθέσεις ή να επεξεργαστείς έναν τύπο Pool "
 "απογραφής."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Προσοχή: αυτή η ενέργεια είναι επικίνδυνη και δεν μπορεί να αναιρεθεί"
+
 msgid "Whether this content is currently available for access"
 msgstr "Αν αυτό το περιεχόμενο είναι διαθέσιμο για πρόσβαση αυτή τη στιγμή"
 
@@ -8742,6 +8774,10 @@ msgstr "Περιεχόμενο της αίτησης μέλους συμπληρ
 msgid "Create at least one ticket type for event registrations"
 msgstr ""
 "Δημιούργησε τουλάχιστον έναν τύπο εισιτηρίου για τις εγγραφές στο event"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+"Η διαγραφή ξεκίνησε, μπορεί να χρειαστούν μερικά λεπτά για να ολοκληρωθεί"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Θέλεις να επιτρέπεις στους χρήστες να κάνουν εθελοντικές δωρεές;"
@@ -9702,6 +9738,10 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Έλεγξε όλες τις ακυρωμένες εγγραφές και παρακολούθησε την κατάσταση "
 "επιστροφής τους"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr ""
+"Οι συνεδρίες της εκδήλωσης έχουν αλλάξει, έλεγξέ τες και επιβεβαίωσε ξανά"
 
 msgid "The payment session has expired. Please start the payment again."
 msgstr "Η συνεδρία πληρωμής έληξε. Ξεκίνα ξανά την πληρωμή."
@@ -11340,6 +11380,13 @@ msgstr ""
 "φαίνονται σωστές."
 
 msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Ολοκλήρωσε την πληρωμή σου για να οριστικοποιήσεις την εγγραφή σου και να "
+"αποκτήσεις πρόσβαση στον χαρακτήρα σου!"
+
+msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
 msgstr ""
@@ -12934,8 +12981,8 @@ msgid ""
 "The payment has not been confirmed yet: it will be registered as soon as "
 "PayPal confirms it."
 msgstr ""
-"Η πληρωμή δεν έχει επιβεβαιωθεί ακόμα: θα καταχωριστεί μόλις την "
-"επιβεβαιώσει το PayPal."
+"Η πληρωμή δεν έχει επιβεβαιωθεί ακόμα: θα καταχωρηθεί μόλις την επιβεβαιώσει"
+" το PayPal."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -13379,6 +13426,13 @@ msgstr ""
 "Έχεις ήδη πληρώσει τη συνδρομή σου για το τρέχον έτος, οπότε καλύπτεσαι ήδη "
 "για αυτή την εκδήλωση!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Η εγγραφή σου δεν έχει ολοκληρωθεί ακόμα: ολοκλήρωσε την πληρωμή σου για να "
+"δημιουργήσεις ή να επιλέξεις τον χαρακτήρα σου"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13551,6 +13605,13 @@ msgid ""
 msgstr ""
 "Το μέλος πρέπει να έχει ήδη επιβεβαιώσει τη συγκατάθεσή του για την "
 "κοινοποίηση προσωπικών δεδομένων στον οργανισμό σου."
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Αυτή η συνεδρία και όλα τα δεδομένα της (εγγραφές, λογιστικά κ.λπ.) <b>θα "
+"διαγραφούν οριστικά</b>."
 
 msgid ""
 "Track candidate vote counts and view the list of members who have already "
@@ -14690,6 +14751,13 @@ msgstr ""
 "αν ο συμμετέχων έχει ανατεθεί σε συγκεκριμένες παρατάξεις."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Η εκδήλωση και όλα τα δεδομένα της (εγγραφές, χαρακτήρες, κείμενα, λογιστικά"
+" κ.λπ.) <b>θα διαγραφούν οριστικά</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -15200,8 +15268,8 @@ msgid ""
 "The payment was received by PayPal but could not be registered "
 "automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
-"Η πληρωμή παραλήφθηκε από το PayPal αλλά δεν ήταν δυνατό να καταχωρηθεί "
-"αυτόματα: οι διοργανωτές θα την ελέγξουν. Μην πληρώσεις ξανά."
+"Το PayPal έλαβε την πληρωμή, αλλά δεν ήταν δυνατό να καταχωρηθεί αυτόματα: "
+"οι διοργανωτές θα την ελέγξουν. Μην πληρώσεις ξανά."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
@@ -15279,6 +15347,14 @@ msgstr ""
 "Αυτή η συντεχνία τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν "
 "έχουν αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά "
 "ανανέωσε τη σελίδα."
+
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Η ανάκτηση των διαγραμμένων δεδομένων <b>δεν</b> θα είναι δυνατή. <i>Αν δεν "
+"είσαι σίγουρος για το τι κάνεις, επικοινώνησε με τους διαχειριστές του "
+"συστήματος</i>."
 
 #, python-format
 msgid ""
@@ -15374,14 +15450,6 @@ msgid ""
 msgstr ""
 "Κανονικά εμφανίζονται όλα τα πεδία χαρακτήρα (δημόσια ή ιδιωτικά)· με αυτή "
 "τη διαμόρφωση μπορείς να επιλέξεις ποια θα εμφανίζονται κάθε στιγμή."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Το αίτημά σου καταγράφηκε· λόγω της ευαισθησίας της ενέργειας που ζητήθηκε, "
-"η ομάδα μας θα το εξετάσει χειροκίνητα· θα σε ενημερώσουμε το συντομότερο "
-"δυνατό"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "
@@ -15543,6 +15611,14 @@ msgstr ""
 "Δεν υπάρχει έγκυρη ανάθεση με τους τρέχοντες περιορισμούς: έλεγξε τους "
 "συμμετέχοντες που περιλαμβάνονται και τους διαθέσιμους χαρακτήρες, μετά "
 "τρέξε ξανά τον αλγόριθμο"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Αν είναι ενεργό, οι παίκτες μπορούν να δημιουργήσουν, να επιλέξουν ή να δουν"
+" τους χαρακτήρες τους μόνο αφού ανεβάσουν αποδεικτικό πληρωμής (ή κάνουν "
+"πληρωμή) για την εγγραφή τους."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

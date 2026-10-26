@@ -1436,6 +1436,9 @@ msgstr "Dodáno"
 msgid "Template"
 msgstr "Šablona"
 
+msgid "Timezone"
+msgstr "Časové pásmo"
+
 msgid "Transfer"
 msgstr "Přenos"
 
@@ -2819,6 +2822,9 @@ msgstr "Další zasedání"
 msgid "Not completed"
 msgstr "Není dokončeno"
 
+msgid "Not signed up"
+msgstr "Bez přihlášky"
+
 msgid "Number events"
 msgstr "Počet událostí"
 
@@ -3706,6 +3712,9 @@ msgstr "Priorita platby"
 
 msgid "Payment reminder"
 msgstr "Upomínka k platbě"
+
+msgid "Payment required"
+msgstr "Vyžadována platba"
 
 msgid "Pending approval"
 msgstr "Čeká se na schválení"
@@ -4803,6 +4812,9 @@ msgstr "Dodané sbírky"
 msgid "Complete sheet (Test)"
 msgstr "Kompletní list (Test)"
 
+msgid "Complete your payment"
+msgstr "Dokonči platbu"
+
 msgid "Complete your profile"
 msgstr "Doplň svůj profil"
 
@@ -5002,9 +5014,6 @@ msgstr "Přizpůsobený poštovní server"
 
 msgid "Disable free abilities"
 msgstr "Vypnout bezplatné schopnosti"
-
-msgid "Event deletion request"
-msgstr "Žádost o odstranění události"
 
 msgid "Expenses collaborators"
 msgstr "Výdaje spolupracovníků"
@@ -6200,6 +6209,9 @@ msgstr "Ostatní pole jsou nepovinná."
 msgid "The total registration fee is:"
 msgstr "Celkový registrační poplatek je:"
 
+msgid "To confirm, type the full name"
+msgstr "Pro potvrzení napiš celý název"
+
 msgid "Type of accommodation included"
 msgstr "Typ ubytování v ceně"
 
@@ -6298,6 +6310,9 @@ msgstr "Příplatek k lístku"
 
 msgid "The date when this event begins"
 msgstr "Datum zahájení této události"
+
+msgid "The name entered does not match"
+msgstr "Zadaný název se neshoduje"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
@@ -7775,6 +7790,9 @@ msgstr "Spravuj hlavní nastavení organizace"
 msgid "No participants have been issued tokens yet."
 msgstr "Žádnému z účastníků zatím nebyly vydány žetony."
 
+msgid "Permanently delete this session of the event"
+msgstr "Trvale smazat tento termín události"
+
 msgid "Please verify the following payment details:"
 msgstr "Prosím, zkontroluj následující platební údaje:"
 
@@ -8011,6 +8029,9 @@ msgstr "Zobraz seznam akcí, na které ses přihlásil/a"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Vítej na přístrojovém panelu své organizace!"
+
+msgid "You can create more characters for this event!"
+msgstr "Pro tuto událost můžeš vytvořit další postavy!"
 
 msgid "You can now add warehouse containers and items"
 msgstr "Nyní můžeš přidávat skladové kontejnery a položky"
@@ -8372,6 +8393,9 @@ msgstr "Zaplať %(amount)s%(currency)s do %(counter)s dnů"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Platba za tuto akci je uhrazena a v pořádku!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Trvale smazat tuto událost a všechny její termíny"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"
 
@@ -8392,6 +8416,9 @@ msgstr "Tato funkce je k dispozici pro vstupenky mimo čekací listinu!"
 
 msgid "This member has not registered for any events yet."
 msgstr "Tento člen se zatím nepřihlásil na žádnou akci."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Časové pásmo, ve kterém zadáváš a zobrazuješ data a časy"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
@@ -8674,6 +8701,9 @@ msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Tato stránka ti umožňuje přidat nebo upravit typ inventárního poolu."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varování: tato akce je nebezpečná a nelze ji vrátit zpět"
+
 msgid "Whether this content is currently available for access"
 msgstr "Zda je tento obsah aktuálně k dispozici pro přístup"
 
@@ -8695,6 +8725,9 @@ msgstr "Obsah žádosti o členství vyplněný údaji uživatele"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Vytvoř alespoň jeden typ vstupenky pro registrace na událost"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Mazání bylo zahájeno, dokončení může trvat několik minut"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Chceš uživatelům umožnit dobrovolné dary?"
@@ -9508,8 +9541,11 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Zkontroluj všechny zrušené registrace a sleduj stav jejich vrácení peněz"
 
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Běhy akce se změnily, zkontroluj je prosím a potvrď znovu"
+
 msgid "The payment session has expired. Please start the payment again."
-msgstr "Platební relace vypršela. Spusť prosím platbu znovu."
+msgstr "Platební relace vypršela. Zahaj prosím platbu znovu."
 
 msgid "The writing element this question applies to, allowed values are"
 msgstr ""
@@ -10352,7 +10388,7 @@ msgstr "Sbírka je připravena k doručení, předej příjemci tento odkaz:"
 
 msgid ""
 "This payment has already been completed, you have not been charged again."
-msgstr "Tato platba již byla dokončena, znovu ti nebylo nic účtováno."
+msgstr "Tato platba už byla dokončena, nic ti nebylo účtováno znovu."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -10900,6 +10936,13 @@ msgid ""
 msgstr ""
 "Odpověz na následující otázky. Vyber *všechny* odpovědi, které se ti zdají "
 "správné."
+
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Dokonči platbu, abys dokončil svou registraci a získal přístup ke své "
+"postavě!"
 
 msgid ""
 "Define reusable ability templates that can be assigned to individual "
@@ -12420,7 +12463,7 @@ msgid ""
 "The payment has not been confirmed yet: it will be registered as soon as "
 "PayPal confirms it."
 msgstr ""
-"Platba zatím nebyla potvrzena: zaznamenáme ji, jakmile ji PayPal potvrdí."
+"Platba zatím nebyla potvrzena: zaznamená se, jakmile ji PayPal potvrdí."
 
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
@@ -12859,6 +12902,13 @@ msgstr ""
 "Již jsi zaplatil/a členský poplatek na aktuální rok, takže máš pro tuto akci"
 " vše pokryto!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Tvoje registrace ještě není dokončená: dokonči platbu, abys mohl vytvořit "
+"nebo vybrat svou postavu"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13029,6 +13079,13 @@ msgid ""
 "with your organization."
 msgstr ""
 "Člen už musel potvrdit souhlas se sdílením osobních údajů s tvou organizací."
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Tento běh a všechna jeho data (registrace, účetnictví atd.) <b>budou trvale "
+"smazána</b>."
 
 msgid ""
 "Track candidate vote counts and view the list of members who have already "
@@ -13919,7 +13976,7 @@ msgid ""
 "This payment method is temporarily unavailable. Please choose another "
 "payment method, or contact the organizers."
 msgstr ""
-"Tahle platební metoda je dočasně nedostupná. Vyber si prosím jinou platební "
+"Tato platební metoda je dočasně nedostupná. Vyber si prosím jinou platební "
 "metodu, nebo kontaktuj organizátory."
 
 msgid ""
@@ -14152,6 +14209,13 @@ msgid ""
 msgstr ""
 "Pokud je povoleno, umožňuje zobrazit otázku registračního formuláře jen "
 "tehdy, když je účastník přiřazen k určitým frakcím."
+
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Akce a všechna její data (registrace, postavy, texty, účetnictví atd.) "
+"<b>budou trvale smazána</b>."
 
 msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
@@ -14640,7 +14704,7 @@ msgid ""
 "The payment was received by PayPal but could not be registered "
 "automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
-"Platbu PayPal přijal, ale nepodařilo se ji automaticky zaznamenat: "
+"PayPal platbu přijal, ale nepodařilo se ji automaticky zaznamenat: "
 "organizátoři ji ověří. Prosím, neplať znovu."
 
 msgid ""
@@ -14714,6 +14778,13 @@ msgid ""
 msgstr ""
 "Tento spolek byl změněn v jiném okně: tvoje změny zde nebyly uloženy. "
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
+
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Obnovení smazaných dat <b>nebude</b> možné. <i>Pokud si nejsi jistý, co "
+"děláš, kontaktuj prosím správce systému</i>."
 
 #, python-format
 msgid ""
@@ -14800,13 +14871,6 @@ msgid ""
 msgstr ""
 "Normálně se zobrazují všechna pole postavy (veřejná i soukromá); s touto "
 "konfigurací můžeš vybrat, která se mají kdy zobrazit."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Tvůj požadavek byl zaevidován; vzhledem k citlivosti požadovaného úkolu jej "
-"náš tým posoudí ručně; dáme ti vědět co nejdříve."
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "
@@ -14957,6 +15021,13 @@ msgid ""
 msgstr ""
 "Žádné platné přiřazení neexistuje s aktuálními omezeními: zkontroluj "
 "zahrnuté účastníky a dostupné postavy, pak spusť algoritmus znovu"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Pokud je zapnuto, hráči můžou vytvořit, vybrat nebo zobrazit své postavy až "
+"po nahrání dokladu o platbě (nebo provedení platby) za svou registraci."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

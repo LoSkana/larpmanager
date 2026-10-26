@@ -1056,6 +1056,20 @@ class OrgaConfigForm(ConfigForm):
             character_approval_help_text,
         )
 
+        # Payment proof requirement configuration, only relevant if the payment feature is active
+        if "payment" in self.params["features"]:
+            payment_required_label = _("Payment required")
+            payment_required_help_text = _(
+                "If enabled, players can create, choose or access their characters only after uploading a "
+                "payment proof (or making a payment) for their registration.",
+            )
+            self.add_configs(
+                "user_character_payment_required",
+                ConfigType.BOOL,
+                payment_required_label,
+                payment_required_help_text,
+            )
+
         # Automatic faction assignment configuration, only relevant if the faction feature is active
         if "faction" in self.params["features"]:
             auto_faction_label = _("Automatic faction assignment")

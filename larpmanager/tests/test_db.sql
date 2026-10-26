@@ -827,7 +827,8 @@ CREATE TABLE public.larpmanager_association (
     skin_id integer NOT NULL,
     lite_mode boolean NOT NULL,
     uuid character varying(12) NOT NULL,
-    demo_type_id integer
+    demo_type_id integer,
+    timezone character varying(64) NOT NULL
 );
 
 CREATE TABLE public.larpmanager_association_features (
@@ -4868,14 +4869,14 @@ INSERT INTO public.auth_user VALUES (2, 'banana', '2025-01-01 00:00:00.000000+01
 INSERT INTO public.auth_user VALUES (3, 'banana', NULL, false, 'user@test.it', '', '', 'user@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.auth_user VALUES (4, 'banana', NULL, false, 'player@test.it', '', '', 'player@test.it', false, true, '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {}]', '3ef1b43da432e47bfa6cf411b9ca320f22179ba0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (2, 'larpmanager.utils.publication.base.publish_event', '[[1], {}]', '318295ccf70fa6b9f004f4f8335c85fa0a8ddfb4', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'pub', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (3, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (4, 'larpmanager.utils.publication.base.publish_event_role', '[[1], {}]', 'a6556d14d5bc2172fad0f4bb1dcb425c5aa8c1d9', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'pub', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (5, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[2], {}]', 'e99d51b68475f7e5a284b9bc6eb13ce0ecc73347', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (6, 'larpmanager.accounting.registration.check_registration_background', '[[""], {}]', '66e630687098ebf80d330c8477d5b89c927dd363', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (7, 'larpmanager.cache.rels.refresh_character_relationships_background', '[[1], {}]', '811345ec5719b8e384fa47d586fead117b85b98d', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'cache-rels', 0, NULL, '', NULL, NULL, NULL, NULL);
-INSERT INTO public.background_task VALUES (8, 'larpmanager.utils.services.character.update_character_referenced_chars_background', '[[1], {}]', '996e0499ee0052ac16be8ab1b94285c932d838c0', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'cache-rels', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (1, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[1], {"active_timezone": "UTC"}]', '9cd540e16df43a6f30cf2f70867c63843f39cfb8', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (2, 'larpmanager.utils.publication.base.publish_event', '[[1], {"active_timezone": "UTC"}]', '5b557bba5c005da79b5e14165bd7f29b86643397', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'pub', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (3, 'larpmanager.accounting.registration.check_registration_background', '[[""], {"active_timezone": "UTC"}]', 'd515623a2f07a9974857b92edbf961ad409bdeb4', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (4, 'larpmanager.utils.publication.base.publish_event_role', '[[1], {"active_timezone": "UTC"}]', '29df7ce9ebb8397820823eceb11b4882a7c20cca', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'pub', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (5, 'larpmanager.utils.larpmanager.tasks.my_send_mail_bkg', '[[2], {"active_timezone": "UTC"}]', '7d18a51d0a72825ea5dd44453e4506859f6f41d2', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'mail', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (6, 'larpmanager.accounting.registration.check_registration_background', '[[""], {"active_timezone": "UTC"}]', 'd515623a2f07a9974857b92edbf961ad409bdeb4', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'acc', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (7, 'larpmanager.cache.rels.refresh_character_relationships_background', '[[1], {"active_timezone": "UTC"}]', 'f5b20c558089cd47e5b87b0e6402e6b57adb3631', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'cache-rels', 0, NULL, '', NULL, NULL, NULL, NULL);
+INSERT INTO public.background_task VALUES (8, 'larpmanager.utils.services.character.update_character_referenced_chars_background', '[[1], {"active_timezone": "UTC"}]', 'b087c725f1429ec0db3cd4088ec2987c01430984', NULL, 0, '2025-01-01 00:00:00.000000+01', 0, NULL, 'cache-rels', 0, NULL, '', NULL, NULL, NULL, NULL);
 
 INSERT INTO public.django_migrations VALUES (1, 'contenttypes', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (2, 'auth', '0001_initial', '2025-01-01 00:00:00.000000+01');
@@ -5125,7 +5126,7 @@ INSERT INTO public.django_migrations VALUES (245, 'larpmanager', '0193_member_fl
 INSERT INTO public.django_migrations VALUES (246, 'larpmanager', '0194_alter_associationconfig_value_alter_config_value_and_more', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (247, 'larpmanager', '0195_callexp', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (248, 'larpmanager', '0196_accountingitemdiscount_registration', '2025-01-01 00:00:00.000000+01');
-INSERT INTO public.django_migrations VALUES (249, 'larpmanager', '0197_alter_registrationquestion_max_length_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (249, 'larpmanager', '0197_registrationquestion_ranking', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (250, 'otp_static', '0001_initial', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (251, 'otp_static', '0002_throttling', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (252, 'otp_static', '0003_add_timestamps', '2025-01-01 00:00:00.000000+01');
@@ -5139,8 +5140,11 @@ INSERT INTO public.django_migrations VALUES (259, 'socialaccount', '0003_extra_d
 INSERT INTO public.django_migrations VALUES (260, 'socialaccount', '0004_app_provider_id_settings', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (261, 'socialaccount', '0005_socialtoken_nullable_app', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (262, 'socialaccount', '0006_alter_socialaccount_extra_data', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (263, 'larpmanager', '0197_alter_registrationquestion_max_length_and_more', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (264, 'larpmanager', '0198_writing_option_run_availability', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (265, 'larpmanager', '0198_association_timezone', '2025-01-01 00:00:00.000000+01');
 
-INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Orga', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1', NULL);
+INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Orga', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1', NULL, 'Europe/Rome');
 
 INSERT INTO public.larpmanager_association_features VALUES (1, 1, 81);
 
@@ -5205,7 +5209,7 @@ INSERT INTO public.larpmanager_associationskin_default_features VALUES (2, 1, 75
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (3, 1, 108);
 INSERT INTO public.larpmanager_associationskin_default_features VALUES (4, 1, 55);
 
-INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, '4pnfatqbof63ktw96jqopyskd1vu5hy5', 1);
+INSERT INTO public.larpmanager_character VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 1, 'Test Character', '<p>Test Teaser</p>', '<p>Test Text</p>', false, '', false, '', 'c', NULL, 1, NULL, NULL, NULL, 'baba', 'u1', false, 'oyt3fago7pd9xynmca9703ojik5xacls', 1);
 
 INSERT INTO public.larpmanager_characterconfig VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'text_links', '0', 1);
 
@@ -5478,10 +5482,10 @@ INSERT INTO public.larpmanager_inventory_owners VALUES (1, 1, 1);
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'test@test.it', 'a');
 INSERT INTO public.larpmanager_larpmanagernewsletter VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'admin@test.it', 'a');
 
-INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'ttagfj1miy82c9q6bw6sun79df1ywp9d', NULL);
-INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'j4uhwbu494upepdss98otgpukqgnt7r2', NULL);
-INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', 'bdxuzgxnbvum2tabnitpscx6s7cdg40y', NULL);
-INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', '7erf97022gsaahln28ii6byj0rfh47i6', NULL);
+INSERT INTO public.larpmanager_member VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', '', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 1, 'hwCXNm815c9a', 'zbq69o0idhbmzsssgwwmkeugrglwxamn', NULL);
+INSERT INTO public.larpmanager_member VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'orga@test.it', 'Admin Test', 'en', 'Admin', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 2, 'GpFgBKP0p482', 'yk6b46gbp3orblbptzrhfpknseoammt6', NULL);
+INSERT INTO public.larpmanager_member VALUES (3, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'user@test.it', 'User Test', 'en', 'User', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 3, 'uIT2O97q9XKA', '3hezlc2i9lgmda9baaj32x4af8mg07g5', NULL);
+INSERT INTO public.larpmanager_member VALUES (4, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'player@test.it', 'Orga Test', 'en', 'Orga', 'Test', '', NULL, NULL, NULL, 'o', NULL, NULL, 'n', NULL, NULL, NULL, 'i', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a', '', NULL, NULL, 4, 'YngKtqLrb639', 's8v61yz58r4jsyz43dz040rhbfxzlrxc', NULL);
 
 INSERT INTO public.larpmanager_membership VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 4);
 INSERT INTO public.larpmanager_membership VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', false, 0.00, 0.00, 'j', '', '', NULL, NULL, NULL, 'a', 1, 2);
@@ -5572,7 +5576,7 @@ INSERT INTO public.larpmanager_registrationquestion VALUES (1, NULL, false, '202
 
 INSERT INTO public.larpmanager_registrationticket VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp (Standard) Standard', 1, 'b', 'Standard', NULL, 0.00, 0, true, 1, false, 1, 1, 'u1', false);
 
-INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'd1lrnkpwmdildjzeneaui31jk6nvg2i4');
+INSERT INTO public.larpmanager_run VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Larp', '1', 1, '2050-03-19', '2050-03-19', NULL, '1d71c0a4a727', 0.00, NULL, 'f', 1, 'u1', '', 'o', 'dgnuwlq7tf1jlm1sw0mc48frhnat9sca');
 
 INSERT INTO public.larpmanager_writingquestion VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'name', 'Test Larp - Name', 'Name', '', 1, 'm', 'c', 'c,s,r,a', 1000, true, 1, 'c', 'u1');
 INSERT INTO public.larpmanager_writingquestion VALUES (2, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'teaser', 'Test Larp - Presentation', 'Presentation', '', 2, 'o', 'c', 'c,s,r,a', 10000, true, 1, 'c', 'u2');
@@ -5608,7 +5612,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 262, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 265, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -10215,4 +10219,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0197_alter_registrationquestion_max_length_and_more
+-- LARPMANAGER_SCHEMA_VERSION: 0198_association_timezone

@@ -217,7 +217,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get members already registered for current or future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.localdate()).values_list(
             "member_id",
             flat=True,
         ),
@@ -268,7 +268,7 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get list of members already registered for current/future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.localdate()).values_list(
             "member_id",
             flat=True,
         ),
@@ -560,7 +560,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
             # These functions control how data is displayed in the template
             "callbacks": {
                 "body": format_email_body,
-                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "sent": lambda el: timezone.localtime(el.sent).strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
                 "skipped": format_email_skipped,
             },

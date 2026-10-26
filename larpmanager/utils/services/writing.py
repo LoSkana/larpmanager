@@ -50,6 +50,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
+    CharacterStatus,
     Faction,
     Guild,
     GuildMembership,
@@ -501,6 +502,8 @@ def _prepare_writing_list(context: dict) -> None:
     if context["default_fields"] == "[]" and context.get("writing_typ"):
         def_types = get_def_writing_types()
         question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
+        if model_name == "character" and "user_character" in context["features"]:
+            question_field_list.insert(0, "player")
         if question_field_list:
             context["default_fields"] = json.dumps(question_field_list)
 
@@ -609,8 +612,12 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     if "user_character" in context["features"]:
         context["list"] = context["list"].select_related("player")
 
-    # Add registration status annotation for campaign events
-    if "campaign" in context["features"]:
+    split_by_status = "user_character" in context["features"] and get_event_config(
+        context["event"].id, "user_character_approval", context=context
+    )
+
+    # Add registration status annotation for campaign events or status split
+    if "campaign" in context["features"] or split_by_status:
         # add check if the character is signed up to the event
         context["list"] = context["list"].annotate(
             has_registration=Exists(
@@ -674,8 +681,26 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     context["campaign_split_registration"] = get_event_config(
         context["event"].id, "campaign_split_registration", context=context
     )
+    campaign_split = "campaign" in context["features"] and context["campaign_split_registration"]
+    # Split signed up characters by approval status, then list those not signed up
+    if split_by_status:
+        all_chars = list(context["list"])
+        if all_chars:
+            signed_up = [c for c in all_chars if c.has_registration]
+            context["split_lists"] = [
+                {"title": label, "list": [c for c in signed_up if c.status == value], "count": True}
+                for value, label in CharacterStatus.choices
+            ]
+            not_signed_up = {"list": [c for c in all_chars if not c.has_registration], "count": True}
+            # campaign split shows them openly, otherwise they are hidden behind a toggle
+            if campaign_split:
+                not_signed_up["title"] = _("Characters not participating")
+            else:
+                not_signed_up["title"] = _("Not signed up")
+                not_signed_up["hidden"] = "chars_not_signed_up"
+            context["split_lists"].append(not_signed_up)
     # Split list by registration status if config is enabled
-    if "campaign" in context["features"] and context["campaign_split_registration"]:
+    elif campaign_split:
         all_chars = list(context["list"])
         context["split_lists"] = [
             {"title": "", "list": [c for c in all_chars if c.has_registration]},

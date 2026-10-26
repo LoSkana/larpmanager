@@ -330,15 +330,19 @@ div.ui-lm_tooltip {
 .popup_delete {
   width: fit-content;
   min-width: 400px;
-  max-width: 40vw;
+  max-width: 60vw;
   height: fit-content;
   min-height: 300px;
-  max-height: 50vh;
+  max-height: 85vh;
 }
 
 .popup_delete #lm-modal-content,
 .popup_delete .frame-container {
   height: auto;
+}
+
+.popup_delete #lm-modal-content {
+  max-height: calc(85vh - 2em);
 }
 
 .popup_delete .frame-container iframe {

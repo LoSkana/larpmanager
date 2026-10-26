@@ -1436,6 +1436,9 @@ msgstr "Angivet"
 msgid "Template"
 msgstr "Skabelon"
 
+msgid "Timezone"
+msgstr "Tidszone"
+
 msgid "Transfer"
 msgstr "Overfør"
 
@@ -2819,6 +2822,9 @@ msgstr "Næste sessioner"
 msgid "Not completed"
 msgstr "Ikke gennemført"
 
+msgid "Not signed up"
+msgstr "Ikke tilmeldt"
+
 msgid "Number events"
 msgstr "Antal events"
 
@@ -3706,6 +3712,9 @@ msgstr "Betalingsprioritet"
 
 msgid "Payment reminder"
 msgstr "Betalingspåmindelse"
+
+msgid "Payment required"
+msgstr "Betaling påkrævet"
 
 msgid "Pending approval"
 msgstr "Afventer godkendelse"
@@ -4803,6 +4812,9 @@ msgstr "Leverede indsamlinger"
 msgid "Complete sheet (Test)"
 msgstr "Komplet ark (test)"
 
+msgid "Complete your payment"
+msgstr "Gennemfør din betaling"
+
 msgid "Complete your profile"
 msgstr "Fuldfør din profil"
 
@@ -5002,9 +5014,6 @@ msgstr "Tilpasset mailserver"
 
 msgid "Disable free abilities"
 msgstr "Deaktivér gratis evner"
-
-msgid "Event deletion request"
-msgstr "Anmodning om sletning af event"
 
 msgid "Expenses collaborators"
 msgstr "Samarbejdspartneres udgifter"
@@ -6200,6 +6209,9 @@ msgstr "De øvrige felter er valgfrie."
 msgid "The total registration fee is:"
 msgstr "Det samlede tilmeldingsgebyr er:"
 
+msgid "To confirm, type the full name"
+msgstr "For at bekræfte skal du skrive det fulde navn"
+
 msgid "Type of accommodation included"
 msgstr "Type indkvartering inkluderet"
 
@@ -6298,6 +6310,9 @@ msgstr "Tillæg anvendt på billetten"
 
 msgid "The date when this event begins"
 msgstr "Datoen, hvor dette event begynder"
+
+msgid "The name entered does not match"
+msgstr "Det indtastede navn stemmer ikke overens"
 
 msgid "Total of recorded money inflows"
 msgstr "Samlet beløb for registrerede pengeindbetalinger"
@@ -7774,6 +7789,9 @@ msgstr "Administrer organisationens hovedindstillinger"
 msgid "No participants have been issued tokens yet."
 msgstr "Der er endnu ikke udstedt tokens til nogen deltagere."
 
+msgid "Permanently delete this session of the event"
+msgstr "Slet denne session af begivenheden permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Bekræft venligst følgende betalingsoplysninger:"
 
@@ -8010,6 +8028,9 @@ msgstr "Se listen over events, du er tilmeldt"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Velkommen til dashboardet for din organisation!"
+
+msgid "You can create more characters for this event!"
+msgstr "Du kan oprette flere karakterer til dette event!"
 
 msgid "You can now add warehouse containers and items"
 msgstr "Du kan nu tilføje lagerbeholdere og varer"
@@ -8373,6 +8394,9 @@ msgstr "Betal %(amount)s%(currency)s inden for %(counter)s dage"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalingen for dette event er fuldført og ajour!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Slet denne begivenhed og alle dens sessioner permanent"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Anden karakter i relationen (destination)"
 
@@ -8394,6 +8418,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Dette medlem har endnu ikke tilmeldt sig nogen events."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tidszone, der bruges til at indtaste og vise datoer og klokkeslæt"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Samlet deltagergebyr reduceret gennem rabatter"
@@ -8672,6 +8699,9 @@ msgstr "Denne invitation blev sendt til en anden e-mailadresse."
 msgid "This page lets you add or edit an inventory pool type."
 msgstr "Denne side lader dig tilføje eller redigere en inventar-Pool-type."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Advarsel: denne handling er farlig og kan ikke fortrydes"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om dette indhold i øjeblikket er tilgængeligt"
 
@@ -8693,6 +8723,9 @@ msgstr "Indholdet af medlemsanmodningen udfyldt med brugerdata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Opret mindst én billettype til eventregistreringer"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Sletningen er startet, det kan tage et par minutter at blive færdig"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vil du lade brugere give frivillige donationer?"
@@ -9510,6 +9543,9 @@ msgstr ""
 
 msgid "Review all cancelled registrations and track their refund status"
 msgstr "Gennemse alle annullerede tilmeldinger, og følg deres refusionsstatus"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Eventets sessioner er blevet ændret, gennemgå og bekræft igen"
 
 msgid "The payment session has expired. Please start the payment again."
 msgstr "Betalingssessionen er udløbet. Start betalingen igen."
@@ -10402,7 +10438,7 @@ msgstr ""
 msgid ""
 "This payment has already been completed, you have not been charged again."
 msgstr ""
-"Denne betaling er allerede gennemført, og du er ikke blevet opkrævet igen."
+"Denne betaling er allerede gennemført, du er ikke blevet opkrævet igen."
 
 msgid ""
 "Total amount of payment to be received by this date (0 = all outstanding)"
@@ -10973,6 +11009,13 @@ msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
 "correct."
 msgstr "Besvar følgende spørgsmål. Vælg *alle* de svar, der virker korrekte."
+
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Gennemfør din betaling for at færdiggøre din tilmelding og få adgang til din"
+" karakter!"
 
 msgid ""
 "Define reusable ability templates that can be assigned to individual "
@@ -12980,6 +13023,13 @@ msgstr ""
 "Du har allerede betalt dit kontingent for det aktuelle år, så du er allerede"
 " dækket til dette event!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Din tilmelding er ikke gennemført endnu: gennemfør din betaling for at "
+"oprette eller vælge din karakter"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13152,6 +13202,13 @@ msgid ""
 msgstr ""
 "Medlemmet skal allerede have bekræftet sit samtykke til at dele "
 "personoplysninger med din organisation."
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Denne session og alle dens data (tilmeldinger, regnskab osv.) <b>bliver "
+"slettet permanent</b>."
 
 msgid ""
 "Track candidate vote counts and view the list of members who have already "
@@ -14278,6 +14335,13 @@ msgstr ""
 "hvis deltageren er tildelt bestemte faktioner."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Eventet og alle dets data (tilmeldinger, karakterer, tekster, regnskab osv.)"
+" <b>bliver slettet permanent</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14765,7 +14829,7 @@ msgid ""
 "automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
 "Betalingen er modtaget af PayPal, men kunne ikke registreres automatisk: "
-"arrangørerne vil tjekke den. Betal venligst ikke igen."
+"arrangørerne vil kontrollere den. Betal ikke igen."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
@@ -14840,12 +14904,19 @@ msgstr ""
 "Denne guild blev ændret i et andet vindue: dine ændringer her er ikke blevet"
 " gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
 
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Gendannelse af slettede data vil <b>ikke</b> være mulig. <i>Hvis du ikke er "
+"sikker på, hvad du laver, så kontakt systemadministratorerne</i>."
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"
 " start because these settings are missing: <b>%(fields)s</b>."
 msgstr ""
-"En deltager forsøgte at betale med <b>%(method)s</b>, men betalingen kunne "
+"En deltager prøvede at betale med <b>%(method)s</b>, men betalingen kunne "
 "ikke starte, fordi disse indstillinger mangler: <b>%(fields)s</b>."
 
 msgid ""
@@ -14926,13 +14997,6 @@ msgid ""
 msgstr ""
 "Normalt vises alle karakterfelter (offentlige eller private); med denne "
 "konfiguration kan du vælge, hvilke der skal vises på et givet tidspunkt."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din anmodning er registreret; på grund af opgavens følsomme karakter vil "
-"vores team gennemgå den manuelt; vi giver dig besked hurtigst muligt"
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "
@@ -15084,6 +15148,14 @@ msgid ""
 msgstr ""
 "Ingen gyldig tildeling findes med de nuværende begrænsninger: tjek "
 "deltagerne og de tilgængelige karakterer, og kør algoritmen igen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Hvis det er slået til, kan spillerne først oprette, vælge eller åbne deres "
+"karakterer, når de har uploadet en betalingskvittering (eller betalt) for "
+"deres tilmelding."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

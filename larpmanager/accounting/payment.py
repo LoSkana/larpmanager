@@ -629,7 +629,7 @@ def _process_membership(invoice: PaymentInvoice) -> None:
         if AccountingItemMembership.objects.filter(inv=invoice).exists():
             return
 
-        year = timezone.now().year
+        year = timezone.localdate().year
 
         # Reject if member already has an active membership item for this year
         if AccountingItemMembership.objects.filter(

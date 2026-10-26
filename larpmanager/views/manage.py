@@ -180,7 +180,7 @@ def _get_registration_status(run: Run) -> str:
     if status_code == "future":
         # Check if we have a valid datetime to format
         if opening_datetime:
-            formatted_opening_date = opening_datetime.strftime(format_datetime)
+            formatted_opening_date = timezone.localtime(opening_datetime).strftime(format_datetime)
             return _("Registrations opening on: %(date)s") % {"date": formatted_opening_date}
         # Fallback when datetime is not available
         return _("Registrations opening not set")
@@ -270,7 +270,6 @@ def _exe_widgets(request: HttpRequest, context: dict, features: dict) -> None:
     context["widgets"] = {
         widget: get_exe_widget_cache(context["association_id"], widget) for widget in widgets_available
     }
-
 
 
 def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:

@@ -166,7 +166,7 @@ def _compute_date_delta(template: Association) -> timedelta:
     ]
     if not first_start:
         return timedelta(0)
-    target_start = timezone.now().date() + relativedelta(months=1)
+    target_start = timezone.localdate() + relativedelta(months=1)
     return target_start - first_start
 
 

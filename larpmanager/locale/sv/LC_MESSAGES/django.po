@@ -1436,6 +1436,9 @@ msgstr "Medföljer"
 msgid "Template"
 msgstr "Mall"
 
+msgid "Timezone"
+msgstr "Tidszon"
+
 msgid "Transfer"
 msgstr "Överföring"
 
@@ -2819,6 +2822,9 @@ msgstr "Kommande sessioner"
 msgid "Not completed"
 msgstr "Ej slutfört"
 
+msgid "Not signed up"
+msgstr "Inte anmäld"
+
 msgid "Number events"
 msgstr "Antal evenemang"
 
@@ -3706,6 +3712,9 @@ msgstr "Betalningsprioritet"
 
 msgid "Payment reminder"
 msgstr "Betalningspåminnelse"
+
+msgid "Payment required"
+msgstr "Betalning krävs"
 
 msgid "Pending approval"
 msgstr "Väntar på godkännande"
@@ -4803,6 +4812,9 @@ msgstr "Insamlingar levererade"
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
 
+msgid "Complete your payment"
+msgstr "Slutför din betalning"
+
 msgid "Complete your profile"
 msgstr "Fyll i din profil"
 
@@ -5002,9 +5014,6 @@ msgstr "Skräddarsydd e-postserver"
 
 msgid "Disable free abilities"
 msgstr "Inaktivera fria förmågor"
-
-msgid "Event deletion request"
-msgstr "Begäran om radering av evenemang"
 
 msgid "Expenses collaborators"
 msgstr "Medarbetarnas utgifter"
@@ -6200,6 +6209,9 @@ msgstr "De övriga fälten är valfria."
 msgid "The total registration fee is:"
 msgstr "Den totala anmälningsavgiften är:"
 
+msgid "To confirm, type the full name"
+msgstr "Skriv hela namnet för att bekräfta"
+
 msgid "Type of accommodation included"
 msgstr "Typ av boende som ingår"
 
@@ -6298,6 +6310,9 @@ msgstr "Tilläggsavgift till biljett"
 
 msgid "The date when this event begins"
 msgstr "Datum då händelsen börjar"
+
+msgid "The name entered does not match"
+msgstr "Namnet du angav stämmer inte"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt belopp av registrerade penninginflöden"
@@ -7774,6 +7789,9 @@ msgstr "Hantera organisationens huvudinställningar"
 msgid "No participants have been issued tokens yet."
 msgstr "Inga deltagare har fått några tokens ännu."
 
+msgid "Permanently delete this session of the event"
+msgstr "Radera den här sessionen av evenemanget permanent"
+
 msgid "Please verify the following payment details:"
 msgstr "Vänligen kontrollera följande betalningsuppgifter:"
 
@@ -8011,6 +8029,9 @@ msgstr "Se listan över de evenemang du har anmält dig till"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Välkommen till instrumentpanelen för din organisation!"
+
+msgid "You can create more characters for this event!"
+msgstr "Du kan skapa fler karaktärer för det här eventet!"
 
 msgid "You can now add warehouse containers and items"
 msgstr "Du kan nu lägga till lagerbehållare och föremål"
@@ -8375,6 +8396,9 @@ msgstr "Betala %(amount)s%(currency)s inom %(counter)s dagar"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Betalningen för detta evenemang är genomförd och i ordning!"
 
+msgid "Permanently delete this event and all its sessions"
+msgstr "Radera det här evenemanget och alla dess sessioner permanent"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i relationen (destination)"
 
@@ -8396,6 +8420,9 @@ msgstr ""
 
 msgid "This member has not registered for any events yet."
 msgstr "Den här medlemmen har ännu inte anmält sig till några evenemang."
+
+msgid "Timezone used to enter and display dates and times"
+msgstr "Tidszon som används för att ange och visa datum och tider"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
@@ -8676,6 +8703,9 @@ msgid "This page lets you add or edit an inventory pool type."
 msgstr ""
 "På den här sidan kan du lägga till eller redigera en typ av inventariepool."
 
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr "Varning: den här åtgärden är farlig och kan inte ångras"
+
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
 
@@ -8697,6 +8727,9 @@ msgstr "Innehållet i medlemsansökan är ifyllt med användardata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Skapa minst en biljettyp för anmälningar till evenemang"
+
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr "Raderingen har startat, det kan ta några minuter innan den är klar"
 
 msgid "Do you want to allow users to make voluntary donations?"
 msgstr "Vill du låta användare göra frivilliga donationer?"
@@ -9538,6 +9571,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Granska alla avbokade anmälningar och följ upp återbetalningsstatusen för "
 "dem"
+
+msgid "The event sessions have changed, please review and confirm again"
+msgstr "Evenemangets sessioner har ändrats, granska och bekräfta igen"
 
 msgid "The payment session has expired. Please start the payment again."
 msgstr "Betalningssessionen har gått ut. Starta betalningen igen."
@@ -11026,6 +11062,13 @@ msgid ""
 "correct."
 msgstr ""
 "Svara på följande frågor. Markera *alla* svar som du tycker verkar korrekta."
+
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+"Slutför din betalning för att bekräfta din anmälan och få tillgång till din "
+"karaktär!"
 
 msgid ""
 "Define reusable ability templates that can be assigned to individual "
@@ -13034,6 +13077,13 @@ msgstr ""
 "Du har redan betalat din medlemsavgift för innevarande år, så den gäller "
 "redan för detta evenemang!"
 
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+"Din anmälan är inte klar än: slutför din betalning för att skapa eller välja"
+" din karaktär"
+
 #, python-format
 msgid ""
 "Alternatively, you may request a payout of your balance on <a "
@@ -13206,6 +13256,13 @@ msgid ""
 msgstr ""
 "Medlemmen måste redan ha bekräftat sitt samtycke till att dela "
 "personuppgifter med din organisation."
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+"Den här sessionen och all dess data (anmälningar, bokföring osv.) <b>kommer "
+"att raderas permanent</b>."
 
 msgid ""
 "Track candidate vote counts and view the list of members who have already "
@@ -14336,6 +14393,13 @@ msgstr ""
 "deltagaren tillhör vissa fraktioner."
 
 msgid ""
+"The event and all its data (registrations, characters, writings, accounting,"
+" etc.) <b>will be permanently deleted</b>."
+msgstr ""
+"Evenemanget och all dess data (anmälningar, karaktärer, texter, bokföring "
+"osv.) <b>kommer att raderas permanent</b>."
+
+msgid ""
 "Whether the discount can be used only on new enrollment, or whether it can "
 "be used by already registered participants."
 msgstr ""
@@ -14828,8 +14892,8 @@ msgid ""
 "The payment was received by PayPal but could not be registered "
 "automatically: the organizers will verify it. Please do not pay again."
 msgstr ""
-"Betalningen togs emot av PayPal men kunde inte registreras automatiskt: "
-"arrangörerna kommer att kontrollera den. Betala inte igen."
+"Betalningen har tagits emot av PayPal men kunde inte registreras "
+"automatiskt: arrangörerna kommer att kontrollera den. Betala inte igen."
 
 msgid ""
 "Enables field 'concept', a short text hidden from participants, shown to "
@@ -14903,13 +14967,20 @@ msgstr ""
 "Det här gillet ändrades i ett annat fönster: dina ändringar här har inte "
 "sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
 
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure"
+" of what you're doing, please contact the system admins</i>."
+msgstr ""
+"Återställning av raderad data kommer <b>inte</b> att vara möjlig. <i>Om du "
+"inte är säker på vad du gör, kontakta systemadministratörerna</i>."
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"
 " start because these settings are missing: <b>%(fields)s</b>."
 msgstr ""
 "En deltagare försökte betala med <b>%(method)s</b>, men betalningen kunde "
-"inte startas eftersom de här inställningarna saknas: <b>%(fields)s</b>."
+"inte starta eftersom de här inställningarna saknas: <b>%(fields)s</b>."
 
 msgid ""
 "Adds a quiz-style system for workshop questions. Organizers can define "
@@ -14990,14 +15061,6 @@ msgid ""
 msgstr ""
 "Normalt visas alla karaktärsfält (offentliga eller privata); med den här "
 "inställningen kan du välja vilka som ska visas vid varje tillfälle."
-
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
-msgstr ""
-"Din förfrågan har registrerats. Eftersom det rör sig om en känslig fråga "
-"kommer vårt team att granska den manuellt. Vi återkommer till dig så snart "
-"som möjligt."
 
 msgid ""
 "Enables a button in the topbar to redirect authenticated users to an "
@@ -15151,6 +15214,14 @@ msgstr ""
 "Ingen giltig tilldelning finns med nuvarande begränsningar: kontrollera de "
 "inkluderade deltagarna och tillgängliga karaktärerna, kör sedan algoritmen "
 "igen"
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after"
+" uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+"Om detta är aktiverat kan spelare skapa, välja eller komma åt sina "
+"karaktärer först efter att de har laddat upp ett betalningsbevis (eller "
+"gjort en betalning) för sin anmälan."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
