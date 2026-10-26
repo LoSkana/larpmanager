@@ -613,7 +613,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=timezone.now().year,
+        year=timezone.localdate().year,
         member_id=context["member"].id,
     ).exists()
 
@@ -835,7 +835,7 @@ def badge(request: HttpRequest, badge_uuid: str) -> HttpResponse:
         context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
-    v = timezone.now().date() - date(1970, 1, 1)
+    v = timezone.localdate() - date(1970, 1, 1)
     random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
@@ -1033,7 +1033,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
-    context["year"] = timezone.now().year
+    context["year"] = timezone.localdate().year
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:

@@ -731,7 +731,7 @@ class MemberFlagDef(UuidMixin, OrderMixin, BaseModel):
         """Return the MemberConfig name for this flag in the current calendar year, scoped to the association."""
         name = f"flag_{self.association_id}_{self.uuid}"
         if self.annual:
-            return f"{name}_{timezone.now().year}"
+            return f"{name}_{timezone.localdate().year}"
         return name
 
     def __str__(self) -> str:

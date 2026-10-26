@@ -32,12 +32,14 @@ from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from larpmanager.accounting.gateway.redsys import redsys_webhook
-from larpmanager.accounting.gateway.satispay import satispay_webhook
-from larpmanager.accounting.gateway.stripe import stripe_webhook
+from larpmanager.accounting.gateway.satispay import satispay_verify, satispay_webhook
+from larpmanager.accounting.gateway.stripe import get_stripe_cancel_error, stripe_webhook
 from larpmanager.accounting.gateway.sumup import sumup_webhook
 from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting, is_membership_fee_reserved
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
@@ -75,13 +77,14 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.base import fetch_payment_details, get_context, get_event_context
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
+from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.utils.registrations.status import _status_payment, registration_status
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 
@@ -570,7 +573,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = timezone.now().year
+    year = timezone.localdate().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -935,6 +938,36 @@ def accounting_webhook_stripe(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"res": "ok"})
 
 
+@login_required
+@require_POST
+def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonResponse:
+    """Notify admins of a payment error reported by the SumUp card widget."""
+    invoice = (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+        )
+        .select_related("method")
+        .first()
+    )
+    if not invoice:
+        raise Http404
+
+    response_type = request.POST.get("type", "")[:50]
+    response_body = request.POST.get("body", "")[:2000]
+    notify_admins(
+        f"SumUp payment {response_type} - {request.association['slug']} - {request.user}",
+        _payment_cancelled_info(
+            request,
+            fetch_payment_details(request.association["id"]),
+            invoice,
+            f"{response_type}: {response_body}",
+        ),
+    )
+    return JsonResponse({"res": "ok"})
+
+
 @csrf_exempt
 def accounting_webhook_sumup(request: HttpRequest) -> JsonResponse:
     """Process SumUp webhook and return success response."""
@@ -963,10 +996,88 @@ def accounting_wait(request: HttpRequest) -> HttpResponse:
     return render(request, "larpmanager/member/accounting_wait.html")
 
 
+def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
+    """Return the cancelled invoice from the gateway url, or the latest one still pending."""
+    invoices = PaymentInvoice.objects.filter(
+        member=request.user.member,
+        association_id=request.association["id"],
+    ).select_related("method")
+
+    invoice_uuid = request.GET.get("invoice")
+    if invoice_uuid:
+        invoice = invoices.filter(uuid=invoice_uuid).first()
+        if invoice:
+            return invoice
+
+    return invoices.filter(status=PaymentStatus.CREATED).order_by("-created").first()
+
+
+def _payment_cancelled_info(
+    request: HttpRequest,
+    payment_details: dict,
+    invoice: PaymentInvoice | None,
+    gateway_error: str | None,
+) -> str:
+    """Collect request, member, invoice and gateway details useful to debug a cancelled payment."""
+    member = request.user.member
+    lines = [
+        f"Association: {request.association['slug']} ({request.association['id']})",
+        f"Member: {member} - {request.user.email} ({member.id})",
+        f"Path: {request.get_full_path()}",
+        f"Referer: {request.META.get('HTTP_REFERER', '')}",
+        f"User agent: {request.META.get('HTTP_USER_AGENT', '')}",
+        f"Language: {request.META.get('HTTP_ACCEPT_LANGUAGE', '')}",
+    ]
+
+    if gateway_error:
+        lines += ["", f"Gateway error: {gateway_error}"]
+
+    if invoice:
+        lines += [
+            "",
+            f"Invoice: {invoice.uuid} - created {invoice.created}",
+            f"Status: {invoice.get_status_display()}",
+            f"Method: {invoice.method.slug}",
+            f"Type: {invoice.get_typ_display()}",
+            f"Amount: {invoice.mc_gross}",
+            f"Causal: {invoice.causal}",
+            f"Cod: {invoice.cod}",
+            f"Registration: {invoice.registration_id}",
+        ]
+
+    # Gateway configuration, without exposing secrets
+    stripe_key = payment_details.get("stripe_sk_api") or ""
+    stripe_mode = "live" if stripe_key.startswith(("sk_live", "rk_live")) else "test" if stripe_key else "missing"
+    lines += [
+        "",
+        f"Currency: {payment_details.get('payment_currency', '')}",
+        f"Stripe key: {stripe_mode}",
+        f"Stripe webhook secret: {'set' if payment_details.get('stripe_webhook_secret') else 'missing'}",
+        f"PayPal id: {payment_details.get('paypal_id', '')}",
+    ]
+    return "<br />\n".join(escape(line) for line in lines)
+
+
 @login_required
 def accounting_cancelled(request: HttpRequest) -> HttpResponse:
-    """Handle cancelled payment redirecting to accounting page."""
-    mes = _("The payment was not completed. Please contact us to find out why.")
+    """Handle cancelled payment: notify admins on gateway errors and redirect to accounting page."""
+    payment_details = fetch_payment_details(request.association["id"])
+    invoice = _get_cancelled_invoice(request)
+
+    # Only Stripe lets us tell a user cancellation from a gateway error
+    gateway_error = None
+    if invoice and invoice.method.slug == "stripe" and payment_details.get("stripe_sk_api"):
+        gateway_error = get_stripe_cancel_error(payment_details, invoice)
+        if not gateway_error:
+            messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+            return redirect("accounting")
+
+    notify_admins(
+        f"Payment cancelled - {request.association['slug']} - {request.user}",
+        _payment_cancelled_info(request, payment_details, invoice, gateway_error),
+    )
+
+    mes = _("The payment was not completed. Please try again later or choose another payment method.")
     messages.warning(request, mes)
     return redirect("accounting")
 
@@ -1042,6 +1153,24 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
     else:
         # No specific invoice to process
         inv = None
+
+    # Satispay redirects here whatever the outcome, check the actual payment status
+    if inv and inv.method.slug == "satispay" and inv.status == PaymentStatus.CREATED:
+        try:
+            satispay_status = satispay_verify(context, inv.cod)
+        except Exception:
+            logger.exception("Satispay status check failed - invoice %s", inv.cod)
+            satispay_status = None
+
+        if satispay_status == "CANCELED":
+            messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+            return redirect("accounting")
+        if satispay_status == "PENDING":
+            messages.warning(
+                request,
+                _("The payment has not been confirmed yet: it will be registered as soon as Satispay confirms it."),
+            )
+            return redirect("accounting")
 
     # Set success message for payment completion
     mes = _("You have completed the payment!")
@@ -1239,6 +1368,6 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     for e in lis:
         # Filter and add runs to dictionary by ID
         for r in get_event_runs(e.id):
-            if future and r.end < timezone.now().date():
+            if future and r.end < timezone.localdate():
                 continue
             ls[r.id] = r

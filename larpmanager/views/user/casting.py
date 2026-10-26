@@ -40,6 +40,7 @@ from larpmanager.models.writing import Character, Faction, FactionType, get_even
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import check_event_feature
+from larpmanager.utils.registrations.characters import check_character_payment_lock
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.event import get_event_filter_characters
 
@@ -247,6 +248,8 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
             ),
         )
         return redirect("event", event_slug=context["run"].get_slug())
+
+    check_character_payment_lock(context)
 
     get_element(context, casting_type, "quest_type", QuestType)
 
@@ -732,6 +735,7 @@ def casting_preferences(request: HttpRequest, event_slug: str, casting_type: str
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+    check_character_payment_lock(context)
     get_element(context, casting_type, "quest_type", QuestType)
     casting_details(context)
 
@@ -924,6 +928,7 @@ def casting_history(request: HttpRequest, event_slug: str, casting_type: str | N
     """
     # Get event context and verify user signup status
     context = get_event_context(request, event_slug, signup=True, include_status=True)
+    check_character_payment_lock(context)
     get_element(context, casting_type, "quest_type", QuestType)
     casting_details(context)
 

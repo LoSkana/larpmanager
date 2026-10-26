@@ -25,10 +25,10 @@ Races, classes, abilities, prerequisites, modifiers, criteria and computed rules
 from __future__ import annotations
 
 import datetime
-from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
@@ -446,7 +446,7 @@ def build_experience_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.start = timezone.localdate() + datetime.timedelta(days=60)
     run.end = run.start + datetime.timedelta(days=2)
     run.save()
     _enable_features(event, ["character", "user_character", "experience"])

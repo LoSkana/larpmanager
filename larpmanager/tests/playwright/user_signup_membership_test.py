@@ -147,7 +147,7 @@ def pay(live_server: Any, page: Any) -> None:
     sidebar(page, "Event")
     expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Standard)")
     logout(page)
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
+    expect_normalized(page, page.locator("#one"), "Registrations are open!")
     expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")
     # test mails
     go_to(page, live_server, "/debug/mail")

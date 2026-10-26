@@ -27,10 +27,10 @@ whose registration setup was duplicated from the previous one via Copy.
 from __future__ import annotations
 
 import datetime
-from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
@@ -78,7 +78,7 @@ def _make_member(username: str, name: str, surname: str, association: Associatio
 
 
 def _build_events(association: Association) -> dict[str, Event]:
-    today = datetime.datetime.now(tz=UTC).date()
+    today = timezone.localdate()
 
     chapter_1 = Event.objects.create(
         association=association,

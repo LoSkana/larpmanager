@@ -82,7 +82,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
 
     # Signup
     go_to(page, live_server, "/")
-    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("link", name="Registrations are open!").click()
     page.locator("#register_form").click()
     submit_register(page)
 

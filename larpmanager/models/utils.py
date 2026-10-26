@@ -356,9 +356,16 @@ def save_payment_details(association: Association, payment_details: dict) -> Non
     # Get the file path for storing encrypted payment details
     encrypted_file_path = get_payment_details_path(association)
 
-    # Write encrypted data to file
-    with Path(encrypted_file_path).open("wb") as f:
+    # Write encrypted data to file, owner and group read/write regardless of umask
+    fd = os.open(encrypted_file_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o660)
+    with os.fdopen(fd, "wb") as f:
         f.write(encrypted_data)
+
+    # Enforce mode also on pre-existing files; chmod fails if process is not the owner
+    try:
+        Path(encrypted_file_path).chmod(0o660)
+    except PermissionError:
+        logger.warning("Cannot set permissions on %s", encrypted_file_path)
 
 
 def strip_tags(html: str | None) -> str:
