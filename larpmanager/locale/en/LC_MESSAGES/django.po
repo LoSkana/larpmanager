@@ -1674,6 +1674,14 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
+msgid "Payment required"
+msgstr ""
+
+msgid ""
+"If enabled, players can create, choose or access their characters only after "
+"uploading a payment proof (or making a payment) for their registration."
+msgstr ""
+
 msgid "Automatic faction assignment"
 msgstr ""
 
@@ -3734,6 +3742,11 @@ msgstr ""
 msgid "You're not allowed to sign up!"
 msgstr ""
 
+msgid ""
+"Complete your payment to finalize your registration and access your "
+"character!"
+msgstr ""
+
 msgid "Bank Statement"
 msgstr ""
 
@@ -3962,6 +3975,12 @@ msgid "Payment currency"
 msgstr ""
 
 msgid "The currency you want to use for all payments and pricing"
+msgstr ""
+
+msgid "Timezone"
+msgstr ""
+
+msgid "Timezone used to enter and display dates and times"
 msgstr ""
 
 msgid "Promotional image"
@@ -7397,6 +7416,33 @@ msgid "Public page"
 msgstr ""
 
 msgid "No events yet. Create your first event using the button above."
+msgstr ""
+
+msgid "Permanently delete this event and all its sessions"
+msgstr ""
+
+msgid "Permanently delete this session of the event"
+msgstr ""
+
+msgid "Warning: this action is dangerous and cannot be undone"
+msgstr ""
+
+msgid ""
+"The event and all its data (registrations, characters, writings, accounting, "
+"etc.) <b>will be permanently deleted</b>."
+msgstr ""
+
+msgid ""
+"This session and all its data (registrations, accounting, etc.) <b>will be "
+"permanently deleted</b>."
+msgstr ""
+
+msgid ""
+"Recovery of deleted data will <b>not</b> be available. <i>If you're not sure "
+"of what you're doing, please contact the system admins</i>."
+msgstr ""
+
+msgid "To confirm, type the full name"
 msgstr ""
 
 msgid ""
@@ -12663,6 +12709,14 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available."
 msgstr ""
 
+msgid "Complete your payment"
+msgstr ""
+
+msgid ""
+"Your registration is not completed yet: complete your payment to create or "
+"choose your character"
+msgstr ""
+
 msgid "Your character is"
 msgstr ""
 
@@ -12691,6 +12745,9 @@ msgid "Write your questions about the character directly to the authors here."
 msgstr ""
 
 msgid "Create another character"
+msgstr ""
+
+msgid "You can create more characters for this event!"
 msgstr ""
 
 msgid "Create another character!"
@@ -12871,26 +12928,26 @@ msgid ""
 "If you have made a wire transfer, please upload its receipt for processing"
 msgstr ""
 
+msgid "Registrations closed"
+msgstr ""
+
 msgid "Registrations for this event are currently closed"
 msgstr ""
 
-msgid "Registration is open!"
+msgid "Registrations are open!"
 msgstr ""
 
 msgid "Registrations are open: sign up now to secure your spot!"
 msgstr ""
 
-msgid "Registrations not open!"
+#, python-format
+msgid "Registrations will open on %(date)s at %(time)s"
+msgstr ""
+
+msgid "Registrations not yet open"
 msgstr ""
 
 msgid "Registrations for this event have not opened yet"
-msgstr ""
-
-#, python-format
-msgid "Registration opens on: %(date)s"
-msgstr ""
-
-msgid "Registrations closed"
 msgstr ""
 
 msgid "Sign up as a reserve!"
@@ -12908,7 +12965,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Registration closes on: %(date)s"
+msgid "Registrations close on %(date)s at %(time)s"
 msgstr ""
 
 msgid "Pre-registration confirmed!"
@@ -13091,6 +13148,9 @@ msgstr ""
 msgid "Characters not participating"
 msgstr ""
 
+msgid "Not signed up"
+msgstr ""
+
 msgid "Place of birth not included in the ISTAT list"
 msgstr ""
 
@@ -13214,12 +13274,13 @@ msgstr ""
 msgid "Advanced mode activated! All features are now available."
 msgstr ""
 
-msgid "Event deletion request"
+msgid "The event sessions have changed, please review and confirm again"
 msgstr ""
 
-msgid ""
-"Your request has been logged; due to delicacy of the task requested, our "
-"team will review it manually; we'll let you know as soon as possible"
+msgid "Deletion started, it may take a few minutes to complete"
+msgstr ""
+
+msgid "The name entered does not match"
 msgstr ""
 
 msgid "Member approved!"
@@ -13498,10 +13559,20 @@ msgstr ""
 msgid "The payment has not been completed"
 msgstr ""
 
-msgid "The payment was not completed. Please contact us to find out why."
+msgid "The payment was cancelled. You can try again whenever you want."
+msgstr ""
+
+msgid ""
+"The payment was not completed. Please try again later or choose another "
+"payment method."
 msgstr ""
 
 msgid "As a final step, we ask you to complete your profile."
+msgstr ""
+
+msgid ""
+"The payment has not been confirmed yet: it will be registered as soon as "
+"Satispay confirms it."
 msgstr ""
 
 msgid "You have completed the payment!"
@@ -13936,6 +14007,9 @@ msgstr ""
 
 #, python-format
 msgid "Your registration for %(event)s has been cancelled."
+msgstr ""
+
+msgid "Registrations not open!"
 msgstr ""
 
 msgid "You cannot redeem a membership, you are already a member!"

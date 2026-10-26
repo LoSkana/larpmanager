@@ -170,7 +170,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     association_id = member.membership.association_id
     member_registrations = member.registrations.filter(
         run__event__association_id=association_id,
-        run__start__gte=timezone.now().date(),
+        run__start__gte=timezone.localdate(),
     )
     requires_membership_fee = False
     unpaid_registration_links = []
@@ -178,7 +178,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     # Process each registration for payment requirements
     for registration in member_registrations:
         features = get_event_features(get_run_event_id(registration.run_id))
-        run_starts_this_year = registration.run.start and registration.run.start.year == timezone.now().year
+        run_starts_this_year = registration.run.start and registration.run.start.year == timezone.localdate().year
 
         # Check if membership fee is required for this event
         if run_starts_this_year and "laog" not in features:

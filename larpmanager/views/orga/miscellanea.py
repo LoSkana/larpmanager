@@ -1075,7 +1075,7 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_milestones(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display milestones for an event run in the organizer dashboard."""
     context = check_event_context(request, event_slug, "orga_milestones")
-    today = timezone.now().date()
+    today = timezone.localdate()
     milestones = Milestone.objects.filter(event=context["event"]).select_related("assigned").order_by("deadline")
     for m in milestones:
         if m.deadline:

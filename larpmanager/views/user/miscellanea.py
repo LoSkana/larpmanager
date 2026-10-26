@@ -55,7 +55,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Handout
 from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop
+from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop, local_day_start
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import (
     print_handout,
@@ -383,7 +383,7 @@ def shuttle(request: HttpRequest) -> Any:
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
     # get last shuttle requests
-    ref = timezone.now() - timedelta(days=5)
+    ref = local_day_start(timezone.localdate() - timedelta(days=5))
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
@@ -391,7 +391,7 @@ def shuttle(request: HttpRequest) -> Any:
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
-                created__gt=ref.date(),
+                created__gt=ref,
                 status=ShuttleStatus.DONE,
                 association_id=context["association_id"],
             ).order_by("status", "date", "time"),

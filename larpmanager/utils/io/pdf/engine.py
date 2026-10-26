@@ -34,6 +34,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.template import Context, Engine
 from django.template.loader import get_template
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageDraw
@@ -44,7 +45,6 @@ from xhtml2pdf.config.resources import ResourceAccessPolicy
 from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.miscellanea import Util
-from larpmanager.utils.core.common import get_now
 
 # Restricted engine for rendering untrusted database templates
 _RESTRICTED_ENGINE = Engine(
@@ -109,7 +109,7 @@ def reprint(file_path: Any) -> Any:
         return True
 
     # Use timezone-aware datetimes for comparison to avoid naive/aware mismatch
-    cutoff_date = get_now() - timedelta(days=1)
+    cutoff_date = timezone.now() - timedelta(days=1)
     modification_time = datetime.fromtimestamp(path_obj.stat().st_mtime, tz=UTC)
     return modification_time < cutoff_date
 

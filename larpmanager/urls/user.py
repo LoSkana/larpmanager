@@ -290,6 +290,11 @@ urlpatterns = [
         name="accounting_webhook_stripe",
     ),
     path(
+        "accounting/sumup/error/<str:invoice_uuid>/",
+        views_ua.accounting_sumup_error,
+        name="accounting_sumup_error",
+    ),
+    path(
         "accounting/webhook/sumup",
         views_ua.accounting_webhook_sumup,
         name="accounting_webhook_sumup",

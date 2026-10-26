@@ -716,6 +716,8 @@ def backend_delete(
 
 def _element_display_name(element: BaseModel) -> str:
     """Return a best-effort human-readable name for an element."""
+    if hasattr(element, "get_display_name"):
+        return element.get_display_name()
     for field_name in ("name", "title", "text"):
         value = getattr(element, field_name, None)
         if value:

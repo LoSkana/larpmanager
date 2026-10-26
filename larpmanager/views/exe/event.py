@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
@@ -45,13 +44,14 @@ from larpmanager.models.event import (
     RegistrationStatus,
     Run,
 )
-from larpmanager.models.larpmanager import LarpManagerTicket
+from larpmanager.utils.auth.permission import is_association_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
-from larpmanager.utils.core.headers import get_url
+from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_form, exe_new
+from larpmanager.utils.larpmanager.tasks import delete_run_task, is_last_run
 from larpmanager.utils.users.deadlines import check_run_deadlines
 from larpmanager.views.manage import _get_registration_counts, _get_registration_status
 from larpmanager.views.orga.event import full_event_edit
@@ -73,6 +73,8 @@ def exe_events(request: HttpRequest) -> HttpResponse:
     for run in context["list"]:
         run.registration_status = _get_registration_status(run)
         run.registration_counts = _get_registration_counts(run)
+
+    context["can_delete"] = is_association_admin(context)
 
     return render(request, "larpmanager/exe/events.html", context)
 
@@ -301,53 +303,32 @@ def exe_deadlines(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
-    """Handle run deletion request by creating a support ticket.
+    """Delete a run (or its event, if it is the only run) after name confirmation.
 
-    Instead of actually deleting the run, this creates a support ticket
-    with the run's information for manual review.
-
-    Args:
-        request: HTTP request object containing user session
-        run_uuid: Run UUID to request deletion for
-
-    Returns:
-        HttpResponse: Redirect to exe_events page with success message
-
+    Restricted to members with the main association role (number 1). On GET shows a
+    warning page asking to type the full run name; on POST checks the name and deletes.
     """
-    # Check user has executive events permission
     context = check_association_context(request, "exe_events")
+    if not is_association_admin(context):
+        raise UserPermissionError
 
-    # Get the run object
     backend_get(context, Run, run_uuid, "event")
     run = context["el"]
 
-    # Create support ticket with run information
-    delete_url = get_url(reverse("lm_events_delete", args=[run.uuid]))
-    ticket_content = f"""
-        Deletion request for run:\n\n
-        UUID: {run.uuid}\n
-        Name: {run.search}\n
-        Number: {run.number}\n
-        Event: {run.event.name}\n
-        Start: {run.start}\n
-        End: {run.end}\n\n
-        Admin delete link: {delete_url}
-    """
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+    context["frame"] = is_frame
+    context["delete_event"] = is_last_run(run)
 
-    LarpManagerTicket.objects.create(
-        association_id=context["association_id"],
-        member=context["member"],
-        reason=_("Event deletion request"),
-        email=context["member"].user.email if context["member"] else "",
-        content=ticket_content,
-    )
+    if request.method == "POST":
+        if (request.POST.get("delete_event") == "1") != context["delete_event"]:
+            context["error_message"] = _("The event sessions have changed, please review and confirm again")
+        elif request.POST.get("confirm_name", "").strip() == run.search.strip():
+            delete_run_task(str(run.uuid), whole_event=context["delete_event"])
+            messages.success(request, _("Deletion started, it may take a few minutes to complete"))
+            if is_frame:
+                return render(request, "elements/dashboard/form_success.html", context)
+            return redirect("exe_events")
+        else:
+            context["error_message"] = _("The name entered does not match")
 
-    # Inform user
-    messages.success(
-        request,
-        _(
-            "Your request has been logged; due to delicacy of the task requested, our team will review it manually; we'll let you know as soon as possible"
-        ),
-    )
-
-    return redirect("exe_events")
+    return render(request, "larpmanager/exe/events_delete.html", context)
