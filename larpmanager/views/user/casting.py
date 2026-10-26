@@ -58,7 +58,8 @@ def casting_characters(context: dict, registration: Registration) -> None:
 
     Args:
         context (dict): Context dictionary to be populated with character choices and factions.
-                   Will be modified in-place with 'factions', 'choices', and 'faction_filter' keys.
+                   Will be modified in-place with 'factions', 'choices', 'primary_faction_filter'
+                   and 'faction_filter' keys.
         registration: Registration object containing ticket tier information used for filtering.
 
     Returns:
@@ -67,7 +68,7 @@ def casting_characters(context: dict, registration: Registration) -> None:
     Note:
         - Filters out filler characters for non-filler ticket tiers
         - Converts faction and character data to JSON for frontend use
-        - Adds faction filter for transversal faction types
+        - Adds faction filters for primary and transversal faction types
 
     """
     # Determine if we should filter out filler characters based on ticket tier
@@ -104,10 +105,14 @@ def casting_characters(context: dict, registration: Registration) -> None:
     context["choices"] = json.dumps(character_choices_by_faction)
     context["valid_element_ids"] = valid_character_uuids
 
-    # Add faction filter for transversal faction types
-    context["faction_filter"] = get_event_elements(context["event"].id, Faction, context=context).filter(
-        typ=FactionType.TRASV
-    )
+    # Add faction filters for primary and transversal faction types, only if factions are visible
+    context["primary_faction_filter"] = []
+    context["faction_filter"] = []
+    if "faction" in context["features"] and context.get("show_faction"):
+        context["primary_faction_filter"] = [faction for faction in context["factions"] if faction.number != 0]
+        context["faction_filter"] = get_event_elements(context["event"].id, Faction, context=context).filter(
+            typ=FactionType.TRASV
+        )
 
 
 def casting_quest_traits(context: dict, typ: str) -> None:
