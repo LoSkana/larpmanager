@@ -6692,26 +6692,6 @@ msgstr ""
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
 msgstr ""
 
-msgid "Next sessions"
-msgstr ""
-
-msgid "There are no new sessions scheduled at this time."
-msgstr ""
-
-msgid "Pre-register here!"
-msgstr ""
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-
-msgid "Past sessions"
-msgstr ""
-
-msgid "Link"
-msgstr ""
-
 msgid "Dates"
 msgstr ""
 
@@ -9249,6 +9229,9 @@ msgid "Event navigation"
 msgstr ""
 
 msgid "Tooltip"
+msgstr ""
+
+msgid "Link"
 msgstr ""
 
 msgid ""

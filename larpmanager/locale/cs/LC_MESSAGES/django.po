@@ -2819,9 +2819,6 @@ msgstr "Název Questu"
 msgid "New character"
 msgstr "Nová postava"
 
-msgid "Next sessions"
-msgstr "Další zasedání"
-
 msgid "Not completed"
 msgstr "Není dokončeno"
 
@@ -2839,9 +2836,6 @@ msgstr "Původní text"
 
 msgid "Participants:"
 msgstr "Účastníci:"
-
-msgid "Past sessions"
-msgstr "Minulá zasedání"
 
 msgid "Paste as text"
 msgstr "Vložit jako text"
@@ -4280,9 +4274,6 @@ msgstr "Zaplatit roční poplatek"
 
 msgid "Payment processing"
 msgstr "Zpracování plateb"
-
-msgid "Pre-register here!"
-msgstr "Předregistruj se tady!"
 
 msgid "Preferences saved!"
 msgstr "Předvolby uloženy!"
@@ -8340,9 +8331,6 @@ msgstr "Registrační kód není v současné době aktivní"
 
 msgid "The spots of its options are now available again."
 msgstr "Místa pro její možnosti jsou nyní znovu k dispozici."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "V tuto chvíli nejsou naplánovány žádné nové relace."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr "Tato stránka ti umožňuje přidat nebo upravit typ inventáře."
@@ -12851,13 +12839,6 @@ msgid ""
 msgstr ""
 "Unikátní kód pro interní použití – není viditelný. Uveď řetězec bez mezer "
 "nebo zvláštních symbolů"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Jakmile bude naplánována nová relace, budeš o tom informován/a a získáš "
-"přednostní přístup k registraci."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "

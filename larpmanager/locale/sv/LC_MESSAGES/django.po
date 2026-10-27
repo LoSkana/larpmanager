@@ -2819,9 +2819,6 @@ msgstr "Namn på Quest"
 msgid "New character"
 msgstr "Ny karaktär"
 
-msgid "Next sessions"
-msgstr "Kommande sessioner"
-
 msgid "Not completed"
 msgstr "Ej slutfört"
 
@@ -2839,9 +2836,6 @@ msgstr "Originaltext"
 
 msgid "Participants:"
 msgstr "Deltagare:"
-
-msgid "Past sessions"
-msgstr "Tidigare sessioner"
 
 msgid "Paste as text"
 msgstr "Klistra in som text"
@@ -4280,9 +4274,6 @@ msgstr "Betala årsavgiften"
 
 msgid "Payment processing"
 msgstr "Hantering av betalningar"
-
-msgid "Pre-register here!"
-msgstr "Föranmäl dig här!"
 
 msgid "Preferences saved!"
 msgstr "Preferenser sparade!"
@@ -8342,9 +8333,6 @@ msgstr "Registreringskoden är inte aktiv för närvarande"
 
 msgid "The spots of its options are now available again."
 msgstr "Platserna för dess alternativ är nu tillgängliga igen."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "Det finns inga nya sessioner inplanerade för närvarande."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr "På den här sidan kan du lägga till eller redigera en inventarietyp."
@@ -13025,13 +13013,6 @@ msgid ""
 msgstr ""
 "Unik kod för internt bruk - ej synlig. Ange en sträng utan mellanslag eller "
 "konstiga symboler"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Du kommer att få ett meddelande när en ny session planeras och få förtur vid"
-" anmälan."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "
