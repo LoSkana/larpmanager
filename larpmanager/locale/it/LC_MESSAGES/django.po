@@ -2819,9 +2819,6 @@ msgstr "Nome della Quest"
 msgid "New character"
 msgstr "Nuovo personaggio"
 
-msgid "Next sessions"
-msgstr "Prossime sessioni"
-
 msgid "Not completed"
 msgstr "Non completati"
 
@@ -2839,9 +2836,6 @@ msgstr "Testo originale"
 
 msgid "Participants:"
 msgstr "Partecipanti:"
-
-msgid "Past sessions"
-msgstr "Sessioni precedenti"
 
 msgid "Paste as text"
 msgstr "Incolla come testo"
@@ -4280,9 +4274,6 @@ msgstr "Versa la quota annuale"
 
 msgid "Payment processing"
 msgstr "Elaborazione del pagamento"
-
-msgid "Pre-register here!"
-msgstr "Pre-iscriviti qui!"
 
 msgid "Preferences saved!"
 msgstr "Preferenze salvate!"
@@ -8347,9 +8338,6 @@ msgstr "Il codice di iscrizione non è attivo al momento"
 
 msgid "The spots of its options are now available again."
 msgstr "I posti delle sue opzioni sono di nuovo disponibili."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "Al momento non sono previste nuove sessioni."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr ""
@@ -13283,13 +13271,6 @@ msgid ""
 msgstr ""
 "Codice univoco ad uso interno - non visibile. Indica una stringa senza spazi"
 " o simboli strani"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Riceverai una notifica quando verrà programmata una nuova sessione e avrai "
-"accesso prioritario alla registrazione."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "

@@ -800,18 +800,17 @@ def _get_guild_colors(context: dict) -> None:
 
 
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display main event page with runs, registration status, and event details.
+    """Display main event page with registration status and event details.
 
     Args:
         request: HTTP request object containing user authentication and session data
         event_slug: Event slug used to identify the specific event
 
     Returns:
-        HttpResponse: Rendered event template with context containing event details,
-                     runs categorized as coming/past, and registration information
+        HttpResponse: Rendered event template with context containing event details
+                     and registration information
 
     Note:
-        - Categorizes runs as 'coming' (ended within 3 days) or 'past'
         - Includes user registration status if authenticated
         - Sets no_robots flag based on development status and timing
 
@@ -820,33 +819,6 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
     # Template renders these deferred Event fields; fetch them in a single query
     context["event"].refresh_from_db(fields=["tagline", "where", "authors", "description", "genre"])
-    context["coming"] = []
-    context["past"] = []
-
-    # Get all runs for the event and set reference date (3 days ago)
-    runs = Run.objects.filter(event=context["event"]).exclude(id=context["run"].id)
-    ref = timezone.localdate() - timedelta(days=3)
-
-    # Prepare features mapping for registration status checking
-    features_map = {context["event"].id: context["features"]}
-    context.update({"features_map": features_map, "my_regs": get_event_signups(request, context)})
-
-    # Process each run to determine registration status and categorize by timing
-    for run in runs:
-        if not run.end:
-            continue
-
-        # Update run with registration status information
-        run.status = registration_status(context, run, context["member"])
-
-        # Categorize run as coming (recent) or past based on end date
-        if run.end > ref:
-            context["coming"].append(run)
-        else:
-            context["past"].append(run)
-
-    # Whether the run being viewed is itself still scheduled to happen
-    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.localdate()
 
     # Determine if search engines should index this page
     context["no_robots"] = (

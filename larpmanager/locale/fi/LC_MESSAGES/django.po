@@ -2819,9 +2819,6 @@ msgstr "Questin nimi"
 msgid "New character"
 msgstr "Uusi hahmo"
 
-msgid "Next sessions"
-msgstr "Seuraavat istunnot"
-
 msgid "Not completed"
 msgstr "Ei suoritettu"
 
@@ -2839,9 +2836,6 @@ msgstr "Alkuperäinen teksti"
 
 msgid "Participants:"
 msgstr "Osallistujat:"
-
-msgid "Past sessions"
-msgstr "Aiemmat istunnot"
 
 msgid "Paste as text"
 msgstr "Liitä tekstinä"
@@ -4280,9 +4274,6 @@ msgstr "Maksa vuosimaksu"
 
 msgid "Payment processing"
 msgstr "Maksujen käsittely"
-
-msgid "Pre-register here!"
-msgstr "Ilmoittaudu ennakkoon täällä!"
 
 msgid "Preferences saved!"
 msgstr "Mieltymykset tallennettu!"
@@ -8341,9 +8332,6 @@ msgstr "Ilmoittautumiskoodi ei ole aktiivinen tällä hetkellä"
 
 msgid "The spots of its options are now available again."
 msgstr "Sen vaihtoehtojen paikat ovat nyt taas vapaina."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "Tällä hetkellä ei ole uusia istuntoja."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr "Tällä sivulla voit lisätä tai muokata inventaariotyppiä."
@@ -13035,13 +13023,6 @@ msgid ""
 msgstr ""
 "Yksilöllinen koodi sisäiseen käyttöön - ei näkyvissä. Merkitse merkkijono "
 "ilman välilyöntejä tai outoja symboleja"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Saat ilmoituksen, kun uusi istunto on aikataulutettu, ja sinulle annetaan "
-"etuoikeus ilmoittautumiseen."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "

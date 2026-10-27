@@ -2819,9 +2819,6 @@ msgstr "Όνομα Quest"
 msgid "New character"
 msgstr "Νέος χαρακτήρας"
 
-msgid "Next sessions"
-msgstr "Επόμενες συνεδρίες"
-
 msgid "Not completed"
 msgstr "Δεν ολοκληρώθηκαν"
 
@@ -2839,9 +2836,6 @@ msgstr "Αρχικό κείμενο"
 
 msgid "Participants:"
 msgstr "Συμμετέχοντες:"
-
-msgid "Past sessions"
-msgstr "Προηγούμενες συνεδρίες"
 
 msgid "Paste as text"
 msgstr "Επικόλληση ως κείμενο"
@@ -4280,9 +4274,6 @@ msgstr "Πλήρωσε την ετήσια συνδρομή"
 
 msgid "Payment processing"
 msgstr "Επεξεργασία πληρωμής"
-
-msgid "Pre-register here!"
-msgstr "Κάνε προεγγραφή εδώ!"
 
 msgid "Preferences saved!"
 msgstr "Οι προτιμήσεις αποθηκεύτηκαν!"
@@ -8354,9 +8345,6 @@ msgstr "Ο κωδικός εγγραφής δεν είναι ενεργός αυ
 
 msgid "The spots of its options are now available again."
 msgstr "Οι θέσεις των επιλογών του είναι πλέον ξανά διαθέσιμες."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "Δεν υπάρχουν νέες συνεδρίες προγραμματισμένες αυτή τη στιγμή."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr ""
@@ -13375,13 +13363,6 @@ msgid ""
 msgstr ""
 "Μοναδικός κωδικός για εσωτερική χρήση - δεν είναι ορατός. Χρησιμοποίησε μια "
 "συμβολοσειρά χωρίς κενά ή παράξενα σύμβολα"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Θα ειδοποιηθείς όταν προγραμματιστεί μια νέα συνεδρία και θα έχεις "
-"προτεραιότητα στην εγγραφή."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "

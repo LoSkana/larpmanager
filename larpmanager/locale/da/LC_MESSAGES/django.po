@@ -2819,9 +2819,6 @@ msgstr "Navn på quest"
 msgid "New character"
 msgstr "Ny karakter"
 
-msgid "Next sessions"
-msgstr "Næste sessioner"
-
 msgid "Not completed"
 msgstr "Ikke gennemført"
 
@@ -2839,9 +2836,6 @@ msgstr "Originaltekst"
 
 msgid "Participants:"
 msgstr "Deltagere:"
-
-msgid "Past sessions"
-msgstr "Tidligere sessioner"
 
 msgid "Paste as text"
 msgstr "Indsæt som tekst"
@@ -4280,9 +4274,6 @@ msgstr "Betal det årlige kontingent"
 
 msgid "Payment processing"
 msgstr "Betaling behandles"
-
-msgid "Pre-register here!"
-msgstr "Forhåndsregistrér dig her!"
 
 msgid "Preferences saved!"
 msgstr "Præferencer gemt!"
@@ -8341,9 +8332,6 @@ msgstr "Tilmeldingskoden er ikke aktiv i øjeblikket"
 
 msgid "The spots of its options are now available again."
 msgstr "Pladserne til dens muligheder er nu ledige igen."
-
-msgid "There are no new sessions scheduled at this time."
-msgstr "Der er ingen nye sessioner planlagt på nuværende tidspunkt."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr "Denne side lader dig tilføje eller redigere en inventartype."
@@ -12972,13 +12960,6 @@ msgid ""
 msgstr ""
 "Unik kode til internt brug - ikke synlig. Angiv en streng uden mellemrum "
 "eller mærkelige symboler"
-
-msgid ""
-"You will be notified when a new session is scheduled and given priority "
-"access to registration."
-msgstr ""
-"Du får besked, når en ny session planlægges, og får prioriteret adgang til "
-"tilmelding."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "
