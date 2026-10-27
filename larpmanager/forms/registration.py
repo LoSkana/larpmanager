@@ -200,7 +200,7 @@ class RegistrationForm(BaseRegistrationForm):
         if "bring_friend" not in self.params.get("features"):
             return
 
-        if self.instance.pk and self.initial["modified"] > 0:
+        if self.instance.pk and self.instance.modified > 0:
             return
 
         help_text_message = _(
