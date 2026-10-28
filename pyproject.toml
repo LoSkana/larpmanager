@@ -3,7 +3,7 @@ name = "larpmanager"
 version = "1.0.0"
 description = "A Django-based web application for managing LARP (Live Action Role-Playing) events"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12,<3.14"
 license = "AGPL-3.0-or-later"
 authors = [
   {name = "Scanagatta Mauro"}
