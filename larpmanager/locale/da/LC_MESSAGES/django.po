@@ -3119,6 +3119,9 @@ msgstr "Få evne"
 msgid "One-time token"
 msgstr "Engangstoken"
 
+msgid "Organizer edit"
+msgstr "Arrangørredigering"
+
 msgid "Outflows total"
 msgstr "Samlede udbetalinger"
 
@@ -3623,6 +3626,9 @@ msgstr "Aktive rabatter"
 
 msgid "Driver's License"
 msgstr "Kørekort"
+
+msgid "Edit preferences"
+msgstr "Rediger præferencer"
 
 msgid "Enabled features"
 msgstr "Aktiverede funktioner"
@@ -6858,6 +6864,9 @@ msgstr "Definér brugerdefinerede statusflag for brugere"
 msgid "Display all users data for insurance"
 msgstr "Vis alle brugerdata til forsikring"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Elementer, der skal undgås i tildelingen:"
+
 msgid "Error processing payment, contact us"
 msgstr "Fejl ved behandling af betaling, kontakt os"
 
@@ -7091,6 +7100,9 @@ msgstr "Pålæg transaktionsgebyrer på deltageren"
 msgid "Color used to highlight important text"
 msgstr "Farve, der bruges til at fremhæve vigtig tekst"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Træk elementerne for at ændre rækkefølgen af præferencerne."
+
 msgid "Fill in your character's relationships"
 msgstr "Udfyld din karakters relationer"
 
@@ -7186,9 +7198,6 @@ msgstr "Tilpas organisationens siders udseende"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Datoen, fra hvilken tillægget anvendes"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Træk elementer for at ændre rækkefølgen på dine præferencer."
 
 msgid "Enables free pre-registration to events"
 msgstr "Aktiverer gratis forhåndstilmelding til events"
@@ -7968,6 +7977,9 @@ msgstr "Tildel en karakter til en registreret deltager"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annullering på grund af manglende årligt medlemsgebyr"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Klik på en karakter for at tilføje den til præferencerne"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr "Fuldfør tjeklisten for at låse op for alle funktioner:"
 
@@ -8062,9 +8074,6 @@ msgstr "Tilføjes på registreringssiden før formularen"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Karakterer er kun synlige for brugere, der er logget ind:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Klik på en karakter for at føje den til dine præferencer"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpas specifikke tekster i arrangementsinterfacet"
@@ -8190,6 +8199,9 @@ msgstr "Afviger kun med ét symbol fra det forventede"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Rabatter gælder kun ved nye tilmeldinger"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Rediger denne deltagers casting-præferencer"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jeg er interesseret, men har ikke meget erfaring"
@@ -12023,6 +12035,13 @@ msgid ""
 msgstr ""
 "Indtast private oplysninger om din karakter, som kun er synlige for dig og "
 "arrangørerne"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Hvis aktiveret, kan arrangører redigere deltagernes præferencer fra casting-"
+"siden."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "

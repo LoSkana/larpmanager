@@ -1,0 +1,276 @@
+{% load i18n %}
+<script>
+var casting_max = {{ casting_max }};
+var casting_min = {{ casting_min }};
+var factions_dict = {{ factions_json | safe }};
+var choices_dict = {{ choices | safe }};
+var already = {{ already | safe }};
+
+var all_chars = [];
+(function() {
+    Object.keys(choices_dict).forEach(function(fk) {
+        Object.keys(choices_dict[fk]).forEach(function(ck) {
+            var c = choices_dict[fk][ck];
+            all_chars.push({
+                key: ck,
+                faction_key: fk,
+                faction_name: factions_dict[fk],
+                number: c.number,
+                name: c.name,
+                title: c.title || '',
+                factions: c.factions || []
+            });
+        });
+    });
+    all_chars.sort(function(a, b) { return a.number - b.number; });
+})();
+
+var preferences = [];
+var active_primary_factions = [];
+var active_factions = [];
+var dragged_idx = null;
+
+function get_char(key) {
+    for (var i = 0; i < all_chars.length; i++) {
+        if (all_chars[i].key === key) return all_chars[i];
+    }
+    return null;
+}
+
+function char_passes_filter(c) {
+    var search = document.getElementById('char-search').value.toLowerCase();
+    if (search) {
+        var haystack = ('#' + c.number + ' ' + c.name + ' ' + c.title).toLowerCase();
+        if (haystack.indexOf(search) < 0) return false;
+    }
+    if (active_primary_factions.length > 0) {
+        var in_primary = false;
+        for (var j = 0; j < active_primary_factions.length; j++) {
+            if (c.factions.indexOf(active_primary_factions[j]) >= 0) in_primary = true;
+        }
+        if (!in_primary) return false;
+    }
+    if (active_factions.length > 0) {
+        for (var i = 0; i < active_factions.length; i++) {
+            if (c.factions.indexOf(active_factions[i]) < 0) return false;
+        }
+    }
+    return true;
+}
+
+function make_char_info_el(c) {
+    var infoEl = document.createElement('div');
+    infoEl.className = 'char-info';
+    var nameEl = document.createElement('div');
+    nameEl.className = 'char-name';
+    nameEl.textContent = c.name;
+    infoEl.appendChild(nameEl);
+    if (c.title && c.title.trim()) {
+        var titleEl = document.createElement('div');
+        titleEl.className = 'char-title';
+        titleEl.textContent = c.title;
+        infoEl.appendChild(titleEl);
+    }
+    return infoEl;
+}
+
+function render_char_list() {
+    var list = document.getElementById('char-list');
+    list.innerHTML = '';
+
+    var visible = all_chars.filter(char_passes_filter);
+
+    if (visible.length === 0) {
+        list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No characters found" %}{% endfilter %}</div>';
+        return;
+    }
+
+    visible.forEach(function(c) {
+        var selected = preferences.indexOf(c.key) >= 0;
+        var card = document.createElement('div');
+        card.className = 'char-card' + (selected ? ' selected' : '');
+        card.onclick = function() { add_preference(c.key); };
+
+        var numEl = document.createElement('span');
+        numEl.className = 'char-num';
+        numEl.textContent = '#' + c.number;
+
+        card.appendChild(numEl);
+        card.appendChild(make_char_info_el(c));
+        if (c.faction_key !== 'all') {
+            var badgeEl = document.createElement('span');
+            badgeEl.className = 'char-faction-badge';
+            badgeEl.textContent = c.faction_name;
+            card.appendChild(badgeEl);
+        }
+        list.appendChild(card);
+    });
+}
+
+function render_pref_list() {
+    var list = document.getElementById('pref-list');
+    list.innerHTML = '';
+
+    document.getElementById('pref-counter').textContent = preferences.length + ' / ' + casting_max;
+
+    if (preferences.length === 0) {
+        list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "Click a character to add it to the preferences" %}{% endfilter %}</div>';
+        return;
+    }
+
+    preferences.forEach(function(key, idx) {
+        var c = get_char(key);
+        if (!c) return;
+
+        var item = document.createElement('div');
+        item.className = 'pref-item';
+        item.draggable = true;
+
+        item.addEventListener('dragstart', function(e) {
+            dragged_idx = idx;
+            setTimeout(function() { item.classList.add('dragging'); }, 0);
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        item.addEventListener('dragend', function() {
+            item.classList.remove('dragging');
+            document.querySelectorAll('.pref-item').forEach(function(el) {
+                el.classList.remove('drag-over');
+            });
+            dragged_idx = null;
+        });
+        item.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            document.querySelectorAll('.pref-item').forEach(function(el) {
+                el.classList.remove('drag-over');
+            });
+            item.classList.add('drag-over');
+        });
+        item.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (dragged_idx === null || dragged_idx === idx) return;
+            var moved = preferences.splice(dragged_idx, 1)[0];
+            preferences.splice(idx, 0, moved);
+            render_pref_list();
+            render_char_list();
+            check_preferences();
+        });
+
+        var handleEl = document.createElement('span');
+        handleEl.className = 'drag-handle';
+        var handleIcon = document.createElement('i');
+        handleIcon.className = 'fas fa-grip-vertical';
+        handleEl.appendChild(handleIcon);
+
+        var rankEl = document.createElement('span');
+        rankEl.className = 'pref-rank';
+        rankEl.textContent = idx + 1;
+
+        var numEl = document.createElement('span');
+        numEl.className = 'char-num';
+        numEl.textContent = '#' + c.number;
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'pref-remove';
+        removeBtn.type = 'button';
+        var removeIcon = document.createElement('i');
+        removeIcon.className = 'fas fa-times';
+        removeBtn.appendChild(removeIcon);
+        removeBtn.onclick = function() { remove_preference(idx); };
+
+        item.appendChild(handleEl);
+        item.appendChild(rankEl);
+        item.appendChild(numEl);
+        item.appendChild(make_char_info_el(c));
+        item.appendChild(removeBtn);
+        list.appendChild(item);
+    });
+}
+
+function add_preference(key) {
+    if (preferences.indexOf(key) >= 0) return;
+    if (preferences.length >= casting_max) return;
+    preferences.push(key);
+    render_pref_list();
+    render_char_list();
+    check_preferences();
+}
+
+function remove_preference(idx) {
+    preferences.splice(idx, 1);
+    render_pref_list();
+    render_char_list();
+    check_preferences();
+}
+
+function toggle_chip(el, number, active_list) {
+    var idx = active_list.indexOf(number);
+    if (idx >= 0) {
+        active_list.splice(idx, 1);
+        el.classList.remove('active');
+    } else {
+        active_list.push(number);
+        el.classList.add('active');
+    }
+    render_char_list();
+}
+
+function toggle_primary_faction_chip(el, number) {
+    toggle_chip(el, number, active_primary_factions);
+}
+
+function toggle_faction_chip(el, number) {
+    toggle_chip(el, number, active_factions);
+}
+
+function update_hidden_inputs() {
+    var container = document.getElementById('hidden-inputs');
+    container.innerHTML = '';
+    for (var ix = 0; ix < casting_max; ix++) {
+        var fInput = document.createElement('input');
+        fInput.type = 'hidden';
+        fInput.name = 'faction' + ix;
+        var cInput = document.createElement('input');
+        cInput.type = 'hidden';
+        cInput.name = 'choice' + ix;
+        if (ix < preferences.length) {
+            var c = get_char(preferences[ix]);
+            if (c) {
+                fInput.value = c.faction_key;
+                cInput.value = c.key;
+            }
+        }
+        container.appendChild(fInput);
+        container.appendChild(cInput);
+    }
+}
+
+function check_preferences() {
+    var submit = document.getElementById('submit');
+    var err = document.getElementById('err');
+    submit.disabled = true;
+    err.textContent = '';
+
+    if (preferences.length < casting_min) {
+        err.textContent = '{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}';
+        return;
+    }
+
+    submit.disabled = false;
+    update_hidden_inputs();
+}
+
+function load_already() {
+    for (var ix = 0; ix < casting_max; ix++) {
+        if (already[ix] === undefined || already[ix] === '') continue;
+        if (preferences.indexOf(already[ix]) < 0) preferences.push(already[ix]);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    load_already();
+    render_char_list();
+    render_pref_list();
+    check_preferences();
+});
+</script>

@@ -3119,6 +3119,9 @@ msgstr "Vaardigheid verwerven"
 msgid "One-time token"
 msgstr "Eenmalig token"
 
+msgid "Organizer edit"
+msgstr "Bewerken door organisator"
+
 msgid "Outflows total"
 msgstr "Totale kosten"
 
@@ -3623,6 +3626,9 @@ msgstr "Kortingen actief"
 
 msgid "Driver's License"
 msgstr "Rijbewijs"
+
+msgid "Edit preferences"
+msgstr "Voorkeuren bewerken"
 
 msgid "Enabled features"
 msgstr "Ingeschakelde functies"
@@ -6859,6 +6865,9 @@ msgstr "Definieer aangepaste statusmarkeringen voor gebruikers"
 msgid "Display all users data for insurance"
 msgstr "Toon alle gebruikersgegevens voor de verzekering"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Elementen om te vermijden bij de toewijzing:"
+
 msgid "Error processing payment, contact us"
 msgstr "Fout bij het verwerken van betaling, neem contact met ons op"
 
@@ -7092,6 +7101,9 @@ msgstr "Breng transactiekosten in rekening bij de deelnemer"
 msgid "Color used to highlight important text"
 msgstr "Kleur gebruikt om belangrijke tekst te markeren"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Sleep items om de voorkeuren opnieuw te ordenen."
+
 msgid "Fill in your character's relationships"
 msgstr "Vul de relaties van je personage in"
 
@@ -7187,9 +7199,6 @@ msgstr "Het uiterlijk van organisatiepagina's aanpassen"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Datum waarna toeslag van toepassing is"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Sleep items om je voorkeuren te herschikken."
 
 msgid "Enables free pre-registration to events"
 msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
@@ -7973,6 +7982,9 @@ msgstr "Een personage toewijzen aan een geregistreerde deelnemer"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Klik op een personage om het aan de voorkeuren toe te voegen"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr ""
 "Voltooi de checklist om alle functies van het platform te ontgrendelen:"
@@ -8068,9 +8080,6 @@ msgstr "Toegevoegd aan de registratiepagina, vóór het formulier"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Personages zijn alleen zichtbaar voor ingelogde gebruikers:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Klik op een personage om het aan je voorkeuren toe te voegen"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Pas specifieke teksten in de evenementinterface aan"
@@ -8197,6 +8206,9 @@ msgstr "Verschilt maar door één teken van wat je zou verwachten"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Kortingen alleen van toepassing op nieuwe registratie"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Bewerk de casting-voorkeuren van deze deelnemer"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Ik ben geïnteresseerd, maar heb niet veel ervaring"
@@ -12327,6 +12339,13 @@ msgid ""
 msgstr ""
 "Voer privé-informatie over je personage in, alleen zichtbaar voor jou en de "
 "organisatoren"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Als dit is ingeschakeld, kunnen organisatoren de voorkeuren van deelnemers "
+"bewerken vanaf de casting-pagina."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "

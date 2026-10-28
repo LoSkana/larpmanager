@@ -1,0 +1,41 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block body_class %}
+    floating_iframe
+{% endblock body_class %}
+{% block title %}
+    {% trans "Preferences" %} {{ gl_name }} - {{ edit_registration.member }}
+{% endblock title %}
+{% block info %}
+    {% trans "Edit the casting preferences of this participant" %}
+{% endblock info %}
+{% block content %}
+    <div class="form_container user_resize platform">
+        <p class="casting-edit-head">
+            <b>{{ edit_registration.member }}</b>
+            {% if edit_registration.ticket %}- {{ edit_registration.ticket.name }}{% endif %}
+        </p>
+        <form action="{{ request.path }}" method="post" id="casting-form">
+            {% csrf_token %}
+            {% trans "Preferences" as pref_title %}
+            {% include "elements/casting/preferences_widget.html" %}
+            {% if casting_avoid %}
+                <p class="casting-avoid">
+                    <i>{% trans "Elements to avoid in the assignment:" %}</i>
+                </p>
+                <input type="text" name="avoid" id="avoid" value="{{ avoid }}" />
+            {% endif %}
+            <input type="submit"
+                   name="subm"
+                   id="submit"
+                   value="{% trans "Submit" %}"
+                   class="casting-submit">
+        </form>
+    </div>
+{% endblock content %}
+{% block js %}
+    {% include "elements/casting/preferences_widget.js.html" %}
+{% endblock js %}
+{% block js2 %}
+    {% include "elements/helpers/iframe_resize.js" %}
+{% endblock js2 %}

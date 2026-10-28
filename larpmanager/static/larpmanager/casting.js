@@ -63,6 +63,9 @@ var csrf_token = window['csrf_token'];
 // URL endpoint for toggling character assignments
 var toggle_url = window['toggle_url'];
 
+// URL endpoint for editing a player's preferences (null if disabled)
+var edit_pref_url = window['edit_pref_url'];
+
 // Translated UI strings
 var trads = window['trads'];
 
@@ -150,7 +153,7 @@ function load_grid() {
     if (didnt_choose.length > 0) {
         $('#didnt_choose').append(trads['ge']);
         for (var ix = 0; ix < didnt_choose.length; ix++) {
-            $('#didnt_choose').append(' - ' + esc_html(players[didnt_choose[ix]]['name']));
+            $('#didnt_choose').append(' - ' + esc_html(players[didnt_choose[ix]]['name']) + edit_pref_icon(didnt_choose[ix]));
         }
         $('#didnt_choose').append(' - ' + trads['le'] + ': ');
         for (var ix = 0; ix < didnt_choose.length; ix++) {
@@ -216,7 +219,7 @@ function load_grid() {
         if (key in avoids) av = avoids[key];
 
         // Start building row: checkbox, player name, priority
-        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}</td><td>{2}</td>'.format(esc_html(players[key]['name']), key, players[key]['prior']);
+        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}{3}</td><td>{2}</td>'.format(esc_html(players[key]['name']), key, players[key]['prior'], edit_pref_icon(key));
         if (casting_avoid)
             aux += '<td>{0}</td>'.format(esc_html(av))  // Add avoid column if enabled
 
@@ -616,6 +619,12 @@ $(function() {
         return false;
     });
 
+    // Edit icon - opens the player's preferences in a popup, the page reloads on save
+    $(document).on('click', '.casting-edit-pref', function() {
+        var url = edit_pref_url.replace('MEMBER_UUID', $(this).data('member'));
+        window.openIframeModal(url + '?frame=1', 'popup_dashboard');
+    });
+
     // Set form action to current URL (preserves query parameters)
     $('#load form').attr('action', document.URL);
 
@@ -624,6 +633,16 @@ $(function() {
         $(this).prop('checked', true);
     });
 });
+
+/**
+ * Returns the icon to edit a player's preferences, or empty string if editing is disabled
+ * @param {string} key - Player member uuid
+ * @returns {string} Icon html
+ */
+function edit_pref_icon(key) {
+    if (!edit_pref_url) return '';
+    return ' <i class="fas fa-pen casting-edit-pref" data-member="{0}" title="{1}"></i>'.format(esc_html(key), esc_html(trads['ep']));
+}
 
 /**
  * Sorts an object by its keys (numerical order)

@@ -1229,6 +1229,10 @@ class OrgaConfigForm(ConfigForm):
             help_text = _("If enabled, shows participants the histories of preferences entered.")
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
+            label = _("Organizer edit")
+            help_text = _("If enabled, organizers can edit the preferences of participants from the casting page.")
+            self.add_configs("casting_orga_edit", ConfigType.BOOL, label, help_text)
+
             label = _("Registration priority")
             help_text = _(
                 "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong).",

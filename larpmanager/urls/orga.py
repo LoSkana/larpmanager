@@ -1481,6 +1481,16 @@ urlpatterns = [
         name="orga_members_available",
     ),
     path(
+        "<slug:event_slug>/manage/casting/edit/<str:member_uuid>/",
+        views_oca.orga_casting_edit,
+        name="orga_casting_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/edit/<str:member_uuid>/<str:casting_type>/",
+        views_oca.orga_casting_edit,
+        name="orga_casting_edit",
+    ),
+    path(
         "<slug:event_slug>/manage/casting/toggle/",
         views_oca.orga_casting_toggle,
         name="orga_casting_toggle",

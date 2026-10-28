@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -46,6 +47,8 @@ from larpmanager.utils.services.event import get_event_filter_characters
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+
+    from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
 
@@ -203,7 +206,7 @@ def casting_details(context: dict) -> dict:
         )
 
     # Set boolean casting preferences from event configuration
-    for preference_name in ["show_pref", "history", "avoid"]:
+    for preference_name in ["show_pref", "history", "avoid", "orga_edit"]:
         context["casting_" + preference_name] = get_event_config(
             context["event"].id,
             "casting_" + preference_name,
@@ -272,7 +275,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
         return render(request, red, context)
 
     # Load any previously saved preferences for this casting type
-    _get_previous(request, context)
+    get_previous_casting(request, context, context["member"], registration)
 
     # Cap the minimum number of preferences to the available elements
     context["casting_min"] = min(context["casting_min"], len(context.get("valid_element_ids", set())))
@@ -295,6 +298,30 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
 
     Returns:
         Redirect to casting page on validation error, or to current path on success.
+    """
+    prefs = extract_casting_preferences(request, context, enforce_min=True)
+
+    # Handle validation errors or save preferences
+    if prefs is None:
+        if casting_type:
+            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
+        return redirect("casting", event_slug=context["run"].get_slug())
+
+    # Save preferences and redirect to refresh page
+    _casting_update(request, context, prefs)
+    return redirect(request.path_info)
+
+
+def extract_casting_preferences(request: HttpRequest, context: dict, *, enforce_min: bool) -> dict | None:
+    """Extract and validate POST casting preferences (choice0..choiceN).
+
+    Args:
+        request: HTTP request containing POST preference fields.
+        context: View context with casting configuration and valid element ids.
+        enforce_min: Whether to require the configured minimum number of preferences.
+
+    Returns:
+        Dict mapping preference order to element uuid, or None on validation error (messages are set).
     """
     prefs = {}
     valid_element_ids = context.get("valid_element_ids", set())
@@ -325,30 +352,24 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
         prefs[i] = pref
 
     # Validate the minimum number of preferences has been reached
-    if not validation_error and len(prefs) < context["casting_min"]:
+    if enforce_min and not validation_error and len(prefs) < context["casting_min"]:
         messages.error(request, _("You have not reached the minimum number of preferences"))
         validation_error = True
 
-    # Handle validation errors or save preferences
-    if validation_error:
-        if casting_type:
-            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
-        return redirect("casting", event_slug=context["run"].get_slug())
-
-    # Save preferences and redirect to refresh page
-    _casting_update(request, context, prefs)
-    return redirect(request.path_info)
+    return None if validation_error else prefs
 
 
-def _get_previous(request: HttpRequest, context: dict) -> None:
+def get_previous_casting(request: HttpRequest, context: dict, member: Member, registration: Registration) -> None:
     """Retrieve previous casting choices and avoidance preferences.
 
     Fetches existing casting choices for a member and populates the context
     with serialized data. Also retrieves casting avoidance preferences if they exist.
 
     Args:
+        request: HTTP request object
         context: Context dictionary to update with casting data
-        request: HTTP request object containing user information
+        member: Member whose preferences are loaded
+        registration: Registration of the member, used to filter available characters
 
     Returns:
         None: Function modifies context dictionary in place
@@ -362,9 +383,7 @@ def _get_previous(request: HttpRequest, context: dict) -> None:
     # ordered by preference to maintain selection order
     previous_choices = [
         casting_item.element
-        for casting_item in Casting.objects.filter(
-            run=context["run"], member=context["member"], typ=casting_type
-        ).order_by("pref")
+        for casting_item in Casting.objects.filter(run=context["run"], member=member, typ=casting_type).order_by("pref")
     ]
 
     # Serialize casting choices as JSON for frontend consumption
@@ -373,7 +392,7 @@ def _get_previous(request: HttpRequest, context: dict) -> None:
     # Handle different casting types with appropriate data population
     if not casting_type:
         # For character casting, populate available characters
-        casting_characters(context, context["registration"])
+        casting_characters(context, registration)
     else:
         # For quest casting, verify permissions and populate quest data
         check_event_feature(request, context, "questbuilder")
@@ -381,7 +400,7 @@ def _get_previous(request: HttpRequest, context: dict) -> None:
 
     # Attempt to retrieve avoidance preferences for this casting type
     try:
-        casting_avoidance = CastingAvoid.objects.get(run=context["run"], member=context["member"], typ=casting_type)
+        casting_avoidance = CastingAvoid.objects.get(run=context["run"], member=member, typ=casting_type)
         context["avoid"] = casting_avoidance.text
     except ObjectDoesNotExist:
         # No avoidance preferences found, continue without setting avoid context
@@ -425,12 +444,13 @@ def _check_already_done(context: dict) -> None:
             pass
 
 
-def _handle_casting_avoidance(context: dict, request: Any, typ: int) -> str | None:
+def _handle_casting_avoidance(context: dict, request: Any, member: Member, typ: int) -> str | None:
     """Handle casting avoidance preferences update.
 
     Args:
-        context: Context dictionary with run and member data
+        context: Context dictionary with run data
         request: HTTP request object with POST data
+        member: Member whose avoidance is updated
         typ: Casting type identifier
 
     Returns:
@@ -440,20 +460,20 @@ def _handle_casting_avoidance(context: dict, request: Any, typ: int) -> str | No
         return None
 
     # Clear existing avoidance preferences
-    CastingAvoid.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
+    CastingAvoid.objects.filter(run=context["run"], member=member, typ=typ).delete()
 
     # Get avoidance text from POST data if provided
     avoidance_text = request.POST.get("avoid", "")
 
     # Create new avoidance record if text was provided
     if avoidance_text and len(avoidance_text) > 0:
-        CastingAvoid.objects.create(run=context["run"], member=context["member"], typ=typ, text=avoidance_text)
+        CastingAvoid.objects.create(run=context["run"], member=member, typ=typ, text=avoidance_text)
         return avoidance_text
 
     return None
 
 
-def _build_preference_names_list(context: dict, typ: int, prefs: dict) -> list[str]:
+def build_preference_names_list(context: dict, typ: int, prefs: dict) -> list[str]:
     """Build list of preference names for email confirmation.
 
     Args:
@@ -503,38 +523,56 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
         None: Function performs database operations and sends messages/emails.
 
     """
-    typ = 0
-    if "quest_type" in context:
-        typ = context["quest_type"].number
-
-    # Clear all existing casting preferences for this user, run, and type
-    Casting.objects.filter(run=context["run"], member=context["member"], typ=typ).delete()
-
-    # Create new casting preferences based on submitted data
-    Casting.objects.bulk_create(
-        [
-            Casting(
-                run=context["run"],
-                member=context["member"],
-                typ=typ,
-                element=element_id,
-                pref=preference_order,
-            )
-            for preference_order, element_id in prefs.items()
-        ]
-    )
-
-    # Handle casting avoidance preferences if feature is enabled
-    avoidance_text = _handle_casting_avoidance(context, request, typ)
+    typ, avoidance_text = save_casting_preferences(request, context, context["member"], prefs)
 
     # Show success message to user
     messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
-    preference_names_list = _build_preference_names_list(context, typ, prefs)
+    preference_names_list = build_preference_names_list(context, typ, prefs)
 
     # Send confirmation email with updated preferences
     mail_confirm_casting(context["member"], context["run"], context["gl_name"], preference_names_list, avoidance_text)
+
+
+def save_casting_preferences(
+    request: HttpRequest, context: dict, member: Member, prefs: dict
+) -> tuple[int, str | None]:
+    """Replace the casting preferences and avoidance of a member for the current casting type.
+
+    Args:
+        request: HTTP request object with POST data (avoidance text)
+        context: Context dictionary with run and optional quest_type
+        member: Member whose preferences are saved
+        prefs: Dict mapping preference order to element uuid
+
+    Returns:
+        Tuple of casting type number and saved avoidance text (None if empty or disabled)
+    """
+    typ = context["quest_type"].number if "quest_type" in context else 0
+
+    with transaction.atomic():
+        # Clear all existing casting preferences for this member, run, and type
+        Casting.objects.filter(run=context["run"], member=member, typ=typ).delete()
+
+        # Create new casting preferences based on submitted data
+        Casting.objects.bulk_create(
+            [
+                Casting(
+                    run=context["run"],
+                    member=member,
+                    typ=typ,
+                    element=element_id,
+                    pref=preference_order,
+                )
+                for preference_order, element_id in prefs.items()
+            ]
+        )
+
+        # Handle casting avoidance preferences if feature is enabled
+        avoidance_text = _handle_casting_avoidance(context, request, member, typ)
+
+    return typ, avoidance_text
 
 
 def get_casting_preferences(

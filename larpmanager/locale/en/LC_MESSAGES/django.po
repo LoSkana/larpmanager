@@ -1818,6 +1818,14 @@ msgstr ""
 msgid "If enabled, shows participants the histories of preferences entered."
 msgstr ""
 
+msgid "Organizer edit"
+msgstr ""
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+
 msgid "Registration priority"
 msgstr ""
 
@@ -5621,6 +5629,21 @@ msgstr ""
 msgid "View the complete list of our events!"
 msgstr ""
 
+msgid "Available characters"
+msgstr ""
+
+msgid "Drag items to reorder the preferences."
+msgstr ""
+
+msgid "No characters found"
+msgstr ""
+
+msgid "Click a character to add it to the preferences"
+msgstr ""
+
+msgid "You have not reached the minimum number of preferences"
+msgstr ""
+
 msgid "Obtain the selected ability?"
 msgstr ""
 
@@ -6522,28 +6545,13 @@ msgstr ""
 msgid "Show the global preferences."
 msgstr ""
 
-msgid "Available characters"
-msgstr ""
-
 msgid "Your preferences"
-msgstr ""
-
-msgid "Drag items to reorder your preferences."
 msgstr ""
 
 msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr ""
 
 msgid "Confirm your casting preferences?"
-msgstr ""
-
-msgid "No characters found"
-msgstr ""
-
-msgid "Click a character to add it to your preferences"
-msgstr ""
-
-msgid "You have not reached the minimum number of preferences"
 msgstr ""
 
 msgid "History preferences"
@@ -9318,9 +9326,18 @@ msgstr ""
 msgid "Assigned outside expressed preferences"
 msgstr ""
 
+msgid "Edit preferences"
+msgstr ""
+
 msgid ""
 "No valid assignment exists with the current constraints: check the included "
 "participants and the available characters, then run the algorithm again"
+msgstr ""
+
+msgid "Edit the casting preferences of this participant"
+msgstr ""
+
+msgid "Elements to avoid in the assignment:"
 msgstr ""
 
 msgid "Configure form:"

@@ -3119,6 +3119,9 @@ msgstr "Απόκτηση ικανότητας"
 msgid "One-time token"
 msgstr "Token μίας χρήσης"
 
+msgid "Organizer edit"
+msgstr "Επεξεργασία από διοργανωτή"
+
 msgid "Outflows total"
 msgstr "Σύνολο εκροών"
 
@@ -3623,6 +3626,9 @@ msgstr "Ενεργές εκπτώσεις"
 
 msgid "Driver's License"
 msgstr "Άδεια οδήγησης"
+
+msgid "Edit preferences"
+msgstr "Επεξεργασία προτιμήσεων"
 
 msgid "Enabled features"
 msgstr "Ενεργοποιημένες λειτουργίες"
@@ -6858,6 +6864,9 @@ msgstr "Όρισε προσαρμοσμένες σημαίες κατάστασ�
 msgid "Display all users data for insurance"
 msgstr "Εμφάνιση όλων των δεδομένων χρηστών για ασφάλιση"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Στοιχεία που πρέπει να αποφευχθούν στην ανάθεση:"
+
 msgid "Error processing payment, contact us"
 msgstr "Σφάλμα επεξεργασίας πληρωμής, επικοινώνησε μαζί μας"
 
@@ -7092,6 +7101,9 @@ msgstr "Χρέωση προμηθειών συναλλαγής στον συμμ
 msgid "Color used to highlight important text"
 msgstr "Χρώμα που χρησιμοποιείται για την επισήμανση σημαντικού κειμένου"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Σύρε τα στοιχεία για να αλλάξεις τη σειρά των προτιμήσεων."
+
 msgid "Fill in your character's relationships"
 msgstr "Συμπλήρωσε τις σχέσεις του χαρακτήρα σου"
 
@@ -7187,9 +7199,6 @@ msgstr "Προσάρμοσε την εμφάνιση των σελίδων το�
 
 msgid "Date from when the surcharge is applied"
 msgstr "Ημερομηνία από την οποία εφαρμόζεται η προσαύξηση"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Σύρε τα στοιχεία για να αναδιατάξεις τις προτιμήσεις σου."
 
 msgid "Enables free pre-registration to events"
 msgstr "Επιτρέπει δωρεάν προεγγραφή σε εκδηλώσεις"
@@ -7973,6 +7982,9 @@ msgstr "Ανάθεσε έναν χαρακτήρα σε έναν εγγεγρα�
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Ακύρωση λόγω μη καταβολής της ετήσιας συνδρομής μέλους"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Κάνε κλικ σε έναν χαρακτήρα για να τον προσθέσεις στις προτιμήσεις"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr "Ολοκλήρωσε τη λίστα ελέγχου για να ξεκλειδώσεις όλες τις λειτουργίες:"
 
@@ -8069,10 +8081,6 @@ msgstr "Προστίθεται στη σελίδα εγγραφής, πριν α
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Οι χαρακτήρες είναι ορατοί μόνο σε συνδεδεμένους χρήστες:"
-
-msgid "Click a character to add it to your preferences"
-msgstr ""
-"Κάνε κλικ σε έναν χαρακτήρα για να τον προσθέσεις στις προτιμήσεις σου"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Προσαρμογή συγκεκριμένων κειμένων στη διεπαφή της εκδήλωσης"
@@ -8198,6 +8206,9 @@ msgstr "Διαφέρει μόνο κατά ένα σύμβολο από το α�
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Οι εκπτώσεις ισχύουν μόνο για νέες εγγραφές"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Επεξεργάσου τις προτιμήσεις casting αυτού του συμμετέχοντα"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Με ενδιαφέρει, αλλά δεν έχω μεγάλη εμπειρία"
@@ -12423,6 +12434,13 @@ msgid ""
 msgstr ""
 "Εισήγαγε ιδιωτικές πληροφορίες για τον χαρακτήρα σου, ορατές μόνο σε εσένα "
 "και στους διοργανωτές"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Αν είναι ενεργό, οι διοργανωτές μπορούν να επεξεργάζονται τις προτιμήσεις "
+"των συμμετεχόντων από τη σελίδα casting."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "
