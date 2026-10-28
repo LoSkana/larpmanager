@@ -21,8 +21,9 @@ from __future__ import annotations
 
 from typing import Any, ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
+from django import forms
 from django.contrib import admin
+from django.contrib.admin.widgets import AutocompleteSelect
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from tinymce.models import HTMLField
@@ -40,6 +41,58 @@ class DefModelAdmin(ImportExportModelAdmin):
         css: ClassVar[dict] = {"all": ("larpmanager/assets/css/admin.css",)}
 
     ordering: ClassVar[list] = ["-updated"]
+
+    def changelist_view(self, request: Any, extra_context: dict | None = None) -> Any:
+        """Render the changelist, adding the assets required by autocomplete list filters."""
+        response = super().changelist_view(request, extra_context)
+        context = getattr(response, "context_data", None)
+        if context and "cl" in context:
+            for spec in context["cl"].filter_specs:
+                if isinstance(spec, AutocompleteFilter):
+                    context["media"] += spec.media
+        return response
+
+
+class AutocompleteFilter(admin.SimpleListFilter):
+    """List filter on a foreign key, rendered as an admin autocomplete select.
+
+    Subclasses set `title` and `field_name`; the related model admin must define `search_fields`.
+    """
+
+    template = "admin/autocomplete_filter.html"
+    field_name = ""
+
+    def __init__(self, request: Any, params: dict, model: Any, model_admin: Any) -> None:
+        """Build the autocomplete widget for the filtered foreign key."""
+        self.parameter_name = f"{self.field_name}__pk__exact"
+        super().__init__(request, params, model, model_admin)
+
+        field = model._meta.get_field(self.field_name)  # noqa: SLF001
+        form_field = forms.ModelChoiceField(
+            queryset=field.remote_field.model._default_manager.all(),  # noqa: SLF001
+            widget=AutocompleteSelect(field, model_admin.admin_site),
+            required=False,
+        )
+        self.media = form_field.widget.media + forms.Media(js=("larpmanager/assets/js/admin-autocomplete-filter.js",))
+        self.rendered_widget = form_field.widget.render(
+            name=self.parameter_name,
+            value=self.value() or "",
+            attrs={"id": f"id-{self.parameter_name}-filter"},
+        )
+
+    def has_output(self) -> bool:
+        """Always show the filter, as its choices are loaded on demand."""
+        return True
+
+    def lookups(self, request: Any, model_admin: Any) -> tuple:  # noqa: ARG002
+        """Return no static choices; the widget queries the admin autocomplete view."""
+        return ()
+
+    def queryset(self, request: Any, queryset: Any) -> Any:  # noqa: ARG002
+        """Filter the queryset by the selected related object."""
+        if self.value():
+            return queryset.filter(**{self.parameter_name: self.value()})
+        return queryset
 
 
 class CSRFTinyMCEModelAdmin(DefModelAdmin):

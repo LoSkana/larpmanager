@@ -36,6 +36,9 @@ uv pip freeze | grep -v '^-e' | while read line; do
   fi
 done
 
+# regenerate the lockfile from the new pins
+uv lock
+
 # DB env
 export POSTGRES_HOST=localhost
 export POSTGRES_PORT=5432

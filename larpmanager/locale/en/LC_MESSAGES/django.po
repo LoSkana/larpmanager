@@ -5547,6 +5547,10 @@ msgstr ""
 msgid "The link may be outdated, or the page may have been moved or deleted."
 msgstr ""
 
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
 msgid "Activation failed"
 msgstr ""
 

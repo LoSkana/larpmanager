@@ -26,12 +26,18 @@ discounts, and financial records within the LarpManager application.
 
 from typing import ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
 
-from larpmanager.admin.base import AssociationFilter, DefModelAdmin, MemberFilter, RegistrationFilter, RunFilter
+from larpmanager.admin.base import (
+    AssociationFilter,
+    AutocompleteFilter,
+    DefModelAdmin,
+    MemberFilter,
+    RegistrationFilter,
+    RunFilter,
+)
 from larpmanager.models.accounting import (
     AccountingItem,
     AccountingItemCollection,

@@ -33,7 +33,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'tinymce',
     'django_select2',
-    'admin_auto_filters',
     'paypal.standard.ipn',
     'imagekit',
     'corsheaders',

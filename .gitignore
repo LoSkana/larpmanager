@@ -7,7 +7,6 @@ static-prod/
 .idea/
 deploy
 
-whoosh/
 
 
 playwright.config.js
