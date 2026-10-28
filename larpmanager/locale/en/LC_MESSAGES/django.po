@@ -9458,19 +9458,10 @@ msgstr ""
 msgid "Not scanned"
 msgstr ""
 
-msgid "No additional details."
-msgstr ""
-
-msgid "Loading..."
-msgstr ""
-
-msgid "Unable to load details."
+msgid "Outstanding"
 msgstr ""
 
 msgid "Pending sync:"
-msgstr ""
-
-msgid "Outstanding"
 msgstr ""
 
 msgid "Yes"
@@ -10824,6 +10815,9 @@ msgid "_MENU_ entries per page"
 msgstr ""
 
 msgid "Search:"
+msgstr ""
+
+msgid "Loading..."
 msgstr ""
 
 msgid "You have unsaved changes. Close without saving?"

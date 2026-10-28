@@ -891,9 +891,16 @@ body.floating_iframe .inner {
   font-weight: bold;
 }
 
-.checkin-offline {
+.checkin-offline,
+.checkin-unpaid {
   color: #c62828;
   font-weight: bold;
+}
+
+#checkin_scan_detail {
+  max-width: min(90vw, 400px);
+  max-height: 40vh;
+  overflow-y: auto;
 }
 
 #checkin_summary {

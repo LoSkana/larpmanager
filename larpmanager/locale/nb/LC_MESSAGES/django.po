@@ -5071,9 +5071,6 @@ msgstr "Ny karakter opprettet!"
 msgid "Newsletter preferences"
 msgstr "Innstillinger for nyhetsbrev"
 
-msgid "No additional details."
-msgstr "Ingen flere detaljer."
-
 msgid "No address was ignored"
 msgstr "Ingen adresse ble utelatt"
 
@@ -5293,9 +5290,6 @@ msgstr "Deltakerens e-postadresse"
 
 msgid "Total registration fee:"
 msgstr "Total registreringsavgift:"
-
-msgid "Unable to load details."
-msgstr "Kan ikke laste inn detaljer."
 
 msgid "Welcome to LarpManager!"
 msgstr "Velkommen til LarpManager!"

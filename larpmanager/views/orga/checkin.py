@@ -20,23 +20,26 @@
 
 from __future__ import annotations
 
-import json
+from html import unescape
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.db.models import Prefetch
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration_lookup import get_active_registrations
-from larpmanager.cache.writing import get_character_element_fields
-from larpmanager.models.form import BaseQuestionType, RegistrationQuestionType
+from larpmanager.cache.writing import get_writing_element_fields_batch
+from larpmanager.models.form import BaseQuestionType, QuestionApplicable, RegistrationQuestionType
 from larpmanager.models.registration import CheckIn, Registration
-from larpmanager.models.writing import FactionType
+from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.registrations.questions import (
     get_ordered_registration_questions,
@@ -48,7 +51,7 @@ from larpmanager.utils.registrations.questions import (
 
 def _resolve_registration(run_id: int, registration_uuid: str) -> Registration:
     """Return the registration for the run matching a scanned QR code's uuid."""
-    return Registration.objects.get(
+    return Registration.objects.prefetch_related("rcrs__character").get(
         uuid=registration_uuid, run_id=run_id, cancellation_date__isnull=True, pending=False
     )
 
@@ -57,7 +60,7 @@ def _registration_row(registration: Registration, *, writing_number: bool) -> di
     """Build the JSON-serializable row used by the check-in list and chart."""
     registration_payments_status(registration)
     character_labels = []
-    for rel in registration.rcrs.select_related("character"):
+    for rel in registration.rcrs.all():
         label = rel.character.name
         if writing_number:
             label = f"#{rel.character.number} {label}"
@@ -77,93 +80,133 @@ def _registration_row(registration: Registration, *, writing_number: bool) -> di
     }
 
 
-@login_required
-def orga_checkin(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Render the check-in dashboard: registration list, chart and scan control.
-
-    Ships the full registration list for the run inline, so the page keeps working
-    (lookup + local list/chart update) even without connectivity; a scan is synced
-    to the server in the background, or queued in localStorage until it succeeds.
-    """
-    context = check_event_context(request, event_slug, "orga_checkin")
-
-    registrations = (
-        get_active_registrations(context["run"].id)
-        .select_related("member", "check_in")
-        .prefetch_related("rcrs__character")
-    )
-    writing_number = get_event_config(context["event"].id, "writing_number", context=context)
-    rows = [_registration_row(registration, writing_number=writing_number) for registration in registrations]
-
-    context["checkin_data"] = json.dumps(rows)
-    return render(request, "larpmanager/orga/checkin.html", context)
+# Max characters of a single detail value shipped with the check-in page.
+DETAIL_VALUE_MAX_LENGTH = 200
 
 
-@login_required
-def orga_checkin_detail(request: HttpRequest, event_slug: str) -> JsonResponse:
-    """Return ticket, addons, faction and full character sheet fields for one registration.
+def _truncate_detail(value: str) -> str:
+    """Shorten a detail value to keep the inline check-in payload small."""
+    return Truncator(value).chars(DETAIL_VALUE_MAX_LENGTH, truncate="...")
 
-    Fetched on demand when a check-in row is expanded, rather than shipped with the
-    initial list, since it requires per-registration writing-question queries.
-    """
-    context = check_event_context(request, event_slug, "orga_checkin")
-    context["show_all"] = "1"
 
-    registration_uuid = request.GET.get("uuid", "")
-    try:
-        registration = _resolve_registration(context["run"].id, registration_uuid)
-    except ObjectDoesNotExist:
-        return JsonResponse({"res": "ko", "error": "invalid_uuid"}, status=404)
-
-    questions = list(get_ordered_registration_questions(context).prefetch_related("options"))
-    question_ids = [question.id for question in questions]
-    answers = get_registration_answers_by_question(question_ids, registration_id=registration.id)
-    choices = get_registration_choices_by_question(question_ids, registration_id=registration.id)
-
+def _registration_addons(
+    questions: list, answers: dict[int, str], choices: dict[int, list[str]], ranking_names: dict[int, dict]
+) -> list[dict]:
+    """Return the non-empty registration answers of one registration as name/value pairs."""
     addons = []
     for question in questions:
         if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
-            value = ", ".join(choices.get(registration.id, {}).get(question.id, []))
+            value = ", ".join(choices.get(question.id, []))
         elif question.typ == RegistrationQuestionType.RANKING:
-            names_by_uuid = {str(option.uuid): option.name for option in question.options.all()}
-            value = ", ".join(get_ranking_names(answers.get(registration.id, {}).get(question.id, ""), names_by_uuid))
+            value = ", ".join(get_ranking_names(answers.get(question.id, ""), ranking_names[question.id]))
         else:
-            value = answers.get(registration.id, {}).get(question.id, "")
+            value = answers.get(question.id, "")
         if value:
-            addons.append({"name": question.name, "value": value})
+            addons.append({"name": question.name, "value": _truncate_detail(value)})
+    return addons
 
-    first_character = next((rel.character for rel in registration.rcrs.select_related("character")), None)
 
-    faction_name = ""
+def _character_fields(fields_data: dict) -> list[dict]:
+    """Return the non-empty character sheet fields as name/value pairs."""
     character_fields = []
-    if first_character:
-        faction_name = ", ".join(
-            first_character.factions_list.exclude(typ=FactionType.SECRET).values_list("name", flat=True)
-        )
-        fields_data = get_character_element_fields(context, first_character.id, only_visible=False)
-        for question_uuid, question in fields_data["questions"].items():
-            value = fields_data["fields"].get(question_uuid)
-            if not value:
-                continue
-            if isinstance(value, str):
-                display_value = value
-            else:
-                display_value = ", ".join(
-                    fields_data["options"][option_uuid]["name"]
-                    for option_uuid in value
-                    if option_uuid in fields_data["options"]
-                )
-            character_fields.append({"name": question["name"], "value": display_value})
+    for question_uuid, question in fields_data.get("questions", {}).items():
+        value = fields_data.get("fields", {}).get(question_uuid)
+        if not value:
+            continue
+        if isinstance(value, str):
+            display_value = unescape(strip_tags(value))
+        else:
+            display_value = ", ".join(
+                fields_data["options"][option_uuid]["name"]
+                for option_uuid in value
+                if option_uuid in fields_data["options"]
+            )
+        character_fields.append({"name": question["name"], "value": _truncate_detail(display_value)})
+    return character_fields
 
-    return JsonResponse(
-        {
-            "res": "ok",
+
+def _registration_details(context: dict, registrations: list[Registration]) -> dict[int, dict]:
+    """Map registration id -> ticket, addons, faction and character sheet fields.
+
+    Built in bulk for the whole run, so details are available offline right after a scan.
+    """
+    context["show_all"] = "1"
+    registration_ids = [registration.id for registration in registrations]
+
+    questions = list(get_ordered_registration_questions(context).prefetch_related("options"))
+    question_ids = [question.id for question in questions]
+    answers = get_registration_answers_by_question(question_ids, registration_id__in=registration_ids)
+    choices = get_registration_choices_by_question(question_ids, registration_id__in=registration_ids)
+    ranking_names = {
+        question.id: {str(option.uuid): option.name for option in question.options.all()}
+        for question in questions
+        if question.typ == RegistrationQuestionType.RANKING
+    }
+
+    first_characters = {}
+    for registration in registrations:
+        rels = list(registration.rcrs.all())
+        if rels:
+            first_characters[registration.id] = rels[0].character
+    character_fields_by_id = get_writing_element_fields_batch(
+        context,
+        "character",
+        QuestionApplicable.CHARACTER,
+        [character.id for character in first_characters.values()],
+        only_visible=False,
+    )
+
+    details = {}
+    for registration in registrations:
+        addons = _registration_addons(
+            questions, answers.get(registration.id, {}), choices.get(registration.id, {}), ranking_names
+        )
+
+        faction_name = ""
+        character_fields = []
+        character = first_characters.get(registration.id)
+        if character:
+            faction_name = ", ".join(faction.name for faction in character.factions_list.all())
+            character_fields = _character_fields(character_fields_by_id.get(character.id, {}))
+
+        details[registration.id] = {
             "ticket": registration.ticket.name if registration.ticket_id else None,
             "addons": addons,
             "faction": faction_name,
             "character_fields": character_fields,
         }
+    return details
+
+
+@login_required
+def orga_checkin(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Render the check-in dashboard: registration list, chart and scan control.
+
+    Ships the full registration list with each registration's details inline, so the
+    page keeps working (lookup, details, local list/chart update) even without
+    connectivity; a scan is synced to the server in the background, or queued in
+    localStorage until it succeeds.
+    """
+    context = check_event_context(request, event_slug, "orga_checkin")
+
+    registrations = list(
+        get_active_registrations(context["run"].id)
+        .select_related("member", "check_in", "ticket")
+        .prefetch_related(
+            "rcrs__character",
+            Prefetch(
+                "rcrs__character__factions_list",
+                queryset=Faction.objects.exclude(typ=FactionType.SECRET).order_by("order"),
+            ),
+        )
     )
+    writing_number = get_event_config(context["event"].id, "writing_number", context=context)
+    details = _registration_details(context, registrations)
+    context["checkin_data"] = [
+        {**_registration_row(registration, writing_number=writing_number), "detail": details[registration.id]}
+        for registration in registrations
+    ]
+    return render(request, "larpmanager/orga/checkin.html", context)
 
 
 @login_required

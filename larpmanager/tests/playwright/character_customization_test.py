@@ -224,6 +224,21 @@ def verify_checkin_and_award_xp(page: Any, live_server: Any) -> None:
     expect(row.locator(".checkin-present")).to_have_text("Yes")
     expect(page.locator("#checkin_summary_present")).to_have_text("1")
 
+    # Sign-in opens the participant details
+    detail_popup = page.locator("#checkin_detail_popup")
+    expect(detail_popup).to_be_visible()
+    expect(detail_popup).to_contain_text("Payment")
+    expect(detail_popup).to_contain_text("Ticket")
+    page.locator("#checkin_detail_close").click()
+
+    # Details are shipped with the page, so they open even offline
+    page.context.set_offline(True)
+    row.locator(".checkin-expand-btn").click()
+    expect(detail_popup).to_be_visible()
+    expect(detail_popup).to_contain_text("Ticket")
+    page.locator("#checkin_detail_close").click()
+    page.context.set_offline(False)
+
     # Award XP to the checked-in character
     go_to(page, live_server, "/test/manage/experience/awards/")
     page.get_by_role("link", name="New").click()
