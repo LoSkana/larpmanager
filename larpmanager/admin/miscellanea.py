@@ -21,11 +21,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 from django.utils.html import format_html
 
-from larpmanager.admin.base import AssociationFilter, DefModelAdmin, EventFilter, RunFilter, reduced
+from larpmanager.admin.base import AssociationFilter, AutocompleteFilter, DefModelAdmin, EventFilter, RunFilter, reduced
 from larpmanager.admin.character import TargetFilter
 from larpmanager.models.member import NotificationQueue
 from larpmanager.models.miscellanea import (

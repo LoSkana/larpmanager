@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
     from larpmanager.models.base import BaseModel
 
-import datetime
+import datetime as dt
 
 from larpmanager.cache.bulk import get_bulk_options_cache
 from larpmanager.cache.config import get_association_config, get_event_config
@@ -118,8 +118,8 @@ def _restore_writing_answers(element_id: int, deleted_at: Any) -> None:
     Only restores entries deleted within 1 second of the parent object's deletion
     (i.e. cascade-deleted together with it) and whose question/option is still active.
     """
-    window_start = deleted_at - datetime.timedelta(seconds=1)
-    window_end = deleted_at + datetime.timedelta(seconds=1)
+    window_start = deleted_at - dt.timedelta(seconds=1)
+    window_end = deleted_at + dt.timedelta(seconds=1)
     for answer in WritingAnswer.all_objects.filter(
         element_id=element_id,
         deleted__range=(window_start, window_end),

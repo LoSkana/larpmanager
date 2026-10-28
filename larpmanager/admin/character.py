@@ -20,10 +20,9 @@
 
 from typing import ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
+from larpmanager.admin.base import AutocompleteFilter, CharacterFilter, DefModelAdmin, EventFilter, reduced
 from larpmanager.models.base import BaseModel
 from larpmanager.models.experience import (
     AbilityExp,

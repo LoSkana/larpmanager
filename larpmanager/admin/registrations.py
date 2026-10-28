@@ -20,10 +20,10 @@
 
 from typing import ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
 from larpmanager.admin.base import (
+    AutocompleteFilter,
     CharacterFilter,
     DefModelAdmin,
     EventFilter,

@@ -180,7 +180,7 @@ def ability(live_server: Any, page: Any) -> None:
     sidebar(page, "Abilities")
     page.locator("[id='u2']").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.locator(".select2-container--open .select2-search__field").fill("test_template")
     edit_iframe.get_by_role("option", name="test_template").click()
     save_modal(page, edit_iframe)

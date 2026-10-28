@@ -25,7 +25,7 @@ conflicts, and organizer-side casting assignment.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -355,8 +355,8 @@ def build_casting_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = timezone.localdate() + datetime.timedelta(days=60)
-    run.end = run.start + datetime.timedelta(days=2)
+    run.start = timezone.localdate() + dt.timedelta(days=60)
+    run.end = run.start + dt.timedelta(days=2)
     run.save()
     _enable_features(event, ["character", "user_character", "casting", "custom_character", "faction"])
 

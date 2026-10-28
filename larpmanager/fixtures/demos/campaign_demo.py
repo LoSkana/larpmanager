@@ -26,7 +26,7 @@ whose registration setup was duplicated from the previous one via Copy.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -95,8 +95,8 @@ def _build_events(association: Association) -> dict[str, Event]:
         ),
     )
     run_1 = chapter_1.runs.first()
-    run_1.start = today - datetime.timedelta(days=180)
-    run_1.end = run_1.start + datetime.timedelta(days=2)
+    run_1.start = today - dt.timedelta(days=180)
+    run_1.end = run_1.start + dt.timedelta(days=2)
     run_1.development = "9"  # Concluded
     run_1.registration_status = RegistrationStatus.CLOSED
     run_1.save()
@@ -115,8 +115,8 @@ def _build_events(association: Association) -> dict[str, Event]:
         ),
     )
     run_2 = chapter_2.runs.first()
-    run_2.start = today - datetime.timedelta(days=60)
-    run_2.end = run_2.start + datetime.timedelta(days=2)
+    run_2.start = today - dt.timedelta(days=60)
+    run_2.end = run_2.start + dt.timedelta(days=2)
     run_2.development = "9"  # Concluded
     run_2.registration_status = RegistrationStatus.CLOSED
     run_2.save()
@@ -134,8 +134,8 @@ def _build_events(association: Association) -> dict[str, Event]:
         ),
     )
     run_3 = chapter_3.runs.first()
-    run_3.start = today + datetime.timedelta(days=45)
-    run_3.end = run_3.start + datetime.timedelta(days=2)
+    run_3.start = today + dt.timedelta(days=45)
+    run_3.end = run_3.start + dt.timedelta(days=2)
     run_3.development = "1"  # Visible
     run_3.registration_status = RegistrationStatus.OPEN
     run_3.save()

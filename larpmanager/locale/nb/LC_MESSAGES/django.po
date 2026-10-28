@@ -4774,6 +4774,10 @@ msgid "You are logged in as"
 msgstr "Du er logget inn som"
 
 #, python-format
+msgid " By %(filter_title)s "
+msgstr " Etter %(filter_title)s "
+
+#, python-format
 msgid "%(elements)s received"
 msgstr "%(elements)s mottatt"
 

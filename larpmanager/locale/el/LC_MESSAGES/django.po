@@ -4774,6 +4774,10 @@ msgid "You are logged in as"
 msgstr "Έχεις συνδεθεί ως"
 
 #, python-format
+msgid " By %(filter_title)s "
+msgstr " Κατά %(filter_title)s "
+
+#, python-format
 msgid "%(elements)s received"
 msgstr "Λήφθηκαν %(elements)s"
 

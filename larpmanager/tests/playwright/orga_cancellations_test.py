@@ -116,7 +116,7 @@ def _add_event_credits(live_server: Any, page: Any, member_search: str, member_o
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.get_by_role("searchbox").fill(member_search)
     edit_iframe.get_by_role("option", name=member_option).click()
     edit_iframe.locator("#id_value").fill(str(value))

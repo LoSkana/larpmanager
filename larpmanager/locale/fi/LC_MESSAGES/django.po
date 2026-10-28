@@ -4774,6 +4774,10 @@ msgid "You are logged in as"
 msgstr "Olet kirjautunut sisään nimellä"
 
 #, python-format
+msgid " By %(filter_title)s "
+msgstr " %(filter_title)s mukaan "
+
+#, python-format
 msgid "%(elements)s received"
 msgstr "Vastaanotetut %(elements)s"
 

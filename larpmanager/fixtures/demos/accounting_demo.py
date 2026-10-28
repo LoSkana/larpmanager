@@ -27,7 +27,7 @@ event accounting overview is fully populated.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -66,8 +66,8 @@ EVENT_SLUG = "midwinter-fair"
 DEMO_TYPE_SLUG = "accounting"
 
 
-def _days_ago(days: int) -> datetime.datetime:
-    return timezone.now() - datetime.timedelta(days=days)
+def _days_ago(days: int) -> dt.datetime:
+    return timezone.now() - dt.timedelta(days=days)
 
 
 def _enable_event_features(event: Event, slugs: list[str]) -> None:
@@ -265,12 +265,12 @@ def _build_installments(event: Event, tickets: dict[str, RegistrationTicket]) ->
     today = timezone.localdate()
 
     deposit = RegistrationInstallment.objects.create(
-        event=event, number=1, amount=30, date_deadline=today - datetime.timedelta(days=25)
+        event=event, number=1, amount=30, date_deadline=today - dt.timedelta(days=25)
     )
     deposit.tickets.set(applicable)
 
     balance = RegistrationInstallment.objects.create(
-        event=event, number=2, amount=0, date_deadline=today - datetime.timedelta(days=5)
+        event=event, number=2, amount=0, date_deadline=today - dt.timedelta(days=5)
     )
     balance.tickets.set(applicable)
 
@@ -656,8 +656,8 @@ def build_accounting_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = timezone.localdate() + datetime.timedelta(days=60)
-    run.end = run.start + datetime.timedelta(days=2)
+    run.start = timezone.localdate() + dt.timedelta(days=60)
+    run.end = run.start + dt.timedelta(days=2)
     run.save()
 
     _enable_event_features(
