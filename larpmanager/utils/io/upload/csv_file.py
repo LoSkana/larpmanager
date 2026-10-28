@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import csv
 import io
 import logging
 from typing import Any
@@ -30,6 +31,17 @@ from larpmanager.utils.io.upload.constants import MAX_CSV_FILE_SIZE
 from larpmanager.utils.security import FileSecurityError, sanitize_dataframe, validate_file_size
 
 logger = logging.getLogger(__name__)
+
+CSV_DELIMITERS = ",;\t|"
+
+
+def _detect_delimiter(content: str) -> str:
+    """Detect the CSV delimiter from the header line among common candidates, defaulting to comma."""
+    header = next((line for line in content.splitlines() if line.strip()), "")
+    try:
+        return csv.Sniffer().sniff(header, delimiters=CSV_DELIMITERS).delimiter
+    except csv.Error:
+        return ","
 
 
 def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
@@ -86,7 +98,8 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
             string_buffer = io.StringIO(decoded_content)
 
             # Parse CSV with automatic delimiter detection
-            df = pd.read_csv(string_buffer, encoding=encoding, sep=None, engine="python", dtype=str)
+            delimiter = _detect_delimiter(decoded_content)
+            df = pd.read_csv(string_buffer, encoding=encoding, sep=delimiter, engine="python", dtype=str)
 
             # Sanitize all values to prevent formula injection
             return sanitize_dataframe(df)

@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from django import forms
 from django.conf import settings as conf_settings
 from django.db.models import Q, QuerySet
-from django.forms.widgets import Textarea, Widget
+from django.forms.widgets import MediaAsset, Textarea, Widget
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
@@ -140,9 +140,15 @@ def validate_html(value: str) -> None:
         raise forms.ValidationError(_("Invalid HTML: %(error)s") % {"error": errors[0]})
 
 
-def render_js(cls: Any) -> list[str]:
+def render_js(cls: Any, *, attrs: dict | None = None) -> list[str]:
     """Render JavaScript includes with defer attribute for forms."""
-    return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
+    attrs = {"defer": True, **(attrs or {})}
+    return [
+        path.render(attrs={key: value for key, value in attrs.items() if key not in path.attributes})
+        if isinstance(path, MediaAsset)
+        else path.__html__()
+        for path in cls._js
+    ]
 
 
 forms.widgets.Media.render_js = render_js

@@ -237,7 +237,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.get_by_role("searchbox").fill("org")
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     edit_iframe.locator("#id_value").click()

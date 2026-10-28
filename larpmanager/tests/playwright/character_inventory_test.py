@@ -256,7 +256,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Characters").click()
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
     save_modal(page, edit_iframe)

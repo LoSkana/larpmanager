@@ -152,6 +152,9 @@ class TestExperienceCalls(BaseTestCase):
         # Remove the elements, so that the restore must recreate them
         for model in (CallExp, ModifierExp, RuleExp):
             model.objects.filter(event=self.event).delete()
+        ability.typ = None
+        ability.save()
+        ability_type.delete()
 
         sections, unknown = preview_restore(self.context, zip_bytes)
         assert unknown == []
@@ -159,7 +162,11 @@ class TestExperienceCalls(BaseTestCase):
         assert labels == ["Ability types", "Abilities", "Rules", "Modifiers", "Calls"]
 
         logs = execute_restore(self.context, zip_bytes)
-        assert not [log for log in logs if log.startswith("ERR")], logs
+        assert not [log for log in logs if log.startswith(("ERR", "WARN"))], logs
+
+        restored_type = AbilityTypeExp.objects.get(event=self.event, name="Combat")
+        ability.refresh_from_db()
+        assert ability.typ_id == restored_type.id
 
         restored_rule = RuleExp.objects.get(event=self.event, number=1)
         assert restored_rule.field_id == field.id
