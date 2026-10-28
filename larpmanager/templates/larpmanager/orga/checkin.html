@@ -28,11 +28,13 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- will be filled later -->
             </tbody>
         </table>
         <dialog id="checkin_scan_popup" class="popup_delete">
             <div id="checkin_reader"></div>
             <p id="checkin_scan_result"></p>
+            <div id="checkin_scan_detail"></div>
             <button type="button" id="checkin_scan_close" class="btn">{% trans "Close" %}</button>
         </dialog>
         <dialog id="checkin_detail_popup" class="popup_delete">
@@ -61,6 +63,7 @@
             </tbody>
         </table>
     </div>
+    {{ checkin_data|json_script:"checkin_data" }}
 {% endblock content %}
 {% block js %}
     <script type="text/javascript"
@@ -70,17 +73,39 @@
 (function () {
   "use strict";
 
-  var CHECKIN_DATA = {{ checkin_data|safe }};
+  var CHECKIN_DATA = JSON.parse(document.getElementById("checkin_data").textContent);
   var SCAN_URL = "{% url 'orga_checkin_scan' run.get_slug %}";
-  var DETAIL_URL = "{% url 'orga_checkin_detail' run.get_slug %}";
   var CSRF_TOKEN = "{{ csrf_token }}";
   var QUEUE_KEY = "checkin_queue_{{ run.id }}";
+  var TXT = {
+    payment: "{% filter escapejs %}{% trans "Payment" %}{% endfilter %}",
+    paid: "{% filter escapejs %}{% trans "Paid" %}{% endfilter %}",
+    outstanding: "{% filter escapejs %}{% trans "Outstanding" %}{% endfilter %}",
+    ticket: "{% filter escapejs %}{% trans "Ticket" %}{% endfilter %}",
+    faction: "{% filter escapejs %}{% trans "Faction" %}{% endfilter %}",
+    pendingSync: "{% filter escapejs %}{% trans "Pending sync:" %}{% endfilter %}",
+    yes: "{% filter escapejs %}{% trans "Yes" %}{% endfilter %}",
+    no: "{% filter escapejs %}{% trans "No" %}{% endfilter %}",
+    signIn: "{% filter escapejs %}{% trans "Sign in" %}{% endfilter %}",
+    online: "{% filter escapejs %}{% trans "Online" %}{% endfilter %}",
+    offline: "{% filter escapejs %}{% trans "Offline" %}{% endfilter %}",
+    unknownQr: "{% filter escapejs %}{% trans "Unknown QR code for this event." %}{% endfilter %}",
+    checkedIn: "{% filter escapejs %}{% trans "Checked in:" %}{% endfilter %}",
+    scanRejected: "{% filter escapejs %}{% trans "Scan rejected:" %}{% endfilter %}",
+    confirmCheckin: "{% filter escapejs %}{% trans "Confirm check-in for" %}{% endfilter %}"
+  };
 
   var byUuid = {};
   CHECKIN_DATA.forEach(function (row) { byUuid[row.uuid] = row; });
 
   var searchText = "";
-  var detailCache = {};
+  var lastScanUuid = null;
+
+  function escapeHtml(text) {
+    var div = document.createElement("div");
+    div.textContent = text == null ? "" : String(text);
+    return div.innerHTML;
+  }
 
   function matchesSearch(row) {
     if (!searchText) return true;
@@ -88,44 +113,30 @@
     return haystack.indexOf(searchText) !== -1;
   }
 
-  function renderDetail(container, detail) {
+  function renderDetail(container, row) {
+    var detail = row.detail;
     var parts = [];
-    if (detail.ticket) parts.push("<b>{% trans 'Ticket' %}:</b> " + detail.ticket);
-    if (detail.faction) parts.push("<b>{% trans 'Faction' %}:</b> " + detail.faction);
+    if (row.paid) {
+      parts.push("<b>" + escapeHtml(TXT.payment) + ":</b> " + escapeHtml(TXT.paid));
+    } else {
+      parts.push("<b class='checkin-unpaid'>" + escapeHtml(TXT.payment) + ": " + escapeHtml(TXT.outstanding) + "</b>");
+    }
+    if (detail.ticket) parts.push("<b>" + escapeHtml(TXT.ticket) + ":</b> " + escapeHtml(detail.ticket));
+    if (detail.faction) parts.push("<b>" + escapeHtml(TXT.faction) + ":</b> " + escapeHtml(detail.faction));
     detail.addons.forEach(function (addon) {
-      parts.push("<b>" + addon.name + ":</b> " + addon.value);
+      parts.push("<b>" + escapeHtml(addon.name) + ":</b> " + escapeHtml(addon.value));
     });
     detail.character_fields.forEach(function (field) {
-      parts.push("<b>" + field.name + ":</b> " + field.value);
+      parts.push("<b>" + escapeHtml(field.name) + ":</b> " + escapeHtml(field.value));
     });
-    container.innerHTML = parts.length ? parts.join("<br>") : "{% trans 'No additional details.' %}";
+    container.innerHTML = parts.join("<br>");
   }
 
   function openDetail(uuid) {
-    var popup = document.getElementById("checkin_detail_popup");
-    var container = document.getElementById("checkin_detail_content");
-    popup.showModal();
-
-    var cached = detailCache[uuid];
-    if (cached) {
-      renderDetail(container, cached);
-      return;
-    }
-
-    container.textContent = "{% trans 'Loading...' %}";
-    fetch(DETAIL_URL + "?uuid=" + encodeURIComponent(uuid))
-      .then(function (resp) { return resp.json(); })
-      .then(function (data) {
-        if (data.res !== "ok") {
-          container.textContent = "{% trans 'Unable to load details.' %}";
-          return;
-        }
-        detailCache[uuid] = data;
-        renderDetail(container, data);
-      })
-      .catch(function () {
-        container.textContent = "{% trans 'Unable to load details.' %}";
-      });
+    var row = byUuid[uuid];
+    if (!row) return;
+    renderDetail(document.getElementById("checkin_detail_content"), row);
+    document.getElementById("checkin_detail_popup").showModal();
   }
 
   function loadQueue() {
@@ -139,7 +150,7 @@
   function saveQueue(queue) {
     window.localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
     document.getElementById("checkin_queue_count").textContent =
-      queue.length ? ("{% trans 'Pending sync:' %} " + queue.length) : "";
+      queue.length ? (TXT.pendingSync + " " + queue.length) : "";
   }
 
   function renderSummary() {
@@ -158,11 +169,11 @@
       tr.dataset.uuid = row.uuid;
       tr.innerHTML =
         "<td><button type='button' class='btn checkin-expand-btn'><i class='fas fa-circle-info'></i></button></td>" +
-        "<td>" + row.member + "</td>" +
-        "<td>" + row.character + "</td>" +
-        "<td>" + (row.paid ? "{% trans 'Paid' %}" : "{% trans 'Outstanding' %}") + "</td>" +
-        "<td class='checkin-present'>" + (row.checked_in_at ? "{% trans 'Yes' %}" : "{% trans 'No' %}") + "</td>" +
-        "<td>" + (row.checked_in_at ? "" : "<button type='button' class='btn checkin-signin-btn'>{% trans 'Sign in' %}</button>") + "</td>";
+        "<td>" + escapeHtml(row.member) + "</td>" +
+        "<td>" + escapeHtml(row.character) + "</td>" +
+        "<td>" + escapeHtml(row.paid ? TXT.paid : TXT.outstanding) + "</td>" +
+        "<td class='checkin-present'>" + escapeHtml(row.checked_in_at ? TXT.yes : TXT.no) + "</td>" +
+        "<td>" + (row.checked_in_at ? "" : "<button type='button' class='btn checkin-signin-btn'>" + escapeHtml(TXT.signIn) + "</button>") + "</td>";
       tbody.appendChild(tr);
     });
   }
@@ -226,29 +237,36 @@
   function setOnlineState() {
     var el = document.getElementById("checkin_sync_state");
     if (navigator.onLine) {
-      el.textContent = "{% trans 'Online' %}";
+      el.textContent = TXT.online;
       el.className = "checkin-online";
       flushQueue();
     } else {
-      el.textContent = "{% trans 'Offline' %}";
+      el.textContent = TXT.offline;
       el.className = "checkin-offline";
     }
   }
 
   function handleScan(uuid) {
+    // The camera decodes the same QR many times per second while it stays in view.
+    if (uuid === lastScanUuid) return;
+    lastScanUuid = uuid;
+
     var scannedAt = new Date().toISOString();
     var resultEl = document.getElementById("checkin_scan_result");
+    var detailEl = document.getElementById("checkin_scan_detail");
+    detailEl.innerHTML = "";
 
     // The QR payload is the registration's own uuid, already present in the
     // locally downloaded list, update the UI immediately regardless of
     // connectivity, then try to persist the scan to the server.
     var row = byUuid[uuid];
     if (!row) {
-      resultEl.textContent = "{% trans 'Unknown QR code for this event.' %}";
+      resultEl.textContent = TXT.unknownQr;
       return;
     }
     updateLocalRow(uuid, row.checked_in_at || scannedAt);
-    resultEl.textContent = "{% trans 'Checked in:' %} " + row.member;
+    resultEl.textContent = TXT.checkedIn + " " + row.member;
+    renderDetail(detailEl, row);
 
     postScan(uuid, scannedAt, function (ok, status, data) {
       if (ok && data && data.row) {
@@ -258,7 +276,10 @@
         queue.push({ uuid: uuid, scanned_at: scannedAt });
         saveQueue(queue);
       } else {
-        resultEl.textContent = "{% trans 'Scan rejected:' %} " + row.member;
+        resultEl.textContent = TXT.scanRejected + " " + row.member;
+        detailEl.innerHTML = "";
+        // Allow presenting the same QR again to retry a rejected scan.
+        lastScanUuid = null;
       }
     });
   }
@@ -267,6 +288,9 @@
 
   function openScanner() {
     var popup = document.getElementById("checkin_scan_popup");
+    lastScanUuid = null;
+    document.getElementById("checkin_scan_result").textContent = "";
+    document.getElementById("checkin_scan_detail").innerHTML = "";
     popup.showModal();
     scanner = new Html5Qrcode("checkin_reader");
     scanner.start(
@@ -299,9 +323,9 @@
     if (!tr) return;
     var uuid = tr.dataset.uuid;
 
-    if (ev.target.classList.contains("checkin-expand-btn")) {
+    if (ev.target.closest(".checkin-expand-btn")) {
       openDetail(uuid);
-    } else if (ev.target.classList.contains("checkin-signin-btn")) {
+    } else if (ev.target.closest(".checkin-signin-btn")) {
       confirmSignIn(uuid);
     }
   });
@@ -317,13 +341,17 @@
     if (!row) return;
     signinUuid = uuid;
     document.getElementById("checkin_signin_message").textContent =
-      "{% trans 'Confirm check-in for' %} " + row.member + "?";
+      TXT.confirmCheckin + " " + row.member + "?";
     document.getElementById("checkin_signin_popup").showModal();
   }
 
   document.getElementById("checkin_signin_confirm").addEventListener("click", function () {
     document.getElementById("checkin_signin_popup").close();
-    if (signinUuid) handleScan(signinUuid);
+    if (signinUuid) {
+      lastScanUuid = null;
+      handleScan(signinUuid);
+      openDetail(signinUuid);
+    }
     signinUuid = null;
   });
 

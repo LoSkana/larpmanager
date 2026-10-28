@@ -5071,9 +5071,6 @@ msgstr "Uusi hahmo luotu!"
 msgid "Newsletter preferences"
 msgstr "Uutiskirjeen asetukset"
 
-msgid "No additional details."
-msgstr "Ei lisätietoja."
-
 msgid "No address was ignored"
 msgstr "Yhtään osoitetta ei jätetty huomiotta"
 
@@ -5293,9 +5290,6 @@ msgstr "Osallistujan sähköpostiosoite"
 
 msgid "Total registration fee:"
 msgstr "Ilmoittautumismaksu yhteensä:"
-
-msgid "Unable to load details."
-msgstr "Tietojen lataaminen epäonnistui."
 
 msgid "Welcome to LarpManager!"
 msgstr "Tervetuloa LarpManageriin!"

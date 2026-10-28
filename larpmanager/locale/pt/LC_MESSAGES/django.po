@@ -5071,9 +5071,6 @@ msgstr "Nova personagem criada!"
 msgid "Newsletter preferences"
 msgstr "Preferências da newsletter"
 
-msgid "No additional details."
-msgstr "Sem detalhes adicionais."
-
 msgid "No address was ignored"
 msgstr "Nenhum endereço foi ignorado"
 
@@ -5293,9 +5290,6 @@ msgstr "O e-mail do participante"
 
 msgid "Total registration fee:"
 msgstr "Taxa total de inscrição:"
-
-msgid "Unable to load details."
-msgstr "Não foi possível carregar os detalhes."
 
 msgid "Welcome to LarpManager!"
 msgstr "Bem-vindo ao LarpManager!"
