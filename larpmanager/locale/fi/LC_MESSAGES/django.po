@@ -3119,6 +3119,9 @@ msgstr "Hanki taito"
 msgid "One-time token"
 msgstr "Kertakäyttöinen tunniste"
 
+msgid "Organizer edit"
+msgstr "Järjestäjän muokkaus"
+
 msgid "Outflows total"
 msgstr "Ulosvirtaukset yhteensä"
 
@@ -3623,6 +3626,9 @@ msgstr "Alennukset aktiiviset"
 
 msgid "Driver's License"
 msgstr "Ajokortti"
+
+msgid "Edit preferences"
+msgstr "Muokkaa toiveita"
 
 msgid "Enabled features"
 msgstr "Käytössä olevat ominaisuudet"
@@ -6858,6 +6864,9 @@ msgstr "Määritä käyttäjille omia tilamerkintöjä"
 msgid "Display all users data for insurance"
 msgstr "Näytä kaikkien käyttäjien tiedot vakuutusta varten"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Vältettävät elementit roolijaossa:"
+
 msgid "Error processing payment, contact us"
 msgstr "Virhe maksun käsittelyssä, ota yhteyttä"
 
@@ -7091,6 +7100,9 @@ msgstr "Veloita transaktiomaksut osallistujalta"
 msgid "Color used to highlight important text"
 msgstr "Tärkeän tekstin korostamiseen käytetty väri"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Järjestä toiveet uudelleen vetämällä kohteita."
+
 msgid "Fill in your character's relationships"
 msgstr "Täytä hahmosi suhteet"
 
@@ -7186,9 +7198,6 @@ msgstr "Mukauta organisaatiosivujen ulkonäköä"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Päivä, josta alkaen lisämaksua sovelletaan"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Voit järjestää asetuksesi uudelleen vetämällä kohteita."
 
 msgid "Enables free pre-registration to events"
 msgstr "Mahdollistaa ilmaisen ennakkoilmoittautumisen tapahtumiin"
@@ -7968,6 +7977,9 @@ msgstr "Määritä hahmo rekisteröidylle osallistujalle"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Peruuttaminen puuttuvan vuosittaisen jäsenmaksun vuoksi"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Lisää hahmo toiveisiin klikkaamalla sitä"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr "Täytä tarkistuslista avataksesi kaikki ominaisuudet:"
 
@@ -8062,9 +8074,6 @@ msgstr "Lisätty ilmoittautumissivulle, ennen lomaketta"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Hahmot näkyvät vain kirjautuneille käyttäjille:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Napsauta hahmoa lisätäksesi sen mieltymyksiisi"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Mukauta tapahtuman käyttöliittymän tiettyjä tekstejä"
@@ -8190,6 +8199,9 @@ msgstr "Eroaa odotetusta vain yhdellä merkillä"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Alennuksia sovelletaan vain uusiin ilmoittautumisiin"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Muokkaa tämän osallistujan casting-toiveita"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Olen kiinnostunut, mutta minulla ei ole paljon kokemusta"
@@ -12094,6 +12106,13 @@ msgid ""
 "organizers"
 msgstr ""
 "Syötä hahmosi yksityiset tiedot, jotka näkyvät vain sinulle ja järjestäjille"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Jos tämä on käytössä, järjestäjät voivat muokata osallistujien toiveita "
+"casting-sivulla."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "

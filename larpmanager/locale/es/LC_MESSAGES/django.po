@@ -3119,6 +3119,9 @@ msgstr "Adquirir habilidad"
 msgid "One-time token"
 msgstr "Token de un solo uso"
 
+msgid "Organizer edit"
+msgstr "Edición del organizador"
+
 msgid "Outflows total"
 msgstr "Gastos totales"
 
@@ -3623,6 +3626,9 @@ msgstr "Descuentos activos"
 
 msgid "Driver's License"
 msgstr "Carnet de conducir"
+
+msgid "Edit preferences"
+msgstr "Editar preferencias"
 
 msgid "Enabled features"
 msgstr "Funciones activadas"
@@ -6858,6 +6864,9 @@ msgstr "Define indicadores de estado personalizados para los usuarios"
 msgid "Display all users data for insurance"
 msgstr "Muestra los datos de todos los usuarios para el seguro"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Elementos que evitar en la asignación:"
+
 msgid "Error processing payment, contact us"
 msgstr "Error al procesar el pago, contáctanos"
 
@@ -7091,6 +7100,9 @@ msgstr "Cobrar comisiones de transacción al participante"
 msgid "Color used to highlight important text"
 msgstr "Color utilizado para resaltar texto importante"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Arrastra los elementos para reordenar las preferencias."
+
 msgid "Fill in your character's relationships"
 msgstr "Rellena las relaciones de tu personaje"
 
@@ -7186,9 +7198,6 @@ msgstr "Personaliza la apariencia de las páginas de la organización"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Fecha a partir de la cual se aplica el recargo"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Arrastra los elementos para cambiar el orden de tus preferencias."
 
 msgid "Enables free pre-registration to events"
 msgstr "Permite la preinscripción gratuita a eventos"
@@ -7970,6 +7979,9 @@ msgstr "Asignar un personaje a un participante inscrito"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Cancelación por falta de pago de la cuota anual de afiliación"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Haz clic en un personaje para añadirlo a las preferencias"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr ""
 "Completa la lista de verificación para desbloquear todas las funciones de la"
@@ -8069,9 +8081,6 @@ msgstr "Añadido a la página de registro, antes del formulario"
 msgid "Characters are only visible to logged in users:"
 msgstr ""
 "Los personajes solo son visibles para usuarios actualmente conectados:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Haz clic en un personaje para añadirlo a tus preferencias"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Personaliza textos específicos en la interfaz del evento"
@@ -8198,6 +8207,9 @@ msgstr "Solo se diferencia en un símbolo del esperado"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Descuentos solamente disponibles para nuevas inscripciones"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Edita las preferencias de casting de este participante"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Estoy interesado, pero no tengo mucha experiencia"
@@ -12316,6 +12328,13 @@ msgid ""
 msgstr ""
 "Introduce información privada sobre tu personaje, visible solo para ti y los"
 " organizadores"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Si está activado, los organizadores pueden editar las preferencias de los "
+"participantes desde la página de casting."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "

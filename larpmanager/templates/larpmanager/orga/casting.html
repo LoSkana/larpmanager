@@ -135,9 +135,11 @@ window['avoids'] = {{ avoids | safe }};
 window['csrf_token'] = "{{ csrf_token }}";
 {% if quest_type %}
 window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug quest_type.uuid %}";
+window['edit_pref_url'] = {% if casting_orga_edit %}"{% url 'orga_casting_edit' run.get_slug 'MEMBER_UUID' quest_type.uuid %}"{% else %}null{% endif %};
 window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug quest_type.uuid %}";
 {% else %}
 window['toggle_url'] = "{% url 'orga_casting_toggle' run.get_slug %}";
+window['edit_pref_url'] = {% if casting_orga_edit %}"{% url 'orga_casting_edit' run.get_slug 'MEMBER_UUID' %}"{% else %}null{% endif %};
 window['orga_casting_url'] = "{% url 'orga_casting' run.get_slug %}";
 {% endif %}
 
@@ -153,6 +155,7 @@ window['trads'] = {
     'le': '{% filter escapejs %}{% trans "Email list" %}{% endfilter %}',
     'na': '{% filter escapejs %}{% trans "Characters left unassigned by the algorithm" %}{% endfilter %}',
     'op': '{% filter escapejs %}{% trans "Assigned outside expressed preferences" %}{% endfilter %}',
+    'ep': '{% filter escapejs %}{% trans "Edit preferences" %}{% endfilter %}',
     'nf': '{% filter escapejs %}{% trans "No valid assignment exists with the current constraints: check the included participants and the available characters, then run the algorithm again" %}{% endfilter %}'
 }
 

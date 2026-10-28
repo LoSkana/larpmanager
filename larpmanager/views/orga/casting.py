@@ -28,8 +28,9 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Count
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -38,7 +39,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.forms.miscellanea import NO_FACTION_KEY, OrganizerCastingOptionsForm
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
-from larpmanager.models.member import Member, Membership
+from larpmanager.models.member import LogOperationType, Member, Membership
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -47,14 +48,19 @@ from larpmanager.models.registration import (
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_elements
 from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_time_diff_today
+from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
+    build_preference_names_list,
     casting_details,
     casting_history_characters,
     casting_history_traits,
     casting_preferences_characters,
     casting_preferences_traits,
+    extract_casting_preferences,
+    get_previous_casting,
+    save_casting_preferences,
 )
 
 logger = logging.getLogger(__name__)
@@ -775,3 +781,107 @@ def orga_casting_toggle(request: HttpRequest, event_slug: str, casting_type: str
         return JsonResponse({"res": "ok"})
     except (ObjectDoesNotExist, KeyError):
         return JsonResponse({"res": "ko"})
+
+
+@login_required
+def orga_casting_edit(
+    request: HttpRequest, event_slug: str, member_uuid: str, casting_type: str | None = None
+) -> HttpResponse:
+    """Let organizers edit the casting preferences of a participant, shown in a popup.
+
+    Args:
+        request: HTTP request object
+        event_slug: Event slug identifier
+        member_uuid: UUID of the participant whose preferences are edited
+        casting_type: UUID of quest type (None for characters)
+
+    Returns:
+        Rendered edit form, or the popup success page after saving
+
+    Raises:
+        Http404: If the feature is disabled or the participant is not eligible for casting
+    """
+    context = check_event_context(request, event_slug, "orga_casting")
+    get_element(context, casting_type, "quest_type", QuestType)
+
+    casting_details(context)
+    if not context["casting_orga_edit"]:
+        msg = "organizer edit of casting preferences is disabled"
+        raise Http404(msg)
+
+    # Find the active, non waiting-list registration of the participant
+    registration = (
+        get_active_registrations(context["run"].id)
+        .filter(member__uuid=member_uuid)
+        .exclude(ticket__tier=TicketTier.WAITING)
+        .select_related("ticket", "member")
+        .first()
+    )
+    if not registration:
+        msg = "registration not found"
+        raise Http404(msg)
+    member = registration.member
+
+    get_previous_casting(request, context, member, registration)
+
+    # Organizers are not bound to the minimum number of preferences
+    context["casting_min"] = 0
+    context["frame"] = True
+    context["edit_registration"] = registration
+
+    if request.method == "POST":
+        prefs = extract_casting_preferences(request, context, enforce_min=False)
+        if prefs is not None:
+            _casting_edit_save(request, context, registration, prefs)
+            return render(request, "elements/dashboard/form_success.html", context)
+
+    return render(request, "larpmanager/orga/casting_edit.html", context)
+
+
+def _casting_edit_save(request: HttpRequest, context: dict, registration: Registration, prefs: dict) -> None:
+    """Save casting preferences edited by an organizer and log the changes.
+
+    Args:
+        request: HTTP request object with POST data
+        context: View context with run, casting configuration and organizer member
+        registration: Registration of the participant whose preferences are saved
+        prefs: Dict mapping preference order to element uuid
+    """
+    member = registration.member
+    typ = context["quest_type"].number if "quest_type" in context else 0
+
+    with transaction.atomic():
+        # Lock and snapshot the current preferences and avoidance before replacing them
+        previous_prefs = dict(
+            enumerate(
+                Casting.objects.select_for_update()
+                .filter(run=context["run"], member=member, typ=typ)
+                .order_by("pref")
+                .values_list("element", flat=True)
+            )
+        )
+        previous_avoid = (
+            CastingAvoid.objects.select_for_update()
+            .filter(run=context["run"], member=member, typ=typ)
+            .values_list("text", flat=True)
+            .first()
+            or ""
+        )
+
+        avoidance_text = save_casting_preferences(request, context, member, prefs)[1]
+
+    # Describe the changes in the log entry
+    previous_names = ", ".join(build_preference_names_list(context, typ, previous_prefs))
+    new_names = ", ".join(build_preference_names_list(context, typ, prefs))
+    info = f"Casting {context['gl_name']} of {member}: [{previous_names}] -> [{new_names}]"
+    if context.get("casting_avoid"):
+        info += f"; avoid: '{previous_avoid}' -> '{avoidance_text or ''}'"
+
+    save_log(
+        context,
+        Registration,
+        registration,
+        registration.uuid,
+        operation_type=LogOperationType.UPDATE,
+        info=info,
+    )

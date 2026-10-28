@@ -3119,6 +3119,9 @@ msgstr "Förvärva färdighet"
 msgid "One-time token"
 msgstr "Engångstoken"
 
+msgid "Organizer edit"
+msgstr "Arrangörsredigering"
+
 msgid "Outflows total"
 msgstr "Summa utgifter"
 
@@ -3623,6 +3626,9 @@ msgstr "Aktiva rabatter"
 
 msgid "Driver's License"
 msgstr "Körkort"
+
+msgid "Edit preferences"
+msgstr "Redigera preferenser"
 
 msgid "Enabled features"
 msgstr "Aktiverade funktioner"
@@ -6858,6 +6864,9 @@ msgstr "Definiera anpassade statusflaggor för användare"
 msgid "Display all users data for insurance"
 msgstr "Visa alla användaruppgifter för försäkring"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Element att undvika i tilldelningen:"
+
 msgid "Error processing payment, contact us"
 msgstr "Fel vid betalning, kontakta oss"
 
@@ -7091,6 +7100,9 @@ msgstr "Ta ut transaktionsavgifter av deltagaren"
 msgid "Color used to highlight important text"
 msgstr "Färg används för att markera viktig text"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Dra objekten för att ändra ordningen på preferenserna."
+
 msgid "Fill in your character's relationships"
 msgstr "Fyll i din karaktärs relationer"
 
@@ -7186,9 +7198,6 @@ msgstr "Anpassa utseendet på organisationssidorna"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Datum från vilket tilläggsavgiften gäller"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Dra och släpp objekten för att ändra ordningen på dina preferenser."
 
 msgid "Enables free pre-registration to events"
 msgstr "Möjliggör kostnadsfri föranmälan till evenemang"
@@ -7968,6 +7977,9 @@ msgstr "Tilldela en karaktär till en registrerad deltagare"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Uppsägning på grund av utebliven årlig medlemsavgift"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Klicka på en karaktär för att lägga till den i preferenserna"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr "Slutför checklistan för att låsa upp alla plattformsfunktioner:"
 
@@ -8063,9 +8075,6 @@ msgstr "Tillagd på registreringssidan, före formuläret"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Karaktärerna är endast synliga för inloggade användare:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Klicka på en karaktär för att lägga till den i dina preferenser"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassa specifika texter i evenemangsgränssnittet"
@@ -8190,6 +8199,9 @@ msgstr "Skiljer sig endast med ett tecken från det förväntade"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Rabatter gäller endast vid nyregistrering"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Redigera casting-preferenserna för den här deltagaren"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Jag är intresserad, men har inte så mycket erfarenhet"
@@ -12074,6 +12086,13 @@ msgid ""
 msgstr ""
 "Ange privat information om din karaktär, som bara är synlig för dig och "
 "arrangörerna"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Om det är aktiverat kan arrangörer redigera deltagarnas preferenser från "
+"casting-sidan."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "

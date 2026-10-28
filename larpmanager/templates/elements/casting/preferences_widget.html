@@ -1,0 +1,42 @@
+{% load i18n %}
+{% if primary_faction_filter %}
+    <div class="faction-chips" id="primary-faction-chips">
+        {% for f in primary_faction_filter %}
+            <span class="faction-chip"
+                  data-number="{{ f.number }}"
+                  onclick="toggle_primary_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
+        {% endfor %}
+    </div>
+{% endif %}
+{% if faction_filter %}
+    <div class="faction-chips" id="faction-chips">
+        {% for f in faction_filter %}
+            <span class="faction-chip"
+                  data-number="{{ f.number }}"
+                  onclick="toggle_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
+        {% endfor %}
+    </div>
+{% endif %}
+<div id="hidden-inputs"></div>
+<div class="casting-layout">
+    <div class="casting-panel">
+        <h4>{% trans "Available characters" %}</h4>
+        <input type="text"
+               class="casting-search"
+               id="char-search"
+               placeholder="{% trans "Search" %}..."
+               oninput="render_char_list()">
+        <div class="char-list" id="char-list"></div>
+    </div>
+    <div class="casting-panel">
+        <h4>{{ pref_title }}</h4>
+        <div id="casting-info">
+            <span class="pref-counter" id="pref-counter"></span>
+            <span class="helptext">
+                <i>{% trans "Drag items to reorder the preferences." %}
+                </i></span>
+            </div>
+            <div class="pref-list" id="pref-list"></div>
+            <div class="casting-err" id="err"></div>
+        </div>
+    </div>

@@ -274,6 +274,24 @@
   text-align: center !important;
 }
 
+.casting-submit {
+  margin-top: 1rem;
+}
+
+.casting-edit-head {
+  margin-bottom: 0.5rem;
+}
+
+.casting-edit-pref {
+  cursor: pointer;
+  margin-left: 0.4em;
+  opacity: 0.6;
+}
+
+.casting-edit-pref:hover {
+  opacity: 1;
+}
+
 /* ---------------------------------------------------------------------------
    Badges assignment
    --------------------------------------------------------------------------- */

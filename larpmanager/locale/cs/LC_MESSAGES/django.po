@@ -3119,6 +3119,9 @@ msgstr "Získat dovednost"
 msgid "One-time token"
 msgstr "Jednorázový žeton"
 
+msgid "Organizer edit"
+msgstr "Úprava organizátorem"
+
 msgid "Outflows total"
 msgstr "Celkové výdaje"
 
@@ -3623,6 +3626,9 @@ msgstr "Aktivní slevy"
 
 msgid "Driver's License"
 msgstr "Řidičský průkaz"
+
+msgid "Edit preferences"
+msgstr "Upravit preference"
 
 msgid "Enabled features"
 msgstr "Povolené funkce"
@@ -6858,6 +6864,9 @@ msgstr "Definovat vlastní příznaky stavu uživatelů"
 msgid "Display all users data for insurance"
 msgstr "Zobrazit údaje všech uživatelů pro pojištění"
 
+msgid "Elements to avoid in the assignment:"
+msgstr "Prvky, kterým se při přiřazení vyhnout:"
+
 msgid "Error processing payment, contact us"
 msgstr "Chyba při zpracování platby, kontaktuj nás"
 
@@ -7091,6 +7100,9 @@ msgstr "Účtuj transakční poplatky účastníkovi"
 msgid "Color used to highlight important text"
 msgstr "Barva použitá ke zvýraznění důležitého textu"
 
+msgid "Drag items to reorder the preferences."
+msgstr "Přetažením položek změníš pořadí preferencí."
+
 msgid "Fill in your character's relationships"
 msgstr "Vyplň vztahy své postavy"
 
@@ -7186,9 +7198,6 @@ msgstr "Přizpůsobení vzhledu stránek organizace"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Datum, od kterého se uplatňuje příplatek"
-
-msgid "Drag items to reorder your preferences."
-msgstr "Přetáhni položky a změň pořadí svých preferencí."
 
 msgid "Enables free pre-registration to events"
 msgstr "Umožňuje bezplatnou předběžnou registraci na události"
@@ -7969,6 +7978,9 @@ msgstr "Přiřazení postavy registrovanému účastníkovi"
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Zrušení z důvodu nezaplacení ročního členského příspěvku"
 
+msgid "Click a character to add it to the preferences"
+msgstr "Klikni na postavu a přidáš ji do preferencí"
+
 msgid "Complete the checklist to unlock all features:"
 msgstr "Dokončením kontrolního seznamu odemkneš všechny funkce platformy:"
 
@@ -8063,9 +8075,6 @@ msgstr "Přidáno na registrační stránku před formulář"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Postavy jsou viditelné pouze pro přihlášené uživatele:"
-
-msgid "Click a character to add it to your preferences"
-msgstr "Klikni na postavu a přidej ji do svých preferencí"
 
 msgid "Customize specific texts on the event interface"
 msgstr "Přizpůsobit konkrétní texty v rozhraní události"
@@ -8190,6 +8199,9 @@ msgstr "Liší se od očekávaného pouze jedním znakem"
 
 msgid "Discounts only applicable with new registrations"
 msgstr "Slevy použitelné pouze při nové registraci"
+
+msgid "Edit the casting preferences of this participant"
+msgstr "Uprav casting preference tohoto účastníka"
 
 msgid "I'm interested, but I don't have much experience"
 msgstr "Mám zájem, ale nemám mnoho zkušeností"
@@ -11917,6 +11929,13 @@ msgid ""
 "organizers"
 msgstr ""
 "Zadej soukromé informace o své postavě, které uvidíš jen ty a organizátoři"
+
+msgid ""
+"If enabled, organizers can edit the preferences of participants from the "
+"casting page."
+msgstr ""
+"Když je zapnuto, organizátoři můžou upravovat preference účastníků přímo ze "
+"stránky casting."
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "
