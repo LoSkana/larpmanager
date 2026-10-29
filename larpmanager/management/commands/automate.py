@@ -75,6 +75,7 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
 from larpmanager.utils.core.common import ensure_timezone_aware, get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
+from larpmanager.utils.larpmanager.csp import send_csp_digest
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
@@ -169,6 +170,9 @@ class Command(BaseCommand):
 
         # Warn admins when SES bounce or complaint rates approach AWS thresholds
         self.check_email_reputation()
+
+        # Send admins the Content-Security-Policy violations collected since yesterday
+        send_csp_digest()
 
         # Remind admins about paid-plan runs still unpaid
         self.check_lm_payment_reminders()

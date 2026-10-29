@@ -102,6 +102,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.chat import get_chat_answer
+from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
     delete_run_task,
@@ -117,6 +118,9 @@ from larpmanager.views.user.member import get_user_backend
 
 # Refuse oversized SNS bodies before parsing them
 MAX_SNS_PAYLOAD_SIZE = 256 * 1024
+
+# Refuse oversized CSP violation reports before parsing them
+MAX_CSP_REPORT_SIZE = 16 * 1024
 
 # Suppressed addresses shown per page in the admin listing
 SUPPRESSIONS_PER_PAGE = 100
@@ -1276,6 +1280,23 @@ def ses_notification(request: HttpRequest) -> HttpResponse:
 
     handle_sns_payload(payload)
     return JsonResponse({"res": "ok"})
+
+
+@csrf_exempt
+@require_POST
+@ratelimit(key="ip", rate="60/m", block=True)
+def csp_report(request: HttpRequest) -> HttpResponse:
+    """Collect a Content-Security-Policy violation report sent by the browser."""
+    if len(request.body) > MAX_CSP_REPORT_SIZE:
+        return HttpResponse(status=413)
+
+    try:
+        payload = json.loads(request.body.decode())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return HttpResponse(status=400)
+
+    record_csp_report(payload)
+    return HttpResponse(status=204)
 
 
 @login_required
