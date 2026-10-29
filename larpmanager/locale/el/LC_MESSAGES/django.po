@@ -4584,6 +4584,9 @@ msgstr "Πλήρες φύλλο (PDF)"
 msgid "Confirm check-in for"
 msgstr "Επιβεβαίωση check-in για"
 
+msgid "Count unpaid tickets"
+msgstr "Μέτρα τα απλήρωτα εισιτήρια"
+
 msgid "Country of the event"
 msgstr "Χώρα του event"
 
@@ -15527,6 +15530,14 @@ msgstr ""
 "Ενεργοποιεί ένα κουμπί στην επάνω γραμμή για ανακατεύθυνση συνδεδεμένων "
 "χρηστών σε εξωτερική εφαρμογή, χρησιμοποιώντας διαμορφώσιμο URL και "
 "προαιρετικό SSO μέσω JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Αν είναι ενεργό, μετριούνται στην αναλογία και τα εισιτήρια patron που δεν "
+"έχουν πληρωθεί ακόμα. Αν είναι ανενεργό, μετριούνται μόνο τα εισιτήρια "
+"patron με τουλάχιστον μία πληρωμή."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

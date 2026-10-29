@@ -4584,6 +4584,9 @@ msgstr "Volledig blad (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Check-in bevestigen voor"
 
+msgid "Count unpaid tickets"
+msgstr "Onbetaalde tickets meetellen"
+
 msgid "Country of the event"
 msgstr "Land van het evenement"
 
@@ -15418,6 +15421,14 @@ msgstr ""
 "Maakt een knop in de bovenbalk mogelijk om geauthenticeerde gebruikers om te"
 " leiden naar een externe applicatie, met behulp van een configureerbare URL "
 "en optionele JWT-gebaseerde SSO"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Als dit aanstaat, worden ook nog niet betaalde patron-tickets meegeteld in "
+"de verhouding. Als dit uitstaat, worden alleen patron-tickets met minstens "
+"één betaling meegeteld."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

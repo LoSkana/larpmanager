@@ -4584,6 +4584,9 @@ msgstr "Komplett ark (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Bekreft innsjekking for"
 
+msgid "Count unpaid tickets"
+msgstr "Tell ubetalte billetter"
+
 msgid "Country of the event"
 msgstr "Arrangementets land"
 
@@ -15161,6 +15164,14 @@ msgstr ""
 "Aktiverer en knapp i topplinjen for å omdirigere autentiserte brukere til en"
 " ekstern applikasjon, ved hjelp av en konfigurerbar URL og valgfri JWT-"
 "basert SSO"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Hvis dette er aktivert, telles også patron-billetter som ikke er betalt ennå"
+" med i forholdet. Hvis det er deaktivert, telles bare patron-billetter med "
+"minst én betaling."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

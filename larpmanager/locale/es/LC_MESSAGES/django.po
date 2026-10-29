@@ -4584,6 +4584,9 @@ msgstr "Ficha completa (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Confirmar el check-in de"
 
+msgid "Count unpaid tickets"
+msgstr "Contar entradas no pagadas"
+
 msgid "Country of the event"
 msgstr "País del evento"
 
@@ -15404,6 +15407,14 @@ msgstr ""
 "Habilita un botón en la barra superior para redirigir a los usuarios "
 "autenticados a una aplicación externa, utilizando una URL configurable y un "
 "SSO basado en JWT opcional"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Si está activado, las entradas de mecenas aún no pagadas también se cuentan "
+"en la proporción. Si está desactivado, solo se cuentan las entradas de "
+"mecenas con al menos un pago."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

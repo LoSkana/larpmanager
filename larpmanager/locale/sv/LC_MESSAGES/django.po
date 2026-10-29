@@ -4584,6 +4584,9 @@ msgstr "Komplett blad (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Bekräfta incheckning för"
 
+msgid "Count unpaid tickets"
+msgstr "Räkna obetalda biljetter"
+
 msgid "Country of the event"
 msgstr "Land där evenemanget äger rum"
 
@@ -15137,6 +15140,13 @@ msgstr ""
 "Aktiverar en knapp i toppfältet för att omdirigera autentiserade användare "
 "till en extern applikation med hjälp av en konfigurerbar URL och valfri JWT-"
 "baserad SSO"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Om aktiverat räknas även obetalda patron-biljetter med i kvoten. Om "
+"inaktiverat räknas bara patron-biljetter med minst en betalning."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

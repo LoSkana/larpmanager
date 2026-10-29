@@ -4584,6 +4584,9 @@ msgstr "Ficha completa (PDF)"
 msgid "Confirm check-in for"
 msgstr "Confirmar check-in para"
 
+msgid "Count unpaid tickets"
+msgstr "Contar bilhetes não pagos"
+
 msgid "Country of the event"
 msgstr "País do evento"
 
@@ -15259,6 +15262,14 @@ msgstr ""
 "Ativa um botão na barra superior para redirecionar utilizadores autenticados"
 " para uma aplicação externa, usando um URL configurável e SSO opcional "
 "baseado em JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Se ativado, os bilhetes de patrono ainda não pagos também entram na contagem"
+" da proporção. Se desativado, só contam os bilhetes de patrono com pelo "
+"menos um pagamento."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

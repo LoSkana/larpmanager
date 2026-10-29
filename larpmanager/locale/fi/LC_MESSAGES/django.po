@@ -4584,6 +4584,9 @@ msgstr "Täydellinen lomake (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Vahvista sisäänkirjautuminen henkilölle"
 
+msgid "Count unpaid tickets"
+msgstr "Laske maksamattomat liput"
+
 msgid "Country of the event"
 msgstr "Tapahtuman maa"
 
@@ -15155,6 +15158,14 @@ msgstr ""
 "Mahdollistaa yläpalkissa olevan painikkeen, jolla voidaan ohjata todennetut "
 "käyttäjät ulkoiseen sovellukseen käyttämällä määritettävissä olevaa URL-"
 "osoitetta ja valinnaista JWT-pohjaista SSO:ta"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Jos tämä on käytössä, suhteeseen lasketaan myös patron-liput, joita ei ole "
+"vielä maksettu. Jos se ei ole käytössä, lasketaan vain patron-liput, joille "
+"on kirjattu vähintään yksi maksu."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
