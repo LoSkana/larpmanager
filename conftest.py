@@ -68,7 +68,7 @@ def _copy_test_media() -> None:
 
 @pytest.fixture(autouse=True)
 def _email_backend(settings: SettingsWrapper) -> None:
-    settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+    settings.MAILERS = {"default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}}
 
 
 @pytest.fixture(autouse=True)

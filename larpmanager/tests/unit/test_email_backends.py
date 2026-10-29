@@ -51,10 +51,13 @@ class TestSMTPEmailBackend(BaseTestCase):
             'use_tls': True,
         }
 
-        with patch('larpmanager.mail.backends.get_connection') as mock_get_connection:
+        with self.settings(MAILERS={'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend'}}), patch(
+            'larpmanager.mail.backends.DjangoSMTPBackend'
+        ) as mock_smtp_backend:
             backend = SMTPEmailBackend(smtp_config)
 
-            mock_get_connection.assert_called_once_with(
+            mock_smtp_backend.assert_called_once_with(
+                alias='custom_smtp',
                 host='smtp.example.com',
                 port=587,
                 username='user@example.com',
@@ -72,9 +75,11 @@ class TestSMTPEmailBackend(BaseTestCase):
             'use_tls': True,
         }
 
-        with patch('larpmanager.mail.backends.get_connection') as mock_get_connection:
+        with self.settings(MAILERS={'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend'}}), patch(
+            'larpmanager.mail.backends.DjangoSMTPBackend'
+        ) as mock_smtp_backend:
             mock_connection = Mock()
-            mock_get_connection.return_value = mock_connection
+            mock_smtp_backend.return_value = mock_connection
 
             backend = SMTPEmailBackend(smtp_config)
 
@@ -89,9 +94,17 @@ class TestSMTPEmailBackend(BaseTestCase):
             # Send email
             backend.send_message(email)
 
-            # Verify connection was set and send was called
-            assert email.connection == mock_connection
-            assert email.send or True  # EmailMultiAlternatives.send() is called
+            # Verify message was sent via custom connection
+            mock_connection.send_messages.assert_called_once_with([email])
+
+
+    def test_smtp_backend_uses_default_mailer_when_not_smtp(self):
+        """Test SMTP backend falls back to the default mailer when it is not SMTP."""
+        with patch('larpmanager.mail.backends.DjangoSMTPBackend') as mock_smtp_backend:
+            backend = SMTPEmailBackend({'host': 'smtp.example.com'})
+
+            mock_smtp_backend.assert_not_called()
+            assert backend.connection.__class__.__module__ == 'django.core.mail.backends.locmem'
 
 
 class TestSESEmailBackend(BaseTestCase):
@@ -253,16 +266,16 @@ class TestDefaultEmailBackend(BaseTestCase):
     """Tests for default email backend."""
 
     def test_default_backend_initialization(self):
-        """Test default backend initializes with get_connection."""
-        with patch('larpmanager.mail.backends.get_connection') as mock_get_connection:
+        """Test default backend initializes with the default mailer."""
+        with patch('larpmanager.mail.backends.mailers') as mock_mailers:
             backend = DefaultEmailBackend()
-            mock_get_connection.assert_called_once_with()
+            assert backend.connection == mock_mailers.default
 
     def test_default_backend_send_message(self):
         """Test default backend sends message."""
-        with patch('larpmanager.mail.backends.get_connection') as mock_get_connection:
+        with patch('larpmanager.mail.backends.mailers') as mock_mailers:
             mock_connection = Mock()
-            mock_get_connection.return_value = mock_connection
+            mock_mailers.default = mock_connection
 
             backend = DefaultEmailBackend()
 
@@ -277,8 +290,8 @@ class TestDefaultEmailBackend(BaseTestCase):
             # Send email
             backend.send_message(email)
 
-            # Verify connection was set
-            assert email.connection == mock_connection
+            # Verify message was sent via default mailer
+            mock_connection.send_messages.assert_called_once_with([email])
 
 
 class TestEmailConnectionFactory(BaseTestCase):
