@@ -146,7 +146,7 @@
     {% endif %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window['all'] = {{ chars_json | safe }};
 
 window['facs'] = {{ factions_json | safe }};

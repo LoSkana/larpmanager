@@ -14,7 +14,7 @@
             </div>
         {% endfor %}
     </div>
-    <script>
+    <script nonce="{{ csp_nonce }}">
     function dismissStickyMessage(messageId, buttonElement) {
         const messageElement = buttonElement.closest('.sticky-message');
 

@@ -156,5 +156,5 @@
     </form>
 {% endblock content %}
 {% block js %}
-    <script>document.querySelector('#login').click();</script>
+    <script nonce="{{ csp_nonce }}">document.querySelector('#login').click();</script>
 {% endblock js %}

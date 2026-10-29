@@ -71,5 +71,5 @@
 {% block landing_final %}
 {% endblock landing_final %}
 {% block js2 %}
-    <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+    <script nonce="{{ csp_nonce }}"> window.base_domain = ".{{ association.base_domain }}"; </script>
 {% endblock js2 %}

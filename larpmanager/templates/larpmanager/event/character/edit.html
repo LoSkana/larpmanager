@@ -40,7 +40,7 @@
     {% endif %}
     {% include "elements/form/max_length.js" %}
     {{ form.unavail|json_script:"unavail" }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
     var hide_unavailable = {{ hide_unavailable | yesno:"true,false" }};

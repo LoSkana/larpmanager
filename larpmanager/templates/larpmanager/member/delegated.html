@@ -92,7 +92,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
         function submitForm(formId) {
             document.getElementById(formId).submit();
         }

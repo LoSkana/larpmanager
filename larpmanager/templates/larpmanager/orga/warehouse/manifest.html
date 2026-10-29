@@ -111,7 +111,7 @@
     {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 // Show photo
 
 function openImage(url) {

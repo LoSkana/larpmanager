@@ -97,7 +97,7 @@
     {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
         window.addEventListener('DOMContentLoaded', function() {
             // Highlight rows that will be deleted
             $('.table-danger').css('background-color', '#f8d7da');

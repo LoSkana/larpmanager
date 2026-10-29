@@ -817,7 +817,6 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
     return None
 
 
-@cache_page(60 * 15)
 def discover(request: HttpRequest) -> Any:
     """Display discovery page with featured content."""
     context = get_lm_contact(request)
@@ -892,7 +891,6 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     return render(request, "larpmanager/landing/tutorials.html", context)
 
 
-@cache_page(60 * 15)
 def guides(request: HttpRequest) -> Any:
     """Display list of published guides for LarpManager users."""
     context = get_lm_contact(request)
@@ -966,7 +964,6 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     return render(request, "larpmanager/landing/blog.html", context)
 
 
-@cache_page(60 * 15)
 def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page."""
     context = get_lm_contact(request)
@@ -974,7 +971,6 @@ def privacy(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/privacy.html", context)
 
 
-@cache_page(60 * 15)
 def usage(request: HttpRequest) -> Any:
     """Display usage/terms page."""
     context = get_lm_contact(request)
@@ -983,7 +979,6 @@ def usage(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/usage.html", context)
 
 
-@cache_page(60 * 15)
 def about_us(request: HttpRequest) -> Any:
     """Display about us page."""
     context = get_lm_contact(request)

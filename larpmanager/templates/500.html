@@ -22,7 +22,7 @@
     {% if exception %}<p>Additional info: {{ exception }}</p>{% endif %}
 {% endblock content %}
 {% block js %}
-    <script language="JavaScript" type="text/javascript">
+    <script nonce="{{ csp_nonce }}" language="JavaScript" type="text/javascript">
 function redirect(){
    location.reload(true);
 }

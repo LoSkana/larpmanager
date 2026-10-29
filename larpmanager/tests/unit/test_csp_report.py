@@ -21,6 +21,7 @@
 """Unit tests for the CSP violation report endpoint and the daily digest."""
 
 import json
+import re
 from http import HTTPStatus
 from unittest.mock import patch
 
@@ -122,3 +123,17 @@ class TestCspReportEndpoint(BaseTestCase):
     def test_get_not_allowed(self):
         """Only POST is accepted."""
         assert self.client.get(reverse("csp_report")).status_code == HTTPStatus.METHOD_NOT_ALLOWED
+
+
+class TestCspNonce(BaseTestCase):
+    """Tests that inline scripts carry the nonce announced in the policy header."""
+
+    def test_page_nonce_matches_header(self):
+        """Every inline script of a rendered page uses the nonce of the report-only policy."""
+        response = Client().get("/accounts/login/")
+
+        assert response.status_code == HTTPStatus.OK
+        header_nonces = re.findall(r"'nonce-([^']+)'", response.headers["Content-Security-Policy-Report-Only"])
+        page_nonces = set(re.findall(r'<script nonce="([^"]+)"', response.content.decode()))
+        assert len(header_nonces) == 1
+        assert page_nonces == {header_nonces[0]}

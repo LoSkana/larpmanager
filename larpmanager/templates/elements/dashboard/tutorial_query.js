@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 let timeout = null;
 

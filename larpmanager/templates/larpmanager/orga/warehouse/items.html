@@ -93,7 +93,7 @@
     {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 function openImage(url) {
     document.getElementById('popupImg').src = url;
     document.getElementById('imagePopup').style.display = 'flex';

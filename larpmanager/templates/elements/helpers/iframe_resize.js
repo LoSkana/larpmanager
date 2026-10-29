@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 $(document).ready(function() {
     function sendHeight() {
         if (window.parent && window.parent !== window) {

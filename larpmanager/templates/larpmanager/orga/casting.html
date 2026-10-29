@@ -118,7 +118,7 @@
 {% endblock content %}
 {% block js %}
     <script src="{% static "node_modules/javascript-lp-solver/dist/solver.global.js" %}"></script>
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window['num_pref'] = {{ num_choices }};
 window['choices'] = {{ choices | safe }};
 window['players'] = {{ players | safe }};

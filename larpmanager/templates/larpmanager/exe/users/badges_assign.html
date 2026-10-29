@@ -42,7 +42,7 @@
     {{ block.super }}
     {{ badges_data|json_script:"badges-data" }}
     {{ members_data|json_script:"members-data" }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     var all_badges = JSON.parse(document.getElementById('badges-data').textContent);
     var all_members = JSON.parse(document.getElementById('members-data').textContent);
     var toggle_url = "{% url 'exe_badges_toggle' %}";

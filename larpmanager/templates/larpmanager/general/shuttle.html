@@ -85,7 +85,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 setInterval(function() {
     window.location.reload();
 }, 30000);

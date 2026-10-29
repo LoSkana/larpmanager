@@ -19,7 +19,7 @@
         </label>
         <button type="button" class="demo-hint-close" id="demo-hint-close">{% trans "Close" %}</button>
     </div>
-    <script>
+    <script nonce="{{ csp_nonce }}">
         window.addEventListener('DOMContentLoaded', function() {
             var panel = document.getElementById('demo-hint-panel');
             document.getElementById('demo-hint-toggle').addEventListener('click', function() {

@@ -1,5 +1,5 @@
 {% load i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 var casting_max = {{ casting_max }};
 var casting_min = {{ casting_min }};
 var factions_dict = {{ factions_json | safe }};

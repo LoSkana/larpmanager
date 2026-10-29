@@ -86,7 +86,7 @@
     {% endif %}
     {% include "elements/writing/excel-edit.js" %}
     {% include "elements/form/char_highlight.js" %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
         var url_load_questions = "{% url 'orga_writing_form_list' run.get_slug label_typ %}";
         var url_load_questions_email = "{% url 'orga_writing_form_email' run.get_slug label_typ %}";
 

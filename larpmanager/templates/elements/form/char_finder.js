@@ -1,6 +1,6 @@
 {% load tz show_tags static  i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 var type = "{{ finder_typ }}";
 

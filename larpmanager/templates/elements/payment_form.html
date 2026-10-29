@@ -62,7 +62,7 @@
         <input type="submit" id="submit" value="{% trans "Submit" %}">
     </form>
 </div>
-<script>
+<script nonce="{{ csp_nonce }}">
 
         function toggle_radio(x) {
             const elem = document.getElementById(x);

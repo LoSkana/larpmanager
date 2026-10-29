@@ -38,7 +38,7 @@
     {% endif %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     $(function() {
         $(document).on('click', '.edit_member_flags', function (e) {
             e.preventDefault();

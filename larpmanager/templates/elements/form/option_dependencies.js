@@ -1,5 +1,5 @@
 {{ dependencies|json_script:"option-dependencies" }}
-<script>
+<script nonce="{{ csp_nonce }}">
 var all_dependencies = JSON.parse(document.getElementById('option-dependencies').textContent);
 
 // options required by each option, and options required by each question

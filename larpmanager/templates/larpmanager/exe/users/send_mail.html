@@ -10,7 +10,7 @@
     {% include "elements/form/main.html" %}
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script nonce="{{ csp_nonce }}">window.addEventListener('DOMContentLoaded', function() {
 $(function() {
     $('#main_form').attr('data-confirm', '{% filter escapejs %}{% trans "Send this email to all the selected recipients?" %}{% endfilter %}');
 });
