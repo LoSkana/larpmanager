@@ -1825,3 +1825,133 @@ function copyClipboardButton() {
 }
 
 });
+
+// Max size of picked files buffered in memory, larger ones are uploaded as picked.
+const LM_FILE_BUFFER_MAX = 10 * 1024 * 1024;
+// Max wait for a picked file to be read, before using it as picked.
+const LM_FILE_BUFFER_TIMEOUT = 30000;
+
+// Show a persistent error toast about picked files.
+function warnFileError(text) {
+    if (!text || !$.toast) return;
+    $.toast({
+        text: text,
+        showHideTransition: 'slide',
+        icon: 'error',
+        position: 'top-center',
+        textAlign: 'center',
+        hideAfter: false
+    });
+}
+
+// Read a file in memory; resolves to the original if too big, or to null if unreadable.
+function bufferFile(file) {
+    if (file.size > LM_FILE_BUFFER_MAX) return Promise.resolve(file);
+    let timer;
+    const read = file.arrayBuffer().then(function(buffer) {
+        return new File([buffer], file.name, {type: file.type, lastModified: file.lastModified});
+    });
+    const timeout = new Promise(function(resolve, reject) {
+        timer = setTimeout(function() { reject(new Error('timeout')); }, LM_FILE_BUFFER_TIMEOUT);
+    });
+    return Promise.race([read, timeout]).catch(function(err) {
+        console.error('Failed to read file:', err);
+        return null;
+    }).finally(function() {
+        clearTimeout(timer);
+    });
+}
+
+// Read files in memory so cloud-backed files stay uploadable, warning once if any is too big or unreadable.
+function bufferFiles(files) {
+    if (files.some(function(file) { return file.size > LM_FILE_BUFFER_MAX; })) {
+        warnFileError(window.lmFileTooLargeText);
+    }
+    return Promise.all(files.map(bufferFile)).then(function(buffered) {
+        if (buffered.includes(null)) warnFileError(window.lmFileReadErrorText);
+        return buffered.map(function(file, idx) { return file || files[idx]; });
+    });
+}
+
+// Read a single file in memory; resolves to the original if too big or unreadable.
+window.lmBufferFile = function(file) {
+    return bufferFiles([file]).then(function(buffered) { return buffered[0]; });
+};
+
+// Buffer files picked in any file input.
+document.addEventListener('change', function(event) {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement) || input.type !== 'file') return;
+    // a newer pick (or a clear) on the same input supersedes any pending one
+    input.lmPicked = null;
+    input.lmBuffering = null;
+    input.lmPending = false;
+    if (!input.files || !input.files.length || typeof DataTransfer === 'undefined') return;
+
+    const picked = Array.from(input.files);
+    input.lmPicked = picked;
+    input.lmPending = true;
+
+    // exposed so other change handlers reuse the buffered files instead of reading them again
+    input.lmBuffering = bufferFiles(picked);
+    input.lmBuffering.then(function(buffered) {
+        if (input.lmPicked !== picked) return;
+        if (buffered.every(function(file, idx) { return file === picked[idx]; })) return;
+        try {
+            const transfer = new DataTransfer();
+            buffered.forEach(function(file) { transfer.items.add(file); });
+            input.files = transfer.files;
+        } catch (err) {
+            console.error('Failed to replace picked files:', err);
+        }
+    }).finally(function() {
+        if (input.lmPicked === picked) input.lmPending = false;
+    });
+}, true);
+
+// Whether a file input of the form is still being buffered.
+function formHasPendingFiles(form) {
+    return Array.from(form.elements).some(function(el) { return el.lmPending; });
+}
+
+// Run callback once all files picked in the form are buffered, right away if none is pending.
+function whenFilesBuffered(form, callback) {
+    if (!formHasPendingFiles(form)) return callback();
+    const wait = setInterval(function() {
+        if (formHasPendingFiles(form)) return;
+        clearInterval(wait);
+        callback();
+    }, 100);
+}
+
+// Delay form submit until its picked files are buffered, sending it once.
+document.addEventListener('submit', function(event) {
+    const form = event.target;
+    if (!formHasPendingFiles(form)) return;
+    const submitter = event.submitter;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (form.lmAwaitingFiles) return;
+    form.lmAwaitingFiles = true;
+    whenFilesBuffered(form, function() {
+        form.lmAwaitingFiles = false;
+        if (!form.requestSubmit) return nativeFormSubmit.call(form);
+        form.requestSubmit(submitter && submitter.form === form ? submitter : undefined);
+    });
+}, true);
+
+// Exposed for code that reads a form outside of its submit event (eg building a FormData).
+window.lmWhenFilesBuffered = whenFilesBuffered;
+
+// Programmatic submits skip the submit event, so they are delayed here.
+const nativeFormSubmit = HTMLFormElement.prototype.submit;
+HTMLFormElement.prototype.submit = function() {
+    const form = this;
+    if (!formHasPendingFiles(form)) return nativeFormSubmit.call(form);
+    if (form.lmAwaitingFiles) return;
+    form.lmAwaitingFiles = true;
+    whenFilesBuffered(form, function() {
+        form.lmAwaitingFiles = false;
+        nativeFormSubmit.call(form);
+    });
+};

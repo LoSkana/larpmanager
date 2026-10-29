@@ -10808,6 +10808,16 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
+msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in "
+"the cloud, download it to your device and retry."
+msgstr ""
+
 msgid "Nothing here yet."
 msgstr ""
 
