@@ -5891,12 +5891,6 @@ msgstr ""
 msgid "Drag to reorder"
 msgstr ""
 
-msgid "Translate"
-msgstr ""
-
-msgid "Original"
-msgstr ""
-
 #, python-format
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr ""
@@ -7545,6 +7539,9 @@ msgstr ""
 msgid ""
 "No custom texts defined yet. Add a text to customize emails and registration "
 "pages for your organization."
+msgstr ""
+
+msgid "Original"
 msgstr ""
 
 msgid "Translation"
@@ -9728,15 +9725,15 @@ msgstr ""
 msgid "Open Link"
 msgstr ""
 
-msgid "Copied"
-msgstr ""
-
 msgid "Copy URL"
 msgstr ""
 
 msgid ""
 "No access tokens generated yet. Create one-time content items first, then "
 "generate tokens for distribution."
+msgstr ""
+
+msgid "Copied"
 msgstr ""
 
 msgid "Show closed"
@@ -10102,6 +10099,9 @@ msgstr ""
 
 msgid ""
 "No texts have been created yet. Use the button above to add a new event text."
+msgstr ""
+
+msgid "Translate"
 msgstr ""
 
 msgid ""

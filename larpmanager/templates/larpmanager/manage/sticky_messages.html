@@ -6,7 +6,7 @@
                  role="alert"
                  data-message-id="{{ message.id }}">
                 <span class="close">
-                    <a href="#" onclick="dismissStickyMessage('{{ message.id }}', this);">
+                    <a href="#" class="dismiss-sticky-message">
                         <i class="fa fa-window-close" aria-hidden="true"></i>
                     </a>
                 </span>
@@ -43,5 +43,12 @@
             console.error('Error dismissing sticky message:', error);
         });
     }
+
+    document.querySelectorAll('.dismiss-sticky-message').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            dismissStickyMessage(button.closest('.sticky-message').dataset.messageId, button);
+        });
+    });
     </script>
 {% endif %}

@@ -36,9 +36,7 @@
         <p>{% trans "Choose the payment method:" %}</p>
         <table id="payment_form">
             {% for key, el in form.methods.items %}
-                <tr id="row_{{ el.slug }}"
-                    onclick="toggle_radio('{{ el.slug }}')"
-                    class="selable">
+                <tr id="row_{{ el.slug }}" data-method="{{ el.slug }}" class="selable">
                     <th class="hide">
                         <input type="radio" id="{{ el.slug }}" name="method" value="{{ el.slug }}">
                     </th>
@@ -81,6 +79,10 @@
 
     window.addEventListener('DOMContentLoaded', function() {
         $(function() {
+
+            $('#payment_form .selable').on('click', function() {
+                toggle_radio(this.dataset.method);
+            });
 
             $("#submit").prop("disabled", true);
 

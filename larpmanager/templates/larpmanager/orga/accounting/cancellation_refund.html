@@ -58,25 +58,23 @@
         </div>
     {% elif features.tokens and not features.credits %}
         <div class="nav typ">
-            <a id="typ_t" href="#" onclick="return select_typ('t');" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
+            <a id="typ_t" href="#" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
         </div>
     {% elif features.credits and not features.tokens %}
         <div class="nav typ">
-            <a id="typ_c" href="#" onclick="return select_typ('c');" class="sel">{% trans "Only" %} {{ credits_name }}</a>
+            <a id="typ_c" href="#" class="sel">{% trans "Only" %} {{ credits_name }}</a>
         </div>
     {% else %}
         <div class="nav typ">
-            <a id="typ_t" href="#" onclick="return select_typ('t');">{% trans "Only" %} {{ tokens_name }}</a>
-            <a id="typ_c" href="#" onclick="return select_typ('c');">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
+            <a id="typ_t" href="#">{% trans "Only" %} {{ tokens_name }}</a>
+            <a id="typ_c" href="#">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
         </div>
     {% endif %}
     <br />
     <h3>{% trans "Refund percentage" %}</h3>
     <div class="nav p">
         {% for i in '0123456789'|make_list %}
-            <a id="p_{{ forloop.counter }}"
-               href="#"
-               onclick="return select_p('{{ forloop.counter }}');">{{ forloop.counter }}0 %</a>
+            <a id="p_{{ forloop.counter }}" href="#">{{ forloop.counter }}0 %</a>
         {% endfor %}
     </div>
     <br />
@@ -170,6 +168,15 @@ window.addEventListener('DOMContentLoaded', function() {
             select_typ('c');
         {% endif %}
         select_p('7');
+
+        $('.nav.typ a').on('click', function(event) {
+            event.preventDefault();
+            select_typ(this.id.replace('typ_', ''));
+        });
+        $('.nav.p a').on('click', function(event) {
+            event.preventDefault();
+            select_p(this.id.replace('p_', ''));
+        });
 
         $('#ref_form').on('submit', function() {
             {% if not features.tokens and not features.credits %}

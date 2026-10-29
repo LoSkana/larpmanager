@@ -2,19 +2,13 @@
 {% if primary_faction_filter %}
     <div class="faction-chips" id="primary-faction-chips">
         {% for f in primary_faction_filter %}
-            <span class="faction-chip"
-                  data-number="{{ f.number }}"
-                  onclick="toggle_primary_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
+            <span class="faction-chip" data-number="{{ f.number }}">{{ f.name }}</span>
         {% endfor %}
     </div>
 {% endif %}
 {% if faction_filter %}
     <div class="faction-chips" id="faction-chips">
-        {% for f in faction_filter %}
-            <span class="faction-chip"
-                  data-number="{{ f.number }}"
-                  onclick="toggle_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
-        {% endfor %}
+        {% for f in faction_filter %}<span class="faction-chip" data-number="{{ f.number }}">{{ f.name }}</span>{% endfor %}
     </div>
 {% endif %}
 <div id="hidden-inputs"></div>
@@ -24,8 +18,7 @@
         <input type="text"
                class="casting-search"
                id="char-search"
-               placeholder="{% trans "Search" %}..."
-               oninput="render_char_list()">
+               placeholder="{% trans "Search" %}...">
         <div class="char-list" id="char-list"></div>
     </div>
     <div class="casting-panel">

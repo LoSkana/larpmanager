@@ -23,8 +23,7 @@
                     <input type="text"
                            id="member-search"
                            class="casting-search"
-                           placeholder="{% trans "Search" %}..."
-                           oninput="render_left()">
+                           placeholder="{% trans "Search" %}...">
                     <div id="member-list" class="char-list"></div>
                 </div>
                 <div class="casting-panel">
@@ -213,6 +212,8 @@
     }
 
     window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('member-search').addEventListener('input', function() { render_left(); });
+
         var sel = document.getElementById('badge-select');
         all_badges.forEach(function(b) {
             var opt = document.createElement('option');

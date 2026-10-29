@@ -59,11 +59,12 @@
         <link rel="preload"
               href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"
               as="style"
-              onload="this.onload=null;this.rel='stylesheet'">
+              data-async-css>
         <noscript>
             <link rel="stylesheet"
                   href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
         </noscript>
+        {% include "elements/helpers/async-css.js" %}
         <style>
             @font-face {
                 font-family: 'future_light';

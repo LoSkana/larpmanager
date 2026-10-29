@@ -154,7 +154,7 @@
     <link rel="preload"
           href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"
           as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
+          data-async-css>
     <noscript>
         <link rel="stylesheet"
               href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
@@ -162,7 +162,7 @@
     <link rel="preload"
           href="{% static 'node_modules/qtip2/dist/jquery.qtip.min.css' %}"
           as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
+          data-async-css>
     <noscript>
         <link rel="stylesheet"
               href="{% static 'node_modules/qtip2/dist/jquery.qtip.min.css' %}">
@@ -170,11 +170,12 @@
     <link rel="preload"
           href="{% static 'node_modules/jquery-datetimepicker/jquery.datetimepicker.css' %}"
           as="style"
-          onload="this.onload=null;this.rel='stylesheet'">
+          data-async-css>
     <noscript>
         <link rel="stylesheet"
               href="{% static 'node_modules/jquery-datetimepicker/jquery.datetimepicker.css' %}">
     </noscript>
+    {% include "elements/helpers/async-css.js" %}
     <link rel="stylesheet"
           href="{% static 'node_modules/jquery-toast-plugin/dist/jquery.toast.min.css' %}" />
     <link rel="stylesheet"

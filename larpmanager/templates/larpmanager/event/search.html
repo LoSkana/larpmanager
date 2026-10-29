@@ -52,13 +52,13 @@
                     {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong." %}
                 </p>
                 <p>
-                    {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#" onclick="false;">{% trans "Example" %}</a>
+                    {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#">{% trans "Example" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
+                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel">{% trans "Included" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
+                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel">{% trans "Excluded" %}</a>
                 </p>
             </div>
         </div>
@@ -182,6 +182,11 @@ window['fields'] = {}
 window['questions'] = {{ questions_json | safe }};
 window['options'] = {{ options_json | safe }};
 window['searchable'] = {{ searchable_json | safe }};
+
+// Example filter buttons in the instructions are decorative only
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.istr a')) event.preventDefault();
+});
 
     </script>
     {% compress js %}

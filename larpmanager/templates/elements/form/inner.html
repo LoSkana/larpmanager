@@ -53,20 +53,9 @@
                     <a href="{{ link }}" class="trigger_save"> <i class="fa-solid fa-arrow-down"></i></a>
                 {% endif %}
             {% endif %}
-            {% if form.translate and field.auto_id in form.translate %}
-                <br />
-                <br />
-                <a onclick="return translate('{{ field.auto_id }}');">{% trans "Translate" %}</a>
-            {% endif %}
         </th>
         <td>
             {% if field.errors %}{{ field.errors }}{% endif %}
-            {% if form.translate and field.auto_id in form.translate %}
-                <div class="orig hide">
-                    <p>{% trans "Original" %}</p>
-                    <div class="plot">{% get_field form.translate field.auto_id %}</div>
-                </div>
-            {% endif %}
             {% if form.details and field.auto_id in form.details %}
                 {% autoescape off %}
                     <div class="plot">{% get_field_show_char form.details field.auto_id run 1 %}</div>
@@ -75,10 +64,7 @@
             {% if form.show_link and field.auto_id in form.show_link %}
                 <div class="hide  f_{{ field.auto_id }}">{{ field }}</div>
                 <p>
-                    <a href="#"
-                       class="my_toggle"
-                       tog="f_{{ field.auto_id }}"
-                       onclick="var s=this.querySelector('.sl-show');var h=this.querySelector('.sl-hide');s.classList.toggle('hide');h.classList.toggle('hide');">
+                    <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">
                         <span class="sl-show"><i class="fa-regular fa-eye"></i> {% trans "Show" %}</span>
                         <span class="sl-hide hide"><i class="fa-regular fa-eye-slash"></i> {% trans "Hide" %}</span>
                     </a>

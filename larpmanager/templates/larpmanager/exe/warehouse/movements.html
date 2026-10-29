@@ -41,8 +41,7 @@
                             <img src="{{ el.item.thumb.url }}"
                                  class="inv_photo"
                                  alt="item photo"
-                                 style="cursor: pointer"
-                                 onclick="openImage('{{ el.item.photo.url }}')" />
+                                 data-popup-image="{{ el.item.photo.url }}" />
                         {% endif %}
                     </td>
                     <td>
@@ -64,15 +63,3 @@
     </div>
     {% include "elements/table/footer.html" %}
 {% endblock content %}
-{% block js %}
-    <script nonce="{{ csp_nonce }}">
-function openImage(url) {
-    document.getElementById('popupImg').src = url;
-    document.getElementById('imagePopup').style.display = 'flex';
-}
-
-document.getElementById('imagePopup').onclick = function() {
-    this.style.display = 'none';
-};
-    </script>
-{% endblock js %}
