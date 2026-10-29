@@ -126,15 +126,17 @@ class BrokenLinkEmailsMiddleware:
 
         # Send detailed error report to administrators
         ip_address = request.META.get("REMOTE_ADDR", "<none>")
-        mail_managers(
-            f"Broken link on {domain}",
-            f"Requested URL: {path}\n"
-            f"Exception: {exception}\n"
-            f"User: {request.user!s}\n"
-            f"Referrer: {referer}\n"
-            f"User agent: {user_agent}\n"
-            f"IP address: {ip_address}\n\n"
-            f"{vars(request)}",
-            fail_silently=True,
-        )
+        try:
+            mail_managers(
+                f"Broken link on {domain}",
+                f"Requested URL: {path}\n"
+                f"Exception: {exception}\n"
+                f"User: {request.user!s}\n"
+                f"Referrer: {referer}\n"
+                f"User agent: {user_agent}\n"
+                f"IP address: {ip_address}\n\n"
+                f"{vars(request)}",
+            )
+        except Exception:
+            logger.exception("Failed to send broken link report for %s", path)
         return None

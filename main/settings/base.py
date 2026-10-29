@@ -372,7 +372,11 @@ ALLOWED_MIME_TYPES = {
 
 # email
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+MAILERS = {
+    'default': {
+        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
 
 MAIL_BATCH_SIZE = 10
 
