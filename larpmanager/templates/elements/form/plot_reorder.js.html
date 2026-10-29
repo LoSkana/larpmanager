@@ -1,5 +1,5 @@
 {% load i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         var plotReorderUrl = '{{ form.plot_reorder_url }}';

@@ -29,7 +29,7 @@
             <div id="sumup-card"></div>
             <script type="text/javascript"
                     src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
-            <script type="text/javascript">
+            <script nonce="{{ csp_nonce }}" type="text/javascript">
               SumUpCard.mount({
                 checkoutId: '{{ sumup_checkout_id }}',
                 showAmount: true,
@@ -41,7 +41,9 @@
               });
             </script>
         {% endif %}
-        {% if method == 'stripe' %}<script>window.location.replace("{{ stripe_ck.url }}");</script>{% endif %}
+        {% if method == 'stripe' %}
+            <script nonce="{{ csp_nonce }}">window.location.replace("{{ stripe_ck.url }}");</script>
+        {% endif %}
         {% if method == 'satispay' %}
             <br />
             <br />
@@ -183,7 +185,7 @@
         </a>
     {% endif %}
 {% endif %}
-<script>
+<script nonce="{{ csp_nonce }}">
 
     window.addEventListener('DOMContentLoaded', function() {
         $(function() {

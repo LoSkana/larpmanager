@@ -204,7 +204,7 @@
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
     </dialog>
 {% endif %}
-<script>
+<script nonce="{{ csp_nonce }}">
 (function () {
     var wrapper = document.querySelector('.tv22-pills-wrapper');
     var btnLeft = document.querySelector('.tv22-scroll-left');

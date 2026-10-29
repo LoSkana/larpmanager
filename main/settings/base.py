@@ -6,6 +6,8 @@ import os
 import re
 from pathlib import Path
 
+from django.utils.csp import CSP
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -63,7 +65,7 @@ MIDDLEWARE = [
     # Security middleware
     'django.middleware.security.SecurityMiddleware',
     # Content-Security-Policy headers
-    'csp.middleware.CSPMiddleware',
+    'django.middleware.csp.ContentSecurityPolicyMiddleware',
     # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
     # Axes: rate limiting on login
@@ -111,6 +113,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.csp',
                 'larpmanager.utils.core.context_processors.cache_association',
             ],
         },
@@ -240,7 +243,7 @@ SECURE_REFERRER_POLICY = 'origin'
 # Prevent browser MIME-sniffing of served content (esp. user uploads in /media/)
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Content-Security-Policy (django-csp). Inline scripts/styles are still used
+# Content-Security-Policy (Django built-in). Inline scripts/styles are still used
 # throughout the templates, so 'unsafe-inline' stays for now; the policy still
 # restricts script/style loading to self plus the known CDNs and blocks
 # object/base injection as defense-in-depth against stored XSS.
@@ -254,77 +257,87 @@ _CSP_CDN_HOSTS = [
     'https://static.cloudflareinsights.com/'
 ]
 
-CONTENT_SECURITY_POLICY = {
-    'DIRECTIVES': {
-        'default-src': ["'self'"],
-        'script-src': [
-            "'self'",
-            "'unsafe-inline'",
-            "'unsafe-eval'",
-            *_CSP_CDN_HOSTS,
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://www.googletagmanager.com',
-            'https://www.google.com',
-            'https://www.gstatic.com',
-            'https://static.hotjar.com',
-            'https://script.hotjar.com',
-            'https://*.hotjar.com',
-        ],
-        'style-src': [
-            "'self'",
-            "'unsafe-inline'",
-            *_CSP_CDN_HOSTS,
-            'https://*.hotjar.com',
-            'https://fonts.googleapis.com',
-        ],
-        'font-src': [
-            "'self'",
-            'data:',
-            *_CSP_CDN_HOSTS,
-            'https://*.hotjar.com',
-            'https://fonts.gstatic.com',
-        ],
-        'img-src': ["'self'", 'data:', 'blob:', 'https:'],
-        'media-src': ["'self'", 'data:', 'blob:', 'https:'],
-        'connect-src': [
-            "'self'",
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://api.thecatapi.com',
-            'https://*.hotjar.com',
-            'https://*.hotjar.io',
-            # Hotjar streams recordings over WebSocket; wss: is not covered by the https: sources
-            'wss://*.hotjar.com',
-            # Google Analytics / Tag Manager / Ads beacons
-            'https://www.google-analytics.com',
-            'https://*.google-analytics.com',
-            'https://*.analytics.google.com',
-            'https://www.googletagmanager.com',
-            'https://*.googletagmanager.com',
-            'https://www.google.com',
-            'https://ad.doubleclick.net',
-            'https://*.g.doubleclick.net',
-            # Address lookup in the leaflet map picker
-            'https://nominatim.openstreetmap.org',
-        ],
-        # Hotjar (and other libs) spawn workers from blob: URLs; without this it
-        # falls back to default-src 'self' and the worker is blocked
-        'worker-src': ["'self'", 'blob:'],
-        'frame-src': [
-            "'self'",
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://www.youtube.com',
-            'https://www.google.com',
-            'https://www.googletagmanager.com',
-            'https://larpmanager.com',
-            'https://*.larpmanager.com',
-        ],
-        'object-src': ["'none'"],
-        'base-uri': ["'self'"],
-        'frame-ancestors': ["'self'", 'https://larpmanager.com', 'https://*.larpmanager.com'],
-    },
+SECURE_CSP = {
+    'default-src': [CSP.SELF],
+    'script-src': [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        CSP.UNSAFE_EVAL,
+        *_CSP_CDN_HOSTS,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://www.googletagmanager.com',
+        'https://www.google.com',
+        'https://www.gstatic.com',
+        'https://static.hotjar.com',
+        'https://script.hotjar.com',
+        'https://*.hotjar.com',
+    ],
+    'style-src': [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        *_CSP_CDN_HOSTS,
+        'https://*.hotjar.com',
+        'https://fonts.googleapis.com',
+    ],
+    'font-src': [
+        CSP.SELF,
+        'data:',
+        *_CSP_CDN_HOSTS,
+        'https://*.hotjar.com',
+        'https://fonts.gstatic.com',
+    ],
+    'img-src': [CSP.SELF, 'data:', 'blob:', 'https:'],
+    'media-src': [CSP.SELF, 'data:', 'blob:', 'https:'],
+    'connect-src': [
+        CSP.SELF,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://api.thecatapi.com',
+        'https://*.hotjar.com',
+        'https://*.hotjar.io',
+        # Hotjar streams recordings over WebSocket; wss: is not covered by the https: sources
+        'wss://*.hotjar.com',
+        # Google Analytics / Tag Manager / Ads beacons
+        'https://www.google-analytics.com',
+        'https://*.google-analytics.com',
+        'https://*.analytics.google.com',
+        'https://www.googletagmanager.com',
+        'https://*.googletagmanager.com',
+        'https://www.google.com',
+        'https://ad.doubleclick.net',
+        'https://*.g.doubleclick.net',
+        # Address lookup in the leaflet map picker
+        'https://nominatim.openstreetmap.org',
+    ],
+    # Hotjar (and other libs) spawn workers from blob: URLs; without this it
+    # falls back to default-src 'self' and the worker is blocked
+    'worker-src': [CSP.SELF, 'blob:'],
+    'frame-src': [
+        CSP.SELF,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://www.youtube.com',
+        'https://www.google.com',
+        'https://www.googletagmanager.com',
+        'https://larpmanager.com',
+        'https://*.larpmanager.com',
+    ],
+    'object-src': [CSP.NONE],
+    'base-uri': [CSP.SELF],
+    'frame-ancestors': [CSP.SELF, 'https://larpmanager.com', 'https://*.larpmanager.com'],
+}
+
+# Stricter policy only reported, never enforced: inline scripts need the request nonce
+# and eval is forbidden. Violations are collected by /csp-report/ and mailed daily.
+SECURE_CSP_REPORT_ONLY = {
+    **SECURE_CSP,
+    'script-src': [
+        CSP.NONCE if source == CSP.UNSAFE_INLINE else source
+        for source in SECURE_CSP['script-src']
+        if source != CSP.UNSAFE_EVAL
+    ],
+    'report-uri': ['/csp-report/'],
 }
 
 # Session and CSRF cookie security

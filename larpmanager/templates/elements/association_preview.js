@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {

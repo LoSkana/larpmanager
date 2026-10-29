@@ -7,7 +7,7 @@
     <div class="user_resize platform">{% trans "We are processing your payment. Please wait a moment" %}...</div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 setInterval(function() {
     window.location.href = '{% url "accounting_payed" %}';
 }, 5000);

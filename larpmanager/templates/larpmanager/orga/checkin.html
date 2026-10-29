@@ -69,7 +69,7 @@
     <script type="text/javascript"
             src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
             defer></script>
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce }}" type="text/javascript">
 (function () {
   "use strict";
 

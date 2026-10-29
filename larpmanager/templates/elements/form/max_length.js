@@ -1,6 +1,6 @@
 {% load tz show_tags static  i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 var simple_count = ["t", "p", "name", "title"];
 var multiple_count = ["m"];

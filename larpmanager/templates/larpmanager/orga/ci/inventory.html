@@ -166,7 +166,7 @@
 {% endblock content %}
 {% block js %}
     {{ block.super }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     window.addEventListener('DOMContentLoaded', function() {
         $('.select2-transfer-target').select2({ width: 'resolve' });
     });

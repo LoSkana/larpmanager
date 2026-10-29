@@ -23,7 +23,7 @@
                 display: none;
             }
         </style>
-        {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
+        {% if testing %}<script nonce="{{ csp_nonce }}">window.lmTesting = true;</script>{% endif %}
         {% if association.favicon %}
             <link rel="icon" type="image/png" href="{{ association.favicon }}">
             <link rel="apple-touch-icon" href="{{ association.favicon }}">
@@ -92,7 +92,7 @@
             <!-- Page Wrapper -->
             <div id="page-wrapper"
                  class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
-                <script>
+                <script nonce="{{ csp_nonce }}">
                     (function() {
                         try {
                             if (localStorage.getItem('sidebarCollapsed') === '1') {
@@ -113,7 +113,7 @@
         {% if not frame %}
             {% include "elements/structure/accessibility.html" %}
         {% endif %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
     window.enviro = "{{ request.enviro }}";
@@ -146,7 +146,7 @@ window['dt_language'] = {
             <script defer
                     src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
         {% endcompress %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
@@ -176,7 +176,7 @@ window['dt_language'] = {
             {% endif %}
         {% endblock datatables_js %}
         {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-        <script>
+        <script nonce="{{ csp_nonce }}">
         function setCookie(name,value,days) {
             var expires = "";
             if (days) {
@@ -266,7 +266,7 @@ window['dt_language'] = {
             </div>
         </dialog>
         {% if staging %}
-            <script>
+            <script nonce="{{ csp_nonce }}">
             if (getCookie('staging') != 1) {
                 if (confirm("WARNING - This is a staging server. Let's just check if you're supposed to be here: if you don't know why this message appeared, please click OK.")) {
                   url = window.location.href;

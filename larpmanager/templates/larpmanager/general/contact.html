@@ -6,7 +6,7 @@
 {% block content %}
     {% if sent %}
         <h2>{% trans "Message sent, thanks for writing us!" %}</h2>
-        <script>
+        <script nonce="{{ csp_nonce }}">
          setTimeout(function(){
             window.location.href = "{% url 'home' %}";
          }, 5000);

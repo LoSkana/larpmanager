@@ -86,7 +86,7 @@
     </div>
     <div class="hide">{{ avatar_form.image }}</div>
 </div>
-<script>
+<script nonce="{{ csp_nonce }}">
 (function () {
     var uploadUrl = '{{ avatar_upload_url }}';
     var rotateLUrl = '{{ avatar_rotate_l_url }}';

@@ -15,7 +15,7 @@
 {% block messages_toast %}
 {% endblock messages_toast %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     if (window.parent) {
         // Forward warnings and errors to the parent page, since this page is never shown
         var messages = [

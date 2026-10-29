@@ -14,7 +14,7 @@
     <p>Please wait a bit...</p>
 {% endblock landing_content %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 setInterval(function() {
     window.location.reload();
 }, 5000);

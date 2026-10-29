@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 const editUrl = "{% url 'orga_characters_new' run.get_slug %}";
 

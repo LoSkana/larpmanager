@@ -83,8 +83,7 @@
                                 <img src="{{ el.item.thumb.url }}"
                                      class="inv_photo"
                                      alt="item photo"
-                                     style="cursor: pointer"
-                                     onclick="openImage('{{ el.item.photo.url }}')" />
+                                     data-popup-image="{{ el.item.photo.url }}" />
                             {% endif %}
                         </td>
                         <td data-order="{% if el.deployed %}1{% else %}0{% endif %}"
@@ -111,18 +110,7 @@
     {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
-    <script>
-// Show photo
-
-function openImage(url) {
-    document.getElementById('popupImg').src = url;
-    document.getElementById('imagePopup').style.display = 'flex';
-}
-
-document.getElementById('imagePopup').onclick = function() {
-    this.style.display = 'none';
-};
-
+    <script nonce="{{ csp_nonce }}">
 // Keep scroll on refresh
 
   const KEY = "page-wrapper.scrollTop";

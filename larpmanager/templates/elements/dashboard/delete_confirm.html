@@ -22,7 +22,7 @@
 {% endblock content %}
 {% block js2 %}
     {% include "elements/helpers/iframe_resize.js" %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     $(document).ready(function() {
         $('#delete_confirm_cancel').on('click', function() {
             if (window.parent && typeof window.parent.closeLmModal === 'function') {

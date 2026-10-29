@@ -60,8 +60,7 @@
                             <img src="{{ el.thumb.url }}"
                                  class="inv_photo"
                                  alt="item photo"
-                                 style="cursor: pointer"
-                                 onclick="openImage('{{ el.photo.url }}')" />
+                                 data-popup-image="{{ el.photo.url }}" />
                         {% endif %}
                     </td>
                 </tr>
@@ -76,17 +75,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-function openImage(url) {
-    document.getElementById('popupImg').src = url;
-    document.getElementById('imagePopup').style.display = 'flex';
-}
-
-document.getElementById('imagePopup').onclick = function() {
-    this.style.display = 'none';
-};
-
-
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     $(document).on("lm_ready", function() {

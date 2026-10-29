@@ -38,7 +38,7 @@
     </p>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script nonce="{{ csp_nonce }}">window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
             setTimeout(function() {
                 $('*[data-column="1"]').click();

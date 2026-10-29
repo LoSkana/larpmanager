@@ -23,8 +23,7 @@
                     <input type="text"
                            id="member-search"
                            class="casting-search"
-                           placeholder="{% trans "Search" %}..."
-                           oninput="render_left()">
+                           placeholder="{% trans "Search" %}...">
                     <div id="member-list" class="char-list"></div>
                 </div>
                 <div class="casting-panel">
@@ -42,7 +41,7 @@
     {{ block.super }}
     {{ badges_data|json_script:"badges-data" }}
     {{ members_data|json_script:"members-data" }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     var all_badges = JSON.parse(document.getElementById('badges-data').textContent);
     var all_members = JSON.parse(document.getElementById('members-data').textContent);
     var toggle_url = "{% url 'exe_badges_toggle' %}";
@@ -213,6 +212,8 @@
     }
 
     window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('member-search').addEventListener('input', function() { render_left(); });
+
         var sel = document.getElementById('badge-select');
         all_badges.forEach(function(b) {
             var opt = document.createElement('option');

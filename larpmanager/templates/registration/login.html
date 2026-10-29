@@ -55,7 +55,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 $(function(){
 
     function isMobileNonChrome() {

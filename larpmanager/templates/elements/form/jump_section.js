@@ -2,7 +2,7 @@
 
 {% if form.jump_section %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function(){

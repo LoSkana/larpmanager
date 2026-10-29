@@ -83,7 +83,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script nonce="{{ csp_nonce }}">window.addEventListener('DOMContentLoaded', function() {
     var old = '0'
 $(function(){
 $('#char').change(function() {

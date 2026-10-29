@@ -39,9 +39,9 @@
 {% block landing_final %}
 {% endblock landing_final %}
 {% block js2 %}
-    <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+    <script nonce="{{ csp_nonce }}"> window.base_domain = ".{{ association.base_domain }}"; </script>
     {% if not form.is_bound %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
             // Prefill the timezone with the browser one, when it is among the available choices
             (function () {
                 var select = document.getElementById("id_timezone");

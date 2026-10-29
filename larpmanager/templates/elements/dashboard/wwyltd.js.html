@@ -1,5 +1,5 @@
 {% load i18n static %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     var $wrap = $('#wwyltd');
     if (!$wrap.length) return;
