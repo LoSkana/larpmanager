@@ -4584,6 +4584,9 @@ msgstr "Pełny arkusz (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Potwierdź check-in dla"
 
+msgid "Count unpaid tickets"
+msgstr "Licz nieopłacone bilety"
+
 msgid "Country of the event"
 msgstr "Kraj wydarzenia"
 
@@ -15247,6 +15250,14 @@ msgstr ""
 "Włącza przycisk na górnym pasku, aby przekierować uwierzytelnionych "
 "użytkowników do zewnętrznej aplikacji, używając konfigurowalnego adresu URL "
 "i opcjonalnego SSO opartego na JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Jeśli włączone, nieopłacone jeszcze bilety patron też są liczone w "
+"proporcji. Jeśli wyłączone, liczone są tylko bilety patron z co najmniej "
+"jedną płatnością."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

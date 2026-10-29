@@ -4584,6 +4584,9 @@ msgstr "Kompletní list (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Potvrdit check-in pro"
 
+msgid "Count unpaid tickets"
+msgstr "Počítat nezaplacené vstupenky"
+
 msgid "Country of the event"
 msgstr "Země konání akce"
 
@@ -14947,6 +14950,14 @@ msgstr ""
 "Povoluje tlačítko na horním panelu pro přesměrování ověřených uživatelů na "
 "externí aplikaci pomocí konfigurovatelné adresy URL a volitelného SSO "
 "založeného na JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Když je zapnuto, započítávají se do poměru i patronské vstupenky, které "
+"ještě nejsou zaplacené. Když je vypnuto, počítají se jen patronské vstupenky"
+" s alespoň jednou platbou."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

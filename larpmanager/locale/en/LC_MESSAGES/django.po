@@ -1242,6 +1242,14 @@ msgid ""
 "ticket. 5 -> 1 reduced ticket for 2 patron tickets"
 msgstr ""
 
+msgid "Count unpaid tickets"
+msgstr ""
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+
 msgid "Allow reserve signup anytime"
 msgstr ""
 

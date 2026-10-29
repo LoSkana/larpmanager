@@ -4584,6 +4584,9 @@ msgstr "Vollständiger Bogen (Pdf)"
 msgid "Confirm check-in for"
 msgstr "Check-in bestätigen für"
 
+msgid "Count unpaid tickets"
+msgstr "Unbezahlte Tickets mitzählen"
+
 msgid "Country of the event"
 msgstr "Land der Veranstaltung"
 
@@ -15573,6 +15576,14 @@ msgstr ""
 "Ermöglicht eine Schaltfläche in der oberen Leiste, um authentifizierte "
 "Benutzer über eine konfigurierbare URL und optionales JWT-basiertes SSO zu "
 "einer externen Anwendung umzuleiten"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Wenn aktiviert, werden auch noch nicht bezahlte Patron-Tickets im Verhältnis"
+" mitgezählt. Wenn deaktiviert, werden nur Patron-Tickets mit mindestens "
+"einer Zahlung gezählt."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "
