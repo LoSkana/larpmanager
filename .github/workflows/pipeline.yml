@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
 
 permissions:
   contents: read
@@ -16,6 +18,7 @@ env:
 jobs:
   test:
     name: CI
+    if: github.event_name != 'schedule'
     runs-on: self-hosted
 
     container:
@@ -108,6 +111,28 @@ jobs:
           test_screenshots/*.html
           test_screenshots/*.webm
         if-no-files-found: ignore
+  audit:
+    name: Security audit
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - uses: astral-sh/setup-uv@v6
+
+    - name: Python vulnerabilities
+      run: |
+        uv pip compile -q pyproject.toml --python-version 3.12 --generate-hashes -o requirements-audit.txt
+        uvx pip-audit -r requirements-audit.txt --disable-pip --strict
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: JS vulnerabilities
+      working-directory: larpmanager/static
+      run: npm audit --omit=dev --audit-level=high
+
   deploy:
     name: CD
     needs: test
