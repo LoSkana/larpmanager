@@ -67,12 +67,15 @@ def get_reduced_available_count(run: Any) -> int:
         ticket__tier=TicketTier.REDUCED,
         cancellation_date__isnull=True,
     ).count()
-    patron_registrations_count = Registration.objects.filter(
+    patron_registrations = Registration.objects.filter(
         run=run,
         ticket__tier=TicketTier.PATRON,
         cancellation_date__isnull=True,
-        tot_payed__gt=0,
-    ).count()
+    )
+    # Unless configured otherwise, count only patron registrations with at least a payment
+    if not get_event_config(run.event_id, "reduced_unpaid"):
+        patron_registrations = patron_registrations.filter(tot_payed__gt=0)
+    patron_registrations_count = patron_registrations.count()
 
     # Calculate available reduced slots: floor(patron_count * ratio / 10) - used_reduced
     return (

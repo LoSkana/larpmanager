@@ -29,7 +29,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.cache.config import save_single_config
-from larpmanager.models.miscellanea import Log, WarehouseItem, WarehouseItemAssignment
+from larpmanager.models.miscellanea import Log, WarehouseArea, WarehouseItem, WarehouseItemAssignment
 from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
@@ -67,6 +67,8 @@ def test_warehouse(pw_page: Any) -> None:
     edit_loaded_deployed(page)
     item_areas(page)
     commit_quantities(page)
+    manifest_bulk(page)
+    items_bulk(page)
 
 
 def prepare(page: Any) -> None:
@@ -276,11 +278,10 @@ def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
-    expect_normalized(page,
-        page.locator("#one"), """Item 1 Boc B - dd Item 3sa Box A - bibi	 b no items have been assigned to this area yet. sALOON Position: SDsad Description: saddsadsa """
-    )
-    expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
+    expect_normalized(page, page.locator("#inv_manifest tbody"), "Kitchen - ss Item 1 Boc B - dd")
+    expect_normalized(page, page.locator("#inv_manifest tbody"), "Kitchen - ss Item 3sa Box A - bibi b")
+    expect_normalized(page, page.locator("#inv_manifest tbody"), "sALOON - SDsad Item 1 Boc B - dd ffff")
+    expect_normalized(page, page.locator("#inv_manifest tbody"), "sALOON - SDsad Item 3sa Box A - bibi sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()
@@ -423,3 +424,70 @@ def commit_quantities(page: Any) -> None:
     _wait_lm_ready(page)
     expect(page.get_by_text("Warehouse quantities already committed for this event")).to_be_visible()
     assert Log.objects.filter(cls="WarehouseCommit").count() == 1
+
+
+def _bulk_apply(page: Any, row_uuids: list, operation: int, target: str) -> None:
+    """Select the given table rows in bulk mode and apply an operation with a target."""
+    page.get_by_role("link", name="Bulk").click()
+    for row_uuid in row_uuids:
+        page.locator(f'tr[id="{row_uuid}"] td').nth(3).click()
+    page.locator("#operation").select_option(str(operation))
+    page.locator(f"#objs_{operation}").select_option(target)
+    with page.expect_response(lambda response: response.request.method == "POST") as response_info:
+        submit_confirm(page)
+    assert response_info.value.ok
+    page.wait_for_load_state("load")
+    _wait_lm_ready(page)
+
+
+def manifest_bulk(page: Any) -> None:
+    kitchen = WarehouseArea.objects.get(name="Kitchen")
+    saloon = WarehouseArea.objects.get(name="sALOON")
+    kitchen_assignment = WarehouseItemAssignment.objects.get(item__name="Item 1", area=kitchen)
+    saloon_assignment = WarehouseItemAssignment.objects.get(item__name="Item 1", area=saloon)
+
+    page.get_by_role("link", name="Manifest").click()
+    _wait_lm_ready(page)
+
+    # moving into an area already holding the item merges the two assignments
+    _bulk_apply(page, [kitchen_assignment.uuid], 30, saloon.uuid)
+    assignments = WarehouseItemAssignment.objects.filter(item__name="Item 1")
+    assert assignments.count() == 1
+    merged = assignments.get()
+    assert merged.pk == saloon_assignment.pk
+    assert merged.quantity == 4
+    assert merged.notes == "ffff"
+    assert merged.loaded
+    expect_normalized(page, page.locator("#inv_manifest tbody"), "sALOON - SDsad Item 1 Boc B - dd")
+
+    # bulk loaded flag
+    _bulk_apply(page, [merged.uuid], 32, "0")
+    assert not WarehouseItemAssignment.objects.get(pk=merged.pk).loaded
+
+    # bulk deployed flag
+    _bulk_apply(page, [merged.uuid], 33, "1")
+    assert WarehouseItemAssignment.objects.get(pk=merged.pk).deployed
+
+    # bulk remove from area
+    _bulk_apply(page, [merged.uuid], 31, "1")
+    assert not WarehouseItemAssignment.objects.filter(item__name="Item 1").exists()
+    expect(page.locator("#inv_manifest tbody").get_by_text("Item 1")).to_have_count(0)
+
+
+def items_bulk(page: Any) -> None:
+    kitchen = WarehouseArea.objects.get(name="Kitchen")
+    item_1 = WarehouseItem.objects.get(name="Item 1")
+    item_2 = WarehouseItem.objects.get(name="Item 2")
+    item_2.quantity = None
+    item_2.save()
+
+    sidebar(page, "Items")
+
+    # add to area: finite stock gets its remaining quantity, unlimited stock no quantity
+    _bulk_apply(page, [item_1.uuid, item_2.uuid], 27, kitchen.uuid)
+    assert WarehouseItemAssignment.objects.get(item=item_1, area=kitchen).quantity == 6
+    assert WarehouseItemAssignment.objects.get(item=item_2, area=kitchen).quantity is None
+
+    # remove from area
+    _bulk_apply(page, [item_1.uuid, item_2.uuid], 34, kitchen.uuid)
+    assert not WarehouseItemAssignment.objects.filter(area=kitchen, item__in=[item_1, item_2]).exists()

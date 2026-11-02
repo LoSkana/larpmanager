@@ -104,12 +104,22 @@
         if (baseUpdated) $('#base_updated').val(baseUpdated);
     }
 
-    function doUpload(file) {
-        var fd = new FormData();
-        fd.append('image', file);
+    // incremented on every pick, so only the latest one gets uploaded
+    var uploadSeq = 0;
+
+    function doUpload(bufferedFile) {
+        var seq = ++uploadSeq;
         $('#profile').attr('src', '');
         $('#upload_spinner').removeClass('hide');
         $(confirmSel).prop('disabled', true);
+        bufferedFile.then(function (file) {
+            if (seq === uploadSeq) sendUpload(file);
+        });
+    }
+
+    function sendUpload(file) {
+        var fd = new FormData();
+        fd.append('image', file);
         $.ajax({
             url: uploadUrl,
             type: 'POST',
@@ -145,11 +155,16 @@
             e.preventDefault();
             $(this).removeClass('drag-over');
             var files = e.originalEvent.dataTransfer.files;
-            if (files.length) doUpload(files[0]);
+            if (files.length) doUpload(window.lmBufferFile(files[0]));
         });
 
         $('#id_image').on('change', function () {
-            if (this.files && this.files[0]) doUpload(this.files[0]);
+            if (!this.files || !this.files[0]) return;
+            // reuse the read already started by the global file input listener
+            var buffering = this.lmBuffering;
+            doUpload(buffering
+                ? buffering.then(function (files) { return files[0]; })
+                : window.lmBufferFile(this.files[0]));
         });
 
         $('#rotate_l_btn').on('click', function (e) {

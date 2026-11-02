@@ -73,7 +73,9 @@ class AutocompleteFilter(admin.SimpleListFilter):
             widget=AutocompleteSelect(field, model_admin.admin_site),
             required=False,
         )
-        self.media = form_field.widget.media + forms.Media(js=("larpmanager/assets/js/admin-autocomplete-filter.js",))
+        self.media = form_field.widget.media + forms.Media(
+            js=("admin/js/jquery.init.js", "larpmanager/assets/js/admin-autocomplete-filter.js")
+        )
         self.rendered_widget = form_field.widget.render(
             name=self.parameter_name,
             value=self.value() or "",

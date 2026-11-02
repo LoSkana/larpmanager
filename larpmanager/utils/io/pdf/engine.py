@@ -39,6 +39,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageDraw
 from reportlab.lib import pagesizes
+from reportlab.platypus.doctemplate import LayoutError
 from xhtml2pdf import pisa
 from xhtml2pdf.config.resources import ResourceAccessPolicy
 
@@ -631,21 +632,37 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
     if border and border != _PDF_BORDER_DEFAULT:
         html_content = re.sub(r"<hr\b(?![^>]*\bcolor=)", f'<hr color="{border}"', html_content)
 
-    # Generate PDF file from rendered HTML
-    with Path(output_filename).open("wb") as pdf_file:
-        # Convert HTML to PDF using xhtml2pdf library
-        pdf_result = pisa.CreatePDF(
-            html_content,
-            dest=pdf_file,
-            link_callback=link_callback,
-            resource_policy=_resource_policy(),
-        )
+    try:
+        pdf_bytes = _render_pdf(html_content, output_filename)
+    except LayoutError:
+        # An inline-block taller than a page cannot be split; retry laying it out inline
+        logger.warning("PDF layout overflow for %s, retrying without inline-block", output_filename)
+        html_content = _INLINE_BLOCK_RE.sub("display: inline", html_content)
+        pdf_bytes = _render_pdf(html_content, output_filename)
 
-        # Check for PDF generation errors; log details, don't leak rendered HTML
-        if pdf_result.err:
-            logger.error("PDF generation failed for %s", output_filename)
-            msg = "We had some errors generating the PDF"
-            raise Http404(msg)
+    Path(output_filename).write_bytes(pdf_bytes)
+
+
+_INLINE_BLOCK_RE = re.compile(r"display\s*:\s*inline-block", re.IGNORECASE)
+
+
+def _render_pdf(html_content: str, output_filename: str) -> bytes:
+    """Convert rendered HTML to PDF bytes, raising Http404 on generation errors."""
+    pdf_buffer = io.BytesIO()
+    pdf_result = pisa.CreatePDF(
+        html_content,
+        dest=pdf_buffer,
+        link_callback=link_callback,
+        resource_policy=_resource_policy(),
+    )
+
+    # Check for PDF generation errors; log details, don't leak rendered HTML
+    if pdf_result.err:
+        logger.error("PDF generation failed for %s", output_filename)
+        msg = "We had some errors generating the PDF"
+        raise Http404(msg)
+
+    return pdf_buffer.getvalue()
 
 
 class _PrintableDict(dict):

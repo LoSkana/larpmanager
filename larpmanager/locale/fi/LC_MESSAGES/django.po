@@ -1018,6 +1018,9 @@ msgstr "Kuitti"
 msgid "Reduced"
 msgstr "Vähennetty"
 
+msgid "Refresh"
+msgstr "Päivitä"
+
 msgid "Refunds"
 msgstr "Palautukset"
 
@@ -1628,9 +1631,6 @@ msgstr "Poolityyppi"
 msgid "Portraits"
 msgstr "Muotokuvat"
 
-msgid "Position:"
-msgstr "Asema:"
-
 msgid "Preaching"
 msgstr "Saarnaaminen"
 
@@ -2033,6 +2033,9 @@ msgstr "Valittavissa"
 msgid "Set hidden"
 msgstr "Aseta piilotetuksi"
 
+msgid "Set loaded"
+msgstr "Merkitse lastatuksi"
+
 msgid "Set locked"
 msgstr "Aseta lukituksi"
 
@@ -2119,6 +2122,9 @@ msgstr "Pääsylinkki"
 
 msgid "Access link"
 msgstr "Pääsylinkki"
+
+msgid "Add to area"
+msgstr "Lisää alueelle"
 
 msgid "Add to plot"
 msgstr "Lisää juoneen"
@@ -2531,6 +2537,9 @@ msgstr "Likert-asteikko"
 msgid "Members list"
 msgstr "Jäsenluettelo"
 
+msgid "Move to area"
+msgstr "Siirrä alueelle"
+
 msgid "Municipality"
 msgstr "Kunta"
 
@@ -2602,6 +2611,9 @@ msgstr "Skannaa QR-koodi"
 
 msgid "Scroll right"
 msgstr "Vieritä oikealle"
+
+msgid "Set deployed"
+msgstr "Merkitse sijoitetuksi"
 
 msgid "Show history"
 msgstr "Näytä historia"
@@ -3762,6 +3774,9 @@ msgstr "Ilmoittautumismaksu"
 msgid "Remove character"
 msgstr "Poista hahmo"
 
+msgid "Remove from area"
+msgstr "Poista alueelta"
+
 msgid "Remove from plot"
 msgstr "Poista juonelta"
 
@@ -4583,6 +4598,9 @@ msgstr "Täydellinen lomake (Pdf)"
 
 msgid "Confirm check-in for"
 msgstr "Vahvista sisäänkirjautuminen henkilölle"
+
+msgid "Count unpaid tickets"
+msgstr "Laske maksamattomat liput"
 
 msgid "Country of the event"
 msgstr "Tapahtuman maa"
@@ -6110,9 +6128,6 @@ msgstr "Aktivoi uudet alustan ominaisuudet"
 
 msgid "Already existing relationship!"
 msgstr "Jo olemassa oleva suhde!"
-
-msgid "Assign remaining stock to area"
-msgstr "Määritä jäljellä oleva varasto alueelle"
 
 msgid "Character Inventory Pool Types"
 msgstr "Hahmojen inventaariopoolien tyypit"
@@ -7805,6 +7820,9 @@ msgstr "Hallitse osallistujien kysymyksiä ja vastaa niihin"
 msgid "Manage the main settings of the organization"
 msgstr "Hallitse organisaation pääasetuksia"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Yhtään tavaraa ei ole vielä määritetty millekään alueelle."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Osallistujille ei ole vielä jaettu tokeneita."
 
@@ -7920,9 +7938,6 @@ msgstr "Jäsenmaksun maksumuistutus tapahtumaa %(event)s varten"
 msgid "Modify the character details to make it yours"
 msgstr "Muokkaa hahmon yksityiskohtia, jotta se olisi omasi"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Tälle alueelle ei ole vielä määritetty yhtään kohdetta."
-
 msgid "No participants have been issued credits yet."
 msgstr "Osallistujille ei ole vielä myönnetty krediittejä."
 
@@ -8026,6 +8041,9 @@ msgstr "%(user)s rekisteröintipyyntö %(event)s -tapahtumaan"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "%(user)s on päivittänyt %(event)s -tapahtuman ilmoittautumistiedot"
+
+msgid "Selected items will be removed from their area"
+msgstr "Valitut tavarat poistetaan alueeltaan"
 
 msgid "Session expired, please upload the file again."
 msgstr "Istunto on vanhentunut, lataa tiedosto uudelleen."
@@ -11486,6 +11504,13 @@ msgstr ""
 "Korvaus, jonka määrä on %(amount).2f %(elements)s, on käsitelty syystä "
 "'%(reason)s'."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Määritä varaston tavaroita yhdelle tai useammalle tapahtuman alueelle, yksi "
+"kerrallaan tai massana"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -11979,13 +12004,6 @@ msgid ""
 msgstr ""
 "Näkyy rekisteröitymispyynnön sivulla ja lisätään pyynnön vastaanottamista "
 "koskevaan vahvistussähköpostiin"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Seuraa kaikkia kohteiden osoituksia alueittain ryhmiteltynä ja merkitse "
-"kukin kohde ladatuksi ja käyttöönotetuksi"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13417,6 +13435,13 @@ msgstr ""
 "rekisteröidään asianmukaisesti:"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Valittua tiedostoa ei voitu lukea. Jos se on tallennettu pilveen, lataa se "
+"laitteellesi ja yritä uudelleen."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14431,6 +14456,14 @@ msgstr ""
 "organisaatiolle, eikä niitä ole lisätty jonoon:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Seuraa kaikkia tavaroiden määrityksiä alueittain ja merkitse jokainen tavara"
+" lastatuksi ja sijoitetuksi; käytä massatoimintoja siirtääksesi tai "
+"poistaaksesi monta kerralla"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -14742,6 +14775,14 @@ msgid ""
 msgstr ""
 "Tälle tapahtumalle ei ole vielä määritelty rooleja. Luo rooli ja määritä "
 "henkilöstön jäsenille käyttöoikeudet yllä olevan painikkeen avulla."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Valittu tiedosto on liian suuri, jotta se voitaisiin valmistella "
+"lähetettäväksi. Jos se on tallennettu pilveen, lataa se laitteellesi ja "
+"yritä uudelleen."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15155,6 +15196,14 @@ msgstr ""
 "Mahdollistaa yläpalkissa olevan painikkeen, jolla voidaan ohjata todennetut "
 "käyttäjät ulkoiseen sovellukseen käyttämällä määritettävissä olevaa URL-"
 "osoitetta ja valinnaista JWT-pohjaista SSO:ta"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Jos tämä on käytössä, suhteeseen lasketaan myös patron-liput, joita ei ole "
+"vielä maksettu. Jos se ei ole käytössä, lasketaan vain patron-liput, joille "
+"on kirjattu vähintään yksi maksu."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

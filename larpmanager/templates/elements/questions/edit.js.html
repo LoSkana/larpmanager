@@ -29,6 +29,10 @@ window.addEventListener('DOMContentLoaded', function() {
     // Exposed globally: the inline options editor uses it when the question is new.
     window.lmEnsureQuestionSaved = function(callback) {
         const $mainForm = $('#main_form');
+        window.lmWhenFilesBuffered($mainForm[0], function() { saveQuestion($mainForm, callback); });
+    };
+
+    function saveQuestion($mainForm, callback) {
         const $optionInputs = $('#inline-options').find('input, textarea, select');
         $optionInputs.prop('disabled', true);
         const formData = new FormData($mainForm[0]);
@@ -67,7 +71,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 $mainForm.submit();
             }
         });
-    };
+    }
 
 
     // ========== Form Field Visibility ==========

@@ -1018,6 +1018,9 @@ msgstr "Ontvangstbewijs"
 msgid "Reduced"
 msgstr "Verminderd"
 
+msgid "Refresh"
+msgstr "Vernieuwen"
+
 msgid "Refunds"
 msgstr "Terugbetalingen"
 
@@ -1628,9 +1631,6 @@ msgstr "Pooltype"
 msgid "Portraits"
 msgstr "Portretten"
 
-msgid "Position:"
-msgstr "Positie:"
-
 msgid "Preaching"
 msgstr "Prediking"
 
@@ -2033,6 +2033,9 @@ msgstr "Selecteerbaar"
 msgid "Set hidden"
 msgstr "Verborgen instellen"
 
+msgid "Set loaded"
+msgstr "Markeren als geladen"
+
 msgid "Set locked"
 msgstr "Vergrendeld instellen"
 
@@ -2119,6 +2122,9 @@ msgstr "Toegangslink"
 
 msgid "Access link"
 msgstr "Toegangslink"
+
+msgid "Add to area"
+msgstr "Toevoegen aan zone"
 
 msgid "Add to plot"
 msgstr "Toevoegen aan plot"
@@ -2531,6 +2537,9 @@ msgstr "Likert-schaal"
 msgid "Members list"
 msgstr "Ledenlijst"
 
+msgid "Move to area"
+msgstr "Verplaatsen naar zone"
+
 msgid "Municipality"
 msgstr "Gemeente"
 
@@ -2602,6 +2611,9 @@ msgstr "Scan QR-code"
 
 msgid "Scroll right"
 msgstr "Scroll naar rechts"
+
+msgid "Set deployed"
+msgstr "Markeren als geplaatst"
 
 msgid "Show history"
 msgstr "Toon geschiedenis"
@@ -3762,6 +3774,9 @@ msgstr "Inschrijfgeld"
 msgid "Remove character"
 msgstr "Karakter verwijderen"
 
+msgid "Remove from area"
+msgstr "Verwijderen uit zone"
+
 msgid "Remove from plot"
 msgstr "Verwijderen uit de verhaallijn"
 
@@ -4583,6 +4598,9 @@ msgstr "Volledig blad (Pdf)"
 
 msgid "Confirm check-in for"
 msgstr "Check-in bevestigen voor"
+
+msgid "Count unpaid tickets"
+msgstr "Onbetaalde tickets meetellen"
 
 msgid "Country of the event"
 msgstr "Land van het evenement"
@@ -6110,9 +6128,6 @@ msgstr "Nieuwe platformfuncties activeren"
 
 msgid "Already existing relationship!"
 msgstr "Reeds bestaande relatie!"
-
-msgid "Assign remaining stock to area"
-msgstr "De resterende voorraad aan een gebied toewijzen"
 
 msgid "Character Inventory Pool Types"
 msgstr "Typen inventaris-Pools voor personages"
@@ -7806,6 +7821,9 @@ msgstr "Beheer vragen van deelnemers en beantwoord ze"
 msgid "Manage the main settings of the organization"
 msgstr "Beheer de belangrijkste instellingen van de organisatie"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Er zijn nog geen items aan een zone toegewezen."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Er zijn nog geen tokens uitgegeven aan deelnemers."
 
@@ -7925,9 +7943,6 @@ msgstr "Herinnering voor het betalen van de contributie voor %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Pas de details van het personage aan om het van jou te maken"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Er zijn nog geen items aan dit gebied toegewezen."
-
 msgid "No participants have been issued credits yet."
 msgstr "Er zijn nog geen credits/tegoed aan deelnemers toegekend."
 
@@ -8032,6 +8047,9 @@ msgstr "Aanmeldingsverzoek voor %(event)s door %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "De inschrijving voor %(event)s is bijgewerkt door %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Geselecteerde items worden uit hun zone verwijderd"
 
 msgid "Session expired, please upload the file again."
 msgstr "Sessie verlopen, upload het bestand opnieuw."
@@ -11709,6 +11727,13 @@ msgstr ""
 "Er is een terugbetaling van %(amount).2f %(elements)s verwerkt vanwege "
 "'%(reason)s'."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Wijs magazijnitems toe aan een of meer zones van het evenement, per item of "
+"in bulk"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -12210,13 +12235,6 @@ msgid ""
 msgstr ""
 "Wordt weergegeven op de aanmeldingspagina en toegevoegd aan het "
 "bevestigingsmailtje dat je krijgt als je aanvraag is ontvangen"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Houd alle toewijzingen van items bij, gegroepeerd per gebied, en markeer elk"
-" item als geladen en ingezet."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13666,6 +13684,13 @@ msgstr ""
 "ben je geregistreerd:"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Het geselecteerde bestand kon niet worden gelezen. Als het in de cloud "
+"staat, download het naar je apparaat en probeer het opnieuw."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14687,6 +14712,14 @@ msgstr ""
 "organisatie heeft gedeeld, en zijn niet aan de wachtrij toegevoegd:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Houd alle toewijzingen van items per zone bij en markeer elk item als "
+"geladen en geplaatst; gebruik bulk om er veel tegelijk te verplaatsen of te "
+"verwijderen"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -15002,6 +15035,13 @@ msgid ""
 msgstr ""
 "Er zijn nog geen rollen gedefinieerd voor dit evenement. Gebruik de knop "
 "hierboven om een rol aan te maken en rechten toe te wijzen aan medewerkers."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Het geselecteerde bestand is te groot om voor te bereiden op uploaden. Als "
+"het in de cloud staat, download het naar je apparaat en probeer het opnieuw."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15418,6 +15458,14 @@ msgstr ""
 "Maakt een knop in de bovenbalk mogelijk om geauthenticeerde gebruikers om te"
 " leiden naar een externe applicatie, met behulp van een configureerbare URL "
 "en optionele JWT-gebaseerde SSO"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Als dit aanstaat, worden ook nog niet betaalde patron-tickets meegeteld in "
+"de verhouding. Als dit uitstaat, worden alleen patron-tickets met minstens "
+"één betaling meegeteld."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

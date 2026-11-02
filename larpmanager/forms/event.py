@@ -616,6 +616,13 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
+            reduced_unpaid_label = _("Count unpaid tickets")
+            reduced_unpaid_help_text = _(
+                "If enabled, patron tickets not yet paid are also counted in the ratio. "
+                "If disabled, only patron tickets with at least one payment are counted."
+            )
+            self.add_configs("reduced_unpaid", ConfigType.BOOL, reduced_unpaid_label, reduced_unpaid_help_text)
+
         if "filler" in self.params["features"]:
             self.set_section("filler", _("Reserve"))
             filler_free_registration_label = _("Allow reserve signup anytime")

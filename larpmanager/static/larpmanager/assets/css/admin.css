@@ -3,7 +3,7 @@
   background: white;
 }
 
-.select2-container {
+select + .select2-container {
   width: 100% !important;
   margin: auto;
 }

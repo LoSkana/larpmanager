@@ -1018,6 +1018,9 @@ msgstr "Ricevuta"
 msgid "Reduced"
 msgstr "Ridotto"
 
+msgid "Refresh"
+msgstr "Aggiorna"
+
 msgid "Refunds"
 msgstr "Rimborsi"
 
@@ -1628,9 +1631,6 @@ msgstr "Tipo di pool"
 msgid "Portraits"
 msgstr "Ritratti"
 
-msgid "Position:"
-msgstr "Posizione:"
-
 msgid "Preaching"
 msgstr "Predicazione"
 
@@ -2033,6 +2033,9 @@ msgstr "Selezionabile"
 msgid "Set hidden"
 msgstr "Imposta come nascosto"
 
+msgid "Set loaded"
+msgstr "Segna come caricato"
+
 msgid "Set locked"
 msgstr "Imposta come bloccato"
 
@@ -2119,6 +2122,9 @@ msgstr "Link di accesso"
 
 msgid "Access link"
 msgstr "Link di accesso"
+
+msgid "Add to area"
+msgstr "Aggiungi all'area"
 
 msgid "Add to plot"
 msgstr "Aggiungi alla trama"
@@ -2531,6 +2537,9 @@ msgstr "Scala Likert"
 msgid "Members list"
 msgstr "Lista soci"
 
+msgid "Move to area"
+msgstr "Sposta nell'area"
+
 msgid "Municipality"
 msgstr "Comune"
 
@@ -2602,6 +2611,9 @@ msgstr "Scansiona il codice QR"
 
 msgid "Scroll right"
 msgstr "Scorri verso destra"
+
+msgid "Set deployed"
+msgstr "Segna come allestito"
 
 msgid "Show history"
 msgstr "Mostra storico"
@@ -3762,6 +3774,9 @@ msgstr "Quota iscrizione"
 msgid "Remove character"
 msgstr "Rimuovi personaggio"
 
+msgid "Remove from area"
+msgstr "Rimuovi dall'area"
+
 msgid "Remove from plot"
 msgstr "Rimuovi dalla trama"
 
@@ -4583,6 +4598,9 @@ msgstr "Scheda completa (Pdf)"
 
 msgid "Confirm check-in for"
 msgstr "Conferma il check-in per"
+
+msgid "Count unpaid tickets"
+msgstr "Conta i biglietti non pagati"
 
 msgid "Country of the event"
 msgstr "Paese dell'evento"
@@ -6110,9 +6128,6 @@ msgstr "Attiva nuove funzionalità della piattaforma"
 
 msgid "Already existing relationship!"
 msgstr "Relazione già esistente!"
-
-msgid "Assign remaining stock to area"
-msgstr "Assegna le scorte rimanenti all'area"
 
 msgid "Character Inventory Pool Types"
 msgstr "Tipi di pool dell'inventario dei personaggi"
@@ -7807,6 +7822,9 @@ msgstr "Gestisci le domande dei partecipanti e rispondi"
 msgid "Manage the main settings of the organization"
 msgstr "Gestisci le impostazioni principali dell'organizzazione"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Nessun oggetto è ancora stato assegnato a un'area."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Non sono ancora stati assegnati token a nessun partecipante."
 
@@ -7923,9 +7941,6 @@ msgstr "Promemoria per il pagamento della quota associativa per %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Modifica i dettagli del personaggio per renderlo tuo"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Non sono ancora stati assegnati articoli a quest'area."
-
 msgid "No participants have been issued credits yet."
 msgstr "Non sono stati ancora assegnati crediti a nessun partecipante."
 
@@ -8031,6 +8046,9 @@ msgstr "Richiesta di registrazione a %(event)s da parte di %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Iscrizione aggiornata per %(event)s da parte di %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Gli elementi selezionati verranno rimossi dalla loro area"
 
 msgid "Session expired, please upload the file again."
 msgstr "Sessione scaduta, carica nuovamente il file."
@@ -11709,6 +11727,13 @@ msgid ""
 msgstr ""
 "È stato elaborato un rimborso di %(amount).2f %(elements)s per '%(reason)s'."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Assegna gli oggetti del magazzino a una o più aree dell'evento, uno alla "
+"volta o in blocco"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -12213,13 +12238,6 @@ msgid ""
 msgstr ""
 "Viene visualizzato nella pagina di richiesta di registrazione e aggiunto "
 "all'e-mail di conferma di ricezione della richiesta"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Tieni traccia di tutte le assegnazioni degli articoli raggruppate per area, "
-"contrassegnando ogni articolo come caricato e installato"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13668,6 +13686,13 @@ msgstr ""
 " regolarmente iscritto:"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Impossibile leggere il file selezionato. Se è salvato nel cloud, scaricalo "
+"sul tuo dispositivo e riprova."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14685,6 +14710,14 @@ msgstr ""
 " con l'organizzazione e non sono stati aggiunti alla coda:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Tieni traccia di tutte le assegnazioni degli oggetti per area, segnando ogni"
+" oggetto come caricato e allestito; usa le azioni in blocco per spostarne o "
+"rimuoverne molti in una volta"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -14998,6 +15031,13 @@ msgstr ""
 "Non sono ancora stati definiti ruoli per questo evento. Usa il pulsante qui "
 "sopra per creare un ruolo e assegnare le autorizzazioni ai membri dello "
 "staff."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Il file selezionato è troppo grande per essere preparato per il caricamento."
+" Se è salvato nel cloud, scaricalo sul tuo dispositivo e riprova."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15418,6 +15458,14 @@ msgstr ""
 "Abilita un pulsante nella barra superiore per reindirizzare gli utenti "
 "autenticati a un'applicazione esterna, utilizzando un URL configurabile e un"
 " SSO opzionale basato su JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Se attivo, nel rapporto vengono conteggiati anche i biglietti sostenitore "
+"non ancora pagati. Se disattivo, vengono conteggiati solo i biglietti "
+"sostenitore con almeno un pagamento."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

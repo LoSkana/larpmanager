@@ -1018,6 +1018,9 @@ msgstr "Kvittering"
 msgid "Reduced"
 msgstr "Redusert"
 
+msgid "Refresh"
+msgstr "Oppdater"
+
 msgid "Refunds"
 msgstr "Refusjoner"
 
@@ -1628,9 +1631,6 @@ msgstr "Pooltype"
 msgid "Portraits"
 msgstr "Portretter"
 
-msgid "Position:"
-msgstr "Posisjon:"
-
 msgid "Preaching"
 msgstr "Forkynnelse"
 
@@ -2033,6 +2033,9 @@ msgstr "Kan velges"
 msgid "Set hidden"
 msgstr "Skjul"
 
+msgid "Set loaded"
+msgstr "Merk som lastet"
+
 msgid "Set locked"
 msgstr "Lås"
 
@@ -2119,6 +2122,9 @@ msgstr "Tilgangslenke"
 
 msgid "Access link"
 msgstr "Tilgangslenke"
+
+msgid "Add to area"
+msgstr "Legg til i område"
 
 msgid "Add to plot"
 msgstr "Legg til i plottet"
@@ -2531,6 +2537,9 @@ msgstr "Likert-skala"
 msgid "Members list"
 msgstr "Medlemsliste"
 
+msgid "Move to area"
+msgstr "Flytt til område"
+
 msgid "Municipality"
 msgstr "Kommune"
 
@@ -2602,6 +2611,9 @@ msgstr "Skann QR-kode"
 
 msgid "Scroll right"
 msgstr "Rull til høyre"
+
+msgid "Set deployed"
+msgstr "Merk som utplassert"
 
 msgid "Show history"
 msgstr "Vis historikk"
@@ -3762,6 +3774,9 @@ msgstr "Deltakeravgift"
 msgid "Remove character"
 msgstr "Fjern karakter"
 
+msgid "Remove from area"
+msgstr "Fjern fra område"
+
 msgid "Remove from plot"
 msgstr "Fjern fra historien"
 
@@ -4583,6 +4598,9 @@ msgstr "Komplett ark (Pdf)"
 
 msgid "Confirm check-in for"
 msgstr "Bekreft innsjekking for"
+
+msgid "Count unpaid tickets"
+msgstr "Tell ubetalte billetter"
 
 msgid "Country of the event"
 msgstr "Arrangementets land"
@@ -6110,9 +6128,6 @@ msgstr "Aktiver nye plattformfunksjoner"
 
 msgid "Already existing relationship!"
 msgstr "Allerede eksisterende forhold!"
-
-msgid "Assign remaining stock to area"
-msgstr "Fordel gjenværende lagerbeholdning på området"
 
 msgid "Character Inventory Pool Types"
 msgstr "Typer av karakterinventar-pool"
@@ -7806,6 +7821,9 @@ msgstr "Administrer deltakerspørsmål og svar på dem"
 msgid "Manage the main settings of the organization"
 msgstr "Administrer organisasjonens hovedinnstillinger"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Ingen gjenstander er tildelt noe område ennå."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Det er foreløpig ikke utstedt noen tokens til deltakerne."
 
@@ -7921,9 +7939,6 @@ msgstr "Påminnelse om betaling av medlemsavgift for %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Endre karakterdetaljene for å gjøre den til din egen"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Det er foreløpig ikke tilordnet noen elementer til dette området."
-
 msgid "No participants have been issued credits yet."
 msgstr "Det er foreløpig ikke tildelt noen kreditter til deltakerne."
 
@@ -8027,6 +8042,9 @@ msgstr "Registreringsforespørsel for %(event)s fra %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Registreringen for %(event)s er oppdatert av %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Valgte gjenstander blir fjernet fra området sitt"
 
 msgid "Session expired, please upload the file again."
 msgstr "Økten har utløpt. Last opp filen på nytt."
@@ -11483,6 +11501,13 @@ msgstr ""
 "En refusjon på %(amount).2f %(elements)s for «%(reason)s» er blitt "
 "behandlet."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Tildel lagergjenstander til ett eller flere områder i arrangementet, én og "
+"én eller samlet"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -11982,13 +12007,6 @@ msgid ""
 msgstr ""
 "Vises på siden for påmeldingsforespørselen og legges til i bekreftelses-e-"
 "posten om mottatt forespørsel"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Spor alle tildelinger av utstyr gruppert etter område, og merk hvert element"
-" som lastet og satt i drift"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13430,6 +13448,13 @@ msgstr ""
 " bli behørig registrert:"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Kunne ikke lese den valgte filen. Hvis den er lagret i skyen, last den ned "
+"til enheten din og prøv igjen."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14442,6 +14467,14 @@ msgstr ""
 "organisasjonen, og ble ikke lagt til i køen:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Følg alle gjenstandstildelinger per område, og merk hver gjenstand som "
+"lastet og utplassert; bruk massehandlinger for å flytte eller fjerne mange "
+"samtidig"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -14754,6 +14787,13 @@ msgstr ""
 "Det er foreløpig ikke definert noen roller for dette arrangementet. Bruk "
 "knappen ovenfor for å opprette en rolle og tildele tillatelser til "
 "medarbeiderne."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Den valgte filen er for stor til å klargjøres for opplasting. Hvis den er "
+"lagret i skyen, last den ned til enheten din og prøv igjen."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15161,6 +15201,14 @@ msgstr ""
 "Aktiverer en knapp i topplinjen for å omdirigere autentiserte brukere til en"
 " ekstern applikasjon, ved hjelp av en konfigurerbar URL og valgfri JWT-"
 "basert SSO"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Hvis dette er aktivert, telles også patron-billetter som ikke er betalt ennå"
+" med i forholdet. Hvis det er deaktivert, telles bare patron-billetter med "
+"minst én betaling."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

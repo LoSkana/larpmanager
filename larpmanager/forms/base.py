@@ -26,10 +26,10 @@ from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import FieldDoesNotExist, ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db.models import TextChoices
+from django.db.models import ForeignKey, ManyToManyField, Q, TextChoices
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
@@ -109,19 +109,52 @@ class FormMixin:
         """Configure a form field's widget and queryset for a specific event."""
         field = self.fields[field_name]
         field.widget.set_event(event)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
 
     def configure_field_association(self, field_name: str, association_id: int) -> None:
         """Configure a form field's widget and queryset for a specific association."""
         field = self.fields[field_name]
         field.widget.set_association_id(association_id)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
 
     def configure_field_run(self, field_name: str, run: Run) -> None:
         """Configure a form field's widget and queryset for a specific run."""
         field = self.fields[field_name]
         field.widget.set_run(run)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
+
+    def _keep_saved_values(self, field_name: str, queryset: QuerySet) -> QuerySet:
+        """Extend the queryset with the values saved on the instance that it would otherwise exclude.
+
+        Without them an edit form would render the field empty and drop (or reject) the saved values on save.
+        """
+        instance = getattr(self, "instance", None)
+        if not instance:
+            return queryset
+
+        try:
+            model_field = instance._meta.get_field(field_name)  # noqa: SLF001  # Django model metadata
+        except FieldDoesNotExist:
+            return queryset
+
+        if isinstance(model_field, ForeignKey):
+            current_id = getattr(instance, model_field.attname)
+            saved_ids = {current_id} if current_id else set()
+        elif isinstance(model_field, ManyToManyField) and instance.pk:
+            saved_ids = set(getattr(instance, field_name).values_list("pk", flat=True))
+        else:
+            return queryset
+
+        if not saved_ids:
+            return queryset
+
+        missing_ids = saved_ids - set(queryset.filter(pk__in=saved_ids).values_list("pk", flat=True))
+        if not missing_ids:
+            return queryset
+
+        return queryset.model.objects.filter(Q(pk__in=queryset.values("pk")) | Q(pk__in=missing_ids)).order_by(
+            *queryset.query.order_by
+        )
 
     def delete_field(self, field_key: str) -> None:
         """Remove a field from the form if it exists."""

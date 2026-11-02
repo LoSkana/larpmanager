@@ -1242,6 +1242,14 @@ msgid ""
 "ticket. 5 -> 1 reduced ticket for 2 patron tickets"
 msgstr ""
 
+msgid "Count unpaid tickets"
+msgstr ""
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+
 msgid "Allow reserve signup anytime"
 msgstr ""
 
@@ -10403,7 +10411,9 @@ msgstr ""
 msgid "Back to manifest"
 msgstr ""
 
-msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in "
+"bulk"
 msgstr ""
 
 msgid "Commit all remaining quantity"
@@ -10416,8 +10426,11 @@ msgid "Cargo manifest"
 msgstr ""
 
 msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+
+msgid "Refresh"
 msgstr ""
 
 msgid ""
@@ -10431,16 +10444,13 @@ msgstr ""
 msgid "Warehouse quantities have been committed for this event"
 msgstr ""
 
-msgid "Position:"
-msgstr ""
-
 msgid "Loaded"
 msgstr ""
 
 msgid "Deployed"
 msgstr ""
 
-msgid "No items have been assigned to this area yet."
+msgid "No items have been assigned to any area yet."
 msgstr ""
 
 msgid "Workshop Modules"
@@ -10798,6 +10808,16 @@ msgid "Enter your email below to receive instructions on how to change it:"
 msgstr ""
 
 msgid "Sign In"
+msgstr ""
+
+msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in "
+"the cloud, download it to your device and retry."
 msgstr ""
 
 msgid "Nothing here yet."
@@ -11967,6 +11987,9 @@ msgid "Read the writing elements"
 msgstr ""
 
 msgid "Manage event areas"
+msgstr ""
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 
 msgid "Checks"
@@ -13145,13 +13168,28 @@ msgstr ""
 msgid "Remove character"
 msgstr ""
 
-msgid "Assign remaining stock to area"
+msgid "Add to area"
 msgstr ""
 
 msgid "Set hidden"
 msgstr ""
 
 msgid "Set locked"
+msgstr ""
+
+msgid "Move to area"
+msgstr ""
+
+msgid "Remove from area"
+msgstr ""
+
+msgid "Set loaded"
+msgstr ""
+
+msgid "Set deployed"
+msgstr ""
+
+msgid "Selected items will be removed from their area"
 msgstr ""
 
 msgid "Your registration ticket"

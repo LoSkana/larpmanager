@@ -1018,6 +1018,9 @@ msgstr "Reçu"
 msgid "Reduced"
 msgstr "Réduit"
 
+msgid "Refresh"
+msgstr "Actualiser"
+
 msgid "Refunds"
 msgstr "Remboursements"
 
@@ -1628,9 +1631,6 @@ msgstr "Type de pool"
 msgid "Portraits"
 msgstr "Portraits"
 
-msgid "Position:"
-msgstr "Position:"
-
 msgid "Preaching"
 msgstr "Prédication"
 
@@ -2033,6 +2033,9 @@ msgstr "Sélectionnable"
 msgid "Set hidden"
 msgstr "Masquer"
 
+msgid "Set loaded"
+msgstr "Marquer comme chargé"
+
 msgid "Set locked"
 msgstr "Verrouiller"
 
@@ -2119,6 +2122,9 @@ msgstr "Lien d'accès"
 
 msgid "Access link"
 msgstr "Lien d'accès"
+
+msgid "Add to area"
+msgstr "Ajouter à la zone"
 
 msgid "Add to plot"
 msgstr "Ajouter à la trame"
@@ -2531,6 +2537,9 @@ msgstr "Échelle de Likert"
 msgid "Members list"
 msgstr "Liste des membres"
 
+msgid "Move to area"
+msgstr "Déplacer vers la zone"
+
 msgid "Municipality"
 msgstr "Municipalité"
 
@@ -2602,6 +2611,9 @@ msgstr "Scanner le code QR"
 
 msgid "Scroll right"
 msgstr "Fais défiler vers la droite"
+
+msgid "Set deployed"
+msgstr "Marquer comme déployé"
 
 msgid "Show history"
 msgstr "Afficher l'historique"
@@ -3762,6 +3774,9 @@ msgstr "Frais d'inscription"
 msgid "Remove character"
 msgstr "Supprimer le personnage"
 
+msgid "Remove from area"
+msgstr "Retirer de la zone"
+
 msgid "Remove from plot"
 msgstr "Retirer de la trame"
 
@@ -4583,6 +4598,9 @@ msgstr "Fiche complète (Pdf)"
 
 msgid "Confirm check-in for"
 msgstr "Confirmer le check-in pour"
+
+msgid "Count unpaid tickets"
+msgstr "Compter les billets non payés"
 
 msgid "Country of the event"
 msgstr "Pays de la manifestation"
@@ -6110,9 +6128,6 @@ msgstr "Active les nouvelles fonctionnalités de la plateforme"
 
 msgid "Already existing relationship!"
 msgstr "Relation déjà existante!"
-
-msgid "Assign remaining stock to area"
-msgstr "Attribue le stock restant à la zone"
 
 msgid "Character Inventory Pool Types"
 msgstr "Types de pools d'inventaire de personnages"
@@ -7814,6 +7829,9 @@ msgstr "Gère les questions des participants et y répond"
 msgid "Manage the main settings of the organization"
 msgstr "Gère les paramètres principaux de l’organisation"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Aucun objet n'a encore été assigné à une zone."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Aucun participant n'a encore reçu de jetons."
 
@@ -7930,9 +7948,6 @@ msgstr "Rappel de paiement de la cotisation pour %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Modifie les détails du personnage pour le rendre tien"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Aucun élément n'a encore été attribué à cette zone."
-
 msgid "No participants have been issued credits yet."
 msgstr "Aucun participant n'a encore reçu de crédits."
 
@@ -8038,6 +8053,9 @@ msgstr "Demande d'inscription à %(event)s par %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Inscription mise à jour pour %(event)s par %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Les objets sélectionnés seront retirés de leur zone"
 
 msgid "Session expired, please upload the file again."
 msgstr "Session expirée, téléverse à nouveau le fichier."
@@ -11799,6 +11817,13 @@ msgstr ""
 "Un remboursement de %(amount).2f %(elements)s pour « %(reason)s » a été "
 "traité."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Assigne des objets de l'entrepôt à une ou plusieurs zones de l'événement, "
+"objet par objet ou en masse"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -12305,13 +12330,6 @@ msgid ""
 msgstr ""
 "Affiché sur la page de demande d'inscription et ajouté à l'e-mail de "
 "confirmation de réception de la demande"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Suis toutes les affectations d'éléments regroupées par zone, en indiquant "
-"pour chaque élément s'il a été chargé et déployé"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13763,6 +13781,13 @@ msgstr ""
 " et tu seras alors dûment inscrit(e) :"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Impossible de lire le fichier sélectionné. S'il est stocké dans le cloud, "
+"télécharge-le sur ton appareil et réessaie."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14790,6 +14815,14 @@ msgstr ""
 "avec l'organisation, et n'ont pas été ajoutées à la file d'attente:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Suis toutes les affectations d'objets par zone, en marquant chaque objet "
+"comme chargé et déployé ; utilise l'action groupée pour en déplacer ou en "
+"retirer plusieurs à la fois"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -15110,6 +15143,13 @@ msgstr ""
 "Aucun rôle n'a encore été défini pour cet événement. Clique sur le bouton "
 "ci-dessus pour créer un rôle et attribuer des autorisations aux membres de "
 "l'équipe."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Le fichier sélectionné est trop volumineux pour être préparé à l'envoi. S'il"
+" est stocké dans le cloud, télécharge-le sur ton appareil et réessaie."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15539,6 +15579,14 @@ msgstr ""
 "Permet d'activer un bouton dans la barre supérieure pour rediriger les "
 "utilisateurs authentifiés vers une application externe, à l'aide d'une URL "
 "configurable et d'un SSO optionnel basé sur JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Si cette option est activée, les billets mécène pas encore payés sont aussi "
+"comptés dans le ratio. Si elle est désactivée, seuls les billets mécène avec"
+" au moins un paiement sont comptés."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

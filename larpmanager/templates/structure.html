@@ -117,6 +117,8 @@
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
     window.enviro = "{{ request.enviro }}";
+    window.lmFileReadErrorText = '{% filter escapejs %}{% trans "Could not read the selected file. If it is stored in the cloud, download it to your device and retry." %}{% endfilter %}';
+    window.lmFileTooLargeText = '{% filter escapejs %}{% trans "The selected file is too large to be prepared for upload. If it is stored in the cloud, download it to your device and retry." %}{% endfilter %}';
 
 window['icon_texts'] = {
     'edit': '{% filter escapejs %}{% trans "Edit" %}{% endfilter %}',

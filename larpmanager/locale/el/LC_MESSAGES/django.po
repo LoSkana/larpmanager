@@ -1018,6 +1018,9 @@ msgstr "Απόδειξη"
 msgid "Reduced"
 msgstr "Μειωμένο"
 
+msgid "Refresh"
+msgstr "Ανανέωση"
+
 msgid "Refunds"
 msgstr "Επιστροφές χρημάτων"
 
@@ -1628,9 +1631,6 @@ msgstr "Τύπος Pool"
 msgid "Portraits"
 msgstr "Πορτρέτα"
 
-msgid "Position:"
-msgstr "Θέση:"
-
 msgid "Preaching"
 msgstr "Κήρυγμα"
 
@@ -2033,6 +2033,9 @@ msgstr "Επιλέξιμο"
 msgid "Set hidden"
 msgstr "Ορισμός ως κρυφό"
 
+msgid "Set loaded"
+msgstr "Ορισμός ως φορτωμένο"
+
 msgid "Set locked"
 msgstr "Ορισμός ως κλειδωμένο"
 
@@ -2119,6 +2122,9 @@ msgstr "Σύνδεσμος πρόσβασης"
 
 msgid "Access link"
 msgstr "Σύνδεσμος πρόσβασης"
+
+msgid "Add to area"
+msgstr "Προσθήκη σε περιοχή"
 
 msgid "Add to plot"
 msgstr "Προσθήκη στην πλοκή"
@@ -2531,6 +2537,9 @@ msgstr "Κλίμακα Likert"
 msgid "Members list"
 msgstr "Λίστα μελών"
 
+msgid "Move to area"
+msgstr "Μετακίνηση σε περιοχή"
+
 msgid "Municipality"
 msgstr "Δήμος"
 
@@ -2602,6 +2611,9 @@ msgstr "Scansiona il codice QR"
 
 msgid "Scroll right"
 msgstr "Κύλιση δεξιά"
+
+msgid "Set deployed"
+msgstr "Ορισμός ως τοποθετημένο"
 
 msgid "Show history"
 msgstr "Εμφάνιση ιστορικού"
@@ -3762,6 +3774,9 @@ msgstr "Κόστος εγγραφής"
 msgid "Remove character"
 msgstr "Αφαίρεση χαρακτήρα"
 
+msgid "Remove from area"
+msgstr "Αφαίρεση από περιοχή"
+
 msgid "Remove from plot"
 msgstr "Αφαίρεση από την πλοκή"
 
@@ -4583,6 +4598,9 @@ msgstr "Πλήρες φύλλο (PDF)"
 
 msgid "Confirm check-in for"
 msgstr "Επιβεβαίωση check-in για"
+
+msgid "Count unpaid tickets"
+msgstr "Μέτρα τα απλήρωτα εισιτήρια"
 
 msgid "Country of the event"
 msgstr "Χώρα του event"
@@ -6110,9 +6128,6 @@ msgstr "Ενεργοποίησε νέες λειτουργίες της πλατ
 
 msgid "Already existing relationship!"
 msgstr "Υπάρχει ήδη σχέση!"
-
-msgid "Assign remaining stock to area"
-msgstr "Ανάθεση του εναπομείναντος αποθέματος στην περιοχή"
 
 msgid "Character Inventory Pool Types"
 msgstr "Τύποι Pools αποθέματος χαρακτήρων"
@@ -7807,6 +7822,9 @@ msgstr "Διαχειρίσου τις ερωτήσεις των συμμετεχ
 msgid "Manage the main settings of the organization"
 msgstr "Διαχειρίσου τις κύριες ρυθμίσεις του οργανισμού"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Δεν έχει ανατεθεί ακόμα κανένα αντικείμενο σε καμία περιοχή."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Δεν έχουν εκδοθεί ακόμη token σε συμμετέχοντες."
 
@@ -7925,9 +7943,6 @@ msgstr "Υπενθύμιση πληρωμής ετήσιας συνδρομής 
 msgid "Modify the character details to make it yours"
 msgstr "Τροποποίησε τα στοιχεία του χαρακτήρα για να τον κάνεις δικό σου"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Δεν έχουν ανατεθεί ακόμη αντικείμενα σε αυτή την περιοχή."
-
 msgid "No participants have been issued credits yet."
 msgstr "Δεν έχουν εκδοθεί ακόμη πιστώσεις σε συμμετέχοντες."
 
@@ -8033,6 +8048,9 @@ msgstr "Αίτημα εγγραφής για %(event)s από %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Ενημερωμένη εγγραφή για %(event)s από %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Τα επιλεγμένα αντικείμενα θα αφαιρεθούν από την περιοχή τους"
 
 msgid "Session expired, please upload the file again."
 msgstr "Η συνεδρία έληξε, ανέβασε ξανά το αρχείο."
@@ -11801,6 +11819,13 @@ msgstr ""
 "Μια επιστροφή χρημάτων %(amount).2f %(elements)s για «%(reason)s» "
 "διεκπεραιώθηκε."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Ανάθεσε αντικείμενα της αποθήκης σε μία ή περισσότερες περιοχές της "
+"εκδήλωσης, ένα προς ένα ή μαζικά"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -12306,13 +12331,6 @@ msgid ""
 msgstr ""
 "Εμφανίζεται στη σελίδα αιτήματος εγγραφής και προστίθεται στο email "
 "επιβεβαίωσης λήψης αιτήματος"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Παρακολούθησε όλες τις αναθέσεις αντικειμένων ομαδοποιημένες ανά περιοχή, "
-"σημειώνοντας κάθε αντικείμενο ως φορτωμένο και αναπτυγμένο"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -13760,6 +13778,13 @@ msgstr ""
 "κανονικά:"
 
 msgid ""
+"Could not read the selected file. If it is stored in the cloud, download it "
+"to your device and retry."
+msgstr ""
+"Δεν ήταν δυνατή η ανάγνωση του αρχείου που επέλεξες. Αν είναι αποθηκευμένο "
+"στο cloud, κατέβασέ το στη συσκευή σου και δοκίμασε ξανά."
+
+msgid ""
 "Define installment schedules that split ticket costs into multiple payment "
 "deadlines for participants"
 msgstr ""
@@ -14784,6 +14809,14 @@ msgstr ""
 " του στον οργανισμό και δεν προστέθηκαν στην ουρά:"
 
 msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Παρακολούθησε όλες τις αναθέσεις αντικειμένων ανά περιοχή, σημειώνοντας κάθε"
+" αντικείμενο ως φορτωμένο και τοποθετημένο· χρησιμοποίησε τη μαζική "
+"επεξεργασία για να μετακινήσεις ή να αφαιρέσεις πολλά μαζί"
+
+msgid ""
 "Your registration will now be saved in provisional status. It will be "
 "confirmed when your ticket payment is received."
 msgstr ""
@@ -15104,6 +15137,14 @@ msgstr ""
 "Δεν έχουν οριστεί ακόμη ρόλοι για αυτό το event. Χρησιμοποίησε το παραπάνω "
 "κουμπί για να δημιουργήσεις έναν ρόλο και να αναθέσεις δικαιώματα στα μέλη "
 "του προσωπικού."
+
+msgid ""
+"The selected file is too large to be prepared for upload. If it is stored in"
+" the cloud, download it to your device and retry."
+msgstr ""
+"Το αρχείο που επέλεξες είναι πολύ μεγάλο για να προετοιμαστεί για "
+"μεταφόρτωση. Αν είναι αποθηκευμένο στο cloud, κατέβασέ το στη συσκευή σου "
+"και δοκίμασε ξανά."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -15527,6 +15568,14 @@ msgstr ""
 "Ενεργοποιεί ένα κουμπί στην επάνω γραμμή για ανακατεύθυνση συνδεδεμένων "
 "χρηστών σε εξωτερική εφαρμογή, χρησιμοποιώντας διαμορφώσιμο URL και "
 "προαιρετικό SSO μέσω JWT"
+
+msgid ""
+"If enabled, patron tickets not yet paid are also counted in the ratio. If "
+"disabled, only patron tickets with at least one payment are counted."
+msgstr ""
+"Αν είναι ενεργό, μετριούνται στην αναλογία και τα εισιτήρια patron που δεν "
+"έχουν πληρωθεί ακόμα. Αν είναι ανενεργό, μετριούνται μόνο τα εισιτήρια "
+"patron με τουλάχιστον μία πληρωμή."
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

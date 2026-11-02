@@ -288,7 +288,7 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
 
     # Process birth place and get municipality code
     cleaned_birth_place = _clean_birth_place(member.birth_place)
-    municipality_code = _extract_municipality_code(cleaned_birth_place)
+    municipality_code = _extract_municipality_code(cleaned_birth_place).upper()
 
     # Construct fiscal code without check digit and add check digit
     fiscal_code_without_check_digit = f"{last_name_code}{first_name_code}{birth_date_code}{municipality_code}"

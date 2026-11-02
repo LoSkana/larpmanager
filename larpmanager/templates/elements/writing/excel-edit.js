@@ -78,6 +78,10 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         const form = document.getElementById('form-excel');
+        window.lmWhenFilesBuffered(form, function() { sendExcelForm(form, auto); });
+    }
+
+    function sendExcelForm(form, auto) {
         const formData = new FormData(form);
 
         formData.append('edit_uuid', edit_uuid);
