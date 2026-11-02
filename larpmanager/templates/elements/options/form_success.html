@@ -15,7 +15,7 @@
     <p>{% trans "Closing" %}...</p>
 {% endblock content %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     $(document).ready(function() {
         if (window.parent && window.parent !== window) {
             window.parent.postMessage({type: 'option_saved'}, '*');

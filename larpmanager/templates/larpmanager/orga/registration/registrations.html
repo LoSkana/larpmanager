@@ -362,7 +362,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 var url_load_questions = "{% url 'orga_registration_form_list' run.get_slug %}";
 var url_load_questions_email = "{% url 'orga_registration_form_email' run.get_slug %}";
 

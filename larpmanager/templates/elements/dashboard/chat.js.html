@@ -1,5 +1,5 @@
 {% load i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     var $trigger = $('.chat-widget-open-trigger');
     if (!$trigger.length) return;

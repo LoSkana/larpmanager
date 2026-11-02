@@ -38,8 +38,8 @@
                            class="btn btn-sm btn-primary">
                             <i class="fa fa-external-link"></i> {% trans "Open Link" %}
                         </a>
-                        <button class="btn btn-sm btn-secondary"
-                                onclick="navigator.clipboard.writeText('{{ request.scheme }}://{{ request.get_host }}{% url 'onetime_access' el.token %}'); this.innerHTML='<i class=\'fa fa-check\'></i> {% trans "Copied" %}'; setTimeout(() => this.innerHTML='<i class=\'fa fa-copy\'></i> {% trans "Copy URL" %}', 2000);">
+                        <button class="btn btn-sm btn-secondary copy-token-url"
+                                data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'onetime_access' el.token %}">
                             <i class="fa fa-copy"></i> {% trans "Copy URL" %}
                         </button>
                     </td>
@@ -71,4 +71,19 @@
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}
+    <script nonce="{{ csp_nonce }}">
+    document.addEventListener('click', function(event) {
+        const button = event.target.closest('.copy-token-url');
+        if (!button || button.dataset.copied) return;
+        navigator.clipboard.writeText(button.dataset.url).then(function() {
+            const original = button.innerHTML;
+            button.dataset.copied = '1';
+            button.innerHTML = '<i class="fa fa-check"></i> {% filter escapejs %}{% trans "Copied" %}{% endfilter %}';
+            setTimeout(function() {
+                button.innerHTML = original;
+                delete button.dataset.copied;
+            }, 2000);
+        });
+    });
+    </script>
 {% endblock content %}

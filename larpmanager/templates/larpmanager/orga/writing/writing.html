@@ -22,7 +22,7 @@
         {{ char_finder_media }}
         {% include "elements/form/char_finder.js" %}
     {% endif %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 

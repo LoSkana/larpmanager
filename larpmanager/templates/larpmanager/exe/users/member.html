@@ -45,7 +45,7 @@
     {% endif %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 {% if form.country_subdivisions_map %}
     var countrySubdivisions = {{ form.country_subdivisions_map | safe }};
 

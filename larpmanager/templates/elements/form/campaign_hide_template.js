@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 (function () {
     var parentField = $('#id_form1-parent');
     var templateRows = ['#id_form1-template_event_tr', '#id_form1-event_template_tr'];

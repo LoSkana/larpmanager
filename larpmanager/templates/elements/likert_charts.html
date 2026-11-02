@@ -3,7 +3,7 @@
     {% for chart in likert_charts %}
         <h3>{{ chart.question.name }}</h3>
         <canvas id="likert_chart_{{ forloop.counter }}" width="400" height="200"></canvas>
-        <script>
+        <script nonce="{{ csp_nonce }}">
 (function() {
     var ctx = document.getElementById('likert_chart_{{ forloop.counter }}').getContext('2d');
     new Chart(ctx, {

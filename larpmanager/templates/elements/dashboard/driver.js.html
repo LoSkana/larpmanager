@@ -12,7 +12,7 @@
 {% trans "Write here what you would like to to!" as wwyltd_sugg %}
 <script src="{% static 'node_modules/driver.js/dist/driver.js.iife.js' %}"
         defer></script>
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     function driverWelcome() {

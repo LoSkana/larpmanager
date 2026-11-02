@@ -17,7 +17,7 @@
             </p>
             <p>
                 {% blocktrans with parent=request.user.member.parent %}To log back in with the account {{ parent }}, press here:{% endblocktrans %}
-                <a href="#" onclick="submitForm('login_0'); return false;">{% trans "Login" %}</a>
+                <a href="#" data-login-form="login_0">{% trans "Login" %}</a>
             </p>
         {% else %}
             <p>{% trans "You are currently logged in with the:" %} {{ request.user.member }}.</p>
@@ -70,7 +70,7 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="account" value="{{ el.uuid }}" />
                             </form>
-                            <a href="#" onclick="submitForm('login_{{ el.uuid }}'); return false;">{% trans "Login" %}</a>
+                            <a href="#" data-login-form="login_{{ el.uuid }}">{% trans "Login" %}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -92,9 +92,12 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
-        function submitForm(formId) {
-            document.getElementById(formId).submit();
-        }
+    <script nonce="{{ csp_nonce }}">
+        document.addEventListener('click', function(event) {
+            const link = event.target.closest('[data-login-form]');
+            if (!link) return;
+            event.preventDefault();
+            document.getElementById(link.dataset.loginForm).submit();
+        });
     </script>
 {% endblock js %}

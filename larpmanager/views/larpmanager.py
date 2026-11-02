@@ -102,6 +102,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.chat import get_chat_answer
+from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
     delete_run_task,
@@ -117,6 +118,9 @@ from larpmanager.views.user.member import get_user_backend
 
 # Refuse oversized SNS bodies before parsing them
 MAX_SNS_PAYLOAD_SIZE = 256 * 1024
+
+# Refuse oversized CSP violation reports before parsing them
+MAX_CSP_REPORT_SIZE = 16 * 1024
 
 # Suppressed addresses shown per page in the admin listing
 SUPPRESSIONS_PER_PAGE = 100
@@ -813,7 +817,6 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
     return None
 
 
-@cache_page(60 * 15)
 def discover(request: HttpRequest) -> Any:
     """Display discovery page with featured content."""
     context = get_lm_contact(request)
@@ -888,7 +891,6 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     return render(request, "larpmanager/landing/tutorials.html", context)
 
 
-@cache_page(60 * 15)
 def guides(request: HttpRequest) -> Any:
     """Display list of published guides for LarpManager users."""
     context = get_lm_contact(request)
@@ -962,7 +964,6 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     return render(request, "larpmanager/landing/blog.html", context)
 
 
-@cache_page(60 * 15)
 def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page."""
     context = get_lm_contact(request)
@@ -970,7 +971,6 @@ def privacy(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/privacy.html", context)
 
 
-@cache_page(60 * 15)
 def usage(request: HttpRequest) -> Any:
     """Display usage/terms page."""
     context = get_lm_contact(request)
@@ -979,7 +979,6 @@ def usage(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/usage.html", context)
 
 
-@cache_page(60 * 15)
 def about_us(request: HttpRequest) -> Any:
     """Display about us page."""
     context = get_lm_contact(request)
@@ -1276,6 +1275,23 @@ def ses_notification(request: HttpRequest) -> HttpResponse:
 
     handle_sns_payload(payload)
     return JsonResponse({"res": "ok"})
+
+
+@csrf_exempt
+@require_POST
+@ratelimit(key="ip", rate="60/m", block=True)
+def csp_report(request: HttpRequest) -> HttpResponse:
+    """Collect a Content-Security-Policy violation report sent by the browser."""
+    if len(request.body) > MAX_CSP_REPORT_SIZE:
+        return HttpResponse(status=413)
+
+    try:
+        payload = json.loads(request.body.decode())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return HttpResponse(status=400)
+
+    record_csp_report(payload)
+    return HttpResponse(status=204)
 
 
 @login_required

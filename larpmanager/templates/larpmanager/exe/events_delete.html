@@ -64,7 +64,7 @@
     {% if frame %}
         {% include "elements/helpers/iframe_resize.js" %}
     {% endif %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     $(document).ready(function() {
         const expected = $('#events_delete_name').text().trim();
         $('#id_confirm_name').on('input', function() {

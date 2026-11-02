@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 // drafts are saved automatically, no need to warn before leaving
 window.lmDraftAutosave = true;

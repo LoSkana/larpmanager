@@ -1,6 +1,6 @@
 {% include "elements/writing/token.js" %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 {% if edit_uuid %}
 var edit_uuid = '{{ edit_uuid }}';

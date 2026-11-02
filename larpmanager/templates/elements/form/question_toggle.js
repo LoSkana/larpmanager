@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 
 // placeholder shown on the selects of the questions that get hidden
 var question_toggle_empty = '-------';

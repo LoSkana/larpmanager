@@ -24,7 +24,7 @@
     <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     <script src="{% static 'node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js' %}"></script>
     <script src="{% static 'node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js' %}"></script>
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce }}" type="text/javascript">
 function balanceChartOptions(label) {
   return {
     type: "line",

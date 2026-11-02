@@ -650,6 +650,7 @@ function initToggles() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
+        $(this).find('.sl-show, .sl-hide').toggleClass('hide');
 
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
@@ -724,6 +725,17 @@ function initDatatableLinks() {
 // ========== Init: Popups ==========
 
 // Open inline .show_popup content in the modal and wire AJAX post_popup handlers.
+// Open [data-popup-image] thumbnails full size in #imagePopup, closing it on click.
+function initImagePopup() {
+    $(document).on('click', '[data-popup-image]', function() {
+        $('#popupImg').attr('src', this.dataset.popupImage);
+        $('#imagePopup').css('display', 'flex');
+    });
+    $(document).on('click', '#imagePopup', function() {
+        $(this).hide();
+    });
+}
+
 function initPopups() {
     $(document).on("click", ".show_popup", function() {
         num = $(this).attr("pop");
@@ -842,6 +854,7 @@ $(document).ready(function() {
     initToggles();
     initFeatureModals();
     initPopups();
+    initImagePopup();
     initTableSearch();
 
     // Tables

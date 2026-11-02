@@ -721,6 +721,10 @@ form .plot {
   height: 5em;
 }
 
+.inv_photo[data-popup-image] {
+  cursor: pointer;
+}
+
 .satispay-button {
   height: 50px;
   cursor: pointer;

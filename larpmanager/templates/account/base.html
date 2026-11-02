@@ -4,7 +4,7 @@
     {% endblock head_title %}
 {% endblock title %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     jQuery(function(){
        jQuery('.major').remove();

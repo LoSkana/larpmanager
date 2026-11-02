@@ -54,7 +54,7 @@
                 <p>This content is protected and cannot be downloaded or recorded.</p>
             </div>
         </div>
-        <script>
+        <script nonce="{{ csp_nonce }}">
         // Disable right-click context menu on media elements
         document.querySelectorAll('video, audio').forEach(function(media) {
             media.addEventListener('contextmenu', function(e) {

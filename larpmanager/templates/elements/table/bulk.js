@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 // handle bulk operations
 

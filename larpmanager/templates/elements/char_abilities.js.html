@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 {{ exp_calls|json_script:"exp-calls" }}
-<script>
+<script nonce="{{ csp_nonce }}">
 
 const abilities = {{ available | safe }};
 

@@ -41,7 +41,7 @@
     <script src="{% static 'node_modules/flickity/dist/flickity.pkgd.min.js' %}"
             defer></script>
     {{ json|json_script:"carousel-data" }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 const base_url = "{% url 'event_register' '0' %}";
 
 window.addEventListener('DOMContentLoaded', function() {

@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 // Open the member profile popup on click of a.post_popup_member
 window.addEventListener('DOMContentLoaded', function() {
     $(document).on('click', '.post_popup_member', function () {

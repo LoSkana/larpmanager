@@ -63,7 +63,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     var quickbar = document.getElementById('sheet-quickbar');
     if (quickbar === null) return;
@@ -87,7 +87,7 @@ window.addEventListener('DOMContentLoaded', function() {
     </script>
     <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     {% if pref %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
 function go_chart() {
 
     var context = document.getElementById('myChart');

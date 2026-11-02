@@ -45,7 +45,7 @@
     {% endfor %}
 {% endblock landing_content %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     var searchInput = document.getElementById('search');

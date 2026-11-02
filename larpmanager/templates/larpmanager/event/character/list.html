@@ -108,7 +108,7 @@
     </table>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
  window.addEventListener('DOMContentLoaded', function() {
     $(document).on('click', '.char-choose-select', function(e) {
         e.preventDefault();

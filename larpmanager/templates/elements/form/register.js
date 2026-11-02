@@ -2,7 +2,7 @@
 
 {{ form.unavail|json_script:"unavail" }}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 var unavail = JSON.parse(document.getElementById('unavail').textContent);
 

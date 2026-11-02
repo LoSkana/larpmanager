@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 // handle select all / deselect all of the copy element cards
 
