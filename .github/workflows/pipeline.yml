@@ -53,7 +53,7 @@ jobs:
     steps:
 
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
 
     - name: Setup Git LFS
       run: |
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - uses: astral-sh/setup-uv@v6
 
@@ -140,7 +140,7 @@ jobs:
     if: github.event_name == 'push' && github.base_ref == ''
     steps:
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Deploy via SSH
       uses: appleboy/ssh-action@v0.1.4
