@@ -1018,6 +1018,9 @@ msgstr "Příjmový doklad"
 msgid "Reduced"
 msgstr "Snížené"
 
+msgid "Refresh"
+msgstr "Obnovit"
+
 msgid "Refunds"
 msgstr "Vrácené platby"
 
@@ -1628,9 +1631,6 @@ msgstr "Typ poolu"
 msgid "Portraits"
 msgstr "Portréty"
 
-msgid "Position:"
-msgstr "Pozice:"
-
 msgid "Preaching"
 msgstr "Kázání"
 
@@ -2033,6 +2033,9 @@ msgstr "Zvolitelný"
 msgid "Set hidden"
 msgstr "Nastavit jako skryté"
 
+msgid "Set loaded"
+msgstr "Označit jako naložené"
+
 msgid "Set locked"
 msgstr "Nastavit jako zamčené"
 
@@ -2119,6 +2122,9 @@ msgstr "Přístupový odkaz"
 
 msgid "Access link"
 msgstr "Přístupový odkaz"
+
+msgid "Add to area"
+msgstr "Přidat do oblasti"
 
 msgid "Add to plot"
 msgstr "Přidat do zápletky"
@@ -2531,6 +2537,9 @@ msgstr "Likertova škála"
 msgid "Members list"
 msgstr "Seznam členů"
 
+msgid "Move to area"
+msgstr "Přesunout do oblasti"
+
 msgid "Municipality"
 msgstr "Obec"
 
@@ -2602,6 +2611,9 @@ msgstr "Naskenovat QR kód"
 
 msgid "Scroll right"
 msgstr "Posuň doprava"
+
+msgid "Set deployed"
+msgstr "Označit jako rozmístěné"
 
 msgid "Show history"
 msgstr "Zobrazit historii"
@@ -3761,6 +3773,9 @@ msgstr "Registrační poplatek"
 
 msgid "Remove character"
 msgstr "Odstranit postavu"
+
+msgid "Remove from area"
+msgstr "Odebrat z oblasti"
 
 msgid "Remove from plot"
 msgstr "Odstranit z děje"
@@ -6114,9 +6129,6 @@ msgstr "Aktivuj nové funkce platformy"
 msgid "Already existing relationship!"
 msgstr "Již existující vztah!"
 
-msgid "Assign remaining stock to area"
-msgstr "Přiřadit zbývající zásoby do oblasti"
-
 msgid "Character Inventory Pool Types"
 msgstr "Typy Poolů inventáře postav"
 
@@ -7809,6 +7821,9 @@ msgstr "Spravovat otázky účastníků a odpovídat na ně"
 msgid "Manage the main settings of the organization"
 msgstr "Spravuj hlavní nastavení organizace"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Do žádné oblasti zatím nebyly přiřazeny žádné položky."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Žádnému z účastníků zatím nebyly vydány žetony."
 
@@ -7924,9 +7939,6 @@ msgstr "Upomínka k úhradě členského příspěvku za %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Uprav údaje o postavě tak, aby byla tvoje"
 
-msgid "No items have been assigned to this area yet."
-msgstr "K této oblasti zatím nebyly přiřazeny žádné položky."
-
 msgid "No participants have been issued credits yet."
 msgstr "Žádnému z účastníků zatím nebyly přiděleny kredity."
 
@@ -8030,6 +8042,9 @@ msgstr "Žádost o registraci na %(event)s podaná %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "%(user)s aktualizoval/a registraci pro %(event)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Vybrané položky budou odebrány ze své oblasti"
 
 msgid "Session expired, please upload the file again."
 msgstr "Relace vypršela, nahraj soubor znovu."
@@ -11326,6 +11341,13 @@ msgstr ""
 "Byla zpracována refundace ve výši %(amount).2f %(elements)s z důvodu "
 "„%(reason)s“."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Přiřaď položky ze skladu do jedné nebo více oblastí akce, po jedné nebo "
+"hromadně"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -11809,13 +11831,6 @@ msgid ""
 msgstr ""
 "Zobrazuje se na stránce žádosti o registraci a je uvedeno v potvrzovacím "
 "e-mailu o přijetí žádosti"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Sleduj všechna přiřazení položek seskupená podle oblastí a označuj "
-"jednotlivé položky jako naložené a nasazené"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -14252,6 +14267,14 @@ msgid ""
 msgstr ""
 "Tyto adresy nepatří uživateli, který sdílel svá data s organizací, a nebyly "
 "zařazeny do fronty:"
+
+msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Sleduj všechna přiřazení položek podle oblastí a u každé položky označ, "
+"jestli je naložená a rozmístěná; hromadné akce použij k přesunu nebo "
+"odebrání více položek najednou"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

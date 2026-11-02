@@ -47,6 +47,7 @@ from larpmanager.models.miscellanea import (
     WarehouseArea,
     WarehouseContainer,
     WarehouseItem,
+    WarehouseItemAssignment,
     WarehouseTag,
 )
 from larpmanager.models.writing import (
@@ -226,9 +227,14 @@ class Operations(models.IntegerChoices):
     DEL_FACT_CHAR = 24, _("Remove character")
     SET_FACT_PROGRESS = 25, _("Set progress step")
     SET_FACT_ASSIGNED = 26, _("Set assigned staff member")
-    SET_ITEM_AREA_REMAINING = 27, _("Assign remaining stock to area")
+    SET_ITEM_AREA_REMAINING = 27, _("Add to area")
     SET_CHAR_HIDE = 28, _("Set hidden")
     SET_CHAR_LOCKED = 29, _("Set locked")
+    MOVE_ASSIGNMENT_AREA = 30, _("Move to area")
+    DEL_ASSIGNMENT = 31, _("Remove from area")
+    SET_ASSIGNMENT_LOADED = 32, _("Set loaded")
+    SET_ASSIGNMENT_DEPLOYED = 33, _("Set deployed")
+    DEL_ITEM_AREA = 34, _("Remove from area")
 
 
 def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[str]) -> QuerySet:
@@ -413,22 +419,32 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
     _add_bulk_delete_option(request, context)
 
 
-def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -> str:
-    """Assign each selected item's full remaining stock to a target event area.
+def _get_event_area(context: dict, area_uuid: str) -> WarehouseArea:
+    """Return an area of the current event by UUID."""
+    return get_event_elements(context["event"].id, WarehouseArea, context=context).get(uuid=area_uuid)
 
-    Items with unlimited stock or with nothing left available are skipped.
+
+def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -> str:
+    """Add each selected item to a target event area.
+
+    Finite-stock items get their whole remaining stock (skipped if nothing is left);
+    unlimited items get an assignment without quantity, if not already present.
     """
-    area = get_event_elements(context["event"].id, WarehouseArea, context=context).get(uuid=target)
+    area = _get_event_area(context, target)
     with transaction.atomic():
         items = list(
             WarehouseItem.objects.select_for_update().filter(
                 association_id=context["association_id"],
                 uuid__in=uuids,
-                quantity__isnull=False,
             )
         )
-        assigned_by_item = warehouse_assigned_quantities(items)
+        assigned_by_item = warehouse_assigned_quantities([item for item in items if item.quantity is not None])
         for item in items:
+            if item.quantity is None:
+                WarehouseItemAssignment.objects.get_or_create(
+                    item=item, area=area, defaults={"event": context["event"]}
+                )
+                continue
             available = warehouse_available_quantity(item, assigned_by_item.get(item.id, 0))
             if available <= 0:
                 continue
@@ -437,13 +453,29 @@ def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -
     return area.name
 
 
+def exec_del_item_area(context: dict, target: str, uuids: list[str]) -> str:
+    """Remove the selected items from a target event area."""
+    area = _get_event_area(context, target)
+    with transaction.atomic():
+        for assignment in WarehouseItemAssignment.objects.select_for_update().filter(
+            area=area,
+            item__association_id=context["association_id"],
+            item__uuid__in=uuids,
+        ):
+            assignment.delete()
+    return area.name
+
+
 def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
     """Handle bulk operations on warehouse items scoped to a single event.
 
-    Supports committing each item's full remaining stock to an area of the current event.
+    Supports adding items to an area of the current event, and removing them from it.
     """
     if request.POST:
-        mapping = {Operations.SET_ITEM_AREA_REMAINING: exec_set_item_area_remaining}
+        mapping = {
+            Operations.SET_ITEM_AREA_REMAINING: exec_set_item_area_remaining,
+            Operations.DEL_ITEM_AREA: exec_del_item_area,
+        }
         raise ReturnNowError(exec_bulk(request, context, mapping, WarehouseItem))
 
     areas = (
@@ -451,6 +483,105 @@ def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
     )
     context["bulk"] = [
         _bulk_op(Operations.SET_ITEM_AREA_REMAINING, areas),
+        _bulk_op(Operations.DEL_ITEM_AREA, areas),
+    ]
+
+
+def _get_assignments(context: dict, uuids: list[str]) -> QuerySet[WarehouseItemAssignment]:
+    """Return the event's warehouse assignments with the given UUIDs, locked for update."""
+    return (
+        get_event_elements(context["event"].id, WarehouseItemAssignment, context=context)
+        .select_for_update()
+        .filter(uuid__in=uuids)
+    )
+
+
+def _merge_assignment(source: WarehouseItemAssignment, target: WarehouseItemAssignment) -> None:
+    """Merge a source assignment into a target one of the same item, then delete the source."""
+    if source.quantity is not None or target.quantity is not None:
+        target.quantity = (target.quantity or 0) + (source.quantity or 0)
+    target.notes = "; ".join(note for note in (target.notes, source.notes) if note)[:1000]
+    target.loaded = target.loaded and source.loaded
+    target.deployed = target.deployed and source.deployed
+    target.save()
+    source.delete()
+
+
+def exec_move_assignment_area(context: dict, target: str, uuids: list[str]) -> str:
+    """Move the selected assignments to a target area, merging into existing ones of the same item."""
+    area = _get_event_area(context, target)
+    with transaction.atomic():
+        for assignment in _get_assignments(context, uuids):
+            if assignment.area_id == area.id:
+                continue
+            existing = (
+                WarehouseItemAssignment.objects.select_for_update()
+                .filter(item_id=assignment.item_id, area=area)
+                .first()
+            )
+            if existing:
+                _merge_assignment(assignment, existing)
+            else:
+                assignment.area = area
+                assignment.save()
+    return area.name
+
+
+def exec_del_assignment(context: dict, target: str, uuids: list[str]) -> str:  # noqa: ARG001
+    """Remove the selected assignments from their area."""
+    with transaction.atomic():
+        for assignment in _get_assignments(context, uuids):
+            assignment.delete()
+    return ""
+
+
+def _exec_set_assignment_flag(context: dict, target: str, uuids: list[str], field: str) -> str:
+    """Set a boolean flag on the selected assignments, target being '1' or '0'."""
+    if target not in ("0", "1"):
+        msg = f"invalid flag value {target}"
+        raise ValueError(msg)
+    value = target == "1"
+    with transaction.atomic():
+        for assignment in _get_assignments(context, uuids):
+            setattr(assignment, field, value)
+            assignment.save()
+    return str(_("Yes") if value else _("No"))
+
+
+def exec_set_assignment_loaded(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the loaded flag on the selected assignments."""
+    return _exec_set_assignment_flag(context, target, uuids, "loaded")
+
+
+def exec_set_assignment_deployed(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the deployed flag on the selected assignments."""
+    return _exec_set_assignment_flag(context, target, uuids, "deployed")
+
+
+def handle_bulk_orga_manifest(request: HttpRequest, context: dict) -> None:
+    """Handle bulk operations on warehouse item assignments of a single event.
+
+    Supports moving assignments to another area, removing them, and setting loaded/deployed flags.
+    """
+    if request.POST:
+        mapping = {
+            Operations.MOVE_ASSIGNMENT_AREA: exec_move_assignment_area,
+            Operations.DEL_ASSIGNMENT: exec_del_assignment,
+            Operations.SET_ASSIGNMENT_LOADED: exec_set_assignment_loaded,
+            Operations.SET_ASSIGNMENT_DEPLOYED: exec_set_assignment_deployed,
+        }
+        raise ReturnNowError(exec_bulk(request, context, mapping, WarehouseItemAssignment))
+
+    areas = (
+        get_event_elements(context["event"].id, WarehouseArea, context=context).values("uuid", "name").order_by("name")
+    )
+    flags = [{"uuid": "1", "name": _("Yes")}, {"uuid": "0", "name": _("No")}]
+    confirm = [{"uuid": "1", "name": _("Selected items will be removed from their area")}]
+    context["bulk"] = [
+        _bulk_op(Operations.MOVE_ASSIGNMENT_AREA, areas),
+        _bulk_op(Operations.DEL_ASSIGNMENT, confirm),
+        _bulk_op(Operations.SET_ASSIGNMENT_LOADED, flags),
+        _bulk_op(Operations.SET_ASSIGNMENT_DEPLOYED, flags),
     ]
 
 

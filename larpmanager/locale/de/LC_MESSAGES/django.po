@@ -1018,6 +1018,9 @@ msgstr "Quittung"
 msgid "Reduced"
 msgstr "Verringert"
 
+msgid "Refresh"
+msgstr "Aktualisieren"
+
 msgid "Refunds"
 msgstr "Erstattungen"
 
@@ -1628,9 +1631,6 @@ msgstr "Pool-Typ"
 msgid "Portraits"
 msgstr "Porträts"
 
-msgid "Position:"
-msgstr "Position:"
-
 msgid "Preaching"
 msgstr "Predigt"
 
@@ -2033,6 +2033,9 @@ msgstr "Wählbar"
 msgid "Set hidden"
 msgstr "Als verborgen festlegen"
 
+msgid "Set loaded"
+msgstr "Als geladen markieren"
+
 msgid "Set locked"
 msgstr "Als gesperrt festlegen"
 
@@ -2119,6 +2122,9 @@ msgstr "Zugriffslink"
 
 msgid "Access link"
 msgstr "Zugriffslink"
+
+msgid "Add to area"
+msgstr "Zum Bereich hinzufügen"
 
 msgid "Add to plot"
 msgstr "Zum Plot hinzufügen"
@@ -2531,6 +2537,9 @@ msgstr "Likert-Skala"
 msgid "Members list"
 msgstr "Mitgliederliste"
 
+msgid "Move to area"
+msgstr "In Bereich verschieben"
+
 msgid "Municipality"
 msgstr "Kommune"
 
@@ -2602,6 +2611,9 @@ msgstr "QR-Code scannen"
 
 msgid "Scroll right"
 msgstr "Nach rechts scrollen"
+
+msgid "Set deployed"
+msgstr "Als aufgestellt markieren"
 
 msgid "Show history"
 msgstr "Verlauf anzeigen"
@@ -3761,6 +3773,9 @@ msgstr "Registrierungsgebühr"
 
 msgid "Remove character"
 msgstr "Charakter entfernen"
+
+msgid "Remove from area"
+msgstr "Aus Bereich entfernen"
 
 msgid "Remove from plot"
 msgstr "Aus der Handlung entfernen"
@@ -6114,9 +6129,6 @@ msgstr "Aktiviere neue Plattformfunktionen"
 msgid "Already existing relationship!"
 msgstr "Bereits bestehende Beziehung!"
 
-msgid "Assign remaining stock to area"
-msgstr "Restbestand dem Bereich zuweisen"
-
 msgid "Character Inventory Pool Types"
 msgstr "Typen von Charakterinventar-Pools"
 
@@ -7810,6 +7822,9 @@ msgstr "Verwalte Fragen von Teilnehmenden und beantworte sie"
 msgid "Manage the main settings of the organization"
 msgstr "Verwalte die Haupteinstellungen der Organisation"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Es wurden noch keine Gegenstände einem Bereich zugewiesen."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Bisher wurden noch keine Token an Teilnehmer ausgegeben."
 
@@ -7926,9 +7941,6 @@ msgstr "Erinnerung zur Zahlung des Mitgliedsbeitrags für %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Ändere die Details des Charakters, um ihn zu deinem zu machen"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Diesem Bereich wurden noch keine Elemente zugewiesen."
-
 msgid "No participants have been issued credits yet."
 msgstr "Bisher wurden noch keine Credits an Teilnehmer vergeben."
 
@@ -8033,6 +8045,9 @@ msgstr "Anmeldeanfrage für %(event)s von %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Anmeldung für %(event)s von %(user)s aktualisiert"
+
+msgid "Selected items will be removed from their area"
+msgstr "Die ausgewählten Gegenstände werden aus ihrem Bereich entfernt"
 
 msgid "Session expired, please upload the file again."
 msgstr "Sitzung abgelaufen, bitte lade die Datei erneut hoch."
@@ -11835,6 +11850,13 @@ msgstr ""
 "Eine Rückerstattung in Höhe von %(amount).2f %(elements)s wegen '%(reason)s'"
 " wurde bearbeitet."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Weise Lagergegenstände einem oder mehreren Bereichen des Events zu, einzeln "
+"oder in großer Menge"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -12341,13 +12363,6 @@ msgid ""
 msgstr ""
 "Wird auf der Anmeldeseite angezeigt und in die Bestätigungs-E-Mail zum "
 "Eingang der Anfrage aufgenommen"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Verfolge alle Artikelzuweisungen, gruppiert nach Bereich, und markiere jeden"
-" Artikel als geladen und installiert"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -14830,6 +14845,14 @@ msgid ""
 msgstr ""
 "Diese Adressen gehören keinem Nutzer, der seine Daten mit der Organisation "
 "geteilt hat, und wurden nicht in die Warteschlange aufgenommen:"
+
+msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Behalte alle Zuweisungen nach Bereich im Blick und markiere jeden Gegenstand"
+" als geladen und aufgestellt; nutze die Mehrfachbearbeitung, um viele auf "
+"einmal zu verschieben oder zu entfernen"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

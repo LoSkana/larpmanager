@@ -1018,6 +1018,9 @@ msgstr "Kvittering"
 msgid "Reduced"
 msgstr "Reduceret"
 
+msgid "Refresh"
+msgstr "Opdater"
+
 msgid "Refunds"
 msgstr "Refusioner"
 
@@ -1628,9 +1631,6 @@ msgstr "Pool-type"
 msgid "Portraits"
 msgstr "Portrætter"
 
-msgid "Position:"
-msgstr "Position:"
-
 msgid "Preaching"
 msgstr "Prædiken"
 
@@ -2033,6 +2033,9 @@ msgstr "Kan vælges"
 msgid "Set hidden"
 msgstr "Sæt som skjult"
 
+msgid "Set loaded"
+msgstr "Markér som læsset"
+
 msgid "Set locked"
 msgstr "Sæt som låst"
 
@@ -2119,6 +2122,9 @@ msgstr "Adgangslink"
 
 msgid "Access link"
 msgstr "Adgangslink"
+
+msgid "Add to area"
+msgstr "Tilføj til område"
 
 msgid "Add to plot"
 msgstr "Tilføj til plot"
@@ -2531,6 +2537,9 @@ msgstr "Likertskala"
 msgid "Members list"
 msgstr "Medlemsliste"
 
+msgid "Move to area"
+msgstr "Flyt til område"
+
 msgid "Municipality"
 msgstr "Kommune"
 
@@ -2602,6 +2611,9 @@ msgstr "Scan QR-kode"
 
 msgid "Scroll right"
 msgstr "Rul til højre"
+
+msgid "Set deployed"
+msgstr "Markér som opstillet"
 
 msgid "Show history"
 msgstr "Vis historik"
@@ -3761,6 +3773,9 @@ msgstr "Tilmeldingsgebyr"
 
 msgid "Remove character"
 msgstr "Fjern karakter"
+
+msgid "Remove from area"
+msgstr "Fjern fra område"
 
 msgid "Remove from plot"
 msgstr "Fjern fra plot"
@@ -6114,9 +6129,6 @@ msgstr "Aktivér nye platformfunktioner"
 msgid "Already existing relationship!"
 msgstr "Relationen findes allerede!"
 
-msgid "Assign remaining stock to area"
-msgstr "Tildel resterende lager til område"
-
 msgid "Character Inventory Pool Types"
 msgstr "Pool-typer for karakterinventar"
 
@@ -7808,6 +7820,9 @@ msgstr "Administrer deltageres spørgsmål og besvar dem"
 msgid "Manage the main settings of the organization"
 msgstr "Administrer organisationens hovedindstillinger"
 
+msgid "No items have been assigned to any area yet."
+msgstr "Ingen genstande er tildelt et område endnu."
+
 msgid "No participants have been issued tokens yet."
 msgstr "Der er endnu ikke udstedt tokens til nogen deltagere."
 
@@ -7923,9 +7938,6 @@ msgstr "Påmindelse om betaling af medlemskontingent til %(event)s"
 msgid "Modify the character details to make it yours"
 msgstr "Rediger karakteroplysningerne for at gøre den til din"
 
-msgid "No items have been assigned to this area yet."
-msgstr "Der er endnu ikke tildelt genstande til dette område."
-
 msgid "No participants have been issued credits yet."
 msgstr "Der er endnu ikke udstedt kreditter til nogen deltagere."
 
@@ -8029,6 +8041,9 @@ msgstr "Anmodning om tilmelding til %(event)s af %(user)s"
 #, python-format
 msgid "Registration updated for %(event)s by %(user)s"
 msgstr "Tilmelding opdateret for %(event)s af %(user)s"
+
+msgid "Selected items will be removed from their area"
+msgstr "Valgte genstande fjernes fra deres område"
 
 msgid "Session expired, please upload the file again."
 msgstr "Sessionen er udløbet, upload venligst filen igen."
@@ -11416,6 +11431,13 @@ msgstr ""
 "En refusion på %(amount).2f %(elements)s for '%(reason)s' er blevet "
 "behandlet."
 
+msgid ""
+"Assign warehouse items to one or more areas of the event, item by item or in"
+" bulk"
+msgstr ""
+"Tildel lagergenstande til et eller flere områder i eventet, én ad gangen "
+"eller samlet"
+
 #, python-format
 msgid ""
 "Character %(character)s assigned, but exceeds the spots available for "
@@ -11913,13 +11935,6 @@ msgid ""
 msgstr ""
 "Vises på siden for tilmeldingsanmodning og tilføjes i bekræftelsesmailen for"
 " modtaget anmodning"
-
-msgid ""
-"Track all item assignments grouped by area, marking each item as loaded and "
-"deployed"
-msgstr ""
-"Følg alle genstandstildelinger grupperet efter område, og markér hver "
-"genstand som læsset og udlagt"
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -14376,6 +14391,14 @@ msgid ""
 msgstr ""
 "Disse adresser tilhører ikke en bruger, der har delt sine data med "
 "organisationen, og blev ikke tilføjet til køen:"
+
+msgid ""
+"Track all item assignments by area, marking each item as loaded and "
+"deployed; use bulk to move or remove many at once"
+msgstr ""
+"Følg alle tildelinger af genstande pr. område, og markér hver genstand som "
+"læsset og opstillet; brug masseredigering til at flytte eller fjerne mange "
+"på én gang"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "
