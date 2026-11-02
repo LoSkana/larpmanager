@@ -66,7 +66,7 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
-from larpmanager.utils.services.bulk import handle_bulk_orga_items
+from larpmanager.utils.services.bulk import handle_bulk_orga_items, handle_bulk_orga_manifest
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 
@@ -579,8 +579,10 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
     context["items"] = {}
 
     # Iterate through all warehouse item assignments for this event
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
-        "area", "item"
+    for el in (
+        get_event_elements(context["event"].id, WarehouseItemAssignment, context=context)
+        .select_related("area", "item")
+        .order_by("item__name", "area__name")
     ):
         # Check if item is already in our items dictionary
         if el.item_id not in context["items"]:
@@ -601,58 +603,24 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
 
 @login_required
 def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Generate a warehouse manifest view organized by area for an event.
+    """List all warehouse item assignments of the event in a single table, one row per item and area.
 
-    Creates a comprehensive manifest of all warehouse items assigned to this event,
-    grouped by their warehouse areas. This view serves as the central hub for
-    warehouse management, showing what items are assigned to each area and whether
-    quantities have been committed to the warehouse inventory.
-
-    The manifest displays item assignments across all areas and provides access to
-    the quantity commit functionality if enabled and not yet executed for this event.
-
-    Args:
-        request: HTTP request object containing user and session data
-        event_slug: Event slug identifier to locate the specific event
-
-    Returns:
-        HttpResponse: Rendered template with context containing:
-            - area_list: Dictionary of WarehouseArea objects with their assigned items
-            - warehouse_committed: Boolean flag indicating if quantities are committed
-            - optionals: Warehouse configuration options (quantity tracking, etc.)
-
-    Raises:
-        PermissionDenied: If user lacks orga_warehouse_manifest permission
-
+    Rows can be marked as loaded/deployed, and bulk moved to another area or removed.
+    Also exposes the quantity commit link if quantity tracking is enabled and not yet committed.
     """
-    # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
-    # Initialize area list dictionary and retrieve warehouse feature configurations
-    context["area_list"] = {}
-    get_warehouse_optionals(context, [])
+    handle_bulk_orga_manifest(request, context)
 
-    # Check if warehouse quantities have been committed for this event
-    # This flag controls UI elements for the commit functionality
+    get_warehouse_optionals(context, [])
     context["warehouse_committed"] = context["event"].get_config("warehouse_committed")
 
-    # Iterate through all warehouse item assignments for this event
-    # Group items by their assigned areas for organized manifest display
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
-        "area", "item", "item__container"
-    ):
-        # Create area entry in the list if this is the first item for this area
-        if el.area_id not in context["area_list"]:
-            context["area_list"][el.area_id] = el.area
+    context["list"] = (
+        get_event_elements(context["event"].id, WarehouseItemAssignment, context=context)
+        .select_related("area", "item", "item__container")
+        .order_by("area__name", "item__name")
+    )
 
-        # Initialize the items list attribute on the area object if needed
-        if not hasattr(context["area_list"][el.area_id], "items"):
-            context["area_list"][el.area_id].items = []
-
-        # Add this item assignment to its area's items list
-        context["area_list"][el.area_id].items.append(el)
-
-    # Render the warehouse manifest template with organized data
     return render(request, "larpmanager/orga/warehouse/manifest.html", context)
 
 
