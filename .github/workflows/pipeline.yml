@@ -125,7 +125,7 @@ jobs:
         uv pip compile -q pyproject.toml --python-version 3.12 --generate-hashes -o requirements-audit.txt
         uvx pip-audit -r requirements-audit.txt --disable-pip --strict
 
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v7
       with:
         node-version: 22
 
