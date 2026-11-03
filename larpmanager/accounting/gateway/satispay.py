@@ -361,7 +361,65 @@ def satispay_check(context: dict) -> None:
         satispay_verify(context, invoice.cod)
 
 
-def satispay_verify(context: dict, payment_code: str) -> str | None:  # noqa: PLR0911 - Multiple validation checks require multiple returns
+def _get_pending_satispay_invoice(payment_code: str) -> PaymentInvoice | None:
+    """Return the Satispay invoice still awaiting payment for the code, or None if not verifiable."""
+    try:
+        invoice = PaymentInvoice.objects.get(cod=payment_code)
+    except ObjectDoesNotExist:
+        logger.warning("Not found - invoice %s", payment_code)
+        return None
+
+    if invoice.method.slug != "satispay":
+        logger.warning("Wrong slug method - invoice %s", payment_code)
+        return None
+
+    if invoice.status != PaymentStatus.CREATED:
+        logger.warning("Already confirmed - invoice %s", payment_code)
+        return None
+
+    return invoice
+
+
+def _fetch_satispay_payment(context: dict, invoice: PaymentInvoice) -> tuple[Decimal, str] | None:
+    """Read amount and status of the invoice payment from the Satispay API.
+
+    Returns:
+        Tuple of (amount, status), or None if the response is invalid or the currency mismatches
+
+    """
+    key_id = context["satispay_key_id"]
+    rsa_key = load_key("main/satispay/private.pem")
+    response = get_payment_details(key_id, rsa_key, invoice.cod)
+
+    expected_success_code = 200
+    if response.status_code != expected_success_code:
+        return None
+
+    try:
+        payment_data = json.loads(response.content)
+        payment_amount = Decimal(str(int(payment_data["amount_unit"]))) / Decimal(str(CURRENCY_TO_CENTS_MULTIPLIER))
+        payment_status = payment_data["status"]
+        payment_currency = payment_data.get("currency")
+    except (json.JSONDecodeError, KeyError, ValueError) as e:
+        error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
+        logger.exception(error_msg)
+        notify_admins("Satispay verification JSON error", error_msg)
+        return None
+
+    expected_currency = context.get("payment_currency")
+    if expected_currency and payment_currency and payment_currency != expected_currency:
+        logger.error(
+            "Satispay Security Alert: Currency Mismatch - Expected: %s, Got: %s, Invoice: %s - REJECTED",
+            expected_currency,
+            payment_currency,
+            invoice.cod,
+        )
+        return None
+
+    return payment_amount, payment_status
+
+
+def satispay_verify(context: dict, payment_code: str) -> str | None:
     """Verify Satispay payment status and process if accepted.
 
     This function verifies a Satispay payment by checking the payment status
@@ -379,62 +437,17 @@ def satispay_verify(context: dict, payment_code: str) -> str | None:  # noqa: PL
         Only processes payments with status "ACCEPTED" from Satispay.
 
     """
-    # Initialize context and update payment details from request
     update_payment_details(context)
 
-    # Retrieve invoice by payment code, log and return if not found
-    try:
-        invoice = PaymentInvoice.objects.get(cod=payment_code)
-    except ObjectDoesNotExist:
-        logger.warning("Not found - invoice %s", payment_code)
+    invoice = _get_pending_satispay_invoice(payment_code)
+    if not invoice:
         return None
 
-    # Validate that invoice uses Satispay payment method
-    if invoice.method.slug != "satispay":
-        logger.warning("Wrong slug method - invoice %s", payment_code)
+    payment = _fetch_satispay_payment(context, invoice)
+    if not payment:
         return None
 
-    # Check if payment is still in created status (not already processed)
-    if invoice.status != PaymentStatus.CREATED:
-        logger.warning("Already confirmed - invoice %s", payment_code)
-        return None
-
-    # Load Satispay API credentials and private key for authentication
-    key_id = context["satispay_key_id"]
-    rsa_key = load_key("main/satispay/private.pem")
-
-    # Make API call to Satispay to get current payment status
-    response = get_payment_details(key_id, rsa_key, invoice.cod)
-
-    # Validate API response status code
-    expected_success_code = 200
-    if response.status_code != expected_success_code:
-        return None
-
-    # Parse response and extract payment details
-    try:
-        payment_data = json.loads(response.content)
-        payment_amount = Decimal(str(int(payment_data["amount_unit"]))) / Decimal(str(CURRENCY_TO_CENTS_MULTIPLIER))
-        payment_status = payment_data["status"]
-        payment_currency = payment_data.get("currency")
-    except (json.JSONDecodeError, KeyError, ValueError) as e:
-        error_msg = f"Failed to parse Satispay payment verification: {e}\nResponse: {response.content}"
-        logger.exception(error_msg)
-        notify_admins("Satispay verification JSON error", error_msg)
-        return None
-
-    # Verify currency if available
-    expected_currency = context.get("payment_currency")
-    if expected_currency and payment_currency and payment_currency != expected_currency:
-        logger.error(
-            "Satispay Security Alert: Currency Mismatch - Expected: %s, Got: %s, Invoice: %s - REJECTED",
-            expected_currency,
-            payment_currency,
-            invoice.cod,
-        )
-        return None
-
-    # Process payment if Satispay marked it as accepted
+    payment_amount, payment_status = payment
     if payment_status == "ACCEPTED":
         invoice_received_money(invoice.cod, payment_amount, expected_amount=invoice.mc_gross, payment_method="satispay")
 
