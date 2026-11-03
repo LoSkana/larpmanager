@@ -67,6 +67,9 @@
                 color: #555;
                 font-style: italic;
             }
+            .align-right {
+                text-align: right;
+            }
             .donation-note {
                 font-size: 8.5pt;
                 color: #444;
@@ -91,7 +94,7 @@
                 <td>
                     <span class="label-bold">Data emissione:</span> {{ accounting_item.created|date:"d/m/Y" }}
                 </td>
-                <td style="text-align: right;">
+                <td class="align-right">
                     <span class="label-bold">Importo: &euro; {{ accounting_item.value }}</span>
                 </td>
             </tr>

@@ -229,6 +229,10 @@ i.fas {
   display: inline;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 .clearer {
   clear: both;
 }

@@ -241,8 +241,8 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
     const frame = `
         <div class="frame-container">
-            <div class="frame-loading" style="display:none;"></div>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
+            <div class="frame-loading is-hidden"></div>
+            <iframe src="${iframeUrl}" width="100%"></iframe>
         </div>
     `;
 
@@ -255,7 +255,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const loading = dialog.querySelector('.frame-loading');
 
     const spinnerTimeout = setTimeout(function() {
-        if (!revealed && loading) loading.style.display = '';
+        if (!revealed && loading) loading.classList.remove('is-hidden');
     }, 500);
 
     function revealIframe() {
@@ -263,7 +263,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         revealed = true;
         clearTimeout(spinnerTimeout);
         iframe.style.visibility = 'visible';
-        if (loading) loading.style.display = 'none';
+        if (loading) loading.classList.add('is-hidden');
         if (modalClass === 'popup_edit') {
             try {
                 const iframeTitle = iframe.contentDocument && iframe.contentDocument.title;

@@ -4,7 +4,7 @@
       method="post"
       enctype="multipart/form-data">
     {% csrf_token %}
-    <select id="year" name="year" style="display:inline-block;">
+    <select id="year" name="year" class="inline-block">
         {% for y in years %}
             <option id="{{ y }}" {% if y == year %}selected="selected"{% endif %}>{{ y }}</option>
         {% endfor %}
