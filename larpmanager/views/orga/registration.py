@@ -681,8 +681,49 @@ def _get_ranking_form_list(context: dict, question: dict) -> dict[str, str]:
     }
 
 
+def _can_access_registration_question(context: dict, question: dict) -> bool:
+    """Check if the user may see answers of a question restricted to specific organizers."""
+    allowed_map = question.get("allowed_map")
+    if "reg_que_allowed" not in context["features"] or not allowed_map or not allowed_map[0]:
+        return True
+    organizer = 1 in context["all_runs"].get(context["run"].id, {})
+    return organizer or context["member"].id in allowed_map
+
+
+def _get_choice_form_list(context: dict, question: dict) -> dict[str, list[str]]:
+    """Map registration uuids to the chosen option texts of a single/multiple choice question."""
+    # Use cached options instead of DB query
+    option_texts = {opt["id"]: get_option_form_text(opt) for opt in question.get("options", [])}
+
+    # Still need to query choices as they're registration-specific
+    res = {}
+    for el in RegistrationChoice.objects.filter(
+        question_id=question["id"], registration__run=context["run"]
+    ).select_related("registration"):
+        res.setdefault(str(el.registration.uuid), []).append(option_texts[el.option_id])
+    return res
+
+
+def _get_text_form_list(context: dict, question: dict) -> tuple[dict[str, str], list[str]]:
+    """Map registration uuids to truncated text answers; also return uuids whose answer was truncated."""
+    max_length = 100
+    answers = (
+        RegistrationAnswer.objects.filter(question_id=question["id"], registration__run=context["run"])
+        .annotate(short_text=Substr("text", 1, max_length))
+        .values("registration_id", "short_text", "registration__uuid")
+    )
+    res = {}
+    popup = []
+    for el in answers:
+        answer = el["short_text"]
+        if len(answer) == max_length:
+            popup.append(el["registration__uuid"])
+        res[el["registration__uuid"]] = answer
+    return res, popup
+
+
 @login_required
-def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  # noqa: C901, PLR0912 - Complex form list management with POST handling
+def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:
     """Handle registration form list management for event organizers.
 
     Args:
@@ -698,53 +739,23 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
     q_uuid = request.POST.get("q_uuid")
 
     # Get question from cache instead of DB query
-    cached_questions = get_cached_registration_questions(context["event"].id)
-    q = None
-    for question in cached_questions:
-        if str(question["uuid"]) == str(q_uuid):
-            q = question
-            break
-
-    if not q:
+    q = next(
+        (
+            question
+            for question in get_cached_registration_questions(context["event"].id)
+            if str(question["uuid"]) == str(q_uuid)
+        ),
+        None,
+    )
+    if not q or not _can_access_registration_question(context, q):
         return None
-
-    # Check allowed permissions
-    if "reg_que_allowed" in context["features"] and q.get("allowed_map") and q["allowed_map"][0]:
-        run_id = context["run"].id
-        organizer = 1 in context["all_runs"].get(run_id, {})
-        if not organizer and context["member"].id not in q["allowed_map"]:
-            return None
 
     res = {}
     popup = []
-
-    max_length = 100
-
     if q["typ"] in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        # Use cached options instead of DB query
-        cho = {}
-        for opt in q.get("options", []):
-            cho[opt["id"]] = get_option_form_text(opt)
-
-        # Still need to query choices as they're registration-specific
-        for el in RegistrationChoice.objects.filter(
-            question_id=q["id"], registration__run=context["run"]
-        ).select_related("registration"):
-            reg_uuid = str(el.registration.uuid)
-            if reg_uuid not in res:
-                res[reg_uuid] = []
-            res[reg_uuid].append(cho[el.option_id])
-
+        res = _get_choice_form_list(context, q)
     elif q["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
-        que = RegistrationAnswer.objects.filter(question_id=q["id"], registration__run=context["run"])
-        que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("registration_id", "short_text", "registration__uuid")
-        for el in que:
-            answer = el["short_text"]
-            if len(answer) == max_length:
-                popup.append(el["registration__uuid"])
-            res[el["registration__uuid"]] = answer
-
+        res, popup = _get_text_form_list(context, q)
     elif q["typ"] == RegistrationQuestionType.RANKING:
         res = _get_ranking_form_list(context, q)
 

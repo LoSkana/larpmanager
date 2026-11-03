@@ -321,7 +321,7 @@ def _get_question_cell(question: dict, element: object, question_answers: dict, 
     return ""
 
 
-def _row_header(  # noqa: C901, PLR0912
+def _row_header(
     context: dict,
     el: object,
     header_columns: list,
@@ -351,73 +351,62 @@ def _row_header(  # noqa: C901, PLR0912
     member = None
     if model == "registration":
         member = el.member
-    # Check if character has assignment in context
-    elif model == "character" and el.id in context["assignments"]:
-        member = context["assignments"][el.id]
+    elif model == "character":
+        member = context["assignments"].get(el.id)
 
     # Add profile image column if requested
     if member_cover:
         header_columns.append("")
-        profile_url = ""
-        if member and member.profile:
-            profile_url = member.profile_thumb.url
-        row_values.append(profile_url)
+        row_values.append(member.profile_thumb.url if member and member.profile else "")
 
-    # Add character number column if writing_number config is enabled
-    if model == "character" and get_event_config(context["event"].id, "writing_number"):
+    if model == "registration":
+        _row_header_registration(context, el, member, header_columns, row_values)
+    elif model == "character":
+        _row_header_character(context, el, member, header_columns, row_values)
+
+
+def _append_member_columns(
+    member: object | None, name_header: str, email_header: str, header_columns: list, row_values: list
+) -> None:
+    """Append member display name and email columns."""
+    header_columns.extend([name_header, email_header])
+    row_values.extend([member.display_real(), member.email] if member else ["", ""])
+
+
+def _row_header_registration(
+    context: dict, el: object, member: object | None, header_columns: list, row_values: list
+) -> None:
+    """Append participant, ticket, and additional registration columns."""
+    _append_member_columns(member, "Participant", "Email", header_columns, row_values)
+
+    type_names = _get_reg_type_names(context.get("questions", []))
+    row_values.append(el.ticket.name if el.ticket is not None else "")
+    header_columns.append(type_names.get("ticket", _("Ticket")))
+
+    _header_regs(context, el, header_columns, row_values, type_names)
+
+
+def _row_header_character(
+    context: dict, el: object, member: object | None, header_columns: list, row_values: list
+) -> None:
+    """Append number, player, status, and assigned columns based on enabled features and configs."""
+    features = context.get("features", {})
+
+    if get_event_config(context["event"].id, "writing_number"):
         header_columns.append("number")
         row_values.append(el.number)
 
-    # Add participant and email columns for registrations
-    if model == "registration":
-        # Add participant display name
-        header_columns.append("Participant")
-        display_name = ""
-        if member:
-            display_name = member.display_real()
-        row_values.append(display_name)
+    # Player columns if character creation is active
+    if "user_character" in features:
+        _append_member_columns(member, "player_name", "player", header_columns, row_values)
 
-        # Add participant email
-        header_columns.append("Email")
-        email_address = ""
-        if member:
-            email_address = member.email
-        row_values.append(email_address)
-
-    # Add player name and email columns for characters if character creation is active
-    elif model == "character" and "user_character" in context.get("features", {}):
-        header_columns.append("player_name")
-        player_name = ""
-        if member:
-            player_name = member.display_real()
-        row_values.append(player_name)
-
-        header_columns.append("player")
-        player_email = ""
-        if member:
-            player_email = member.email
-        row_values.append(player_email)
-
-    # Add status column if character approval is enabled
-    if model == "character" and context.get("user_character_approval", False):
+    if context.get("user_character_approval", False):
         header_columns.append("status")
         row_values.append(el.status if hasattr(el, "status") else "")
 
-    # Add assigned orga email if assigned feature is enabled
-    if model == "character" and "assigned" in context.get("features", {}):
+    if "assigned" in features:
         header_columns.append("assigned")
         row_values.append(el.assigned.user.email if el.assigned else "")
-
-    # Add registration-specific columns
-    if model == "registration":
-        type_names = _get_reg_type_names(context.get("questions", []))
-
-        # Add ticket information
-        row_values.append(el.ticket.name if el.ticket is not None else "")
-        header_columns.append(type_names.get("ticket", _("Ticket")))
-
-        # Process additional registration headers
-        _header_regs(context, el, header_columns, row_values, type_names)
 
 
 def _expand_val(values: list, element: object, field_name: str) -> None:

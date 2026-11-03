@@ -610,7 +610,7 @@ def request_signup(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/request_signup.html", context)
 
 
-def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:  # noqa: PLR0911
+def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -620,7 +620,6 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
     Args:
         request: Django HTTP request object containing user and session data
         context: Context dictionary containing event, run data, features, and tier info
-        event: Event model instance being registered for
         secret_code: Optional secret code for registration access, None if not provided
 
     Returns:
@@ -646,6 +645,11 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
         # Secret code is correct, allow registration bypassing other checks
         return None
 
+    return _check_registration_status(request, context)
+
+
+def _check_registration_status(request: HttpRequest, context: dict) -> HttpResponse | None:
+    """Return the redirect or error page matching the run registration status, None if registration is open."""
     # Get registration status from run
     registration_status = context["run"].registration_status
 

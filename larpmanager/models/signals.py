@@ -334,7 +334,7 @@ from larpmanager.utils.io.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
-from larpmanager.utils.larpmanager.tasks import notify_admins
+from larpmanager.utils.larpmanager.tasks import events_detached, notify_admins
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.publication.base import (
     publish_event,
@@ -936,6 +936,14 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Schedule event publication (skip if being soft-deleted)
     if instance.deleted is None:
         publish_event(instance.id)
+
+
+@receiver(events_detached, sender=Event)
+def on_events_detached(sender: type, event_ids: list[int], **kwargs: Any) -> None:
+    """Clear caches of events detached from a deleted parent."""
+    for event_id in event_ids:
+        reset_event_basic_cache(event_id)
+        clear_event_cache_all_runs(event_id)
 
 
 @receiver(post_save, sender=EmailSuppression)

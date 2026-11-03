@@ -44,6 +44,7 @@ from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.utils.security import normalize_filename
 
 if TYPE_CHECKING:
@@ -233,8 +234,6 @@ class UploadToPathAndRename:
         if hasattr(instance, "event") and instance.event:
             path = str(Path(path) / instance.event.slug)
         if hasattr(instance, "run_id") and instance.run_id:
-            from larpmanager.cache.basic import get_run_basic_cache  # noqa: PLC0415
-
             run_cache = get_run_basic_cache(instance.run_id)
             path = str(Path(path) / run_cache["slug"] / str(run_cache["number"]))
         if hasattr(instance, "album") and instance.album:

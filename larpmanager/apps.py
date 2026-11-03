@@ -35,8 +35,8 @@ class LarpManagerConfig(AppConfig):
         # apps.py is imported while Django is still populating the app registry
         # (AppConfig.create), and django_otp.admin transitively imports
         # django.contrib.auth.models, which needs the registry fully ready.
-        from django.contrib import admin  # noqa: PLC0415
+        from django.contrib import admin
 
-        from larpmanager.utils.auth.otp import LarpManagerOTPAdminSite  # noqa: PLC0415
+        from larpmanager.utils.auth.otp import LarpManagerOTPAdminSite
 
         admin.site.__class__ = LarpManagerOTPAdminSite

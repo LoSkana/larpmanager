@@ -57,7 +57,7 @@ from larpmanager.utils.services.demo import add_demo_hint_context
 MAX_DEMO_REGISTRATIONS = 10
 
 
-def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:  # noqa: C901 - Complex context building with feature checks
+def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     """Build context with commonly used elements.
 
     Constructs a comprehensive context dictionary containing user information,
@@ -95,16 +95,9 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     if hasattr(request, "user") and hasattr(request.user, "member"):
         context["member"] = request.user.member
 
+    _check_main_site_access(request, context, check_main_site=check_main_site)
     if context["association_id"] == 0:
-        if not check_main_site:
-            if context["member"]:
-                user_associations = [membership.association for membership in context["member"].memberships.all()]
-                raise MembershipError(user_associations)
-            raise MembershipError
         return context
-
-    if check_main_site:
-        raise MainPageError(request)
 
     # Add cached event links to context
     cache_event_links(request, context)
@@ -131,20 +124,38 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     if context.get("demo") and context.get("request_func_name"):
         add_demo_hint_context(request, context)
 
-    # Check if intro driver tutorial should be shown for this association
-    if context["member"] and context["association_id"]:
-        intro_value = get_association_config(context["association_id"], "intro_driver")
-        if intro_value:
-            context["intro_driver"] = intro_value
-            AssociationConfig.objects.filter(
-                association_id=context["association_id"],
-                name="intro_driver",
-            ).delete()
+    _add_intro_driver(context)
 
     # Set sidebar state from user session
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     return context
+
+
+def _check_main_site_access(request: HttpRequest, context: dict, *, check_main_site: bool) -> None:
+    """Raise if the page is requested on the wrong site (main site vs association site)."""
+    if context["association_id"] != 0:
+        if check_main_site:
+            raise MainPageError(request)
+        return
+
+    if check_main_site:
+        return
+    if context["member"]:
+        user_associations = [membership.association for membership in context["member"].memberships.all()]
+        raise MembershipError(user_associations)
+    raise MembershipError
+
+
+def _add_intro_driver(context: dict) -> None:
+    """Show the intro driver tutorial once, consuming its association config."""
+    if not context["member"] or not context["association_id"]:
+        return
+    intro_value = get_association_config(context["association_id"], "intro_driver")
+    if not intro_value:
+        return
+    context["intro_driver"] = intro_value
+    AssociationConfig.objects.filter(association_id=context["association_id"], name="intro_driver").delete()
 
 
 def get_context_member(request: HttpRequest, context: dict) -> None:

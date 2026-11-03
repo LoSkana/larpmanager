@@ -162,7 +162,22 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple security checks require multiple returns
+def _valid_sumup_signature(request: HttpRequest, webhook_secret: str) -> bool:
+    """Check the webhook HMAC-SHA256 signature header against the request body."""
+    signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
+    if not signature_header:
+        logger.error("SumUp webhook: Missing signature header")
+        return False
+
+    expected_signature = hmac.new(webhook_secret.encode("utf-8"), request.body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature_header, expected_signature):
+        logger.error("SumUp webhook: Invalid signature. Expected: %s, Got: %s", expected_signature, signature_header)
+        return False
+
+    return True
+
+
+def sumup_webhook(request: HttpRequest) -> bool:
     """Handle SumUp webhook notifications for payment processing.
 
     Processes incoming webhook requests from SumUp payment gateway,
@@ -183,22 +198,8 @@ def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple sec
 
     # Verify HMAC signature if configured
     sumup_webhook_secret = context.get("sumup_webhook_secret")
-    if sumup_webhook_secret:
-        # Get signature from headers
-        signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
-        if not signature_header:
-            logger.error("SumUp webhook: Missing signature header")
-            return False
-
-        # Compute expected signature using HMAC-SHA256
-        expected_signature = hmac.new(sumup_webhook_secret.encode("utf-8"), request.body, hashlib.sha256).hexdigest()
-
-        # Verify signature matches
-        if not hmac.compare_digest(signature_header, expected_signature):
-            logger.error(
-                "SumUp webhook: Invalid signature. Expected: %s, Got: %s", expected_signature, signature_header
-            )
-            return False
+    if sumup_webhook_secret and not _valid_sumup_signature(request, sumup_webhook_secret):
+        return False
 
     # Parse the JSON payload from the webhook request body
     try:

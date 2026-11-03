@@ -64,7 +64,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def my_send_digest_email(  # noqa: C901
+def my_send_digest_email(
     member: Member,
     run: Run,
     instance: Any,
@@ -90,62 +90,73 @@ def my_send_digest_email(  # noqa: C901
     Returns:
         None
     """
-    should_queue = get_member_config(member.pk, "mail_orga_digest")
-
-    # Check if this organizer has enabled digest mode for their notifications
-    if should_queue:
+    # Digest mode enabled: queue for daily summary
+    if get_member_config(member.pk, "mail_orga_digest"):
         object_id = getattr(instance, "id", None) or 0
-        # Queue notification for daily digest summary for this specific organizer
         queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
-    else:
-        # Activate organizer's preferred language
-        activate(member.language)
+        return
 
-        # Determine which email generator to use based on notification type
-        if notification_type == NotificationType.REGISTRATION_NEW:
-            email_context = {"event": instance.run, "user": instance.member}
-            subject, body = get_registration_new_organizer_email(instance, email_context)
+    generator = _get_run_notification_generator(notification_type)
+    if generator is None:
+        msg = f"Unknown notification type: {notification_type}"
+        raise ValueError(msg)
 
-        elif notification_type == NotificationType.REGISTRATION_UPDATE:
-            email_context = {"event": instance.run, "user": instance.member}
-            subject, body = get_registration_update_organizer_email(instance, email_context)
+    activate(member.language)
+    subject, body = generator(instance, run)
+    my_send_mail(subject, body, member, instance)
 
-        elif notification_type == NotificationType.REGISTRATION_CANCEL:
-            email_context = {"event": instance.run, "user": instance.member}
-            subject, body = get_registration_cancel_organizer_email(instance, email_context)
 
-        elif notification_type == NotificationType.REGISTRATION_REQUEST_NEW:
-            email_context = {"event": instance.run, "user": instance.member}
-            subject, body = get_registration_request_new_organizer_email(instance, email_context)
+def _registration_email(email_function: callable) -> callable:
+    """Wrap a registration organizer email generator to build its context."""
 
-        elif notification_type == NotificationType.PAYMENT_MONEY:
-            currency_symbol = get_run_basic_cache(run.id)["currency_symbol"]
-            subject, body = get_pay_money_email(currency_symbol, instance, run)
-            subject += _(" for %(user)s") % {"user": instance.registration.member}
+    def generate(instance: Any, _run: Run) -> tuple[str, str]:
+        return email_function(instance, {"event": instance.run, "user": instance.member})
 
-        elif notification_type == NotificationType.PAYMENT_CREDIT:
-            tokens_name, credits_name = get_token_credit_name(get_run_association_id(run.id))
-            subject, body = get_pay_credit_email(credits_name, instance, run)
-            subject += _(" for %(user)s") % {"user": instance.registration.member}
+    return generate
 
-        elif notification_type == NotificationType.PAYMENT_TOKEN:
-            tokens_name, credits_name = get_token_credit_name(get_run_association_id(run.id))
-            subject, body = get_pay_token_email(instance, run, tokens_name)
-            subject += _(" for %(user)s") % {"user": instance.registration.member}
 
-        elif notification_type == NotificationType.INVOICE_APPROVAL:
-            subject, body = get_invoice_email(instance)
+def _payment_email(email_function: callable) -> callable:
+    """Wrap a payment email generator appending the paying member to the subject."""
 
-        elif notification_type == NotificationType.CHARACTER_OPTION_FULL:
-            subject, body = get_character_full_options_organizer_email(instance, run)
+    def generate(instance: Any, run: Run) -> tuple[str, str]:
+        subject, body = email_function(instance, run)
+        subject += _(" for %(user)s") % {"user": instance.registration.member}
+        return subject, body
 
-        else:
-            # This should never happen, but just in case
-            msg = f"Unknown notification type: {notification_type}"
-            raise ValueError(msg)
+    return generate
 
-        # Send the email to this organizer
-        my_send_mail(subject, body, member, instance)
+
+def _pay_money(instance: Any, run: Run) -> tuple[str, str]:
+    """Build payment money email for organizers."""
+    return get_pay_money_email(get_run_basic_cache(run.id)["currency_symbol"], instance, run)
+
+
+def _pay_credit(instance: Any, run: Run) -> tuple[str, str]:
+    """Build payment credit email for organizers."""
+    _tokens_name, credits_name = get_token_credit_name(get_run_association_id(run.id))
+    return get_pay_credit_email(credits_name, instance, run)
+
+
+def _pay_token(instance: Any, run: Run) -> tuple[str, str]:
+    """Build payment token email for organizers."""
+    tokens_name, _credits_name = get_token_credit_name(get_run_association_id(run.id))
+    return get_pay_token_email(instance, run, tokens_name)
+
+
+def _get_run_notification_generator(notification_type: str) -> callable | None:
+    """Get email generator (instance, run) -> (subject, body) for run-level notifications."""
+    generators = {
+        NotificationType.REGISTRATION_NEW: _registration_email(get_registration_new_organizer_email),
+        NotificationType.REGISTRATION_UPDATE: _registration_email(get_registration_update_organizer_email),
+        NotificationType.REGISTRATION_CANCEL: _registration_email(get_registration_cancel_organizer_email),
+        NotificationType.REGISTRATION_REQUEST_NEW: _registration_email(get_registration_request_new_organizer_email),
+        NotificationType.PAYMENT_MONEY: _payment_email(_pay_money),
+        NotificationType.PAYMENT_CREDIT: _payment_email(_pay_credit),
+        NotificationType.PAYMENT_TOKEN: _payment_email(_pay_token),
+        NotificationType.INVOICE_APPROVAL: lambda instance, _run: get_invoice_email(instance),
+        NotificationType.CHARACTER_OPTION_FULL: get_character_full_options_organizer_email,
+    }
+    return generators.get(notification_type)
 
 
 def _get_association_notification_generator(notification_type: str) -> callable:
