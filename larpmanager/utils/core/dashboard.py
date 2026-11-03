@@ -290,7 +290,80 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             )
 
 
-def _orga_actions_priorities(context: dict, features: dict) -> None:  # noqa: C901 - Complex priority determination logic
+def _orga_feature_dependency_priorities(context: dict, features: dict, actions_data: dict) -> None:
+    """Add priorities for missing first character and for features whose dependencies are not active."""
+    if "character" in features:
+        # Prompt to create first character if none exist
+        if not actions_data.get("has_characters", False):
+            _add_priority(context, _("Create the first character of the event"), "orga_characters")
+    elif set(features) & {
+        "faction",
+        "plot",
+        "casting",
+        "user_character",
+        "experience",
+        "custom_character",
+        "questbuilder",
+    }:
+        _add_priority(context, _("Some features require 'Character', which is not active"), "orga_features")
+
+    if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
+        _add_priority(context, _("Some features require 'Credits', which is not active"), "orga_features")
+
+
+def _add_count_action(context: dict, actions_data: dict, key: str, message: str, view: str, **extra: Any) -> None:
+    """Add an action for a pending element count from cached actions data, if non zero."""
+    count = actions_data.get(key, {}).get("count", 0)
+    if count > 0:
+        _add_action(context, message % {"number": count, **extra}, view, count=count)
+
+
+def _orga_pending_approval_actions(context: dict, actions_data: dict) -> None:
+    """Add actions for elements pending organizer approval."""
+    _add_count_action(
+        context, actions_data, "proposed_characters", _("<b>%(number)s</b> characters to approve"), "orga_characters"
+    )
+
+    # Expense approvals only if not disabled for organizers
+    if not get_association_config(context["event"].association_id, "expense_disable_orga", context=context):
+        _add_count_action(
+            context, actions_data, "pending_expenses", _("<b>%(number)s</b> expenses to approve"), "orga_expenses"
+        )
+
+    _add_count_action(
+        context,
+        actions_data,
+        "pending_registration_requests",
+        _("<b>%(number)s</b> signup requests to approve"),
+        "orga_registration_requests",
+    )
+
+    _add_count_action(
+        context,
+        actions_data,
+        "pending_invoices_registration",
+        _("<b>%(number)s</b> %(label)s to approve"),
+        "orga_payments",
+        label=_("payments"),
+    )
+
+
+def _orga_incomplete_questions_priorities(context: dict, actions_data: dict) -> None:
+    """Add priorities for registration and writing questions missing their options."""
+    for key, message, view in (
+        (
+            "registration_questions_incomplete",
+            _("Registration questions without options: %(list)s"),
+            "orga_registration_form",
+        ),
+        ("writing_questions_incomplete", _("Writing fields without options: %(list)s"), "orga_character_form"),
+    ):
+        incomplete = actions_data.get(key, {})
+        if incomplete.get("count", 0) > 0:
+            _add_priority(context, message % {"list": ", ".join(incomplete["names"])}, view)
+
+
+def _orga_actions_priorities(context: dict, features: dict) -> None:
     """Determine priority actions for event organizers based on event state.
 
     Analyzes event features and configuration to suggest next steps in
@@ -313,98 +386,11 @@ def _orga_actions_priorities(context: dict, features: dict) -> None:  # noqa: C9
     # Get cached actions data
     actions_data = get_orga_widget_cache(context["run"], "actions")
 
-    # Check if character feature is properly configured
-    if "character" in features:
-        # Prompt to create first character if none exist
-        if not actions_data.get("has_characters", False):
-            _add_priority(
-                context,
-                _("Create the first character of the event"),
-                "orga_characters",
-            )
-    # Check for feature dependencies on character feature
-    elif set(features) & {
-        "faction",
-        "plot",
-        "casting",
-        "user_character",
-        "experience",
-        "custom_character",
-        "questbuilder",
-    }:
-        _add_priority(
-            context,
-            _("Some features require 'Character', which is not active"),
-            "orga_features",
-        )
+    _orga_feature_dependency_priorities(context, features, actions_data)
 
-    # Check for features that depend on credits
-    if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
-        _add_priority(
-            context,
-            _("Some features require 'Credits', which is not active"),
-            "orga_features",
-        )
+    _orga_pending_approval_actions(context, actions_data)
 
-    # Check for pending character approvals
-    if actions_data.get("proposed_characters", {}).get("count", 0) > 0:
-        _add_action(
-            context,
-            _("<b>%(number)s</b> characters to approve") % {"number": actions_data["proposed_characters"]["count"]},
-            "orga_characters",
-            count=actions_data["proposed_characters"]["count"],
-        )
-
-    # Check for pending expense approvals (if not disabled for organizers)
-    if (
-        not get_association_config(context["event"].association_id, "expense_disable_orga", context=context)
-        and actions_data.get("pending_expenses", {}).get("count", 0) > 0
-    ):
-        _add_action(
-            context,
-            _("<b>%(number)s</b> expenses to approve") % {"number": actions_data["pending_expenses"]["count"]},
-            "orga_expenses",
-            count=actions_data["pending_expenses"]["count"],
-        )
-
-    # Check for pending signup requests awaiting approval
-    if actions_data.get("pending_registration_requests", {}).get("count", 0) > 0:
-        _add_action(
-            context,
-            _("<b>%(number)s</b> signup requests to approve")
-            % {"number": actions_data["pending_registration_requests"]["count"]},
-            "orga_registration_requests",
-            count=actions_data["pending_registration_requests"]["count"],
-        )
-
-    # Check for pending registration invoice approvals
-    if actions_data.get("pending_invoices_registration", {}).get("count", 0) > 0:
-        _add_action(
-            context,
-            _("<b>%(number)s</b> %(label)s to approve")
-            % {"number": actions_data["pending_invoices_registration"]["count"], "label": _("payments")},
-            "orga_payments",
-            count=actions_data["pending_invoices_registration"]["count"],
-        )
-
-    # Check for incomplete registration form questions (missing options)
-    if actions_data.get("registration_questions_incomplete", {}).get("count", 0) > 0:
-        registration_questions_without_options = actions_data["registration_questions_incomplete"]["names"]
-        _add_priority(
-            context,
-            _("Registration questions without options: %(list)s")
-            % {"list": ", ".join(registration_questions_without_options)},
-            "orga_registration_form",
-        )
-
-    # Check for incomplete writing form questions (missing options)
-    if actions_data.get("writing_questions_incomplete", {}).get("count", 0) > 0:
-        writing_questions_without_options = actions_data["writing_questions_incomplete"]["names"]
-        _add_priority(
-            context,
-            _("Writing fields without options: %(list)s") % {"list": ", ".join(writing_questions_without_options)},
-            "orga_character_form",
-        )
+    _orga_incomplete_questions_priorities(context, actions_data)
 
     # Delegate to sub-functions for additional action checks
     _orga_user_actions(context, features, actions_data)
@@ -837,48 +823,25 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
     return reverse(view_name, args=[context["run"].get_slug()])
 
 
-def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901, PLR0912 - Complex dashboard compilation with feature-dependent sections
+def _compile(request: HttpRequest, context: dict) -> None:
     """Compile management dashboard with suggestions, actions, and priorities."""
     section_names = ["priorities"]
     if not context.get("lite_mode"):
         section_names.extend(["suggestions", "actions"])
-    all_sections_empty = True
     for section_name in section_names:
         context[section_name] = []
-        if f"{section_name}_list" in context:
-            all_sections_empty = False
 
-    if all_sections_empty:
+    # Only sections that collected at least one item
+    filled_sections = [section_name for section_name in section_names if f"{section_name}_list" in context]
+    if not filled_sections:
         return
 
-    permission_cache = {}
-    permission_slug_list = []
-    for section_name in section_names:
-        if f"{section_name}_list" not in context:
-            continue
-
-        permission_slug_list.extend(
-            [
-                slug
-                for _name, slug, _url, _count in context[f"{section_name}_list"]
-                if _has_permission(request, context, slug)
-            ],
-        )
-
-    for permission_model in (EventPermission, AssociationPermission):
-        permission_queryset = permission_model.objects.filter(slug__in=permission_slug_list).select_related("feature")
-        for slug, permission_name, tutorial, icon in permission_queryset.values_list(
-            "slug", "name", "feature__tutorial", "icon"
-        ):
-            permission_cache[slug] = (permission_name, tutorial, icon)
+    permission_cache = _get_dashboard_permission_cache(request, context, filled_sections)
 
     # Aggregate pending element counts per permission slug for the sidebar badges
     sidebar_badges = context.setdefault("sidebar_badges", {})
 
-    for section_name in section_names:
-        if f"{section_name}_list" not in context:
-            continue
-
+    for section_name in filled_sections:
         for text, slug, custom_link, count in context[f"{section_name}_list"]:
             if slug not in permission_cache:
                 continue
@@ -893,3 +856,24 @@ def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901, PLR091
             # (informational hints) and setup priorities without a count are excluded
             if count and section_name in ("priorities", "actions"):
                 sidebar_badges[slug] = sidebar_badges.get(slug, 0) + count
+
+
+def _get_dashboard_permission_cache(
+    request: HttpRequest, context: dict, section_names: list[str]
+) -> dict[str, tuple[str, str, str]]:
+    """Map each permission slug the user can access in the sections to (name, tutorial, icon)."""
+    permission_slug_list = [
+        slug
+        for section_name in section_names
+        for _name, slug, _url, _count in context[f"{section_name}_list"]
+        if _has_permission(request, context, slug)
+    ]
+
+    permission_cache = {}
+    for permission_model in (EventPermission, AssociationPermission):
+        permission_queryset = permission_model.objects.filter(slug__in=permission_slug_list).select_related("feature")
+        for slug, permission_name, tutorial, icon in permission_queryset.values_list(
+            "slug", "name", "feature__tutorial", "icon"
+        ):
+            permission_cache[slug] = (permission_name, tutorial, icon)
+    return permission_cache

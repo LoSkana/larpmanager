@@ -535,7 +535,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return True
         return False
 
-    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket | dict) -> bool:  # noqa: C901 - Complex ticket eligibility logic
+    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket | dict) -> bool:
         """Determine if a ticket type should be skipped for the current member.
 
         This method checks various conditions to determine whether a specific ticket
@@ -566,41 +566,32 @@ class RegistrationForm(BaseRegistrationForm):
         if "ticket" in self.params and self.params["ticket"] == str(ticket_uuid):
             return False
 
-        result = False
-
         # Hide new player tickets if member has previous non-waiting/staff/npc registrations
         if ticket_tier == TicketTier.NEW_PLAYER:
-            past_regs = Registration.objects.filter(cancellation_date__isnull=True)
-            past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
-            past_regs = past_regs.filter(member=self.params["member"]).exclude(run=run)
-            if past_regs.exists():
-                result = True
+            return self._has_past_registrations(run)
 
         # Show waiting tickets only if run allows waiting or member already has waiting ticket
-        elif ticket_tier == TicketTier.WAITING:
-            if "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING):
-                result = True
+        if ticket_tier == TicketTier.WAITING:
+            return "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING)
 
-        # Handle filler ticket visibility based on event config and member status
-        elif ticket_tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", context=self.params)
-            if filler_alway:
-                # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
-                if (
-                    "filler" not in self.run_status
-                    and "primary" not in self.run_status
-                    and not self.has_ticket(TicketTier.FILLER)
-                ):
-                    result = True
-            # Without filler_always, show only if run supports filler or member has filler ticket
-            elif "filler" not in self.run_status and not self.has_ticket(TicketTier.FILLER):
-                result = True
+        # Show filler tickets only if run supports filler (or primary, with filler_always) or member has filler ticket
+        if ticket_tier == TicketTier.FILLER:
+            allowed_status = {"filler"}
+            if get_event_config(event.id, "filler_always", context=self.params):
+                allowed_status.add("primary")
+            return not (allowed_status & set(self.run_status)) and not self.has_ticket(TicketTier.FILLER)
 
         # Show primary tickets only if run supports primary registration or member has primary ticket
-        elif "primary" not in self.run_status and not self.has_ticket_primary():
-            result = True
+        return "primary" not in self.run_status and not self.has_ticket_primary()
 
-        return result
+    def _has_past_registrations(self, run: Run) -> bool:
+        """Check if member has active registrations to other runs, excluding waiting/staff/npc tickets."""
+        return (
+            Registration.objects.filter(cancellation_date__isnull=True, member=self.params["member"])
+            .exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
+            .exclude(run=run)
+            .exists()
+        )
 
     def clean(self) -> dict:
         """Validate form data and check for valid friend codes."""

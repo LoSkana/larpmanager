@@ -13215,9 +13215,6 @@ msgstr ""
 msgid "Not signed up"
 msgstr ""
 
-msgid "Place of birth not included in the ISTAT list"
-msgstr ""
-
 msgid "One symbol more or less than expected"
 msgstr ""
 
@@ -13236,6 +13233,9 @@ msgid "Symbols for place of birth do not match (check exact municipality)"
 msgstr ""
 
 msgid "Symbols for date of birth do not match (check exact date)"
+msgstr ""
+
+msgid "Place of birth not included in the ISTAT list"
 msgstr ""
 
 msgid "Registration completed successfully!"

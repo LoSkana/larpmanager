@@ -114,7 +114,7 @@ def _status_membership_fee(
     return True
 
 
-def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration status logic with feature checks
+def registration_status_signed(
     run: Run,
     registration: Registration,
     member: Member,
@@ -178,44 +178,11 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     registration_text = registration_message
     run_status["text_long"] = registration_message_long
     run_status["url"] = register_url
-
-    # Handle membership feature requirements and status checks
-    if "membership" in features:
-        # Check for revoked membership status and raise error
-        if user_membership.status == MembershipStatus.REWOKED:
-            raise RewokedMembershipError
-
-        # Handle incomplete membership applications (empty, joined, uploaded)
-        if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
-            membership_url = reverse("membership")
-            run_status["text"] = registration_text
-            run_status["status_type"] = "action_needed"
-            run_status["action"] = {
-                "url": membership_url,
-                "label": _("Upload membership application"),
-                "label_long": _(
-                    "Fill in and upload your membership application, needed before you can pay for your registration"
-                ),
-            }
-            run_status["can_pay"] = False
-            return
-
-        # Handle pending membership approval (submitted but not approved)
-        if user_membership.status == MembershipStatus.SUBMITTED:
-            run_status["text"] = registration_text
-            run_status["status_type"] = "pending"
-            run_status["action"] = {
-                "label": _("Pending approval"),
-                "label_long": _(
-                    "Your membership application is being reviewed by the organization. "
-                    "Payment will be available once it has been approved."
-                ),
-            }
-            run_status["can_pay"] = False
-            return
-
-    # Set base text before payment check (may be overridden for submitted/wire cases)
     run_status["text"] = registration_text
+
+    # Membership application must be completed and approved before anything else
+    if "membership" in features and _status_membership_application(user_membership, run_status):
+        return
 
     # Check payment status and return if payment handling is complete
     if "payment" in features and _status_payment(register_url, registration, run_status, context):
@@ -227,32 +194,72 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     ):
         return
 
-    # Check for incomplete user profile and prompt completion
-    if not user_membership.compiled:
-        profile_url = reverse("profile")
-        run_status["text"] = registration_text
+    _status_profile_or_provisional(
+        registration, user_membership, run_status, registration_text, is_provisional=is_provisional
+    )
+
+
+def _status_membership_application(user_membership: Membership, run_status: dict) -> bool:
+    """Set status for membership applications not yet approved; return True if handled."""
+    if user_membership.status == MembershipStatus.REWOKED:
+        raise RewokedMembershipError
+
+    # Incomplete membership applications (empty, joined, uploaded)
+    if user_membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
         run_status["status_type"] = "action_needed"
         run_status["action"] = {
-            "url": profile_url,
+            "url": reverse("membership"),
+            "label": _("Upload membership application"),
+            "label_long": _(
+                "Fill in and upload your membership application, needed before you can pay for your registration"
+            ),
+        }
+        run_status["can_pay"] = False
+        return True
+
+    # Submitted but not approved
+    if user_membership.status == MembershipStatus.SUBMITTED:
+        run_status["status_type"] = "pending"
+        run_status["action"] = {
+            "label": _("Pending approval"),
+            "label_long": _(
+                "Your membership application is being reviewed by the organization. "
+                "Payment will be available once it has been approved."
+            ),
+        }
+        run_status["can_pay"] = False
+        return True
+
+    return False
+
+
+def _status_profile_or_provisional(
+    registration: Registration,
+    user_membership: Membership,
+    run_status: dict,
+    registration_text: str,
+    *,
+    is_provisional: bool,
+) -> None:
+    """Set final status: prompt profile completion, provisional payment, or confirmed."""
+    run_status["text"] = registration_text
+
+    if not user_membership.compiled:
+        run_status["status_type"] = "action_needed"
+        run_status["action"] = {
+            "url": reverse("profile"),
             "label": _("Complete your profile"),
             "label_long": _("Fill in the missing information in your profile to complete your registration"),
         }
         return
 
-    # Handle provisional registration status
     if is_provisional:
-        payment_url = reverse("accounting_registration", args=[registration.uuid])
-        run_status["text"] = registration_text
         run_status["status_type"] = "provisional"
         run_status["action"] = {
-            "url": payment_url,
+            "url": reverse("accounting_registration", args=[registration.uuid]),
             "label": _("Proceed with payment"),
             "label_long": _("Your registration is provisional: complete the payment to confirm your spot"),
         }
-        return
-
-    # Set final confirmed registration status for completed registrations
-    run_status["text"] = registration_text
 
 
 def _registration_messages(

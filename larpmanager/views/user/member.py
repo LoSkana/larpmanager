@@ -42,6 +42,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
+from django.db.models import Prefetch
 from django.http import (
     Http404,
     HttpRequest,
@@ -641,8 +642,30 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
     return render(request, "pdf/membership/request.html", context)
 
 
+def _get_public_larp_history(member: Member, association_id: int) -> list[Registration]:
+    """Return member's active registrations in the association, each with its characters (uuid -> name)."""
+    registrations = list(
+        Registration.objects.filter(
+            cancellation_date__isnull=True,
+            member=member,
+            run__event__association_id=association_id,
+        )
+        .order_by("-run__end")
+        .select_related("run", "run__event")
+        .prefetch_related(Prefetch("rcrs", queryset=RegistrationCharacterRel.objects.select_related("character")))
+    )
+    for registration in registrations:
+        # Use custom name if available, otherwise use character name
+        registration.chars = {
+            rcr.character.uuid: rcr.custom_name or rcr.character.name
+            for rcr in registration.rcrs.all()
+            if rcr.character
+        }
+    return registrations
+
+
 @login_required
-def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
+def public(request: HttpRequest, slug: str) -> HttpResponse:
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -674,39 +697,16 @@ def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Com
 
     # Add badges if badge feature is enabled for association
     if "badge" in context["features"]:
-        context["badges"] = []
-        for badge in (
-            context["member_public"].badges.filter(association_id=context["association_id"]).order_by("number")
-        ):
-            context["badges"].append(badge.show())
+        context["badges"] = [
+            badge.show()
+            for badge in context["member_public"]
+            .badges.filter(association_id=context["association_id"])
+            .order_by("number")
+        ]
 
     # Add LARP history if enabled in association configuration
-    association_id = context["association_id"]
-    if get_association_config(association_id, "player_larp_history"):
-        # Fetch registrations with related run and event data
-        context["regs"] = (
-            Registration.objects.filter(
-                cancellation_date__isnull=True,
-                member=context["member_public"],
-                run__event__association_id=context["association_id"],
-            )
-            .order_by("-run__end")
-            .select_related("run", "run__event")
-            .prefetch_related("rcrs")
-        )
-
-        # Process character information for each registration
-        for el in context["regs"]:
-            el.chars = {}
-
-            for rcr in el.rcrs.select_related("character").all():
-                if not rcr.character:
-                    continue
-                # Use custom name if available, otherwise use character name
-                name = rcr.character.name
-                if rcr.custom_name:
-                    name = rcr.custom_name
-                el.chars[rcr.character.uuid] = name
+    if get_association_config(context["association_id"], "player_larp_history"):
+        context["regs"] = _get_public_larp_history(context["member_public"], context["association_id"])
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()

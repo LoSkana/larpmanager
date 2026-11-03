@@ -553,7 +553,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: C901 - Complex form initialization with dynamic field setup
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -566,26 +566,7 @@ class ProfileForm(BaseProfileForm):
         """
         super().__init__(*args, **kwargs)
 
-        # Batch process mandatory field updates
-        mandatory_asterisk = " (*)"
-        fields_to_update = {}
-
-        # Process mandatory fields
-        for field_name in self.fields:
-            if field_name in self.mandatory:
-                field = self.fields[field_name]
-                field.required = True
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Process always-required fields
-        for field_name in ["name", "surname"]:
-            if field_name in self.fields:
-                field = self.fields[field_name]
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Apply all label updates at once
-        for field_name, new_label in fields_to_update.items():
-            self.fields[field_name].label = new_label
+        self._mark_mandatory_fields()
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
@@ -596,22 +577,11 @@ class ProfileForm(BaseProfileForm):
                 self.delete_field("presentation")
 
         # Set default values
-        initial_defaults = {}
-        if "phone_contact" not in self.initial:
-            initial_defaults["phone_contact"] = "+XX"
-        if "birth_date" not in self.initial:
-            initial_defaults["birth_date"] = "00/00/0000"
+        self.initial.setdefault("phone_contact", "+XX")
+        self.initial.setdefault("birth_date", "00/00/0000")
 
-        # Apply initial values in batch
-        self.initial.update(initial_defaults)
-
-        # Membership checking
-        share = False
-        if self.instance.pk:
-            membership = self.params.get("membership")
-            share = membership.compiled
-
-        # Add consent field only if needed
+        # Add consent field only if membership data not yet compiled
+        share = self.instance.pk and self.params.get("membership").compiled
         if not share:
             self.fields["share"] = forms.BooleanField(
                 required=True,
@@ -621,6 +591,16 @@ class ProfileForm(BaseProfileForm):
                 )
                 + "?",
             )
+
+    def _mark_mandatory_fields(self) -> None:
+        """Set mandatory fields as required, and add the mandatory marker to their labels (name and surname always)."""
+        mandatory_asterisk = " (*)"
+        for field_name, field in self.fields.items():
+            if field_name in self.mandatory:
+                field.required = True
+            elif field_name not in ("name", "surname"):
+                continue
+            field.label = _(field.label) + mandatory_asterisk
 
     def clean_phone_contact(self) -> Any:
         """Validate phone uniqueness with a helpful recovery message."""

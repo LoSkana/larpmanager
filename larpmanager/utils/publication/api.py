@@ -30,7 +30,7 @@ from django.views.decorators.http import require_GET
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
-from larpmanager.models.event import Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Log
 from larpmanager.utils.core.common import parse_multi_config
@@ -134,7 +134,7 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
 
 
 @require_GET
-def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR0912 - Complex event data aggregation for API
+def published_events(request: HttpRequest) -> JsonResponse:
     """Get upcoming runs from associations with publisher feature enabled.
 
     This endpoint returns a list of upcoming LARP events from associations that have
@@ -179,81 +179,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             .order_by("start")
         )
 
-        # Initialize response data structure
-        events_data = []
-
-        # Process each run to build the response data
-        for run in runs:
-            event = run.event
-            association = run.event.association
-
-            # Get registration status information for this run
-            run_status = _get_registration_status_code(run)
-
-            # Build base event data structure with required fields
-            event_data = {
-                "id": run.id,
-                "name": str(run),
-                "date_start": run.start.isoformat() if run.start else None,
-                "date_end": run.end.isoformat() if run.end else None,
-                "association": association.name,
-                "signup_url": f"https://{association.slug}.{association.skin.domain}/{run.get_slug()}/register/",
-                "status": run_status[0],
-                "additional": run_status[1],
-            }
-
-            # Map optional event model attributes to response fields
-            mapping = {
-                "authors": "authors",
-                "description": "description",
-                "keywords": "keywords",
-                "website": "website",
-            }
-
-            # Add optional fields if they exist and have values
-            for orig, dest in mapping.items():
-                if not hasattr(event, orig):
-                    continue
-                value = getattr(event, orig, "")
-                if not value:
-                    continue
-                event_data[dest] = value
-
-            # Add publication metadata from EventConfig
-            pub_char_fields = ["country", "accommodation", "event_type"]
-            for field in pub_char_fields:
-                value = get_element_config(event, f"pub_{field}")
-                if value:
-                    event_data[field] = value
-
-            if event.where:
-                event_data["place"] = event.where
-
-            for field in ["accommodation_type", "meals", "language"]:
-                raw = get_element_config(event, f"pub_{field}")
-                parsed = parse_multi_config(raw)
-                if parsed:
-                    event_data[field] = parsed
-
-            _setting_map = {v: label.lower() for v, label in PromotionSetting.choices}
-            event_settings = [
-                _setting_map[g]
-                for g in parse_multi_config(get_element_config(event, "pub_setting"))
-                if g in _setting_map
-            ]
-            if event_settings:
-                event_data["setting"] = event_settings
-
-            _mood_map = {v: label.lower() for v, label in PromotionMood.choices}
-            moods = [_mood_map[g] for g in parse_multi_config(get_element_config(event, "pub_mood")) if g in _mood_map]
-            if moods:
-                event_data["mood"] = moods
-
-            # Add cover image URL if available
-            if event.cover:
-                event_data["cover"] = request.build_absolute_uri(event.cover_thumb.url)
-
-            events_data.append(event_data)
+        events_data = [_build_published_event_data(request, run) for run in runs]
 
         # Build final response with metadata
         response_data = {"runs": events_data, "count": len(events_data), "generated_at": timezone.now().isoformat()}
@@ -275,3 +201,57 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
         if settings.DEBUG:
             return JsonResponse({"error": str(e)}, status=500)
         return JsonResponse({"error": "Internal server error"}, status=500)
+
+
+def _build_published_event_data(request: HttpRequest, run: Run) -> dict:
+    """Build the API data of an upcoming run for the publisher endpoint."""
+    event = run.event
+    association = event.association
+    run_status = _get_registration_status_code(run)
+
+    event_data = {
+        "id": run.id,
+        "name": str(run),
+        "date_start": run.start.isoformat() if run.start else None,
+        "date_end": run.end.isoformat() if run.end else None,
+        "association": association.name,
+        "signup_url": f"https://{association.slug}.{association.skin.domain}/{run.get_slug()}/register/",
+        "status": run_status[0],
+        "additional": run_status[1],
+    }
+
+    # Add optional event fields if they have values
+    for field in ("authors", "description", "keywords", "website"):
+        value = getattr(event, field, "")
+        if value:
+            event_data[field] = value
+
+    _add_publication_metadata(event, event_data)
+
+    if event.cover:
+        event_data["cover"] = request.build_absolute_uri(event.cover_thumb.url)
+
+    return event_data
+
+
+def _add_publication_metadata(event: Event, event_data: dict) -> None:
+    """Add publication metadata stored in event config to the API data."""
+    for field in ("country", "accommodation", "event_type"):
+        value = get_element_config(event, f"pub_{field}")
+        if value:
+            event_data[field] = value
+
+    if event.where:
+        event_data["place"] = event.where
+
+    for field in ("accommodation_type", "meals", "language"):
+        parsed = parse_multi_config(get_element_config(event, f"pub_{field}"))
+        if parsed:
+            event_data[field] = parsed
+
+    # Map multi-choice values to their lowercase labels
+    for field, choices in (("setting", PromotionSetting.choices), ("mood", PromotionMood.choices)):
+        labels = {value: label.lower() for value, label in choices}
+        values = [labels[v] for v in parse_multi_config(get_element_config(event, f"pub_{field}")) if v in labels]
+        if values:
+            event_data[field] = values

@@ -110,7 +110,7 @@ def join_email(association: Any) -> None:
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001, C901
+def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -134,43 +134,39 @@ def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noq
         - Triggers member association join process
 
     """
-    # Extract signal parameters with type safety
-    model = kwargs.pop("model", None)
-    if model == Member:
-        action = kwargs.pop("action", None)
-        instance: AssociationRole | None = kwargs.pop("instance", None)
-        if not instance:
-            return
-        pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    if kwargs.pop("model", None) != Member:
+        return
+    action = kwargs.pop("action", None)
+    instance: AssociationRole | None = kwargs.pop("instance", None)
+    if not instance:
+        return
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
-        # Handle role removal or clear - invalidate cache immediately
-        # This ensures permissions are updated when roles are removed
-        if action in ("post_remove", "post_clear"):
-            if pk_set:
-                for mid in pk_set:
-                    mb = Member.objects.get(pk=mid)
-                    # Reset cached event links to reflect permission changes
-                    reset_event_links(mb.id, instance.association_id)
-            return
+    # Role removal or clear: invalidate cached links so permissions update
+    if action in ("post_remove", "post_clear"):
+        _reset_members_links(pk_set, instance.association_id)
+        return
 
-        # Only process role additions from this point forward
-        if action != "post_add":
-            return
+    if action != "post_add":
+        return
 
-        # Get association executives for notification purposes
-        # Handle case where association might not have executives yet
-        try:
-            exes = get_association_executives(instance.association)
-        except ObjectDoesNotExist:
-            exes = []
+    try:
+        exes = get_association_executives(instance.association)
+    except ObjectDoesNotExist:
+        exes = []
 
-        # Process each member being added to the role
-        for mid in pk_set:
-            _add_member_association_role(exes, instance, mid)
-            if instance.number == 1:
-                mb = Member.objects.filter(pk=mid).first()
-                if mb and mb.email:
-                    _newsletter_set_active(mb.email)
+    for mid in pk_set:
+        _add_member_association_role(exes, instance, mid)
+        if instance.number == 1:
+            mb = Member.objects.filter(pk=mid).first()
+            if mb and mb.email:
+                _newsletter_set_active(mb.email)
+
+
+def _reset_members_links(pk_set: set[int] | None, association_id: int) -> None:
+    """Reset cached event links for each member in pk_set."""
+    for mid in pk_set or []:
+        reset_event_links(int(mid), association_id)
 
 
 def _add_member_association_role(exes: list[Member], instance: AssociationRole, mid: int | str) -> None:
@@ -220,7 +216,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
         my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001, C901
+def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:
@@ -241,70 +237,59 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
         m2m_changed signal to handle role assignment notifications.
 
     """
-    # Extract signal parameters with type safety
-    model = kwargs.pop("model", None)
-    if model == Member:
-        action = kwargs.pop("action", None)
-        instance: EventRole | None = kwargs.pop("instance", None)
-        pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    if kwargs.pop("model", None) != Member:
+        return
+    action = kwargs.pop("action", None)
+    instance: EventRole | None = kwargs.pop("instance", None)
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    association_id = get_event_association_id(instance.event_id)
 
-        # Handle role removal or clear - invalidate cache immediately
-        # Cache invalidation ensures permission changes take effect
-        if action in ("post_remove", "post_clear"):
-            if pk_set:
-                association_id = get_event_association_id(instance.event_id)
-                for mid in pk_set:
-                    mb = Member.objects.get(pk=mid)
-                    reset_event_links(mb.id, association_id)
-            return
+    # Role removal or clear: invalidate cached links so permissions update
+    if action in ("post_remove", "post_clear"):
+        _reset_members_links(pk_set, association_id)
+        return
 
-        # Only process role additions from this point
-        if action != "post_add":
-            return
+    if action != "post_add":
+        return
 
-        # Get event organizers for notification purposes
-        # Gracefully handle cases where event has no organizers yet
-        try:
-            orgas = get_event_organizers_by_event(instance.event_id)
-        except ObjectDoesNotExist:
-            orgas = []
+    try:
+        orgas = get_event_organizers_by_event(instance.event_id)
+    except ObjectDoesNotExist:
+        orgas = []
 
-        # Process each member that was added to the role
-        association_id = get_event_association_id(instance.event_id)
-        for mid in pk_set:
-            mb = Member.objects.get(pk=mid)
-            # Ensure member is part of the association
-            mb.join(association_id)
-            # Invalidate cached permissions for the member
-            reset_event_links(mb.id, association_id)
-            if instance.number == 1 and mb.email:
-                _newsletter_set_active(mb.email)
+    for mid in pk_set:
+        _add_member_event_role(orgas, instance, mid, association_id)
 
-            # Send approval notification to the member
-            # Use member's preferred language for personalized communication
-            activate(mb.language)
-            subj = hdr_association(association_id) + _("Role approval %(role)s per %(event)s") % {
-                "role": instance.name,
-                "event": instance.event,
-            }
-            url = get_association_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), association_id)
-            body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
-            my_send_mail(subj, body, mb, instance.event)
 
-            # Notify organizers about the new role assignment
-            # Skip self-notification if the organizer assigned themselves
-            for m in orgas:
-                if m.pk == int(mid):
-                    continue
-                # Use organizer's preferred language for notification
-                activate(m.language)
-                subj = hdr_association(association_id) + _("Approval %(user)s as %(role)s for %(event)s") % {
-                    "user": mb,
-                    "role": instance.name,
-                    "event": instance.event,
-                }
-                body = _("The user has been assigned the specified role.")
-                my_send_mail(subj, body, m, instance.event)
+def _add_member_event_role(orgas: list[Member], instance: EventRole, mid: int | str, association_id: int) -> None:
+    """Join member to association, reset its links, and notify member and organizers of the event role."""
+    mb = Member.objects.get(pk=mid)
+    mb.join(association_id)
+    reset_event_links(mb.id, association_id)
+    if instance.number == 1 and mb.email:
+        _newsletter_set_active(mb.email)
+
+    activate(mb.language)
+    subj = hdr_association(association_id) + _("Role approval %(role)s per %(event)s") % {
+        "role": instance.name,
+        "event": instance.event,
+    }
+    url = get_association_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), association_id)
+    body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
+    my_send_mail(subj, body, mb, instance.event)
+
+    # Notify organizers, skipping the member itself
+    for m in orgas:
+        if m.pk == int(mid):
+            continue
+        activate(m.language)
+        subj = hdr_association(association_id) + _("Approval %(user)s as %(role)s for %(event)s") % {
+            "user": mb,
+            "role": instance.name,
+            "event": instance.event,
+        }
+        body = _("The user has been assigned the specified role.")
+        my_send_mail(subj, body, m, instance.event)
 
 
 def send_role_invite_email(invite: RoleInvite) -> None:

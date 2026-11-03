@@ -85,7 +85,7 @@ def get_character_filter(character: Any, character_registrations: Any, active_fi
     return not ("mirror" in active_filters and character.mirror_id and character.mirror_id in character_registrations)
 
 
-def get_event_filter_characters(context: dict, character_filters: Any) -> None:  # noqa: C901 - Complex character filtering with faction organization
+def get_event_filter_characters(context: dict, character_filters: Any) -> None:
     """Get filtered characters organized by factions for event display.
 
     Args:
@@ -96,59 +96,70 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
         Updates context with filtered factions and characters lists
 
     """
+    character_registrations = {
+        relation.character_id: relation.registration
+        for relation in RegistrationCharacterRel.objects.filter(
+            registration__run=context["run"],
+            registration__cancellation_date__isnull=True,
+        ).select_related("registration", "registration__member")
+    }
+
     context["factions"] = []
-
-    character_registrations = {}
-    for relation in RegistrationCharacterRel.objects.filter(
-        registration__run=context["run"],
-        registration__cancellation_date__isnull=True,
-    ).select_related("registration", "registration__member"):
-        character_registrations[relation.character_id] = relation.registration
-
-    characters_by_id = {}
-    for character in get_event_elements(context["event"].id, Character, context=context).filter(hide=False):
-        if character.id in character_registrations:
-            character.registration = character_registrations[character.id]
-            character.member = character_registrations[character.id].member
-        characters_by_id[character.id] = character
-
     if "faction" in context["features"] and context["show_faction"]:
-        faction_query = (
-            get_event_elements(context["event"].id, Faction, context=context)
-            .filter(typ=FactionType.PRIM)
-            .order_by("order")
-        )
-        character_prefetch = Prefetch(
-            "characters",
-            queryset=Character.objects.filter(hide=False).order_by("number"),
-        )
-        for faction in faction_query.prefetch_related(character_prefetch):
-            faction.data = faction.show_red()
-            faction.chars = []
-            for character in faction.characters.all():
-                if character.hide:
-                    continue
-                if not get_character_filter(character, character_registrations, character_filters):
-                    continue
-                character.data = character.show_red()
-                faction.chars.append(character)
-            if len(faction.chars) == 0:
-                continue
-            context["factions"].append(faction)
+        context["factions"] = _get_primary_factions_filtered(context, character_registrations, character_filters)
 
     if not context["factions"]:
-        default_faction = Faction()
-        default_faction.number = 0
-        default_faction.name = "all"
-        default_faction.data = default_faction.show_red()
-        default_faction.chars = []
-        # Sort characters by number for consistent ordering
-        for character in sorted(characters_by_id.values(), key=lambda c: c.number):
-            if not get_character_filter(character, character_registrations, character_filters):
-                continue
-            character.data = character.show_red()
-            default_faction.chars.append(character)
-        context["factions"].append(default_faction)
+        context["factions"].append(_get_default_faction_filtered(context, character_registrations, character_filters))
+
+
+def _filter_characters_for_display(characters: Any, character_registrations: dict, character_filters: Any) -> list:
+    """Return visible characters matching the filters, with their display data set."""
+    filtered = []
+    for character in characters:
+        if character.hide or not get_character_filter(character, character_registrations, character_filters):
+            continue
+        character.data = character.show_red()
+        filtered.append(character)
+    return filtered
+
+
+def _get_primary_factions_filtered(context: dict, character_registrations: dict, character_filters: Any) -> list:
+    """Return primary factions, in order, each with its non-empty list of filtered characters."""
+    faction_query = (
+        get_event_elements(context["event"].id, Faction, context=context).filter(typ=FactionType.PRIM).order_by("order")
+    )
+    character_prefetch = Prefetch(
+        "characters",
+        queryset=Character.objects.filter(hide=False).order_by("number"),
+    )
+    factions = []
+    for faction in faction_query.prefetch_related(character_prefetch):
+        faction.chars = _filter_characters_for_display(
+            faction.characters.all(), character_registrations, character_filters
+        )
+        if faction.chars:
+            faction.data = faction.show_red()
+            factions.append(faction)
+    return factions
+
+
+def _get_default_faction_filtered(context: dict, character_registrations: dict, character_filters: Any) -> Faction:
+    """Return a placeholder faction holding all filtered characters, with their registration data."""
+    characters = list(get_event_elements(context["event"].id, Character, context=context).filter(hide=False))
+    for character in characters:
+        if character.id in character_registrations:
+            character.registration = character_registrations[character.id]
+            character.member = character.registration.member
+
+    default_faction = Faction()
+    default_faction.number = 0
+    default_faction.name = "all"
+    default_faction.data = default_faction.show_red()
+    # Sort characters by number for consistent ordering
+    default_faction.chars = _filter_characters_for_display(
+        sorted(characters, key=lambda c: c.number), character_registrations, character_filters
+    )
+    return default_faction
 
 
 def has_access_character(request: HttpRequest, context: dict) -> bool:
