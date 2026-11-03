@@ -241,15 +241,14 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
         return
     action = kwargs.pop("action", None)
     instance: EventRole | None = kwargs.pop("instance", None)
+    if not instance or action not in ("post_add", "post_remove", "post_clear"):
+        return
     pk_set: list[int] | None = kwargs.pop("pk_set", None)
     association_id = get_event_association_id(instance.event_id)
 
     # Role removal or clear: invalidate cached links so permissions update
     if action in ("post_remove", "post_clear"):
         _reset_members_links(pk_set, association_id)
-        return
-
-    if action != "post_add":
         return
 
     try:

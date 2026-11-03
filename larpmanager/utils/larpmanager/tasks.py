@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from background_task import background
+from background_task.models import Task
 from django.conf import settings as conf_settings
 from django.core import signing
 from django.core.cache import cache
@@ -36,11 +37,12 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import validate_email
 from django.db import transaction
+from django.dispatch import Signal
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.basic import get_event_association_id, get_run_association_id, reset_event_basic_cache
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
@@ -58,6 +60,9 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 logger = logging.getLogger(__name__)
+
+# Sent with event_ids after child events are detached from a deleted parent, so their caches get cleared
+events_detached = Signal()
 
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
 
@@ -114,8 +119,6 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
             kwargs[TIMEZONE_KWARG] = timezone.get_current_timezone_name()
             # Skip scheduling if an identical pending task already exists
             if skip_duplicates:
-                from background_task.models import Task  # noqa: PLC0415
-
                 filtered_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
                 if Task.objects.get_task(background_task.name, args=list(args), kwargs=filtered_kwargs).exists():
                     return None
@@ -950,8 +953,6 @@ def delete_run_task(run_uuid: str, *, whole_event: bool = False) -> None:
     row is locked so concurrent deletions of sibling runs never leave an event without runs.
     Nulls out parent FK on child events first to prevent cascade-deleting them.
     """
-    from larpmanager.cache.character import clear_event_cache_all_runs  # noqa: PLC0415
-
     with transaction.atomic():
         try:
             run = Run.objects.get(uuid=run_uuid)
@@ -965,9 +966,9 @@ def delete_run_task(run_uuid: str, *, whole_event: bool = False) -> None:
         Event.objects.filter(id__in=child_ids).update(parent=None)
         event.delete()
 
-    for child_id in child_ids:
-        reset_event_basic_cache(child_id)
-        clear_event_cache_all_runs(child_id)
+    if child_ids:
+        # Cache cleanup handled by on_events_detached in larpmanager/models/signals.py
+        events_detached.send(sender=Event, event_ids=child_ids)
 
 
 @background(schedule=0)

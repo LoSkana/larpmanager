@@ -114,6 +114,9 @@ ignore = [
     "DJ001",  # TODO remove django-nullable-model-string-field
 ]
 
+[tool.ruff.lint.per-file-ignores]
+"larpmanager/apps.py" = ["PLC0415"]  # AppConfig.ready() must defer imports until the registry is populated
+
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 

@@ -17,17 +17,15 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
-"""Cache the minimal Event/Run attributes callers need without loading the full object."""
+"""Cache the minimal Association/Event/Run attributes callers need, kept free of module-level model imports to avoid cycles."""
 
 from __future__ import annotations
 
 from typing import TypedDict
 
+from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
-
-from larpmanager.models.association import Association, Currency
-from larpmanager.models.event import Event, Run
 
 
 class RunBasicCache(TypedDict):
@@ -62,13 +60,14 @@ def get_association_basic_cache(association_id: int, *, context: dict | None = N
     if data is not None and "timezone" not in data:
         data = None
     if data is None:
+        association_model = apps.get_model("larpmanager", "Association")
         association = (
-            Association.all_objects.select_related("skin")
+            association_model.all_objects.select_related("skin")
             .only("payment_currency", "slug", "name", "timezone", "skin__domain")
             .get(id=association_id)
         )
         if not association.payment_currency:
-            association.payment_currency = Currency.EUR
+            association.payment_currency = association_model.payment_currency.field.default
         data = {
             "currency_symbol": association.get_currency_symbol(),
             "slug": association.slug,
@@ -82,21 +81,6 @@ def get_association_basic_cache(association_id: int, *, context: dict | None = N
         context["association_basic_cache"][association_id] = data
 
     return data
-
-
-def reset_association_basic_cache(association_id: int) -> None:
-    """Invalidate the cached basic info for an association."""
-    cache.delete(association_basic_cache_key(association_id))
-    reset_association_events_runs_basic_cache(association_id)
-
-
-def reset_association_events_runs_basic_cache(association_id: int) -> None:
-    """Invalidate the cached basic info for all events and runs of an association."""
-    event_ids = list(Event.all_objects.filter(association_id=association_id).values_list("id", flat=True))
-    if event_ids:
-        cache.delete_many([event_basic_cache_key(event_id) for event_id in event_ids])
-        run_ids = Run.all_objects.filter(event_id__in=event_ids).values_list("id", flat=True)
-        cache.delete_many([run_basic_cache_key(run_id) for run_id in run_ids])
 
 
 def event_basic_cache_key(event_id: int) -> str:
@@ -116,9 +100,11 @@ def get_event_basic_cache(event_id: int, *, context: dict | None = None) -> dict
     cache_key = event_basic_cache_key(event_id)
     data = cache.get(cache_key)
     if data is None:
-        association_id, parent_id, slug, name = Event.all_objects.values_list(
-            "association_id", "parent_id", "slug", "name"
-        ).get(id=event_id)
+        association_id, parent_id, slug, name = (
+            apps.get_model("larpmanager", "Event")
+            .all_objects.values_list("association_id", "parent_id", "slug", "name")
+            .get(id=event_id)
+        )
         association_cache = get_association_basic_cache(association_id)
         data = {
             "association_id": association_id,
@@ -136,19 +122,9 @@ def get_event_basic_cache(event_id: int, *, context: dict | None = None) -> dict
     return data
 
 
-def reset_event_basic_cache(event_id: int) -> None:
-    """Invalidate the cached basic info for an event."""
-    cache.delete(event_basic_cache_key(event_id))
-
-
 def _get_event_parent_id(event_id: int, context: dict | None = None) -> int | None:
     """Get parent_id for an event, using the shared event basic cache."""
     return get_event_basic_cache(event_id, context=context)["parent_id"]
-
-
-def reset_event_parent_cache(event_id: int) -> None:
-    """Invalidate cached parent_id for an event."""
-    reset_event_basic_cache(event_id)
 
 
 def run_basic_cache_key(run_id: int) -> str:
@@ -168,7 +144,11 @@ def get_run_basic_cache(run_id: int, *, context: dict | None = None) -> RunBasic
     cache_key = run_basic_cache_key(run_id)
     data = cache.get(cache_key)
     if data is None:
-        event_id, number, media_token = Run.all_objects.values_list("event_id", "number", "media_token").get(id=run_id)
+        event_id, number, media_token = (
+            apps.get_model("larpmanager", "Run")
+            .all_objects.values_list("event_id", "number", "media_token")
+            .get(id=run_id)
+        )
         event_cache = get_event_basic_cache(event_id, context=context)
         data = {
             "event_id": event_id,
@@ -186,6 +166,33 @@ def get_run_basic_cache(run_id: int, *, context: dict | None = None) -> RunBasic
         context["run_basic_cache"][run_id] = data
 
     return data
+
+
+def reset_association_basic_cache(association_id: int) -> None:
+    """Invalidate the cached basic info for an association."""
+    cache.delete(association_basic_cache_key(association_id))
+    reset_association_events_runs_basic_cache(association_id)
+
+
+def reset_association_events_runs_basic_cache(association_id: int) -> None:
+    """Invalidate the cached basic info for all events and runs of an association."""
+    event_model = apps.get_model("larpmanager", "Event")
+    run_model = apps.get_model("larpmanager", "Run")
+    event_ids = list(event_model.all_objects.filter(association_id=association_id).values_list("id", flat=True))
+    if event_ids:
+        cache.delete_many([event_basic_cache_key(event_id) for event_id in event_ids])
+        run_ids = run_model.all_objects.filter(event_id__in=event_ids).values_list("id", flat=True)
+        cache.delete_many([run_basic_cache_key(run_id) for run_id in run_ids])
+
+
+def reset_event_basic_cache(event_id: int) -> None:
+    """Invalidate the cached basic info for an event."""
+    cache.delete(event_basic_cache_key(event_id))
+
+
+def reset_event_parent_cache(event_id: int) -> None:
+    """Invalidate cached parent_id for an event."""
+    reset_event_basic_cache(event_id)
 
 
 def get_run_event_id(run_id: int, *, context: dict | None = None) -> int:

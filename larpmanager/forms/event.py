@@ -85,6 +85,7 @@ from larpmanager.models.utils import generate_id
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.copy_class import copy_class
 from larpmanager.utils.core.validators import FileTypeValidator
+from larpmanager.utils.io.pdf.engine import PDF_FONT_TYPES, PDF_PAGE_SIZE_CHOICES
 from larpmanager.utils.publication.ildb import (
     PromotionAccommodation,
     PromotionAccommodationType,
@@ -122,8 +123,6 @@ class EventCharactersPdfForm(ConfigForm):
         and fonts, the colors of the text, and as last option the free CSS
         code to customize anything else.
         """
-        from larpmanager.utils.io.pdf.engine import PDF_FONT_TYPES, PDF_PAGE_SIZE_CHOICES  # noqa: PLC0415
-
         # Set up the main PDF configuration section
         self.set_section("pdf", "PDF")
 

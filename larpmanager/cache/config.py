@@ -27,6 +27,7 @@ from django.core.cache import cache
 from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.models.base import Config
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
@@ -485,8 +486,6 @@ def get_event_config(
     if any(config_name.startswith(p) for p in EVENT_CONFIGS_OWN_CHILD):
         lookup_id = event_id
     else:
-        from larpmanager.cache.basic import _get_event_parent_id  # noqa: PLC0415
-
         parent_id = _get_event_parent_id(event_id, context)
         lookup_id = parent_id or event_id
 

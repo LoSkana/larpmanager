@@ -13,10 +13,15 @@ Reports, per tutorial:
 import argparse
 import html
 import json
+import os
 import re
 import sys
 import unicodedata
 from pathlib import Path
+
+import django
+from django.apps import apps
+from django.urls import Resolver404, resolve
 
 ROOT = Path(__file__).resolve().parents[3]
 PO_FILE = ROOT / "larpmanager" / "locale" / "en" / "LC_MESSAGES" / "django.po"
@@ -85,8 +90,6 @@ def ui_strings() -> set[str]:
     """English UI strings, plus model field names shown as-is when they have no translated verbose name."""
     po = PO_FILE.read_text(encoding="utf-8")
     strings = {m.lower().strip() for m in re.findall(r'msgid "(.*?)"', po)}
-    from django.apps import apps  # noqa: PLC0415
-
     for model in apps.get_app_config("larpmanager").get_models():
         for model_field in model._meta.get_fields():  # noqa: SLF001
             name = getattr(model_field, "verbose_name", None)
@@ -98,13 +101,8 @@ def ui_strings() -> set[str]:
 def resolver():  # noqa: ANN201
     """Return a function telling whether a redirect path resolves in the Django URLconf."""
     sys.path.insert(0, str(ROOT))
-    import os  # noqa: PLC0415
-
-    import django  # noqa: PLC0415
-
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "main.settings")
     django.setup()
-    from django.urls import Resolver404, resolve  # noqa: PLC0415
 
     def resolves(path: str) -> bool:
         if path.startswith("event/"):
