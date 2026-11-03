@@ -27,10 +27,12 @@ from django import forms
 from django.conf import settings as conf_settings
 from django.db.models import Q, QuerySet
 from django.forms.widgets import MediaAsset, Textarea, Widget
+from django.middleware.csp import get_nonce
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
+from django_recaptcha.widgets import ReCaptchaV3
 from django_select2 import forms as s2forms
 from lxml import etree
 from tinymce.widgets import TinyMCE
@@ -74,6 +76,8 @@ from larpmanager.utils.auth.permission import LITE_PERMISSIONS
 from larpmanager.utils.services.playing_filter import filter_playing_characters
 
 if TYPE_CHECKING:
+    from django.http import HttpRequest
+
     from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
@@ -155,6 +159,21 @@ forms.widgets.Media.render_js = render_js
 
 
 # special widget
+
+
+class NonceReCaptchaV3(ReCaptchaV3):
+    """ReCaptcha v3 widget whose inline script carries the request CSP nonce."""
+
+    def __init__(self, *args: Any, request: HttpRequest | None = None, **kwargs: Any) -> None:
+        """Store the CSP nonce of the request rendering the widget."""
+        super().__init__(*args, **kwargs)
+        self.csp_nonce = get_nonce(request) if request is not None else None
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Expose the CSP nonce to the widget template."""
+        context = super().get_context(name, value, attrs)
+        context["csp_nonce"] = self.csp_nonce
+        return context
 
 
 class ReadOnlyWidget(Widget):

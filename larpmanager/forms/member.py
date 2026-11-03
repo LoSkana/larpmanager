@@ -39,7 +39,6 @@ from django.template import loader
 from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
@@ -48,6 +47,7 @@ from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
     DatePickerInput,
+    NonceReCaptchaV3,
     get_members_queryset,
 )
 from larpmanager.models.accounting import AccountingItemMembership
@@ -190,7 +190,7 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
                 self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3,
+                    widget=NonceReCaptchaV3(request=self.request),
                     label="Captcha",
                     public_key=public,
                     private_key=private,
