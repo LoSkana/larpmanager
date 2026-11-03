@@ -29,7 +29,7 @@
     {% if is_previewing %}
         <div class="alert alert-info">
             {% trans "Previewing version" %} <strong>{{ member_version }}</strong>.
-            <form method="post" style="display:inline">
+            <form method="post" class="inline">
                 {% csrf_token %}
                 <input type="hidden" name="action" value="reset_preview">
                 <button type="submit" class="button small">{% trans "Exit Preview" %}</button>
@@ -41,8 +41,8 @@
         {% for version in upgradeable_versions %}
             <div class="version-item">
                 <strong>{% trans "Version" %} {{ version.number }}</strong> ({{ version.description }})
-                <div style="margin-top:0.5em">
-                    <form method="post" style="display:inline">
+                <div class="version-actions">
+                    <form method="post" class="inline">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="test">
                         <input type="hidden" name="target_version" value="{{ version.number }}">
@@ -51,7 +51,7 @@
                         </button>
                     </form>
                     &nbsp;
-                    <form method="post" style="display:inline">
+                    <form method="post" class="inline">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="upgrade">
                         <input type="hidden" name="target_version" value="{{ version.number }}">

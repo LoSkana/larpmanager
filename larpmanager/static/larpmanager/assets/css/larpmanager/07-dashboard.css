@@ -540,6 +540,10 @@ body.floating_iframe .inner {
   padding: 24px;
 }
 
+.frame-loading.is-hidden {
+  display: none;
+}
+
 .frame-loading::after {
   content: "";
   width: 32px;
@@ -944,4 +948,14 @@ body.floating_iframe .inner {
 #checkin_signin_popup[open] {
   display: flex;
   flex-direction: column;
+}
+
+.version-actions {
+  margin-top: 0.5em;
+}
+
+.faction-color-swatch {
+  width: 40px;
+  height: 20px;
+  border-radius: 3px;
 }

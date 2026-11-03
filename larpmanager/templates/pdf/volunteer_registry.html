@@ -31,6 +31,14 @@
                 font-size: 120%;
             }
 
+            .align-center {
+                text-align: center;
+            }
+
+            .col-wide {
+                width: 20%;
+            }
+
             @page {
                 size: "A4";
 
@@ -66,7 +74,7 @@
                 </tr>
             </table>
         </div>
-        <p style="text-align: center;">
+        <p class="align-center">
             <img width="100px" src="{{ association.profile_thumb.url }}" />
         </p>
         <h1>Registro Volontari {{ association.name }} - {{ date }}</h1>
@@ -74,8 +82,8 @@
             <tr>
                 <th>Nome e Cognome</th>
                 <th>Data e luogo di nascita</th>
-                <th style="width: 20%">Codice fiscale</th>
-                <th style="width: 20%">Indirizzo</th>
+                <th class="col-wide">Codice fiscale</th>
+                <th class="col-wide">Indirizzo</th>
                 <th>Data inizio</th>
                 <th>Data fine</th>
             </tr>

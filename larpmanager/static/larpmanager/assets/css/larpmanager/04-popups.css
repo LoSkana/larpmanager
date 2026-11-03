@@ -374,6 +374,14 @@ div.ui-lm_tooltip {
 .frame-container iframe {
   transition: height 0.2s ease;
   height: 100%;
+  border: none;
+  visibility: hidden;
+}
+
+.member-popup-thumb {
+  width: 15em;
+  margin: 1em;
+  border-radius: 5%;
 }
 
 body.floating_iframe #wrapper {

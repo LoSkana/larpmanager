@@ -1461,7 +1461,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     # Add profile image if available
     if member.profile:
-        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
+        text += f"<img src='{member.profile_thumb.url}' class='member-popup-thumb' />"
 
     # Always include email address
     text += f"<p><b>Email</b>: {member.email}</p>"

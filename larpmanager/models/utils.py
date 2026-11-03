@@ -157,8 +157,7 @@ def download(url: str) -> str:
 
 def show_thumb(height: int, image_url: str) -> SafeString:
     """Generate HTML img tag for thumbnail display."""
-    # Generate HTML img tag with inline height styling using format_html for safety
-    return format_html('<img style="height:{}px" src="{}" />', height, image_url)
+    return format_html('<img height="{}" src="{}" />', height, image_url)
 
 
 def get_attr(obj: object, attr_name: str) -> str | None:

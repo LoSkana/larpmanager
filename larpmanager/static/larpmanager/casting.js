@@ -233,7 +233,7 @@ function load_grid() {
 
             var k = preferences[key][ix];
             // Hidden select dropdown for preference ordering (used by algorithm)
-            aux += '<td id="cost_{0}" class="mn"><select class="pref" disabled style="display:none;">'.format(ix);
+            aux += '<td id="cost_{0}" class="mn"><select class="pref hide" disabled>'.format(ix);
             for (var iy = 0; iy < num_pref; iy++) {
                 aux += ' <option value="{0}">{1}</option>'.format(iy, iy+1);
             }
