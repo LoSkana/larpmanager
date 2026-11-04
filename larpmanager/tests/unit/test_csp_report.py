@@ -23,12 +23,15 @@
 import json
 import re
 from http import HTTPStatus
+from pathlib import Path
 from unittest.mock import patch
 
+from django.contrib.staticfiles import finders
 from django.core.cache import cache
 from django.test import Client
 from django.urls import reverse
 
+from larpmanager.forms.utils import CSRFTinyMCE
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.larpmanager.csp import pop_csp_reports, record_csp_report, send_csp_digest
 
@@ -137,3 +140,24 @@ class TestCspNonce(BaseTestCase):
         page_nonces = set(re.findall(r'<script nonce="([^"]+)"', response.content.decode()))
         assert len(header_nonces) == 1
         assert page_nonces == {header_nonces[0]}
+
+
+class TestTinymceWithoutEval(BaseTestCase):
+    """The TinyMCE upload handler must work under a policy without unsafe-eval."""
+
+    def test_upload_handler_is_resolved_by_name_before_init(self) -> None:
+        """The handler is a global name, whose script loads before init_tinymce.js."""
+        widget = CSRFTinyMCE()
+
+        handler = widget.get_mce_config({"id": "id_text"})["images_upload_handler"]
+        media = str(widget.media)
+
+        assert "(" not in handler
+        assert media.index("tinymce-upload.js") < media.index("init_tinymce.js")
+
+    def test_upload_handler_name_is_defined_by_script(self) -> None:
+        """The configured name is the global assigned by tinymce-upload.js."""
+        handler = CSRFTinyMCE().get_mce_config({"id": "id_text"})["images_upload_handler"]
+        script = Path(finders.find("larpmanager/assets/js/tinymce-upload.js")).read_text()
+
+        assert f"window.{handler} = " in script

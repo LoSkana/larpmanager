@@ -237,6 +237,8 @@ TINYMCE_DEFAULT_CONFIG = {
 
 
 TINYMCE_COMPRESSOR = False
+# Loaded before init_tinymce.js, which resolves named callbacks from window
+TINYMCE_EXTRA_MEDIA = {'js': ['larpmanager/assets/js/tinymce-upload.js']}
 
 SECURE_REFERRER_POLICY = 'origin'
 
@@ -305,6 +307,7 @@ SECURE_CSP = {
         'https://www.googletagmanager.com',
         'https://*.googletagmanager.com',
         'https://www.google.com',
+        'https://www.googleadservices.com',
         'https://ad.doubleclick.net',
         'https://*.g.doubleclick.net',
         # Address lookup in the leaflet map picker
