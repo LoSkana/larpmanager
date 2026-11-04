@@ -1425,55 +1425,8 @@ def get_members_queryset(association_id: int) -> QuerySet[Member]:
     return Member.objects.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
-# CSRF-aware upload handler for TinyMCE
-# This JavaScript function is injected into TinyMCE configuration to handle file uploads
-# with proper CSRF token authentication
-_TINYMCE_CSRF_UPLOAD_HANDLER = """function(blobInfo, progress) {
-    return new Promise(function(resolve, reject) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/upload_media/');
-
-        // Get CSRF token from cookie or form
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
-                         document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
-
-        if (csrftoken) {
-            xhr.setRequestHeader('X-CSRFToken', csrftoken);
-        }
-
-        xhr.upload.onprogress = function(e) {
-            progress(e.loaded / e.total * 100);
-        };
-
-        xhr.onload = function() {
-            if (xhr.status === 403) {
-                reject('HTTP Error: ' + xhr.status + ' - CSRF verification failed');
-                return;
-            }
-            if (xhr.status < 200 || xhr.status >= 300) {
-                reject('HTTP Error: ' + xhr.status);
-                return;
-            }
-
-            const json = JSON.parse(xhr.responseText);
-            if (!json || typeof json.location !== 'string') {
-                reject('Invalid JSON: ' + xhr.responseText);
-                return;
-            }
-
-            resolve(json.location);
-        };
-
-        xhr.onerror = function() {
-            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
-        };
-
-        const formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-        xhr.send(formData);
-    });
-}"""
+# Name of the global TinyMCE upload handler defined in tinymce-upload.js, which sends the CSRF token
+_TINYMCE_CSRF_UPLOAD_HANDLER = "lmTinymceUploadHandler"
 
 
 class CSRFTinyMCE(TinyMCE):

@@ -691,6 +691,12 @@ form .plot {
    Application - Membership
    --------------------------------------------------------------------------- */
 
+.membership_pdf {
+  border: 0;
+  height: 500px;
+  width: 100%;
+}
+
 .membership_request {
   width: 50%;
 }
