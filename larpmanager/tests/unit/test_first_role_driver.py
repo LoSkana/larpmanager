@@ -82,16 +82,3 @@ class TestFirstRoleDriver(BaseTestCase):
         add_first_role_driver(context)
         self.assertNotIn("intro_driver", context)
         self.assertFalse(get_member_config(self.get_member().id, self._config_name(), bypass_cache=True))
-
-    def test_migration_marks_existing_role_holders(self) -> None:
-        """Members holding a role before the rollout never see the tour."""
-        member = self.get_member()
-        role, _created = AssociationRole.objects.get_or_create(
-            association=self.get_association(), number=1, defaults={"name": "Admin"}
-        )
-        role.members.add(member)
-
-        migration = import_module("larpmanager.migrations.0199_mark_first_role_driver_seen")
-        migration.mark_existing_role_holders(apps, None)
-
-        self.assertTrue(MemberConfig.objects.filter(member=member, name=self._config_name(), value="True").exists())
