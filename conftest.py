@@ -197,14 +197,6 @@ def pw_page(
         record_video_dir=str(video_dir) if video_dir else None,
         record_video_size={"width": 1280, "height": 800} if video_dir else None,
     )
-    # Stub driver.js so the one-time dashboard tours do not overlay the pages under test
-    context.route(
-        "**/driver.js/dist/driver.js.iife.js",
-        lambda route: route.fulfill(
-            content_type="application/javascript",
-            body="window.driver = {js: {driver: () => ({drive: () => {}})}};",
-        ),
-    )
     page = context.new_page()
     base_url = live_server.url
     timeout = 60000

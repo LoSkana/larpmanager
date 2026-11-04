@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -170,7 +171,11 @@ def add_first_role_driver(context: dict) -> None:
     """Show the management tour on the member's first dashboard visit, once per association.
 
     A pending association tour takes precedence and counts as the member's introduction.
+    Skipped under pytest, where the tour would overlay the pages driven by the browser tests.
     """
+    if os.getenv("PYTEST_CURRENT_TEST"):
+        return
+
     member = context["member"]
     config_name = f"{FIRST_ROLE_DRIVER_CONFIG_PREFIX}{context['association_id']}"
     if not context.get("role_names") or member.get_config(config_name):

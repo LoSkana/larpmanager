@@ -20,7 +20,9 @@
 
 """Tests for the one-time tour shown on a member's first management dashboard visit."""
 
+import os
 from importlib import import_module
+from unittest.mock import patch
 
 from django.apps import apps
 
@@ -33,6 +35,14 @@ from larpmanager.utils.core.base import FIRST_ROLE_DRIVER_CONFIG_PREFIX, add_fir
 
 class TestFirstRoleDriver(BaseTestCase):
     """First role tour selection and one-time consumption."""
+
+    def setUp(self) -> None:
+        """Run as outside pytest, where the tour is disabled."""
+        super().setUp()
+        env_patcher = patch.dict(os.environ)
+        env_patcher.start()
+        self.addCleanup(env_patcher.stop)
+        os.environ.pop("PYTEST_CURRENT_TEST", None)
 
     def _config_name(self) -> str:
         """Return the marker config name for the test association."""
