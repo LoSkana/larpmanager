@@ -2618,6 +2618,9 @@ msgstr "Marquer comme déployé"
 msgid "Show history"
 msgstr "Afficher l'historique"
 
+msgid "Sidebar size"
+msgstr "Taille de la barre latérale"
+
 msgid "Subscription"
 msgstr "Abonnement"
 
@@ -9138,6 +9141,10 @@ msgstr ""
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nom de l'option, affiché dans la question (reste court)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr ""
+"Réduis la barre latérale pour gagner de la place, ou agrandis-la à nouveau"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Inscris-toi à l'événement ou modifie tes options d'inscription"
 
@@ -11697,6 +11704,12 @@ msgid ""
 msgstr ""
 "Pour participer aux événements de l’organisation, tu dois demander à devenir"
 " membre."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Tu as reçu un rôle de gestion : voici une visite rapide du tableau de bord"
 
 #, python-format
 msgid ""

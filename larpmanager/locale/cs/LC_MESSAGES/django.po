@@ -2618,6 +2618,9 @@ msgstr "Označit jako rozmístěné"
 msgid "Show history"
 msgstr "Zobrazit historii"
 
+msgid "Sidebar size"
+msgstr "Velikost postranního panelu"
+
 msgid "Subscription"
 msgstr "Předplatné"
 
@@ -9046,6 +9049,9 @@ msgstr "Správa možností odpovědí dostupných pro otázky v rámci workshopu
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, zobrazený v otázce (ponech ho krátký)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr "Zmenši postranní panel, abys získal víc místa, nebo ho znovu zvětši"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Zaregistruj se na akci nebo uprav své registrační možnosti"
 
@@ -11227,6 +11233,12 @@ msgid ""
 "To participate in the organization's events, you must apply to become a "
 "member."
 msgstr "Chceš-li se účastnit akcí organizace, musíš požádat o členství."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Byla ti přidělena manažerská role: tady je rychlá prohlídka dashboardu"
 
 #, python-format
 msgid ""

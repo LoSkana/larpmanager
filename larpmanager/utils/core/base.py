@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import os
 from typing import Any
 
 from django.conf import settings as conf_settings
@@ -28,7 +29,12 @@ from django.http import Http404, HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.config import get_association_config, get_event_config, is_event_config_set
+from larpmanager.cache.config import (
+    get_association_config,
+    get_event_config,
+    is_event_config_set,
+    save_single_config,
+)
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
@@ -55,6 +61,9 @@ from larpmanager.utils.services.demo import add_demo_hint_context
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
 MAX_DEMO_REGISTRATIONS = 10
+
+# Member config prefix, followed by the association id, set once introduced to its management interface
+FIRST_ROLE_DRIVER_CONFIG_PREFIX = "intro_first_role_seen_"
 
 
 def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
@@ -156,6 +165,24 @@ def _add_intro_driver(context: dict) -> None:
         return
     context["intro_driver"] = intro_value
     AssociationConfig.objects.filter(association_id=context["association_id"], name="intro_driver").delete()
+
+
+def add_first_role_driver(context: dict) -> None:
+    """Show the management tour on the member's first dashboard visit, once per association.
+
+    A pending association tour takes precedence and counts as the member's introduction.
+    Skipped under pytest, where the tour would overlay the pages driven by the browser tests.
+    """
+    if os.getenv("PYTEST_CURRENT_TEST"):
+        return
+
+    member = context["member"]
+    config_name = f"{FIRST_ROLE_DRIVER_CONFIG_PREFIX}{context['association_id']}"
+    if not context.get("role_names") or member.get_config(config_name):
+        return
+    if not context.get("intro_driver"):
+        context["intro_driver"] = "first_role"
+    save_single_config(member, config_name, value=True)
 
 
 def get_context_member(request: HttpRequest, context: dict) -> None:

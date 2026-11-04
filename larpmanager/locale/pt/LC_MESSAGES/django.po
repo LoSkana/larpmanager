@@ -2618,6 +2618,9 @@ msgstr "Marcar como montado"
 msgid "Show history"
 msgstr "Mostrar histórico"
 
+msgid "Sidebar size"
+msgstr "Tamanho da barra lateral"
+
 msgid "Subscription"
 msgstr "Subscrição"
 
@@ -9058,6 +9061,9 @@ msgstr "Gerir as opções de resposta disponíveis para perguntas de workshop"
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nome da opção, apresentado na pergunta (mantém-no curto)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr "Reduz a barra lateral para ganhar mais espaço, ou volta a aumentá-la"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Inscreve-te no evento ou atualiza as opções da tua inscrição"
 
@@ -11479,6 +11485,12 @@ msgid ""
 msgstr ""
 "Para participares nos eventos da organização, tens de pedir para te tornares"
 " membro."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Foi-te atribuído um papel de gestão: aqui tens uma visita rápida ao painel"
 
 #, python-format
 msgid ""

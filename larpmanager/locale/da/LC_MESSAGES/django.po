@@ -2618,6 +2618,9 @@ msgstr "Markér som opstillet"
 msgid "Show history"
 msgstr "Vis historik"
 
+msgid "Sidebar size"
+msgstr "Sidepanelets størrelse"
+
 msgid "Subscription"
 msgstr "Abonnement"
 
@@ -9045,6 +9048,9 @@ msgstr ""
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Indstillingsnavn, der vises i spørgsmålet (hold det kort)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr "Formindsk sidepanelet for at få mere plads, eller gør det større igen"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Tilmeld dig eventet, eller opdater dine tilmeldingsmuligheder"
 
@@ -11313,6 +11319,13 @@ msgid ""
 "member."
 msgstr ""
 "For at deltage i organisationens events skal du ansøge om at blive medlem."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Du har fået tildelt en administrativ rolle: her er en hurtig rundtur i "
+"dashboardet"
 
 #, python-format
 msgid ""

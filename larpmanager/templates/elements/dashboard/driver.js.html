@@ -2,9 +2,11 @@
 {% trans "Your organization has been created" as welcome_intro %}
 {% trans "Initialize the platform by creating your first event" as welcome_cta %}
 {% trans "You have been redirected to the Event Dashboard" as first_event_intro %}
+{% trans "You have been assigned a management role: here is a quick tour of the dashboard" as first_role_intro %}
 {% trans "Switch between Organization and Events management" as select_workspace %}
 {% trans "Toggle between administrative backend and public-facing pages" as select_side %}
 {% trans "Access the pages to manage each different aspect" as select_sidebar %}
+{% trans "Reduce the sidebar to gain more space, or enlarge it again" as sidebar_collapse %}
 {% trans "Complete the setup to unlock full platform features" as lite_mode %}
 {% trans "Here you can review the event details and visit its public page" as event_widget %}
 {% trans "The sidebar has expanded. New menus will continue to appear as you activate additional modules" as advanced_unlock %}
@@ -14,6 +16,66 @@
         defer></script>
 <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
+
+    function ensureTopbarVisible(element) {
+        if ($('#topbar-mobile-v22').is(':visible') && !$('#topbar').hasClass('mobile-visible'))
+            $('#topbar-mobile-v22').trigger('click');
+    }
+
+    function ensureSidebarVisible(element) {
+        if ($('#sidebar-mobile-v22').is(':visible') && !$('#sidebar').hasClass('mobile-visible'))
+            $('#sidebar-mobile-v22').trigger('click');
+    }
+
+    function navigationSteps() {
+        let steps = [
+          {
+            element: '#tv22-user-pills',
+            onHighlightStarted: ensureTopbarVisible,
+            popover: {
+              title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
+              description: '{{ select_workspace | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+          {
+            element: '#tv22-switch',
+            onHighlightStarted: ensureTopbarVisible,
+            popover: {
+              title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
+              description: '{{ select_side | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+          {
+            element: '#sidebar .inner',
+            onHighlightStarted: ensureSidebarVisible,
+            popover: {
+              title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
+              description: '{{ select_sidebar | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+        ];
+
+        // The button is hidden on mobile and on older interface versions
+        if ($('#sidebar-collapse-btn').is(':visible')) {
+            steps.push({
+              element: '#sidebar-collapse-btn',
+              popover: {
+                title: '{% filter escapejs %}{% trans "Sidebar size" %}{% endfilter %}',
+                description: '{{ sidebar_collapse | escapejs }}',
+                side: 'right',
+                align: 'start'
+              }
+            });
+        }
+
+        return steps;
+    }
 
     function driverWelcome() {
         const driver = window.driver.js.driver;
@@ -49,16 +111,6 @@ window.addEventListener('DOMContentLoaded', function() {
     function driverFirstEvent() {
         const driver = window.driver.js.driver;
 
-        function ensureTopbarVisible(element) {
-            if ($('#topbar-mobile-v22').is(':visible') && !$('#topbar').hasClass('mobile-visible'))
-                $('#topbar-mobile-v22').trigger('click');
-        }
-
-        function ensureSidebarVisible(element) {
-            if ($('#sidebar-mobile-v22').is(':visible') && !$('#sidebar').hasClass('mobile-visible'))
-                $('#sidebar-mobile-v22').trigger('click');
-        }
-
         let steps = [
           {
             popover: {
@@ -66,37 +118,7 @@ window.addEventListener('DOMContentLoaded', function() {
               description: '{{ first_event_intro | escapejs }}'
             }
           },
-          {
-            element: '#tv22-user-pills',
-            onHighlightStarted: ensureTopbarVisible,
-            popover: {
-              title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
-              description: '{{ select_workspace | escapejs }}',
-              side: 'bottom',
-              align: 'start'
-            }
-          },
-          {
-            element: '#tv22-switch',
-            onHighlightStarted: ensureTopbarVisible,
-            popover: {
-              title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
-              description: '{{ select_side | escapejs }}',
-              side: 'bottom',
-              align: 'start'
-            }
-          },
-
-          {
-            element: '#sidebar .inner',
-            onHighlightStarted: ensureSidebarVisible,
-            popover: {
-              title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
-              description: '{{ select_sidebar | escapejs }}',
-              side: 'bottom',
-              align: 'start'
-            }
-          },
+          ...navigationSteps(),
           {
             element: '#orga_event_widget',
             onHighlightStarted: function() {
@@ -118,6 +140,33 @@ window.addEventListener('DOMContentLoaded', function() {
                 description: '{{ lite_mode | escapejs }}'
             }
         });
+
+        const driverObj = driver({
+            showProgress: true,
+            steps: steps,
+            allowClose: true,
+            popoverClass: 'my-driverjs',
+            doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
+            onDestroyed: function() {
+                $('#sidebar, #topbar').removeClass('mobile-visible');
+            },
+        });
+
+        driverObj.drive();
+    }
+
+    function driverFirstRole() {
+        const driver = window.driver.js.driver;
+
+        let steps = [
+          {
+            popover: {
+              title: '{% filter escapejs %}{% trans "Welcome to" %} {{ association.platform }}!{% endfilter %}',
+              description: '{{ first_role_intro | escapejs }}'
+            }
+          },
+          ...navigationSteps(),
+        ];
 
         const driverObj = driver({
             showProgress: true,
@@ -179,6 +228,8 @@ window.addEventListener('DOMContentLoaded', function() {
     driverWelcome();
     {% elif intro_driver == "first_event" %}
     driverFirstEvent();
+    {% elif intro_driver == "first_role" %}
+    driverFirstRole();
     {% elif intro_driver == "advanced_unlock" %}
     driverUnlocked();
     {% endif %}

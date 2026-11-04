@@ -2618,6 +2618,9 @@ msgstr "Ορισμός ως τοποθετημένο"
 msgid "Show history"
 msgstr "Εμφάνιση ιστορικού"
 
+msgid "Sidebar size"
+msgstr "Μέγεθος πλαϊνής μπάρας"
+
 msgid "Subscription"
 msgstr "Συνδρομή"
 
@@ -9136,6 +9139,11 @@ msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 "Όνομα επιλογής, που εμφανίζεται μέσα στην ερώτηση (κράτησέ το σύντομο)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr ""
+"Σμίκρυνε την πλαϊνή μπάρα για να κερδίσεις περισσότερο χώρο ή μεγάλωσέ την "
+"ξανά"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Εγγράψου στην εκδήλωση ή ενημέρωσε τις επιλογές εγγραφής σου"
 
@@ -11698,6 +11706,13 @@ msgid ""
 msgstr ""
 "Για να συμμετέχεις στα events του οργανισμού, πρέπει να υποβάλεις αίτηση για"
 " να γίνεις μέλος."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Σου ανατέθηκε ένας ρόλος διαχείρισης: ορίστε μια γρήγορη περιήγηση στον "
+"πίνακα ελέγχου"
 
 #, python-format
 msgid ""

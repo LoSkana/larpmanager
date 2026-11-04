@@ -2618,6 +2618,9 @@ msgstr "Als aufgestellt markieren"
 msgid "Show history"
 msgstr "Verlauf anzeigen"
 
+msgid "Sidebar size"
+msgstr "Größe der Seitenleiste"
+
 msgid "Subscription"
 msgstr "Abonnement"
 
@@ -9125,6 +9128,11 @@ msgstr "Die Antwortmöglichkeiten für Workshop-Fragen verwalten"
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr ""
+"Verkleinere die Seitenleiste, um mehr Platz zu gewinnen, oder vergrößere sie"
+" wieder"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr ""
 "Melde dich für die Veranstaltung an oder passe deine Anmeldeoptionen an"
@@ -11728,6 +11736,13 @@ msgid ""
 msgstr ""
 "Um an den Veranstaltungen der Organisation teilzunehmen, musst du die "
 "Mitgliedschaft beantragen."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Du hast eine Management-Rolle erhalten: Hier ist eine kurze Tour durch das "
+"Dashboard"
 
 #, python-format
 msgid ""
