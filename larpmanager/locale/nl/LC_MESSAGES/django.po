@@ -2618,6 +2618,9 @@ msgstr "Markeren als geplaatst"
 msgid "Show history"
 msgstr "Toon geschiedenis"
 
+msgid "Sidebar size"
+msgstr "Grootte van de zijbalk"
+
 msgid "Subscription"
 msgstr "Abonnement"
 
@@ -9096,6 +9099,10 @@ msgstr "Beheer de antwoordopties voor workshopvragen"
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr ""
+"Verklein de zijbalk om meer ruimte te krijgen, of maak hem weer groter"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Schrijf je in voor het evenement, of pas je inschrijvingsopties aan"
 
@@ -11607,6 +11614,13 @@ msgid ""
 msgstr ""
 "Om deel te nemen aan de evenementen van de organisatie, moet je een aanvraag"
 " indienen om lid te worden."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Je hebt een beheerdersrol gekregen: hier is een korte rondleiding door het "
+"dashboard"
 
 #, python-format
 msgid ""

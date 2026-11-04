@@ -62,7 +62,7 @@ from larpmanager.utils.auth.permission import (
     has_association_permission,
     has_event_permission,
 )
-from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.base import add_first_role_driver, get_context, get_event_context
 from larpmanager.utils.core.checks import check_association_context, check_event_context
 from larpmanager.utils.core.common import format_datetime
 from larpmanager.utils.core.dashboard import _compile, _exe_build_lists, _orga_build_lists
@@ -250,6 +250,8 @@ def _exe_manage(request: HttpRequest) -> HttpResponse:
     # Compile final context
     _compile(request, context)
 
+    add_first_role_driver(context)
+
     return render(request, "larpmanager/manage/exe.html", context)
 
 
@@ -330,6 +332,8 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Loads widget data
     _orga_widgets(request, context, features)
+
+    add_first_role_driver(context)
 
     return render(request, "larpmanager/manage/orga.html", context)
 

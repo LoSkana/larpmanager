@@ -5710,6 +5710,11 @@ msgstr ""
 msgid "You have been redirected to the Event Dashboard"
 msgstr ""
 
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+
 msgid "Switch between Organization and Events management"
 msgstr ""
 
@@ -5717,6 +5722,9 @@ msgid "Toggle between administrative backend and public-facing pages"
 msgstr ""
 
 msgid "Access the pages to manage each different aspect"
+msgstr ""
+
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
 msgstr ""
 
 msgid "Complete the setup to unlock full platform features"
@@ -5737,15 +5745,6 @@ msgstr ""
 msgid "Write here what you would like to to!"
 msgstr ""
 
-msgid "Welcome to"
-msgstr ""
-
-msgid "Start here:"
-msgstr ""
-
-msgid "Event created!"
-msgstr ""
-
 msgid "Workspace selector"
 msgstr ""
 
@@ -5753,6 +5752,18 @@ msgid "View Selector"
 msgstr ""
 
 msgid "Sidebar"
+msgstr ""
+
+msgid "Sidebar size"
+msgstr ""
+
+msgid "Welcome to"
+msgstr ""
+
+msgid "Start here:"
+msgstr ""
+
+msgid "Event created!"
 msgstr ""
 
 msgid "Event public page"

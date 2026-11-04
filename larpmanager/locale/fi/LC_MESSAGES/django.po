@@ -2618,6 +2618,9 @@ msgstr "Merkitse sijoitetuksi"
 msgid "Show history"
 msgstr "Näytä historia"
 
+msgid "Sidebar size"
+msgstr "Sivupalkin koko"
+
 msgid "Subscription"
 msgstr "Tilaus"
 
@@ -9062,6 +9065,9 @@ msgstr "Hallitse työpajan kysymyksiin tarjolla olevia vastausvaihtoehtoja"
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"
 
+msgid "Reduce the sidebar to gain more space, or enlarge it again"
+msgstr "Pienennä sivupalkkia saadaksesi lisää tilaa tai suurenna se uudelleen"
+
 msgid "Sign up for the event, or update your registration options"
 msgstr "Ilmoittaudu tapahtumaan tai päivitä ilmoittautumisasetuksesi"
 
@@ -11387,6 +11393,12 @@ msgid ""
 "To participate in the organization's events, you must apply to become a "
 "member."
 msgstr "Osallistuaksesi järjestön tapahtumiin sinun on haettava jäsenyyttä."
+
+msgid ""
+"You have been assigned a management role: here is a quick tour of the "
+"dashboard"
+msgstr ""
+"Sinulle on annettu hallintarooli: tässä pikakierros hallintapaneelissa"
 
 #, python-format
 msgid ""
