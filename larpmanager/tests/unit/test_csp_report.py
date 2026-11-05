@@ -78,6 +78,7 @@ class TestCspAggregation(BaseTestCase):
         assert not record_csp_report(build_report(**{"blocked-uri": "chrome-extension://abc/inject.js"}))
         assert not record_csp_report({"other": {}})
         assert not record_csp_report([])
+        assert not record_csp_report(build_report(**{"source-file": "sandbox eval code"}))
 
         assert pop_csp_reports() == []
 
