@@ -83,14 +83,14 @@
   &.animation-reveal {
     animation: reveal 1s cubic-bezier(0.77, 0, 0.175, 1);
   }
+}
 
-  @keyframes reveal {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
+@keyframes reveal {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 

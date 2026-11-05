@@ -51,6 +51,9 @@ CSP_FIELD_MAX_LENGTH = 300
 # Sources injected by browser extensions, which the site cannot fix
 CSP_IGNORED_SCHEMES = ("chrome-extension", "moz-extension", "safari-extension", "safari-web-extension")
 
+# Placeholder source files Firefox reports for code run by extensions rather than by the page
+CSP_IGNORED_SOURCES = ("sandbox eval code",)
+
 
 def _strip_query(url: str) -> str:
     """Drop querystring and fragment from a URL, so tokens never end up in the digest."""
@@ -79,7 +82,10 @@ def record_csp_report(payload: Any) -> bool:
     source = _strip_query(_field(report, "source-file"))
     line = _field(report, "line-number")
 
-    if not directive or any(value.startswith(CSP_IGNORED_SCHEMES) for value in (blocked, source)):
+    is_extension = source in CSP_IGNORED_SOURCES or any(
+        value.startswith(CSP_IGNORED_SCHEMES) for value in (blocked, source)
+    )
+    if not directive or is_extension:
         return False
 
     signature = hashlib.md5(f"{directive}|{blocked}|{source}|{line}".encode(), usedforsecurity=False).hexdigest()
