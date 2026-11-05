@@ -8908,6 +8908,10 @@ msgstr "Dessa karaktärer är inte medlemmar i guilden: %(names)s"
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Vi stötte på ett problem med den skattekod du angav:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Du har bjudits in till rollen %(role)s för %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Du måste välja minst en biljett för denna delbetalning"
 
@@ -9175,7 +9179,7 @@ msgstr ""
 "använd en rektangulär bild, helst i förhållandet 4:3 för bästa resultat"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr "Öppna hanteringspanelen <a href='%(url)s'>från här</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"

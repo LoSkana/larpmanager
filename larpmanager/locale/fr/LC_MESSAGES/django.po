@@ -8968,6 +8968,10 @@ msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Nous avons rencontré un problème avec le code fiscal que tu as fourni:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Tu as été invité au rôle %(role)s pour %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Tu dois sélectionner au moins un billet pour cette tranche"
 
@@ -9277,7 +9281,7 @@ msgstr ""
 " résultats"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr "Accède au panneau de gestion <a href='%(url)s'>à partir d'ici</a> !"
 
 msgid "Adds a page where you can define shorter URLs for long links"

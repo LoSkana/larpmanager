@@ -25,11 +25,12 @@ from typing import TYPE_CHECKING, Any
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _, override
 
 from larpmanager.cache.basic import get_event_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_event_config
@@ -45,7 +46,7 @@ from larpmanager.models.access import (
 )
 from larpmanager.models.association import Association, get_association_maintainers
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.event import EventTextType
+from larpmanager.models.event import EventTextType, Run
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_association, hdr_run
@@ -198,7 +199,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
     activate(mb.language)
     subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
     url = get_url(reverse("manage"), instance.association)
-    body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
+    body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
     my_send_mail(subj, body, mb, instance.association)
 
     # Notify existing executives about the new role assignment
@@ -256,11 +257,20 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
     except ObjectDoesNotExist:
         orgas = []
 
+    # Mails are tied to the latest run, so they use its archive and SMTP settings
+    run = _latest_event_run(instance.event_id)
     for mid in pk_set:
-        _add_member_event_role(orgas, instance, mid, association_id)
+        _add_member_event_role(orgas, instance, mid, association_id, run)
 
 
-def _add_member_event_role(orgas: list[Member], instance: EventRole, mid: int | str, association_id: int) -> None:
+def _latest_event_run(event_id: int) -> Run | None:
+    """Return the run of the event with the latest end date, runs without one coming last."""
+    return Run.objects.filter(event_id=event_id).order_by(F("end").desc(nulls_last=True), "-pk").first()
+
+
+def _add_member_event_role(
+    orgas: list[Member], instance: EventRole, mid: int | str, association_id: int, run: Run | None = None
+) -> None:
     """Join member to association, reset its links, and notify member and organizers of the event role."""
     mb = Member.objects.get(pk=mid)
     mb.join(association_id)
@@ -274,8 +284,8 @@ def _add_member_event_role(orgas: list[Member], instance: EventRole, mid: int | 
         "event": instance.event,
     }
     url = get_association_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), association_id)
-    body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
-    my_send_mail(subj, body, mb, instance.event)
+    body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
+    my_send_mail(subj, body, mb, run or instance.event)
 
     # Notify organizers, skipping the member itself
     for m in orgas:
@@ -288,21 +298,29 @@ def _add_member_event_role(orgas: list[Member], instance: EventRole, mid: int | 
             "event": instance.event,
         }
         body = _("The user has been assigned the specified role.")
-        my_send_mail(subj, body, m, instance.event)
+        my_send_mail(subj, body, m, run or instance.event)
 
 
-def send_role_invite_email(invite: RoleInvite) -> None:
-    """Send invitation email with redeem link to invited email address."""
+def send_role_invite_email(invite: RoleInvite, run: Run | None = None) -> None:
+    """Send invitation email with redeem link, in the language of the invited member when already registered."""
     role = invite.role()
     association = invite.association
-    activate("en")
-    subj = hdr(association) + _("You have been invited to the role: %(role)s") % {"role": role.name}
-    redeem_url = get_url(reverse("role_invite_redeem", kwargs={"token": invite.token}), association)
-    body = _("You have been invited to join as %(role)s") % {"role": role.name}
-    body += ".<br/><br/>"
-    body += _("Click <a href='%(url)s'>here</a> to accept the invitation") % {"url": redeem_url}
-    body += "."
-    my_send_mail(subj, body, invite.email, association)
+    member = Member.objects.filter(email__iexact=invite.email).first()
+    # Scoped override: the view keeps the language of the sender for its own messages
+    with override(member.language if member else "en"):
+        if invite.event:
+            subj = hdr(association) + _("You have been invited to the role %(role)s for %(event)s") % {
+                "role": role.name,
+                "event": invite.event,
+            }
+        else:
+            subj = hdr(association) + _("You have been invited to the role: %(role)s") % {"role": role.name}
+        redeem_url = get_url(reverse("role_invite_redeem", kwargs={"token": invite.token}), association)
+        body = _("You have been invited to join as %(role)s") % {"role": role.name}
+        body += ".<br/><br/>"
+        body += _("Click <a href='%(url)s'>here</a> to accept the invitation") % {"url": redeem_url}
+        body += "."
+    my_send_mail(subj, body, member or invite.email, run or association)
 
 
 def bring_friend_instructions(registration: Registration, context: dict) -> None:

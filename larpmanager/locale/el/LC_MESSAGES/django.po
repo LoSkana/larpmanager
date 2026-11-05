@@ -8970,6 +8970,10 @@ msgstr "Αυτοί οι χαρακτήρες δεν είναι μέλη της �
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Εντοπίσαμε πρόβλημα με τον φορολογικό κωδικό που έδωσες:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Έχεις προσκληθεί στον ρόλο %(role)s για το %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Πρέπει να επιλέξεις τουλάχιστον ένα εισιτήριο για αυτή τη δόση"
 
@@ -9271,8 +9275,8 @@ msgstr ""
 "αποτελέσματα"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
-msgstr "Πρόσβαση στον πίνακα διαχείρισης <a href= %(url)s'>από εδώ</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
+msgstr "Πρόσβαση στον πίνακα διαχείρισης <a href='%(url)s'>από εδώ</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""

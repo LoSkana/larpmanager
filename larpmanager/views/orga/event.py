@@ -324,7 +324,7 @@ def orga_roles_invite(request: HttpRequest, event_slug: str, role_uuid: str) -> 
                 event_role=role,
                 invited_by=request.user.member,
             )
-            send_role_invite_email(invite)
+            send_role_invite_email(invite, context["run"])
             messages.success(request, _("Invitation sent to %(email)s") % {"email": email})
         return redirect("orga_roles", event_slug=event_slug)
     context["role"] = role
