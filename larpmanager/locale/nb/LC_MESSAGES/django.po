@@ -8909,6 +8909,10 @@ msgstr "Disse karakterene er ikke medlemmer av lauget: %(names)s"
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Vi har støtt på et problem med skattekoden du oppga:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Du har blitt invitert til rollen %(role)s for %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Du må velge minst én billett til denne delbetalingen"
 
@@ -9182,7 +9186,7 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr "bruk et rektangulært bilde, helst i forholdet 4:3 for best resultat"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr "Få tilgang til administrasjonspanelet <a href='%(url)s'>herfra</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"

@@ -3081,7 +3081,7 @@ msgid "Role approval %(role)s"
 msgstr ""
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr ""
 
 #, python-format
@@ -3097,6 +3097,10 @@ msgstr ""
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
 msgstr ""
 
 #, python-format

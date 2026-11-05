@@ -8918,6 +8918,10 @@ msgstr "Nämä hahmot eivät ole killan jäseniä: %(names)s"
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Toimittamasi verokoodin kanssa ilmeni ongelma:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Sinut on kutsuttu rooliin %(role)s tapahtumassa %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Sinun on valittava vähintään yksi lippu tätä erää varten"
 
@@ -9189,7 +9193,7 @@ msgstr ""
 "tulokset"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr "Pääset hallintapaneeliin <a href='%(url)s'>täältä</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"

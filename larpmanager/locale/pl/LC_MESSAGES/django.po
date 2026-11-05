@@ -8922,6 +8922,10 @@ msgstr "Te postacie nie są członkami gildii: %(names)s"
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Napotkaliśmy problem z podanym kodem podatkowym:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Zaproszono cię do roli %(role)s w wydarzeniu %(event)s"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Musisz wybrać co najmniej jeden bilet dla tej raty"
 
@@ -9207,7 +9211,7 @@ msgstr ""
 "najlepsze wyniki"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr "Dostęp do panelu zarządzania <a href='%(url)s'>z tego miejsca</a>!"
 
 msgid "Adds a page where you can define shorter URLs for long links"

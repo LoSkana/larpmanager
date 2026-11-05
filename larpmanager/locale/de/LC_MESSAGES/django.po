@@ -8965,6 +8965,10 @@ msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Es ist ein Problem mit der von dir angegebenen Steuerkennung aufgetreten:"
 
+#, python-format
+msgid "You have been invited to the role %(role)s for %(event)s"
+msgstr "Du wurdest für %(event)s zur Rolle %(role)s eingeladen"
+
 msgid "You must select at least one ticket for this installment"
 msgstr "Du musst mindestens ein Ticket für diese Tranche auswählen"
 
@@ -9267,7 +9271,7 @@ msgstr ""
 "Ergebnisse zu erzielen"
 
 #, python-format
-msgid "Access the management panel <a href= %(url)s'>from here</a>!"
+msgid "Access the management panel <a href='%(url)s'>from here</a>!"
 msgstr ""
 "Greife <a href='%(url)s'>von hier aus auf den Verwaltungsbereich zu</a>!"
 
