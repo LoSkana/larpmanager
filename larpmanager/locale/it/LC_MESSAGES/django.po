@@ -553,6 +553,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Annulla"
 
+msgid "Change"
+msgstr "Modifica"
+
 msgid "Checks"
 msgstr "Controlli"
 
@@ -4335,6 +4338,9 @@ msgstr "Imposta i tipi di Quest"
 msgid "Show other options"
 msgstr "Mostra altre opzioni"
 
+msgid "Slug already used!"
+msgstr "Slug già in uso!"
+
 msgid "The trash is empty"
 msgstr "Il cestino è vuoto"
 
@@ -6089,6 +6095,9 @@ msgstr "Personalizzazione giocatore aggiornata!"
 msgid "Players waiting for character"
 msgstr "Giocatori in attesa del personaggio"
 
+msgid "Please select this file again"
+msgstr "Seleziona di nuovo questo file"
+
 msgid "Preferred navigation language"
 msgstr "Lingua preferita di navigazione"
 
@@ -7052,6 +7061,9 @@ msgstr "Non sono stati trovati file riconosciuti nello ZIP."
 msgid "One symbol more or less than expected"
 msgstr "Un simbolo in più o in meno rispetto al previsto"
 
+msgid "Reserved word, please choose another!"
+msgstr "Parola riservata, scegline un'altra!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Seleziona l'organizzazione verso cui procedere"
 
@@ -7372,6 +7384,9 @@ msgstr "Imposta le opzioni di casting nella configurazione"
 
 msgid "The collection was delivered to the user"
 msgstr "La colletta è stata consegnata all'utente"
+
+msgid "The name must contain letters or numbers"
+msgstr "Il nome deve contenere lettere o numeri"
 
 msgid "The number of payments to split the fee."
 msgstr "Il numero di pagamenti in cui suddividere la quota."
@@ -9011,6 +9026,9 @@ msgid "Symbols for date of birth do not match (check exact date)"
 msgstr ""
 "I simboli della data di nascita non corrispondono (controlla la data esatta)"
 
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "Non è possibile creare l'URL da questo nome, scegline uno tu"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Il campo personaggio di tipo computato che verrà aggiornato"
 
@@ -10614,6 +10632,11 @@ msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr ""
 "La prenotazione di questi sconti è scaduta, quindi non sono stati applicati"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+"Questo URL non è disponibile: controlla quello suggerito o scegline un altro"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -13124,6 +13147,14 @@ msgid ""
 msgstr ""
 "La tua iscrizione a questo evento è stata cancellata con successo. Ci "
 "dispiace che tu te ne vada!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s è già stata creata con questo modulo: riapri il modulo per "
+"crearne un'altra"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

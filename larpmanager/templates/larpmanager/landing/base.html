@@ -170,6 +170,7 @@
             </footer>
         {% endif %}
         {% compress js %}
+            <script defer src="{% static 'larpmanager/assets/js/slug-field.js' %}"></script>
             <script defer src="{% static 'larpmanager/landing/landing.js' %}"></script>
         {% endcompress %}
         <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>

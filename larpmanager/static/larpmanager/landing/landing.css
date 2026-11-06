@@ -1384,6 +1384,15 @@ body.landing .slug_pre {
   margin: 0;
 }
 
+body.landing .slug_change {
+  font-size: 0.82rem;
+}
+
+body.landing #id_submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 body.landing .slug_war {
   font-size: 0.78rem;
   color: #a33;

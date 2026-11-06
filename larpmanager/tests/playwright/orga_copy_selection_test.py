@@ -30,6 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    fill_slug,
     fill_date,
     get_modal_iframe,
     go_to,
@@ -85,7 +86,7 @@ def prepare_target(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("target")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("target")
+    fill_slug(edit_iframe, "target")
     fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
     fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
     save_modal(page, edit_iframe)

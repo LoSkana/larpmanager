@@ -32,6 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    fill_slug,
     fill_date,
     fill_tinymce,
     get_modal_iframe,
@@ -179,7 +180,7 @@ def create_child_event(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("child choose")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("childchoose")
+    fill_slug(edit_iframe, "childchoose")
     expect(edit_iframe.locator("#slug")).to_have_value("childchoose")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
