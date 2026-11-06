@@ -483,6 +483,12 @@ function initFeatureModals() {
         window.openIframeModal($(this).data('iframe-url'), 'popup_tutorial');
     });
 
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('#tv22-help summary').length) {
+            $('#tv22-help').removeAttr('open');
+        }
+    });
+
     $('.feature_checkbox a').click(function(event) {
         event.preventDefault();
 

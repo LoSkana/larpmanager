@@ -528,14 +528,15 @@ def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
 def chat_ask(request: HttpRequest) -> Any:
     """AJAX endpoint for the live chat assistant.
 
-    Answers are grounded in the guides/tutorials cache and cached per question, so the
-    Anthropic API is only called for new, matchable questions.
+    Answers are grounded in the guides and tutorials and cached per question and page, so
+    the Anthropic API is only called for new, matchable questions.
 
     Args:
-        request: HTTP request object, expects POST with "question".
+        request: HTTP request object, expects POST with "question" and optional "page",
+            the name of the view the user is on.
 
     Returns:
-        JsonResponse: {"answer": "..."}
+        JsonResponse: {"answer": "...", "sources": [{"title": "...", "url": "..."}]}
 
     """
     if request.method != "POST":
@@ -550,8 +551,7 @@ def chat_ask(request: HttpRequest) -> Any:
 
     LarpManagerChatLog.objects.create(member=request.user.member, question=question)
 
-    answer = get_chat_answer(question)
-    return JsonResponse({"answer": answer})
+    return JsonResponse(get_chat_answer(question, request.POST.get("page", "")))
 
 
 def ticket(request: HttpRequest, reason: Any = "") -> Any:
@@ -882,12 +882,6 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["opened"] = tutorial
 
-    # Track tutorial visit for activation checklist
-    member = context.get("member")
-    if member:
-        for membership in member.memberships.filter(association__lite_mode=True).select_related("association"):
-            save_single_config(membership.association, "exe_tutorial_suggestion", value=True)
-
     return render(request, "larpmanager/landing/tutorials.html", context)
 
 
@@ -899,6 +893,14 @@ def guides(request: HttpRequest) -> Any:
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/landing/guides.html", context)
+
+
+def concepts(request: HttpRequest) -> Any:
+    """Display the primer on the key concepts of the platform, on the main site and on any organization site."""
+    context = get_context(request, check_main_site=request.association["id"] == 0)
+    context["lm"] = 1
+    context["iframe"] = request.GET.get("in_iframe") == "1"
+    return render(request, "larpmanager/landing/concepts.html", context)
 
 
 def guide(request: HttpRequest, slug: Any) -> Any:

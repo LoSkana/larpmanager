@@ -81,16 +81,8 @@
     {% endif %}
     {% if topbar_admin %}
         {% if manage %}
-            {% if is_larpmanager_skin and not association.demo and not lite_mode %}
-                <button id="wwyltd-open"
-                        class="tv22-wwyltd-btn wwyltd-open-trigger"
-                        aria-label="{% trans "What would you like to do?" %}">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </button>
-                <button class="tv22-wwyltd-btn chat-widget-open-trigger"
-                        aria-label="{% trans "Ask a question" %}">
-                    <i class="fa-solid fa-comment-dots"></i>
-                </button>
+            {% if not association.demo %}
+                {% include "elements/structure/help-menu.html" %}
             {% endif %}
             {% if run %}
                 {% url 'event_redirect' event_slug=run.get_slug as user_href %}
@@ -199,7 +191,7 @@
         </tr>
     </table>
 </div>
-{% if is_larpmanager_skin and manage and not lite_mode %}
+{% if is_larpmanager_skin and manage %}
     <dialog id="wwyltd-modal" class="popup_small">
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
     </dialog>

@@ -65,9 +65,11 @@
                 </table>
             </div>
             {% if not item.list and not item.title %}
-                <p class="no-elements-available">
-                    <i>{% trans "No elements are currently available" %}</i>
-                </p>
+                {% block empty_state %}
+                    <p class="no-elements-available">
+                        <i>{% trans "No elements are currently available" %}</i>
+                    </p>
+                {% endblock empty_state %}
             {% endif %}
         {% endif %}
     {% endfor %}

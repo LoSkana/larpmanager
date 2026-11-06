@@ -1,0 +1,99 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {% trans "Key concepts" %}
+{% endblock maintitle %}
+{% block landing_eyebrow %}
+    {% trans "Key concepts" %}
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {% trans "How it is organized" %}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div id="concepts">
+        <p>
+            {% trans "An organization hosts your events, and each event can have one or more sessions. Participants register for a session by choosing a ticket and answering the registration form. Staff members manage everything from two dashboards, one for the organization and one for each event." %}
+        </p>
+        <ol>
+            <li>{% trans "Create an event, which opens its first session." %}</li>
+            <li>{% trans "Set up the tickets and the registration form." %}</li>
+            <li>{% trans "Choose how participants pay, then open registrations." %}</li>
+            <li>{% trans "Follow registrations and payments from the event dashboard." %}</li>
+        </ol>
+        <h2>{% trans "Structure" %}</h2>
+        <dl>
+            <dt>{% trans "Organization" %}</dt>
+            <dd>
+                {% trans "The group running events. It holds members, accounting and the settings shared by all its events." %}
+            </dd>
+            <dt>{% trans "Event" %}</dt>
+            <dd>
+                {% trans "A game you run, with its own pages, tickets, characters and staff." %}
+            </dd>
+            <dt>{% trans "Session" %}</dt>
+            <dd>
+                {% trans "One edition of an event, with its dates. Running the same event twice means two sessions." %}
+            </dd>
+            <dt>{% trans "Campaign" %}</dt>
+            <dd>
+                {% trans "A series of events sharing the same characters and factions." %}
+            </dd>
+        </dl>
+        <h2>{% trans "People" %}</h2>
+        <dl>
+            <dt>{% trans "Participant" %}</dt>
+            <dd>
+                {% trans "Someone registered for an event." %}
+            </dd>
+            <dt>{% trans "Role" %}</dt>
+            <dd>
+                {% trans "A set of permissions given to staff members. Organization roles and event roles are managed separately." %}
+            </dd>
+        </dl>
+        <h2>{% trans "Registrations" %}</h2>
+        <dl>
+            <dt>{% trans "Ticket" %}</dt>
+            <dd>
+                {% trans "An option participants choose when they register, with its own price and availability." %}
+            </dd>
+            <dt>{% trans "Registration form" %}</dt>
+            <dd>
+                {% trans "The questions participants answer when they register." %}
+            </dd>
+            <dt>{% trans "Payment method" %}</dt>
+            <dd>
+                {% trans "A way for participants to pay, such as a bank transfer or an online gateway." %}
+            </dd>
+            <dt>{% trans "Character" %}</dt>
+            <dd>
+                {% trans "A role in the game, with a sheet that the assigned participant can read." %}
+            </dd>
+        </dl>
+        <h2>{% trans "Platform" %}</h2>
+        <dl>
+            <dt>{% trans "Dashboard" %}</dt>
+            <dd>
+                {% trans "The management home, showing what needs your attention. Use the top bar to switch between the organization and each event." %}
+            </dd>
+            <dt>{% trans "Feature" %}</dt>
+            <dd>
+                {% trans "An optional tool you activate when you need it, for the whole organization or for a single event." %}
+            </dd>
+            <dt>{% trans "Configuration" %}</dt>
+            <dd>
+                {% trans "The settings of the features you have activated." %}
+            </dd>
+            <dt>{% trans "Lite Mode" %}</dt>
+            <dd>
+                {% trans "The simplified interface of new organizations, showing only the core pages." %}
+            </dd>
+            <dt>{% trans "Advanced Mode" %}</dt>
+            <dd>
+                {% trans "The full interface, available once the activation checklist is complete." %}
+            </dd>
+        </dl>
+        <p>
+            <a href="{% url 'tutorials' %}{% if iframe %}?in_iframe=1{% endif %}">{% trans "Continue with the tutorials" %}</a>
+        </p>
+    </div>
+{% endblock landing_content %}

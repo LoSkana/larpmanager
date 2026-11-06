@@ -360,7 +360,11 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
     sidebar(page, "Factions")
-    expect_normalized(page, page.locator("#one"), "No elements are currently available")
+    expect_normalized(
+        page,
+        page.locator(".empty-state p"),
+        "Factions group characters together, for example by team, family or allegiance.",
+    )
 
     # add new factions
     page.get_by_role("link", name="New").click()

@@ -91,6 +91,17 @@
   background: rgba(var(--pri-rgb), 0.08);
 }
 
+/*** EMPTY STATES ***/
+
+.empty-state {
+  margin: 1.5em 0;
+  text-align: center;
+}
+
+.empty-state p {
+  margin-bottom: 0.75em;
+}
+
 /*** MOBILE ***/
 
 @media screen and (max-width: 840px) {

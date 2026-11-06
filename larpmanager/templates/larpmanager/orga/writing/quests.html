@@ -3,6 +3,11 @@
 {% block title %}
     {% trans "Quest" %} - {{ event.name }}
 {% endblock title %}
+{% block empty_state %}
+    {% trans "Quests are the building blocks of character sheets, each with its own traits." as empty_text %}
+    {% trans "New quest" as empty_new %}
+    {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
+{% endblock empty_state %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='traits'>{% trans "Traits" %}</a>

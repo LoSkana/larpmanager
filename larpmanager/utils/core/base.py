@@ -133,8 +133,6 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     if context.get("demo") and context.get("request_func_name"):
         add_demo_hint_context(request, context)
 
-    _add_intro_driver(context)
-
     # Set sidebar state from user session
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
@@ -156,15 +154,21 @@ def _check_main_site_access(request: HttpRequest, context: dict, *, check_main_s
     raise MembershipError
 
 
-def _add_intro_driver(context: dict) -> None:
-    """Show the intro driver tutorial once, consuming its association config."""
+def add_intro_driver(request: HttpRequest, context: dict) -> None:
+    """Pick the dashboard tour: the pending association one, consumed once, or a replay on request.
+
+    Called only by the dashboards, the pages rendering the tour, so that no other page can consume it.
+    Pending tours are skipped under pytest, where they would overlay the pages driven by the browser tests.
+    """
     if not context["member"] or not context["association_id"]:
         return
-    intro_value = get_association_config(context["association_id"], "intro_driver")
-    if not intro_value:
-        return
-    context["intro_driver"] = intro_value
-    AssociationConfig.objects.filter(association_id=context["association_id"], name="intro_driver").delete()
+    pending_allowed = not os.getenv("PYTEST_CURRENT_TEST")
+    intro_value = pending_allowed and get_association_config(context["association_id"], "intro_driver")
+    if intro_value:
+        context["intro_driver"] = intro_value
+        AssociationConfig.objects.filter(association_id=context["association_id"], name="intro_driver").delete()
+    elif request.GET.get("tour"):
+        context["intro_driver"] = "overview"
 
 
 def add_first_role_driver(context: dict) -> None:

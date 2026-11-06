@@ -3,6 +3,11 @@
 {% block title %}
     {% trans "Characters" %} - {{ event.name }}
 {% endblock title %}
+{% block empty_state %}
+    {% trans "Characters are the roles participants play, each with its own sheet." as empty_text %}
+    {% trans "New character" as empty_new %}
+    {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
+{% endblock empty_state %}
 {% block nav_fields %}
     {% if user_character_max %}
         <a href="#" class="table_toggle" tog='player'>{% trans "Player" %}</a>

@@ -685,6 +685,9 @@ msgstr "Επιλογή"
 msgid "Patron"
 msgstr "Υποστηρικτής"
 
+msgid "People"
+msgstr "Άτομα"
+
 msgid "Photo:"
 msgstr "Φωτογραφία:"
 
@@ -900,6 +903,9 @@ msgstr "Εκτέλεσε"
 
 msgid "Faction"
 msgstr "Παράταξη"
+
+msgid "Feature"
+msgstr "Λειτουργία"
 
 msgid "Gallery"
 msgstr "Γκαλερί"
@@ -1283,6 +1289,9 @@ msgstr "Νέο κόστος"
 msgid "New gift"
 msgstr "Νέο δώρο"
 
+msgid "New plot"
+msgstr "Νέα πλοκή"
+
 msgid "Nickname"
 msgstr "Ψευδώνυμο"
 
@@ -1321,6 +1330,9 @@ msgstr "Μαζικό PDF"
 
 msgid "Personal"
 msgstr "Προσωπικό"
+
+msgid "Platform"
+msgstr "Πλατφόρμα"
 
 msgid "Portrait"
 msgstr "Πορτρέτο"
@@ -1577,6 +1589,9 @@ msgstr "Γλώσσες"
 msgid "Last page"
 msgstr "Τελευταία σελίδα"
 
+msgid "Lite Mode"
+msgstr "Λειτουργία Lite"
+
 msgid "Longitude"
 msgstr "Γεωγραφικό μήκος"
 
@@ -1600,6 +1615,9 @@ msgstr "Νέα εκδήλωση"
 
 msgid "New guild"
 msgstr "Νέα συντεχνία"
+
+msgid "New quest"
+msgstr "Νέο Quest"
 
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
@@ -1705,6 +1723,9 @@ msgstr "Speedlarp"
 
 msgid "Start day"
 msgstr "Ημέρα έναρξης"
+
+msgid "Structure"
+msgstr "Δομή"
 
 msgid "Subdomain"
 msgstr "Υποτομέας"
@@ -1946,6 +1967,9 @@ msgstr "Νέος παίκτης"
 msgid "New signup"
 msgstr "Νέα εγγραφή"
 
+msgid "New ticket"
+msgstr "Νέο εισιτήριο"
+
 msgid "Newsletter"
 msgstr "Ενημερωτικό δελτίο"
 
@@ -2002,6 +2026,12 @@ msgstr "Τύπος Quest"
 
 msgid "Questions:"
 msgstr "Ερωτήσεις:"
+
+msgid "Quick tour"
+msgstr "Γρήγορη περιήγηση"
+
+msgid "Read more:"
+msgstr "Διάβασε περισσότερα:"
 
 msgid "Recipients"
 msgstr "Παραλήπτες"
@@ -2270,6 +2300,9 @@ msgstr "Υπηκοότητα"
 msgid "Net profit:"
 msgstr "Καθαρό κέρδος:"
 
+msgid "New faction"
+msgstr "Νέα φατρία"
+
 msgid "New session"
 msgstr "Νέα συνεδρία"
 
@@ -2522,6 +2555,9 @@ msgstr "Διάστημα (δ)"
 msgid "Invite sent!"
 msgstr "Η πρόσκληση στάλθηκε!"
 
+msgid "Key concepts"
+msgstr "Βασικές έννοιες"
+
 msgid "Legal Gender"
 msgstr "Νομικό φύλο"
 
@@ -2548,6 +2584,12 @@ msgstr "Εθνικότητα:"
 
 msgid "Need a ride?"
 msgstr "Χρειάζεσαι μεταφορά;"
+
+msgid "New discount"
+msgstr "Νέα έκπτωση"
+
+msgid "New question"
+msgstr "Νέα ερώτηση"
 
 msgid "Not included"
 msgstr "Δεν περιλαμβάνεται"
@@ -2711,8 +2753,14 @@ msgstr "Διαμονή"
 msgid "Add character"
 msgstr "Προσθήκη χαρακτήρα"
 
+msgid "Advanced Mode"
+msgstr "Προηγμένη λειτουργία"
+
 msgid "Age selection"
 msgstr "Επιλογή ηλικίας"
+
+msgid "All tutorials"
+msgstr "Όλοι οι οδηγοί"
 
 msgid "Apply Upgrade"
 msgstr "Εφαρμογή αναβάθμισης"
@@ -3149,6 +3197,9 @@ msgstr "Η σελίδα δεν βρέθηκε"
 msgid "Password reset"
 msgstr "Επαναφορά κωδικού"
 
+msgid "Payment method"
+msgstr "Τρόπος πληρωμής"
+
 msgid "Payment quotas"
 msgstr "Δόσεις πληρωμής"
 
@@ -3494,6 +3545,9 @@ msgstr "Αφαίρεση προλόγου"
 
 msgid "Replacing names"
 msgstr "Αντικατάσταση ονομάτων"
+
+msgid "Replay the tour"
+msgstr "Ξαναδές την περιήγηση"
 
 msgid "Restore Preview"
 msgstr "Προεπισκόπηση επαναφοράς"
@@ -4479,6 +4533,9 @@ msgstr "Πήγαινε στην αρχική σελίδα"
 msgid "History preferences"
 msgstr "Ιστορικό προτιμήσεων"
 
+msgid "How it is organized"
+msgstr "Πώς είναι οργανωμένο"
+
 msgid "I am not interested"
 msgstr "Δεν ενδιαφέρομαι"
 
@@ -4919,6 +4976,9 @@ msgstr "Ερωτήσεις συμμετεχόντων"
 
 msgid "Pre-registration link"
 msgstr "Σύνδεσμος προεγγραφής"
+
+msgid "Read the key concepts"
+msgstr "Διάβασε τις βασικές έννοιες"
 
 msgid "Referenced Characters"
 msgstr "Αναφερόμενοι χαρακτήρες"
@@ -5769,6 +5829,9 @@ msgstr "Έλεγχος αντίστροφης σχέσης:"
 msgid "Commit warehouse quantities"
 msgstr "Οριστικοποίηση ποσοτήτων αποθήκης"
 
+msgid "Continue with the tutorials"
+msgstr "Συνέχισε με τους οδηγούς"
+
 msgid "Credits, tokens and refunds"
 msgstr "Credits, tokens και επιστροφές χρημάτων"
 
@@ -6466,6 +6529,9 @@ msgstr "Εμφάνιση ιστορικού προτιμήσεων."
 msgid "So far you have paid a total of:"
 msgstr "Μέχρι τώρα έχεις πληρώσει συνολικά:"
 
+msgid "Someone registered for an event."
+msgstr "Ένα άτομο εγγεγραμμένο σε μια εκδήλωση."
+
 msgid "Sum of payments received through"
 msgstr "Σύνολο πληρωμών που ελήφθησαν μέσω"
 
@@ -6545,9 +6611,6 @@ msgstr "Ανακάλυψε τις παρατάξεις του παιχνιδιο
 
 msgid "Do you want to tell us something?"
 msgstr "Θέλεις να μας πεις κάτι;"
-
-msgid "For best results, ask in English."
-msgstr "Για καλύτερα αποτελέσματα, ρώτησε στα Αγγλικά."
 
 msgid "Is it selectable by participants?"
 msgstr "Μπορούν να το επιλέξουν οι συμμετέχοντες;"
@@ -7014,6 +7077,9 @@ msgstr ""
 msgid "Feature %(name)s already deactivated!"
 msgstr "Η λειτουργία %(name)s είναι ήδη απενεργοποιημένη!"
 
+msgid "Here is a quick tour of the dashboard"
+msgstr "Ορίστε μια γρήγορη περιήγηση στον πίνακα ελέγχου"
+
 msgid "Hide participants without a character"
 msgstr "Απόκρυψη συμμετεχόντων χωρίς χαρακτήρα"
 
@@ -7040,6 +7106,9 @@ msgstr "Διαχείριση ληφθεισών προεγγραφών"
 
 msgid "Mirror type character, not selectable"
 msgstr "Χαρακτήρας τύπου Mirror, δεν είναι επιλέξιμος"
+
+msgid "New here? Start from the key concepts"
+msgstr "Πρώτη φορά εδώ; Ξεκίνα από τις βασικές έννοιες"
 
 msgid "No collections have been created yet."
 msgstr "Δεν έχουν δημιουργηθεί ακόμη συλλογές."
@@ -7073,9 +7142,6 @@ msgstr "Ενημέρωσε εδώ τις επιλογές εγγραφής!"
 
 msgid "View the complete list of our events!"
 msgstr "Δες την πλήρη λίστα των εκδηλώσεών μας!"
-
-msgid "Write here what you would like to to!"
-msgstr "Γράψε εδώ τι θα ήθελες να κάνεις!"
 
 msgid "You are currently logged in with the:"
 msgstr "Αυτή τη στιγμή έχεις συνδεθεί με:"
@@ -7153,9 +7219,6 @@ msgstr "Μεταφορές: καύσιμα και διόδια"
 
 msgid "View and edit each user's status flags"
 msgstr "Δες και επεξεργάσου τις σημαίες κατάστασης κάθε χρήστη"
-
-msgid "Visit the tutorial to learn the basics"
-msgstr "Επισκέψου τον οδηγό για να μάθεις τα βασικά"
 
 msgid "You are exploring a demo organization."
 msgstr "Εξερευνάς έναν δοκιμαστικό οργανισμό."
@@ -7958,6 +8021,9 @@ msgstr "Αναζήτησε και φιλτράρισε τους χαρακτήρ
 msgid "Select the event you wish to pre-register for"
 msgstr "Επίλεξε την εκδήλωση για την οποία θέλεις να κάνεις προεγγραφή"
 
+msgid "Set up the tickets and the registration form."
+msgstr "Ρύθμισε τα εισιτήρια και τη φόρμα εγγραφής."
+
 #, python-format
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Η επιλογή '%(option)s' απαιτεί: %(missing)s"
@@ -8100,6 +8166,9 @@ msgstr "Προστίθεται στη σελίδα εγγραφής, πριν α
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Οι χαρακτήρες είναι ορατοί μόνο σε συνδεδεμένους χρήστες:"
+
+msgid "Create an event, which opens its first session."
+msgstr "Δημιούργησε μια εκδήλωση, η οποία ανοίγει την πρώτη της συνεδρία."
 
 msgid "Customize specific texts on the event interface"
 msgstr "Προσαρμογή συγκεκριμένων κειμένων στη διεπαφή της εκδήλωσης"
@@ -8260,6 +8329,9 @@ msgstr "Τα επιλεγμένα στοιχεία θα εμφανίζονται
 
 msgid "The sessions for which the discount is available"
 msgstr "Οι συνεδρίες για τις οποίες διατίθεται η έκπτωση"
+
+msgid "The settings of the features you have activated."
+msgstr "Οι ρυθμίσεις των λειτουργιών που έχεις ενεργοποιήσει."
 
 msgid "The subscription plan associated with this event"
 msgstr "Το πρόγραμμα συνδρομής που σχετίζεται με αυτή την εκδήλωση"
@@ -8660,6 +8732,10 @@ msgstr "Ως τελευταίο βήμα, συμπλήρωσε το προφίλ
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Αποθηκεύτηκαν προτιμήσεις Casting για «%(type)s» για %(event)s"
 
+msgid "Choose how participants pay, then open registrations."
+msgstr ""
+"Επίλεξε πώς θα πληρώνουν οι συμμετέχοντες και μετά άνοιξε τις εγγραφές."
+
 msgid "Crew can now upload expenses, and you can review them"
 msgstr ""
 "Το προσωπικό μπορεί τώρα να ανεβάζει έξοδα και μπορείς να τα ελέγξεις."
@@ -8705,6 +8781,9 @@ msgstr "Δεν έχουν ανατεθεί ακόμη χαρακτήρες σε 
 msgid "No characters or handouts available to export as PDF."
 msgstr "Δεν υπάρχουν διαθέσιμοι χαρακτήρες ή handouts για εξαγωγή σε PDF."
 
+msgid "Plots are storylines that involve several characters."
+msgstr "Οι πλοκές είναι ιστορίες που αφορούν πολλούς χαρακτήρες."
+
 #, python-format
 msgid "Preview activated: you are now viewing version %(v)s."
 msgstr "Η προεπισκόπηση ενεργοποιήθηκε: βλέπεις τώρα την έκδοση %(v)s."
@@ -8718,6 +8797,10 @@ msgstr "Αλγόριθμος υπογραφής για το JWT token (προε�
 
 msgid "The date when your identification document was issued"
 msgstr "Η ημερομηνία έκδοσης του εγγράφου ταυτοποίησής σου"
+
+msgid "The questions participants answer when they register."
+msgstr ""
+"Οι ερωτήσεις στις οποίες απαντούν οι συμμετέχοντες κατά την εγγραφή τους."
 
 msgid "View your payments and pending amounts for this event"
 msgstr "Δες τις πληρωμές και τα εκκρεμή ποσά σου για αυτό το event"
@@ -8769,9 +8852,6 @@ msgstr "Αρχική τιμή πόντων εμπειρίας για όλους 
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Διαχείριση πεδίων για φύλλο χαρακτήρα και στοιχεία συγγραφής"
-
-msgid "No registrations have been received for this event yet"
-msgstr "Δεν έχουν ληφθεί ακόμη εγγραφές για αυτό το event"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
@@ -9195,6 +9275,11 @@ msgstr "Θέλεις να αναθέτεις χαρακτήρες χρησιμο
 msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr "Εισήγαγε εδώ οποιοδήποτε στοιχείο θέλεις να αποφύγεις στην ανάθεση:"
 
+msgid "Follow registrations and payments from the event dashboard."
+msgstr ""
+"Παρακολούθησε τις εγγραφές και τις πληρωμές από τον πίνακα ελέγχου της "
+"εκδήλωσης."
+
 msgid "I am not good what to say. I never thought it would happen."
 msgstr "Δεν ξέρω τι να πω. Ποτέ δεν πίστευα ότι θα συνέβαινε."
 
@@ -9273,6 +9358,11 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "χρησιμοποίησε ορθογώνια εικόνα, ιδανικά με αναλογία 4:3 για καλύτερα "
 "αποτελέσματα"
+
+msgid "A series of events sharing the same characters and factions."
+msgstr ""
+"Μια σειρά εκδηλώσεων που μοιράζονται τους ίδιους χαρακτήρες και τις ίδιες "
+"φατρίες."
 
 #, python-format
 msgid "Access the management panel <a href='%(url)s'>from here</a>!"
@@ -9535,6 +9625,11 @@ msgid "Copy the payment reference exactly as shown (in colored text)."
 msgstr ""
 "Αντέγραψε την αναφορά πληρωμής ακριβώς όπως εμφανίζεται (σε έγχρωμο "
 "κείμενο)."
+
+msgid "Discounts offer reduced prices or promo codes to participants."
+msgstr ""
+"Οι εκπτώσεις προσφέρουν μειωμένες τιμές ή κωδικούς προσφοράς στους "
+"συμμετέχοντες."
 
 msgid "Do you want to manage character progression through abilities?"
 msgstr "Θέλεις να διαχειρίζεσαι την εξέλιξη χαρακτήρων μέσω ικανοτήτων;"
@@ -9907,6 +10002,10 @@ msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
 msgstr ""
 "Επόμενη πληρωμή: %(quota)s%(currency)s αναμένεται εντός %(days)s ημερών"
 
+msgid "Participants appear here as soon as they register for this event."
+msgstr ""
+"Οι συμμετέχοντες εμφανίζονται εδώ μόλις εγγραφούν σε αυτή την εκδήλωση."
+
 msgid "Participants can sign up right away through the registration form"
 msgstr "Οι συμμετέχοντες μπορούν να εγγραφούν αμέσως μέσω της φόρμας εγγραφής"
 
@@ -9970,6 +10069,11 @@ msgstr ""
 "%(role)s χωρίς ενεργοποιημένο έλεγχο ταυτότητας δύο παραγόντων (OTP): "
 "%(list)s"
 
+msgid "A game you run, with its own pages, tickets, characters and staff."
+msgstr ""
+"Ένα παιχνίδι που διοργανώνεις, με τις δικές του σελίδες, εισιτήρια, "
+"χαρακτήρες και προσωπικό."
+
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Σφάλμα φόρτωσης. Μη έγκυρη μορφή αρχείου (δεχόμαστε μόνο pdf ή εικόνες)."
@@ -10002,6 +10106,9 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Διαχειρίζεται πιστώσεις που χρησιμοποιούν οι συμμετέχοντες για την κάλυψη "
 "του τέλους εγγραφής"
+
+msgid "Members appear here once they have submitted a membership request."
+msgstr "Τα μέλη εμφανίζονται εδώ μόλις υποβάλουν αίτηση συμμετοχής."
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, expected within %(days)s days"
@@ -10164,6 +10271,11 @@ msgstr ""
 msgid "Assign roles to collaborators and grant access to specific functions"
 msgstr ""
 "Ανάθεσε ρόλους σε συνεργάτες και δώσε πρόσβαση σε συγκεκριμένες λειτουργίες"
+
+msgid "Characters are the roles participants play, each with its own sheet."
+msgstr ""
+"Οι χαρακτήρες είναι οι ρόλοι που υποδύονται οι συμμετέχοντες, ο καθένας με "
+"το δικό του φύλλο."
 
 msgid "Date when the membership was officially approved by the organization"
 msgstr ""
@@ -10573,6 +10685,12 @@ msgstr ""
 "<b>%(type)s</b>: δευτερεύουσα ομαδοποίηση μέσα στη δομή της κύριας παράταξης"
 
 msgid ""
+"A role in the game, with a sheet that the assigned participant can read."
+msgstr ""
+"Ένας ρόλος στο παιχνίδι, με ένα φύλλο που μπορεί να διαβάσει ο συμμετέχων "
+"στον οποίο έχει ανατεθεί."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Επιτρέπει στον οργανισμό να απονέμει Badges και ενεργοποιεί έναν δημόσιο "
@@ -10688,6 +10806,12 @@ msgstr ""
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr "Επίλεξε ποια πεδία θα ανοίγουν αυτόματα όταν εμφανίζεται η λίστα"
+
+msgid ""
+"The full interface, available once the activation checklist is complete."
+msgstr ""
+"Το πλήρες περιβάλλον, διαθέσιμο μόλις ολοκληρωθεί η λίστα ελέγχου "
+"ενεργοποίησης."
 
 msgid ""
 "The main email address participants can use to contact your organization"
@@ -11065,6 +11189,12 @@ msgstr ""
 "Οι επιλογές χαρακτήρα που πρέπει να επιλεγούν για να γίνει διαθέσιμη η "
 "ικανότητα"
 
+msgid ""
+"The simplified interface of new organizations, showing only the core pages."
+msgstr ""
+"Το απλοποιημένο περιβάλλον των νέων οργανισμών, που εμφανίζει μόνο τις "
+"βασικές σελίδες."
+
 #, python-format
 msgid ""
 "Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
@@ -11111,6 +11241,12 @@ msgid ""
 msgstr ""
 "επιτρέπονται μόνο πεζά γράμματα και αριθμοί, χωρίς κενά ή ειδικούς "
 "χαρακτήρες"
+
+msgid ""
+"A way for participants to pay, such as a bank transfer or an online gateway."
+msgstr ""
+"Ένας τρόπος πληρωμής για τους συμμετέχοντες, όπως τραπεζικό έμβασμα ή online"
+" πύλη πληρωμών."
 
 msgid ""
 "Browse each event's staff members and the competences they bring to the team"
@@ -11393,6 +11529,13 @@ msgstr ""
 "«εμφάνιση παρουσίασης»"
 
 msgid ""
+"Quests are the building blocks of character sheets, each with its own "
+"traits."
+msgstr ""
+"Τα Quest είναι τα δομικά στοιχεία των φύλλων χαρακτήρων, το καθένα με τα "
+"δικά του Trait."
+
+msgid ""
 "The event will not take place: hidden from users and excluded from "
 "accounting"
 msgstr ""
@@ -11475,6 +11618,13 @@ msgid ""
 msgstr ""
 "Ενεργοποιεί το πεδίο «τίτλος», ένα σύντομο κείμενο (2-3 λέξεις) που "
 "προστίθεται στο όνομα του χαρακτήρα."
+
+msgid ""
+"Factions group characters together, for example by team, family or "
+"allegiance."
+msgstr ""
+"Οι φατρίες ομαδοποιούν χαρακτήρες, για παράδειγμα ανά ομάδα, οικογένεια ή "
+"συμμαχία."
 
 #, python-format
 msgid ""
@@ -11782,6 +11932,13 @@ msgstr ""
 "ανοίξουν οι εγγραφές!"
 
 msgid ""
+"Questions collect the information you need from participants when they "
+"register."
+msgstr ""
+"Οι ερωτήσεις συλλέγουν τις πληροφορίες που χρειάζεσαι από τους συμμετέχοντες"
+" κατά την εγγραφή τους."
+
+msgid ""
 "Selecting an event makes you join its campaign and share your characters "
 "with it"
 msgstr ""
@@ -11894,6 +12051,13 @@ msgid ""
 msgstr ""
 "Δεν έχουν οριστεί ακόμη τροποποιητές κόστους. Χρησιμοποίησε το παραπάνω "
 "κουμπί για να δημιουργήσεις τον πρώτο τροποποιητή."
+
+msgid ""
+"Open this menu to search, ask a question, read the tutorials, or replay this"
+" tour"
+msgstr ""
+"Άνοιξε αυτό το μενού για να κάνεις αναζήτηση, να θέσεις μια ερώτηση, να "
+"διαβάσεις τους οδηγούς ή να ξαναδείς αυτή την περιήγηση"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -12041,13 +12205,6 @@ msgid ""
 msgstr ""
 "Δεν υπάρχουν ανοιχτές ερωτήσεις αυτή τη στιγμή. Όλα τα αιτήματα μελών έχουν "
 "απαντηθεί ή κλείσει."
-
-msgid ""
-"No questions have been created yet for this form. Use the button above to "
-"add one."
-msgstr ""
-"Δεν έχουν δημιουργηθεί ακόμη ερωτήσεις για αυτή τη φόρμα. Χρησιμοποίησε το "
-"παραπάνω κουμπί για να προσθέσεις μία."
 
 msgid ""
 "No warehouse items found. Use the button above to add a new item to the "
@@ -12457,6 +12614,13 @@ msgstr ""
 " του αυτόν τον σύνδεσμο: %(url)s"
 
 msgid ""
+"An option participants choose when they register, with its own price and "
+"availability."
+msgstr ""
+"Μια επιλογή που κάνουν οι συμμετέχοντες κατά την εγγραφή τους, με τη δική "
+"της τιμή και διαθεσιμότητα."
+
+msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -12469,6 +12633,13 @@ msgid ""
 msgstr ""
 "Εισήγαγε ιδιωτικές πληροφορίες για τον χαρακτήρα σου, ορατές μόνο σε εσένα "
 "και στους διοργανωτές"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try opening a "
+"support ticket."
+msgstr ""
+"Δεν βρήκα τίποτα σχετικό στην τεκμηρίωση. Δοκίμασε να ανοίξεις ένα αίτημα "
+"υποστήριξης."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
@@ -12765,18 +12936,18 @@ msgstr ""
 " τις αναθέσεις παικτών τους."
 
 msgid ""
-"No members found. Members will appear here once they have submitted a "
-"membership request."
-msgstr ""
-"Δεν βρέθηκαν μέλη. Τα μέλη θα εμφανιστούν εδώ μόλις υποβάλουν αίτημα "
-"εγγραφής ως μέλους."
-
-msgid ""
 "No resource files have been uploaded yet. Use the button above to add a new "
 "file or link."
 msgstr ""
 "Δεν έχουν ανεβεί ακόμη αρχεία πόρων. Χρησιμοποίησε το παραπάνω κουμπί για να"
 " προσθέσεις νέο αρχείο ή σύνδεσμο."
+
+msgid ""
+"One edition of an event, with its dates. Running the same event twice means "
+"two sessions."
+msgstr ""
+"Μια έκδοση μιας εκδήλωσης, με τις ημερομηνίες της. Αν διοργανώσεις την ίδια "
+"εκδήλωση δύο φορές, έχεις δύο συνεδρίες."
 
 msgid ""
 "Optional - Casting priority granted by this option (e.g., 1 = low, 5 = "
@@ -13469,13 +13640,6 @@ msgstr ""
 "συμπεριλαμβανομένων των ρόλων και της διαμόρφωσής τους"
 
 msgid ""
-"No discounts created yet. Add a discount to offer reduced prices or promo "
-"codes to participants."
-msgstr ""
-"Δεν έχουν δημιουργηθεί ακόμη εκπτώσεις. Πρόσθεσε μια έκπτωση για να "
-"προσφέρεις μειωμένες τιμές ή κωδικούς προσφοράς στους συμμετέχοντες."
-
-msgid ""
 "Note that existing ability types with the same name, will be overwritten "
 "with the uploaded data."
 msgstr ""
@@ -13524,6 +13688,13 @@ msgid ""
 msgstr ""
 "Εναλλακτικά, μπορείς να ζητήσεις καταβολή του υπολοίπου σου στη <a "
 "href='%(url)s'>λογιστική σου</a>."
+
+msgid ""
+"An optional tool you activate when you need it, for the whole organization "
+"or for a single event."
+msgstr ""
+"Ένα προαιρετικό εργαλείο που ενεργοποιείς όταν το χρειάζεσαι, για ολόκληρο "
+"τον οργανισμό ή για μία μόνο εκδήλωση."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -13582,6 +13753,13 @@ msgid ""
 msgstr ""
 "Το event <strong>%(event)s</strong> προστέθηκε αυτόματα στο larpdatabase.com"
 " ως πρόχειρο."
+
+msgid ""
+"The group running events. It holds members, accounting and the settings "
+"shared by all its events."
+msgstr ""
+"Η ομάδα που διοργανώνει τις εκδηλώσεις. Περιλαμβάνει τα μέλη, τη λογιστική "
+"και τις ρυθμίσεις που μοιράζονται όλες οι εκδηλώσεις της."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
@@ -13818,6 +13996,13 @@ msgstr ""
 "μια καθορισμένη ημερομηνία"
 
 msgid ""
+"Events are what participants register for. Each one has its own dashboard, "
+"tickets and registrations."
+msgstr ""
+"Οι εκδηλώσεις είναι αυτό στο οποίο εγγράφονται οι συμμετέχοντες. Η καθεμία "
+"έχει τον δικό της πίνακα ελέγχου, εισιτήρια και εγγραφές."
+
+msgid ""
 "Manage custom texts used across the organization, such as emails and "
 "registration pages, per language"
 msgstr ""
@@ -13928,6 +14113,13 @@ msgid ""
 msgstr ""
 "Αυτό το πεδίο μπορεί να επεξεργαστεί από τον συμμετέχοντα μόνο όταν ο "
 "χαρακτήρας βρίσκεται σε μία από τις επιλεγμένες καταστάσεις"
+
+msgid ""
+"A set of permissions given to staff members. Organization roles and event "
+"roles are managed separately."
+msgstr ""
+"Ένα σύνολο δικαιωμάτων που δίνεται στα μέλη του προσωπικού. Οι ρόλοι "
+"οργανισμού και οι ρόλοι εκδήλωσης διαχειρίζονται ξεχωριστά."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -14099,13 +14291,6 @@ msgstr ""
 "πρέπει να υποβάλεις αίτηση εγγραφής μέλους στον σύλλογο."
 
 msgid ""
-"I could not find anything relevant in the documentation. Try asking in "
-"English, or open a support ticket."
-msgstr ""
-"Δεν μπόρεσα να βρω κάτι σχετικό στην τεκμηρίωση. Δοκίμασε να ρωτήσεις στα "
-"Αγγλικά ή άνοιξε ένα αίτημα υποστήριξης."
-
-msgid ""
 "If enabled, generates secret URLs for sharing the full character sheet with "
 "a user who has not signed up."
 msgstr ""
@@ -14189,6 +14374,13 @@ msgid ""
 msgstr ""
 "Η ερώτηση θα εμφανίζεται στην επιλεγμένη ενότητα (αν μείνει κενή, θα "
 "εμφανίζεται στην αρχή της φόρμας)"
+
+msgid ""
+"Tickets are the options participants choose when they register, each with "
+"its own price and availability."
+msgstr ""
+"Τα εισιτήρια είναι οι επιλογές που κάνουν οι συμμετέχοντες κατά την εγγραφή "
+"τους, το καθένα με τη δική του τιμή και διαθεσιμότητα."
 
 msgid ""
 "Whether the character is a mirror (i.e., whether this pg shows the true "
@@ -15006,6 +15198,14 @@ msgstr ""
 " πληρωμής για όλες τις εκδηλώσεις, αντί για τους διοργανωτές κάθε εκδήλωσης"
 
 msgid ""
+"The management home, showing what needs your attention. Use the top bar to "
+"switch between the organization and each event."
+msgstr ""
+"Η αρχική σελίδα διαχείρισης, που δείχνει τι χρειάζεται την προσοχή σου. "
+"Χρησιμοποίησε την επάνω γραμμή για να αλλάζεις μεταξύ του οργανισμού και "
+"κάθε εκδήλωσης."
+
+msgid ""
 "The optimal allocation based on the set values is simulated; you can run it "
 "as many times as you like before final loading"
 msgstr ""
@@ -15503,20 +15703,20 @@ msgstr ""
 "πρέπει να συμπληρώσουν οι συμμετέχοντες."
 
 msgid ""
-"No tickets have been created for this event yet. Use the button above to add"
-" a ticket type that participants can choose when registering."
-msgstr ""
-"Δεν έχουν δημιουργηθεί ακόμη εισιτήρια για αυτό το event. Χρησιμοποίησε το "
-"παραπάνω κουμπί για να προσθέσεις έναν τύπο εισιτηρίου που μπορούν να "
-"επιλέξουν οι συμμετέχοντες κατά την εγγραφή."
-
-msgid ""
 "Your profile was modified in another window: your changes here have not been"
 " saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 "Το προφίλ σου τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν έχουν "
 "αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά ανανέωσε "
 "τη σελίδα."
+
+msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket."
+msgstr ""
+"Ένας οργανισμός φιλοξενεί τις εκδηλώσεις σου και κάθε εκδήλωση μπορεί να "
+"έχει μία ή περισσότερες συνεδρίες. Οι συμμετέχοντες εγγράφονται σε μια "
+"συνεδρία επιλέγοντας ένα εισιτήριο."
 
 msgid ""
 "We confirm that your votes are correctly registered in the system! Thank you"
@@ -16317,6 +16517,18 @@ msgstr ""
 "τον αριθμό που εμφανίζεται στα δεξιά, αλλά στις σχέσεις ο χαρακτήρας "
 "σχετίζεται. Έλεγξε αν είναι απαραίτητο να αφαιρέσεις τη σχέση ή να "
 "υποδείξεις στο κείμενο μια αναφορά στον χαρακτήρα."
+
+msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket and "
+"answering the registration form. Staff members manage everything from two "
+"dashboards, one for the organization and one for each event."
+msgstr ""
+"Ένας οργανισμός φιλοξενεί τις εκδηλώσεις σου και κάθε εκδήλωση μπορεί να "
+"έχει μία ή περισσότερες συνεδρίες. Οι συμμετέχοντες εγγράφονται σε μια "
+"συνεδρία επιλέγοντας ένα εισιτήριο και απαντώντας στη φόρμα εγγραφής. Τα "
+"μέλη του προσωπικού διαχειρίζονται τα πάντα από δύο πίνακες ελέγχου, έναν "
+"για τον οργανισμό και έναν για κάθε εκδήλωση."
 
 msgid ""
 "<strong>Lite Mode</strong> is a simplified environment designed to help you "

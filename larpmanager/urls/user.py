@@ -439,11 +439,6 @@ urlpatterns = [
         name="after_login",
     ),
     path(
-        "tutorial_query/",
-        views_base.tutorial_query,
-        name="tutorial_query",
-    ),
-    path(
         "set_member_config/",
         views_base.set_member_config,
         name="set_member_config",

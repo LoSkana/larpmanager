@@ -18,27 +18,17 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from difflib import SequenceMatcher
 from typing import Any
 
-import deepl
 from bs4 import BeautifulSoup
-from django.conf import settings as conf_settings
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
-from django.db.models import Q
-from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
+from slugify import slugify
 
-from larpmanager.models.access import AssociationPermission, EventPermission
-from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
-from larpmanager.utils.larpmanager.tasks import notify_admins
 
 SEARCH_CONFIG = "english"
-
-SNIPPET_LENGTH = 300
 
 GUIDES_LIMIT = 5
 
@@ -50,8 +40,8 @@ def _html_to_text(html: str | None) -> str:
     return BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True)
 
 
-def _tutorial_sections(html: str | None) -> list[tuple[str, str]]:
-    """Split tutorial HTML into (heading, text) pairs, one for each H2/H3 section."""
+def _html_sections(html: str | None) -> list[tuple[str, str]]:
+    """Split HTML into (heading, text) pairs, one for each H2/H3 section."""
     sections = []
     soup = BeautifulSoup(html or "", "html.parser")
     for heading in soup.find_all(["h2", "h3"]):
@@ -61,12 +51,51 @@ def _tutorial_sections(html: str | None) -> list[tuple[str, str]]:
             if sibling.name in ["h2", "h3"]:
                 break
             content.append(sibling.get_text())
-        sections.append((heading.get_text(), "\n".join(content)))
+        sections.append((heading.get_text(strip=True), "\n".join(content)))
     return sections
 
 
+def _rank_sections(sections: list[tuple[Any, str, str]], search_text: str) -> list[int]:
+    """Return the indexes of the (owner, title, content) sections matching, best first."""
+    if not sections:
+        return []
+
+    # Rank every section in a single query, weighting headings over their content
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT section.idx
+            FROM unnest(%s::text[], %s::text[]) WITH ORDINALITY AS section(title, content, idx),
+                 websearch_to_tsquery(%s::regconfig, %s) AS query,
+                 LATERAL (
+                     SELECT setweight(to_tsvector(%s::regconfig, section.title), 'A')
+                         || setweight(to_tsvector(%s::regconfig, section.content), 'B') AS vector
+                 ) AS doc
+            WHERE doc.vector @@ query
+            ORDER BY ts_rank(doc.vector, query) DESC
+            """,
+            [
+                [section_title for _owner, section_title, _content in sections],
+                [content for _owner, _section_title, content in sections],
+                SEARCH_CONFIG,
+                search_text,
+                SEARCH_CONFIG,
+                SEARCH_CONFIG,
+            ],
+        )
+        return [row[0] - 1 for row in cursor.fetchall()]
+
+
+def _tutorial_doc(tutorial: LarpManagerTutorial, section_title: str, text: str) -> dict[str, str]:
+    """Build the result for a tutorial section, linked through its anchor."""
+    url = reverse("tutorials", args=[tutorial.slug])
+    if section_title:
+        url += f"#{slugify(section_title)}"
+    return {"title": tutorial.name, "section": section_title, "url": url, "text": text}
+
+
 def search_guides(search_text: str) -> list[dict[str, str]]:
-    """Full-text search published guides, best matches first."""
+    """Full-text search published guides, best matches first, each with its best section."""
     search_query = SearchQuery(search_text, config=SEARCH_CONFIG, search_type="websearch")
     vector = SearchVector("title", weight="A", config=SEARCH_CONFIG) + SearchVector(
         "text", weight="B", config=SEARCH_CONFIG
@@ -77,10 +106,22 @@ def search_guides(search_text: str) -> list[dict[str, str]]:
         .filter(search=search_query)
         .order_by("-rank")[:GUIDES_LIMIT]
     )
-    return [
-        {"slug": guide.slug, "title": guide.title, "snippet": _html_to_text(guide.text)[:SNIPPET_LENGTH]}
-        for guide in guides
+
+    sections = [
+        (guide, section_title, content) for guide in guides for section_title, content in _html_sections(guide.text)
     ]
+    best_sections: dict[int, tuple[str, str]] = {}
+    for index in _rank_sections(sections, search_text):
+        guide, section_title, content = sections[index]
+        best_sections.setdefault(guide.pk, (section_title, content))
+
+    results = []
+    for guide in guides:
+        section_title, text = best_sections.get(guide.pk, ("", _html_to_text(guide.text)))
+        results.append(
+            {"title": guide.title, "section": section_title, "url": reverse("guide", args=[guide.slug]), "text": text}
+        )
+    return results
 
 
 def search_tutorials(search_text: str) -> list[dict[str, str]]:
@@ -102,134 +143,28 @@ def search_tutorials(search_text: str) -> list[dict[str, str]]:
     sections = [
         (tutorial, section_title, content)
         for tutorial in tutorials
-        for section_title, content in _tutorial_sections(tutorial.descr)
+        for section_title, content in _html_sections(tutorial.descr)
     ]
-    if not sections:
-        return []
-
-    # Rank every section in a single query, weighting headings over their content
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
-            SELECT section.idx
-            FROM unnest(%s::text[], %s::text[]) WITH ORDINALITY AS section(title, content, idx),
-                 websearch_to_tsquery(%s::regconfig, %s) AS query,
-                 LATERAL (
-                     SELECT setweight(to_tsvector(%s::regconfig, section.title), 'A')
-                         || setweight(to_tsvector(%s::regconfig, section.content), 'B') AS vector
-                 ) AS doc
-            WHERE doc.vector @@ query
-            ORDER BY ts_rank(doc.vector, query) DESC
-            """,
-            [
-                [section_title for _tutorial, section_title, _content in sections],
-                [content for _tutorial, _section_title, content in sections],
-                SEARCH_CONFIG,
-                search_text,
-                SEARCH_CONFIG,
-                SEARCH_CONFIG,
-            ],
-        )
-        matching_indexes = [row[0] - 1 for row in cursor.fetchall()]
+    matching_indexes = _rank_sections(sections, search_text)
 
     # Keep tutorial relevance as primary order, section relevance as secondary
     tutorial_order = {tutorial.pk: position for position, tutorial in enumerate(tutorials)}
     matching_indexes.sort(key=lambda index: tutorial_order[sections[index][0].pk])
 
     return [
-        {
-            "slug": sections[index][0].slug,
-            "title": sections[index][0].name,
-            "section": sections[index][1],
-            "snippet": sections[index][2][:SNIPPET_LENGTH],
-        }
+        _tutorial_doc(sections[index][0], sections[index][1], sections[index][2])
         for index in matching_indexes[:TUTORIALS_LIMIT]
     ]
 
 
-def similarity(first_string: str, second_string: str) -> float:
-    """Calculate similarity ratio between two strings (case-insensitive)."""
-    return SequenceMatcher(None, first_string.lower(), second_string.lower()).ratio()
+def get_tutorial_doc(tutorial_reference: str) -> dict[str, str] | None:
+    """Return the tutorial named by a "slug" or "slug#section" reference, narrowed to that section."""
+    slug, _separator, section_slug = tutorial_reference.replace("/", "").partition("#")
+    tutorial = LarpManagerTutorial.objects.filter(slug=slug).first()
+    if not tutorial:
+        return None
 
-
-def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
-    """Get permissions filtered by query and sorted by name similarity."""
-    # Filter permissions by name or description containing the query
-    permissions = model.objects.filter(Q(name__icontains=query) | Q(descr__icontains=query)).values(
-        "name",
-        "slug",
-        "descr",
-    )
-
-    # Sort by similarity to query string, most similar first
-    return sorted(permissions, key=lambda permission: similarity(permission["name"], query), reverse=True)
-
-
-def query_index(request: HttpRequest) -> JsonResponse:
-    """Handle search queries with translation support.
-
-    Processes search requests and translates content using DeepL API,
-    then searches through both permission-based navigation links, guides and
-    tutorial content to provide relevant results.
-
-    Args:
-        request: Django HTTP request object containing POST data with:
-            - q: Search query string
-            - r: Optional run UUID for event-specific search
-
-    Returns:
-        JsonResponse containing search results with guides, tutorials, and links.
-        Returns empty JsonResponse if run lookup fails.
-
-    Raises:
-        ObjectDoesNotExist: If specified run doesn't exist (handled internally)
-
-    """
-    # Extract and validate input parameters
-    original_search_query: str = request.POST.get("q", "")
-    run_uuid: str = request.POST.get("r", "")
-
-    # Translate query string to English for consistent search
-    translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
-    translated_query: str = str(translator.translate_text(original_search_query, target_lang="EN-US"))
-
-    # Log search activity for admin monitoring
-    notify_admins(f"query_index: {translated_query}", f"{original_search_query} - {request.user}")
-
-    # Build permission-based navigation links
-    permission_links: list[dict[str, str]] = []
-    if run_uuid:
-        # Event-specific permissions and links
-        try:
-            run = Run.objects.select_related("event").get(
-                uuid=run_uuid, event__association_id=request.association["id"]
-            )
-        except ObjectDoesNotExist:
-            return JsonResponse({})
-
-        sorted_permissions: list[dict[str, Any]] = get_sorted_permissions(EventPermission, translated_query)
-        permission_links = [
-            {
-                "name": permission["name"],
-                "descr": permission["descr"],
-                "href": reverse(permission["slug"], args=[run.get_slug()]),
-            }
-            for permission in sorted_permissions
-        ]
-    else:
-        # Organization-wide permissions and links
-        sorted_permissions = get_sorted_permissions(AssociationPermission, translated_query)
-        permission_links = [
-            {"name": permission["name"], "descr": permission["descr"], "href": reverse(permission["slug"])}
-            for permission in sorted_permissions
-        ]
-
-    # Search through guide and tutorial content
-    matching_guides = search_guides(translated_query)
-    matching_tutorials = search_tutorials(translated_query)
-
-    # Return consolidated search results
-    return JsonResponse(
-        {"guides": matching_guides, "tutorials": matching_tutorials, "links": permission_links},
-        safe=False,
-    )
+    for section_title, content in _html_sections(tutorial.descr):
+        if section_slug and slugify(section_title) == section_slug:
+            return _tutorial_doc(tutorial, section_title, content)
+    return _tutorial_doc(tutorial, "", _html_to_text(tutorial.descr))

@@ -339,9 +339,8 @@
         <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
     {% else %}
         <br />
-        <p class="no-elements-available">
-            <i>{% trans "No registrations have been received for this event yet" %}</i>
-        </p>
+        {% trans "Participants appear here as soon as they register for this event." as empty_text %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     <div class="table-footer-row">
         {% include "elements/table/footer.html" %}

@@ -2149,3 +2149,17 @@ body.landing #get-started-real.hide {
   margin: 0 auto 2.5rem;
   text-align: center;
 }
+
+/* ---------- Concepts ---------- */
+body.landing #concepts {
+  text-align: left;
+}
+
+body.landing #concepts dt {
+  font-weight: 700;
+  margin-top: 0.8rem;
+}
+
+body.landing #concepts dd {
+  margin: 0;
+}
