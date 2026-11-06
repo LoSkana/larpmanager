@@ -5688,6 +5688,9 @@ msgstr "Ora puoi creare badge"
 msgid "You can now manage events"
 msgstr "Ora puoi gestire gli eventi"
 
+msgid "Your question is too long"
+msgstr "La tua domanda è troppo lunga"
+
 msgid "check lack relationships:"
 msgstr "Controlla le relazioni mancanti:"
 
@@ -6011,9 +6014,6 @@ msgstr "Vai al cruscotto dell'organizzazione"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Invito inviato a %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "La chat live non è configurata."
 
 msgid "Manage modules for workshops"
 msgstr "Gestisci i moduli per i workshop"
@@ -9625,11 +9625,6 @@ msgstr "Gestisci le assegnazioni di token ai partecipanti a questo evento"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Nomi delle persone o dei team che organizzano e gestiscono l'evento"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Non ci sono ancora eventi. Crea il tuo primo evento cliccando sul pulsante "
-"qui sopra."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

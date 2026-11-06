@@ -8,6 +8,7 @@
             {% csrf_token %}
             <input type="text"
                    id="chat-widget-input"
+                   maxlength="{{ chat_max_question_length }}"
                    name="question"
                    placeholder="{% trans "Type your question..." %}">
             <button type="submit">

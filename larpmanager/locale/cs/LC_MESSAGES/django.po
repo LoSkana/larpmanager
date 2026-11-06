@@ -5688,6 +5688,9 @@ msgstr "Nyní můžeš vytvářet Badges"
 msgid "You can now manage events"
 msgstr "Nyní můžeš spravovat akce"
 
+msgid "Your question is too long"
+msgstr "Tvůj dotaz je příliš dlouhý"
+
 msgid "check lack relationships:"
 msgstr "Zkontrolovat chybějící vztahy:"
 
@@ -6011,9 +6014,6 @@ msgstr "Přejdi na řídicí panel organizace"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Pozvánka zaslaná na %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "Živý chat není nastaven."
 
 msgid "Manage modules for workshops"
 msgstr "Spravovat moduly pro workshopy"
@@ -9513,11 +9513,6 @@ msgstr "Správa přidělení tokenů účastníkům této akce"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Jména osob nebo týmů, které tuto akci organizují a řídí"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Zatím nejsou žádné události. Vytvoř si svou první událost pomocí tlačítka "
-"výše."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

@@ -5688,6 +5688,9 @@ msgstr "Je kunt nu badges maken"
 msgid "You can now manage events"
 msgstr "Je kunt nu evenementen beheren"
 
+msgid "Your question is too long"
+msgstr "Je vraag is te lang"
+
 msgid "check lack relationships:"
 msgstr "controleer ontbrekende relaties:"
 
@@ -6011,9 +6014,6 @@ msgstr "Ga naar het dashboard van de organisatie"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Uitnodiging verstuurd naar %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "De livechat is niet ingesteld."
 
 msgid "Manage modules for workshops"
 msgstr "Beheer modules voor workshops"
@@ -9619,11 +9619,6 @@ msgstr ""
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
 "Namen van de mensen of teams die dit evenement organiseren en uitvoeren"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Er zijn nog geen evenementen. Maak je eerste evenement aan via de knop "
-"hierboven."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

@@ -5688,6 +5688,9 @@ msgstr "Voit nyt luoda badgeja"
 msgid "You can now manage events"
 msgstr "Voit nyt hallita tapahtumia"
 
+msgid "Your question is too long"
+msgstr "Kysymyksesi on liian pitkä"
+
 msgid "check lack relationships:"
 msgstr "tarkista puuttuvat suhteet:"
 
@@ -6011,9 +6014,6 @@ msgstr "Siirry organisaation kojelautaan"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Kutsu lähetetty osoitteeseen %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "Live-chat-toimintoa ei ole määritetty."
 
 msgid "Manage modules for workshops"
 msgstr "Hallitse työpajojen moduuleja"
@@ -9557,11 +9557,6 @@ msgstr "Hallitse tapahtuman osallistujille myönnettyjä tokeneita"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Tapahtuman järjestäjien ja toteuttajien henkilöiden tai ryhmien nimet"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Tapahtumia ei ole vielä. Luo ensimmäinen tapahtumasi yllä olevan painikkeen "
-"avulla."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

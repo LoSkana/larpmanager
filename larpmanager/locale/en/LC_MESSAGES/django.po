@@ -7488,9 +7488,6 @@ msgid ""
 "tickets and registrations."
 msgstr ""
 
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-
 msgid "Permanently delete this event and all its sessions"
 msgstr ""
 
@@ -12886,9 +12883,6 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
-msgid "Live chat is not configured."
-msgstr ""
-
 msgid ""
 "I could not find anything relevant in the documentation. Try opening a "
 "support ticket."
@@ -13565,6 +13559,9 @@ msgid "Invalid request method"
 msgstr ""
 
 msgid "Please write a question"
+msgstr ""
+
+msgid "Your question is too long"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

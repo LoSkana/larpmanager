@@ -5688,6 +5688,9 @@ msgstr "Du kan nå opprette badges"
 msgid "You can now manage events"
 msgstr "Du kan nå administrere arrangementer"
 
+msgid "Your question is too long"
+msgstr "Spørsmålet ditt er for langt"
+
 msgid "check lack relationships:"
 msgstr "sjekk manglende relasjoner:"
 
@@ -6011,9 +6014,6 @@ msgstr "Gå til organisasjonens dashbord"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Invitasjon sendt til %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "Live-chatten er ikke konfigurert."
 
 msgid "Manage modules for workshops"
 msgstr "Administrer moduler for workshoper"
@@ -9546,11 +9546,6 @@ msgid "Names of the people or teams organizing and running this event"
 msgstr ""
 "Navn på personene eller teamene som organiserer og gjennomfører dette "
 "arrangementet"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Ingen arrangementer ennå. Opprett ditt første arrangement ved å klikke på "
-"knappen ovenfor."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

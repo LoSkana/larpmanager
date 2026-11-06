@@ -101,7 +101,7 @@ from larpmanager.utils.auth.permission import has_association_permission, has_ev
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.larpmanager.chat import get_chat_answer
+from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH, get_chat_answer
 from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
@@ -549,6 +549,9 @@ def chat_ask(request: HttpRequest) -> Any:
     if not question:
         return JsonResponse({"error": _("Please write a question")}, status=400)
 
+    if len(question) > CHAT_MAX_QUESTION_LENGTH:
+        return JsonResponse({"error": _("Your question is too long")}, status=400)
+
     LarpManagerChatLog.objects.create(member=request.user.member, question=question)
 
     return JsonResponse(get_chat_answer(question, request.POST.get("page", "")))
@@ -900,6 +903,8 @@ def concepts(request: HttpRequest) -> Any:
     context = get_context(request, check_main_site=request.association["id"] == 0)
     context["lm"] = 1
     context["iframe"] = request.GET.get("in_iframe") == "1"
+    if request.association["id"] == 0:
+        context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/landing/concepts.html", context)
 
 

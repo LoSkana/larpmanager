@@ -5688,6 +5688,9 @@ msgstr "Τώρα μπορείς να δημιουργήσεις Badges"
 msgid "You can now manage events"
 msgstr "Τώρα μπορείς να διαχειριστείς εκδηλώσεις"
 
+msgid "Your question is too long"
+msgstr "Η ερώτησή σου είναι πολύ μεγάλη"
+
 msgid "check lack relationships:"
 msgstr "Έλεγξε τις σχέσεις που λείπουν:"
 
@@ -6011,9 +6014,6 @@ msgstr "Μετάβαση στον πίνακα οργανισμού"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Η πρόσκληση στάλθηκε στο %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "Η ζωντανή συνομιλία δεν έχει ρυθμιστεί."
 
 msgid "Manage modules for workshops"
 msgstr "Διαχείριση ενοτήτων για εργαστήρια"
@@ -9675,11 +9675,6 @@ msgstr ""
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
 "Ονόματα των ατόμων ή ομάδων που διοργανώνουν και υλοποιούν αυτή την εκδήλωση"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr ""
-"Δεν υπάρχουν ακόμη εκδηλώσεις. Δημιούργησε την πρώτη σου εκδήλωση με το "
-"παραπάνω κουμπί."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"

@@ -78,7 +78,4 @@
         {% url 'exe_events_new' as empty_url %}
         {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new new_url=empty_url %}
     {% endif %}
-    {% if not list %}
-        <p class="no-elements-available">{% trans "No events yet. Create your first event using the button above." %}</p>
-    {% endif %}
 {% endblock content %}

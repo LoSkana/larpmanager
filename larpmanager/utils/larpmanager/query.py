@@ -24,7 +24,7 @@ from bs4 import BeautifulSoup
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db import connection
 from django.urls import reverse
-from slugify import slugify
+from django.utils.text import slugify
 
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
 
@@ -40,18 +40,24 @@ def _html_to_text(html: str | None) -> str:
     return BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True)
 
 
-def _html_sections(html: str | None) -> list[tuple[str, str]]:
-    """Split HTML into (heading, text) pairs, one for each H2/H3 section."""
+def _html_sections(html: str | None, *, include_subsections: bool = False) -> list[tuple[str, str]]:
+    """Split HTML into (heading, text) pairs, one for each H2/H3 section with content.
+
+    An H2 section stops at its first H3, so sections do not overlap when ranked. With
+    include_subsections it extends to the next H2 instead.
+    """
     sections = []
     soup = BeautifulSoup(html or "", "html.parser")
     for heading in soup.find_all(["h2", "h3"]):
         content = []
         # Collect content following this heading until the next one
         for sibling in heading.find_next_siblings():
-            if sibling.name in ["h2", "h3"]:
+            if sibling.name == "h2" or (sibling.name == "h3" and (heading.name == "h3" or not include_subsections)):
                 break
             content.append(sibling.get_text())
-        sections.append((heading.get_text(strip=True), "\n".join(content)))
+        text = "\n".join(content).strip()
+        if text:
+            sections.append((heading.get_text().strip(), text))
     return sections
 
 
@@ -164,7 +170,7 @@ def get_tutorial_doc(tutorial_reference: str) -> dict[str, str] | None:
     if not tutorial:
         return None
 
-    for section_title, content in _html_sections(tutorial.descr):
+    for section_title, content in _html_sections(tutorial.descr, include_subsections=True):
         if section_slug and slugify(section_title) == section_slug:
             return _tutorial_doc(tutorial, section_title, content)
     return _tutorial_doc(tutorial, "", _html_to_text(tutorial.descr))

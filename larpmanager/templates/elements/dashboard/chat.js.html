@@ -76,8 +76,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 $pending.removeClass('chat-widget-pending').text(response.answer || errorText);
                 addSources($pending, response.sources);
             },
-            error: function() {
-                $pending.removeClass('chat-widget-pending').text(errorText);
+            error: function(xhr) {
+                var message = xhr.responseJSON && xhr.responseJSON.error;
+                $pending.removeClass('chat-widget-pending').text(message || errorText);
             },
             complete: function() {
                 sending = false;
