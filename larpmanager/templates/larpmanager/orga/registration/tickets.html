@@ -86,9 +86,9 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No tickets have been created for this event yet. Use the button above to add a ticket type that participants can choose when registering." %}
-        </p>
+        {% trans "Tickets are the options participants choose when they register, each with its own price and availability." as empty_text %}
+        {% trans "New ticket" as empty_new %}
+        {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
     {% endif %}
     {% include "elements/table/footer.html" %}
 {% endblock content %}

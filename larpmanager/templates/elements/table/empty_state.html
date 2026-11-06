@@ -1,0 +1,11 @@
+<div class="no-elements-available empty-state">
+    <p>{{ text }}</p>
+    {% if new_label and not readonly_event and not hide_new %}
+        <a class="new button form-new"
+           role="button"
+           href="{{ new_url | default:'#' }}">
+            <i class="fas fa-plus"></i>
+            {{ new_label }}
+        </a>
+    {% endif %}
+</div>

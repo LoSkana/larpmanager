@@ -5693,13 +5693,13 @@ msgstr ""
 msgid "Ask LarpManager"
 msgstr ""
 
-msgid "For best results, ask in English."
-msgstr ""
-
 msgid "Type your question..."
 msgstr ""
 
 msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+
+msgid "Read more:"
 msgstr ""
 
 msgid "Are you sure you want to delete this element?"
@@ -5746,7 +5746,17 @@ msgid ""
 "Enable specific features to add specialized functionalities to the platform"
 msgstr ""
 
-msgid "Write here what you would like to to!"
+msgid ""
+"Open this menu to search, ask a question, read the tutorials, or replay this "
+"tour"
+msgstr ""
+
+msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket."
+msgstr ""
+
+msgid "Here is a quick tour of the dashboard"
 msgstr ""
 
 msgid "Workspace selector"
@@ -5759,6 +5769,15 @@ msgid "Sidebar"
 msgstr ""
 
 msgid "Sidebar size"
+msgstr ""
+
+msgid "Need help?"
+msgstr ""
+
+msgid "How it is organized"
+msgstr ""
+
+msgid "Read the key concepts"
 msgstr ""
 
 msgid "Welcome to"
@@ -5782,7 +5801,7 @@ msgstr ""
 msgid "Activate modules"
 msgstr ""
 
-msgid "Need help?"
+msgid "Quick tour"
 msgstr ""
 
 msgid "No results"
@@ -6386,6 +6405,18 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
+msgid "Ask a question"
+msgstr ""
+
+msgid "All tutorials"
+msgstr ""
+
+msgid "Key concepts"
+msgstr ""
+
+msgid "Replay the tour"
+msgstr ""
+
 msgid "Delegated users"
 msgstr ""
 
@@ -6446,12 +6477,6 @@ msgstr ""
 msgid "Scroll right"
 msgstr ""
 
-msgid "What would you like to do?"
-msgstr ""
-
-msgid "Ask a question"
-msgstr ""
-
 msgid "Manage"
 msgstr ""
 
@@ -6469,6 +6494,9 @@ msgstr ""
 
 msgid ""
 "To use the feature you requested, you need to activate the following feature:"
+msgstr ""
+
+msgid "Tutorial"
 msgstr ""
 
 msgid "Do you want to proceed?"
@@ -7317,6 +7345,9 @@ msgid ""
 "you total control over the platform's professional features."
 msgstr ""
 
+msgid "New here? Start from the key concepts"
+msgstr ""
+
 msgid "What you will unlock:"
 msgstr ""
 
@@ -7452,7 +7483,9 @@ msgstr ""
 msgid "Public page"
 msgstr ""
 
-msgid "No events yet. Create your first event using the button above."
+msgid ""
+"Events are what participants register for. Each one has its own dashboard, "
+"tickets and registrations."
 msgstr ""
 
 msgid "Permanently delete this event and all its sessions"
@@ -7731,9 +7764,7 @@ msgstr ""
 msgid "View registrations"
 msgstr ""
 
-msgid ""
-"No members found. Members will appear here once they have submitted a "
-"membership request."
+msgid "Members appear here once they have submitted a membership request."
 msgstr ""
 
 msgid "Emails"
@@ -8188,6 +8219,113 @@ msgid "Confirm Unsubscribe"
 msgstr ""
 
 msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket and "
+"answering the registration form. Staff members manage everything from two "
+"dashboards, one for the organization and one for each event."
+msgstr ""
+
+msgid "Create an event, which opens its first session."
+msgstr ""
+
+msgid "Set up the tickets and the registration form."
+msgstr ""
+
+msgid "Choose how participants pay, then open registrations."
+msgstr ""
+
+msgid "Follow registrations and payments from the event dashboard."
+msgstr ""
+
+msgid "Structure"
+msgstr ""
+
+msgid ""
+"The group running events. It holds members, accounting and the settings "
+"shared by all its events."
+msgstr ""
+
+msgid "A game you run, with its own pages, tickets, characters and staff."
+msgstr ""
+
+msgid ""
+"One edition of an event, with its dates. Running the same event twice means "
+"two sessions."
+msgstr ""
+
+msgid "A series of events sharing the same characters and factions."
+msgstr ""
+
+msgid "People"
+msgstr ""
+
+msgid "Someone registered for an event."
+msgstr ""
+
+msgid ""
+"A set of permissions given to staff members. Organization roles and event "
+"roles are managed separately."
+msgstr ""
+
+msgid ""
+"An option participants choose when they register, with its own price and "
+"availability."
+msgstr ""
+
+msgid "The questions participants answer when they register."
+msgstr ""
+
+msgid "Payment method"
+msgstr ""
+
+msgid ""
+"A way for participants to pay, such as a bank transfer or an online gateway."
+msgstr ""
+
+msgid ""
+"A role in the game, with a sheet that the assigned participant can read."
+msgstr ""
+
+msgid "Platform"
+msgstr ""
+
+msgid "Dashboard"
+msgstr ""
+
+msgid ""
+"The management home, showing what needs your attention. Use the top bar to "
+"switch between the organization and each event."
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid ""
+"An optional tool you activate when you need it, for the whole organization "
+"or for a single event."
+msgstr ""
+
+msgid "The settings of the features you have activated."
+msgstr ""
+
+msgid "Lite Mode"
+msgstr ""
+
+msgid ""
+"The simplified interface of new organizations, showing only the core pages."
+msgstr ""
+
+msgid "Advanced Mode"
+msgstr ""
+
+msgid ""
+"The full interface, available once the activation checklist is complete."
+msgstr ""
+
+msgid "Continue with the tutorials"
+msgstr ""
+
+msgid ""
 "LarpManager has over 100 different features. There is one for every aspect "
 "of event organizing: signups, accounting, writing, and logistics."
 msgstr ""
@@ -8332,9 +8470,6 @@ msgstr ""
 msgid "Counts"
 msgstr ""
 
-msgid "Dashboard"
-msgstr ""
-
 msgid "Campaign:"
 msgstr ""
 
@@ -8436,6 +8571,9 @@ msgid "In creation"
 msgstr ""
 
 msgid "In revision"
+msgstr ""
+
+msgid "What would you like to do?"
 msgstr ""
 
 msgid "View all your historical financial movements"
@@ -9202,9 +9340,10 @@ msgstr ""
 msgid "Session active"
 msgstr ""
 
-msgid ""
-"No discounts created yet. Add a discount to offer reduced prices or promo "
-"codes to participants."
+msgid "Discounts offer reduced prices or promo codes to participants."
+msgstr ""
+
+msgid "New discount"
 msgstr ""
 
 msgid ""
@@ -9799,8 +9938,11 @@ msgid "%(name)s form"
 msgstr ""
 
 msgid ""
-"No questions have been created yet for this form. Use the button above to "
-"add one."
+"Questions collect the information you need from participants when they "
+"register."
+msgstr ""
+
+msgid "New question"
 msgstr ""
 
 msgid "Installments"
@@ -9955,7 +10097,7 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "No registrations have been received for this event yet"
+msgid "Participants appear here as soon as they register for this event."
 msgstr ""
 
 msgid "Recompute"
@@ -9984,8 +10126,11 @@ msgid "Signup link"
 msgstr ""
 
 msgid ""
-"No tickets have been created for this event yet. Use the button above to add "
-"a ticket type that participants can choose when registering."
+"Tickets are the options participants choose when they register, each with "
+"its own price and availability."
+msgstr ""
+
+msgid "New ticket"
 msgstr ""
 
 msgid "Transfer registration"
@@ -10541,6 +10686,9 @@ msgstr ""
 msgid "No characters have been assigned to this faction yet."
 msgstr ""
 
+msgid "Characters are the roles participants play, each with its own sheet."
+msgstr ""
+
 msgid "Attending"
 msgstr ""
 
@@ -10647,6 +10795,14 @@ msgstr ""
 msgid "Check missing speed larp:"
 msgstr ""
 
+msgid ""
+"Factions group characters together, for example by team, family or "
+"allegiance."
+msgstr ""
+
+msgid "New faction"
+msgstr ""
+
 msgid "Selectable"
 msgstr ""
 
@@ -10672,6 +10828,12 @@ msgstr ""
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "
 "handout."
+msgstr ""
+
+msgid "Plots are storylines that involve several characters."
+msgstr ""
+
+msgid "New plot"
 msgstr ""
 
 msgid "Progress step"
@@ -10709,6 +10871,13 @@ msgstr ""
 msgid ""
 "No quest categories have been created yet. Use the button above to add a "
 "quest type to organize your quests."
+msgstr ""
+
+msgid ""
+"Quests are the building blocks of character sheets, each with its own traits."
+msgstr ""
+
+msgid "New quest"
 msgstr ""
 
 msgid "Tagged sides"
@@ -12714,12 +12883,9 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
-msgid "Live chat is not configured."
-msgstr ""
-
 msgid ""
-"I could not find anything relevant in the documentation. Try asking in "
-"English, or open a support ticket."
+"I could not find anything relevant in the documentation. Try opening a "
+"support ticket."
 msgstr ""
 
 #, python-format
@@ -13084,12 +13250,6 @@ msgid ""
 "using the drop-down list."
 msgstr ""
 
-msgid "Tutorial"
-msgstr ""
-
-msgid "Visit the tutorial to learn the basics"
-msgstr ""
-
 msgid "Event creation"
 msgstr ""
 
@@ -13399,6 +13559,9 @@ msgid "Invalid request method"
 msgstr ""
 
 msgid "Please write a question"
+msgstr ""
+
+msgid "Your question is too long"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

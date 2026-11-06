@@ -12,6 +12,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     var askUrl = '{% url "chat_ask" %}';
     var errorText = '{% filter escapejs %}{% trans "The assistant is temporarily unavailable, please try again later." %}{% endfilter %}';
+    var sourcesText = '{% filter escapejs %}{% trans "Read more:" %}{% endfilter %}';
     var sending = false;
 
     function addMessage(text, role) {
@@ -21,7 +22,17 @@ window.addEventListener('DOMContentLoaded', function() {
         return $msg;
     }
 
-    $trigger.on('click', function() {
+    function addSources($msg, sources) {
+        if (!sources || !sources.length) return;
+        var $sources = $('<div class="chat-widget-sources"></div>').text(sourcesText);
+        sources.forEach(function(source) {
+            $sources.append($('<a target="_blank" rel="noopener"></a>').attr('href', source.url).text(source.title));
+        });
+        $msg.append($sources);
+    }
+
+    $trigger.on('click', function(e) {
+        e.preventDefault();
         $dialog[0].showModal();
         $input.trigger('focus');
     });
@@ -52,6 +63,7 @@ window.addEventListener('DOMContentLoaded', function() {
         var formData = new FormData();
         formData.append('csrfmiddlewaretoken', $form.find('input[name=csrfmiddlewaretoken]').val());
         formData.append('question', question);
+        formData.append('page', '{{ request_func_name | escapejs }}');
 
         sending = true;
         $.ajax({
@@ -62,9 +74,11 @@ window.addEventListener('DOMContentLoaded', function() {
             contentType: false,
             success: function(response) {
                 $pending.removeClass('chat-widget-pending').text(response.answer || errorText);
+                addSources($pending, response.sources);
             },
-            error: function() {
-                $pending.removeClass('chat-widget-pending').text(errorText);
+            error: function(xhr) {
+                var message = xhr.responseJSON && xhr.responseJSON.error;
+                $pending.removeClass('chat-widget-pending').text(message || errorText);
             },
             complete: function() {
                 sending = false;

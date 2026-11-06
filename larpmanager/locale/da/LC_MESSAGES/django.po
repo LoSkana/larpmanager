@@ -685,6 +685,9 @@ msgstr "Mulighed"
 msgid "Patron"
 msgstr "Patron"
 
+msgid "People"
+msgstr "Personer"
+
 msgid "Photo:"
 msgstr "Foto:"
 
@@ -900,6 +903,9 @@ msgstr "Udfør"
 
 msgid "Faction"
 msgstr "Fraktion"
+
+msgid "Feature"
+msgstr "Funktion"
 
 msgid "Gallery"
 msgstr "Galleri"
@@ -1283,6 +1289,9 @@ msgstr "Ny omkostning"
 msgid "New gift"
 msgstr "Ny gave"
 
+msgid "New plot"
+msgstr "Nyt plot"
+
 msgid "Nickname"
 msgstr "Kaldenavn"
 
@@ -1321,6 +1330,9 @@ msgstr "PDF-masseeksport"
 
 msgid "Personal"
 msgstr "Personlig"
+
+msgid "Platform"
+msgstr "Platform"
 
 msgid "Portrait"
 msgstr "Portræt"
@@ -1577,6 +1589,9 @@ msgstr "Sprog"
 msgid "Last page"
 msgstr "Sidste side"
 
+msgid "Lite Mode"
+msgstr "Lite-tilstand"
+
 msgid "Longitude"
 msgstr "Længdegrad"
 
@@ -1600,6 +1615,9 @@ msgstr "Nyt event"
 
 msgid "New guild"
 msgstr "Nyt guild"
+
+msgid "New quest"
+msgstr "Ny quest"
 
 msgid "Next page"
 msgstr "Næste side"
@@ -1705,6 +1723,9 @@ msgstr "Speedlarp"
 
 msgid "Start day"
 msgstr "Startdag"
+
+msgid "Structure"
+msgstr "Struktur"
 
 msgid "Subdomain"
 msgstr "Underdomæne"
@@ -1946,6 +1967,9 @@ msgstr "Ny spiller"
 msgid "New signup"
 msgstr "Ny tilmelding"
 
+msgid "New ticket"
+msgstr "Ny billet"
+
 msgid "Newsletter"
 msgstr "Nyhedsbrev"
 
@@ -2002,6 +2026,12 @@ msgstr "Quest-type"
 
 msgid "Questions:"
 msgstr "Spørgsmål:"
+
+msgid "Quick tour"
+msgstr "Hurtig rundvisning"
+
+msgid "Read more:"
+msgstr "Læs mere:"
 
 msgid "Recipients"
 msgstr "Modtagere"
@@ -2270,6 +2300,9 @@ msgstr "Nationalitet"
 msgid "Net profit:"
 msgstr "Nettooverskud:"
 
+msgid "New faction"
+msgstr "Ny fraktion"
+
 msgid "New session"
 msgstr "Ny session"
 
@@ -2522,6 +2555,9 @@ msgstr "Interval (s)"
 msgid "Invite sent!"
 msgstr "Invitation sendt!"
 
+msgid "Key concepts"
+msgstr "Vigtigste begreber"
+
 msgid "Legal Gender"
 msgstr "Juridisk køn"
 
@@ -2548,6 +2584,12 @@ msgstr "Nationalitet:"
 
 msgid "Need a ride?"
 msgstr "Har du brug for et lift?"
+
+msgid "New discount"
+msgstr "Ny rabat"
+
+msgid "New question"
+msgstr "Nyt spørgsmål"
 
 msgid "Not included"
 msgstr "Ikke inkluderet"
@@ -2711,8 +2753,14 @@ msgstr "Indkvartering"
 msgid "Add character"
 msgstr "Tilføj karakter"
 
+msgid "Advanced Mode"
+msgstr "Avanceret tilstand"
+
 msgid "Age selection"
 msgstr "Aldersvalg"
+
+msgid "All tutorials"
+msgstr "Alle vejledninger"
 
 msgid "Apply Upgrade"
 msgstr "Anvend opgradering"
@@ -3149,6 +3197,9 @@ msgstr "Siden blev ikke fundet"
 msgid "Password reset"
 msgstr "Nulstil adgangskode"
 
+msgid "Payment method"
+msgstr "Betalingsmetode"
+
 msgid "Payment quotas"
 msgstr "Betalingskvoter"
 
@@ -3494,6 +3545,9 @@ msgstr "Fjern prolog"
 
 msgid "Replacing names"
 msgstr "Erstatning af navne"
+
+msgid "Replay the tour"
+msgstr "Gense rundvisningen"
 
 msgid "Restore Preview"
 msgstr "Forhåndsvisning af gendannelse"
@@ -4479,6 +4533,9 @@ msgstr "Gå til forsiden"
 msgid "History preferences"
 msgstr "Præferencehistorik"
 
+msgid "How it is organized"
+msgstr "Sådan er det organiseret"
+
 msgid "I am not interested"
 msgstr "Jeg er ikke interesseret"
 
@@ -4919,6 +4976,9 @@ msgstr "Deltagerspørgsmål"
 
 msgid "Pre-registration link"
 msgstr "Link til forhåndstilmelding"
+
+msgid "Read the key concepts"
+msgstr "Læs de vigtigste begreber"
 
 msgid "Referenced Characters"
 msgstr "Refererede karakterer"
@@ -5628,6 +5688,9 @@ msgstr "Du kan nu oprette badges"
 msgid "You can now manage events"
 msgstr "Du kan nu administrere arrangementer"
 
+msgid "Your question is too long"
+msgstr "Dit spørgsmål er for langt"
+
 msgid "check lack relationships:"
 msgstr "kontrollér manglende relationer:"
 
@@ -5768,6 +5831,9 @@ msgstr "Kontrollér omvendt relation:"
 
 msgid "Commit warehouse quantities"
 msgstr "Bekræft lagerantal"
+
+msgid "Continue with the tutorials"
+msgstr "Fortsæt med vejledningerne"
 
 msgid "Credits, tokens and refunds"
 msgstr "Credits, tokens og tilbagebetalinger"
@@ -5948,9 +6014,6 @@ msgstr "Gå til organisationsoversigten"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Invitation sendt til %(email)s"
-
-msgid "Live chat is not configured."
-msgstr "Livechat er ikke konfigureret."
 
 msgid "Manage modules for workshops"
 msgstr "Administrer moduler til workshops"
@@ -6466,6 +6529,9 @@ msgstr "Vis præferencehistorikken."
 msgid "So far you have paid a total of:"
 msgstr "Indtil nu har du betalt i alt:"
 
+msgid "Someone registered for an event."
+msgstr "En person, der er tilmeldt et event."
+
 msgid "Sum of payments received through"
 msgstr "Summen af modtagne betalinger gennem"
 
@@ -6545,9 +6611,6 @@ msgstr "Opdag spillets fraktioner"
 
 msgid "Do you want to tell us something?"
 msgstr "Vil du fortælle os noget?"
-
-msgid "For best results, ask in English."
-msgstr "For de bedste resultater, spørg på engelsk."
 
 msgid "Is it selectable by participants?"
 msgstr "Kan den vælges af deltagere?"
@@ -7013,6 +7076,9 @@ msgstr "Slutdatoen kan ikke ligge før startdatoen!"
 msgid "Feature %(name)s already deactivated!"
 msgstr "Funktion %(name)s er allerede deaktiveret!"
 
+msgid "Here is a quick tour of the dashboard"
+msgstr "Her er en hurtig rundvisning i dashboardet"
+
 msgid "Hide participants without a character"
 msgstr "Skjul deltagere uden en karakter"
 
@@ -7039,6 +7105,9 @@ msgstr "Administrer de modtagne forhåndstilmeldinger"
 
 msgid "Mirror type character, not selectable"
 msgstr "Karakter af spejltype, kan ikke vælges"
+
+msgid "New here? Start from the key concepts"
+msgstr "Ny her? Start med de vigtigste begreber"
 
 msgid "No collections have been created yet."
 msgstr "Der er endnu ikke oprettet nogen indsamlinger."
@@ -7072,9 +7141,6 @@ msgstr "Opdater registreringsmulighederne her!"
 
 msgid "View the complete list of our events!"
 msgstr "Se den komplette liste over vores events!"
-
-msgid "Write here what you would like to to!"
-msgstr "Skriv her, hvad du gerne vil gøre!"
 
 msgid "You are currently logged in with the:"
 msgstr "Du er i øjeblikket logget ind med:"
@@ -7152,9 +7218,6 @@ msgstr "Transport: brændstof og motorvejsafgifter"
 
 msgid "View and edit each user's status flags"
 msgstr "Se og redigér hver brugers statusflag"
-
-msgid "Visit the tutorial to learn the basics"
-msgstr "Besøg vejledningen for at lære det grundlæggende"
 
 msgid "You are exploring a demo organization."
 msgstr "Du udforsker en demoorganisation."
@@ -7953,6 +8016,9 @@ msgstr "Søg og filtrér eventets karakterer"
 msgid "Select the event you wish to pre-register for"
 msgstr "Vælg det event, du vil forhåndstilmelde dig til"
 
+msgid "Set up the tickets and the registration form."
+msgstr "Opsæt billetterne og tilmeldingsformularen."
+
 #, python-format
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Indstillingen '%(option)s' kræver: %(missing)s"
@@ -8093,6 +8159,9 @@ msgstr "Tilføjes på registreringssiden før formularen"
 
 msgid "Characters are only visible to logged in users:"
 msgstr "Karakterer er kun synlige for brugere, der er logget ind:"
+
+msgid "Create an event, which opens its first session."
+msgstr "Opret et event, hvilket åbner dets første session."
 
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpas specifikke tekster i arrangementsinterfacet"
@@ -8252,6 +8321,9 @@ msgstr "Valgte elementer vises for deltagerne."
 
 msgid "The sessions for which the discount is available"
 msgstr "De sessioner, som rabatten er tilgængelig for"
+
+msgid "The settings of the features you have activated."
+msgstr "Indstillingerne for de funktioner, du har aktiveret."
 
 msgid "The subscription plan associated with this event"
 msgstr "Abonnementsplanen knyttet til dette event"
@@ -8627,6 +8699,9 @@ msgstr "Som sidste trin beder vi dig fuldføre din profil."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-præferencer gemt for '%(type)s' til %(event)s"
 
+msgid "Choose how participants pay, then open registrations."
+msgstr "Vælg, hvordan deltagerne betaler, og åbn derefter for tilmeldinger."
+
 msgid "Crew can now upload expenses, and you can review them"
 msgstr "Crew kan nu uploade udgifter, og du kan gennemse dem"
 
@@ -8669,6 +8744,9 @@ msgstr "Der er endnu ikke tildelt karakterer til denne fraktion."
 msgid "No characters or handouts available to export as PDF."
 msgstr "Ingen karakterer eller handouts tilgængelige til eksport som PDF."
 
+msgid "Plots are storylines that involve several characters."
+msgstr "Plots er historielinjer, der involverer flere karakterer."
+
 #, python-format
 msgid "Preview activated: you are now viewing version %(v)s."
 msgstr "Forhåndsvisning aktiveret: du ser nu version %(v)s."
@@ -8682,6 +8760,9 @@ msgstr "Signeringsalgoritme til JWT-tokenet (standard: HS256)."
 
 msgid "The date when your identification document was issued"
 msgstr "Datoen, hvor dit identitetsdokument blev udstedt"
+
+msgid "The questions participants answer when they register."
+msgstr "De spørgsmål, deltagerne besvarer, når de tilmelder sig."
 
 msgid "View your payments and pending amounts for this event"
 msgstr "Se dine betalinger og udestående beløb for dette event"
@@ -8727,9 +8808,6 @@ msgstr "Startværdi for erfaringspoint for alle karakterer."
 
 msgid "Manage fields for character sheet and writing elements"
 msgstr "Administrer felter til karakterark og skriveelementer"
-
-msgid "No registrations have been received for this event yet"
-msgstr "Der er endnu ikke modtaget nogen registreringer til dette event"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Mængdesporing er ikke aktiveret for denne organisation"
@@ -9101,6 +9179,9 @@ msgstr "Vil du tildele karakterer ved hjælp af en Casting-algoritme?"
 msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr "Indtast her ethvert element, du ønsker at undgå i tildelingen:"
 
+msgid "Follow registrations and payments from the event dashboard."
+msgstr "Følg tilmeldinger og betalinger fra eventets dashboard."
+
 msgid "I am not good what to say. I never thought it would happen."
 msgstr "Jeg ved ikke, hvad jeg skal sige. Jeg troede aldrig, det ville ske."
 
@@ -9170,6 +9251,9 @@ msgstr "Du skal acceptere datadeling for at acceptere denne invitation."
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "brug et rektangulært billede, helst i forholdet 4:3 for det bedste resultat"
+
+msgid "A series of events sharing the same characters and factions."
+msgstr "En serie af events, der deler de samme karakterer og fraktioner."
 
 #, python-format
 msgid "Access the management panel <a href='%(url)s'>from here</a>!"
@@ -9392,6 +9476,9 @@ msgstr ""
 msgid "Copy the payment reference exactly as shown (in colored text)."
 msgstr "Kopiér betalingsreferencen præcis som vist (med farvet tekst)."
 
+msgid "Discounts offer reduced prices or promo codes to participants."
+msgstr "Rabatter giver deltagerne nedsatte priser eller rabatkoder."
+
 msgid "Do you want to manage character progression through abilities?"
 msgstr "Vil du administrere karakterprogression gennem evner?"
 
@@ -9427,9 +9514,6 @@ msgstr "Administrer token-tildelinger udstedt til deltagere i dette event"
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
 "Navne på de personer eller teams, der arrangerer og afholder dette event"
-
-msgid "No events yet. Create your first event using the button above."
-msgstr "Ingen events endnu. Opret dit første event med knappen ovenfor."
 
 #, python-format
 msgid "No spots left for %(options)s, please choose different options"
@@ -9693,6 +9777,9 @@ msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
 msgstr ""
 "Næste betaling: %(quota)s%(currency)s forventes inden for %(days)s dage"
 
+msgid "Participants appear here as soon as they register for this event."
+msgstr "Deltagerne vises her, så snart de tilmelder sig dette event."
+
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deltagere kan tilmelde sig med det samme via registreringsformularen"
 
@@ -9749,6 +9836,9 @@ msgstr "Din tilmelding til dette arrangement er blevet annulleret."
 msgid "%(role)s without two-factor authentication (OTP) enabled: %(list)s"
 msgstr "%(role)s uden aktiveret to-faktor-autentificering (OTP): %(list)s"
 
+msgid "A game you run, with its own pages, tickets, characters and staff."
+msgstr "Et spil, du afholder, med egne sider, billetter, karakterer og staff."
+
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Fejl ved indlæsning. Ugyldigt filformat (vi accepterer kun pdf eller "
@@ -9776,6 +9866,9 @@ msgstr "Administrer alle lagerartikler, deres beholdere, tags og mængder"
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Administrerer credits, som deltagere bruger til at dække tilmeldingsgebyret"
+
+msgid "Members appear here once they have submitted a membership request."
+msgstr "Medlemmer vises her, når de har indsendt en medlemsanmodning."
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s, expected within %(days)s days"
@@ -9919,6 +10012,9 @@ msgstr ""
 msgid "Assign roles to collaborators and grant access to specific functions"
 msgstr ""
 "Tildel roller til samarbejdspartnere og giv adgang til specifikke funktioner"
+
+msgid "Characters are the roles participants play, each with its own sheet."
+msgstr "Karakterer er de roller, deltagerne spiller, hver med sit eget ark."
 
 msgid "Date when the membership was officially approved by the organization"
 msgstr "Datoen, hvor medlemskabet officielt blev godkendt af organisationen"
@@ -10266,6 +10362,10 @@ msgstr ""
 "<b>%(type)s</b>: sekundær gruppering inden for den primære fraktionsstruktur"
 
 msgid ""
+"A role in the game, with a sheet that the assigned participant can read."
+msgstr "En rolle i spillet med et ark, som den tildelte deltager kan læse."
+
+msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
 "Giver organisationen mulighed for at tildele badges og aktiverer en "
@@ -10365,6 +10465,12 @@ msgstr ""
 msgid ""
 "Select which fields should open automatically when the list is displayed"
 msgstr "Vælg, hvilke felter der skal åbne automatisk, når listen vises"
+
+msgid ""
+"The full interface, available once the activation checklist is complete."
+msgstr ""
+"Den fulde brugerflade, der bliver tilgængelig, når aktiveringstjeklisten er "
+"gennemført."
 
 msgid ""
 "The main email address participants can use to contact your organization"
@@ -10713,6 +10819,12 @@ msgid ""
 msgstr ""
 "Karakterindstillingerne, som skal vælges for at gøre evnen tilgængelig"
 
+msgid ""
+"The simplified interface of new organizations, showing only the core pages."
+msgstr ""
+"Den forenklede brugerflade for nye organisationer, der kun viser de centrale"
+" sider."
+
 #, python-format
 msgid ""
 "Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
@@ -10758,6 +10870,12 @@ msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "kun små bogstaver og tal er tilladt, ingen mellemrum eller specialtegn"
+
+msgid ""
+"A way for participants to pay, such as a bank transfer or an online gateway."
+msgstr ""
+"En måde, deltagerne kan betale på, f.eks. bankoverførsel eller en online "
+"betalingsløsning."
 
 msgid ""
 "Browse each event's staff members and the competences they bring to the team"
@@ -11029,6 +11147,11 @@ msgstr ""
 "Præsentation synlig for alle deltagere, når 'vis præsentation' er markeret"
 
 msgid ""
+"Quests are the building blocks of character sheets, each with its own "
+"traits."
+msgstr "Quests er byggestenene i karakterark, hver med sine egne traits."
+
+msgid ""
 "The event will not take place: hidden from users and excluded from "
 "accounting"
 msgstr "Eventet afholdes ikke: skjult for brugere og udelukket fra regnskabet"
@@ -11103,6 +11226,13 @@ msgid ""
 msgstr ""
 "Aktiverer feltet 'titel', en kort tekst (2-3 ord), der føjes til karakterens"
 " navn."
+
+msgid ""
+"Factions group characters together, for example by team, family or "
+"allegiance."
+msgstr ""
+"Fraktioner samler karakterer, for eksempel efter hold, familie eller "
+"loyalitet."
 
 #, python-format
 msgid ""
@@ -11394,6 +11524,13 @@ msgstr ""
 "tilmeldingen åbner!"
 
 msgid ""
+"Questions collect the information you need from participants when they "
+"register."
+msgstr ""
+"Spørgsmål indsamler de oplysninger, du har brug for fra deltagerne, når de "
+"tilmelder sig."
+
+msgid ""
 "Selecting an event makes you join its campaign and share your characters "
 "with it"
 msgstr ""
@@ -11504,6 +11641,13 @@ msgid ""
 msgstr ""
 "Der er endnu ikke defineret nogen omkostningsmodifikatorer. Brug knappen "
 "ovenfor til at oprette den første modifikator."
+
+msgid ""
+"Open this menu to search, ask a question, read the tutorials, or replay this"
+" tour"
+msgstr ""
+"Åbn denne menu for at søge, stille et spørgsmål, læse vejledningerne eller "
+"gense denne rundvisning"
 
 msgid ""
 "Request for reimbursement entered! You will receive notice when it is "
@@ -11647,13 +11791,6 @@ msgid ""
 msgstr ""
 "Ingen åbne spørgsmål lige nu. Alle medlemsanmodninger er blevet besvaret "
 "eller lukket."
-
-msgid ""
-"No questions have been created yet for this form. Use the button above to "
-"add one."
-msgstr ""
-"Der er endnu ikke oprettet nogen spørgsmål til denne formular. Brug knappen "
-"ovenfor til at tilføje et."
 
 msgid ""
 "No warehouse items found. Use the button above to add a new item to the "
@@ -12056,6 +12193,13 @@ msgstr ""
 "Giv dem dette link: %(url)s"
 
 msgid ""
+"An option participants choose when they register, with its own price and "
+"availability."
+msgstr ""
+"En mulighed, deltagerne vælger ved tilmelding, med egen pris og "
+"tilgængelighed."
+
+msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
 msgstr ""
@@ -12068,6 +12212,13 @@ msgid ""
 msgstr ""
 "Indtast private oplysninger om din karakter, som kun er synlige for dig og "
 "arrangørerne"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try opening a "
+"support ticket."
+msgstr ""
+"Jeg kunne ikke finde noget relevant i dokumentationen. Prøv at åbne en "
+"supportsag."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
@@ -12364,18 +12515,18 @@ msgstr ""
 "spillertildelinger her."
 
 msgid ""
-"No members found. Members will appear here once they have submitted a "
-"membership request."
-msgstr ""
-"Ingen medlemmer fundet. Medlemmer vises her, når de har indsendt en "
-"medlemsansøgning."
-
-msgid ""
 "No resource files have been uploaded yet. Use the button above to add a new "
 "file or link."
 msgstr ""
 "Der er endnu ikke uploadet ressourcefiler. Brug knappen ovenfor til at "
 "tilføje en ny fil eller et link."
+
+msgid ""
+"One edition of an event, with its dates. Running the same event twice means "
+"two sessions."
+msgstr ""
+"En udgave af et event med sine egne datoer. Afholder du det samme event to "
+"gange, er det to sessioner."
 
 msgid ""
 "Optional - Casting priority granted by this option (e.g., 1 = low, 5 = "
@@ -13064,13 +13215,6 @@ msgstr ""
 "inklusive deres roller og konfiguration"
 
 msgid ""
-"No discounts created yet. Add a discount to offer reduced prices or promo "
-"codes to participants."
-msgstr ""
-"Der er endnu ikke oprettet nogen rabatter. Tilføj en rabat for at tilbyde "
-"nedsatte priser eller kampagnekoder til deltagerne."
-
-msgid ""
 "Note that existing ability types with the same name, will be overwritten "
 "with the uploaded data."
 msgstr ""
@@ -13119,6 +13263,13 @@ msgid ""
 msgstr ""
 "Alternativt kan du anmode om udbetaling af din saldo på <a "
 "href='%(url)s'>dit regnskab</a>."
+
+msgid ""
+"An optional tool you activate when you need it, for the whole organization "
+"or for a single event."
+msgstr ""
+"Et valgfrit værktøj, du aktiverer efter behov, for hele organisationen eller"
+" for et enkelt event."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -13177,6 +13328,13 @@ msgid ""
 msgstr ""
 "Eventet <strong>%(event)s</strong> er automatisk blevet tilføjet til "
 "larpdatabase.com som et udkast."
+
+msgid ""
+"The group running events. It holds members, accounting and the settings "
+"shared by all its events."
+msgstr ""
+"Gruppen, der afholder events. Den rummer medlemmer, regnskab og de "
+"indstillinger, der deles af alle dens events."
 
 msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
@@ -13413,6 +13571,13 @@ msgstr ""
 "efter en angivet dato"
 
 msgid ""
+"Events are what participants register for. Each one has its own dashboard, "
+"tickets and registrations."
+msgstr ""
+"Events er det, deltagerne tilmelder sig. Hvert event har sit eget dashboard,"
+" sine egne billetter og tilmeldinger."
+
+msgid ""
 "Manage custom texts used across the organization, such as emails and "
 "registration pages, per language"
 msgstr ""
@@ -13522,6 +13687,13 @@ msgid ""
 msgstr ""
 "Dette felt kan kun redigeres af deltageren, når karakteren har en af de "
 "valgte statusser"
+
+msgid ""
+"A set of permissions given to staff members. Organization roles and event "
+"roles are managed separately."
+msgstr ""
+"Et sæt tilladelser, der gives til staffmedlemmer. Organisationsroller og "
+"eventroller administreres hver for sig."
 
 msgid ""
 "Beyond the minimum number of days indicated, the quota will no longer be "
@@ -13693,13 +13865,6 @@ msgstr ""
 "om medlemskab af foreningen."
 
 msgid ""
-"I could not find anything relevant in the documentation. Try asking in "
-"English, or open a support ticket."
-msgstr ""
-"Jeg kunne ikke finde noget relevant i dokumentationen. Prøv at spørge på "
-"engelsk, eller opret en supporthenvendelse."
-
-msgid ""
 "If enabled, generates secret URLs for sharing the full character sheet with "
 "a user who has not signed up."
 msgstr ""
@@ -13783,6 +13948,13 @@ msgid ""
 msgstr ""
 "Spørgsmålet vises i den valgte sektion (hvis feltet står tomt, vises det i "
 "starten af formularen)"
+
+msgid ""
+"Tickets are the options participants choose when they register, each with "
+"its own price and availability."
+msgstr ""
+"Billetter er de muligheder, deltagerne vælger ved tilmelding, hver med egen "
+"pris og tilgængelighed."
 
 msgid ""
 "Whether the character is a mirror (i.e., whether this pg shows the true "
@@ -14582,6 +14754,13 @@ msgstr ""
 "e-mail for alle arrangementer i stedet for hvert arrangements arrangører"
 
 msgid ""
+"The management home, showing what needs your attention. Use the top bar to "
+"switch between the organization and each event."
+msgstr ""
+"Administrationens startside, der viser, hvad der kræver din opmærksomhed. "
+"Brug topbjælken til at skifte mellem organisationen og de enkelte events."
+
+msgid ""
 "The optimal allocation based on the set values is simulated; you can run it "
 "as many times as you like before final loading"
 msgstr ""
@@ -15053,18 +15232,18 @@ msgstr ""
 "definere formularer, spørgsmål og korrekte svar, som deltagerne skal udfylde"
 
 msgid ""
-"No tickets have been created for this event yet. Use the button above to add"
-" a ticket type that participants can choose when registering."
-msgstr ""
-"Der er endnu ikke oprettet billetter til dette event. Brug knappen ovenfor "
-"til at tilføje en billettype, som deltagerne kan vælge ved tilmelding."
-
-msgid ""
 "Your profile was modified in another window: your changes here have not been"
 " saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 "Din profil blev ændret i et andet vindue: dine ændringer her er ikke blevet "
 "gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
+
+msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket."
+msgstr ""
+"En organisation er vært for dine events, og hvert event kan have en eller "
+"flere sessioner. Deltagerne tilmelder sig en session ved at vælge en billet."
 
 msgid ""
 "We confirm that your votes are correctly registered in the system! Thank you"
@@ -15836,6 +16015,17 @@ msgstr ""
 "nummeret vist til højre, men i relationerne er karakteren alligevel "
 "relateret. Kontrollér, om det er nødvendigt at fjerne relationen eller "
 "angive en henvisning til karakteren i teksten."
+
+msgid ""
+"An organization hosts your events, and each event can have one or more "
+"sessions. Participants register for a session by choosing a ticket and "
+"answering the registration form. Staff members manage everything from two "
+"dashboards, one for the organization and one for each event."
+msgstr ""
+"En organisation er vært for dine events, og hvert event kan have en eller "
+"flere sessioner. Deltagerne tilmelder sig en session ved at vælge en billet "
+"og udfylde tilmeldingsformularen. Staff administrerer det hele fra to "
+"dashboards: et for organisationen og et for hvert event."
 
 msgid ""
 "<strong>Lite Mode</strong> is a simplified environment designed to help you "

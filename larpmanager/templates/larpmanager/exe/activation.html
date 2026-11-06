@@ -7,6 +7,9 @@
     <p>
         {% trans "<strong>Lite Mode</strong> is a simplified environment designed to help you master the core mechanics of the platform. Once you have completed the following steps, you can switch to <strong>Advanced Mode</strong>, granting you total control over the platform's professional features." %}
     </p>
+    <p>
+        <a href="{% url 'concepts' %}" target="_blank" rel="noopener">{% trans "New here? Start from the key concepts" %}</a>
+    </p>
     <div class="features-grid">
         <h3>{% trans "What you will unlock:" %}</h3>
         <ul class="no-list">
@@ -44,6 +47,7 @@
                 <th></th>
                 <th>{% trans "Step" %}</th>
                 <th>{% trans "Description" %}</th>
+                <th>{% trans "Tutorial" %}</th>
                 <th>{% trans "Status" %}</th>
                 <th></th>
             </tr>
@@ -56,6 +60,12 @@
                         <strong>{{ item.name }}</strong>
                     </td>
                     <td>{{ item.descr }}</td>
+                    <td>
+                        <a href="#" class="feature_tutorial" tut="{{ item.tutorial }}">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            {% trans "Tutorial" %}
+                        </a>
+                    </td>
                     <td>
                         {% if item.done %}
                             <i class="fa-solid fa-circle-check progress_done"></i> {% trans "Done" %}

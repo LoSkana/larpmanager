@@ -60,6 +60,11 @@ urlpatterns = [
         name="guides",
     ),
     path(
+        "concepts/",
+        views_lm.concepts,
+        name="concepts",
+    ),
+    path(
         "guide/<slug:slug>/",
         views_lm.guide,
         name="guide",

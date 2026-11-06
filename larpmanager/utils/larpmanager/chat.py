@@ -18,24 +18,27 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import hashlib
-import logging
 import re
 
 import anthropic
+import deepl
 from django.conf import settings as conf_settings
 from django.core.cache import cache
-from django.utils.translation import gettext as _
+from django.utils.translation import get_language, gettext as _
 
-from larpmanager.cache.wwyltd import get_content_preview, get_guides_cache, get_tutorials_cache
-from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
-
-logger = logging.getLogger(__name__)
+from larpmanager.models.access import AssociationPermission, EventPermission
+from larpmanager.utils.larpmanager.query import get_tutorial_doc, search_guides, search_tutorials
+from larpmanager.utils.larpmanager.tasks import notify_admins
 
 CHAT_MODEL = "claude-haiku-4-5-20251001"
 CHAT_ANSWER_CACHE_TIMEOUT = 7 * 86400  # 7 days: repeated questions are answered for free
 CHAT_MAX_CONTEXT_DOCS = 4
+CHAT_MAX_TUTORIAL_SECTIONS = 3
+CHAT_MAX_GUIDES = 1
 CHAT_MAX_DOC_LENGTH = 3000
 CHAT_MAX_TOKENS = 500
+CHAT_MAX_PAGE_LENGTH = 100
+CHAT_MAX_QUESTION_LENGTH = 1000
 
 _STOPWORDS = {
     "the",
@@ -74,70 +77,105 @@ def _tokenize(text: str) -> set[str]:
     }
 
 
-def _find_relevant_docs(question: str) -> list[tuple[int, str, str, str]]:
-    """Rank cached guides/tutorials by keyword overlap with the question.
-
-    Reuses the existing wwyltd guides/tutorials cache (already built and refreshed via
-    signals) instead of a separate index, so retrieval costs no extra API calls or storage.
-
-    Returns:
-        List of (score, doc_type, slug, title) tuples, highest score first.
-
-    """
-    question_tokens = _tokenize(question)
-    if not question_tokens:
+def _find_relevant_docs(question: str) -> list[dict[str, str]]:
+    """Find the tutorial and guide sections matching any content word of the question."""
+    search_text = " or ".join(sorted(_tokenize(question)))
+    if not search_text:
         return []
 
-    scores: dict[tuple[str, str], list] = {}
-
-    for guide in get_guides_cache():
-        overlap = len(question_tokens & _tokenize(f"{guide['title']} {guide['content_preview']}"))
-        if overlap:
-            key = ("guide", guide["slug"])
-            entry = scores.setdefault(key, [0, guide["title"]])
-            entry[0] += overlap
-
-    for tutorial in get_tutorials_cache():
-        text = f"{tutorial['title']} {tutorial['section_title']} {tutorial['content_preview']}"
-        overlap = len(question_tokens & _tokenize(text))
-        if overlap:
-            key = ("tutorial", tutorial["slug"])
-            entry = scores.setdefault(key, [0, tutorial["title"]])
-            entry[0] += overlap
-
-    ranked = sorted(
-        ((score, doc_type, slug, title) for (doc_type, slug), (score, title) in scores.items()),
-        key=lambda item: item[0],
-        reverse=True,
-    )
-    return ranked[:CHAT_MAX_CONTEXT_DOCS]
+    return search_tutorials(search_text)[:CHAT_MAX_TUTORIAL_SECTIONS] + search_guides(search_text)[:CHAT_MAX_GUIDES]
 
 
-def _get_doc_context(doc_type: str, slug: str, title: str) -> str:
-    """Fetch and clean full document text from the database for a matched doc.
+def _translate_to_english(text: str) -> str | None:
+    """Translate text to English, the language of the documentation, alerting admins and returning None on failure."""
+    api_key = getattr(conf_settings, "DEEPL_API_KEY", None)
+    if not api_key:
+        return text
 
-    Only called for the handful of top-ranked matches, so it stays a cheap targeted
-    query instead of loading full guide/tutorial text into the shared cache.
+    try:
+        return str(deepl.Translator(api_key).translate_text(text, target_lang="EN-US"))
+    except deepl.DeepLException as error:
+        notify_admins("Chat assistant: DeepL translation failed", str(error), error)
+        return None
+
+
+def _search_docs(question: str) -> tuple[list[dict[str, str]], bool]:
+    """Search the documentation, translating the question when it is likely not in English.
+
+    Returns:
+        The documents found, and whether the search was complete: False if the translation failed.
+
     """
-    if doc_type == "guide":
-        guide = LarpManagerGuide.objects.filter(slug=slug, published=True).first()
-        raw_text = guide.text if guide else ""
-    else:
-        tutorial = LarpManagerTutorial.objects.filter(slug=slug).first()
-        raw_text = tutorial.descr if tutorial else ""
+    docs = _find_relevant_docs(question) if (get_language() or "en").startswith("en") else []
+    if docs:
+        return docs, True
 
-    return f"# {title}\n{get_content_preview(raw_text, CHAT_MAX_DOC_LENGTH)}"
+    translated_question = _translate_to_english(question)
+    if translated_question is None:
+        return _find_relevant_docs(question), False
+
+    return _find_relevant_docs(translated_question), True
 
 
-def _call_anthropic(question: str, context_blocks: list[str]) -> str:
-    """Send the question and retrieved doc excerpts to Claude, grounded-only."""
+def _unavailable_answer() -> dict:
+    """Build the answer given when a service failure prevents a real one."""
+    return {
+        "answer": str(_("The assistant is temporarily unavailable, please try again later.")),
+        "sources": [],
+    }
+
+
+def _get_page_context(page_slug: str) -> tuple[str, str]:
+    """Return the label and the tutorial reference of a management page, if it is one."""
+    slug = page_slug.removesuffix("_edit").removesuffix("_new")
+    for model in (EventPermission, AssociationPermission):
+        permission = model.objects.filter(slug=slug).select_related("feature").first()
+        if permission:
+            return f"{permission.name}: {permission.descr}", permission.feature.tutorial
+    return "", ""
+
+
+def _collect_docs(question: str, page_tutorial: str) -> tuple[list[dict[str, str]], bool]:
+    """Gather the documents for a question, the tutorial of the current page first.
+
+    Returns:
+        The documents, and whether the search behind them was complete.
+
+    """
+    page_doc = get_tutorial_doc(page_tutorial) if page_tutorial else None
+    found_docs, search_complete = _search_docs(question)
+    docs = ([page_doc] if page_doc else []) + found_docs
+
+    unique_docs: dict[str, dict[str, str]] = {}
+    for doc in docs:
+        unique_docs.setdefault(doc["url"], doc)
+    return list(unique_docs.values())[:CHAT_MAX_CONTEXT_DOCS], search_complete
+
+
+def _doc_title(doc: dict[str, str]) -> str:
+    """Return the title of a document, including its section if any."""
+    return f"{doc['title']} - {doc['section']}" if doc["section"] else doc["title"]
+
+
+def _format_doc(doc: dict[str, str]) -> str:
+    """Format a document as a titled excerpt for the system prompt."""
+    return f"# {_doc_title(doc)}\n{doc['text'][:CHAT_MAX_DOC_LENGTH]}"
+
+
+def _call_anthropic(question: str, context_blocks: list[str], page_label: str = "") -> str | None:
+    """Send the question and retrieved doc excerpts to Claude, alerting admins and returning None on failure."""
     if not conf_settings.ANTHROPIC_API_KEY:
-        return str(_("Live chat is not configured."))
+        notify_admins("Chat assistant: Anthropic API key not configured")
+        return None
 
+    page_hint = f"The user is on this page of the management interface: {page_label}.\n" if page_label else ""
     system_prompt = (
         "You are the LarpManager support assistant. Answer the user's question using ONLY "
-        "the documentation excerpts below. If they do not contain the answer, say you don't "
-        "know and suggest opening a support ticket. Keep the answer short and concrete.\n\n"
+        "the documentation excerpts below. If they do not contain the answer, say you don't know "
+        "and suggest opening a support ticket. Keep the answer short and concrete. "
+        "The excerpts are in English: reply in the language of the user's question.\n"
+        + page_hint
+        + "\n"
         + "\n\n---\n\n".join(context_blocks)
     )
 
@@ -149,39 +187,57 @@ def _call_anthropic(question: str, context_blocks: list[str]) -> str:
             system=system_prompt,
             messages=[{"role": "user", "content": question}],
         )
-    except anthropic.APIError:
-        logger.exception("Anthropic chat request failed")
-        return str(_("The assistant is temporarily unavailable, please try again later."))
+    except anthropic.APIError as error:
+        notify_admins("Chat assistant: Anthropic request failed", str(error), error)
+        return None
 
     return "".join(block.text for block in message.content if block.type == "text").strip()
 
 
-def get_chat_answer(question: str) -> str:
+def get_chat_answer(question: str, page_slug: str = "") -> dict:
     """Answer a user question grounded in LarpManager guides/tutorials, cheaply.
 
-    Retrieval is free keyword matching over the already-cached guides/tutorials summaries.
-    The Anthropic call (the only paid step) only fires for the handful of top matches, and
-    identical questions are served from cache afterwards without calling the API again.
+    Retrieval is free full-text search over the guides and tutorials. The Anthropic call
+    (the only paid step) receives just the matching sections, and identical questions with
+    the same page context are served from cache afterwards without calling the API again.
+    Answers affected by a failure are not cached, so they recover with the service.
+
+    Args:
+        question: The user's question.
+        page_slug: Name of the view the user is on, used to give the answer context.
+
+    Returns:
+        Dict with the "answer" text and the "sources" list of {"title", "url"} it is based on.
+
     """
     question = (question or "").strip()
     if not question:
-        return ""
+        return {"answer": "", "sources": []}
 
-    cache_key = "chat_answer_" + hashlib.sha256(question.lower().encode()).hexdigest()
+    page_label, page_tutorial = _get_page_context(page_slug[:CHAT_MAX_PAGE_LENGTH])
+    cache_input = f"{get_language()}|{page_label}|{page_tutorial}|{question.lower()}"
+    cache_key = "chat_answer_" + hashlib.sha256(cache_input.encode()).hexdigest()
     cached_answer = cache.get(cache_key)
     if cached_answer is not None:
         return cached_answer
 
-    relevant_docs = _find_relevant_docs(question)
-    if not relevant_docs:
-        answer = str(
-            _(
-                """I could not find anything relevant in the documentation. Try asking in English, or open a support ticket."""
-            )
-        )
+    docs, search_complete = _collect_docs(question, page_tutorial)
+    if not docs:
+        if not search_complete:
+            return _unavailable_answer()
+        result = {
+            "answer": str(_("I could not find anything relevant in the documentation. Try opening a support ticket.")),
+            "sources": [],
+        }
     else:
-        context_blocks = [_get_doc_context(doc_type, slug, title) for _score, doc_type, slug, title in relevant_docs]
-        answer = _call_anthropic(question, context_blocks)
+        answer = _call_anthropic(question, [_format_doc(doc) for doc in docs], page_label)
+        if not answer:
+            return _unavailable_answer()
+        result = {
+            "answer": answer,
+            "sources": [{"title": _doc_title(doc), "url": doc["url"]} for doc in docs],
+        }
 
-    cache.set(cache_key, answer, timeout=CHAT_ANSWER_CACHE_TIMEOUT)
-    return answer
+    if search_complete:
+        cache.set(cache_key, result, timeout=CHAT_ANSWER_CACHE_TIMEOUT)
+    return result

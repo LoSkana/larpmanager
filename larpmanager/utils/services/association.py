@@ -260,7 +260,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
 
     Returns:
         A tuple of (checklist, progress) where:
-            - checklist: list of dicts with keys slug, name, descr, done, url
+            - checklist: list of dicts with keys slug, name, descr, done, url, tutorial
             - progress: integer percentage of completed steps (0-100)
 
     """
@@ -274,16 +274,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             return bool(get_association_config(association_id, config_key))
         return any(get_event_config(eid, config_key) for eid in event_ids)
 
-    _not_used = [
-        {
-            "slug": "exe_tutorial",
-            "name": _("Tutorial"),
-            "descr": _("Visit the tutorial to learn the basics"),
-            "done": _done("exe_tutorial"),
-            "url": reverse("tutorials"),
-        }
-    ]
-
     checklist = [
         {
             "slug": "exe_events",
@@ -291,6 +281,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Create your first event"),
             "done": Event.objects.filter(association_id=association_id).exists(),
             "url": reverse("exe_events"),
+            "tutorial": "manage-events/#create-event",
         },
         {
             "slug": "exe_methods",
@@ -298,6 +289,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Configure at least one payment method for participants"),
             "done": _done("exe_methods"),
             "url": reverse("exe_methods"),
+            "tutorial": "payments/#payments",
         },
         {
             "slug": "orga_registration_tickets",
@@ -305,6 +297,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Create at least one ticket type for event registrations"),
             "done": _done("orga_registration_tickets"),
             "url": reverse("redr", kwargs={"path": "event/manage/tickets/"}),
+            "tutorial": "manage-ticket/#manage-tickets",
         },
         {
             "slug": "orga_registration_form",
@@ -312,6 +305,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Define at least one question in the registration form"),
             "done": _done("orga_registration_form"),
             "url": reverse("redr", kwargs={"path": "event/manage/form/"}),
+            "tutorial": "registration-form/#manage-questions",
         },
         {
             "slug": "orga_registrations",
@@ -321,6 +315,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 run__event__association_id=association_id, cancellation_date__isnull=True, pending=False
             ).exists(),
             "url": _get_registrations_url(association_id),
+            "tutorial": "registrations/#manage-registrations",
         },
     ]
 
@@ -332,6 +327,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 "descr": _("Create at least one character for one of your events"),
                 "done": _done("orga_characters"),
                 "url": reverse("redr", kwargs={"path": "event/manage/characters/"}),
+                "tutorial": "characters/#manage-characters",
             },
             {
                 "slug": "orga_casting",
@@ -341,6 +337,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                     registration__run__event__association_id=association_id
                 ).exists(),
                 "url": reverse("redr", kwargs={"path": "event/manage/registrations/"}),
+                "tutorial": "registrations/#manage-registrations",
             },
         ]
 

@@ -697,11 +697,13 @@ dialog::backdrop {
   padding-right: 0.5em;
 }
 
-#chat-widget-hint {
-  font-size: 0.8em;
-  opacity: 0.7;
-  margin: 0 0 0.5em;
-  text-align: center;
+.chat-widget-sources {
+  margin-top: 0.5em;
+  font-size: 0.85em;
+}
+
+.chat-widget-sources a {
+  display: block;
 }
 
 .chat-widget-message {

@@ -43,7 +43,6 @@ from larpmanager.forms.member import MyAuthForm
 from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, session_token_key
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import welcome_user
-from larpmanager.utils.larpmanager.query import query_index
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.services.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
@@ -183,12 +182,6 @@ def get_base_domain(request: HttpRequest) -> str:
     base_domain = ".".join(host_parts[-2:]) if len(host_parts) >= minimum_parts_for_base_domain else host_without_port
 
     return f"{base_domain}:{port}" if port else base_domain
-
-
-@require_POST
-def tutorial_query(request: HttpRequest) -> HttpResponse:
-    """Delegate to query_index for tutorial queries."""
-    return query_index(request)
 
 
 def _validate_upload_file(file: Any, file_ext: str) -> str | None:

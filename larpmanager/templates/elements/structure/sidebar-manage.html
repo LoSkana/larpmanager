@@ -189,9 +189,9 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
-                    {% if not association.lite_mode and not association.demo %}
+                    {% if not association.demo %}
                         <hr />
-                        {% if role_names %}
+                        {% if role_names and not association.lite_mode %}
                             <div class="roles">
                                 <i>{% trans "Role:" %}
                                     {% for rn in role_names %}
