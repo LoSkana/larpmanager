@@ -6227,6 +6227,9 @@ msgstr "Varaktighet: %(duration)s sekunder"
 msgid "Enter your level of experience"
 msgstr "Ange din erfarenhetsnivå"
 
+msgid "Event published on LARP Radar:"
+msgstr "Evenemang publicerat på LARP Radar:"
+
 msgid "Format of the generated pages."
 msgstr "Format pa de genererade sidorna."
 
@@ -10740,6 +10743,13 @@ msgstr "Om du har gjort en banköverföring, ladda upp kvittot för behandling"
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Inte på LARP Radar än, kontrollera beskrivning och koordinater: "
+"<b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "Medarbetaren %(user)s har lämnat in en ny ansökan om ersättning för "
@@ -12145,6 +12155,14 @@ msgid ""
 msgstr ""
 "Visas på sidan för registreringsförfrågan och läggs till i bekräftelsemejlet"
 " om mottagen förfrågan"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"Evenemanget <strong>%(event)s</strong> har publicerats automatiskt på LARP "
+"Radar."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -15654,6 +15672,15 @@ msgid ""
 msgstr ""
 "Nedan hittar du alla tillgängliga funktioner; du kan skriva ett sökord för "
 "att filtrera dem. Klicka sedan på 'Video', så ser du videon direkt."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Om du väljer detta publiceras synliga kommande evenemang med beskrivning och"
+" koordinater på LARP Radar, och evenemangsdata och organisationens huvudmejl"
+" delas."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "

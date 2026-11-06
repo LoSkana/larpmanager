@@ -81,6 +81,7 @@ from larpmanager.utils.publication.ildb import (
     ILDB_RUN_CONFIG,
     ILDB_TEAM_CONFIG_KEY,
 )
+from larpmanager.utils.publication.radar import RADAR_RUN_CONFIG, get_publishable_runs, is_radar_enabled
 from larpmanager.utils.registrations.availability import registration_available
 from larpmanager.utils.users.deadlines import check_run_deadlines
 
@@ -495,6 +496,8 @@ def _init_exe_actions_cache(association_id: int) -> dict:
 
     data.update(_get_ildb_actions_data(association_id))
 
+    data.update(_get_radar_actions_data(association_id))
+
     data.update(_get_exe_otp_actions_data(association_id))
 
     return data
@@ -564,6 +567,15 @@ def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
         if not stored or stored in ("True", "False"):
             unpublished.append(run.search)
     return unpublished
+
+
+def _get_radar_actions_data(association_id: int) -> dict:
+    """Return the visible upcoming runs not yet published on LARP Radar."""
+    if not is_radar_enabled(association_id):
+        return {}
+    candidate_runs = get_publishable_runs(association_id).order_by("end")
+    unpublished = [run.search for run in candidate_runs if not run.get_config(RADAR_RUN_CONFIG)]
+    return {"radar_unpublished_runs": {"count": len(unpublished), "runs": unpublished}} if unpublished else {}
 
 
 def _init_orga_actions_cache(run: Run) -> dict:

@@ -6227,6 +6227,9 @@ msgstr "Duur: %(duration)s seconden"
 msgid "Enter your level of experience"
 msgstr "Vul je ervaringsniveau in"
 
+msgid "Event published on LARP Radar:"
+msgstr "Evenement gepubliceerd op LARP Radar:"
+
 msgid "Format of the generated pages."
 msgstr "Formaat van de gegenereerde pagina's."
 
@@ -10953,6 +10956,13 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Nog niet op LARP Radar, controleer de beschrijving en coördinaten: "
+"<b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "Medewerker %(user)s heeft een nieuwe onkostenvergoeding aangevraagd voor "
@@ -12393,6 +12403,14 @@ msgid ""
 msgstr ""
 "Wordt weergegeven op de aanmeldingspagina en toegevoegd aan het "
 "bevestigingsmailtje dat je krijgt als je aanvraag is ontvangen"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"Het evenement <strong>%(event)s</strong> is automatisch gepubliceerd op LARP"
+" Radar."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -15947,6 +15965,16 @@ msgstr ""
 "Hieronder vind je alle beschikbare functies; je kunt een zoekwoord ingeven "
 "om ze te filteren. Klik vervolgens op 'Video' en je krijgt de video direct "
 "te zien."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Als je dit selecteert, worden zichtbare aankomende evenementen met een "
+"beschrijving en coördinaten gepubliceerd op LARP Radar, waarbij de "
+"evenementgegevens en het hoofd-e-mailadres van de organisatie worden "
+"gedeeld."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "

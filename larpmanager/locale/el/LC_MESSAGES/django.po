@@ -6227,6 +6227,9 @@ msgstr "Διάρκεια: %(duration)s δευτερόλεπτα"
 msgid "Enter your level of experience"
 msgstr "Εισήγαγε το επίπεδο εμπειρίας σου"
 
+msgid "Event published on LARP Radar:"
+msgstr "Η εκδήλωση δημοσιεύτηκε στο LARP Radar:"
+
 msgid "Format of the generated pages."
 msgstr "Μορφή των σελίδων που δημιουργούνται."
 
@@ -11041,6 +11044,13 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Δεν είναι ακόμα στο LARP Radar, έλεγξε την περιγραφή και τις συντεταγμένες: "
+"<b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "Το μέλος του προσωπικού %(user)s υπέβαλε νέο αίτημα επιστροφής χρημάτων για "
@@ -12502,6 +12512,13 @@ msgid ""
 msgstr ""
 "Εμφανίζεται στη σελίδα αιτήματος εγγραφής και προστίθεται στο email "
 "επιβεβαίωσης λήψης αιτήματος"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"Η εκδήλωση <strong>%(event)s</strong> δημοσιεύτηκε αυτόματα στο LARP Radar."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -16070,6 +16087,15 @@ msgstr ""
 "Παρακάτω θα βρεις όλες τις διαθέσιμες λειτουργίες· μπορείς να γράψεις μια "
 "λέξη-κλειδί αναζήτησης για να τις φιλτράρεις. Έπειτα κάνε κλικ στο «Video» "
 "και θα δεις απευθείας το βίντεο."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Αν το επιλέξεις, οι ορατές επερχόμενες εκδηλώσεις με περιγραφή και "
+"συντεταγμένες δημοσιεύονται στο LARP Radar, κοινοποιώντας τα στοιχεία της "
+"εκδήλωσης και το κύριο email του οργανισμού."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "

@@ -211,6 +211,13 @@ def _exe_publisher_actions(context: dict, actions_data: dict) -> None:
         )
     if actions_data.get("ildb_token_expired"):
         _add_action(context, _("Generate a new ILDB token"), "exe_config")
+    if actions_data.get("radar_unpublished_runs", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>.")
+            % {"list": ", ".join(actions_data["radar_unpublished_runs"]["runs"])},
+            "exe_events",
+        )
 
 
 def _exe_users_actions(context: dict, enabled_features: dict[str, Any], actions_data: dict) -> None:

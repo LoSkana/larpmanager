@@ -6227,6 +6227,9 @@ msgstr "Kesto: %(duration)s sekuntia"
 msgid "Enter your level of experience"
 msgstr "Anna kokemustasosi"
 
+msgid "Event published on LARP Radar:"
+msgstr "Tapahtuma julkaistu LARP Radarissa:"
+
 msgid "Format of the generated pages."
 msgstr "Luotujen sivujen muoto."
 
@@ -10787,6 +10790,12 @@ msgstr "Jos olet tehnyt tilisiirron, lataa sen kuitti käsittelyä varten"
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Ei vielä LARP Radarissa, tarkista kuvaus ja koordinaatit: <b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "Työntekijä %(user)s on jättänyt uuden korvaushakemuksen %(event)s:lle."
@@ -12165,6 +12174,14 @@ msgid ""
 msgstr ""
 "Näkyy rekisteröitymispyynnön sivulla ja lisätään pyynnön vastaanottamista "
 "koskevaan vahvistussähköpostiin"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"Tapahtuma <strong>%(event)s</strong> on julkaistu automaattisesti LARP "
+"Radarissa."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -15672,6 +15689,15 @@ msgstr ""
 "Alla näet kaikki käytettävissä olevat ominaisuudet; voit kirjoittaa "
 "hakusanan suodattaaksesi niitä. Klikkaa sitten 'Video', niin näet videon "
 "suoraan."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Jos tämä on valittuna, tulevat näkyvät tapahtumat, joilla on kuvaus ja "
+"koordinaatit, julkaistaan LARP Radarissa, ja samalla jaetaan tapahtuman "
+"tiedot ja järjestön pääsähköpostiosoite."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "

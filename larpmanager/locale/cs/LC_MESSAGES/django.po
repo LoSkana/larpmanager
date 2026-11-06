@@ -6227,6 +6227,9 @@ msgstr "Doba trvání: %(duration)s sekund"
 msgid "Enter your level of experience"
 msgstr "Zadej svou úroveň zkušeností"
 
+msgid "Event published on LARP Radar:"
+msgstr "Událost zveřejněna na LARP Radar:"
+
 msgid "Format of the generated pages."
 msgstr "Formát generovaných stránek."
 
@@ -10635,6 +10638,13 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Zatím nezveřejněno na LARP Radar, zkontroluj popis a souřadnice: "
+"<b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "Zaměstnanec %(user)s podal novou žádost o proplacení výdajů za %(event)s."
@@ -11979,6 +11989,14 @@ msgid ""
 msgstr ""
 "Zobrazuje se na stránce žádosti o registraci a je uvedeno v potvrzovacím "
 "e-mailu o přijetí žádosti"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"Událost <strong>%(event)s</strong> byla automaticky zveřejněna na LARP "
+"Radar."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -15444,6 +15462,15 @@ msgid ""
 msgstr ""
 "Níže najdeš všechny dostupné funkce; pro jejich filtrování můžeš zadat "
 "klíčové slovo. Poté klikni na 'Video' a zobrazí se ti přímo video."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Pokud tuto možnost vybereš, viditelné nadcházející události s popisem a "
+"souřadnicemi se zveřejní na LARP Radar a budou se sdílet údaje o události a "
+"hlavní e-mail organizace."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "
