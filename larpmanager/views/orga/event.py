@@ -21,10 +21,12 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from contextlib import nullcontext
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import F, Prefetch, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -178,15 +180,20 @@ def full_event_edit(
 
         # Validate both forms before saving
         if event_form.is_valid() and run_form.is_valid():
-            # Save event first
-            saved_event = event_form.save()
-            save_log(context, Event, saved_event, event.uuid if event else None)
+            # A new event is saved with its run so that a failure leaves neither; edits must
+            # commit right away, as the signals of the event invalidate its caches
+            with nullcontext() if event else transaction.atomic():
+                saved_event = event_form.save_unique_slug()
+                if saved_event:
+                    save_log(context, Event, saved_event, event.uuid if event else None)
+                    saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
 
-            saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
-
-            # Show success message and redirect based on access level
-            messages.success(request, _("Operation completed!"))
-            return _full_event_edit_success_response(request, context, saved_run, is_frame, is_executive=is_executive)
+            if saved_event:
+                # Show success message and redirect based on access level
+                messages.success(request, _("Operation completed!"))
+                return _full_event_edit_success_response(
+                    request, context, saved_run, is_frame, is_executive=is_executive
+                )
     else:
         # Create empty forms for GET requests
         event_form = event_form_class(instance=event, context=context, prefix="form1")

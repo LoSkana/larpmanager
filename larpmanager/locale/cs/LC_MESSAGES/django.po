@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Zrušit"
 
+msgid "Change"
+msgstr "Změnit"
+
 msgid "Checks"
 msgstr "Kontroly"
 
@@ -4377,6 +4380,9 @@ msgstr "Nastavit typy Quest"
 msgid "Show other options"
 msgstr "Zobrazit další možnosti"
 
+msgid "Slug already used!"
+msgstr "Slug je už použitý!"
+
 msgid "The trash is empty"
 msgstr "Koš je prázdný"
 
@@ -6143,6 +6149,9 @@ msgstr "Přizpůsobení hráče aktualizováno!"
 msgid "Players waiting for character"
 msgstr "Hráči čekají na postavu"
 
+msgid "Please select this file again"
+msgstr "Vyber prosím tento soubor znovu"
+
 msgid "Preferred navigation language"
 msgstr "Preferovaný jazyk navigace"
 
@@ -7112,6 +7121,9 @@ msgstr "V souboru ZIP nebyly nalezeny žádné rozpoznané soubory."
 msgid "One symbol more or less than expected"
 msgstr "O jeden symbol více nebo méně, než se očekávalo"
 
+msgid "Reserved word, please choose another!"
+msgstr "Rezervované slovo, vyber prosím jiné!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Vyber organizaci, na kterou chceš přejít"
 
@@ -7427,6 +7439,9 @@ msgstr "Nastav možnosti Casting v konfiguraci"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
+
+msgid "The name must contain letters or numbers"
+msgstr "Název musí obsahovat písmena nebo číslice"
 
 msgid "The number of payments to split the fee."
 msgstr "Počet plateb, na které se má poplatek rozdělit."
@@ -9036,6 +9051,9 @@ msgstr "Zaměstnanci, kteří budou přijímat a spravovat tikety podpory"
 msgid "Symbols for date of birth do not match (check exact date)"
 msgstr "Symboly pro datum narození se neshodují (zkontroluj přesné datum)"
 
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "Z tohoto názvu nejde vytvořit URL, vyber prosím nějakou"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Pole postavy vypočteného typu, které bude aktualizováno"
 
@@ -10429,6 +10447,10 @@ msgstr ""
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr "Rezervace těchto slev vypršela, takže nebyly uplatněny"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr "Tato URL není dostupná: zkontroluj navrženou nebo zvol jinou"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -12830,6 +12852,14 @@ msgid ""
 msgstr ""
 "Tvoje registrace na tuto akci byla úspěšně zrušena. Je nám líto, že "
 "odcházíš!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s už byla tímto formulářem vytvořena: pokud chceš vytvořit "
+"další, otevři formulář znovu"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

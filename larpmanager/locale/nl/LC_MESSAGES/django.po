@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Annuleren"
 
+msgid "Change"
+msgstr "Wijzigen"
+
 msgid "Checks"
 msgstr "Controles"
 
@@ -4377,6 +4380,9 @@ msgstr "Questtypes instellen"
 msgid "Show other options"
 msgstr "Toon andere opties"
 
+msgid "Slug already used!"
+msgstr "Slug is al in gebruik!"
+
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
 
@@ -6143,6 +6149,9 @@ msgstr "Spelersaanpassing bijgewerkt!"
 msgid "Players waiting for character"
 msgstr "Spelers wachten op personage"
 
+msgid "Please select this file again"
+msgstr "Selecteer dit bestand opnieuw"
+
 msgid "Preferred navigation language"
 msgstr "Gewenste navigatietaal"
 
@@ -7112,6 +7121,9 @@ msgstr "Geen herkende bestanden gevonden in de ZIP."
 msgid "One symbol more or less than expected"
 msgstr "Eén teken meer of minder dan verwacht"
 
+msgid "Reserved word, please choose another!"
+msgstr "Gereserveerd woord, kies een ander!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Selecteer de organisatie om verder te gaan"
 
@@ -7426,6 +7438,9 @@ msgstr "Castingopties instellen in de configuratie"
 
 msgid "The collection was delivered to the user"
 msgstr "De opbrengst van de inzamelactie is aan de gebruiker overhandigd."
+
+msgid "The name must contain letters or numbers"
+msgstr "De naam moet letters of cijfers bevatten"
 
 msgid "The number of payments to split the fee."
 msgstr "Het aantal betalingen waarin de bijdrage wordt gesplitst."
@@ -9071,6 +9086,9 @@ msgid "Symbols for date of birth do not match (check exact date)"
 msgstr ""
 "De symbolen voor de geboortedatum komen niet overeen (controleer de exacte "
 "datum)"
+
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "De URL kan niet uit deze naam worden gemaakt, kies er zelf een"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Het personageveld van het berekende type dat wordt bijgewerkt"
@@ -10726,6 +10744,12 @@ msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr ""
 "De reservering van deze kortingen is verlopen, dus ze zijn niet toegepast"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+"Deze URL is niet beschikbaar: controleer de voorgestelde URL of kies een "
+"andere"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -13267,6 +13291,14 @@ msgid ""
 msgstr ""
 "Je aanmelding voor dit evenement is succesvol geannuleerd. We vinden het "
 "jammer dat je niet komt!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s is al aangemaakt met dit formulier: open het formulier "
+"opnieuw om er nog een aan te maken"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

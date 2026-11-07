@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Avbryt"
 
+msgid "Change"
+msgstr "Ändra"
+
 msgid "Checks"
 msgstr "Kontroller"
 
@@ -4377,6 +4380,9 @@ msgstr "Ställ in Quest-typer"
 msgid "Show other options"
 msgstr "Visa andra alternativ"
 
+msgid "Slug already used!"
+msgstr "Slug används redan!"
+
 msgid "The trash is empty"
 msgstr "Papperskorgen är tom"
 
@@ -6143,6 +6149,9 @@ msgstr "Spelaranpassning uppdaterad!"
 msgid "Players waiting for character"
 msgstr "Spelare som väntar på karaktär"
 
+msgid "Please select this file again"
+msgstr "Välj den här filen igen"
+
 msgid "Preferred navigation language"
 msgstr "Önskat navigeringsspråk"
 
@@ -7112,6 +7121,9 @@ msgstr "Inga igenkända filer hittades i ZIP-filen."
 msgid "One symbol more or less than expected"
 msgstr "En symbol mer eller mindre än förväntat"
 
+msgid "Reserved word, please choose another!"
+msgstr "Reserverat ord, välj ett annat!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Välj den organisation som du vill gå vidare till"
 
@@ -7426,6 +7438,9 @@ msgstr "Ställ in casting-alternativ i konfigurationen"
 
 msgid "The collection was delivered to the user"
 msgstr "Insamlingen levererades till användaren"
+
+msgid "The name must contain letters or numbers"
+msgstr "Namnet måste innehålla bokstäver eller siffror"
 
 msgid "The number of payments to split the fee."
 msgstr "Antalet betalningar som avgiften ska delas upp på."
@@ -9040,6 +9055,9 @@ msgstr ""
 "Symbolerna för födelsedatum stämmer inte överens (kontrollera det exakta "
 "datumet)"
 
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "URL:en kan inte skapas utifrån det här namnet, välj en själv"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Det beräknade karaktärsfält som kommer att uppdateras"
 
@@ -10531,6 +10549,11 @@ msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr ""
 "Reservationen för de här rabatterna har gått ut, så de tillämpades inte"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+"Den här URL:en är inte tillgänglig: kolla den föreslagna eller välj en annan"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -13015,6 +13038,14 @@ msgid ""
 msgstr ""
 "Din anmälan till detta evenemang har avbokats. Vi beklagar att du lämnar "
 "oss!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s har redan skapats med det här formuläret: öppna formuläret "
+"igen för att skapa en till"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

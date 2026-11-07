@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Annuller"
 
+msgid "Change"
+msgstr "Skift"
+
 msgid "Checks"
 msgstr "Tjek"
 
@@ -4377,6 +4380,9 @@ msgstr "Opsæt Quest-typer"
 msgid "Show other options"
 msgstr "Vis andre muligheder"
 
+msgid "Slug already used!"
+msgstr "Slug er allerede i brug!"
+
 msgid "The trash is empty"
 msgstr "Papirkurven er tom"
 
@@ -6143,6 +6149,9 @@ msgstr "Spillertilpasning opdateret!"
 msgid "Players waiting for character"
 msgstr "Spillere venter på en karakter"
 
+msgid "Please select this file again"
+msgstr "Vælg denne fil igen"
+
 msgid "Preferred navigation language"
 msgstr "Foretrukket navigationssprog"
 
@@ -7112,6 +7121,9 @@ msgstr "Ingen genkendte filer fundet i ZIP-filen."
 msgid "One symbol more or less than expected"
 msgstr "Ét symbol mere eller mindre end forventet"
 
+msgid "Reserved word, please choose another!"
+msgstr "Reserveret ord, vælg et andet!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Vælg organisationen for at fortsætte til"
 
@@ -7426,6 +7438,9 @@ msgstr "Angiv Casting-muligheder i konfigurationen"
 
 msgid "The collection was delivered to the user"
 msgstr "Indsamlingen blev leveret til brugeren"
+
+msgid "The name must contain letters or numbers"
+msgstr "Navnet skal indeholde bogstaver eller tal"
 
 msgid "The number of payments to split the fee."
 msgstr "Antallet af betalinger, som gebyret skal opdeles i."
@@ -9036,6 +9051,9 @@ msgstr "Medarbejdere, der modtager og håndterer supporthenvendelser"
 msgid "Symbols for date of birth do not match (check exact date)"
 msgstr "Symboler for fødselsdato matcher ikke (kontrollér den præcise dato)"
 
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "URL'en kan ikke dannes ud fra dette navn, vælg venligst en"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Karakterfeltet af beregnet type, der opdateres"
 
@@ -10472,6 +10490,11 @@ msgstr ""
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr "Reservationen af disse rabatter er udløbet, så de blev ikke anvendt"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+"Denne URL er ikke tilgængelig: tjek den foreslåede, eller vælg en anden"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -12956,6 +12979,14 @@ msgid ""
 msgstr ""
 "Din tilmelding til dette arrangement er blevet annulleret. Vi er kede af at "
 "se dig gå!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s er allerede oprettet med denne formular: åbn formularen "
+"igen for at oprette en ny"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

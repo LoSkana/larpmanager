@@ -18,12 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import logging
+import uuid
+from collections.abc import Collection
 from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db.models import QuerySet
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
@@ -35,6 +37,7 @@ from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssociationMemberS2WidgetMulti,
+    SlugFormMixin,
     SlugInput,
     WritingTinyMCE,
     prepare_permissions_role,
@@ -43,11 +46,18 @@ from larpmanager.forms.utils import (
     validate_css,
 )
 from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
-from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
+from larpmanager.models.association import (
+    Association,
+    AssociationSkin,
+    AssociationText,
+    AssociationTextType,
+    AssociationTranslation,
+)
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.versions import VERSIONS
 
-logger = logging.getLogger(__name__)
+RESERVED_SUBDOMAINS = frozenset({"admin", "api", "ftp", "mail", "smtp", "staging", "www"})
+NAME_WITHOUT_ALPHANUMERIC_ERROR = _("The name must contain letters or numbers")
 
 
 class ExeAssociationForm(BaseModelForm):
@@ -1013,7 +1023,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 
-class FirstAssociationForm(BaseModelForm):
+class FirstAssociationForm(SlugFormMixin, BaseModelForm):
     """Form for creating a new association during initial setup.
 
     Simplified form for first-time association creation
@@ -1027,24 +1037,32 @@ class FirstAssociationForm(BaseModelForm):
             "slug": SlugInput,
         }
 
-    def clean_slug(self) -> str:
-        """Validate that the slug is unique across all associations."""
-        data: str = self.cleaned_data["slug"]
-        logger.debug("Validating association slug: %s", data)
+    # Identifies a rendering of the form, to recognize a repeated submit
+    join_token = forms.UUIDField(required=False, initial=uuid.uuid4, widget=forms.HiddenInput)
 
-        # Check if slug is already used by other associations
-        lst = Association.objects.filter(slug=data)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form, adding the message shown when the browser rejects the name."""
+        super().__init__(*args, **kwargs)
 
-        # Exclude current instance from validation if editing existing association
-        if self.instance is not None and self.instance.pk is not None:
-            lst = lst.exclude(pk=self.instance.pk)
+        self.fields["name"].widget.attrs["data-invalid-message"] = NAME_WITHOUT_ALPHANUMERIC_ERROR
 
-        # Raise validation error if slug already exists
-        if lst.exists():
-            msg = "Slug already used!"
-            raise ValidationError(msg)
+    def clean_name(self) -> str:
+        """Reject names without any letter or number."""
+        data: str = self.cleaned_data["name"]
+
+        if not any(character.isalnum() for character in data):
+            raise ValidationError(NAME_WITHOUT_ALPHANUMERIC_ERROR)
 
         return data
+
+    def slug_scope(self) -> QuerySet:
+        """Return the associations among which the slug must be unique."""
+        return Association.objects.all()
+
+    def reserved_slugs(self) -> Collection[str]:
+        """Return the technical subdomains and the main domains labels, as the domain root would load them."""
+        main_domains = AssociationSkin.objects.values_list("domain", flat=True)
+        return RESERVED_SUBDOMAINS | {domain.split(".")[0] for domain in main_domains}
 
 
 class ExeQuickSetupForm(QuickSetupForm):

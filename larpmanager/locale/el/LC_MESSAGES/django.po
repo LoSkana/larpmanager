@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Ακύρωση"
 
+msgid "Change"
+msgstr "Αλλαγή"
+
 msgid "Checks"
 msgstr "Έλεγχοι"
 
@@ -4377,6 +4380,9 @@ msgstr "Ρύθμισε τους τύπους Quest"
 msgid "Show other options"
 msgstr "Εμφάνιση άλλων επιλογών"
 
+msgid "Slug already used!"
+msgstr "Το slug χρησιμοποιείται ήδη!"
+
 msgid "The trash is empty"
 msgstr "Ο κάδος είναι άδειος"
 
@@ -6143,6 +6149,9 @@ msgstr "Η προσαρμογή παίκτη ενημερώθηκε!"
 msgid "Players waiting for character"
 msgstr "Παίκτες που περιμένουν χαρακτήρα"
 
+msgid "Please select this file again"
+msgstr "Επίλεξε ξανά αυτό το αρχείο"
+
 msgid "Preferred navigation language"
 msgstr "Προτιμώμενη γλώσσα πλοήγησης"
 
@@ -7113,6 +7122,9 @@ msgstr "Δεν βρέθηκαν αναγνωρισμένα αρχεία στο Z
 msgid "One symbol more or less than expected"
 msgstr "Ένα σύμβολο περισσότερο ή λιγότερο από το αναμενόμενο"
 
+msgid "Reserved word, please choose another!"
+msgstr "Δεσμευμένη λέξη, διάλεξε κάποια άλλη!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Επίλεξε τον οργανισμό για να προχωρήσεις"
 
@@ -7427,6 +7439,9 @@ msgstr "Ρύθμισε τις επιλογές casting στη διαμόρφωσ
 
 msgid "The collection was delivered to the user"
 msgstr "Η συλλογή παραδόθηκε στον χρήστη"
+
+msgid "The name must contain letters or numbers"
+msgstr "Το όνομα πρέπει να περιέχει γράμματα ή αριθμούς"
 
 msgid "The number of payments to split the fee."
 msgstr "Ο αριθμός πληρωμών στις οποίες θα χωριστεί το κόστος."
@@ -9108,6 +9123,9 @@ msgid "Symbols for date of birth do not match (check exact date)"
 msgstr ""
 "Τα σύμβολα για την ημερομηνία γέννησης δεν ταιριάζουν (έλεγξε την ακριβή "
 "ημερομηνία)"
+
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "Δεν μπορεί να δημιουργηθεί το URL από αυτό το όνομα, διάλεξε ένα"
 
 msgid "The character field of computed type that will be updated"
 msgstr "Το πεδίο χαρακτήρα υπολογιζόμενου τύπου που θα ενημερωθεί"
@@ -10808,6 +10826,11 @@ msgstr ""
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr "Η κράτηση αυτών των εκπτώσεων έληξε, οπότε δεν εφαρμόστηκαν"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+"Αυτό το URL δεν είναι διαθέσιμο: δες το προτεινόμενο ή διάλεξε κάποιο άλλο"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -13373,6 +13396,14 @@ msgid ""
 msgstr ""
 "Η εγγραφή σου σε αυτή την εκδήλωση ακυρώθηκε επιτυχώς. Λυπούμαστε που σε "
 "βλέπουμε να φεύγεις!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"Το %(organization)s έχει ήδη δημιουργηθεί με αυτή τη φόρμα: άνοιξε ξανά τη "
+"φόρμα για να δημιουργήσεις άλλο ένα"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

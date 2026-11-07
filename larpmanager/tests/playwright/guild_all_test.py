@@ -32,6 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    fill_slug,
     _select2_search_and_pick,
     char_dual_pick,
     fill_date,
@@ -255,7 +256,7 @@ def check_campaign_child(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").fill("child guild")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("childguild")
+    fill_slug(edit_iframe, "childguild")
     expect(edit_iframe.locator("#slug")).to_have_value("childguild")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")

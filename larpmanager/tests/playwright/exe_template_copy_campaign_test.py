@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, check_feature, go_to, login_orga, submit_confirm, \
+from larpmanager.tests.utils import fill_slug, fill_date, check_feature, go_to, login_orga, submit_confirm, \
     expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal, click_and_wait_question, char_dual_pick
 
 pytestmark = pytest.mark.e2e
@@ -83,7 +83,7 @@ def template(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("from template")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("fromtemplate")
+    fill_slug(edit_iframe, "fromtemplate")
     # the template should be auto-selected
     fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
     fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
@@ -175,7 +175,7 @@ def copy(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("copy")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("copy")
+    fill_slug(edit_iframe, "copy")
     fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
     fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
     save_modal(page, edit_iframe)
@@ -219,7 +219,7 @@ def campaign(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("campaign")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("campaign")
+    fill_slug(edit_iframe, "campaign")
     expect(edit_iframe.locator("#slug")).to_have_value("campaign")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")

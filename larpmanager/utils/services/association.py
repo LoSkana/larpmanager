@@ -162,6 +162,9 @@ def apply_skin_features_to_association(association: Association) -> None:
         else:
             association.features.add(*default_features)
 
+        # Features may have been read and cached earlier in the same transaction
+        reset_association_features(association.id)
+
     # Schedule the feature update to run after the current transaction commits
     transaction.on_commit(update_features)
 

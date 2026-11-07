@@ -260,6 +260,9 @@ msgstr ""
 msgid "Value must be greater than or equal to 0"
 msgstr ""
 
+msgid "The name must contain letters or numbers"
+msgstr ""
+
 msgid "Settings"
 msgstr ""
 
@@ -2795,6 +2798,26 @@ msgstr ""
 msgid "Invalid HTML: %(error)s"
 msgstr ""
 
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+
+msgid "Slug already used!"
+msgstr ""
+
+msgid "Reserved word, please choose another!"
+msgstr ""
+
+msgid "Please select this file again"
+msgstr ""
+
+msgid ""
+"Only lowercase letters and numbers allowed, no spaces or special characters"
+msgstr ""
+
+msgid "The URL cannot be built from this name, please choose one"
+msgstr ""
+
 msgid "Manage all warehouse items, their containers, tags, and quantities"
 msgstr ""
 
@@ -3976,10 +3999,6 @@ msgid "Subdomain"
 msgstr ""
 
 msgid "Your organization's unique subdomain in the platform"
-msgstr ""
-
-msgid ""
-"Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 
 msgid "Logo"
@@ -6574,6 +6593,9 @@ msgid "Move up"
 msgstr ""
 
 msgid "Move down"
+msgstr ""
+
+msgid "Change"
 msgstr ""
 
 msgid "View photos and media from the event"
@@ -13563,6 +13585,12 @@ msgstr ""
 
 #, python-format
 msgid "Welcome to %(organization)s!"
+msgstr ""
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
 msgstr ""
 
 msgid "New organization created"

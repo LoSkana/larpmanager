@@ -556,6 +556,9 @@ msgstr "Badges"
 msgid "Cancel"
 msgstr "Peruuta"
 
+msgid "Change"
+msgstr "Muuta"
+
 msgid "Checks"
 msgstr "Tarkistukset"
 
@@ -4377,6 +4380,9 @@ msgstr "Määritä Quest-tyypit"
 msgid "Show other options"
 msgstr "Näytä muut vaihtoehdot"
 
+msgid "Slug already used!"
+msgstr "Slug on jo käytössä!"
+
 msgid "The trash is empty"
 msgstr "Roskakori on tyhjä"
 
@@ -6143,6 +6149,9 @@ msgstr "Pelaajan mukauttaminen päivitetty!"
 msgid "Players waiting for character"
 msgstr "Pelaajat odottavat hahmoa"
 
+msgid "Please select this file again"
+msgstr "Valitse tämä tiedosto uudelleen"
+
 msgid "Preferred navigation language"
 msgstr "Ensisijainen navigointikieli"
 
@@ -7112,6 +7121,9 @@ msgstr "ZIP-tiedostosta ei löytynyt tunnistettuja tiedostoja."
 msgid "One symbol more or less than expected"
 msgstr "Yksi symboli enemmän tai vähemmän kuin odotettiin"
 
+msgid "Reserved word, please choose another!"
+msgstr "Varattu sana, valitse toinen!"
+
 msgid "Select the organisation to proceed to"
 msgstr "Valitse organisaatio, johon haluat siirtyä"
 
@@ -7426,6 +7438,9 @@ msgstr "Määritä casting-vaihtoehdot asetuksissa"
 
 msgid "The collection was delivered to the user"
 msgstr "Keräys jaettiin käyttäjälle"
+
+msgid "The name must contain letters or numbers"
+msgstr "Nimessä täytyy olla kirjaimia tai numeroita"
 
 msgid "The number of payments to split the fee."
 msgstr "Maksujen määrä, johon maksu jaetaan."
@@ -9051,6 +9066,9 @@ msgstr "Henkilöstön jäsenet, jotka vastaanottavat ja hallinnoivat tukilippuja
 msgid "Symbols for date of birth do not match (check exact date)"
 msgstr "Syntymäpäivän merkit eivät täsmää (tarkista tarkka päivämäärä)"
 
+msgid "The URL cannot be built from this name, please choose one"
+msgstr "URL-osoitetta ei voi muodostaa tästä nimestä, valitse se itse"
+
 msgid "The character field of computed type that will be updated"
 msgstr "Päivitettävä laskennallista tyyppiä oleva hahmokenttä"
 
@@ -10574,6 +10592,10 @@ msgstr ""
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
 msgstr "Näiden alennusten varaus on vanhentunut, joten niitä ei käytetty"
+
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr "Tämä URL ei ole saatavilla: tarkista ehdotettu URL tai valitse toinen"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -13024,6 +13046,14 @@ msgid ""
 msgstr ""
 "Ilmoittautumisesi tähän tapahtumaan on peruutettu onnistuneesti. Harmi, että"
 " lähdet!"
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
+msgstr ""
+"%(organization)s on jo luotu tällä lomakkeella: avaa lomake uudelleen, jos "
+"haluat luoda toisen"
 
 msgid ""
 "A user with this email address already exists. Please use a different email "

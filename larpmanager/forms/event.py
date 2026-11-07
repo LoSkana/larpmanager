@@ -18,14 +18,16 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import logging
 import re
+from collections.abc import Collection
 from typing import Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db import transaction
+from django.db.models import QuerySet
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
@@ -49,6 +51,7 @@ from larpmanager.forms.utils import (
     DatePickerInput,
     DateTimePickerInput,
     EventS2Widget,
+    SlugFormMixin,
     SlugInput,
     TemplateS2Widget,
     WritingTinyMCE,
@@ -96,8 +99,6 @@ from larpmanager.utils.publication.ildb import (
     PromotionSetting,
 )
 from larpmanager.utils.registrations.context import _get_registration_fields
-
-logger = logging.getLogger(__name__)
 
 
 class EventCharactersPdfForm(ConfigForm):
@@ -250,7 +251,7 @@ class EventCharactersPdfForm(ConfigForm):
         )
 
 
-class OrgaEventForm(BaseModelForm):
+class OrgaEventForm(SlugFormMixin, BaseModelForm):
     """Form for managing general event settings and basic configuration."""
 
     page_title = _("Event")
@@ -304,13 +305,9 @@ class OrgaEventForm(BaseModelForm):
         if "exe" not in self.params:
             self.prevent_canc = True
 
-        # Configure slug field based on whether this is a new or existing event
+        # Slug cannot be changed after event creation
         if self.instance.pk:
-            # Slug cannot be changed after event creation
             self.delete_field("slug")
-        else:
-            # Slug is required for new events
-            self.fields["slug"].required = True
 
         # Build list of fields to delete based on disabled features
         # Check each display-related feature and mark fields for removal if disabled
@@ -350,36 +347,13 @@ class OrgaEventForm(BaseModelForm):
             disabled_fields.append("parent")
             return
 
-    def clean_slug(self) -> str:
-        """Validate event slug for uniqueness and reserved word conflicts.
+    def slug_scope(self) -> QuerySet:
+        """Return the events of this association, among which the slug must be unique."""
+        return Event.objects.filter(association_id=self.params.get("association_id"))
 
-        Ensures that the slug is unique among all events within the association
-        (excluding current instance during updates) and is not a reserved static prefix.
-
-        Returns:
-            str: The validated slug value.
-
-        Raises:
-            ValidationError: If slug is already used by another event or is a reserved word.
-
-        """
-        data = self.cleaned_data["slug"]
-        logger.debug("Validating event slug: %s", data)
-
-        # Check if slug is already used by another event in this association
-        lst = Event.objects.filter(association_id=self.params.get("association_id"), slug=data)
-        if self.instance is not None and self.instance.pk is not None:
-            lst = lst.exclude(pk=self.instance.pk)
-        if lst.exists():
-            msg = "Slug already used!"
-            raise ValidationError(msg)
-
-        # Check if slug conflicts with reserved static prefixes
-        if data and hasattr(conf_settings, "STATIC_PREFIXES") and data in conf_settings.STATIC_PREFIXES:
-            msg = "Reserved word, please choose another!"
-            raise ValidationError(msg)
-
-        return data
+    def reserved_slugs(self) -> Collection[str]:
+        """Return the static URL prefixes, that cannot be used as slugs."""
+        return getattr(conf_settings, "STATIC_PREFIXES", ())
 
 
 class OrgaFeatureForm(FeatureForm):
@@ -2082,7 +2056,8 @@ class ExeEventForm(OrgaEventForm):
                     if campaign_feat:
                         association = Association.objects.get(pk=self.params["association_id"])
                         association.features.add(campaign_feat)
-                        reset_association_features(self.params["association_id"])
+                        association_id = self.params["association_id"]
+                        transaction.on_commit(lambda: reset_association_features(association_id))
 
                 for feat_slug in template_features:
                     for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():

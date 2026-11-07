@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, go_to, load_image, load_image_hidden, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import fill_slug, fill_date, go_to, load_image, load_image_hidden, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -191,7 +191,7 @@ def test_user_profile_fields(pw_page: Any) -> None:
     name_input.fill("Profile Test")
     page.locator("#id_profile").wait_for(state="visible")
     load_image(page, "#id_profile")
-    page.locator("#slug").fill("profiletest")
+    fill_slug(page, "profiletest")
     submit(page)
 
     go_to(page, live_server, "/debug/profiletest")
