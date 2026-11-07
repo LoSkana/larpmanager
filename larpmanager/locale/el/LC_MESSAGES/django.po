@@ -1292,9 +1292,6 @@ msgstr "Νέο κόστος"
 msgid "New gift"
 msgstr "Νέο δώρο"
 
-msgid "New plot"
-msgstr "Νέα πλοκή"
-
 msgid "Nickname"
 msgstr "Ψευδώνυμο"
 
@@ -1618,9 +1615,6 @@ msgstr "Νέα εκδήλωση"
 
 msgid "New guild"
 msgstr "Νέα συντεχνία"
-
-msgid "New quest"
-msgstr "Νέο Quest"
 
 msgid "Next page"
 msgstr "Επόμενη σελίδα"
@@ -1970,9 +1964,6 @@ msgstr "Νέος παίκτης"
 msgid "New signup"
 msgstr "Νέα εγγραφή"
 
-msgid "New ticket"
-msgstr "Νέο εισιτήριο"
-
 msgid "Newsletter"
 msgstr "Ενημερωτικό δελτίο"
 
@@ -2303,9 +2294,6 @@ msgstr "Υπηκοότητα"
 msgid "Net profit:"
 msgstr "Καθαρό κέρδος:"
 
-msgid "New faction"
-msgstr "Νέα φατρία"
-
 msgid "New session"
 msgstr "Νέα συνεδρία"
 
@@ -2587,12 +2575,6 @@ msgstr "Εθνικότητα:"
 
 msgid "Need a ride?"
 msgstr "Χρειάζεσαι μεταφορά;"
-
-msgid "New discount"
-msgstr "Νέα έκπτωση"
-
-msgid "New question"
-msgstr "Νέα ερώτηση"
 
 msgid "Not included"
 msgstr "Δεν περιλαμβάνεται"

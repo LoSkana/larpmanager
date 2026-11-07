@@ -1292,9 +1292,6 @@ msgstr "Nouveau coût"
 msgid "New gift"
 msgstr "Nouveau cadeau"
 
-msgid "New plot"
-msgstr "Nouvelle intrigue"
-
 msgid "Nickname"
 msgstr "Surnom"
 
@@ -1618,9 +1615,6 @@ msgstr "Nouvel événement"
 
 msgid "New guild"
 msgstr "Nouvelle guilde"
-
-msgid "New quest"
-msgstr "Nouvelle Quest"
 
 msgid "Next page"
 msgstr "Page suivante"
@@ -1970,9 +1964,6 @@ msgstr "Nouveau joueur"
 msgid "New signup"
 msgstr "Nouvelle inscription"
 
-msgid "New ticket"
-msgstr "Nouveau billet"
-
 msgid "Newsletter"
 msgstr "Bulletin d'information"
 
@@ -2303,9 +2294,6 @@ msgstr "Nationalité"
 msgid "Net profit:"
 msgstr "Bénéfice net:"
 
-msgid "New faction"
-msgstr "Nouvelle faction"
-
 msgid "New session"
 msgstr "Nouvelle session"
 
@@ -2587,12 +2575,6 @@ msgstr "Nationalité:"
 
 msgid "Need a ride?"
 msgstr "Besoin d'un trajet?"
-
-msgid "New discount"
-msgstr "Nouvelle réduction"
-
-msgid "New question"
-msgstr "Nouvelle question"
 
 msgid "Not included"
 msgstr "Non inclus"

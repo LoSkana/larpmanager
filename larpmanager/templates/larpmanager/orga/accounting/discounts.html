@@ -56,8 +56,7 @@
     </table>
     {% if not list %}
         {% trans "Discounts offer reduced prices or promo codes to participants." as empty_text %}
-        {% trans "New discount" as empty_new %}
-        {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     {% include "elements/table/footer.html" %}
 {% endblock content %}

@@ -1292,9 +1292,6 @@ msgstr "Ny kostnad"
 msgid "New gift"
 msgstr "Ny gave"
 
-msgid "New plot"
-msgstr "Nytt plott"
-
 msgid "Nickname"
 msgstr "Kallenavn"
 
@@ -1618,9 +1615,6 @@ msgstr "Nytt arrangement"
 
 msgid "New guild"
 msgstr "Nytt gilde"
-
-msgid "New quest"
-msgstr "Ny quest"
 
 msgid "Next page"
 msgstr "Neste side"
@@ -1970,9 +1964,6 @@ msgstr "Ny spiller"
 msgid "New signup"
 msgstr "Ny påmelding"
 
-msgid "New ticket"
-msgstr "Ny billett"
-
 msgid "Newsletter"
 msgstr "Nyhetsbrev"
 
@@ -2303,9 +2294,6 @@ msgstr "Nasjonalitet"
 msgid "Net profit:"
 msgstr "Nettoresultat:"
 
-msgid "New faction"
-msgstr "Ny fraksjon"
-
 msgid "New session"
 msgstr "Ny økt"
 
@@ -2587,12 +2575,6 @@ msgstr "Nasjonalitet:"
 
 msgid "Need a ride?"
 msgstr "Trenger du skyss?"
-
-msgid "New discount"
-msgstr "Ny rabatt"
-
-msgid "New question"
-msgstr "Nytt spørsmål"
 
 msgid "Not included"
 msgstr "Ikke inkludert"

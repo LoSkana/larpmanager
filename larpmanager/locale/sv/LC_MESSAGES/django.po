@@ -1292,9 +1292,6 @@ msgstr "Ny kostnad"
 msgid "New gift"
 msgstr "Ny gåva"
 
-msgid "New plot"
-msgstr "Ny intrig"
-
 msgid "Nickname"
 msgstr "Smeknamn"
 
@@ -1618,9 +1615,6 @@ msgstr "Nytt evenemang"
 
 msgid "New guild"
 msgstr "Nytt gille"
-
-msgid "New quest"
-msgstr "Ny quest"
 
 msgid "Next page"
 msgstr "Nästa sida"
@@ -1970,9 +1964,6 @@ msgstr "Ny spelare"
 msgid "New signup"
 msgstr "Ny anmälan"
 
-msgid "New ticket"
-msgstr "Ny biljett"
-
 msgid "Newsletter"
 msgstr "Nyhetsbrev"
 
@@ -2303,9 +2294,6 @@ msgstr "Nationalitet"
 msgid "Net profit:"
 msgstr "Nettovinst:"
 
-msgid "New faction"
-msgstr "Ny fraktion"
-
 msgid "New session"
 msgstr "Ny session"
 
@@ -2587,12 +2575,6 @@ msgstr "Nationalitet:"
 
 msgid "Need a ride?"
 msgstr "Behöver du skjuts?"
-
-msgid "New discount"
-msgstr "Ny rabatt"
-
-msgid "New question"
-msgstr "Ny fråga"
 
 msgid "Not included"
 msgstr "Ingår ej"

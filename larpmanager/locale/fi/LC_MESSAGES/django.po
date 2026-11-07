@@ -1292,9 +1292,6 @@ msgstr "Uusi kustannus"
 msgid "New gift"
 msgstr "Uusi lahja"
 
-msgid "New plot"
-msgstr "Uusi juoni"
-
 msgid "Nickname"
 msgstr "Lempinimi"
 
@@ -1618,9 +1615,6 @@ msgstr "Uusi tapahtuma"
 
 msgid "New guild"
 msgstr "Uusi kilta"
-
-msgid "New quest"
-msgstr "Uusi Quest"
 
 msgid "Next page"
 msgstr "Seuraava sivu"
@@ -1970,9 +1964,6 @@ msgstr "Uusi pelaaja"
 msgid "New signup"
 msgstr "Uusi rekisteröityminen"
 
-msgid "New ticket"
-msgstr "Uusi lippu"
-
 msgid "Newsletter"
 msgstr "Uutiskirje"
 
@@ -2303,9 +2294,6 @@ msgstr "Kansalaisuus"
 msgid "Net profit:"
 msgstr "Nettovoitto:"
 
-msgid "New faction"
-msgstr "Uusi ryhmittymä"
-
 msgid "New session"
 msgstr "Uusi istunto"
 
@@ -2587,12 +2575,6 @@ msgstr "Kansalaisuus:"
 
 msgid "Need a ride?"
 msgstr "Tarvitsetko kyydin?"
-
-msgid "New discount"
-msgstr "Uusi alennus"
-
-msgid "New question"
-msgstr "Uusi kysymys"
 
 msgid "Not included"
 msgstr "Ei sisälly"
