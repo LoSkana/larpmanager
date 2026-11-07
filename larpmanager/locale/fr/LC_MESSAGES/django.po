@@ -508,6 +508,9 @@ msgstr "Valeur"
 msgid "Video"
 msgstr "Vidéo"
 
+msgid "Watch"
+msgstr "Regarder"
+
 msgid "Where"
 msgstr "Où"
 
@@ -2956,6 +2959,9 @@ msgstr "Exiger une connexion"
 
 msgid "Requirements:"
 msgstr "Exigences:"
+
+msgid "Search guides"
+msgstr "Rechercher des guides"
 
 msgid "Self-catering"
 msgstr "Auto-restauration"
@@ -6029,6 +6035,9 @@ msgstr "Mes invitations de guilde en attente"
 
 msgid "Name of badge to be awarded."
 msgstr "Nom du badge à attribuer."
+
+msgid "No guide matches your search"
+msgstr "Aucun guide ne correspond à ta recherche"
 
 msgid "Obtain the selected ability?"
 msgstr "Obtenir la capacité sélectionnée ?"

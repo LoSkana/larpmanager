@@ -508,6 +508,9 @@ msgstr "Wartość"
 msgid "Video"
 msgstr "Wideo"
 
+msgid "Watch"
+msgstr "Obejrzyj"
+
 msgid "Where"
 msgstr "Gdzie"
 
@@ -2956,6 +2959,9 @@ msgstr "Wymagaj logowania"
 
 msgid "Requirements:"
 msgstr "Wymagania:"
+
+msgid "Search guides"
+msgstr "Szukaj poradników"
 
 msgid "Self-catering"
 msgstr "Samodzielne wyżywienie"
@@ -6029,6 +6035,9 @@ msgstr "Moje oczekujące zaproszenia do gildii"
 
 msgid "Name of badge to be awarded."
 msgstr "Nazwa badge do przyznania."
+
+msgid "No guide matches your search"
+msgstr "Żaden poradnik nie pasuje do Twojego wyszukiwania"
 
 msgid "Obtain the selected ability?"
 msgstr "Uzyskać wybraną umiejętność?"

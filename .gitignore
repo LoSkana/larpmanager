@@ -171,3 +171,6 @@ dmypy.json
 
 # Playwright
 node_modules/
+
+# Guide video assets and renders
+.guide_videos/

@@ -889,9 +889,12 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
 
 
 def guides(request: HttpRequest) -> Any:
-    """Display list of published guides for LarpManager users."""
+    """Display published guides for LarpManager users, by group in order of first appearance."""
     context = get_lm_contact(request)
-    context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    groups = {}
+    for guide_item in LarpManagerGuide.objects.filter(published=True).order_by("number"):
+        groups.setdefault(guide_item.group or "", []).append(guide_item)
+    context["groups"] = groups
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
@@ -931,7 +934,8 @@ def guide(request: HttpRequest, slug: Any) -> Any:
         msg = "guide not found"
         raise Http404(msg) from err
 
-    context["og_image"] = context["guide"].thumb.url
+    if context["guide"].photo:
+        context["og_image"] = context["guide"].thumb.url
     context["og_title"] = f"{context['guide'].title} - LarpManager"
     context["og_description"] = f"{context['guide'].description} - LarpManager"
     context["iframe"] = request.GET.get("in_iframe") == "1"

@@ -508,6 +508,9 @@ msgstr "Værdi"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Se"
+
 msgid "Where"
 msgstr "Hvor"
 
@@ -2956,6 +2959,9 @@ msgstr "Kræv login"
 
 msgid "Requirements:"
 msgstr "Krav:"
+
+msgid "Search guides"
+msgstr "Søg i guider"
 
 msgid "Self-catering"
 msgstr "Selvforplejning"
@@ -6029,6 +6035,9 @@ msgstr "Mine afventende guild-invitationer"
 
 msgid "Name of badge to be awarded."
 msgstr "Navn på det Badge, der skal tildeles."
+
+msgid "No guide matches your search"
+msgstr "Ingen guide matcher din søgning"
 
 msgid "Obtain the selected ability?"
 msgstr "Opnå den valgte evne?"

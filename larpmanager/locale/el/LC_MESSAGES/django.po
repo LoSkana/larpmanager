@@ -508,6 +508,9 @@ msgstr "Τιμή"
 msgid "Video"
 msgstr "Βίντεο"
 
+msgid "Watch"
+msgstr "Δες"
+
 msgid "Where"
 msgstr "Πού"
 
@@ -2956,6 +2959,9 @@ msgstr "Απαιτείται σύνδεση"
 
 msgid "Requirements:"
 msgstr "Απαιτήσεις:"
+
+msgid "Search guides"
+msgstr "Αναζήτηση οδηγών"
 
 msgid "Self-catering"
 msgstr "Αυτοεξυπηρέτηση"
@@ -6029,6 +6035,9 @@ msgstr "Οι εκκρεμείς προσκλήσεις μου σε συντεχ�
 
 msgid "Name of badge to be awarded."
 msgstr "Όνομα του badge που θα απονεμηθεί."
+
+msgid "No guide matches your search"
+msgstr "Κανένας οδηγός δεν ταιριάζει με την αναζήτησή σου"
 
 msgid "Obtain the selected ability?"
 msgstr "Να αποκτήσεις την επιλεγμένη ικανότητα;"

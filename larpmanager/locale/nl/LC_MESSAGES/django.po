@@ -508,6 +508,9 @@ msgstr "Waarde"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Bekijken"
+
 msgid "Where"
 msgstr "Waar"
 
@@ -2956,6 +2959,9 @@ msgstr "Aanmelden vereist"
 
 msgid "Requirements:"
 msgstr "Vereisten:"
+
+msgid "Search guides"
+msgstr "Zoek in de gidsen"
 
 msgid "Self-catering"
 msgstr "Zelfcatering"
@@ -6029,6 +6035,9 @@ msgstr "Mijn openstaande gilde-uitnodigingen"
 
 msgid "Name of badge to be awarded."
 msgstr "Naam van de toe te kennen badge."
+
+msgid "No guide matches your search"
+msgstr "Geen enkele gids komt overeen met je zoekopdracht"
 
 msgid "Obtain the selected ability?"
 msgstr "De geselecteerde vaardigheid verkrijgen?"

@@ -176,6 +176,66 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Guides list: filter rows by search terms, hiding the groups left empty.
+    var guideSearch = document.getElementById('guide-search');
+    var guideNoResults = document.getElementById('guide-no-results');
+
+    if (guideSearch && guideNoResults) {
+        guideSearch.addEventListener('input', function () {
+            var terms = guideSearch.value.toLowerCase().split(/\s+/).filter(Boolean);
+            var anyVisible = false;
+            document.querySelectorAll('.guide-group').forEach(function (group) {
+                var groupVisible = false;
+                group.querySelectorAll('.guide-row').forEach(function (row) {
+                    var text = row.dataset.search.toLowerCase();
+                    row.hidden = !terms.every(function (term) {
+                        return text.indexOf(term) !== -1;
+                    });
+                    groupVisible = groupVisible || !row.hidden;
+                });
+                group.hidden = !groupVisible;
+                anyVisible = anyVisible || groupVisible;
+            });
+            guideNoResults.hidden = anyVisible;
+        });
+    }
+
+    // Guides list: play a video in a modal, loading YouTube only on request.
+    var guideVideoModal = document.getElementById('guide-video-modal');
+    var guideVideoFrame = document.getElementById('guide-video-frame');
+    var guideVideoTitle = document.getElementById('guide-video-title');
+    var guideVideoClose = document.getElementById('guide-video-close');
+
+    if (guideVideoModal && guideVideoFrame && guideVideoTitle && guideVideoClose) {
+        document.querySelectorAll('.guide-watch').forEach(function (button) {
+            button.addEventListener('click', function () {
+                guideVideoTitle.textContent = button.dataset.title;
+                guideVideoFrame.title = button.dataset.title;
+                guideVideoFrame.src = 'https://www.youtube.com/embed/' +
+                    encodeURIComponent(button.dataset.videoId) + '?autoplay=1';
+                guideVideoModal.showModal();
+            });
+        });
+
+        guideVideoClose.addEventListener('click', function () {
+            guideVideoModal.close();
+        });
+
+        // Close when clicking the backdrop (outside the dialog bounds)
+        guideVideoModal.addEventListener('click', function (event) {
+            var rect = guideVideoModal.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) {
+                guideVideoModal.close();
+            }
+        });
+
+        // Unload the player on every kind of close, so the audio stops
+        guideVideoModal.addEventListener('close', function () {
+            guideVideoFrame.src = 'about:blank';
+        });
+    }
+
     // Coming back with the browser back button may restore the frozen page from
     // the bfcache: close any stuck modal so the user can start another demo
     window.addEventListener('pageshow', function (event) {

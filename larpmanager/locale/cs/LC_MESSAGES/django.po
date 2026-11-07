@@ -508,6 +508,9 @@ msgstr "Hodnota"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Přehrát"
+
 msgid "Where"
 msgstr "Kde"
 
@@ -2956,6 +2959,9 @@ msgstr "Vyžadovat přihlášení"
 
 msgid "Requirements:"
 msgstr "Požadavky:"
+
+msgid "Search guides"
+msgstr "Hledat návody"
 
 msgid "Self-catering"
 msgstr "Vlastní stravování"
@@ -6029,6 +6035,9 @@ msgstr "Moje nevyřízené pozvánky do gildy"
 
 msgid "Name of badge to be awarded."
 msgstr "Název badge, který má být udělen."
+
+msgid "No guide matches your search"
+msgstr "Tvému hledání neodpovídá žádný návod"
 
 msgid "Obtain the selected ability?"
 msgstr "Získat vybranou schopnost?"

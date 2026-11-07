@@ -80,6 +80,7 @@ def test_orga_casting_edit(pw_page: Any) -> None:
     expect(page.locator("#didnt_choose")).not_to_contain_text("Admin Test")
     expect_normalized(page, page.locator("#main_grid"), "Admin Test")
     expect(page.locator("#main_grid .casting-edit-pref")).to_have_count(1)
+    expect(page.locator("#main_grid select.pref").first).to_be_hidden()
 
     # participant sees the preference saved by the organizer
     go_to(page, live_server, "/test/casting")

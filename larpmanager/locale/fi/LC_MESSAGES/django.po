@@ -508,6 +508,9 @@ msgstr "Arvo"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Katso"
+
 msgid "Where"
 msgstr "Missä"
 
@@ -2956,6 +2959,9 @@ msgstr "Vaadi kirjautuminen"
 
 msgid "Requirements:"
 msgstr "Vaatimukset:"
+
+msgid "Search guides"
+msgstr "Hae oppaita"
 
 msgid "Self-catering"
 msgstr "Omatoiminen ruokailu"
@@ -6029,6 +6035,9 @@ msgstr "Omat odottavat kutsuni kiltaan"
 
 msgid "Name of badge to be awarded."
 msgstr "Myönnettävän Badgen nimi."
+
+msgid "No guide matches your search"
+msgstr "Hakuasi vastaavia oppaita ei löytynyt"
 
 msgid "Obtain the selected ability?"
 msgstr "Hankitaanko valittu kyky?"
