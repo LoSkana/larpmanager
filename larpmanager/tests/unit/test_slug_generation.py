@@ -46,6 +46,11 @@ GIF_BYTES = (
 )
 
 
+def slug_is_generated(form: object) -> bool:
+    """Tell whether the slug widget is rendered as generated, whatever the template line wrapping."""
+    return SLUG_GENERATED_MARKER in " ".join(str(form["slug"]).split())
+
+
 def slug_integrity_error(constraint_name: str) -> IntegrityError:
     """Build an IntegrityError as raised by the database driver for a constraint."""
     cause = Exception()
@@ -83,7 +88,7 @@ class TestFormSlug(BaseTestCase):
         assert "slug" in form.errors
         assert form["slug"].value() == "moonlight3"
         assert 'disabled="disabled"' not in str(form["slug"])
-        assert SLUG_GENERATED_MARKER in str(form["slug"])
+        assert slug_is_generated(form)
 
     def test_event_slug_suggestion_keeps_max_length(self) -> None:
         """Keep the counter within the maximum length."""
@@ -129,7 +134,7 @@ class TestFormSlug(BaseTestCase):
 
         assert not form.is_valid()
         assert "slug" in form.errors
-        assert SLUG_GENERATED_MARKER not in str(form["slug"])
+        assert not slug_is_generated(form)
 
     def test_slug_matching_name_conflict_suggests_available_slug(self) -> None:
         """Treat the slug auto-filled from the name as generated, even if sent by the opened field."""
@@ -159,7 +164,7 @@ class TestFormSlug(BaseTestCase):
         association = self.get_association()
         form = self._event_form(association, {"name": "Moonlight", "slug": "moonlight2", "slug_auto": "1"})
         form.is_valid()
-        assert SLUG_GENERATED_MARKER in str(form["slug"])
+        assert slug_is_generated(form)
 
     def test_legacy_slugs_stay_valid_on_models(self) -> None:
         """Keep hyphenated demo slugs and old rows valid outside the creation forms."""
@@ -271,7 +276,7 @@ class TestFormSlug(BaseTestCase):
 
         assert form.errors["slug"] == ["Slug already used!"]
         assert form["slug"].value() == "mygroup"
-        assert SLUG_GENERATED_MARKER not in str(form["slug"])
+        assert not slug_is_generated(form)
 
     def test_unrelated_integrity_error_is_raised(self) -> None:
         """Let errors of other constraints through."""
