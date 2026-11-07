@@ -387,11 +387,22 @@ class TestRadarActivation(BaseTestCase):
         mock_sync.assert_not_called()
 
     @patch("larpmanager.utils.publication.base.sync_event_radar")
-    @patch("larpmanager.utils.publication.base.sync_event_ildb", side_effect=RuntimeError)
-    def test_ildb_failure_does_not_block_radar(self, _ildb: Any, mock_radar: Any) -> None:
-        with pytest.raises(RuntimeError):
-            base.publish_event.task_function(self.get_event().id)
+    @patch("larpmanager.utils.publication.ildb.notify_admins")
+    @patch("larpmanager.utils.publication.ildb._sync_run", side_effect=RuntimeError)
+    @patch("larpmanager.utils.publication.ildb._get_ildb_context", return_value=MagicMock())
+    def test_ildb_failure_does_not_block_radar(
+        self, _context: Any, mock_sync_run: Any, mock_notify: Any, mock_radar: Any
+    ) -> None:
+        run = self.get_run()
+        # creating the fixtures already publishes through the signals
+        mock_sync_run.reset_mock()
+        mock_notify.reset_mock()
+        mock_radar.reset_mock()
 
+        base.publish_event.task_function(run.event_id)
+
+        mock_sync_run.assert_called()
+        mock_notify.assert_called()
         mock_radar.assert_called_once()
 
     @patch("larpmanager.utils.publication.radar.my_send_mail")
