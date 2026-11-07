@@ -148,7 +148,6 @@ def test_assign_video(director: Director) -> None:
     director.hold(1.5)
     director.confirm(page.locator("#submit"), settle=1.0)
     expect(page.locator("#pref-list")).to_contain_text(FIRST_CHOICE)
-    director.hold(1.5)
 
     def back_to_organizer() -> None:
         add_other_players(slug)

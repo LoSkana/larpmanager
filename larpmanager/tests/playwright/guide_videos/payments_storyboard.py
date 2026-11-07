@@ -130,7 +130,6 @@ def test_payments_video(director: Director) -> None:
     director.step("Step 5: player registration")
     director.say("The total updates with tickets and options")
     director.click(page.locator("label", has_text=PAID_OPTION))
-    director.hold(2.0)
     director.confirm(page.get_by_role("button", name="Continue"), settle=1.0)
     expect(page.locator("#riepilogo")).to_contain_text(TOTAL)
     director.hold(2.0)
@@ -147,7 +146,6 @@ def test_payments_video(director: Director) -> None:
     director.say("After the transfer, they notify the organizer")
     director.check(page.get_by_role("checkbox", name="Payment confirmation:"))
     director.confirm(page.get_by_role("button", name=CONFIRM), settle=1.0)
-    director.hold(2.0)
 
     director.play_as(ORGANIZER, login_as(director, login_orga, f"/{slug}/manage/"))
     director.say("Confirm the transfer once received")

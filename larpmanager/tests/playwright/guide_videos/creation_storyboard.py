@@ -97,7 +97,6 @@ def test_creation_video(director: Director) -> None:
     director.select(modal.locator("#id_typ"), "t")
     director.type(modal.locator("#id_name"), EDITABLE_FIELD)
     save_modal(director, modal)
-    director.hold(1.5)
 
     director.play_as(PLAYER, login_as(director, login_user, f"/{slug}/register/"))
     director.step("Step 4: test the player view")
@@ -114,7 +113,6 @@ def test_creation_video(director: Director) -> None:
     director.click(page.get_by_text("Click here to confirm that"))
     director.confirm(page.get_by_role("button", name="Confirm"), settle=1.0)
     expect(page.locator("#one")).to_contain_text("Status: Proposed")
-    director.hold(1.5)
 
     director.play_as(ORGANIZER, login_as(director, login_orga, f"/{slug}/manage/"))
     director.say("Staff see the character waiting for approval")
@@ -125,7 +123,6 @@ def test_creation_video(director: Director) -> None:
     modal = get_modal_iframe(page)
     director.select(modal.locator("#id_status"), "a")
     save_modal(director, modal)
-    director.hold(1.5)
 
     director.play_as(PLAYER, login_as(director, login_user, f"/{slug}/"))
     director.step("Step 6: approval and publishing")

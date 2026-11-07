@@ -126,7 +126,6 @@ def test_xp_video(director: Director) -> None:
     director.say("Prerequisites build progression trees")
     create_ability(director, SECOND_ABILITY, "10", prerequisite=FIRST_ABILITY)
     expect(page.locator("tr", has_text=SECOND_ABILITY)).to_be_visible()
-    director.hold(2.5)
 
     director.play_as(PLAYER, login_as(director, login_user, f"/{slug}/register/"))
     director.step("Step 5: test the player view")
@@ -152,7 +151,6 @@ def test_xp_video(director: Director) -> None:
     pick_character(director, modal, CHARACTER)
     save_modal(director, modal)
     expect(page.locator("tr", has_text=AWARD)).to_be_visible()
-    director.hold(2.5)
 
     director.play_as(PLAYER, login_as(director, login_user, f"/{slug}/"))
     director.say(f"With the award, {SECOND_ABILITY} can now be bought")

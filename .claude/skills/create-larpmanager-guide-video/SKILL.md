@@ -105,7 +105,7 @@ A module-level `PACE` sets the speed of cursor moves, clicks, step headings and 
 
 1. **Never `goto` on camera.** Viewers see an unexplained jump, and they need to learn the way there. Use the sidebar (`open_menu`) or the link a user would click.
 2. **Follow where the app lands.** Check each redirect before adding navigation. Registering lands on the event page; enabling Character creation opens its settings by itself. Clicking on from there is smoother than navigating back.
-3. **In multi-role guides, announce every user switch** with `play_as`, including the opening role. Logging in and out stays off camera. Single-role guides skip `play_as` entirely: no role cards and no corner badge.
+3. **In multi-role guides, announce every user switch** with `play_as`, including the opening role. Logging in and out stays off camera. `play_as` holds the last screen for 2 seconds before every switch, so never add a `hold` right before it. Single-role guides skip `play_as` entirely: no role cards and no corner badge.
 4. **Set the caption before the action it describes**, including before a navigation click. Otherwise the old caption lingers on the new page.
 5. **End with proof.** Assert the result with `expect` and `spotlight` it, so a run fails if the guide stops being true.
 6. **Keep captions short and in sentence case.** One idea, plain ASCII, read within the time on screen.

@@ -53,6 +53,7 @@ CAPTION_SAFE_AREA = 0.8
 CUT_MARGIN_SECONDS = 0.4
 CONFIRM_LEAD_SECONDS = 0.9
 ROLE_CARD_SECONDS = 2.2
+ROLE_SWITCH_HOLD_SECONDS = 2.0
 ROLE_CARD_FADE_SECONDS = 0.4
 
 ORGANIZER = "organizer"
@@ -253,8 +254,10 @@ class Director:
             self._open_role = None
 
     def play_as(self, role: str, prepare: Callable[[], None] | None = None) -> None:
-        """Switch role off camera, then announce it with a full-screen card and a corner badge."""
+        """Leave the last screen visible, switch role off camera, then announce it with a card and a corner badge."""
         title, subtitle, color = ROLE_CARDS[role]
+        if self._open_role:
+            self.hold(ROLE_SWITCH_HOLD_SECONDS)
         self._close_caption()
         self._close_role()
         with self.off_camera():
