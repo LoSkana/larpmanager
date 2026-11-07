@@ -34,6 +34,7 @@ from larpmanager.utils.publication.ildb import (
     sync_crew as sync_crew_ildb,
     sync_event as sync_event_ildb,
 )
+from larpmanager.utils.publication.radar import get_publishable_runs, sync_event as sync_event_radar
 
 logger = logging.getLogger(__name__)
 
@@ -49,6 +50,16 @@ def publish_event(event_id: int) -> None:
         return
 
     sync_event_ildb(event)
+    sync_event_radar(event)
+
+
+@background_auto(queue=PUB_QUEUE, skip_duplicates=True)
+def publish_association_radar(association_id: int) -> None:
+    """Publish on LARP Radar the events of an association with upcoming visible runs."""
+    run_events = get_publishable_runs(association_id).values("event_id")
+    events = Event.objects.select_related("association").filter(id__in=run_events)
+    for event in events:
+        sync_event_radar(event)
 
 
 @background_auto(queue=PUB_QUEUE, skip_duplicates=True)

@@ -6227,6 +6227,9 @@ msgstr "Duración: %(duration)s segundos"
 msgid "Enter your level of experience"
 msgstr "Introduce tu nivel de experiencia"
 
+msgid "Event published on LARP Radar:"
+msgstr "Evento publicado en LARP Radar:"
+
 msgid "Format of the generated pages."
 msgstr "Formato de las páginas generadas."
 
@@ -10942,6 +10945,13 @@ msgstr ""
 
 #, python-format
 msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+"Aún no está en LARP Radar, revisa la descripción y las coordenadas: "
+"<b>%(list)s</b>."
+
+#, python-format
+msgid ""
 "Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 "El miembro del equipo %(user)s ha enviado una nueva solicitud de reembolso "
@@ -12387,6 +12397,14 @@ msgid ""
 msgstr ""
 "Aparece en la página de solicitud de registro y se incluye en el correo de "
 "confirmación de recepción de la solicitud"
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
+msgstr ""
+"El evento <strong>%(event)s</strong> se ha publicado automáticamente en LARP"
+" Radar."
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
@@ -15932,6 +15950,15 @@ msgstr ""
 "A continuación encontrarás todas las funciones disponibles; puedes escribir "
 "una palabra clave de búsqueda para filtrarlas. A continuación, haz clic en "
 "'Vídeo', y verás el vídeo directamente."
+
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+"Si lo seleccionas, los eventos próximos visibles con descripción y "
+"coordenadas se publican en LARP Radar, compartiendo los datos del evento y "
+"el correo principal de la organización."
 
 msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "

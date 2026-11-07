@@ -132,6 +132,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "pub_mood": "",
     "pub_place": "",
     "pub_setting": "",
+    "radar": "",
     "receipt_codice_fiscale": "",
     "receipt_legal_name": "",
     "receipt_runts": "",

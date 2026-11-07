@@ -414,6 +414,10 @@ AWS_SNS_TOPIC_ARN = None
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
 
+# LARP Radar partner API (optional - publication is disabled if the key is unset)
+LARP_RADAR_API_KEY = None
+LARP_RADAR_ORIGIN = 'https://larpmanager.com'
+
 # Optional CLI agent used for translation instead of DeepL.
 LLM_TRANSLATION_AGENT = None
 LLM_TRANSLATION_MODEL = None
