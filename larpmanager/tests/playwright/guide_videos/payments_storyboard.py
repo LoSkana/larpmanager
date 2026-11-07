@@ -132,7 +132,7 @@ def test_payments_video(director: Director) -> None:
     director.click(page.locator("label", has_text=PAID_OPTION))
     director.confirm(page.get_by_role("button", name="Continue"), settle=1.0)
     expect(page.locator("#riepilogo")).to_contain_text(TOTAL)
-    director.hold(2.0)
+    director.hold(3.5)
     director.confirm(page.locator("#register_go"), settle=1.0)
 
     director.step("Step 6: process payment")
