@@ -508,6 +508,9 @@ msgstr "Valor"
 msgid "Video"
 msgstr "Vídeo"
 
+msgid "Watch"
+msgstr "Ver"
+
 msgid "Where"
 msgstr "Onde"
 
@@ -1289,9 +1292,6 @@ msgstr "Novo custo"
 msgid "New gift"
 msgstr "Novo presente"
 
-msgid "New plot"
-msgstr "Nova trama"
-
 msgid "Nickname"
 msgstr "Alcunha"
 
@@ -1615,9 +1615,6 @@ msgstr "Novo evento"
 
 msgid "New guild"
 msgstr "Nova guilda"
-
-msgid "New quest"
-msgstr "Nova Quest"
 
 msgid "Next page"
 msgstr "Página seguinte"
@@ -1967,9 +1964,6 @@ msgstr "Novo jogador"
 msgid "New signup"
 msgstr "Nova inscrição"
 
-msgid "New ticket"
-msgstr "Novo ingresso"
-
 msgid "Newsletter"
 msgstr "Newsletter"
 
@@ -2300,9 +2294,6 @@ msgstr "Nacionalidade"
 msgid "Net profit:"
 msgstr "Lucro líquido:"
 
-msgid "New faction"
-msgstr "Nova facção"
-
 msgid "New session"
 msgstr "Nova sessão"
 
@@ -2584,12 +2575,6 @@ msgstr "Nacionalidade:"
 
 msgid "Need a ride?"
 msgstr "Precisas de boleia?"
-
-msgid "New discount"
-msgstr "Novo desconto"
-
-msgid "New question"
-msgstr "Nova pergunta"
 
 msgid "Not included"
 msgstr "Não incluído"
@@ -2956,6 +2941,9 @@ msgstr "Exigir início de sessão"
 
 msgid "Requirements:"
 msgstr "Requisitos:"
+
+msgid "Search guides"
+msgstr "Pesquisar guias"
 
 msgid "Self-catering"
 msgstr "Refeições por conta própria"
@@ -6029,6 +6017,9 @@ msgstr "Os meus convites pendentes para guildas"
 
 msgid "Name of badge to be awarded."
 msgstr "Nome do Badge a atribuir."
+
+msgid "No guide matches your search"
+msgstr "Nenhum guia corresponde à tua pesquisa"
 
 msgid "Obtain the selected ability?"
 msgstr "Obter a habilidade selecionada?"

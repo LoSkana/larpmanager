@@ -508,6 +508,9 @@ msgstr "Waarde"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Bekijken"
+
 msgid "Where"
 msgstr "Waar"
 
@@ -1289,9 +1292,6 @@ msgstr "Nieuwe kostenpost"
 msgid "New gift"
 msgstr "Nieuw cadeau"
 
-msgid "New plot"
-msgstr "Nieuwe verhaallijn"
-
 msgid "Nickname"
 msgstr "Bijnaam"
 
@@ -1615,9 +1615,6 @@ msgstr "Nieuw evenement"
 
 msgid "New guild"
 msgstr "Nieuwe gilde"
-
-msgid "New quest"
-msgstr "Nieuwe quest"
 
 msgid "Next page"
 msgstr "Volgende pagina"
@@ -1967,9 +1964,6 @@ msgstr "Nieuwe speler"
 msgid "New signup"
 msgstr "Nieuwe inschrijving"
 
-msgid "New ticket"
-msgstr "Nieuw ticket"
-
 msgid "Newsletter"
 msgstr "Nieuwsbrief"
 
@@ -2300,9 +2294,6 @@ msgstr "Nationaliteit"
 msgid "Net profit:"
 msgstr "Nettowinst:"
 
-msgid "New faction"
-msgstr "Nieuwe factie"
-
 msgid "New session"
 msgstr "Nieuwe sessie"
 
@@ -2584,12 +2575,6 @@ msgstr "Nationaliteit:"
 
 msgid "Need a ride?"
 msgstr "Lift nodig?"
-
-msgid "New discount"
-msgstr "Nieuwe korting"
-
-msgid "New question"
-msgstr "Nieuwe vraag"
 
 msgid "Not included"
 msgstr "Niet inbegrepen"
@@ -2956,6 +2941,9 @@ msgstr "Aanmelden vereist"
 
 msgid "Requirements:"
 msgstr "Vereisten:"
+
+msgid "Search guides"
+msgstr "Zoek in de gidsen"
 
 msgid "Self-catering"
 msgstr "Zelfcatering"
@@ -6029,6 +6017,9 @@ msgstr "Mijn openstaande gilde-uitnodigingen"
 
 msgid "Name of badge to be awarded."
 msgstr "Naam van de toe te kennen badge."
+
+msgid "No guide matches your search"
+msgstr "Geen enkele gids komt overeen met je zoekopdracht"
 
 msgid "Obtain the selected ability?"
 msgstr "De geselecteerde vaardigheid verkrijgen?"

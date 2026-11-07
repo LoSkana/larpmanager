@@ -15,6 +15,12 @@
 {% endblock landing_title %}
 {% block landing_content %}
     <div id="article" class="about-prose">
+        {% if guide.video_id %}
+            <iframe class="guide-video"
+                    src="https://www.youtube.com/embed/{{ guide.video_id }}"
+                    title="{{ guide.title }}"
+                    allowfullscreen></iframe>
+        {% endif %}
         {% if guide.photo %}
             <div class="article-image">
                 <img src="{{ guide.photo.url }}"

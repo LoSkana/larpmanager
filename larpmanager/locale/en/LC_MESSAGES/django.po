@@ -8365,6 +8365,18 @@ msgstr ""
 msgid "Create your organization"
 msgstr ""
 
+msgid "Search guides"
+msgstr ""
+
+msgid "No guide matches your search"
+msgstr ""
+
+msgid "Watch"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
 msgid "Partners"
 msgstr ""
 
@@ -9343,9 +9355,6 @@ msgstr ""
 msgid "Discounts offer reduced prices or promo codes to participants."
 msgstr ""
 
-msgid "New discount"
-msgstr ""
-
 msgid ""
 "List of personal expenses submitted for this event. Upload receipts and "
 "track approval status."
@@ -9914,9 +9923,6 @@ msgid ""
 "plots, factions, and more"
 msgstr ""
 
-msgid "Read"
-msgstr ""
-
 msgid ""
 "No writing elements are available for this event yet. Create characters, "
 "plots, factions, or other elements to see them listed here."
@@ -9940,9 +9946,6 @@ msgstr ""
 msgid ""
 "Questions collect the information you need from participants when they "
 "register."
-msgstr ""
-
-msgid "New question"
 msgstr ""
 
 msgid "Installments"
@@ -10128,9 +10131,6 @@ msgstr ""
 msgid ""
 "Tickets are the options participants choose when they register, each with "
 "its own price and availability."
-msgstr ""
-
-msgid "New ticket"
 msgstr ""
 
 msgid "Transfer registration"
@@ -10800,9 +10800,6 @@ msgid ""
 "allegiance."
 msgstr ""
 
-msgid "New faction"
-msgstr ""
-
 msgid "Selectable"
 msgstr ""
 
@@ -10831,9 +10828,6 @@ msgid ""
 msgstr ""
 
 msgid "Plots are storylines that involve several characters."
-msgstr ""
-
-msgid "New plot"
 msgstr ""
 
 msgid "Progress step"
@@ -10875,9 +10869,6 @@ msgstr ""
 
 msgid ""
 "Quests are the building blocks of character sheets, each with its own traits."
-msgstr ""
-
-msgid "New quest"
 msgstr ""
 
 msgid "Tagged sides"

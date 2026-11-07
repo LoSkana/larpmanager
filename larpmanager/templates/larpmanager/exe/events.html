@@ -74,8 +74,6 @@
     </table>
     {% if not list %}
         {% trans "Events are what participants register for. Each one has its own dashboard, tickets and registrations." as empty_text %}
-        {% trans "New event" as empty_new %}
-        {% url 'exe_events_new' as empty_url %}
-        {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new new_url=empty_url %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
 {% endblock content %}

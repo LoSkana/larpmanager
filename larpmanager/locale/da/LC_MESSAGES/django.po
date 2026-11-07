@@ -508,6 +508,9 @@ msgstr "Værdi"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Se"
+
 msgid "Where"
 msgstr "Hvor"
 
@@ -1289,9 +1292,6 @@ msgstr "Ny omkostning"
 msgid "New gift"
 msgstr "Ny gave"
 
-msgid "New plot"
-msgstr "Nyt plot"
-
 msgid "Nickname"
 msgstr "Kaldenavn"
 
@@ -1615,9 +1615,6 @@ msgstr "Nyt event"
 
 msgid "New guild"
 msgstr "Nyt guild"
-
-msgid "New quest"
-msgstr "Ny quest"
 
 msgid "Next page"
 msgstr "Næste side"
@@ -1967,9 +1964,6 @@ msgstr "Ny spiller"
 msgid "New signup"
 msgstr "Ny tilmelding"
 
-msgid "New ticket"
-msgstr "Ny billet"
-
 msgid "Newsletter"
 msgstr "Nyhedsbrev"
 
@@ -2300,9 +2294,6 @@ msgstr "Nationalitet"
 msgid "Net profit:"
 msgstr "Nettooverskud:"
 
-msgid "New faction"
-msgstr "Ny fraktion"
-
 msgid "New session"
 msgstr "Ny session"
 
@@ -2584,12 +2575,6 @@ msgstr "Nationalitet:"
 
 msgid "Need a ride?"
 msgstr "Har du brug for et lift?"
-
-msgid "New discount"
-msgstr "Ny rabat"
-
-msgid "New question"
-msgstr "Nyt spørgsmål"
 
 msgid "Not included"
 msgstr "Ikke inkluderet"
@@ -2956,6 +2941,9 @@ msgstr "Kræv login"
 
 msgid "Requirements:"
 msgstr "Krav:"
+
+msgid "Search guides"
+msgstr "Søg i guider"
 
 msgid "Self-catering"
 msgstr "Selvforplejning"
@@ -6029,6 +6017,9 @@ msgstr "Mine afventende guild-invitationer"
 
 msgid "Name of badge to be awarded."
 msgstr "Navn på det Badge, der skal tildeles."
+
+msgid "No guide matches your search"
+msgstr "Ingen guide matcher din søgning"
 
 msgid "Obtain the selected ability?"
 msgstr "Opnå den valgte evne?"

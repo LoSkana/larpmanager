@@ -508,6 +508,9 @@ msgstr "Hodnota"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Přehrát"
+
 msgid "Where"
 msgstr "Kde"
 
@@ -1289,9 +1292,6 @@ msgstr "Nové náklady"
 msgid "New gift"
 msgstr "Nový dárek"
 
-msgid "New plot"
-msgstr "Nová zápletka"
-
 msgid "Nickname"
 msgstr "Přezdívka"
 
@@ -1615,9 +1615,6 @@ msgstr "Nová událost"
 
 msgid "New guild"
 msgstr "Nová gilda"
-
-msgid "New quest"
-msgstr "Nový Quest"
 
 msgid "Next page"
 msgstr "Další stránka"
@@ -1967,9 +1964,6 @@ msgstr "Nový hráč"
 msgid "New signup"
 msgstr "Nová registrace"
 
-msgid "New ticket"
-msgstr "Nová vstupenka"
-
 msgid "Newsletter"
 msgstr "Zpravodaj"
 
@@ -2300,9 +2294,6 @@ msgstr "Státní příslušnost"
 msgid "Net profit:"
 msgstr "Čistý zisk:"
 
-msgid "New faction"
-msgstr "Nová frakce"
-
 msgid "New session"
 msgstr "Nová relace"
 
@@ -2584,12 +2575,6 @@ msgstr "Státní příslušnost:"
 
 msgid "Need a ride?"
 msgstr "Potřebuješ odvoz?"
-
-msgid "New discount"
-msgstr "Nová sleva"
-
-msgid "New question"
-msgstr "Nová otázka"
 
 msgid "Not included"
 msgstr "Není zahrnuto"
@@ -2956,6 +2941,9 @@ msgstr "Vyžadovat přihlášení"
 
 msgid "Requirements:"
 msgstr "Požadavky:"
+
+msgid "Search guides"
+msgstr "Hledat návody"
 
 msgid "Self-catering"
 msgstr "Vlastní stravování"
@@ -6029,6 +6017,9 @@ msgstr "Moje nevyřízené pozvánky do gildy"
 
 msgid "Name of badge to be awarded."
 msgstr "Název badge, který má být udělen."
+
+msgid "No guide matches your search"
+msgstr "Tvému hledání neodpovídá žádný návod"
 
 msgid "Obtain the selected ability?"
 msgstr "Získat vybranou schopnost?"

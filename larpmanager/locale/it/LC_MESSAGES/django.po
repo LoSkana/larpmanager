@@ -508,6 +508,9 @@ msgstr "Valore"
 msgid "Video"
 msgstr "Video"
 
+msgid "Watch"
+msgstr "Guarda"
+
 msgid "Where"
 msgstr "Dove"
 
@@ -1289,9 +1292,6 @@ msgstr "Nuovo costo"
 msgid "New gift"
 msgstr "Nuovo regalo"
 
-msgid "New plot"
-msgstr "Nuova trama"
-
 msgid "Nickname"
 msgstr "Soprannome"
 
@@ -1615,9 +1615,6 @@ msgstr "Nuovo evento"
 
 msgid "New guild"
 msgstr "Nuova gilda"
-
-msgid "New quest"
-msgstr "Nuova Quest"
 
 msgid "Next page"
 msgstr "Pagina successiva"
@@ -1967,9 +1964,6 @@ msgstr "Nuovo giocatore"
 msgid "New signup"
 msgstr "Nuova iscrizione"
 
-msgid "New ticket"
-msgstr "Nuovo biglietto"
-
 msgid "Newsletter"
 msgstr "Newsletter"
 
@@ -2300,9 +2294,6 @@ msgstr "Nazionalità"
 msgid "Net profit:"
 msgstr "Utile netto:"
 
-msgid "New faction"
-msgstr "Nuova fazione"
-
 msgid "New session"
 msgstr "Nuova sessione"
 
@@ -2584,12 +2575,6 @@ msgstr "Nazionalità:"
 
 msgid "Need a ride?"
 msgstr "Hai bisogno di un passaggio?"
-
-msgid "New discount"
-msgstr "Nuovo sconto"
-
-msgid "New question"
-msgstr "Nuova domanda"
 
 msgid "Not included"
 msgstr "Non incluso"
@@ -2956,6 +2941,9 @@ msgstr "Richiedi il login"
 
 msgid "Requirements:"
 msgstr "Requisiti:"
+
+msgid "Search guides"
+msgstr "Cerca nelle guide"
 
 msgid "Self-catering"
 msgstr "Pasti autogestiti"
@@ -6029,6 +6017,9 @@ msgstr "I miei inviti alla gilda in attesa"
 
 msgid "Name of badge to be awarded."
 msgstr "Nome del badge da assegnare."
+
+msgid "No guide matches your search"
+msgstr "Nessuna guida corrisponde alla tua ricerca"
 
 msgid "Obtain the selected ability?"
 msgstr "Vuoi ottenere l'abilità selezionata?"

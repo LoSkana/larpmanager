@@ -200,7 +200,11 @@ class OrgaAction(StrEnum):
     CHARACTERS = ("orga_characters", {"form": OrgaCharacterForm, "writing": TextVersionChoices.CHARACTER})
     CHARACTER_FORM = (
         "orga_character_form",
-        {"form": OrgaWritingQuestionForm, "can_delete": lambda _context, element: len(element.typ) == 1},
+        {
+            "form": OrgaWritingQuestionForm,
+            "can_delete": lambda _context, element: len(element.typ) == 1,
+            "writing_questions": True,
+        },
     )
     CHARACTER_FORM_OPTION = ("orga_character_form_option", {"form": OrgaWritingOptionForm})
 
@@ -227,10 +231,17 @@ class OrgaAction(StrEnum):
 
     # Registration
     REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm, "tickets": True})
-    REGISTRATION_SECTIONS = ("orga_registration_sections", {"form": OrgaRegistrationSectionForm})
+    REGISTRATION_SECTIONS = (
+        "orga_registration_sections",
+        {"form": OrgaRegistrationSectionForm, "registration_questions": True},
+    )
     REGISTRATION_FORM = (
         "orga_registration_form",
-        {"form": OrgaRegistrationQuestionForm, "can_delete": lambda _context, element: len(element.typ) == 1},
+        {
+            "form": OrgaRegistrationQuestionForm,
+            "can_delete": lambda _context, element: len(element.typ) == 1,
+            "registration_questions": True,
+        },
     )
     REGISTRATION_FORM_OPTION = ("orga_registration_form_option", {"form": OrgaRegistrationOptionForm})
     REGISTRATION_QUOTAS = ("orga_registration_quotas", {"form": OrgaRegistrationQuotaForm})

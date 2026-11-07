@@ -36,6 +36,7 @@ from larpmanager.cache.experience import (
     clear_event_exp_calls_cache,
     clear_event_exp_systems_cache,
 )
+from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
 from larpmanager.cache.registration_lookup import (
     clear_registration_tickets_cache,
     get_active_registrations,
@@ -432,6 +433,27 @@ def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, s
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)
 
 
+def _clear_reorder_caches(action: OrgaAction, context: dict, model_class: type) -> None:
+    """Clear the caches of the elements reordered through the given action."""
+    event_id = context["event"].id
+    if action.config.get("writing"):
+        reset_event_cache_all(context["run"].id)
+    if action.config.get("writing_questions"):
+        clear_writing_questions_cache(get_event_class_parent(event_id, model_class, context=context))
+    if action.config.get("registration_questions"):
+        clear_registration_questions_cache(event_id)
+    if action.config.get("exp"):
+        clear_event_exp_cache(event_id)
+        clear_event_exp_systems_cache(event_id)
+        clear_event_exp_calls_cache(event_id)
+    if action.config.get("button"):
+        clear_event_button_cache(event_id)
+    if action.config.get("tickets"):
+        clear_registration_tickets_cache(event_id)
+    if action.config.get("relationship_tags"):
+        clear_relationship_tags_cache(get_event_class_parent(event_id, model_class, context=context))
+
+
 @login_required
 def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Unified drag-and-drop reorder endpoint. POST JSON {model, uuids}."""
@@ -451,19 +473,7 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     context = check_event_context(request, event_slug, model_key)
     model_class = action.config["form"].Meta.model
     backend_set_order(context, model_class, uuids)
-    if action.config.get("writing"):
-        reset_event_cache_all(context["run"].id)
-    if action.config.get("exp"):
-        event_id = context["event"].id
-        clear_event_exp_cache(event_id)
-        clear_event_exp_systems_cache(event_id)
-        clear_event_exp_calls_cache(event_id)
-    if action.config.get("button"):
-        clear_event_button_cache(context["event"].id)
-    if action.config.get("tickets"):
-        clear_registration_tickets_cache(context["event"].id)
-    if action.config.get("relationship_tags"):
-        clear_relationship_tags_cache(get_event_class_parent(context["event"].id, model_class, context=context))
+    _clear_reorder_caches(action, context, model_class)
     return JsonResponse({"ok": True})
 
 
