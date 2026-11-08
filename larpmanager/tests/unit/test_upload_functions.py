@@ -22,9 +22,11 @@
 
 import pytest
 
+from larpmanager.models.form import WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.io.upload import element_load
+from larpmanager.utils.io.upload.forms import _questions_load
 
 
 @pytest.mark.django_db(transaction=True)
@@ -173,3 +175,18 @@ class TestUploadFunctions(BaseTestCase):
         existing_character.refresh_from_db()
         self.assertEqual(existing_character.teaser, "New teaser")
         self.assertEqual(existing_character.event, parent_event)
+
+    def test_questions_load_keeps_computed_questions_separate(self) -> None:
+        """Test that each computed row of the character form creates its own question."""
+        event = self.create_event(name="Computed Event", slug="computed")
+        context = {"event": event}
+
+        for question_name in ("Hit Points", "Mana"):
+            row = {"name": question_name, "typ": "c", "status": "optional", "applicable": "character"}
+            result = _questions_load(context, row, is_registration=False)
+            self.assertIn("OK", result)
+
+        names = set(
+            WritingQuestion.objects.filter(event=event, typ=WritingQuestionType.COMPUTED).values_list("name", flat=True)
+        )
+        self.assertEqual(names, {"Hit Points", "Mana"})

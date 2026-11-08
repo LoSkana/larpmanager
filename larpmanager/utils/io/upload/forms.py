@@ -193,12 +193,14 @@ def _get_or_create_writing_question(
     event = get_event_class_parent(context["event"].id, WritingQuestion, context=context)
 
     # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
-    # These questions are auto-created by configuration and are unique per type.
+    # These questions are auto-created by configuration and are unique per type,
+    # except computed questions, of which an event can have many.
     raw_typ = str(row_data.get("typ", "")).lower().strip()
     typ_value = field_mappings.get("typ", {}).get(raw_typ, "")
     if typ_value == WritingQuestionType.CONCEPT and applicable != QuestionApplicable.CHARACTER:
         return "ERR - concept applicable only to characters"
-    if typ_value and typ_value not in BaseQuestionType.get_basic_types():
+    multi_instance_types = BaseQuestionType.get_basic_types() | {WritingQuestionType.COMPUTED}
+    if typ_value and typ_value not in multi_instance_types:
         matching_by_type = WritingQuestion.objects.filter(
             event=event,
             typ=typ_value,
