@@ -2780,6 +2780,9 @@ msgstr "Kontaktní e-mail"
 msgid "Contributors:"
 msgstr "Přispěvatelé:"
 
+msgid "Creation only"
+msgstr "Jen při tvorbě"
+
 msgid "Daily Summary"
 msgstr "Denní shrnutí"
 
@@ -3408,6 +3411,9 @@ msgstr "Upravit členství"
 msgid "Event not found"
 msgstr "Událost nebyla nalezena"
 
+msgid "Exclusive group"
+msgstr "Exkluzivní skupina"
+
 msgid "External access"
 msgstr "Externí přístup"
 
@@ -3707,6 +3713,12 @@ msgstr "Navigace pro události"
 
 msgid "Event organizers"
 msgstr "Organizátoři akce"
+
+msgid "Exclusive group:"
+msgstr "Exkluzivní skupina:"
+
+msgid "Exclusive groups"
+msgstr "Exkluzivní skupiny"
 
 msgid "Expected revenue"
 msgstr "Očekávané příjmy"
@@ -5774,6 +5786,9 @@ msgstr "Krátký název - mezinárodní"
 msgid "The collection is growing!"
 msgstr "Sbírka roste!"
 
+msgid "The exclusive group's name"
+msgstr "Název exkluzivní skupiny"
+
 msgid "The name of the competence"
 msgstr "Název kompetence"
 
@@ -6282,6 +6297,9 @@ msgstr "Nastavení registrace aktualizováno!"
 
 msgid "Registrations on external link"
 msgstr "Registrace na externím odkazu"
+
+msgid "Select at least two abilities."
+msgstr "Vyber alespoň dvě schopnosti."
 
 msgid "Set up the taxes configuration"
 msgstr "Nastav konfiguraci daní"
@@ -8063,6 +8081,9 @@ msgstr "Opravdu chceš tento prvek schválit?"
 msgid "Assign a character to a registered participant"
 msgstr "Přiřazení postavy registrovanému účastníkovi"
 
+msgid "Available only until the character is approved"
+msgstr "Dostupné jen do schválení postavy"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Zrušení z důvodu nezaplacení ročního členského příspěvku"
 
@@ -8234,6 +8255,9 @@ msgstr "Dočasný token používaný pro proces resetování hesla"
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Text zobrazený na začátku všech listů postav"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "Schopnosti patřící do této exkluzivní skupiny"
 
 msgid "The name of the question this option belongs to"
 msgstr "Název otázky, ke které tato možnost patří"
@@ -8654,6 +8678,9 @@ msgstr "Inicializuj platformu vytvořením první události"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Spravovat pevné splátky plateb za registrace"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Názvy schopností ve skupině, oddělené čárkami"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Žádný z účastníků zatím nevyplnil formulář Matchmakeru."
@@ -9588,6 +9615,9 @@ msgid "Manage staff expenses based on receipts uploaded for all events"
 msgstr ""
 "Spravovat výdaje personálu podle účtenek nahraných pro všechny události"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr "Maximální počet schopností ze skupiny, které může postava získat"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr "Maximální počet postav, které může hráč vytvořit (výchozí=1)."
 
@@ -9672,6 +9702,9 @@ msgstr ""
 
 msgid "Manage questions asked during workshop activities for this event"
 msgstr "Spravuj otázky položené během workshopových aktivit v rámci této akce"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr "Maximální počet schopností z této skupiny, které může postava získat"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr "Členský příspěvek pro tohoto uživatele a tento rok již existuje."
@@ -10047,6 +10080,9 @@ msgid "Participants can now create refund requests, and you can review them"
 msgstr ""
 "Účastníci nyní mohou vytvářet žádosti o vrácení peněz a ty je můžeš "
 "zkontrolovat"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr "Maximum musí být nižší než počet schopností ve skupině."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr ""
@@ -11431,6 +11467,13 @@ msgstr ""
 "sdílet fotografie z této události."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Zatím nejsou definované žádné exkluzivní skupiny. Pomocí tlačítka výše "
+"vytvoř první skupinu."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr "Nepovinné - doplňující informace o možnosti zobrazené pod otázkou"
@@ -11911,6 +11954,13 @@ msgid ""
 msgstr ""
 "Spravuj vlastní otázky, na které musí účastníci při registraci na tuto akci "
 "odpovědět"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Spravuj skupiny schopností, ze kterých může postava získat jen maximální "
+"počet"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -12994,6 +13044,13 @@ msgstr ""
 " uhradit registrační poplatek"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Pokud je zaškrtnuto, účastníci mohou tuto schopnost získat jen dokud jejich "
+"postava ještě není schválená"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13288,6 +13345,13 @@ msgstr ""
 "neplatné nebo nesouměrné vztahy"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Volitelné) Zda lze schopnost získat jen před schválením postavy: true nebo "
+"false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13328,6 +13392,13 @@ msgid ""
 msgstr ""
 "Umožňuje definovat sekce v registračním formuláři a seskupovat otázky, aby "
 "byly dlouhé formuláře přehlednější"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Pozor: existující exkluzivní skupiny se stejným názvem budou přepsány "
+"nahranými daty."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13391,6 +13462,13 @@ msgid ""
 msgstr ""
 "Je-li povoleno, možnosti, které už nejsou ve formuláři dostupné, se skryjí "
 "místo zobrazení jako zakázané."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Pokud je zapnuto, můžeš definovat skupiny schopností, ze kterých může "
+"postava získat jen maximální počet"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -14621,6 +14699,13 @@ msgid ""
 msgstr ""
 "Vyplň veřejná metadata, která slouží k externí propagaci této akce, včetně "
 "jazyka, typu, prostředí, místa konání a stylu"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Spravuj skupiny schopností, ze kterých může postava získat jen maximální "
+"počet; staff může vždy přidělit jakoukoli schopnost"
 
 #, python-format
 msgid ""

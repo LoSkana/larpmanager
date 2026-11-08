@@ -91,6 +91,7 @@ from larpmanager.cache.config import (
 from larpmanager.cache.event_text import update_event_text_cache_on_save
 from larpmanager.cache.experience import (
     clear_event_exp_calls_cache,
+    clear_event_exp_exclusives_cache,
     clear_event_exp_systems_cache,
     on_ability_characters_m2m_changed,
     on_ability_prerequisites_m2m_changed,
@@ -101,6 +102,7 @@ from larpmanager.cache.experience import (
     on_criterion_prerequisites_m2m_changed,
     on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
+    on_exclusive_abilities_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_factions_m2m_changed,
     on_modifier_prerequisites_m2m_changed,
@@ -260,6 +262,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -972,6 +975,12 @@ def post_save_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_call_exp(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear experience calls cache after save."""
     clear_event_exp_calls_cache(instance.event_id)
+
+
+@receiver(post_save, sender=ExclusiveExp)
+def post_save_exclusive_exp(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear experience exclusive groups cache after save."""
+    clear_event_exp_exclusives_cache(instance.event_id)
 
 
 @receiver(post_save, sender=EventButton)
@@ -1894,6 +1903,7 @@ m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilitie
 m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
 m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
 m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
+m2m_changed.connect(on_exclusive_abilities_m2m_changed, sender=ExclusiveExp.abilities.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

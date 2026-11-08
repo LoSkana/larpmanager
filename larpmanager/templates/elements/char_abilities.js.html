@@ -161,6 +161,17 @@ window.addEventListener('DOMContentLoaded', function() {
             $prereq.text('{% filter escapejs %}{% trans "Requirements:" %}{% endfilter %} ' + ab.prereqs.join(', '));
             $card.append($prereq);
         }
+        if (ab.exclusives && ab.exclusives.length > 0) {
+            const $exclusive = $('<p class="ability-card-prereqs ability-card-exclusive">');
+            $exclusive.text('{% filter escapejs %}{% trans "Exclusive group:" %}{% endfilter %} ' + ab.exclusives.join(', '));
+            $card.append($exclusive);
+        }
+        if (ab.creation_only) {
+            const $creation = $('<p class="ability-card-prereqs ability-card-creation">');
+            $creation.append($('<i class="fa-solid fa-hourglass-half">'));
+            $creation.append(document.createTextNode(' {% filter escapejs %}{% trans "Available only until the character is approved" %}{% endfilter %}'));
+            $card.append($creation);
+        }
         $card.on('click', function() {
             selectedUuid = uuid;
             $hiddenType.val(typId);

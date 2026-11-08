@@ -53,6 +53,9 @@ def _exp_column_names(context: dict) -> None:
             "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
             "requirements": _("(Optional) Character options as requirements, comma-separated"),
             "visible": _("(Optional) Whether the ability is visible to users: true or false"),
+            "creation_only": _(
+                "(Optional) Whether the ability can be obtained only before the character is approved: true or false"
+            ),
         }
         context["name"] = "Ability"
     elif context["typ"] == "exp_criterion":
@@ -81,7 +84,7 @@ def _exp_column_names(context: dict) -> None:
     context["columns"] = [columns]
 
 
-_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type", "exp_call")
+_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type", "exp_call", "exp_exclusive")
 
 
 def _exp_simple_column_names(context: dict) -> None:
@@ -112,6 +115,13 @@ def _exp_simple_column_names(context: dict) -> None:
             "descr": _("(Optional) The call's description"),
         }
         context["name"] = "Call"
+    elif context["typ"] == "exp_exclusive":
+        columns = {
+            "name": _("The exclusive group's name"),
+            "max": _("Maximum number of abilities of the group a character can obtain"),
+            "abilities": _("Names of the abilities in the group, comma-separated"),
+        }
+        context["name"] = "Exclusive group"
     else:
         columns = {"name": _("The ability type's name")}
         context["name"] = "Ability type"

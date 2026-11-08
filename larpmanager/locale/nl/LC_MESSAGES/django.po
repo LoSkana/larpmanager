@@ -2780,6 +2780,9 @@ msgstr "Contact e-mail"
 msgid "Contributors:"
 msgstr "Bijdragers:"
 
+msgid "Creation only"
+msgstr "Alleen bij creatie"
+
 msgid "Daily Summary"
 msgstr "Dagelijkse samenvatting"
 
@@ -3408,6 +3411,9 @@ msgstr "Lidmaatschap bewerken"
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
 
+msgid "Exclusive group"
+msgstr "Exclusieve groep"
+
 msgid "External access"
 msgstr "Externe toegang"
 
@@ -3707,6 +3713,12 @@ msgstr "Evenementnavigatie"
 
 msgid "Event organizers"
 msgstr "Evenementorganisatoren"
+
+msgid "Exclusive group:"
+msgstr "Exclusieve groep:"
+
+msgid "Exclusive groups"
+msgstr "Exclusieve groepen"
 
 msgid "Expected revenue"
 msgstr "Verwachte inkomsten"
@@ -5774,6 +5786,9 @@ msgstr "Korte naam - internationaal"
 msgid "The collection is growing!"
 msgstr "De inzameling groeit!"
 
+msgid "The exclusive group's name"
+msgstr "De naam van de exclusieve groep"
+
 msgid "The name of the competence"
 msgstr "De naam van de competentie"
 
@@ -6282,6 +6297,9 @@ msgstr "Registratie-instellingen bijgewerkt!"
 
 msgid "Registrations on external link"
 msgstr "Registraties op externe link"
+
+msgid "Select at least two abilities."
+msgstr "Selecteer minstens twee vaardigheden."
 
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
@@ -8066,6 +8084,9 @@ msgstr "Weet je zeker dat je dit element wilt goedkeuren?"
 msgid "Assign a character to a registered participant"
 msgstr "Een personage toewijzen aan een geregistreerde deelnemer"
 
+msgid "Available only until the character is approved"
+msgstr "Alleen beschikbaar tot het personage is goedgekeurd"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Annulering wegens het niet betalen van de jaarlijkse contributie"
 
@@ -8240,6 +8261,9 @@ msgstr "Tijdelijk token gebruikt voor het resetten van het wachtwoord"
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Tekst die aan het begin van alle personagefiches staat"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "De vaardigheden die bij deze exclusieve groep horen"
 
 msgid "The name of the question this option belongs to"
 msgstr "De naam van de vraag waar deze optie bij hoort"
@@ -8668,6 +8692,9 @@ msgstr "Initialiseer het platform door je eerste evenement aan te maken"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Beheert vaste termijnbetalingen voor inschrijvingen"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Namen van de vaardigheden in de groep, gescheiden door komma's"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Nog geen enkele deelnemer heeft het Matchmaker-formulier ingevuld."
@@ -9702,6 +9729,10 @@ msgstr ""
 "Beheer personeelskosten op basis van geüploade bonnetjes voor alle "
 "evenementen"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr ""
+"Maximaal aantal vaardigheden uit de groep dat een personage kan krijgen"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr "Maximumaantal personages dat de speler kan aanmaken (standaard=1)."
 
@@ -9805,6 +9836,10 @@ msgid "Manage questions asked during workshop activities for this event"
 msgstr ""
 "Beheer de vragen die tijdens de workshopactiviteiten van dit evenement "
 "worden gesteld"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr ""
+"Maximaal aantal vaardigheden uit deze groep dat een personage kan krijgen"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr "Lidmaatschapsbijdrage bestaat al voor deze gebruiker en dit jaar."
@@ -10266,6 +10301,9 @@ msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
 msgid "Participants can now create refund requests, and you can review them"
 msgstr ""
 "Deelnemers kunnen nu terugbetalingsverzoeken maken en je kunt ze bekijken"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr "Het maximum moet lager zijn dan het aantal vaardigheden in de groep."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr "Deze toegangslink is al gebruikt en kan niet opnieuw worden gebruikt."
@@ -11824,6 +11862,13 @@ msgstr ""
 "evenement te ordenen en te delen."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Er zijn nog geen exclusieve groepen. Gebruik de knop hierboven om de eerste "
+"groep aan te maken."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -12324,6 +12369,13 @@ msgid ""
 msgstr ""
 "Beheer de aangepaste vragen die deelnemers moeten beantwoorden bij het "
 "aanmelden voor dit evenement"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Beheer de groepen vaardigheden waarvan een personage maar een maximaal "
+"aantal kan krijgen"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -13435,6 +13487,13 @@ msgstr ""
 "inschrijving kunt betalen"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Als dit is aangevinkt, kunnen deelnemers deze vaardigheid alleen krijgen "
+"zolang hun personage nog niet is goedgekeurd"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13730,6 +13789,13 @@ msgstr ""
 "of asymmetrische relaties op te sporen"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Optioneel) Of de vaardigheid alleen kan worden verkregen voordat het "
+"personage is goedgekeurd: true of false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13771,6 +13837,13 @@ msgid ""
 msgstr ""
 "Hiermee kun je secties in het registratieformulier definiëren en vragen "
 "groeperen om lange formulieren overzichtelijker te maken"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Let op: bestaande exclusieve groepen met dezelfde naam worden overschreven "
+"met de geüploade gegevens."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13835,6 +13908,13 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, worden opties die niet langer beschikbaar zijn in het "
 "formulier verborgen in plaats van uitgeschakeld weergegeven."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Als dit is ingeschakeld, kun je groepen vaardigheden definiëren waarvan een "
+"personage maar een maximaal aantal kan krijgen"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -15077,6 +15157,13 @@ msgid ""
 msgstr ""
 "Vul de openbare metadata in die worden gebruikt om dit evenement extern te "
 "promoten, zoals taal, type, spelwereld, locatie en stijl"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Beheer de groepen vaardigheden waarvan een personage maar een maximaal "
+"aantal kan krijgen; de staf kan altijd elke vaardigheid toekennen"
 
 #, python-format
 msgid ""
