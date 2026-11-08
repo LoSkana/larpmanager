@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     check_download,
@@ -80,6 +81,8 @@ def test_upload_download(pw_page: Any) -> None:
     criterions_deliveries(page)
 
     calls(page)
+
+    exclusives(page)
 
     full(page)
 
@@ -144,6 +147,31 @@ def calls(page: Any) -> None:
         page.locator("#one"),
         "STUN Fall to the ground for five seconds BLEED Lose one hit point every minute",
     )
+    check_download(page, "Download")
+
+
+def exclusives(page: Any) -> None:
+    # enable exclusive groups
+    page.get_by_role("link", name="Configuration").first.click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.locator("#id_exp_exclusives").check()
+    submit_confirm(page)
+
+    sidebar(page, "Exclusive groups")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("exclusives.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created Weapons",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    expect(page.locator("#exclusives")).to_contain_text("Weapons")
+    expect(page.locator("#exclusives")).to_contain_text("sword")
+    expect(page.locator("#exclusives")).to_contain_text("shield")
     check_download(page, "Download")
 
 

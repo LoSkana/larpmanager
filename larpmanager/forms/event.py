@@ -1005,6 +1005,13 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("exp_calls", ConfigType.BOOL, calls_label, calls_help_text)
 
+        # Exclusive groups configuration
+        exclusives_label = _("Exclusive groups")
+        exclusives_help_text = _(
+            "If enabled, you can define groups of abilities of which a character can obtain only a maximum number",
+        )
+        self.add_configs("exp_exclusives", ConfigType.BOOL, exclusives_label, exclusives_help_text)
+
         # Auto buy configuration
         auto_buy_label = _("Auto buy")
         auto_buy_help_text = _(

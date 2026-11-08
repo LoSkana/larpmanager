@@ -2780,6 +2780,9 @@ msgstr "Sähköpostiosoite"
 msgid "Contributors:"
 msgstr "Tekijät:"
 
+msgid "Creation only"
+msgstr "Vain luonnissa"
+
 msgid "Daily Summary"
 msgstr "Päivittäinen yhteenveto"
 
@@ -3408,6 +3411,9 @@ msgstr "Muokkaa jäsenyyttä"
 msgid "Event not found"
 msgstr "Tapahtumaa ei löydy"
 
+msgid "Exclusive group"
+msgstr "Eksklusiivinen ryhmä"
+
 msgid "External access"
 msgstr "Ulkoinen pääsy"
 
@@ -3707,6 +3713,12 @@ msgstr "Tapahtuman navigointi"
 
 msgid "Event organizers"
 msgstr "Tapahtuman järjestäjät"
+
+msgid "Exclusive group:"
+msgstr "Eksklusiivinen ryhmä:"
+
+msgid "Exclusive groups"
+msgstr "Eksklusiiviset ryhmät"
 
 msgid "Expected revenue"
 msgstr "Odotetut tulot"
@@ -5774,6 +5786,9 @@ msgstr "Lyhyt nimi - kansainvälinen"
 msgid "The collection is growing!"
 msgstr "Keräys kasvaa!"
 
+msgid "The exclusive group's name"
+msgstr "Eksklusiivisen ryhmän nimi"
+
 msgid "The name of the competence"
 msgstr "Pätevyyden nimi"
 
@@ -6282,6 +6297,9 @@ msgstr "Ilmoittautumisasetukset päivitetty!"
 
 msgid "Registrations on external link"
 msgstr "Ilmoittautumiset ulkoisen linkin kautta"
+
+msgid "Select at least two abilities."
+msgstr "Valitse vähintään kaksi kykyä."
 
 msgid "Set up the taxes configuration"
 msgstr "Määritä verojen kokoonpano"
@@ -8062,6 +8080,9 @@ msgstr "Haluatko varmasti hyväksyä tämän elementin?"
 msgid "Assign a character to a registered participant"
 msgstr "Määritä hahmo rekisteröidylle osallistujalle"
 
+msgid "Available only until the character is approved"
+msgstr "Saatavilla vain siihen asti, kun hahmo hyväksytään"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Peruuttaminen puuttuvan vuosittaisen jäsenmaksun vuoksi"
 
@@ -8234,6 +8255,9 @@ msgstr "Tilapäinen token, jota käytetään salasanan palautusprosessissa"
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Kaikkien hahmolomakkeiden alussa näkyvä teksti"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "Tähän eksklusiiviseen ryhmään kuuluvat kyvyt"
 
 msgid "The name of the question this option belongs to"
 msgstr "Kysymyksen nimi, johon tämä vaihtoehto kuuluu"
@@ -8658,6 +8682,9 @@ msgstr "Alusta luomalla ensimmäinen tapahtuma"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Hallitsee ilmoittautumisten kiinteitä erämaksuja"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Ryhmän kykyjen nimet pilkuilla erotettuina"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Yksikään osallistuja ei ole vielä täyttänyt Matchmaker-lomaketta."
@@ -9640,6 +9667,9 @@ msgstr ""
 "Hallitse henkilöstön kuluja kaikkien tapahtumien ladattujen kuittien "
 "perusteella"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr "Ryhmän kykyjen enimmäismäärä, jonka hahmo voi saada"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr "Hahmojen enimmäismäärä, jonka pelaaja voi luoda (oletus=1)."
 
@@ -9732,6 +9762,9 @@ msgstr ""
 msgid "Manage questions asked during workshop activities for this event"
 msgstr ""
 "Hallinnoi tämän tapahtuman työpajatoimintojen aikana esitettyjä kysymyksiä"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr "Tämän ryhmän kykyjen enimmäismäärä, jonka hahmo voi saada"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr "Tälle käyttäjälle ja tälle vuodelle on jo olemassa jäsenmaksu."
@@ -10149,6 +10182,9 @@ msgstr ""
 
 msgid "Participants can now create refund requests, and you can review them"
 msgstr "Osallistujat voivat nyt tehdä hyvityspyyntöjä, ja voit tarkistaa ne"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr "Enimmäismäärän on oltava pienempi kuin ryhmän kykyjen määrä."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr "Tämä linkki on jo käytetty, eikä sitä voi käyttää uudelleen."
@@ -11606,6 +11642,13 @@ msgstr ""
 "tämän tapahtuman valokuvia."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Eksklusiivisia ryhmiä ei ole vielä määritetty. Luo ensimmäinen ryhmä yllä "
+"olevalla painikkeella."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -12094,6 +12137,12 @@ msgid ""
 msgstr ""
 "Hallitse niitä mukautettuja kysymyksiä, joihin osallistujien on vastattava "
 "ilmoittautuessaan tähän tapahtumaan"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Hallitse kykyryhmiä, joista hahmo voi saada vain tietyn enimmäismäärän"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -13189,6 +13238,13 @@ msgstr ""
 "ilmoittautumismaksun"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Jos tämä on valittuna, osallistujat voivat saada tämän kyvyn vain silloin, "
+"kun heidän hahmoaan ei ole vielä hyväksytty"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13482,6 +13538,13 @@ msgstr ""
 "virheellisten tai epäsymmetristen suhteiden havaitsemiseksi"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Valinnainen) Voiko kyvyn saada vain ennen hahmon hyväksymistä: true tai "
+"false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13522,6 +13585,13 @@ msgid ""
 msgstr ""
 "Voit määritellä ilmoittautumislomakkeen osioita ja ryhmitellä kysymyksiä, "
 "jotta pitkät lomakkeet olisivat selkeämpiä"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Huomaa, että samannimiset olemassa olevat eksklusiiviset ryhmät korvataan "
+"ladatuilla tiedoilla."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13586,6 +13656,13 @@ msgid ""
 msgstr ""
 "Jos käytössä, lomakkeessa enää saatavilla olemattomat vaihtoehdot "
 "piilotetaan sen sijaan, että ne näytettäisiin poistettuina käytöstä."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Jos tämä on käytössä, voit määrittää kykyryhmiä, joista hahmo voi saada vain"
+" tietyn enimmäismäärän"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -14822,6 +14899,13 @@ msgid ""
 msgstr ""
 "Täytä tapahtuman ulkoisessa markkinoinnissa käytettävät julkiset metatiedot,"
 " kuten kieli, tyyppi, ympäristö, sijainti ja tyyli"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Hallitse kykyryhmiä, joista hahmo voi saada vain tietyn enimmäismäärän; "
+"henkilökunta voi aina antaa minkä tahansa kyvyn"
 
 #, python-format
 msgid ""

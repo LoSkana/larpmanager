@@ -34,6 +34,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import (
     clear_event_exp_cache,
     clear_event_exp_calls_cache,
+    clear_event_exp_exclusives_cache,
     clear_event_exp_systems_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
@@ -446,6 +447,7 @@ def _clear_reorder_caches(action: OrgaAction, context: dict, model_class: type) 
         clear_event_exp_cache(event_id)
         clear_event_exp_systems_cache(event_id)
         clear_event_exp_calls_cache(event_id)
+        clear_event_exp_exclusives_cache(event_id)
     if action.config.get("button"):
         clear_event_button_cache(event_id)
     if action.config.get("tickets"):

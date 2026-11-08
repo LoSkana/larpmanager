@@ -40,6 +40,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -62,6 +63,7 @@ from larpmanager.utils.io.download import (
     export_calls,
     export_criterions,
     export_deliveries,
+    export_exclusives,
     export_modifiers,
     export_rules,
     zip_exports,
@@ -523,6 +525,44 @@ def orga_exp_calls_edit(request: HttpRequest, event_slug: str, call_uuid: str) -
 def orga_exp_calls_delete(request: HttpRequest, event_slug: str, call_uuid: str) -> HttpResponse:
     """Delete a call for an event."""
     return orga_delete(request, event_slug, OrgaAction.PX_CALLS, call_uuid)
+
+
+@login_required
+def orga_exp_exclusives(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage the exclusive groups of abilities for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_exclusives")
+
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_exclusives(context), "Exclusives"))
+
+    context["upload"] = "exp_exclusives"
+    context["download"] = 1
+
+    context["list"] = (
+        get_event_elements(context["event"].id, ExclusiveExp, context=context)
+        .order_by("order")
+        .prefetch_related("abilities")
+    )
+    return render(request, "larpmanager/orga/experience/exclusives.html", context)
+
+
+@login_required
+def orga_exp_exclusives_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create an exclusive group for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_EXCLUSIVES)
+
+
+@login_required
+def orga_exp_exclusives_edit(request: HttpRequest, event_slug: str, exclusive_uuid: str) -> HttpResponse:
+    """Edit an exclusive group for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_EXCLUSIVES, exclusive_uuid)
+
+
+@login_required
+def orga_exp_exclusives_delete(request: HttpRequest, event_slug: str, exclusive_uuid: str) -> HttpResponse:
+    """Delete an exclusive group for an event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_EXCLUSIVES, exclusive_uuid)
 
 
 @login_required

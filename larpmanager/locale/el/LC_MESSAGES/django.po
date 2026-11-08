@@ -2780,6 +2780,9 @@ msgstr "Email επικοινωνίας"
 msgid "Contributors:"
 msgstr "Συνεισφέροντες:"
 
+msgid "Creation only"
+msgstr "Μόνο κατά τη δημιουργία"
+
 msgid "Daily Summary"
 msgstr "Ημερήσια σύνοψη"
 
@@ -3408,6 +3411,9 @@ msgstr "Επεξεργασία εγγραφής"
 msgid "Event not found"
 msgstr "Το event δεν βρέθηκε"
 
+msgid "Exclusive group"
+msgstr "Αποκλειστική ομάδα"
+
 msgid "External access"
 msgstr "Εξωτερική πρόσβαση"
 
@@ -3707,6 +3713,12 @@ msgstr "Πλοήγηση εκδήλωσης"
 
 msgid "Event organizers"
 msgstr "Διοργανωτές εκδηλώσεων"
+
+msgid "Exclusive group:"
+msgstr "Αποκλειστική ομάδα:"
+
+msgid "Exclusive groups"
+msgstr "Αποκλειστικές ομάδες"
 
 msgid "Expected revenue"
 msgstr "Αναμενόμενα έσοδα"
@@ -5774,6 +5786,9 @@ msgstr "Σύντομο όνομα - διεθνές"
 msgid "The collection is growing!"
 msgstr "Η συλλογή χρημάτων αυξάνεται!"
 
+msgid "The exclusive group's name"
+msgstr "Το όνομα της αποκλειστικής ομάδας"
+
 msgid "The name of the competence"
 msgstr "Το όνομα της ικανότητας"
 
@@ -6282,6 +6297,9 @@ msgstr "Οι ρυθμίσεις εγγραφής ενημερώθηκαν!"
 
 msgid "Registrations on external link"
 msgstr "Εγγραφές μέσω εξωτερικού συνδέσμου"
+
+msgid "Select at least two abilities."
+msgstr "Επίλεξε τουλάχιστον δύο ικανότητες."
 
 msgid "Set up the taxes configuration"
 msgstr "Ρύθμισε τη διαμόρφωση φόρων"
@@ -8067,6 +8085,9 @@ msgstr "Είσαι σίγουρος ότι θέλεις να εγκρίνεις 
 msgid "Assign a character to a registered participant"
 msgstr "Ανάθεσε έναν χαρακτήρα σε έναν εγγεγραμμένο συμμετέχοντα"
 
+msgid "Available only until the character is approved"
+msgstr "Διαθέσιμη μόνο μέχρι να εγκριθεί ο χαρακτήρας"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Ακύρωση λόγω μη καταβολής της ετήσιας συνδρομής μέλους"
 
@@ -8241,6 +8262,9 @@ msgstr ""
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Κείμενο που εμφανίζεται στην αρχή όλων των φύλλων χαρακτήρων"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "Οι ικανότητες που ανήκουν σε αυτή την αποκλειστική ομάδα"
 
 msgid "The name of the question this option belongs to"
 msgstr "Το όνομα της ερώτησης στην οποία ανήκει αυτή η επιλογή"
@@ -8685,6 +8709,9 @@ msgstr "Αρχικοποίησε την πλατφόρμα δημιουργών�
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Διαχειρίζεται σταθερές δόσεις πληρωμής για εγγραφές"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Ονόματα των ικανοτήτων της ομάδας, χωρισμένα με κόμμα"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Κανένας συμμετέχων δεν έχει απαντήσει ακόμη στη φόρμα Matchmaker."
@@ -9762,6 +9789,11 @@ msgstr ""
 "Διαχείριση εξόδων προσωπικού βάσει αποδείξεων που έχουν ανέβει για όλες τις "
 "εκδηλώσεις"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr ""
+"Μέγιστος αριθμός ικανοτήτων της ομάδας που μπορεί να αποκτήσει ένας "
+"χαρακτήρας"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr ""
 "Μέγιστος αριθμός χαρακτήρων που μπορεί να δημιουργήσει ο παίκτης "
@@ -9873,6 +9905,11 @@ msgid "Manage questions asked during workshop activities for this event"
 msgstr ""
 "Διαχειρίσου τις ερωτήσεις που τίθενται κατά τις δραστηριότητες εργαστηρίων "
 "για αυτή την εκδήλωση"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr ""
+"Μέγιστος αριθμός ικανοτήτων αυτής της ομάδας που μπορεί να αποκτήσει ένας "
+"χαρακτήρας"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr ""
@@ -10338,6 +10375,11 @@ msgid "Participants can now create refund requests, and you can review them"
 msgstr ""
 "Οι συμμετέχοντες μπορούν πλέον να δημιουργούν αιτήματα επιστροφής χρημάτων "
 "και μπορείς να τα εξετάσεις"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr ""
+"Ο μέγιστος αριθμός πρέπει να είναι μικρότερος από τον αριθμό των ικανοτήτων "
+"της ομάδας."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr ""
@@ -11927,6 +11969,13 @@ msgstr ""
 " και να μοιραστείς φωτογραφίες για αυτή την εκδήλωση."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Δεν έχουν οριστεί ακόμα αποκλειστικές ομάδες. Χρησιμοποίησε το παραπάνω "
+"κουμπί για να δημιουργήσεις την πρώτη ομάδα."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -12432,6 +12481,13 @@ msgid ""
 msgstr ""
 "Διαχειρίσου τις προσαρμοσμένες ερωτήσεις που πρέπει να απαντήσουν οι "
 "συμμετέχοντες όταν εγγράφονται σε αυτή την εκδήλωση"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Διαχειρίσου τις ομάδες ικανοτήτων από τις οποίες ένας χαρακτήρας μπορεί να "
+"αποκτήσει μόνο έναν μέγιστο αριθμό"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -13541,6 +13597,13 @@ msgstr ""
 "να πληρώσεις για την εγγραφή σου"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Αν είναι επιλεγμένο, οι συμμετέχοντες μπορούν να αποκτήσουν αυτή την "
+"ικανότητα μόνο όσο ο χαρακτήρας τους δεν έχει εγκριθεί ακόμα"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13836,6 +13899,13 @@ msgstr ""
 " μη έγκυρες ή ασύμμετρες σχέσεις"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Προαιρετικό) Αν η ικανότητα μπορεί να αποκτηθεί μόνο πριν εγκριθεί ο "
+"χαρακτήρας: true ή false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13877,6 +13947,13 @@ msgid ""
 msgstr ""
 "Σου επιτρέπει να ορίσεις ενότητες στη φόρμα εγγραφής, ομαδοποιώντας τις "
 "ερωτήσεις ώστε οι μεγάλες φόρμες να είναι πιο ξεκάθαρες"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Σημείωσε ότι οι υπάρχουσες αποκλειστικές ομάδες με το ίδιο όνομα θα "
+"αντικατασταθούν από τα δεδομένα που ανεβάζεις."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13941,6 +14018,13 @@ msgid ""
 msgstr ""
 "Αν ενεργοποιηθεί, οι επιλογές που δεν είναι πλέον διαθέσιμες στη φόρμα "
 "αποκρύπτονται αντί να εμφανίζονται απενεργοποιημένες."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Αν το ενεργοποιήσεις, μπορείς να ορίσεις ομάδες ικανοτήτων από τις οποίες "
+"ένας χαρακτήρας μπορεί να αποκτήσει μόνο έναν μέγιστο αριθμό"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -15190,6 +15274,14 @@ msgstr ""
 "Συμπλήρωσε τα δημόσια μεταδεδομένα που χρησιμοποιούνται για την εξωτερική "
 "προώθηση αυτού του event, συμπεριλαμβανομένων της γλώσσας, του τύπου, του "
 "setting, της τοποθεσίας και του στυλ"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Διαχειρίσου τις ομάδες ικανοτήτων από τις οποίες ένας χαρακτήρας μπορεί να "
+"αποκτήσει μόνο έναν μέγιστο αριθμό· το staff μπορεί πάντα να αναθέσει "
+"οποιαδήποτε ικανότητα"
 
 #, python-format
 msgid ""
