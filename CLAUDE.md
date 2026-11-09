@@ -83,6 +83,7 @@ For pytest and scripts, use `source <venv>/bin/activate` or `./scripts/test.sh`.
 - **Translation updates**: `./scripts/translate.sh` (requires `DEEPL_API_KEY` in dev settings)
 - **Record playwright tests**: `./scripts/record-test.sh`
 - **Update test dump**: `python manage.py dump_test` (required after model/fixture changes) - automatically runs makemigrations, migrate, and reset; auto-adds schema version marker
+- **Check test dump stability**: `python manage.py dump_test --check` - dumps twice and fails listing the tables whose rows differ. Any new field filled with random values (tokens, secrets, random codes) must be set to a fixed value in `fixtures/test.yaml` or normalized in `dump_test.py` (like `media_token`), otherwise every dump changes `test_db.sql`
 
 ### Feature Management
 - **Export features to fixtures**: `python manage.py export_features` (run before pushing new features)
