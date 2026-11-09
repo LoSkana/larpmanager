@@ -94,7 +94,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import CharacterConfig
-from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.autosave import (
@@ -988,13 +988,13 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
 
     resolved = _unsubscribe_token(token)
     if not resolved:
-        return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
+        return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), "error": True})
 
     email, association = resolved
 
     if request.method == "POST" and request.POST.get("confirm"):
         ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
-        return render(request, "larpmanager/general/unsubscribe.html", ctx)
+        return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), **ctx})
 
     has_regs = (
         Registration.objects.filter(
@@ -1007,7 +1007,7 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
         else False
     )
     ctx = {"email": email, "is_org": bool(association), "has_registrations": has_regs}
-    return render(request, "larpmanager/general/unsubscribe.html", ctx)
+    return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), **ctx})
 
 
 @login_required
@@ -1414,4 +1414,6 @@ def otp_verify(request: HttpRequest) -> HttpResponse:
     else:
         form = OTPVerifyForm()
 
-    return render(request, "registration/otp_verify.html", {"form": form})
+    context = get_optional_context(request)
+    context["form"] = form
+    return render(request, "registration/otp_verify.html", context)

@@ -41,7 +41,7 @@ from django_otp import user_has_device
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
 from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, session_token_key
-from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.services.miscellanea import check_centauri
@@ -122,7 +122,9 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     """Handle 404 errors with custom template."""
     # Render the custom 404 template with exception context
     # The 'exe' variable provides exception details to the template
-    return render(request, "404.html", {"exe": exception})
+    context = get_optional_context(request)
+    context["exe"] = exception
+    return render(request, "404.html", context)
 
 
 def error_500(request: HttpRequest) -> Any:
