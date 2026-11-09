@@ -54,7 +54,7 @@ from larpmanager.utils.core.exceptions import (
     check_event_feature,
 )
 from larpmanager.utils.core.nav import build_main_nav_items
-from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, get_effective_version
 from larpmanager.utils.registrations.characters import check_signup, registration_find
 from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.demo import add_demo_hint_context
@@ -139,6 +139,14 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     return context
 
 
+def get_optional_context(request: HttpRequest) -> dict:
+    """Return the base context, or an empty one on the main site where it is not available."""
+    try:
+        return get_context(request)
+    except MembershipError:
+        return {}
+
+
 def _check_main_site_access(request: HttpRequest, context: dict, *, check_main_site: bool) -> None:
     """Raise if the page is requested on the wrong site (main site vs association site)."""
     if context["association_id"] != 0:
@@ -201,15 +209,9 @@ def get_context_member(request: HttpRequest, context: dict) -> None:
     # Get association permissions for the user
     get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
-    # Compute effective interface version (member override, clamped to [assoc_version, latest])
-    member_version_str = context["member"].get_config("interface_version")
-    member_version = int(member_version_str) if member_version_str else None
-    assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
-    if member_version is not None and assoc_version != LATEST_AVAILABLE_VERSION:
-        effective = max(member_version, assoc_version)
-    else:
-        effective = assoc_version
-    context["effective_version"] = effective
+    context["effective_version"] = get_effective_version(
+        context["member"], context.get("assoc_version", LATEST_AVAILABLE_VERSION)
+    )
     context["latest_available_version"] = LATEST_AVAILABLE_VERSION
 
     context["is_staff"] = request.user.is_staff

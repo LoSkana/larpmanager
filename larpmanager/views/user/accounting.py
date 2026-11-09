@@ -1135,7 +1135,7 @@ def accounting_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
 @login_required
 def accounting_wait(request: HttpRequest) -> HttpResponse:
     """Render the account waiting page."""
-    return render(request, "larpmanager/member/accounting_wait.html")
+    return render(request, "larpmanager/member/accounting_wait.html", get_context(request))
 
 
 def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
