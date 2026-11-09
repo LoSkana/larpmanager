@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "File" %}</th>
@@ -25,8 +26,10 @@
                 <tr id="{{ el.uuid }}">
                     <td></td>
                     <td>
-                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.uuid %}">{{ el.name }}</a>
+                        <a href="{% url 'orga_onetimes_edit' run.get_slug el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
+                    <td>{{ el.name }}</td>
                     <td>{{ el.description|truncatewords:10 }}</td>
                     <td>
                         {% if el.file %}<a href="{{ el.file.url }}" target="_blank">{{ el.file.name|basename }}</a>{% endif %}
