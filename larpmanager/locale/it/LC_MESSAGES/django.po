@@ -3735,6 +3735,9 @@ msgstr "Dominio non consentito"
 msgid "Handout template"
 msgstr "Modello di handout"
 
+msgid "Hide past events"
+msgstr "Nascondi eventi passati"
+
 msgid "Interval sending"
 msgstr "Intervallo di invio"
 
@@ -8529,6 +8532,9 @@ msgstr ""
 "Se selezionato, aggiungi un campo per tenere traccia delle quantità degli "
 "oggetti."
 
+msgid "If selected, the link to past events is not shown."
+msgstr "Se selezionato, il link agli eventi passati non viene mostrato."
+
 msgid "If selected, the location is shown for each event."
 msgstr "Se selezionato, viene mostrata la posizione di ogni evento."
 
@@ -9403,10 +9409,6 @@ msgstr "Inserisci il tuo genere legale come appare nei documenti ufficiali."
 
 msgid "Here are the sign up options with a limited number of spots."
 msgstr "Ecco le opzioni di iscrizione con un numero limitato di posti."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr ""
-"Se selezionato, nel calendario viene mostrato un link agli eventi passati."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr ""

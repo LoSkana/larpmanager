@@ -89,7 +89,7 @@ def test_organization_appearance(browser_type, live_server) -> None:
     page = sh.goto(sh.page(ORGA), "manage/texts/new/?frame=1")
     sh.shot(2, page.locator("form table").first, "New organization text")
     page = sh.goto(sh.page(ORGA), "manage/config/interface/")
-    sh.shot(3, section(page, "interface", "id_calendar_past_events", "id_calendar_tagline"), "Interface configuration")
+    sh.shot(3, section(page, "interface", "id_calendar_hide_past_events", "id_calendar_tagline"), "Interface configuration")
     sh.close()
 
 

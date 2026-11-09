@@ -3735,6 +3735,9 @@ msgstr "Zakázaná doména"
 msgid "Handout template"
 msgstr "Šablona pro Handout"
 
+msgid "Hide past events"
+msgstr "Skrýt minulé události"
+
 msgid "Interval sending"
 msgstr "Intervalové odesílání"
 
@@ -8517,6 +8520,9 @@ msgstr "Dělám to pravidelně a mám značné zkušenosti"
 msgid "If selected, add a field to track item quantities."
 msgstr "Je-li vybráno, přidá se pole pro sledování množství položek."
 
+msgid "If selected, the link to past events is not shown."
+msgstr "Pokud tuto možnost vybereš, odkaz na minulé události se nezobrazí."
+
 msgid "If selected, the location is shown for each event."
 msgstr "Je-li vybráno, pro každou akci se zobrazí místo."
 
@@ -9327,9 +9333,6 @@ msgstr ""
 
 msgid "Here are the sign up options with a limited number of spots."
 msgstr "Zde jsou možnosti přihlášení s omezeným počtem míst."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr "Je-li vybráno, v kalendáři se zobrazí odkaz na minulé akce."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Chceš-li místo toho nahrát nový sken své žádosti"

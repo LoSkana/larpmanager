@@ -452,9 +452,9 @@ class ExeConfigForm(ConfigForm):
         """Configure interface and calendar display settings."""
         self.set_section("interface", _("Interface"))
 
-        past_events_label = _("Past events")
-        past_events_help_text = _("If selected, a link to past events is shown in the calendar.")
-        self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
+        past_events_label = _("Hide past events")
+        past_events_help_text = _("If selected, the link to past events is not shown.")
+        self.add_configs("calendar_hide_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         if self.params.get("skin_id") == 1:
             field_label = _("Characters shortcut")
