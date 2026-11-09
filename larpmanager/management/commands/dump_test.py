@@ -17,21 +17,48 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import difflib
+import hashlib
 import os
 import re
 import subprocess
+import tempfile
 from pathlib import Path
 
-from django.core.management import BaseCommand, call_command
+from django.apps import apps
+from django.core.management import BaseCommand, CommandError, call_command
+from django.core.management.base import CommandParser
 from django.db import connection
 
 from larpmanager.management.commands.utils import check_branch, check_virtualenv
+from larpmanager.models.base import MediaTokenMixin
+
+SQL_FILE = Path("larpmanager/tests/test_db.sql")
 
 
 class Command(BaseCommand):
     """Django management command."""
 
     help = "Dump test db"
+
+    def add_arguments(self, parser: CommandParser) -> None:
+        """Add command line arguments."""
+        parser.add_argument(
+            "--check",
+            action="store_true",
+            help="Dump twice and fail if the two dumps differ (detects non-deterministic data)",
+        )
+
+    def normalize_media_tokens(self) -> None:
+        """Replace random media tokens with deterministic values derived from table and primary key."""
+        self.stdout.write("Normalizing media tokens...")
+        for model in apps.get_models():
+            if model._meta.proxy or not issubclass(model, MediaTokenMixin):  # noqa: SLF001
+                continue
+            table = model._meta.db_table  # noqa: SLF001
+            for pk in model.all_objects.values_list("pk", flat=True):
+                token = hashlib.md5(f"{table}:{pk}".encode(), usedforsecurity=False).hexdigest()
+                model.all_objects.filter(pk=pk).update(media_token=token)
 
     def normalize_dates(self, file_path: str) -> None:
         """Normalize dynamic dates in SQL dump to fixed reference dates.
@@ -86,20 +113,11 @@ class Command(BaseCommand):
         with Path(file_path).open("w", encoding="utf-8") as f:
             f.write(content)
 
-    def handle(self, *args: tuple, **kwargs: dict) -> None:  # noqa: ARG002
-        """Django management command handler to dump test database.
+    def handle(self, *args: tuple, **options: dict) -> None:  # noqa: ARG002
+        """Reset the database and dump it to test_db.sql.
 
-        This function resets the database, applies migrations, and creates a clean
-        SQL dump file for testing purposes. The dump is cleaned of PostgreSQL-specific
-        commands that may cause issues during test restoration.
-
-        Args:
-            *args: Command line arguments passed to the management command
-            **kwargs: Command line keyword arguments passed to the management command
-
-        Raises:
-            subprocess.CalledProcessError: If database dump or cleaning operations fail
-
+        With --check, a second dump is created and compared with the first one;
+        the command fails listing the tables whose rows differ.
         """
         # Ensure we're running inside a virtual environment
         check_virtualenv()
@@ -107,16 +125,57 @@ class Command(BaseCommand):
         # Verify we're on the correct branch before proceeding
         check_branch()
 
+        self.create_dump(SQL_FILE)
+
+        if options.get("check"):
+            self.check_stability(SQL_FILE)
+
+        self.stdout.write(self.style.SUCCESS("All done!"))
+
+    def check_stability(self, sql_file: Path) -> None:
+        """Create a second dump and fail if it differs from the first one."""
+        self.stdout.write("Creating second dump to check stability...")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            second_file = Path(tmp_dir) / "test_db_check.sql"
+            self.create_dump(second_file)
+            first_lines = sql_file.read_text(encoding="utf-8").splitlines()
+            second_lines = second_file.read_text(encoding="utf-8").splitlines()
+
+        changed_tables = set()
+        for line in difflib.unified_diff(first_lines, second_lines, lineterm="", n=0):
+            match = re.match(r"^[-+]INSERT INTO (?:public\.)?(\w+) ", line)
+            if match:
+                changed_tables.add(match.group(1))
+            elif line.startswith(("-", "+")) and not line.startswith(("---", "+++")):
+                changed_tables.add("<non-insert statements>")
+
+        if changed_tables:
+            msg = "Dump is not stable, rows differ between runs in: " + ", ".join(sorted(changed_tables))
+            raise CommandError(msg)
+
+        self.stdout.write(self.style.SUCCESS("Dump is stable"))
+
+    def create_dump(self, sql_file: Path) -> None:
+        """Reset the database and write a normalized SQL dump to the given file.
+
+        The dump is cleaned of PostgreSQL-specific commands that may cause issues
+        during test restoration, and dynamic values are normalized for stable diffs.
+
+        Raises:
+            subprocess.CalledProcessError: If database dump or cleaning operations fail
+
+        """
         # Reset database to clean state and apply all migrations
         call_command("reset", verbosity=0)
 
+        # Replace random tokens with deterministic values for stable dumps
+        self.normalize_media_tokens()
+
         # Configure environment for PostgreSQL authentication, matching active Django settings
-        self.stdout.write("Dumping database to test_db.sql...")
+        self.stdout.write(f"Dumping database to {sql_file}...")
         db_settings = connection.settings_dict
         env = os.environ.copy()
         env["PGPASSWORD"] = db_settings["PASSWORD"]
-
-        sql_file = Path("larpmanager/tests/test_db.sql")
 
         # Build pg_dump command with required parameters for test database
         dump_cmd = [
@@ -182,5 +241,3 @@ class Command(BaseCommand):
             # Append schema version comment to end of file
             with sql_file.open("a", encoding="utf-8") as f:
                 f.write(f"\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
-
-        self.stdout.write(self.style.SUCCESS("All done!"))
