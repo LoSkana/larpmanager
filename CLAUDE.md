@@ -171,6 +171,35 @@ Models are organized in `larpmanager/models/` by domain:
   - Avoid refactoring unless approved beforehand
   - Keep commits focused and atomic
 
+### Guide Videos
+The public guides (`/guides/`) are defined in `larpmanager/fixtures/guide.yaml` (loaded by `import_features` on deploy, matched by `slug`) and each embeds a video recorded by a Playwright storyboard in `larpmanager/tests/playwright/guide_videos/<name>_storyboard.py`.
+- **If a branch changes a behaviour shown in a guide** (a page, a label, a button, a form field, a flow or a default listed below), in the same branch: update the storyboard so it still runs, update the steps of the guide `text` in `guide.yaml`, and state in the PR which guide videos need re-recording (with the `create-larpmanager-guide-video` skill). After the new upload, the `video_id` is set in the admin (it is not in the fixture).
+- Never rename a guide `slug`: it is the public URL `/guide/<slug>/`, linked by other guides.
+- Keep one `<h4>Step N</h4>` per `step()` of the storyboard.
+
+| Guide slug | Storyboard | Documented behaviour |
+|---|---|---|
+| `first` | `first_storyboard.py` | Organization signup, first event creation, activation checklist (Lite Mode), payment methods, Standard ticket price, registration form, Admin/User switch, registering, character assignment, advanced mode |
+| `manage` | `manage_storyboard.py` | Event visibility, dashboard status changes, registration opening/pre-registration, new sessions, organization features and configuration |
+| `tickets` | `tickets_storyboard.py` | Ticket price and availability, staff tier and hidden staff ticket with direct link, max participants, registration questions, player view of the form |
+| `advanced-registration` | `advanced_registration_storyboard.py` | Secret registration link, discount codes, waiting list, freed spots kept for waiting list, moving up from it |
+| `roles` | `roles_storyboard.py` | Event roles and permissions, invitation by email and acceptance, organization roles |
+| `appearance` | `appearance_storyboard.py` | Organization logo, themes, Halo background and colors, event cover and title font, custom texts, navigation buttons |
+| `payments` | `payments_storyboard.py` | Payment feature and methods, ticket prices, paid registration options, player payment, registration accounting |
+| `payment-plans` | `payment_plans_storyboard.py` | Fixed instalments, late surcharges, deadlines dashboard, automatic payment reminders |
+| `accounting` | `accounting_storyboard.py` | Staff expenses upload and approval, credits, refund requests, outflows, inflows, event balance, closing the event |
+| `creation` | `creation_storyboard.py` | Player character creation, character form fields, proposal, staff approval |
+| `xp` | `xp_storyboard.py` | Ability types, abilities, player ability selection, XP awards |
+| `campaign` | `campaign_storyboard.py` | Campaign feature, next event in a campaign, characters carried over |
+| `writing` | `writing_storyboard.py` | Factions and plots features, character form, writing characters, factions, plots |
+| `publishing` | `publishing_storyboard.py` | Character reference codes as links, field visibility, revealing fields to players |
+| `quests` | `quests_storyboard.py` | Quest types, quests, traits, trait preferences, trait assignment, trait in character sheet |
+| `approval` | `approval_storyboard.py` | Signup approval requests with questions, matchmaker, debrief, approving and reviewing answers |
+| `assign` | `assign_storyboard.py` | Casting preferences, casting algorithm, re-run and finalization |
+| `pdf` | `pdf_storyboard.py` | Character sheet PDF generation, page layout, header/footer, background, fonts, custom CSS |
+| `membership` | `membership_storyboard.py` | Membership request document, upload, approval, annual fee payment and confirmation |
+| `inventory` | `warehouse_storyboard.py` | Warehouse containers, items with photos and quantities, event areas, assignments, manifest loading and on-site check |
+
 ### Permission System
 - **Feature-based**: Features control availability of functionality (see [Features Guide](docs/01-features-and-permissions.md))
 - **Role-based**: Organization and event-level roles with assigned permissions

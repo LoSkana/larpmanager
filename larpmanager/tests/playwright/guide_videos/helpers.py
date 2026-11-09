@@ -24,8 +24,11 @@ from __future__ import annotations
 
 import datetime as dt
 import re
+from pathlib import Path
 from typing import TYPE_CHECKING
+from urllib.request import urlopen
 
+from django.core.files import File
 from playwright.sync_api import expect
 
 from larpmanager.models.association import Association
@@ -40,6 +43,17 @@ if TYPE_CHECKING:
     from larpmanager.tests.playwright.guide_videos.director import Director
 
 CONFIRM = re.compile(r"^\s*(Confirm|Submit)\s*$", re.IGNORECASE)
+
+# Lorelei avatars by Lisa Wischofsky, CC0 1.0, served by DiceBear
+AVATAR_URL = "https://api.dicebear.com/9.x/lorelei/png?seed={seed}&size=400&backgroundColor={background}"
+AVATAR_DIR = Path(".guide_videos/avatars")
+# Avatar seed and background color of the portrait of each demo player, by first name
+PORTRAITS = {
+    "Alice": ("Aneka", "ffdfbf"),
+    "Ben": ("Theo", "b6e3f4"),
+    "Clara": ("Alice", "c0aede"),
+    "Dario": ("Max", "d1d4f9"),
+}
 
 
 def prepare_data(organization: str) -> None:
@@ -147,3 +161,20 @@ def login_as(director: Director, login: Callable[[Any, str], None], path: str) -
         director.goto(path)
 
     return switch
+
+
+def demo_avatar(name: str) -> Path:
+    """Download the illustrated portrait of a demo player, once."""
+    seed, background = PORTRAITS[name]
+    path = AVATAR_DIR / f"lorelei_{seed.lower()}_{background}.png"
+    if not path.exists():
+        AVATAR_DIR.mkdir(parents=True, exist_ok=True)
+        with urlopen(AVATAR_URL.format(seed=seed, background=background), timeout=30) as response:  # noqa: S310
+            path.write_bytes(response.read())
+    return path
+
+
+def set_avatar(member: Member) -> None:
+    """Save the portrait of a demo player as their profile photo."""
+    with demo_avatar(member.name).open("rb") as image:
+        member.profile.save("avatar.png", File(image))

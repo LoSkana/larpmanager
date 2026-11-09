@@ -35,6 +35,9 @@ def test_guides_list(pw_page: Any) -> None:
     """Search filters the list, the popup loads the video and the guide page embeds it."""
     page, live_server, _context = pw_page
 
+    # Drop the guides loaded from the fixture
+    LarpManagerGuide.objects.all().delete()
+
     LarpManagerGuide.objects.create(
         number=1,
         title="Payments",

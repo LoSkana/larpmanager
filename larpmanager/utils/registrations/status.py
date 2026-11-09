@@ -32,7 +32,7 @@ from larpmanager.cache.basic import RunBasicCache, get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
-from larpmanager.models.event import PreRegistration, RegistrationStatus, Run
+from larpmanager.models.event import DevelopStatus, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.core.exceptions import RewokedMembershipError
@@ -527,6 +527,16 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
                 run, registration, member, features, register_url, run_status, context, run_cache
             )
             return run_status
+
+    # Concluded and cancelled runs accept no new registrations
+    if run.development in (DevelopStatus.DONE, DevelopStatus.CANC):
+        run_status["open"] = False
+        run_status["text"] = _("Registrations closed")
+        if run.development == DevelopStatus.DONE:
+            run_status["text_long"] = _("This event has concluded")
+        else:
+            run_status["text_long"] = _("This event has been cancelled")
+        return run_status
 
     if run.end and get_time_diff_today(run.end) < 0:
         return run_status

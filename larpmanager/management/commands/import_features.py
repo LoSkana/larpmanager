@@ -56,6 +56,7 @@ class Command(BaseCommand):
             "event_permission",
             "payment_methods",
             "skin",
+            "guide",
         ]:
             fixture_path = Path(conf_settings.BASE_DIR) / ".." / "larpmanager" / "fixtures" / f"{fixture}.yaml"
             with fixture_path.open(encoding="utf-8") as f:

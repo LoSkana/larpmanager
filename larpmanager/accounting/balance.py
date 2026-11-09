@@ -338,7 +338,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
         details["exp"] = get_accounting_detail(
             _("Expenses"),
             run,
-            _("Total of expenses submitted by collaborators and approved"),
+            _("Total of expenses submitted by collaborators"),
             AccountingItemExpense,
             ExpenseChoices.choices,
             "exp",
@@ -443,6 +443,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     # Balance = net profit or loss
     if summary["revenue"] and summary["costs"]:
         summary["balance"] = summary["revenue"] - summary["costs"]
+    _store_run_balance(run, summary["revenue"] - summary["costs"])
 
     # Apply organization tax if enabled
     summary["tax"] = 0
@@ -451,6 +452,20 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
         summary["tax"] = summary["revenue"] * tax_percentage / 100
 
     return summary, details
+
+
+def _store_run_balance(run: Run, balance: Decimal) -> None:
+    """Persist the run balance, used by the organization global balance once the run is concluded."""
+    if run.balance == balance:
+        return
+    run.balance = balance
+    Run.objects.filter(pk=run.pk).update(balance=balance)
+
+
+def refresh_concluded_run_balance(run: Run) -> None:
+    """Recompute the stored balance of a run when it is concluded."""
+    if run.development == DevelopStatus.DONE:
+        get_run_accounting(run, {})
 
 
 def check_accounting(association_id: int) -> None:

@@ -43,7 +43,11 @@ if TYPE_CHECKING:
 
 UI_SCALE = 1.25
 ACTION_TIMEOUT_MS = 30_000
-BROWSER_PREFERENCES = {"credentials_enable_service": False, "profile": {"password_manager_enabled": False}}
+BROWSER_PREFERENCES = {
+    "credentials_enable_service": False,
+    "profile": {"password_manager_enabled": False, "password_manager_leak_detection": False},
+    "browser": {"enable_spellchecking": False},
+}
 
 
 @pytest.fixture(autouse=True)

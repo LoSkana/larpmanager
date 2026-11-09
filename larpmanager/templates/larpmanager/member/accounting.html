@@ -75,24 +75,25 @@
                 {% trans "Total:" %} <b>{{ member.membership.credit }}{{ currency_symbol }}</b>.
                 {% if member.membership.credit > 0 %}
                     <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
-                    {% if 'refund' in association.features %}
-                        <br />
-                        {% url 'accounting_refund' as accounting_refund_url %}
-                        <p>
-                            {% blocktrans trimmed %}
-                                Would you like to request a reimbursement? <a href="{{ accounting_refund_url }}">Submit a new refund request</a>.
-                            {% endblocktrans %}
-                        </p>
-                        {% if refunds %}
-                            <b>{% trans "Requests open:" %} </b>
-                            {% for el in refunds %}
-                                {% include "elements/comma.html" %}
-                                {{ el.details }} ({{ el.value }})
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
                 {% endif %}
             </p>
+            {% if member.membership.credit > 0 and 'refund' in association.features %}
+                {% url 'accounting_refund' as accounting_refund_url %}
+                <p>
+                    {% blocktrans trimmed %}
+                        Would you like to request a reimbursement? <a href="{{ accounting_refund_url }}">Submit a new refund request</a>.
+                    {% endblocktrans %}
+                </p>
+                {% if refunds %}
+                    <p class="refund-requests">
+                        <b>{% trans "Requests open:" %}</b>
+                        {% for el in refunds %}
+                            {% include "elements/comma.html" %}
+                            {{ el.details }} ({{ el.value }})
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            {% endif %}
             <hr />
         {% endif %}
         {% if member.membership.tokens %}

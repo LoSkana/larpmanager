@@ -96,8 +96,9 @@ window.addEventListener('DOMContentLoaded', function() {
             $cell.attr('data-order', '1');
           }
 
-          // refresh DataTables
-          table.row($row).invalidate('dom').draw(false);
+          // refresh DataTables; skip the redraw while typing, as it would detach the focused field
+          const row = table.row($row).invalidate('dom');
+          if (!external) row.draw(false);
         }
 
         function clampQuantity($input) {
@@ -169,7 +170,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // enforce clamp on blur
         $(document).on('change blur', 'td.quantity input[type="number"]', function () {
           clampQuantity($(this));
-          table.draw(false);
         });
 
         $(document).on('click', 'td.selected', function () {

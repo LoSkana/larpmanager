@@ -1,6 +1,6 @@
 ---
 name: create-larpmanager-guide-video
-description: Use when creating, re-recording or fixing the videos embedded in the LarpManager Guides (larpmanager.com/guides/). Covers writing Playwright storyboards, rendering with music and text overlays, reviewing the output, and the pitfalls of recording this app.
+description: Use when creating, re-recording or fixing the videos embedded in the LarpManager Guides (larpmanager.com/guides/). Covers writing Playwright storyboards, rendering with music and text overlays, reviewing the output, writing the text and admin entry of a new guide, and the pitfalls of recording this app.
 ---
 
 # Creating LarpManager Guide Videos
@@ -19,6 +19,14 @@ Target: English only, 1080p, 90 to 120 seconds, based on the steps of the guide 
 | Writing | `/guide/writing/` | `64KylVvb6Zw` |
 | Casting | `/guide/assign/` | `YsFjWztbZOI` |
 | Payments | `/guide/payments/` | `2Ir2624xocg` |
+| Your first event | `/guide/first/` | Not uploaded yet |
+| Tickets and registration form | `/guide/tickets/` | Not uploaded yet |
+| Managing your event | `/guide/manage/` | Not uploaded yet |
+| Staff and roles | `/guide/roles/` | Not uploaded yet |
+| Membership | `/guide/membership/` | Not uploaded yet |
+| Event accounting | `/guide/accounting/` | Not uploaded yet |
+| Advanced registration | `/guide/advanced-registration/` | Not uploaded yet |
+| Payment plans and deadlines | `/guide/payment-plans/` | Not uploaded yet |
 
 Web fetch tools drop the iframes when converting pages to markdown: use `curl` and grep the raw HTML to check for videos.
 
@@ -53,7 +61,7 @@ Other sessions may be working in the same checkout. Run `ListAgents`, then `git 
 ./scripts/guide_video.sh campaign
 ```
 
-It takes about 3 minutes and needs `xvfb-run` and `ffmpeg`. Output goes to `.guide_videos/output/<slug>/`:
+It takes about 3 minutes and needs `xvfb-run` and `ffmpeg`. Run videos one at a time, because they share a database and the capture needs the CPU. To re-render all of them, loop over the slugs in a single background command, and keep a copy of each `guide.mp4` to compare durations. Output goes to `.guide_videos/output/<slug>/`:
 
 - `guide.mp4`, the video
 - `captions.srt`, for YouTube captions
@@ -92,6 +100,7 @@ def test_campaign_video(director):
 | `type(target, text)` | Text fields, one key at a time |
 | `fill(target, text)` | Fields already demonstrated earlier in the video, filled at once |
 | `select(target, value)` | Native `<select>` fields |
+| `upload(target, path)` | File inputs, as if picked from the file dialog |
 | `drag(source, target)` | Drag a handle onto a row, such as `td.reorder-handle`, with the cursor following |
 | `spotlight(target, seconds)` | Highlight a result without clicking |
 | `play_as(role, prepare)` | Multi-role guides only: full-screen role card and corner badge |
@@ -122,6 +131,12 @@ Data that is not the point of the guide can be created through the ORM, either b
 
 Deleting the "Test Larp" event makes the next one a true first event. That form hides the status and registration fields, and opens registrations automatically. Only the later events show those radios.
 
+`first_storyboard.py` starts with no organization at all. `/debug` off camera opens the LarpManager domain, and after the creation form `after_login` sets `debug_slug` and lands on the new `/manage/`, so no manual jump is needed. Its `prepare_organizer` removes the roles of the organizer and `prepare_landing` copies the texts, stats and demo cards of production, because the test database has none and the home page would show an empty hero and "0+" counters. Reuse them for any other video opening on the public pages.
+
+A new organization is in Lite Mode: features cannot be activated, and the sidebar shows only `LITE_PERMISSIONS`. The activation checklist has seven steps with the LarpManager skin, and activating advanced mode needs all of them. The Lite Mode banner (`#lite-mode`) links to the checklist, but it only appears once an event exists. The membership of a new organization has `compiled=False`, so update it after the creation form or registering redirects to the profile. Payment details also need removing after that form, once the association exists.
+
+Uploaded files must look real: `membership_storyboard.py` draws a signed request and a fictional ID card with Pillow into `.guide_videos/`. Saving events, runs and tickets with `.save()` instead of `.update()` keeps cached titles and prices in sync.
+
 Payments use the Wire method: no external account is needed, and it takes fake details. With a single active method the payment page opens directly on the transfer details, so there is no gateway choice to show. The way to pay starts from the due-payment banner on the event page.
 
 ### What cannot be shown
@@ -133,6 +148,12 @@ Without that flag, TinyMCE renders as a raw textarea in test settings, so filled
 `lmConfirm` popups (`data-confirm`) are skipped in test runs, so the "are you sure?" step of Upload and of casting Submit never appears on camera. Do not caption it.
 
 Character fields are under the "Sheet" sidebar entry. "Form" and `/manage/form/` are the registration form.
+
+The "Go" links of the checklist for event pages (tickets, form, characters, assignment) use `go_redirect_run`, which in dev and test always redirects to `/`. Only "Event creation", "Payment methods" and "First registration" work on camera: use the top bar pills and the sidebar for the others. Those links also go through `redr`, which lists events of every organization of the user, so a leftover role shows a "Please choose" page.
+
+The slug field is collapsed behind a preview. `#slug` still holds the computed value, so reading it works, but it is hidden: spotlight `.slug_pre`, and use `fill_slug` only if a test must change it.
+
+Status and registration radios are collapsed in the Event page behind "Show other options" (`.sl-show`), while the dashboard pencils (`quick-development/`, `quick-registration/`) open modals listing every option. Activating a feature that has settings lands on its configuration section, already open: clicking that section again is not needed. A second session adds a second event pill in the top bar, so match the pill with `exact=True`.
 
 Links on the "Feature activated" page open a new tab, which the script does not follow: reach settings through the sidebar. The new tab also triggers the "Other users are editing" warning.
 
@@ -207,13 +228,18 @@ Already handled in the code. Keep these fixes when changing it.
 | `Target has no visible box` right after a modal save | The list reloads after the modal closes, replacing the rows under an existing locator | Wait for the row just saved before touching any other row |
 | Payment fields already masked before typing | Saved details live in a `main/payment_settings/` file that outlives the database reset | The storyboard removes the file of its worker before login |
 | ffmpeg survives a failed run | Test fails before `stop()` | `abort()` in fixture teardown |
-| `get_by_label` finds nothing in forms | `elements/form/label.html` renders `<label>` without `for` | Custom fields: `[id^="id_que_"]`. Labels in order: `label[id^="lbl_id_"]` |
+| `get_by_label` finds nothing in forms | `elements/form/label.html` renders `<label>` without `for` | Custom fields: `input[id^="id_que_"]`, or the input of `tr` with the question name, because the bare prefix also matches the row. Labels in order: `label[id^="lbl_id_"]` |
 | Strict mode error on a list table | Fixed headers make DataTables clone it | `table.writing_list[id^="writing_list"]` |
 | Sidebar link not found | A badge joins the link name, such as "Payments 1" | Match the link with `re.compile(r"^Payments")` |
 | Second `iframe` or toggle not found | Plot roles repeat per character, with ids depending on database ids | Match by prefix and use `.nth(index)` |
 | White band and clipped page bottom | `#page-wrapper` scrolls inside a full-height `body`, so padding on `body` shrinks the visible page | Padding goes on `#wrapper` |
 | Hidden actions flash at a cut | Timeline alignment is only approximate | `CUT_MARGIN_SECONDS` keeps the page still around each cut |
 | Chrome suggests earlier values | Form history on repeated field names | `type` sets `autocomplete=off` on the field |
+| Red underlines on names and fake data | Chrome spellcheck | `enable_spellchecking` off in `BROWSER_PREFERENCES`, and `spellcheck=false` set by `type` and `fill` |
+| `spotlight` times out on `#page-wrapper` | Landing pages have no such element | `_box_within_content` returns the plain box there |
+| Spotlight on a sidebar link is a sliver at the content edge | Boxes are clamped to the content area | Targets entirely inside the sidebar skip the clamp |
+| Clicks stop reaching the page after a new user logs in | Chrome password leak detection opens a native bubble, invisible in screenshots, that swallows input ("banana" is a breached password) | `password_manager_leak_detection` off in `BROWSER_PREFERENCES` |
+| Strict mode error on `.run-card` | The calendar renders the list twice, for `.only_v22` and `.no_v22` | `.only_v22 .run-card` |
 
 Recording also finds real app bugs: treat an odd result as one until proven otherwise. Field reorder left forms stale for a day, and the organizer View page omitted factions; both were found on camera. If the fix belongs in the app, make it there, add a regression test that fails without it, and tell the user it is an app change.
 
@@ -231,4 +257,18 @@ Diagnose before fixing: confirm a cause on the raw files. For example, compare `
 
 Upload manually, with `description.txt` as the description and `captions.srt` as captions. Uploading is public, so the user does it or explicitly approves it.
 
-A new upload gets a new video ID. Update that guide's `LarpManagerGuide.video_id` in the admin; no migration is needed. Automating uploads needs the YouTube Data API, and unaudited API projects can only upload private videos.
+Every guide is an entry of `larpmanager/fixtures/guide.yaml`, loaded by `import_features` on every deploy (matched by `slug`), so the fixture is the source of truth: edits made in the production admin to its fields are overwritten. For each video, new or re-recorded, add or update its entry with the fields `slug`, `number`, `group`, `title`, `description`, `keywords`, `icon`, `published` and `text`:
+
+- `slug` is the public URL `/guide/<slug>/`: never rename it once published.
+- `description` is the short description, one sentence starting with "How to", shown in the guides list.
+- `keywords` is a comma separated list of 4-8 terms.
+- `icon` is only the Font Awesome name, such as `calculator`: the template adds `fa-solid fa-`.
+- `text` is the full description, as a YAML `|` block: an intro paragraph, `<hr>`, one `<h4>Step N &ndash; Title</h4>` plus a short paragraph per storyboard step, `<hr>`, then `<p><strong>Related resources</strong></p>` and a `<ul>` of `<li>Topic with <strong>key words</strong> (<a href="...">read here</a>)</li>`. Plain ASCII with HTML entities. Keep each step true to the final video, and keep one `<h4>` per `step()` of the storyboard.
+- Every management page named in the text is a scoped link, as in the tutorials: `<a href="https://larpmanager.com/redirect/event/manage/<path>/" target="_blank" rel="noopener"><strong>Event &gt; <Sidebar label></strong></a>` for event pages, `https://larpmanager.com/redirect/manage/<path>/` and `Organization &gt; <Sidebar label>` for organization pages, and `Event &gt; Configuration &gt; <Section>` (`.../config/<section>/`) for a configuration section. Never write a bare page name ("open Tickets", "in the Payments page", "the event Features"), and never point a page name to a tutorial: link tutorials on feature names or in Related resources. Labels and paths follow the link rules of the `write-larpmanager-tutorial` skill (sidebar label = `name` in `event_permission.yaml` / `association_permission.yaml`, path from `reverse()` of its `slug`). Pages players see (event menu, home page sidebar) and buttons or fields inside a page are not links.
+- Related resources must link both the tutorials (`/tutorials/<slug>/`) and the other guides (`/guide/<slug>/`, singular: `/guides/<slug>/` is a 404). Every guide must be linked by at least one other guide. Check each link with `curl` before finishing.
+- `number` sorts the guides page, and `group` is a heading on it: guides sharing a group are listed together, groups in order of first appearance. The groups are Getting started, Registrations, Accounting, Campaign, One-shot and Organization; renumber the following entries when inserting a guide.
+- `video_id` and `photo` are not in the fixture, and deploys never touch them: after the upload, the user sets the video ID (and the thumbnail as photo) in the admin. A re-recorded video gets a new video ID.
+
+Run `python manage.py import_features` and open `/guides/` and the guide page to check them.
+
+Automating uploads needs the YouTube Data API, and unaudited API projects can only upload private videos.

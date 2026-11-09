@@ -16,7 +16,7 @@ msgstr ""
 msgid "Expenses"
 msgstr ""
 
-msgid "Total of expenses submitted by collaborators and approved"
+msgid "Total of expenses submitted by collaborators"
 msgstr ""
 
 msgid "Outflows"
@@ -10012,11 +10012,6 @@ msgstr ""
 msgid "%(name)s form"
 msgstr ""
 
-msgid ""
-"Questions collect the information you need from participants when they "
-"register."
-msgstr ""
-
 msgid "Installments"
 msgstr ""
 
@@ -13245,6 +13240,12 @@ msgstr ""
 msgid "Registrations closed"
 msgstr ""
 
+msgid "This event has concluded"
+msgstr ""
+
+msgid "This event has been cancelled"
+msgstr ""
+
 msgid "Registrations for this event are currently closed"
 msgstr ""
 
@@ -13766,9 +13767,30 @@ msgid ""
 "feedback"
 msgstr ""
 
+msgid "Debrief questions collect the feedback of participants after the event."
+msgstr ""
+
 msgid ""
 "Manage the questions participants answer on the characters they would like "
 "to play"
+msgstr ""
+
+msgid ""
+"Matchmaker questions collect what participants would like to play, to help "
+"you assign characters."
+msgstr ""
+
+msgid "Manage the questions players answer when they send a signup request"
+msgstr ""
+
+msgid ""
+"Request questions collect the information you need to approve a player, "
+"before they can register."
+msgstr ""
+
+msgid ""
+"Questions collect the information you need from participants when they "
+"register."
 msgstr ""
 
 msgid "View balances and transfer history for this character inventory"
@@ -14306,12 +14328,6 @@ msgstr ""
 
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
-msgstr ""
-
-msgid "This event has concluded"
-msgstr ""
-
-msgid "This event has been cancelled"
 msgstr ""
 
 msgid "Your signup request has been submitted!"

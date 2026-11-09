@@ -387,7 +387,8 @@ def _rule_load(context: dict, csv_row: dict) -> str:
     if abilities_value:
         _assign_abilities(context, rule, logs, abilities_value)
 
-    return f"OK - Created {rule}" if was_created else f"OK - Updated {rule}"
+    status = f"OK - Created rule {number}" if was_created else f"OK - Updated rule {number}"
+    return _row_result(status, logs)
 
 
 def modifiers_load(context: dict, form: Form) -> list[str]:
@@ -444,7 +445,8 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     modifier.save()
     save_log(context, ModifierExp, modifier, operation_type=LogOperationType.UPLOAD)
 
-    return f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"
+    status = f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"
+    return _row_result(status, logs)
 
 
 def criterions_load(context: dict, form: Form) -> list[str]:

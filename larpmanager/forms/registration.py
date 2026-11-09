@@ -321,7 +321,7 @@ class RegistrationForm(BaseRegistrationForm):
 
                         # Add surcharge information to label if applicable
                         if registration_quota.surcharge > 0:
-                            label += f" ({registration_quota.surcharge}€)"
+                            label += f" ({registration_quota.surcharge}{self.params['currency_symbol']})"
                         quota_choices.append((registration_quota.quotas, label))
 
         # Set default quota option if no valid quotas were found
