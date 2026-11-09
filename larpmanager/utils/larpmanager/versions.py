@@ -17,6 +17,9 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
+from typing import Any
 
 VERSIONS = [
     {
@@ -57,3 +60,13 @@ VERSIONS = [
 ]
 
 LATEST_AVAILABLE_VERSION = max(v["number"] for v in VERSIONS if v["available"])
+
+
+def get_effective_version(member: Any, assoc_version: int) -> int:
+    """Return the interface version for a member: their override, clamped to [assoc_version, latest]."""
+    if member is None or assoc_version == LATEST_AVAILABLE_VERSION:
+        return assoc_version
+    member_version_str = member.get_config("interface_version")
+    if not member_version_str:
+        return assoc_version
+    return max(int(member_version_str), assoc_version)

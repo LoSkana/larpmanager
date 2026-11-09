@@ -32,7 +32,7 @@ from larpmanager.middleware.base import is_ajax
 from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
-from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.exceptions import (
     FeatureError,
     HiddenError,
@@ -93,13 +93,16 @@ class ExceptionHandlingMiddleware:
         # Define exception type to handler mappings for clean separation of concerns
         handlers = [
             # Permission-related errors - show appropriate error pages
-            (UserPermissionError, lambda _ex: render(request, "exception/permission.html")),
-            (NotFoundError, lambda _ex: render(request, "exception/notfound.html")),
-            (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
+            (UserPermissionError, lambda _ex: self._render_error(request, "exception/permission.html")),
+            (NotFoundError, lambda _ex: self._render_error(request, "exception/notfound.html")),
+            (
+                MembershipError,
+                lambda ex: self._render_error(request, "exception/membership.html", {"assocs": ex.assocs}),
+            ),
             # Run-related errors - show available runs for the current association
             (
                 UnknowRunError,
-                lambda _ex: render(
+                lambda _ex: self._render_error(
                     request,
                     "exception/runs.html",
                     {
@@ -173,6 +176,13 @@ class ExceptionHandlingMiddleware:
 
         # Return None for unhandled exceptions to use Django's default handling
         return None
+
+    @staticmethod
+    def _render_error(request: HttpRequest, template: str, extra: dict | None = None) -> HttpResponse:
+        """Render an error page with the base context, so the layout matches the interface version."""
+        context = get_optional_context(request)
+        context.update(extra or {})
+        return render(request, template, context)
 
     @staticmethod
     def _handle_redirect(request: HttpRequest, exception: RedirectError) -> HttpResponse:
