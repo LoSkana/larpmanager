@@ -79,6 +79,12 @@ class TestCspAggregation(BaseTestCase):
         assert not record_csp_report({"other": {}})
         assert not record_csp_report([])
         assert not record_csp_report(build_report(**{"source-file": "sandbox eval code"}))
+        assert not record_csp_report(build_report(**{"blocked-uri": "https://connect.facebook.net/en_US/pcm.js"}))
+        assert not record_csp_report(
+            build_report(**{"effective-directive": "font-src", "blocked-uri": "https://cdn.scite.ai/assets/a.woff2"})
+        )
+        assert not record_csp_report(build_report(**{"effective-directive": "frame-ancestors"}))
+        assert not record_csp_report(build_report(**{"source-file": "about", "document-uri": "about"}))
 
         assert pop_csp_reports() == []
 
