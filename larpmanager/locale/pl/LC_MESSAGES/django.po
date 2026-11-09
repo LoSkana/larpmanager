@@ -3735,6 +3735,9 @@ msgstr "Niedozwolona domena"
 msgid "Handout template"
 msgstr "Szablon handout"
 
+msgid "Hide past events"
+msgstr "Ukryj minione wydarzenia"
+
 msgid "Interval sending"
 msgstr "Wysyłanie interwałowe"
 
@@ -8520,6 +8523,11 @@ msgstr "Robię to regularnie i mam duże doświadczenie"
 msgid "If selected, add a field to track item quantities."
 msgstr "Jeśli zaznaczone, dodaj pole do śledzenia ilości przedmiotów."
 
+msgid "If selected, the link to past events is not shown."
+msgstr ""
+"Jeśli zaznaczysz tę opcję, link do minionych wydarzeń nie będzie "
+"wyświetlany."
+
 msgid "If selected, the location is shown for each event."
 msgstr ""
 "Jeśli zaznaczone, dla każdego wydarzenia wyświetlana jest lokalizacja."
@@ -9368,10 +9376,6 @@ msgstr "Wpisz swoją płeć prawną zgodną z dokumentami urzędowymi."
 
 msgid "Here are the sign up options with a limited number of spots."
 msgstr "Oto opcje zapisów z ograniczoną liczbą miejsc."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr ""
-"Jeśli zaznaczone, w kalendarzu wyświetlany jest link do minionych wydarzeń."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr ""

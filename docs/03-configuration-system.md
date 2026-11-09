@@ -58,7 +58,7 @@ Store organization-wide settings.
 - Calendar display options
 
 **Example configurations:**
-- `calendar_past_events` - Show past events in calendar
+- `calendar_hide_past_events` - Hide the past events link
 - `mail_cc` - Send carbon copy of emails
 - `require_birthdate` - Require birthdate for members
 

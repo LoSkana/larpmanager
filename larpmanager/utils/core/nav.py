@@ -562,7 +562,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
             )
         )
 
-    if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
+    if request.association.get("has_past_events") and not request.association.get("calendar_hide_past_events"):
         _append(
             items,
             _item(
@@ -572,7 +572,6 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 "",
                 active=active == "calendar_past",
                 home=True,
-                sidebar_gate=("past_events", allowed_sidebar),
             ),
         )
 

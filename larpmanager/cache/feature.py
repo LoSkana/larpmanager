@@ -78,7 +78,6 @@ def update_association_features(association_id: int) -> dict[str, int]:
             "genre",
             "show_event",
             "website",
-            "past_events",
             "description",
             "where",
             "authors",

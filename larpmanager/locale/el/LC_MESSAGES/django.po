@@ -3735,6 +3735,9 @@ msgstr "Απαγορευμένος τομέας"
 msgid "Handout template"
 msgstr "Πρότυπο Handout"
 
+msgid "Hide past events"
+msgstr "Απόκρυψη προηγούμενων εκδηλώσεων"
+
 msgid "Interval sending"
 msgstr "Διάστημα αποστολής"
 
@@ -8534,6 +8537,11 @@ msgid "If selected, add a field to track item quantities."
 msgstr ""
 "Αν επιλεγεί, προσθέτει πεδίο για την παρακολούθηση ποσοτήτων αντικειμένων."
 
+msgid "If selected, the link to past events is not shown."
+msgstr ""
+"Αν το επιλέξεις, ο σύνδεσμος για τις προηγούμενες εκδηλώσεις δεν θα "
+"εμφανίζεται."
+
 msgid "If selected, the location is shown for each event."
 msgstr "Αν επιλεγεί, εμφανίζεται η τοποθεσία για κάθε εκδήλωση."
 
@@ -9442,11 +9450,6 @@ msgstr "Εισήγαγε το νόμιμο φύλο σου όπως εμφανί
 
 msgid "Here are the sign up options with a limited number of spots."
 msgstr "Εδώ είναι οι επιλογές εγγραφής με περιορισμένο αριθμό θέσεων."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr ""
-"Αν επιλεγεί, εμφανίζεται στο ημερολόγιο σύνδεσμος προς προηγούμενες "
-"εκδηλώσεις."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Αν θέλεις αντίθετα να μεταφορτώσεις νέα σάρωση της αίτησής σου"

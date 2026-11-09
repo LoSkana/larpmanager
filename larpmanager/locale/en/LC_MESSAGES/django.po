@@ -374,10 +374,10 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Past events"
+msgid "Hide past events"
 msgstr ""
 
-msgid "If selected, a link to past events is shown in the calendar."
+msgid "If selected, the link to past events is not shown."
 msgstr ""
 
 msgid "Characters shortcut"
@@ -8136,6 +8136,9 @@ msgid "upcoming events"
 msgstr ""
 
 msgid "Next events"
+msgstr ""
+
+msgid "Past events"
 msgstr ""
 
 msgid "Tell me more"

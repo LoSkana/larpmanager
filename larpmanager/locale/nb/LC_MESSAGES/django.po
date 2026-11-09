@@ -3735,6 +3735,9 @@ msgstr "Forbudt domene"
 msgid "Handout template"
 msgstr "Handout-mal"
 
+msgid "Hide past events"
+msgstr "Skjul tidligere arrangementer"
+
 msgid "Interval sending"
 msgstr "Intervallsending"
 
@@ -8517,6 +8520,9 @@ msgstr "Jeg gjør det regelmessig og har betydelig erfaring"
 msgid "If selected, add a field to track item quantities."
 msgstr "Hvis valgt, legg til et felt for å spore antall varer."
 
+msgid "If selected, the link to past events is not shown."
+msgstr "Hvis valgt, vises ikke lenken til tidligere arrangementer."
+
 msgid "If selected, the location is shown for each event."
 msgstr "Hvis valgt, vises stedet for hvert arrangement."
 
@@ -9340,9 +9346,6 @@ msgstr "Angi ditt juridiske kjønn slik det står i offisielle dokumenter."
 
 msgid "Here are the sign up options with a limited number of spots."
 msgstr "Her er påmeldingsalternativene med et begrenset antall plasser."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr "Hvis valgt, vises en lenke til tidligere arrangementer i kalenderen."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Hvis du ønsker å laste opp en ny skanning av søknaden din i stedet"

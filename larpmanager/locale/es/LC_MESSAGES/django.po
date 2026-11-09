@@ -3735,6 +3735,9 @@ msgstr "Dominio prohibido"
 msgid "Handout template"
 msgstr "Plantilla de handout"
 
+msgid "Hide past events"
+msgstr "Ocultar eventos pasados"
+
 msgid "Interval sending"
 msgstr "Envío a intervalos"
 
@@ -8529,6 +8532,9 @@ msgid "If selected, add a field to track item quantities."
 msgstr ""
 "Si se selecciona, añade un campo para controlar las cantidades de artículos."
 
+msgid "If selected, the link to past events is not shown."
+msgstr "Si lo seleccionas, no se muestra el enlace a los eventos pasados."
+
 msgid "If selected, the location is shown for each event."
 msgstr "Si se selecciona, se muestra la ubicación de cada evento."
 
@@ -9404,10 +9410,6 @@ msgstr ""
 msgid "Here are the sign up options with a limited number of spots."
 msgstr ""
 "Estas son las opciones de inscripción con un número limitado de plazas."
-
-msgid "If selected, a link to past events is shown in the calendar."
-msgstr ""
-"Si se selecciona, se muestra un enlace a eventos pasados en el calendario."
 
 msgid "If you wish to upload a new scan of your application instead"
 msgstr "Si deseas subir un nuevo escaneo de tu solicitud en su lugar"

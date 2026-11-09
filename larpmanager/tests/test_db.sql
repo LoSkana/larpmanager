@@ -5185,6 +5185,7 @@ INSERT INTO public.django_migrations VALUES (262, 'socialaccount', '0006_alter_s
 INSERT INTO public.django_migrations VALUES (263, 'larpmanager', '0198_association_timezone', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (264, 'larpmanager', '0199_larpmanagerguide_group_video_id', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (265, 'larpmanager', '0200_ability_creation_only_exclusiveexp', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (266, 'larpmanager', '0201_remove_calendar_past_events_config', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Orga', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1', NULL, 'Europe/Rome');
 
@@ -5656,7 +5657,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 265, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 266, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilitypx_characters_id_seq', 1, false);
 
@@ -10305,4 +10306,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0200_ability_creation_only_exclusiveexp
+-- LARPMANAGER_SCHEMA_VERSION: 0201_remove_calendar_past_events_config
