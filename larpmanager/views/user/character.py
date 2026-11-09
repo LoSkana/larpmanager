@@ -108,6 +108,7 @@ from larpmanager.utils.services.experience import (
     build_exp_avail_by_system_from_addit,
     build_exp_context,
     calculate_character_experience_points,
+    get_ability_exclusive_labels,
     get_available_ability_exp,
     get_character_calls,
     get_current_ability_exp,
@@ -1104,6 +1105,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
 
     # Build available abilities dictionary organized by ability type
     multiple_systems = len(context["exp_systems_data"]) > 1
+    exclusive_labels = get_ability_exclusive_labels(context["event"].id, exp_context[0])
     context["available"] = {}
     for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
         if ability.typ is None:
@@ -1117,6 +1119,8 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             "descr": ability.get_description or "",
             "prereqs": [p.name for p in ability.prerequisites.all()],
             "system": ability.system.name if multiple_systems else "",
+            "creation_only": ability.creation_only,
+            "exclusives": exclusive_labels.get(ability.id, []),
         }
 
     # Build current character abilities organized by type name

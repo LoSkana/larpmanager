@@ -32,7 +32,7 @@ from django.db.models import Prefetch, Q
 from django.utils.html import escape, strip_tags
 
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
-from larpmanager.cache.experience import get_event_exp_calls, get_event_exp_systems
+from larpmanager.cache.experience import get_event_exp_calls, get_event_exp_exclusives, get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.rels import get_character_faction_ids_cached
 from larpmanager.models.event import Event
@@ -52,7 +52,14 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.writing import Character, CharacterConfig, Faction, get_event_class_parent, get_event_elements
+from larpmanager.models.writing import (
+    Character,
+    CharacterConfig,
+    CharacterStatus,
+    Faction,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.core.guard import experience_recalc_deferred, is_experience_recalc_deferred
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -262,6 +269,11 @@ def _get_available_abilities(
     qs = get_event_elements(char.event_id, AbilityExp).exclude(pk__in=current_character_abilities)
     if visible_only:
         qs = qs.filter(visible=True, system__hidden=False)
+    if is_creation_closed(char):
+        qs = qs.exclude(creation_only=True)
+    exclusive_blocked = get_exclusive_blocked_abilities(char.event_id, current_character_abilities)
+    if exclusive_blocked:
+        qs = qs.exclude(pk__in=exclusive_blocked)
     all_abilities = (
         qs.select_related("typ", "system")
         .order_by("name")
@@ -287,6 +299,41 @@ def _get_available_abilities(
         available_abilities.append(ability)
 
     return available_abilities
+
+
+def is_creation_closed(character: Character) -> bool:
+    """Return whether creation-only abilities are closed for a character, approved under the review process."""
+    if character.status != CharacterStatus.APPROVED:
+        return False
+    if "user_character" not in get_event_features(character.event_id):
+        return False
+    return bool(get_event_config(character.event_id, "user_character_approval"))
+
+
+def get_exclusive_blocked_abilities(event_id: int, character_ability_ids: set[int]) -> set[int]:
+    """Return the ids of abilities blocked because their exclusive group already reached its maximum."""
+    if not get_event_config(event_id, "exp_exclusives"):
+        return set()
+
+    blocked_ids: set[int] = set()
+    for exclusive in get_event_exp_exclusives(event_id):
+        if len(exclusive["abilities"] & character_ability_ids) >= exclusive["max"]:
+            blocked_ids |= exclusive["abilities"] - character_ability_ids
+    return blocked_ids
+
+
+def get_ability_exclusive_labels(event_id: int, character_ability_ids: set[int]) -> dict[int, list[str]]:
+    """Return, for each ability in an exclusive group, the group labels with owned and maximum count."""
+    if not get_event_config(event_id, "exp_exclusives"):
+        return {}
+
+    labels: dict[int, list[str]] = defaultdict(list)
+    for exclusive in get_event_exp_exclusives(event_id):
+        owned_count = len(exclusive["abilities"] & character_ability_ids)
+        label = f"{exclusive['name']} ({owned_count}/{exclusive['max']})"
+        for ability_id in exclusive["abilities"]:
+            labels[ability_id].append(label)
+    return labels
 
 
 def get_free_abilities(char: Character) -> list:
@@ -648,6 +695,11 @@ def _handle_free_abilities(
         visible_only=False,
     ):
         if ability.cost == 0 and ability.id not in free_ability_ids and (ability.visible or ability.system.hidden):
+            # Abilities granted in this same loop may have filled an exclusive group
+            if newly_added_ids and ability.id in get_exclusive_blocked_abilities(
+                character.event_id, current_character_abilities | newly_added_ids
+            ):
+                continue
             character.exp_ability_list.add(ability)
             free_ability_ids.append(ability.id)
             newly_added_ids.add(ability.id)

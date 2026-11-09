@@ -1645,6 +1645,14 @@ msgid ""
 "uppercase in the description of the known abilities."
 msgstr ""
 
+msgid "Exclusive groups"
+msgstr ""
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+
 msgid "Auto buy"
 msgstr ""
 
@@ -2342,6 +2350,20 @@ msgstr ""
 msgid ""
 "Manage the game calls; participants see the calls written in uppercase in "
 "the description of their abilities"
+msgstr ""
+
+msgid "Exclusive group"
+msgstr ""
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+
+msgid "Select at least two abilities."
+msgstr ""
+
+msgid "The maximum must be lower than the number of abilities in the group."
 msgstr ""
 
 msgid "Rule"
@@ -4426,6 +4448,14 @@ msgid ""
 "Enter whether the ability is visible to users, and can be freely purchased"
 msgstr ""
 
+msgid "Creation only"
+msgstr ""
+
+msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+
 msgid "Pre-requisites"
 msgstr ""
 
@@ -4489,6 +4519,15 @@ msgstr ""
 msgid ""
 "If you select one (or more) factions, this criterion applies only to "
 "characters belonging to all of them"
+msgstr ""
+
+msgid "The abilities belonging to this exclusive group"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum number of abilities of this group a character can obtain"
 msgstr ""
 
 msgid "Single choice"
@@ -5697,6 +5736,12 @@ msgstr ""
 msgid "Requirements:"
 msgstr ""
 
+msgid "Exclusive group:"
+msgstr ""
+
+msgid "Available only until the character is approved"
+msgstr ""
+
 msgid "Confirm"
 msgstr ""
 
@@ -6130,9 +6175,6 @@ msgid "Do you confirm?"
 msgstr ""
 
 msgid "Add option"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 msgid "Assigned automatically when the participant cannot answer the question"
@@ -9845,6 +9887,11 @@ msgid ""
 "experience points."
 msgstr ""
 
+msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+
 msgid "New cost"
 msgstr ""
 
@@ -10360,6 +10407,11 @@ msgstr ""
 msgid ""
 "Note that existing calls with the same name, will be overwritten with the "
 "uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
 msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
@@ -12245,6 +12297,11 @@ msgstr ""
 msgid "Manage the game calls participants must remember"
 msgstr ""
 
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -12682,6 +12739,11 @@ msgstr ""
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 
+msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+
 msgid "The criterion's number (unique identifier)"
 msgstr ""
 
@@ -12740,6 +12802,15 @@ msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr ""
 
 msgid "(Optional) The call's description"
+msgstr ""
+
+msgid "The exclusive group's name"
+msgstr ""
+
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr ""
+
+msgid "Names of the abilities in the group, comma-separated"
 msgstr ""
 
 msgid "The ability type's name"

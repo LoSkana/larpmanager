@@ -28,6 +28,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
 )
@@ -52,6 +53,11 @@ def _visible_cell(element: Any) -> str:
     return "true" if element.visible else "false"
 
 
+def _creation_only_cell(element: Any) -> str:
+    """Return the creation only flag of an ability as the lowercase text the upload accepts."""
+    return "true" if element.creation_only else "false"
+
+
 def export_abilities(context: Any) -> Any:
     """Export abilities data for an event.
 
@@ -63,7 +69,7 @@ def export_abilities(context: Any) -> Any:
               where keys are column headers and values are ability data rows
 
     """
-    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements", "visible"]
+    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements", "visible", "creation_only"]
     multiple_systems = _add_system_header(context, column_headers)
 
     ability_queryset = (
@@ -82,6 +88,7 @@ def export_abilities(context: Any) -> Any:
             ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
             ", ".join([req.name for req in ability.requirements.all()]),
             _visible_cell(ability),
+            _creation_only_cell(ability),
         ]
         if multiple_systems:
             row_data.append(_system_cell(ability))
@@ -108,6 +115,23 @@ def export_calls(context: Any) -> Any:
     call_rows = [[call.name, call.descr] for call in call_queryset]
 
     return [("calls", column_headers, call_rows)]
+
+
+def export_exclusives(context: Any) -> Any:
+    """Export exclusive groups data for an event."""
+    column_headers = ["name", "max", "abilities"]
+
+    exclusive_queryset = (
+        get_event_elements(context["event"].id, ExclusiveExp, context=context)
+        .order_by("order")
+        .prefetch_related("abilities")
+    )
+    exclusive_rows = [
+        [exclusive.name, exclusive.max_count, ", ".join(ability.name for ability in exclusive.abilities.all())]
+        for exclusive in exclusive_queryset
+    ]
+
+    return [("exclusives", column_headers, exclusive_rows)]
 
 
 def export_criterions(context: Any) -> Any:

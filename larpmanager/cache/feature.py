@@ -155,6 +155,7 @@ def update_event_features(event_id: int) -> dict[str, int]:
             "exp_systems",
             "exp_criterions",
             "exp_calls",
+            "exp_exclusives",
         ]:
             if get_event_config(event_id, feature_slug, context=context):
                 features_dict[feature_slug] = 1

@@ -20,6 +20,7 @@
 
 from typing import ClassVar
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -122,6 +123,12 @@ class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
     visible = models.BooleanField(
         default=True,
         help_text=_("Enter whether the ability is visible to users, and can be freely purchased"),
+    )
+
+    creation_only = models.BooleanField(
+        default=False,
+        verbose_name=_("Creation only"),
+        help_text=_("If checked, participants can obtain this ability only while their character is not yet approved"),
     )
 
     prerequisites = models.ManyToManyField(
@@ -373,3 +380,40 @@ class CallExp(UuidMixin, OrderMixin, BaseConceptModel):
                 name="unique_call_without_optional",
             ),
         ]
+
+
+class ExclusiveExp(UuidMixin, OrderMixin, BaseConceptModel):
+    """Group of abilities of which a character can obtain only a limited number."""
+
+    abilities = models.ManyToManyField(
+        AbilityExp,
+        related_name="exclusives",
+        blank=True,
+        verbose_name=_("Abilities"),
+        help_text=_("The abilities belonging to this exclusive group"),
+    )
+
+    max_count = models.PositiveIntegerField(
+        default=1,
+        validators=[MinValueValidator(1)],
+        verbose_name=_("Maximum"),
+        help_text=_("Maximum number of abilities of this group a character can obtain"),
+    )
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_exclusive_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_exclusive_without_optional",
+            ),
+        ]
+
+    def display(self) -> str:
+        """Return display name with maximum."""
+        return f"{self.name} ({self.max_count})"

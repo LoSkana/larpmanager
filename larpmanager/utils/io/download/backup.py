@@ -34,6 +34,7 @@ from larpmanager.utils.io.download.experience import (
     export_character_configs,
     export_criterions,
     export_deliveries,
+    export_exclusives,
     export_modifiers,
     export_rules,
 )
@@ -133,6 +134,7 @@ def prepare_backup(context: dict) -> HttpResponse:
         export_files.extend(export_modifiers(context))
         export_files.extend(export_criterions(context))
         export_files.extend(export_calls(context))
+        export_files.extend(export_exclusives(context))
 
     # Export quest builder data if feature is enabled
     if "questbuilder" in context["features"]:

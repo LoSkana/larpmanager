@@ -2780,6 +2780,9 @@ msgstr "Kontakt e-post"
 msgid "Contributors:"
 msgstr "Medarbeidere:"
 
+msgid "Creation only"
+msgstr "Kun ved oppretting"
+
 msgid "Daily Summary"
 msgstr "Daglig sammendrag"
 
@@ -3408,6 +3411,9 @@ msgstr "Rediger medlemskap"
 msgid "Event not found"
 msgstr "Arrangementet ble ikke funnet"
 
+msgid "Exclusive group"
+msgstr "Eksklusiv gruppe"
+
 msgid "External access"
 msgstr "Ekstern tilgang"
 
@@ -3707,6 +3713,12 @@ msgstr "Arrangementsnavigasjon"
 
 msgid "Event organizers"
 msgstr "Arrangører"
+
+msgid "Exclusive group:"
+msgstr "Eksklusiv gruppe:"
+
+msgid "Exclusive groups"
+msgstr "Eksklusive grupper"
 
 msgid "Expected revenue"
 msgstr "Forventede inntekter"
@@ -5774,6 +5786,9 @@ msgstr "Kort navn - internasjonalt"
 msgid "The collection is growing!"
 msgstr "Innsamlingen vokser!"
 
+msgid "The exclusive group's name"
+msgstr "Navnet på den eksklusive gruppen"
+
 msgid "The name of the competence"
 msgstr "Navnet på kompetansen"
 
@@ -6282,6 +6297,9 @@ msgstr "Oppdaterte registreringsinnstillinger!"
 
 msgid "Registrations on external link"
 msgstr "Registreringer på ekstern lenke"
+
+msgid "Select at least two abilities."
+msgstr "Velg minst to evner."
 
 msgid "Set up the taxes configuration"
 msgstr "Sett opp skattekonfigurasjonen"
@@ -8063,6 +8081,9 @@ msgstr "Er du sikker på at du vil godkjenne dette elementet?"
 msgid "Assign a character to a registered participant"
 msgstr "Tilordne en karakter til en registrert deltaker"
 
+msgid "Available only until the character is approved"
+msgstr "Kun tilgjengelig til karakteren er godkjent"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Kansellering på grunn av manglende årlig medlemsavgift"
 
@@ -8234,6 +8255,9 @@ msgstr "Midlertidig token som brukes til tilbakestilling av passord"
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Tekst som vises i begynnelsen av alle karakterarkene"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "Evnene som hører til denne eksklusive gruppen"
 
 msgid "The name of the question this option belongs to"
 msgstr "Navnet på spørsmålet dette alternativet hører til"
@@ -8653,6 +8677,9 @@ msgstr "Initialiser plattformen ved å opprette ditt første arrangement"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Administrerer faste avdragsbetalinger for påmeldinger"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Navnene på evnene i gruppen, kommaseparert"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Ingen av deltakerne har fylt ut Matchmaker-skjemaet ennå."
@@ -9623,6 +9650,9 @@ msgstr ""
 "Administrer stabens utgifter basert på kvitteringer lastet opp for alle "
 "arrangementer"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr "Maksimalt antall evner fra gruppen en karakter kan få"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr "Maksimalt antall karakterer spilleren kan opprette (standard=1)."
 
@@ -9721,6 +9751,9 @@ msgid "Manage questions asked during workshop activities for this event"
 msgstr ""
 "Administrer spørsmålene som stilles under workshopaktivitetene i forbindelse"
 " med dette arrangementet"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr "Maksimalt antall evner fra denne gruppen en karakter kan få"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr "Medlemskontingent finnes allerede for denne brukeren og dette året."
@@ -10130,6 +10163,9 @@ msgstr "Antall dager som spilleren må betale neste avdrag innen"
 msgid "Participants can now create refund requests, and you can review them"
 msgstr ""
 "Deltakerne kan nå opprette refusjonsforespørsler, og du kan gjennomgå dem"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr "Maksimum må være lavere enn antall evner i gruppen."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr ""
@@ -11591,6 +11627,13 @@ msgstr ""
 " dele bilder fra dette arrangementet."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Ingen eksklusive grupper er definert ennå. Bruk knappen over for å opprette "
+"den første gruppen."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -12088,6 +12131,12 @@ msgid ""
 msgstr ""
 "Administrer de tilpassede spørsmålene deltakerne må svare på når de melder "
 "seg på dette arrangementet"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Administrer grupper av evner der en karakter bare kan få et maksimalt antall"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -13189,6 +13238,13 @@ msgstr ""
 "betale for påmeldingen din"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Hvis avkrysset, kan deltakere bare få denne evnen mens karakteren deres ennå"
+" ikke er godkjent"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13485,6 +13541,13 @@ msgstr ""
 "ugyldige eller asymmetriske relasjoner"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Valgfritt) Om evnen bare kan fås før karakteren er godkjent: true eller "
+"false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13526,6 +13589,13 @@ msgid ""
 msgstr ""
 "Her kan du definere seksjoner i registreringsskjemaet og gruppere spørsmål "
 "for å gjøre lange skjemaer mer oversiktlige"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Merk at eksisterende eksklusive grupper med samme navn vil bli overskrevet "
+"med de opplastede dataene."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13590,6 +13660,13 @@ msgid ""
 msgstr ""
 "Hvis aktivert, skjules alternativer som ikke lenger er tilgjengelige i "
 "skjemaet, i stedet for å vises som deaktivert."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Hvis aktivert, kan du definere grupper av evner der en karakter bare kan få "
+"et maksimalt antall"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -14824,6 +14901,13 @@ msgid ""
 msgstr ""
 "Fyll ut de offentlige metadataene som brukes til å markedsføre dette "
 "arrangementet eksternt, inkludert språk, type, ramme, sted og stil"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Administrer grupper av evner der en karakter bare kan få et maksimalt "
+"antall; staben kan alltid tildele hvilken som helst evne"
 
 #, python-format
 msgid ""

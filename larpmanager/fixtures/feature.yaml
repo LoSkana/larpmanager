@@ -1705,3 +1705,16 @@
     hidden: true
     module: miscellany
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Experience Exclusive groups
+    descr: Pseudo-feature activated by exp_exclusives configuration
+    slug: exp_exclusives
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []

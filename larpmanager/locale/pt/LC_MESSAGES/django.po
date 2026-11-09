@@ -2780,6 +2780,9 @@ msgstr "E-mail de contacto"
 msgid "Contributors:"
 msgstr "Contribuintes:"
 
+msgid "Creation only"
+msgstr "Apenas na criação"
+
 msgid "Daily Summary"
 msgstr "Resumo diário"
 
@@ -3408,6 +3411,9 @@ msgstr "Editar adesão"
 msgid "Event not found"
 msgstr "Evento não encontrado"
 
+msgid "Exclusive group"
+msgstr "Grupo exclusivo"
+
 msgid "External access"
 msgstr "Acesso externo"
 
@@ -3707,6 +3713,12 @@ msgstr "Navegação do evento"
 
 msgid "Event organizers"
 msgstr "Organizadores do evento"
+
+msgid "Exclusive group:"
+msgstr "Grupo exclusivo:"
+
+msgid "Exclusive groups"
+msgstr "Grupos exclusivos"
 
 msgid "Expected revenue"
 msgstr "Receita esperada"
@@ -5774,6 +5786,9 @@ msgstr "Nome curto - internacional"
 msgid "The collection is growing!"
 msgstr "A coleta está a crescer!"
 
+msgid "The exclusive group's name"
+msgstr "O nome do grupo exclusivo"
+
 msgid "The name of the competence"
 msgstr "O nome da competência"
 
@@ -6282,6 +6297,9 @@ msgstr "Definições de inscrição atualizadas!"
 
 msgid "Registrations on external link"
 msgstr "Inscrições através de ligação externa"
+
+msgid "Select at least two abilities."
+msgstr "Selecione pelo menos duas habilidades."
 
 msgid "Set up the taxes configuration"
 msgstr "Configura os impostos"
@@ -8062,6 +8080,9 @@ msgstr "Tens a certeza de que queres aprovar este elemento?"
 msgid "Assign a character to a registered participant"
 msgstr "Atribui uma personagem a um participante inscrito"
 
+msgid "Available only until the character is approved"
+msgstr "Disponível apenas até o personagem ser aprovado"
+
 msgid "Cancellation for missing yearly membership fee"
 msgstr "Cancelamento por falta de quota anual de adesão"
 
@@ -8234,6 +8255,9 @@ msgstr "Token temporário usado no processo de redefinição da palavra-passe"
 
 msgid "Text shown at the start of all character sheets"
 msgstr "Texto apresentado no início de todas as fichas de personagem"
+
+msgid "The abilities belonging to this exclusive group"
+msgstr "As habilidades que pertencem a este grupo exclusivo"
 
 msgid "The name of the question this option belongs to"
 msgstr "O nome da pergunta a que esta opção pertence"
@@ -8660,6 +8684,9 @@ msgstr "Inicializa a plataforma criando o teu primeiro evento"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Gere pagamentos fixos em prestações para inscrições"
+
+msgid "Names of the abilities in the group, comma-separated"
+msgstr "Nomes das habilidades do grupo, separados por vírgula"
 
 msgid "No participant has answered the matchmaker form yet."
 msgstr "Ainda nenhum participante respondeu ao formulário do Matchmaker."
@@ -9631,6 +9658,9 @@ msgstr ""
 "Gerir despesas da equipa com base nos recibos carregados para todos os "
 "eventos"
 
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr "Número máximo de habilidades do grupo que um personagem pode obter"
+
 msgid "Maximum number of characters the player can create (default=1)."
 msgstr ""
 "Número máximo de personagens que o jogador pode criar (predefinição=1)."
@@ -9729,6 +9759,9 @@ msgstr ""
 
 msgid "Manage questions asked during workshop activities for this event"
 msgstr "Gerir perguntas feitas durante as atividades de workshop deste evento"
+
+msgid "Maximum number of abilities of this group a character can obtain"
+msgstr "Número máximo de habilidades deste grupo que um personagem pode obter"
 
 msgid "Membership fee already existing for this user and for this year."
 msgstr "Já existe uma quota associativa para este utilizador e para este ano."
@@ -10159,6 +10192,9 @@ msgstr ""
 msgid "Participants can now create refund requests, and you can review them"
 msgstr ""
 "Os participantes podem agora criar pedidos de reembolso, e tu podes revê-los"
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr "O máximo deve ser menor que o número de habilidades do grupo."
 
 msgid "This access link has already been used and cannot be accessed again."
 msgstr ""
@@ -11697,6 +11733,13 @@ msgstr ""
 " fotos deste evento."
 
 msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+"Nenhum grupo exclusivo definido ainda. Use o botão acima para criar o "
+"primeiro grupo."
+
+msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
@@ -12195,6 +12238,13 @@ msgid ""
 msgstr ""
 "Gerir as perguntas personalizadas a que os participantes devem responder ao "
 "inscrever-se neste evento"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+"Gerencie os grupos de habilidades dos quais um personagem pode obter apenas "
+"um número máximo"
 
 msgid ""
 "Minimum number of days before the event for which it is made available (0  ="
@@ -13298,6 +13348,13 @@ msgstr ""
 "pagar a tua inscrição"
 
 msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+"Se marcado, os participantes podem obter esta habilidade apenas enquanto o "
+"personagem ainda não estiver aprovado"
+
+msgid ""
 "If enabled allows participants to enter public information on their "
 "characters, visible to all."
 msgstr ""
@@ -13593,6 +13650,13 @@ msgstr ""
 "relações em falta, inválidas ou assimétricas"
 
 msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+"(Opcional) Se a habilidade pode ser obtida apenas antes de o personagem ser "
+"aprovado: true ou false"
+
+msgid ""
 "Allows you to configure a custom external mail server that will be used "
 "instead of the standard one"
 msgstr ""
@@ -13634,6 +13698,13 @@ msgid ""
 msgstr ""
 "Permite-te definir secções no formulário de inscrição, agrupando perguntas "
 "para tornar formulários longos mais claros"
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Observe que os grupos exclusivos existentes com o mesmo nome serão "
+"substituídos pelos dados enviados."
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
@@ -13698,6 +13769,13 @@ msgid ""
 msgstr ""
 "Se ativado, as opções que já não estão disponíveis no formulário são "
 "ocultadas, em vez de serem apresentadas desativadas."
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+"Se ativado, você pode definir grupos de habilidades dos quais um personagem "
+"pode obter apenas um número máximo"
 
 msgid ""
 "Manage the volunteer registry: view, add, and edit volunteer records, and "
@@ -14934,6 +15012,13 @@ msgid ""
 msgstr ""
 "Preenche os metadados públicos usados para promover este evento "
 "externamente, incluindo idioma, tipo, cenário, local e estilo"
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+"Gerencie os grupos de habilidades dos quais um personagem pode obter apenas "
+"um número máximo; a staff sempre pode atribuir qualquer habilidade"
 
 #, python-format
 msgid ""

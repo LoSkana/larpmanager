@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db.models import Prefetch
 
 from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
@@ -36,6 +37,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -117,6 +119,48 @@ def get_event_exp_calls(event_id: int) -> list[dict[str, str]]:
 def clear_event_exp_calls_cache(event_id: int) -> None:
     """Clear cached experience calls list for the event the calls are inherited from."""
     cache.delete(get_event_exp_calls_key(get_event_class_parent(event_id, CallExp)))
+
+
+def get_event_exp_exclusives_key(event_id: int) -> str:
+    """Generate cache key for event experience exclusive groups list."""
+    return f"event__exp_exclusives__{event_id}"
+
+
+def get_event_exp_exclusives(event_id: int) -> list[dict[str, Any]]:
+    """Get the exclusive groups of an event as dicts with name, max and ability ids set, using cache."""
+    effective_event_id = get_event_class_parent(event_id, ExclusiveExp)
+    cache_key = get_event_exp_exclusives_key(effective_event_id)
+    exclusives = cache.get(cache_key)
+    if exclusives is None:
+        exclusives = [
+            {
+                "name": exclusive.name,
+                "max": exclusive.max_count,
+                "abilities": {ability.id for ability in exclusive.abilities.all()},
+            }
+            for exclusive in get_event_elements(event_id, ExclusiveExp)
+            .order_by("order")
+            .prefetch_related(Prefetch("abilities", queryset=AbilityExp.objects.only("id")))
+        ]
+        cache.set(cache_key, exclusives, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return exclusives
+
+
+def clear_event_exp_exclusives_cache(event_id: int) -> None:
+    """Clear cached exclusive groups list for the event the groups are inherited from."""
+    cache.delete(get_event_exp_exclusives_key(get_event_class_parent(event_id, ExclusiveExp)))
+
+
+def on_exclusive_abilities_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: Any,
+    action: str,
+    **kwargs: Any,  # noqa: ARG001
+) -> None:
+    """Clear exclusive groups cache when the abilities of a group change."""
+    if action in ("post_add", "post_remove", "post_clear"):
+        # Instance is the group or, on reverse changes, the ability: both belong to the same event
+        clear_event_exp_exclusives_cache(instance.event_id)
 
 
 def get_event_exp_key(event_id: int) -> str:
