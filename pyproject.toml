@@ -25,7 +25,7 @@ dependencies = [
   "diff-match-patch==20241021",
   "django==6.1.2",
   "django-allauth==65.21.0",
-  "django-axes==8.3.1",
+  "django-axes==9.0.0",
   "django-otp==1.7.5",
   "qrcode[pil]==8.2",
   "django-clone==5.5.0",
