@@ -54,6 +54,15 @@ CSP_IGNORED_SCHEMES = ("chrome-extension", "moz-extension", "safari-extension", 
 # Placeholder source files Firefox reports for code run by extensions rather than by the page
 CSP_IGNORED_SOURCES = ("sandbox eval code",)
 
+# Resources injected by in-app browsers (Facebook/Instagram) or extensions (Scite), not by the page
+CSP_IGNORED_BLOCKED = ("https://connect.facebook.net/en_US/pcm.js", "https://cdn.scite.ai/")
+
+# Framing by third-party sites: blocked by design, nothing to fix
+CSP_IGNORED_DIRECTIVES = ("frame-ancestors",)
+
+# Blank frames created by third-party scripts, whose inline code cannot carry the page nonce
+CSP_IGNORED_DOCUMENT_SCHEMES = ("about",)
+
 
 def _strip_query(url: str) -> str:
     """Drop querystring and fragment from a URL, so tokens never end up in the digest."""
@@ -81,11 +90,17 @@ def record_csp_report(payload: Any) -> bool:
     blocked = _strip_query(_field(report, "blocked-uri")) or _field(report, "blocked-uri")
     source = _strip_query(_field(report, "source-file"))
     line = _field(report, "line-number")
+    document = _strip_query(_field(report, "document-uri"))
 
     is_extension = source in CSP_IGNORED_SOURCES or any(
         value.startswith(CSP_IGNORED_SCHEMES) for value in (blocked, source)
     )
-    if not directive or is_extension:
+    is_noise = (
+        directive in CSP_IGNORED_DIRECTIVES
+        or blocked.startswith(CSP_IGNORED_BLOCKED)
+        or any(value.startswith(CSP_IGNORED_DOCUMENT_SCHEMES) for value in (source, document))
+    )
+    if not directive or is_extension or is_noise:
         return False
 
     signature = hashlib.md5(f"{directive}|{blocked}|{source}|{line}".encode(), usedforsecurity=False).hexdigest()
@@ -102,7 +117,7 @@ def record_csp_report(payload: Any) -> bool:
             "blocked": blocked,
             "source": source,
             "line": line,
-            "document": _strip_query(_field(report, "document-uri")),
+            "document": document,
         }
         cache.set(CSP_INDEX_KEY, index, CSP_REPORT_TIMEOUT)
 
