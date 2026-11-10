@@ -3176,6 +3176,9 @@ msgstr "Hanki taito"
 msgid "One-time token"
 msgstr "Kertakäyttöinen tunniste"
 
+msgid "Open the guide"
+msgstr "Avaa opas"
+
 msgid "Organizer edit"
 msgstr "Järjestäjän muokkaus"
 
@@ -3611,6 +3614,9 @@ msgstr "PÄIVITETÄÄN"
 
 msgid "Warehouse items"
 msgstr "Varastotuotteet"
+
+msgid "Watch the guide"
+msgstr "Katso opas"
 
 msgid "Will be deleted"
 msgstr "Poistetaan"
@@ -11479,6 +11485,13 @@ msgid ""
 msgstr ""
 "Korvaushakemuksesi, jonka summa on %(amount).2f ja joka koskee '%(reason)s',"
 " on hyväksytty."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Lyhyt video näyttää jokaisen vaiheen ensimmäisestä tapahtumastasi "
+"ensimmäiseen osallistujaasi"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

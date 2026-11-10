@@ -14,6 +14,7 @@
 {% trans "Open this menu to search, ask a question, read the tutorials, or replay this tour" as help_sugg %}
 {% trans "An organization hosts your events, and each event can have one or more sessions. Participants register for a session by choosing a ticket." as concepts_intro %}
 {% trans "Here is a quick tour of the dashboard" as overview_intro %}
+{% trans "A short video shows every step, from your first event to your first participant" as first_guide_intro %}
 <script src="{% static 'node_modules/driver.js/dist/driver.js.iife.js' %}"
         defer></script>
 <script nonce="{{ csp_nonce }}">
@@ -105,6 +106,15 @@ window.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    function firstGuideStep() {
+        return {
+          popover: {
+            title: '{% filter escapejs %}{% trans "Watch the guide" %}{% endfilter %}',
+            description: '{{ first_guide_intro | escapejs }} <a href="{% url 'guide' 'first' %}" class="driver-guide-link" target="_blank" rel="noopener"><i class="fa-solid fa-circle-play"></i> {% filter escapejs %}{% trans "Open the guide" %}{% endfilter %}</a>'
+          }
+        };
+    }
+
     function driverWelcome() {
         const driver = window.driver.js.driver;
 
@@ -115,7 +125,8 @@ window.addEventListener('DOMContentLoaded', function() {
               description: '{{ welcome_intro | escapejs }}'
             }
           },
-          conceptsStep()
+          conceptsStep(),
+          firstGuideStep()
         ];
 
         steps.push({

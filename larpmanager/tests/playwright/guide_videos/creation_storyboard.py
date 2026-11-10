@@ -46,7 +46,7 @@ from larpmanager.tests.utils import get_modal_iframe, login_orga, login_user, ne
 
 pytestmark = pytest.mark.e2e
 
-TITLE = "Character Creation"
+TITLE = "Character creation"
 PACE = 0.7
 
 EVENT = "Vaelmoor: The Sundering"

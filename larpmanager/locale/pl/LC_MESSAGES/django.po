@@ -3176,6 +3176,9 @@ msgstr "Uzyskaj zdolność"
 msgid "One-time token"
 msgstr "Jednorazowy token"
 
+msgid "Open the guide"
+msgstr "Otwórz przewodnik"
+
 msgid "Organizer edit"
 msgstr "Edycja przez organizatora"
 
@@ -3611,6 +3614,9 @@ msgstr "ZOSTANIE ZAKTUALIZOWANY"
 
 msgid "Warehouse items"
 msgstr "Pozycje magazynowe"
+
+msgid "Watch the guide"
+msgstr "Obejrzyj przewodnik"
 
 msgid "Will be deleted"
 msgstr "Zostanie usunięte"
@@ -11531,6 +11537,13 @@ msgid ""
 msgstr ""
 "Twój wniosek o zwrot kwoty %(amount).2f z powodu „%(reason)s” został "
 "zatwierdzony."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Krótki film pokazuje każdy krok, od pierwszego wydarzenia do pierwszego "
+"uczestnika"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

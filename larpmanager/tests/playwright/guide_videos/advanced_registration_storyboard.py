@@ -56,7 +56,7 @@ if TYPE_CHECKING:
 
 pytestmark = pytest.mark.e2e
 
-TITLE = "Advanced registration"
+TITLE = "Secret links, discounts and waiting list"
 PACE = 0.55
 
 ORGANIZATION = "Vaelmoor Chronicle"

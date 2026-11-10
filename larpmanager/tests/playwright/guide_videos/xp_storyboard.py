@@ -50,7 +50,7 @@ if TYPE_CHECKING:
 
 pytestmark = pytest.mark.e2e
 
-TITLE = "Character Progression"
+TITLE = "Character progression"
 PACE = 0.65
 
 EVENT = "Vaelmoor: The Sundering"

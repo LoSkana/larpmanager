@@ -3176,6 +3176,9 @@ msgstr "Fähigkeit erwerben"
 msgid "One-time token"
 msgstr "Einmal-Token"
 
+msgid "Open the guide"
+msgstr "Öffne die Anleitung"
+
 msgid "Organizer edit"
 msgstr "Bearbeitung durch Orga"
 
@@ -3611,6 +3614,9 @@ msgstr "WIRD AKTUALISIERT"
 
 msgid "Warehouse items"
 msgstr "Lagerartikel"
+
+msgid "Watch the guide"
+msgstr "Sieh dir die Anleitung an"
 
 msgid "Will be deleted"
 msgstr "Wird gelöscht"
@@ -11812,6 +11818,13 @@ msgid ""
 "approved."
 msgstr ""
 "Dein Erstattungsantrag über %(amount).2f für „%(reason)s“ wurde genehmigt."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Ein kurzes Video zeigt dir jeden Schritt, von deinem ersten Event bis zu "
+"deinem ersten Teilnehmer"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

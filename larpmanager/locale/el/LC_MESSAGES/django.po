@@ -3176,6 +3176,9 @@ msgstr "Απόκτηση ικανότητας"
 msgid "One-time token"
 msgstr "Token μίας χρήσης"
 
+msgid "Open the guide"
+msgstr "Άνοιξε τον οδηγό"
+
 msgid "Organizer edit"
 msgstr "Επεξεργασία από διοργανωτή"
 
@@ -3611,6 +3614,9 @@ msgstr "ΘΑ ΕΝΗΜΕΡΩΘΕΙ"
 
 msgid "Warehouse items"
 msgstr "Είδη αποθήκης"
+
+msgid "Watch the guide"
+msgstr "Δες τον οδηγό"
 
 msgid "Will be deleted"
 msgstr "Θα διαγραφεί"
@@ -11790,6 +11796,13 @@ msgid ""
 msgstr ""
 "Το αίτημά σου για επιστροφή χρημάτων %(amount).2f για «%(reason)s» έχει "
 "εγκριθεί."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Ένα σύντομο βίντεο σου δείχνει κάθε βήμα, από την πρώτη σου εκδήλωση μέχρι "
+"τον πρώτο σου συμμετέχοντα"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

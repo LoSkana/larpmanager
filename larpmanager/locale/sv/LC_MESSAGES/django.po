@@ -3176,6 +3176,9 @@ msgstr "Förvärva färdighet"
 msgid "One-time token"
 msgstr "Engångstoken"
 
+msgid "Open the guide"
+msgstr "Öppna guiden"
+
 msgid "Organizer edit"
 msgstr "Arrangörsredigering"
 
@@ -3611,6 +3614,9 @@ msgstr "KOMMER ATT UPPDATERAS"
 
 msgid "Warehouse items"
 msgstr "Lagervaror"
+
+msgid "Watch the guide"
+msgstr "Titta på guiden"
 
 msgid "Will be deleted"
 msgstr "Kommer att raderas"
@@ -11446,6 +11452,13 @@ msgid ""
 "approved."
 msgstr ""
 "Din ansökan om återbetalning på %(amount).2f för ”%(reason)s” har godkänts."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"En kort video visar varje steg, från ditt första event till din första "
+"deltagare"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

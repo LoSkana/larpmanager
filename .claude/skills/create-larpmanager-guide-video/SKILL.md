@@ -13,10 +13,10 @@ Target: English only, 1080p, 90 to 120 seconds, based on the steps of the guide 
 
 | Guide | URL | Current YouTube ID |
 |---|---|---|
-| Character Creation | `/guide/creation/` | `HVRTtRkw8AQ` |
-| Character Progression | `/guide/xp/` | `ixpT7TS1VQQ` |
-| Setup Campaigns | `/guide/campaign/` | `x5_30USosXo` |
-| Writing | `/guide/writing/` | `64KylVvb6Zw` |
+| Character creation | `/guide/creation/` | `HVRTtRkw8AQ` |
+| Character progression | `/guide/xp/` | `ixpT7TS1VQQ` |
+| Campaigns | `/guide/campaign/` | `x5_30USosXo` |
+| Character fields, factions and plots | `/guide/writing/` | `64KylVvb6Zw` |
 | Casting | `/guide/assign/` | `YsFjWztbZOI` |
 | Payments | `/guide/payments/` | `2Ir2624xocg` |
 | Your first event | `/guide/first/` | Not uploaded yet |
@@ -25,7 +25,7 @@ Target: English only, 1080p, 90 to 120 seconds, based on the steps of the guide 
 | Staff and roles | `/guide/roles/` | Not uploaded yet |
 | Membership | `/guide/membership/` | Not uploaded yet |
 | Event accounting | `/guide/accounting/` | Not uploaded yet |
-| Advanced registration | `/guide/advanced-registration/` | Not uploaded yet |
+| Secret links, discounts and waiting list | `/guide/advanced-registration/` | Not uploaded yet |
 | Payment plans and deadlines | `/guide/payment-plans/` | Not uploaded yet |
 
 Web fetch tools drop the iframes when converting pages to markdown: use `curl` and grep the raw HTML to check for videos.
@@ -74,7 +74,7 @@ It takes about 3 minutes and needs `xvfb-run` and `ffmpeg`. Run videos one at a 
 Read the guide text and walk the real UI first. A temporary scout storyboard saving `page.screenshot()` at each page is the quickest way to find what each screen actually does. Delete it afterwards.
 
 ```python
-TITLE = "Setup Campaigns"
+TITLE = "Campaigns"
 
 def test_campaign_video(director):
     page = director.page

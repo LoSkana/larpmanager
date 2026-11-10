@@ -3176,6 +3176,9 @@ msgstr "Získat dovednost"
 msgid "One-time token"
 msgstr "Jednorázový žeton"
 
+msgid "Open the guide"
+msgstr "Otevři průvodce"
+
 msgid "Organizer edit"
 msgstr "Úprava organizátorem"
 
@@ -3611,6 +3614,9 @@ msgstr "BUDE AKTUALIZOVÁN"
 
 msgid "Warehouse items"
 msgstr "Skladové položky"
+
+msgid "Watch the guide"
+msgstr "Podívej se na průvodce"
 
 msgid "Will be deleted"
 msgstr "Bude smazáno"
@@ -11304,6 +11310,12 @@ msgid ""
 msgstr ""
 "Tvoje žádost o proplacení částky %(amount).2f z důvodu „%(reason)s“ byla "
 "schválena."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Krátké video ti ukáže každý krok, od první akce až po prvního účastníka"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "
