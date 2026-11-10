@@ -128,3 +128,55 @@ class TestEventRoleApprovalEmail(BaseTestCase):
         content = EmailContent.objects.get(subj__contains=event.name)
         assert content.run_id is None
         assert content.association_id == association.id
+
+
+class TestFirstRoleEmail(BaseTestCase):
+    """Tests for the welcome mail sent to members receiving their first staff role."""
+
+    first_role_subject = "Welcome to the staff"
+
+    def _staff_association(self):
+        """Return the association, making sure it has a staff member besides the new one."""
+        association = self.get_association()
+        staff_role = AssociationRole.objects.create(association=association, number=8, name="Helper")
+        staff_role.members.add(self.get_member())
+        EmailContent.objects.all().delete()
+        return association
+
+    def test_first_event_role_sends_guide_links(self):
+        """A member without roles receives the welcome mail with the guide links."""
+        self._staff_association()
+        role = EventRole.objects.create(event=self.get_event(), number=7, name="Staff")
+        member = self.create_member(self.create_user(username="newstaff", email="newstaff@example.org"))
+        with override("en"):
+            role.members.add(member)
+
+        content = EmailContent.objects.get(subj__contains=self.first_role_subject)
+        assert "https://larpmanager.com/guide/first/" in content.body
+        assert "https://larpmanager.com/guides/" in content.body
+
+    def test_second_role_sends_no_welcome(self):
+        """A member who already holds a role in the association gets no welcome mail."""
+        association = self._staff_association()
+        member = self.create_member(self.create_user(username="newstaff", email="newstaff@example.org"))
+        previous_role = EventRole.objects.create(event=self.get_event(), number=7, name="Staff")
+        previous_role.members.add(member)
+        role = AssociationRole.objects.create(association=association, number=9, name="Treasurer")
+        EmailContent.objects.all().delete()
+        with override("en"):
+            role.members.add(member)
+
+        assert not EmailContent.objects.filter(subj__contains=self.first_role_subject).exists()
+
+    def test_sole_staff_member_gets_no_welcome(self):
+        """The only staff member of an association (its creator) gets no welcome mail."""
+        association = self.get_association()
+        AssociationRole.members.through.objects.filter(associationrole__association=association).delete()
+        EventRole.members.through.objects.filter(eventrole__event__association=association).delete()
+        role = AssociationRole.objects.create(association=association, number=9, name="Treasurer")
+        member = self.get_member()
+        EmailContent.objects.all().delete()
+        with override("en"):
+            role.members.add(member)
+
+        assert not EmailContent.objects.filter(subj__contains=self.first_role_subject).exists()
