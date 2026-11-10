@@ -44,6 +44,7 @@ LOGO_WIDTH = 280
 LOGO_TOP = 0.13
 TITLE_TOP = 0.54
 SUBTITLE_TOP = 0.72
+INTRO_SUBTITLE_TOP = 0.78
 FONT = "Lato"
 MUSIC_FADE_IN = 1.0
 MUSIC_FADE_OUT = 3.0
@@ -73,6 +74,8 @@ Style: role_player,{FONT},30,&H00FFFFFF,&H00FFFFFF,&H10005AA8,&H00000000,-1,0,0,
 Style: role_collaborator,{FONT},30,&H00FFFFFF,&H00FFFFFF,&H103A6B2F,&H00000000,-1,0,0,0,100,100,0,0,3,12,0,3,40,40,44,1
 Style: title,{FONT},112,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,5,120,120,0,1
 Style: subtitle,{FONT},56,&H00D8E8EE,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,120,120,0,1
+Style: intro_title,{FONT},146,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,5,120,120,0,1
+Style: intro_subtitle,{FONT},73,&H00D8E8EE,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,120,120,0,1
 Style: recap_title,{FONT},64,&H00D8E8EE,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,0,0,4,120,120,0,1
 Style: recap,{FONT},54,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,4,120,120,0,1
 
@@ -203,10 +206,10 @@ def write_captions(output_dir: Path, timeline: dict, captions: list[dict]) -> No
     lead = lead_seconds(timeline)
     total = lead + body_duration(timeline) + OUTRO_SECONDS
     events = [
-        f"Dialogue: 0,{ass_time(0.2)},{ass_time(INTRO_SECONDS)},title,,0,0,0,,"
+        f"Dialogue: 0,{ass_time(0.2)},{ass_time(INTRO_SECONDS)},intro_title,,0,0,0,,"
         f"{{\\fad(300,300)\\pos({WIDTH / 2},{HEIGHT * TITLE_TOP})}}{timeline['title']}",
-        f"Dialogue: 0,{ass_time(0.6)},{ass_time(INTRO_SECONDS)},subtitle,,0,0,0,,"
-        f"{{\\fad(300,300)\\pos({WIDTH / 2},{HEIGHT * SUBTITLE_TOP})}}LarpManager Guide",
+        f"Dialogue: 0,{ass_time(0.6)},{ass_time(INTRO_SECONDS)},intro_subtitle,,0,0,0,,"
+        f"{{\\fad(300,300)\\pos({WIDTH / 2},{HEIGHT * INTRO_SUBTITLE_TOP})}}LarpManager Guide",
         f"Dialogue: 0,{ass_time(total - OUTRO_SECONDS + 0.2)},{ass_time(total)},title,,0,0,0,,"
         f"{{\\fad(300,0)\\pos({WIDTH / 2},{HEIGHT * TITLE_TOP})}}larpmanager.com",
         f"Dialogue: 0,{ass_time(total - OUTRO_SECONDS + 0.6)},{ass_time(total)},subtitle,,0,0,0,,"

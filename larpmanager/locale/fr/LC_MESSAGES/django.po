@@ -3176,6 +3176,9 @@ msgstr "Acquérir une compétence"
 msgid "One-time token"
 msgstr "Jeton unique"
 
+msgid "Open the guide"
+msgstr "Ouvre le guide"
+
 msgid "Organizer edit"
 msgstr "Modification par l'organisateur"
 
@@ -3611,6 +3614,9 @@ msgstr "SERA MIS À JOUR"
 
 msgid "Warehouse items"
 msgstr "Articles d'entrepôt"
+
+msgid "Watch the guide"
+msgstr "Regarde le guide"
 
 msgid "Will be deleted"
 msgstr "Sera supprimé"
@@ -11782,6 +11788,13 @@ msgid ""
 msgstr ""
 "Ta demande de remboursement de %(amount).2f pour « %(reason)s » a été "
 "acceptée."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Une courte vidéo te montre chaque étape, de ton premier événement à ton "
+"premier participant"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

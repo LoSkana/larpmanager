@@ -247,6 +247,12 @@
   font-size: 22px !important;
 }
 
+.my-driverjs .driver-guide-link {
+  display: block;
+  margin-top: 0.8em;
+  font-weight: bold;
+}
+
 @media (max-width: 840px) {
   .my-driverjs {
     max-width: 80vw;

@@ -3176,6 +3176,9 @@ msgstr "Obter habilidade"
 msgid "One-time token"
 msgstr "Token de utilização única"
 
+msgid "Open the guide"
+msgstr "Abre o guia"
+
 msgid "Organizer edit"
 msgstr "Edição pelo organizador"
 
@@ -3611,6 +3614,9 @@ msgstr "SERÁ ATUALIZADO"
 
 msgid "Warehouse items"
 msgstr "Itens de armazém"
+
+msgid "Watch the guide"
+msgstr "Vê o guia"
 
 msgid "Will be deleted"
 msgstr "Será excluído"
@@ -11556,6 +11562,13 @@ msgid ""
 "approved."
 msgstr ""
 "O teu pedido de reembolso de %(amount).2f por «%(reason)s» foi aprovado."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Um vídeo curto mostra cada passo, do teu primeiro evento ao teu primeiro "
+"participante"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

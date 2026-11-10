@@ -45,7 +45,7 @@ if TYPE_CHECKING:
 
 pytestmark = pytest.mark.e2e
 
-TITLE = "Writing"
+TITLE = "Character fields, factions and plots"
 PACE = 0.7
 RICH_TEXT = True
 

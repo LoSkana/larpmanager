@@ -42,7 +42,7 @@ from larpmanager.tests.utils import login_orga, login_user
 
 pytestmark = pytest.mark.e2e
 
-TITLE = "Setup Campaigns"
+TITLE = "Campaigns"
 
 FIRST_EVENT = "Vaelmoor: The Sundering"
 SECOND_EVENT = "Vaelmoor: The Last Vigil"

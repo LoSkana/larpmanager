@@ -5823,6 +5823,11 @@ msgstr ""
 msgid "Here is a quick tour of the dashboard"
 msgstr ""
 
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+
 msgid "Workspace selector"
 msgstr ""
 
@@ -5842,6 +5847,12 @@ msgid "How it is organized"
 msgstr ""
 
 msgid "Read the key concepts"
+msgstr ""
+
+msgid "Watch the guide"
+msgstr ""
+
+msgid "Open the guide"
 msgstr ""
 
 msgid "Welcome to"

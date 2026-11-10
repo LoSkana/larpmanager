@@ -3176,6 +3176,9 @@ msgstr "Vaardigheid verwerven"
 msgid "One-time token"
 msgstr "Eenmalig token"
 
+msgid "Open the guide"
+msgstr "Open de gids"
+
 msgid "Organizer edit"
 msgstr "Bewerken door organisator"
 
@@ -3611,6 +3614,9 @@ msgstr "ZAL WORDEN BIJGEWERKT"
 
 msgid "Warehouse items"
 msgstr "Magazijnartikelen"
+
+msgid "Watch the guide"
+msgstr "Bekijk de gids"
 
 msgid "Will be deleted"
 msgstr "Wordt verwijderd"
@@ -11680,6 +11686,13 @@ msgid ""
 msgstr ""
 "Je verzoek om terugbetaling van %(amount).2f voor '%(reason)s' is "
 "goedgekeurd."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"Een korte video laat je elke stap zien, van je eerste evenement tot je "
+"eerste deelnemer"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "

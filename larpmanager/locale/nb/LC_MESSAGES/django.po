@@ -3176,6 +3176,9 @@ msgstr "Tilegn deg en ferdighet"
 msgid "One-time token"
 msgstr "Engangstoken"
 
+msgid "Open the guide"
+msgstr "Åpne guiden"
+
 msgid "Organizer edit"
 msgstr "Redigering av arrangør"
 
@@ -3611,6 +3614,9 @@ msgstr "VIL BLI OPPDATERT"
 
 msgid "Warehouse items"
 msgstr "Lagervarer"
+
+msgid "Watch the guide"
+msgstr "Se guiden"
 
 msgid "Will be deleted"
 msgstr "Blir slettet"
@@ -11453,6 +11459,13 @@ msgid ""
 "Your reimbursement request of %(amount).2f for '%(reason)s' has been "
 "approved."
 msgstr "Din refusjonssøknad på %(amount).2f for «%(reason)s» er godkjent."
+
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+"En kort video viser hvert steg, fra ditt første arrangement til din første "
+"deltaker"
 
 msgid ""
 "Browse the edit history of this writing element and compare version "
