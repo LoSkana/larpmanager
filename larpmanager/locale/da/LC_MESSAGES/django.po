@@ -7946,6 +7946,9 @@ msgstr "Organisationen, som denne oversættelse tilhører"
 msgid "This page lets you add or edit a pool label."
 msgstr "Denne side lader dig tilføje eller redigere en Pool-etiket."
 
+msgid "Total of expenses submitted by collaborators"
+msgstr "Samlede udgifter indsendt af samarbejdspartnere"
+
 msgid "Unrecognized files in ZIP (will be skipped):"
 msgstr "Ikke-genkendte filer i ZIP-filen (springes over):"
 
@@ -9106,9 +9109,6 @@ msgstr "Dette fjerner dig fra denne organisations nyhedsbrev."
 msgid "To stop receiving them, please cancel your registrations."
 msgstr "For at stoppe med at modtage dem skal du annullere dine tilmeldinger."
 
-msgid "Total of expenses submitted by collaborators and approved"
-msgstr "Samlet beløb for udgifter indsendt af samarbejdspartnere og godkendt"
-
 #, python-format
 msgid "Total registration fee: <b>%(amount).2f %(currency)s</b>."
 msgstr "Samlet tilmeldingsgebyr: <b>%(amount).2f %(currency)s</b>."
@@ -10001,6 +10001,11 @@ msgstr ""
 "Administrer udgående lagerbevægelser, der ikke er en del af "
 "eventforberedelsen"
 
+msgid "Manage the questions players answer when they send a signup request"
+msgstr ""
+"Administrer de spørgsmål, spillerne besvarer, når de sender en "
+"tilmeldingsanmodning"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimumsbeløb af nettooverskuddet, der skal tilbageholdes til foreningsskat"
@@ -10295,6 +10300,10 @@ msgstr ""
 msgid ""
 "Day of the year from which the membership year begins, in DD-MM format."
 msgstr "Årets dag, hvor medlemsåret begynder, i DD-MM-format."
+
+msgid ""
+"Debrief questions collect the feedback of participants after the event."
+msgstr "Debrief-spørgsmål indsamler deltagernes feedback efter eventet."
 
 msgid ""
 "Do you want to manage user help requests directly through the platform?"
@@ -13397,11 +13406,25 @@ msgstr ""
 " de indsamlede beløb"
 
 msgid ""
+"Matchmaker questions collect what participants would like to play, to help "
+"you assign characters."
+msgstr ""
+"Matchmaker-spørgsmål indsamler, hvad deltagerne gerne vil spille, så du "
+"lettere kan tildele karakterer."
+
+msgid ""
 "No external item movements have been created yet. Use the button above to "
 "assign warehouse items."
 msgstr ""
 "Der er endnu ikke oprettet eksterne varebevægelser. Brug knappen ovenfor til"
 " at tildele lagervarer."
+
+msgid ""
+"Request questions collect the information you need to approve a player, "
+"before they can register."
+msgstr ""
+"Anmodningsspørgsmål indsamler de oplysninger, du skal bruge for at godkende "
+"en spiller, før vedkommende kan tilmelde sig."
 
 #, python-format
 msgid ""

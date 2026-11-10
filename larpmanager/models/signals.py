@@ -30,6 +30,7 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from safedelete.signals import post_softdelete, pre_softdelete
 
+from larpmanager.accounting.balance import refresh_concluded_run_balance
 from larpmanager.accounting.base import (
     handle_accounting_item_collection_post_save,
     handle_accounting_item_payment_pre_save,
@@ -1714,6 +1715,10 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     # Schedule publication for this run's event
     publish_event(instance.event_id)
+
+    # Store the final balance once the run is concluded
+    if not kwargs.get("raw"):
+        refresh_concluded_run_balance(instance)
 
 
 @receiver(post_save, sender=RunConfig)

@@ -7949,6 +7949,9 @@ msgid "This page lets you add or edit a pool label."
 msgstr ""
 "Auf dieser Seite kannst du eine Pool-Bezeichnung hinzufügen oder bearbeiten."
 
+msgid "Total of expenses submitted by collaborators"
+msgstr "Summe der von Mitarbeitenden eingereichten Ausgaben"
+
 msgid "Unrecognized files in ZIP (will be skipped):"
 msgstr "Nicht erkannte Dateien im ZIP (werden übersprungen):"
 
@@ -9172,9 +9175,6 @@ msgstr "Damit wirst du vom Newsletter dieser Organisation abgemeldet."
 msgid "To stop receiving them, please cancel your registrations."
 msgstr "Um sie nicht mehr zu erhalten, storniere bitte deine Anmeldungen."
 
-msgid "Total of expenses submitted by collaborators and approved"
-msgstr "Summe der von den Mitarbeitern eingereichten und genehmigten Ausgaben"
-
 #, python-format
 msgid "Total registration fee: <b>%(amount).2f %(currency)s</b>."
 msgstr "Gesamtanmeldegebühr: <b>%(amount).2f %(currency)s</b>."
@@ -10262,6 +10262,11 @@ msgstr ""
 "Ausgehende Bestandsbewegungen verwalten, die von der "
 "Veranstaltungsvorbereitung ausgeschlossen sind"
 
+msgid "Manage the questions players answer when they send a signup request"
+msgstr ""
+"Verwalte die Fragen, die Spieler beantworten, wenn sie eine Anmeldeanfrage "
+"senden"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Mindestbetrag des Reingewinns, der für die Vereinssteuer einbehalten werden "
@@ -10622,6 +10627,12 @@ msgid ""
 "Day of the year from which the membership year begins, in DD-MM format."
 msgstr ""
 "Tag des Jahres, an dem das Mitgliedschaftsjahr beginnt, im Format TT-MM."
+
+msgid ""
+"Debrief questions collect the feedback of participants after the event."
+msgstr ""
+"Mit Debrief-Fragen sammelst du nach dem Event das Feedback der "
+"Teilnehmenden."
 
 msgid ""
 "Do you want to manage user help requests directly through the platform?"
@@ -13851,11 +13862,25 @@ msgstr ""
 "zuweist und die gespendeten Beträge nachverfolgst"
 
 msgid ""
+"Matchmaker questions collect what participants would like to play, to help "
+"you assign characters."
+msgstr ""
+"Mit Matchmaker-Fragen erfährst du, was die Teilnehmenden gerne spielen "
+"möchten, damit du die Charaktere leichter zuweisen kannst."
+
+msgid ""
 "No external item movements have been created yet. Use the button above to "
 "assign warehouse items."
 msgstr ""
 "Es wurden noch keine externen Warenbewegungen angelegt. Nutze die "
 "Schaltfläche oben, um Lagerartikel zuzuordnen."
+
+msgid ""
+"Request questions collect the information you need to approve a player, "
+"before they can register."
+msgstr ""
+"Mit Anfragefragen sammelst du die Informationen, die du brauchst, um einen "
+"Spieler freizugeben, bevor er sich anmelden kann."
 
 #, python-format
 msgid ""

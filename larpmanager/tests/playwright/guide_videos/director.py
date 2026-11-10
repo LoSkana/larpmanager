@@ -58,9 +58,13 @@ ROLE_CARD_FADE_SECONDS = 0.4
 
 ORGANIZER = "organizer"
 PLAYER = "player"
+COLLABORATOR = "collaborator"
+STAFF = "staff"
 ROLE_CARDS = {
     ORGANIZER: ("You are the organizer", "Set up events from the admin side", "#12303c"),
     PLAYER: ("Now you are a player", "See what participants do on the site", "#a85a00"),
+    COLLABORATOR: ("Now you are a collaborator", "Join the staff from the invite", "#2f6b3a"),
+    STAFF: ("Now you are a staff member", "Report what you spent for the event", "#5a3d7a"),
 }
 
 # Drawn in the page because a headless-style capture has no system pointer
@@ -397,10 +401,23 @@ class Director:
         )
         time.sleep(seconds)
 
+    def hover(self, target: Locator, seconds: float) -> None:
+        """Rest the cursor on an element, triggering its hover effects such as tooltips."""
+        self._point_at(target)
+        target.hover()
+        time.sleep(seconds)
+
     def _box_within_content(self, target: Locator) -> dict[str, float]:
         """Return the box of the target, kept clear of the sidebar and of the window edge."""
         box = target.bounding_box()
-        content = self.page.locator("#page-wrapper").bounding_box()
+        wrapper = self.page.locator("#page-wrapper")
+        # Landing pages have no sidebar to keep clear of
+        if not wrapper.count():
+            return box
+        content = wrapper.bounding_box()
+        # Targets inside the sidebar keep their own box
+        if box["x"] + box["width"] <= content["x"]:
+            return box
         left = max(box["x"], content["x"] + HIGHLIGHT_LEFT_MARGIN_PIXELS)
         right = min(box["x"] + box["width"], content["x"] + content["width"] - HIGHLIGHT_RIGHT_MARGIN_PIXELS)
         return {**box, "x": left, "width": right - left}
@@ -412,6 +429,14 @@ class Director:
         target.check()
         self._wait(AFTER_CLICK_SECONDS)
 
+    def upload(self, target: Locator, path: Path) -> None:
+        """Move to a file input and attach a file, as if picked from the file dialog."""
+        self._point_at(target)
+        self._pulse()
+        self._wait(CLICK_LEAD_SECONDS)
+        target.set_input_files(str(path))
+        self._wait(AFTER_CLICK_SECONDS)
+
     def select(self, target: Locator, value: str) -> None:
         """Move to a native select and choose a value."""
         self._point_at(target)
@@ -421,6 +446,7 @@ class Director:
 
     def fill(self, target: Locator, text: str) -> None:
         """Fill a field at once, for details already shown earlier in the video."""
+        target.evaluate("(element) => { element.spellcheck = false; }")
         target.fill(text)
         self._wait(0.15)
 
@@ -428,7 +454,7 @@ class Director:
         """Move to a field and type into it, one key at a time."""
         self._point_at(target)
         self._pulse()
-        target.evaluate("(element) => element.setAttribute('autocomplete', 'off')")
+        target.evaluate("(element) => { element.setAttribute('autocomplete', 'off'); element.spellcheck = false; }")
         target.click()
         target.fill("")
         target.press_sequentially(text, delay=TYPING_DELAY_MS)

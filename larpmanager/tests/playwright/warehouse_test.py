@@ -29,7 +29,15 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.cache.config import save_single_config
-from larpmanager.models.miscellanea import Log, WarehouseArea, WarehouseItem, WarehouseItemAssignment
+from larpmanager.models.association import Association
+from larpmanager.models.event import Event
+from larpmanager.models.miscellanea import (
+    Log,
+    WarehouseArea,
+    WarehouseContainer,
+    WarehouseItem,
+    WarehouseItemAssignment,
+)
 from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
@@ -491,3 +499,34 @@ def items_bulk(page: Any) -> None:
     # remove from area
     _bulk_apply(page, [item_1.uuid, item_2.uuid], 34, kitchen.uuid)
     assert not WarehouseItemAssignment.objects.filter(area=kitchen, item__in=[item_1, item_2]).exists()
+
+
+def test_warehouse_assignment_typing(pw_page: Any) -> None:
+    """Typing a quantity in an item assignment keeps every row in the table and the field focused."""
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+    go_to(page, live_server, "/manage")
+    sidebar(page, "Features")
+    page.get_by_role("checkbox", name="Warehouse").check()
+    submit_confirm(page)
+
+    association = Association.objects.get()
+    save_single_config(association, "warehouse_quantity", "True")
+    container = WarehouseContainer.objects.create(name="Box 1", association=association)
+    for name in ("Lamp", "Rope", "Tent"):
+        WarehouseItem.objects.create(name=name, quantity=5, container=container, association=association)
+    area = WarehouseArea.objects.create(name="Camp", event=Event.objects.get(slug="test"))
+
+    go_to(page, live_server, f"/test/manage/warehouse/area/assignments/{area.uuid}/")
+    _wait_lm_ready(page)
+    rows = page.locator("#inv_assignments_items tbody tr")
+    expect(rows).to_have_count(3)
+
+    field = page.locator("tr", has_text="Lamp").locator("td.quantity input")
+    field.click()
+    with _expect_assignment_save(page):
+        field.press_sequentially("3")
+    expect(rows).to_have_count(3)
+    expect(field).to_be_focused()
+    assert WarehouseItemAssignment.objects.get(item__name="Lamp", area=area).quantity == 3

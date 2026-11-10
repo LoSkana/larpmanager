@@ -1790,7 +1790,7 @@ class OrgaRunForm(ConfigForm):
         if "register_link" in self.fields:
             self.fields["register_link"].widget.attrs["data-conditional-show"] = RegistrationStatus.EXTERNAL.value
             self.fields["register_link"].custom_class = "hide"
-            self.fields["registration_open"].custom_style = "display: none"
+            self.fields["register_link"].custom_style = "display: none"
 
     def set_configs(self) -> None:
         """Configure event-specific form fields and sections.

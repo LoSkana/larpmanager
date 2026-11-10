@@ -7947,6 +7947,9 @@ msgstr "Organizace, do které tento překlad patří"
 msgid "This page lets you add or edit a pool label."
 msgstr "Tato stránka ti umožňuje přidat nebo upravit štítek poolu."
 
+msgid "Total of expenses submitted by collaborators"
+msgstr "Součet výdajů odeslaných spolupracovníky"
+
 msgid "Unrecognized files in ZIP (will be skipped):"
 msgstr "Nerozpoznané soubory v ZIP (budou přeskočeny):"
 
@@ -9106,9 +9109,6 @@ msgstr "Tím budeš odstraněn(a) ze zpravodaje této organizace."
 msgid "To stop receiving them, please cancel your registrations."
 msgstr "Chceš-li je přestat dostávat, zruš prosím své registrace."
 
-msgid "Total of expenses submitted by collaborators and approved"
-msgstr "Součet výdajů předložených spolupracovníky a schválených"
-
 #, python-format
 msgid "Total registration fee: <b>%(amount).2f %(currency)s</b>."
 msgstr "Celkový registrační poplatek: <b>%(amount).2f %(currency)s</b>."
@@ -9978,6 +9978,10 @@ msgstr "Spravuj inventáře postav a prohlížej si jejich obsah pro tuto událo
 msgid "Manage outgoing inventory movements excluded from event preparation"
 msgstr "Správa odchozích pohybů zásob vyloučených z přípravy události"
 
+msgid "Manage the questions players answer when they send a signup request"
+msgstr ""
+"Spravuj otázky, na které hráči odpovídají při odeslání žádosti o přihlášení"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimální částka čistého zisku, která má být ponechána pro účely daně ze "
@@ -10265,6 +10269,10 @@ msgstr "Nepřítomný (ve vztazích této postavy chybí druhá postava)"
 msgid ""
 "Day of the year from which the membership year begins, in DD-MM format."
 msgstr "Den v roce, od kterého začíná členský rok, ve formátu DD-MM."
+
+msgid ""
+"Debrief questions collect the feedback of participants after the event."
+msgstr "Otázky debriefu sbírají zpětnou vazbu od účastníků po akci."
 
 msgid ""
 "Do you want to manage user help requests directly through the platform?"
@@ -13269,11 +13277,25 @@ msgstr ""
 "sledovat výši přispěných částek"
 
 msgid ""
+"Matchmaker questions collect what participants would like to play, to help "
+"you assign characters."
+msgstr ""
+"Otázky pro Matchmaker zjišťují, co by účastníci chtěli hrát, aby ti pomohly "
+"přiřadit postavy."
+
+msgid ""
 "No external item movements have been created yet. Use the button above to "
 "assign warehouse items."
 msgstr ""
 "Zatím nebyly vytvořeny žádné externí pohyby položek. Pomocí tlačítka výše "
 "přiřaď skladové položky."
+
+msgid ""
+"Request questions collect the information you need to approve a player, "
+"before they can register."
+msgstr ""
+"Otázky k žádosti sbírají informace, které potřebuješ ke schválení hráče, než"
+" se bude moci přihlásit."
 
 #, python-format
 msgid ""
