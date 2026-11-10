@@ -616,6 +616,9 @@ msgstr "Genere"
 msgid "Guide:"
 msgstr "Guida:"
 
+msgid "Guides"
+msgstr "Guide"
+
 msgid "Guilds"
 msgstr "Gilde"
 
@@ -2531,6 +2534,10 @@ msgstr "Sezione modulo"
 msgid "Full payment"
 msgstr "Pagamento completo"
 
+#, python-format
+msgid "Hi %(name)s,"
+msgstr "Ciao %(name)s,"
+
 msgid "House number"
 msgstr "Numero civico"
 
@@ -3900,6 +3907,9 @@ msgstr "Rimbalzo temporaneo"
 msgid "Workshop Modules"
 msgstr "Moduli del workshop"
 
+msgid "Your first event"
+msgstr "Il tuo primo evento"
+
 msgid "Your preferences"
 msgstr "Le tue preferenze"
 
@@ -4842,6 +4852,9 @@ msgstr "Termini e Condizioni"
 msgid "Terms and conditions"
 msgstr "Termini e condizioni"
 
+msgid "The LarpManager team"
+msgstr "Il team di LarpManager"
+
 msgid "The criterion's name"
 msgstr "Il nome del criterio"
 
@@ -5604,6 +5617,9 @@ msgstr "Errore nella lettura del file di backup"
 
 msgid "Generate a new ILDB token"
 msgstr "Genera un nuovo token ILDB"
+
+msgid "Glad to have you with us!"
+msgstr "Siamo felici di averti con noi!"
 
 msgid "Go to the quests of type:"
 msgstr "Vai alle Quest di tipo:"
@@ -6429,6 +6445,9 @@ msgstr "La data di inizio dell'evento"
 
 msgid "The name entered does not match"
 msgstr "Il nome inserito non corrisponde"
+
+msgid "To get started, check these out"
+msgstr "Per iniziare, dai un'occhiata a questi"
 
 msgid "Total of recorded money inflows"
 msgstr "Totale degli afflussi di denaro registrati"
@@ -7311,6 +7330,9 @@ msgstr "Data a partire dalla quale si applica il sovrapprezzo"
 msgid "Enables free pre-registration to events"
 msgstr "Consente la pre-iscrizione gratuita agli eventi"
 
+msgid "Here's the link to the management panel"
+msgstr "Ecco il link al pannello di gestione"
+
 msgid "Link to an external registration system"
 msgstr "Collegamento a un sistema di iscrizione esterno"
 
@@ -7497,6 +7519,9 @@ msgstr "Sei loggato con indirizzo email:"
 msgid "You can now set the dynamic installments"
 msgstr "Ora puoi impostare le rate dinamiche"
 
+msgid "You might want to keep this email handy."
+msgstr "Ti conviene tenere questa email a portata di mano."
+
 msgid "You must be registered to view this page"
 msgstr "Devi essere registrato per visualizzare questa pagina"
 
@@ -7613,6 +7638,10 @@ msgstr "Location: affitto, utenze e alloggio"
 
 msgid "View your payment details for this event!"
 msgstr "Visualizza i dettagli del pagamento relativi a questo evento!"
+
+#, python-format
+msgid "Welcome to the staff of %(organization)s!"
+msgstr "Benvenuto nello staff di %(organization)s!"
 
 msgid "Would you like to pay a different amount?"
 msgstr "Desideri versare un diverso ammontare?"
@@ -7810,6 +7839,9 @@ msgstr "Le iscrizioni chiudono il %(date)s alle %(time)s"
 msgid "Select a badge above to manage its members."
 msgstr "Seleziona un badge qui sopra per gestire i suoi membri."
 
+msgid "Short guides to help you set up your events"
+msgstr "Brevi guide per aiutarti a configurare i tuoi eventi"
+
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Mostra da _START_ a _END_ di _TOTAL_ voci"
 
@@ -7842,6 +7874,9 @@ msgstr "Utente che ha usato questo token (se autenticato)"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Attenzione! Altri utenti stanno modificando questo elemento."
+
+msgid "We suggest watching all the videos in the \\"
+msgstr "Ti consigliamo di guardare tutti i video nella sezione \\"
 
 msgid "You can now create milestones for the event"
 msgstr "Ora puoi creare tappe per l'evento"
@@ -12998,6 +13033,13 @@ msgstr ""
 "Puoi creare nuovi account delegati, oppure accedere con essi premendo il "
 "pulsante relativo"
 
+msgid ""
+"A short video guide that shows every step, from your first event to your "
+"first participant"
+msgstr ""
+"Una breve guida video che mostra ogni passaggio, dal tuo primo evento al tuo"
+" primo partecipante"
+
 #, python-format
 msgid ""
 "Alternatively, you can request a payout on <a href='%(url)s'>your accounting"
@@ -13494,6 +13536,14 @@ msgid ""
 msgstr ""
 "Quando sei pronto ad aggiornare in modo permanente le quantità di magazzino "
 "in base alle assegnazioni di questo evento"
+
+#, python-format
+msgid ""
+"You have just been given your first staff role in "
+"<b>%(association_name)s</b>, welcome aboard!"
+msgstr ""
+"Hai appena ricevuto il tuo primo ruolo nello staff di "
+"<b>%(association_name)s</b>, benvenuto a bordo!"
 
 #, python-format
 msgid ""

@@ -3122,6 +3122,10 @@ msgid "Welcome to LarpManager!"
 msgstr ""
 
 #, python-format
+msgid "Welcome to the staff of %(organization)s!"
+msgstr ""
+
+#, python-format
 msgid "Role approval %(role)s"
 msgstr ""
 
@@ -11006,6 +11010,48 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
+msgstr ""
+
+#, python-format
+msgid "Hi %(name)s,"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have just been given your first staff role in <b>%(association_name)s</"
+"b>, welcome aboard!"
+msgstr ""
+
+msgid "Here's the link to the management panel"
+msgstr ""
+
+msgid "You might want to keep this email handy."
+msgstr ""
+
+msgid "To get started, check these out"
+msgstr ""
+
+msgid "Your first event"
+msgstr ""
+
+msgid ""
+"A short video guide that shows every step, from your first event to your "
+"first participant"
+msgstr ""
+
+msgid "Guides"
+msgstr ""
+
+msgid "We suggest watching all the videos in the \\"
+msgstr ""
+
+msgid "Short guides to help you set up your events"
+msgstr ""
+
+msgid "Glad to have you with us!"
+msgstr ""
+
+msgid "The LarpManager team"
 msgstr ""
 
 #, python-format

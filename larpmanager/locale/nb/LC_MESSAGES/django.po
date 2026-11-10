@@ -616,6 +616,9 @@ msgstr "Kjønn"
 msgid "Guide:"
 msgstr "Veiledning:"
 
+msgid "Guides"
+msgstr "Guider"
+
 msgid "Guilds"
 msgstr "Gilder"
 
@@ -2531,6 +2534,10 @@ msgstr "Skjemadelen"
 msgid "Full payment"
 msgstr "Full betaling"
 
+#, python-format
+msgid "Hi %(name)s,"
+msgstr "Hei %(name)s,"
+
 msgid "House number"
 msgstr "Husnummer"
 
@@ -3900,6 +3907,9 @@ msgstr "Midlertidig avvisning"
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"
 
+msgid "Your first event"
+msgstr "Ditt første arrangement"
+
 msgid "Your preferences"
 msgstr "Dine preferanser"
 
@@ -4842,6 +4852,9 @@ msgstr "Vilkår og betingelser"
 msgid "Terms and conditions"
 msgstr "Vilkår og betingelser"
 
+msgid "The LarpManager team"
+msgstr "LarpManager-teamet"
+
 msgid "The criterion's name"
 msgstr "Kriteriets navn"
 
@@ -5604,6 +5617,9 @@ msgstr "Feil ved lesing av sikkerhetskopifil"
 
 msgid "Generate a new ILDB token"
 msgstr "Generer et nytt ILDB-token"
+
+msgid "Glad to have you with us!"
+msgstr "Så hyggelig å ha deg med!"
 
 msgid "Go to the quests of type:"
 msgstr "Gå til Quest av typen:"
@@ -6429,6 +6445,9 @@ msgstr "Datoen da denne hendelsen begynner"
 
 msgid "The name entered does not match"
 msgstr "Navnet du skrev inn stemmer ikke"
+
+msgid "To get started, check these out"
+msgstr "Ta en titt på disse for å komme i gang"
 
 msgid "Total of recorded money inflows"
 msgstr "Summen av registrerte pengeinnbetalinger"
@@ -7312,6 +7331,9 @@ msgstr "Dato fra når tilleggsavgiften gjelder"
 msgid "Enables free pre-registration to events"
 msgstr "Muliggjør gratis forhåndsregistrering til arrangementer"
 
+msgid "Here's the link to the management panel"
+msgstr "Her er lenken til administrasjonspanelet"
+
 msgid "Link to an external registration system"
 msgstr "Lenke til et eksternt registreringssystem"
 
@@ -7498,6 +7520,9 @@ msgstr "Du er logget inn med en e-postadresse:"
 msgid "You can now set the dynamic installments"
 msgstr "Du kan nå angi de dynamiske avdragene"
 
+msgid "You might want to keep this email handy."
+msgstr "Det kan være lurt å ta vare på denne e-posten."
+
 msgid "You must be registered to view this page"
 msgstr "Du må være registrert for å se denne siden"
 
@@ -7614,6 +7639,10 @@ msgstr "Lokale: leie, strøm og overnatting"
 
 msgid "View your payment details for this event!"
 msgstr "Se betalingsopplysningene for dette arrangementet!"
+
+#, python-format
+msgid "Welcome to the staff of %(organization)s!"
+msgstr "Velkommen til staben i %(organization)s!"
 
 msgid "Would you like to pay a different amount?"
 msgstr "Ønsker du å betale et annet beløp?"
@@ -7809,6 +7838,9 @@ msgstr "Påmeldingen stenger %(date)s kl. %(time)s"
 msgid "Select a badge above to manage its members."
 msgstr "Velg en badge ovenfor for å administrere medlemmene i den."
 
+msgid "Short guides to help you set up your events"
+msgstr "Korte guider som hjelper deg å sette opp arrangementene dine"
+
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Viser _START_ til _END_ av _TOTAL_ oppføringer"
 
@@ -7841,6 +7873,9 @@ msgstr "Bruker som brukte denne tokenen (hvis autentisert)"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Advarsel! Andre brukere redigerer dette elementet."
+
+msgid "We suggest watching all the videos in the \\"
+msgstr "Vi anbefaler at du ser alle videoene i \\"
 
 msgid "You can now create milestones for the event"
 msgstr "Du kan nå opprette milepæler for arrangementet"
@@ -12748,6 +12783,13 @@ msgstr ""
 "Du kan opprette nye delegatkontoer, eller logge inn med dem ved å trykke på "
 "den relevante knappen"
 
+msgid ""
+"A short video guide that shows every step, from your first event to your "
+"first participant"
+msgstr ""
+"En kort videoguide som viser hvert steg, fra ditt første arrangement til din"
+" første deltaker"
+
 #, python-format
 msgid ""
 "Alternatively, you can request a payout on <a href='%(url)s'>your accounting"
@@ -13241,6 +13283,14 @@ msgid ""
 msgstr ""
 "Når du er klar til å oppdatere lagerantallene permanent basert på denne "
 "hendelsens tildelinger"
+
+#, python-format
+msgid ""
+"You have just been given your first staff role in "
+"<b>%(association_name)s</b>, welcome aboard!"
+msgstr ""
+"Du har nettopp fått din første staff-rolle i <b>%(association_name)s</b>, "
+"velkommen om bord!"
 
 #, python-format
 msgid ""

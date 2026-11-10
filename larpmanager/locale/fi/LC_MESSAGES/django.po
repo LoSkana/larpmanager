@@ -616,6 +616,9 @@ msgstr "Sukupuoli"
 msgid "Guide:"
 msgstr "Opas:"
 
+msgid "Guides"
+msgstr "Oppaat"
+
 msgid "Guilds"
 msgstr "Killat"
 
@@ -2531,6 +2534,10 @@ msgstr "Lomake-osio"
 msgid "Full payment"
 msgstr "Koko maksu"
 
+#, python-format
+msgid "Hi %(name)s,"
+msgstr "Hei %(name)s,"
+
 msgid "House number"
 msgstr "Talon numero"
 
@@ -3900,6 +3907,9 @@ msgstr "Tilapäinen palautus"
 msgid "Workshop Modules"
 msgstr "Työpajamoduulit"
 
+msgid "Your first event"
+msgstr "Ensimmäinen tapahtumasi"
+
 msgid "Your preferences"
 msgstr "Mieltymyksesi"
 
@@ -4842,6 +4852,9 @@ msgstr "Käyttöehdot"
 msgid "Terms and conditions"
 msgstr "Käyttöehdot"
 
+msgid "The LarpManager team"
+msgstr "LarpManager-tiimi"
+
 msgid "The criterion's name"
 msgstr "Kriteerin nimi"
 
@@ -5604,6 +5617,9 @@ msgstr "Virhe varmuuskopiotiedoston lukemisessa"
 
 msgid "Generate a new ILDB token"
 msgstr "Luo uusi ILDB-tunnus"
+
+msgid "Glad to have you with us!"
+msgstr "Kiva, että olet mukana!"
 
 msgid "Go to the quests of type:"
 msgstr "Siirry tämän tyypin Questeihin:"
@@ -6429,6 +6445,9 @@ msgstr "Päivämäärä, jolloin tapahtuma alkaa"
 
 msgid "The name entered does not match"
 msgstr "Syöttämäsi nimi ei täsmää"
+
+msgid "To get started, check these out"
+msgstr "Pääset alkuun näiden avulla"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
@@ -7311,6 +7330,9 @@ msgstr "Päivä, josta alkaen lisämaksua sovelletaan"
 msgid "Enables free pre-registration to events"
 msgstr "Mahdollistaa ilmaisen ennakkoilmoittautumisen tapahtumiin"
 
+msgid "Here's the link to the management panel"
+msgstr "Tässä linkki hallintapaneeliin"
+
 msgid "Link to an external registration system"
 msgstr "Linkki ulkoiseen ilmoittautumisjärjestelmään"
 
@@ -7497,6 +7519,9 @@ msgstr "Olet kirjautunut sisään sähköpostiosoitteella:"
 msgid "You can now set the dynamic installments"
 msgstr "Voit nyt määrittää dynaamiset maksuerät"
 
+msgid "You might want to keep this email handy."
+msgstr "Tämä sähköposti kannattaa ehkä pitää tallessa."
+
 msgid "You must be registered to view this page"
 msgstr "Sinun täytyy olla ilmoittautunut nähdäksesi tämän sivun"
 
@@ -7613,6 +7638,10 @@ msgstr "Tapahtumapaikka: vuokra, käyttökulut ja majoitus"
 
 msgid "View your payment details for this event!"
 msgstr "Tarkista tämän tapahtuman maksutiedot!"
+
+#, python-format
+msgid "Welcome to the staff of %(organization)s!"
+msgstr "Tervetuloa organisaation %(organization)s staffiin!"
 
 msgid "Would you like to pay a different amount?"
 msgstr "Haluatko maksaa eri summan?"
@@ -7808,6 +7837,9 @@ msgstr "Ilmoittautuminen sulkeutuu %(date)s klo %(time)s"
 msgid "Select a badge above to manage its members."
 msgstr "Valitse yllä oleva badge hallitaksesi sen jäseniä."
 
+msgid "Short guides to help you set up your events"
+msgstr "Lyhyitä oppaita tapahtumiesi järjestämiseen"
+
 msgid "Showing _START_ to _END_ of _TOTAL_ entries"
 msgstr "Näytetään _START_-_END_, yhteensä _TOTAL_ merkintää"
 
@@ -7840,6 +7872,9 @@ msgstr "Käyttäjä, joka käytti tätä tokenia (jos tunnistautunut)"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Varoitus! Muut käyttäjät muokkaavat tätä kohdetta."
+
+msgid "We suggest watching all the videos in the \\"
+msgstr "Suosittelemme katsomaan kaikki videot osiossa \\"
 
 msgid "You can now create milestones for the event"
 msgstr "Voit nyt luoda tapahtumalle virstanpylväitä"
@@ -12749,6 +12784,13 @@ msgstr ""
 "Voit luoda uusia valtuutettujen tilejä tai kirjautua niillä sisään "
 "painamalla kyseistä painiketta"
 
+msgid ""
+"A short video guide that shows every step, from your first event to your "
+"first participant"
+msgstr ""
+"Lyhyt video-opas, joka näyttää jokaisen vaiheen ensimmäisestä tapahtumastasi"
+" ensimmäiseen osallistujaasi"
+
 #, python-format
 msgid ""
 "Alternatively, you can request a payout on <a href='%(url)s'>your accounting"
@@ -13239,6 +13281,14 @@ msgid ""
 msgstr ""
 "Kun olet valmis päivittämään varastomäärät pysyvästi tämän tapahtuman "
 "kohdistusten perusteella"
+
+#, python-format
+msgid ""
+"You have just been given your first staff role in "
+"<b>%(association_name)s</b>, welcome aboard!"
+msgstr ""
+"Sait juuri ensimmäisen staff-roolisi organisaatiossa "
+"<b>%(association_name)s</b>, tervetuloa mukaan!"
 
 #, python-format
 msgid ""
