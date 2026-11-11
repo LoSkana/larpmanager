@@ -5770,6 +5770,18 @@ msgstr ""
 msgid "Read more:"
 msgstr ""
 
+msgid "Reading your question..."
+msgstr ""
+
+msgid "Checking your event settings..."
+msgstr ""
+
+msgid "Searching the guides and tutorials..."
+msgstr ""
+
+msgid "Writing the answer..."
+msgstr ""
+
 msgid "Are you sure you want to delete this element?"
 msgstr ""
 
@@ -8552,6 +8564,12 @@ msgid "Sent"
 msgstr ""
 
 msgid "Redeemed"
+msgstr ""
+
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+
+msgid "Send"
 msgstr ""
 
 #, python-format
@@ -13022,11 +13040,6 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please %(link)s."
@@ -13707,6 +13720,11 @@ msgid "Please write a question"
 msgstr ""
 
 msgid "Your question is too long"
+msgstr ""
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"

@@ -215,6 +215,9 @@ msgstr "Regel"
 msgid "Save"
 msgstr "Opslaan"
 
+msgid "Send"
+msgstr "Versturen"
+
 msgid "Sent"
 msgstr "Verzonden"
 
@@ -5077,6 +5080,9 @@ msgstr "Magazijn opdrachten"
 msgid "What you will unlock:"
 msgstr "Wat je zult ontgrendelen:"
 
+msgid "Writing the answer..."
+msgstr "Het antwoord schrijven..."
+
 msgid "You have already paid"
 msgstr "Je hebt al betaald"
 
@@ -5508,6 +5514,9 @@ msgstr "Voorinschrijvingen opgeslagen!"
 
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
+
+msgid "Reading your question..."
+msgstr "Je vraag lezen..."
 
 msgid "Referred Friend Discount"
 msgstr "Korting voor doorverwezen vrienden"
@@ -6394,6 +6403,9 @@ msgstr "Zowel %(tokens)s als %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Labels voor inventaris-Pools van personages"
 
+msgid "Checking your event settings..."
+msgstr "Je evenementinstellingen controleren..."
+
 msgid "Choice available, click to lock"
 msgstr "Keuze beschikbaar, klik om te vergrendelen"
 
@@ -7169,6 +7181,9 @@ msgstr "Eén teken meer of minder dan verwacht"
 
 msgid "Reserved word, please choose another!"
 msgstr "Gereserveerd woord, kies een ander!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "De handleidingen en tutorials doorzoeken..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Selecteer de organisatie om verder te gaan"
@@ -9955,6 +9970,9 @@ msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Optioneel) Of de vaardigheid zichtbaar is voor gebruikers: true of false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Vraag alles over LarpManager, bijv. hoe open ik de inschrijvingen?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12649,13 +12667,6 @@ msgstr ""
 "organisatoren"
 
 msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Ik kon niets relevants vinden in de documentatie. Probeer een supportticket "
-"te openen."
-
-msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
 "casting page."
 msgstr ""
@@ -15217,6 +15228,13 @@ msgstr ""
 "Zodra je de betaling hebt gedaan, ga je terug naar deze pagina en upload je "
 "hieronder de schermafbeelding van de bevestiging die Paypal je heeft "
 "gestuurd."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Je organisatie heeft de dagelijkse limiet aan vragen aan de assistent voor "
+"het gratis abonnement bereikt, probeer het morgen opnieuw"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

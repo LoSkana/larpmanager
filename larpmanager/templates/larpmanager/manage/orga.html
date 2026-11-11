@@ -5,6 +5,7 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        {% include "larpmanager/manage/widgets/ask_bar.html" %}
         {% include "larpmanager/manage/sticky_messages.html" %}
         <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
             {% include "larpmanager/manage/widgets/demo.html" %}

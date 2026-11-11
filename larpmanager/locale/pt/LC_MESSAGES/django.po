@@ -215,6 +215,9 @@ msgstr "Regra"
 msgid "Save"
 msgstr "Guardar"
 
+msgid "Send"
+msgstr "Enviar"
+
 msgid "Sent"
 msgstr "Enviado"
 
@@ -5077,6 +5080,9 @@ msgstr "Atribuições de armazém"
 msgid "What you will unlock:"
 msgstr "O que vais desbloquear:"
 
+msgid "Writing the answer..."
+msgstr "A escrever a resposta..."
+
 msgid "You have already paid"
 msgstr "Já pagaste"
 
@@ -5508,6 +5514,9 @@ msgstr "Pré-inscrições guardadas!"
 
 msgid "Provisional registration"
 msgstr "Inscrição provisória"
+
+msgid "Reading your question..."
+msgstr "A ler a tua pergunta..."
 
 msgid "Referred Friend Discount"
 msgstr "Desconto para amigo recomendado"
@@ -6394,6 +6403,9 @@ msgstr "Tanto %(tokens)s como %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Etiquetas de Pools de inventário de personagens"
 
+msgid "Checking your event settings..."
+msgstr "A verificar as definições do teu evento..."
+
 msgid "Choice available, click to lock"
 msgstr "Escolha disponível, clica para bloquear"
 
@@ -7169,6 +7181,9 @@ msgstr "Um símbolo a mais ou a menos do que o esperado"
 
 msgid "Reserved word, please choose another!"
 msgstr "Palavra reservada, escolhe outra!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "A pesquisar nos guias e tutoriais..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Seleciona a organização para continuar"
@@ -9868,6 +9883,11 @@ msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Opcional) Se a habilidade é visível para os utilizadores: true ou false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+"Pergunta qualquer coisa sobre o LarpManager, por exemplo, como abro as "
+"inscrições?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12513,13 +12533,6 @@ msgstr ""
 "e para os organizadores"
 
 msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Não encontrei nada relevante na documentação. Tente abrir um ticket de "
-"suporte."
-
-msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
 "casting page."
 msgstr ""
@@ -15071,6 +15084,13 @@ msgid ""
 msgstr ""
 "Depois de efetuares o pagamento, volta a esta página e carrega abaixo a "
 "captura de ecrã da confirmação enviada pelo Paypal."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"A tua organização atingiu o limite diário de perguntas ao assistente do "
+"plano gratuito, tenta novamente amanhã"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

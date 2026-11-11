@@ -215,6 +215,9 @@ msgstr "Pravidlo"
 msgid "Save"
 msgstr "Uložit"
 
+msgid "Send"
+msgstr "Odeslat"
+
 msgid "Sent"
 msgstr "Odesláno"
 
@@ -5077,6 +5080,9 @@ msgstr "Přidělování skladových úkolů"
 msgid "What you will unlock:"
 msgstr "Co odemkneš:"
 
+msgid "Writing the answer..."
+msgstr "Píšu odpověď..."
+
 msgid "You have already paid"
 msgstr "Už máš zaplaceno"
 
@@ -5508,6 +5514,9 @@ msgstr "Předběžné registrace jsou uloženy!"
 
 msgid "Provisional registration"
 msgstr "Prozatímní registrace"
+
+msgid "Reading your question..."
+msgstr "Čtu tvou otázku..."
 
 msgid "Referred Friend Discount"
 msgstr "Sleva pro doporučeného přítele"
@@ -6394,6 +6403,9 @@ msgstr "Jak %(tokens)s, tak %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Štítky Poolů inventáře postav"
 
+msgid "Checking your event settings..."
+msgstr "Kontroluji nastavení tvé akce..."
+
 msgid "Choice available, click to lock"
 msgstr "Možnost volby, klikni pro uzamčení"
 
@@ -7169,6 +7181,9 @@ msgstr "O jeden symbol více nebo méně, než se očekávalo"
 
 msgid "Reserved word, please choose another!"
 msgstr "Rezervované slovo, vyber prosím jiné!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Prohledávám návody a tutoriály..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Vyber organizaci, na kterou chceš přejít"
@@ -9811,6 +9826,9 @@ msgstr "Před zodpovězením těchto otázek se musíš na akci zaregistrovat"
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Volitelné) Zda je schopnost viditelná pro uživatele: true nebo false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Zeptej se na cokoliv o LarpManageru, např. jak otevřít registrace?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12221,13 +12239,6 @@ msgid ""
 "organizers"
 msgstr ""
 "Zadej soukromé informace o své postavě, které uvidíš jen ty a organizátoři"
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"V dokumentaci se nepodařilo najít nic relevantního. Zkus otevřít požadavek "
-"na podporu."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
@@ -14758,6 +14769,13 @@ msgid ""
 msgstr ""
 "Po provedení platby se vrať na tuto stránku a níže nahraj snímek obrazovky "
 "potvrzení zaslaného společností PayPal."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Tvoje organizace dosáhla denního limitu dotazů na asistenta v bezplatném "
+"tarifu, zkus to prosím znovu zítra"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

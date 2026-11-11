@@ -215,6 +215,9 @@ msgstr "Κανόνας"
 msgid "Save"
 msgstr "Αποθήκευση"
 
+msgid "Send"
+msgstr "Αποστολή"
+
 msgid "Sent"
 msgstr "Στάλθηκε"
 
@@ -5077,6 +5080,9 @@ msgstr "Αναθέσεις αποθήκης"
 msgid "What you will unlock:"
 msgstr "Τι θα ξεκλειδώσεις:"
 
+msgid "Writing the answer..."
+msgstr "Γράφω την απάντηση..."
+
 msgid "You have already paid"
 msgstr "Έχεις ήδη πληρώσει"
 
@@ -5508,6 +5514,9 @@ msgstr "Οι προεγγραφές αποθηκεύτηκαν!"
 
 msgid "Provisional registration"
 msgstr "Προσωρινή εγγραφή"
+
+msgid "Reading your question..."
+msgstr "Διαβάζω την ερώτησή σου..."
 
 msgid "Referred Friend Discount"
 msgstr "Έκπτωση για παραπεμφθέντα φίλο"
@@ -6394,6 +6403,9 @@ msgstr "Και τα %(tokens)s και τα %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Ετικέτες Pools αποθέματος χαρακτήρων"
 
+msgid "Checking your event settings..."
+msgstr "Ελέγχω τις ρυθμίσεις της εκδήλωσής σου..."
+
 msgid "Choice available, click to lock"
 msgstr "Επιλογή διαθέσιμη, κάνε κλικ για κλείδωμα"
 
@@ -7170,6 +7182,9 @@ msgstr "Ένα σύμβολο περισσότερο ή λιγότερο από 
 
 msgid "Reserved word, please choose another!"
 msgstr "Δεσμευμένη λέξη, διάλεξε κάποια άλλη!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Αναζήτηση στους οδηγούς και τα tutorials..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Επίλεξε τον οργανισμό για να προχωρήσεις"
@@ -10027,6 +10042,9 @@ msgstr "Πρέπει να εγγραφείς στο event πριν απαντή�
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Προαιρετικό) Αν η ικανότητα είναι ορατή στους χρήστες: true ή false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Ρώτα οτιδήποτε για το LarpManager, π.χ. πώς ανοίγω τις εγγραφές;"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12762,13 +12780,6 @@ msgstr ""
 "και στους διοργανωτές"
 
 msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Δεν βρήκα τίποτα σχετικό στην τεκμηρίωση. Δοκίμασε να ανοίξεις ένα αίτημα "
-"υποστήριξης."
-
-msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
 "casting page."
 msgstr ""
@@ -15335,6 +15346,13 @@ msgstr ""
 "Αφού πραγματοποιήσεις την πληρωμή, επέστρεψε σε αυτή τη σελίδα και "
 "μεταφόρτωσε παρακάτω το στιγμιότυπο οθόνης της επιβεβαίωσης που έστειλε το "
 "Paypal."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Ο οργανισμός σου έφτασε το ημερήσιο όριο ερωτήσεων προς τον βοηθό για το "
+"δωρεάν πρόγραμμα, δοκίμασε ξανά αύριο"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

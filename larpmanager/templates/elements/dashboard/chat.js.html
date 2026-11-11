@@ -1,19 +1,80 @@
-{% load i18n %}
+{% load i18n static %}
 <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
-    var $trigger = $('.chat-widget-open-trigger');
-    if (!$trigger.length) return;
-
     var $dialog = $('#chat-widget-dialog');
+    if (!$dialog.length) return;
+
+    var $trigger = $('.chat-widget-open-trigger');
     var $close = $('#chat-widget-close');
     var $messages = $('#chat-widget-messages');
     var $form = $('#chat-widget-form');
     var $input = $('#chat-widget-input');
+    var $askBar = $('.dashboard-ask-bar');
 
     var askUrl = '{% url "chat_ask" %}';
     var errorText = '{% filter escapejs %}{% trans "The assistant is temporarily unavailable, please try again later." %}{% endfilter %}';
     var sourcesText = '{% filter escapejs %}{% trans "Read more:" %}{% endfilter %}';
+    var logoUrl = '{% static "lm_logo.png" %}';
+    var pendingTexts = [
+        '{% filter escapejs %}{% trans "Reading your question..." %}{% endfilter %}',
+        '{% filter escapejs %}{% trans "Checking your event settings..." %}{% endfilter %}',
+        '{% filter escapejs %}{% trans "Searching the guides and tutorials..." %}{% endfilter %}',
+        '{% filter escapejs %}{% trans "Writing the answer..." %}{% endfilter %}'
+    ];
+    var pendingInterval = 3500;
+    var maxHistoryMessages = 6;
+    var history = [];
     var sending = false;
+
+    function escapeHtml(text) {
+        return $('<div></div>').text(text).html();
+    }
+
+    function safeUrl(url) {
+        // Only same-site paths and https links are rendered as links
+        if (/^\/(?!\/)/.test(url) || /^https:\/\//.test(url)) return url;
+        return '';
+    }
+
+    function renderInline(text) {
+        var html = escapeHtml(text);
+        html = html.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function(match, label, url) {
+            var href = safeUrl($('<textarea></textarea>').html(url).text());
+            if (!href) return label;
+            var target = /^https:\/\//.test(href) ? ' target="_blank" rel="noopener"' : '';
+            return '<a href="' + escapeHtml(href).replace(/"/g, '%22') + '"' + target + '>' + label + '</a>';
+        });
+        html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+        return html;
+    }
+
+    function renderMarkdown(text) {
+        // Minimal Markdown: paragraphs, bullet and numbered lists, bold, code and links
+        var html = '';
+        var listTag = null;
+        text.split('\n').forEach(function(rawLine) {
+            var line = rawLine.trim();
+            var bullet = line.match(/^[-*]\s+(.*)$/);
+            var numbered = line.match(/^\d+[.)]\s+(.*)$/);
+            var tag = bullet ? 'ul' : (numbered ? 'ol' : null);
+            if (listTag && tag !== listTag) {
+                html += '</' + listTag + '>';
+                listTag = null;
+            }
+            if (tag) {
+                if (!listTag) {
+                    html += '<' + tag + '>';
+                    listTag = tag;
+                }
+                html += '<li>' + renderInline((bullet || numbered)[1]) + '</li>';
+            } else if (line) {
+                html += '<p>' + renderInline(line.replace(/^#+\s*/, '')) + '</p>';
+            }
+        });
+        if (listTag) html += '</' + listTag + '>';
+        return html;
+    }
 
     function addMessage(text, role) {
         var $msg = $('<div class="chat-widget-message"></div>').addClass(role).text(text);
@@ -31,10 +92,80 @@ window.addEventListener('DOMContentLoaded', function() {
         $msg.append($sources);
     }
 
+    function addPending() {
+        // Spinning logo with a status that advances while the answer is prepared
+        var $msg = $('<div class="chat-widget-message chat-widget-bot chat-widget-pending"></div>');
+        var $status = $('<span class="chat-widget-pending-text"></span>').text(pendingTexts[0]);
+        $msg.append($('<img class="chat-widget-spinner" alt="">').attr('src', logoUrl), $status);
+        $messages.append($msg);
+        $messages.scrollTop($messages[0].scrollHeight);
+
+        var step = 0;
+        var timer = setInterval(function() {
+            step = Math.min(step + 1, pendingTexts.length - 1);
+            $status.text(pendingTexts[step]);
+        }, pendingInterval);
+        $msg.data('timer', timer);
+        return $msg;
+    }
+
+    function resolvePending($msg) {
+        clearInterval($msg.data('timer'));
+        $msg.removeClass('chat-widget-pending').empty();
+    }
+
+    function openDialog() {
+        if (!$dialog[0].open) $dialog[0].showModal();
+        $input.trigger('focus');
+    }
+
+    function askQuestion(question) {
+        question = (question || '').trim();
+        if (!question || sending) return;
+
+        addMessage(question, 'chat-widget-user');
+        var $pending = addPending();
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', $form.find('input[name=csrfmiddlewaretoken]').val());
+        formData.append('question', question);
+        formData.append('page', '{{ request_func_name | escapejs }}');
+        formData.append('run', $dialog.data('run') || '');
+        formData.append('history', JSON.stringify(history));
+
+        sending = true;
+        $.ajax({
+            url: askUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                resolvePending($pending);
+                if (!response.answer) {
+                    $pending.text(errorText);
+                    return;
+                }
+                $pending.addClass('chat-widget-rich').html(renderMarkdown(response.answer));
+                addSources($pending, response.sources);
+                history.push({role: 'user', content: question}, {role: 'assistant', content: response.answer});
+                history = history.slice(-maxHistoryMessages);
+            },
+            error: function(xhr) {
+                var message = xhr.responseJSON && xhr.responseJSON.error;
+                resolvePending($pending);
+                $pending.text(message || errorText);
+            },
+            complete: function() {
+                sending = false;
+                $messages.scrollTop($messages[0].scrollHeight);
+            },
+        });
+    }
+
     $trigger.on('click', function(e) {
         e.preventDefault();
-        $dialog[0].showModal();
-        $input.trigger('focus');
+        openDialog();
     });
 
     $close.on('click', function(e) {
@@ -50,41 +181,19 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $form.on('submit', function(e) {
         e.preventDefault();
-        if (sending) return;
-
-        var question = $input.val().trim();
-        if (!question) return;
-
-        addMessage(question, 'chat-widget-user');
+        var question = $input.val();
         $input.val('');
+        askQuestion(question);
+    });
 
-        var $pending = addMessage('...', 'chat-widget-bot chat-widget-pending');
-
-        var formData = new FormData();
-        formData.append('csrfmiddlewaretoken', $form.find('input[name=csrfmiddlewaretoken]').val());
-        formData.append('question', question);
-        formData.append('page', '{{ request_func_name | escapejs }}');
-
-        sending = true;
-        $.ajax({
-            url: askUrl,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                $pending.removeClass('chat-widget-pending').text(response.answer || errorText);
-                addSources($pending, response.sources);
-            },
-            error: function(xhr) {
-                var message = xhr.responseJSON && xhr.responseJSON.error;
-                $pending.removeClass('chat-widget-pending').text(message || errorText);
-            },
-            complete: function() {
-                sending = false;
-                $messages.scrollTop($messages[0].scrollHeight);
-            },
-        });
+    $askBar.on('submit', function(e) {
+        e.preventDefault();
+        var $barInput = $(this).find('.dashboard-ask-input');
+        var question = $barInput.val();
+        if (!question.trim()) return;
+        $barInput.val('');
+        openDialog();
+        askQuestion(question);
     });
 });
 </script>

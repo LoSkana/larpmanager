@@ -1,0 +1,27 @@
+# Questions to evaluate the chat assistant with "manage.py chat_eval".
+# Each case passes when the answer contains at least one string of every group in "expect" (case-insensitive).
+# "features" and "configs" are enabled on the evaluated event before asking.
+- question: "come si imposta link iscrizioni anticipate?"
+  expect:
+    - ["pre-registration", "pre-iscrizion", "preiscrizion", "secret", "segret"]
+    - ["/manage/"]
+- question: "come rendere i testi personaggi visibili ai giocatori"
+  features: [character]
+  configs: [writing_field_visibility]
+  expect:
+    - ["visibilit"]
+    - ["/manage/"]
+- question: "How do I add a discount code?"
+  expect:
+    - ["discount"]
+    - ["/activate/discount/", "/manage/discounts/"]
+- question: "Come apro le iscrizioni?"
+  expect:
+    - ["/manage/"]
+- question: "How can players pay with PayPal?"
+  expect:
+    - ["paypal"]
+    - ["payment"]
+- question: "Come faccio a mettere una lista d'attesa?"
+  expect:
+    - ["attesa", "waiting"]

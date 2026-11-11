@@ -215,6 +215,9 @@ msgstr "Sääntö"
 msgid "Save"
 msgstr "Tallenna"
 
+msgid "Send"
+msgstr "Lähetä"
+
 msgid "Sent"
 msgstr "Lähetetty"
 
@@ -5077,6 +5080,9 @@ msgstr "Varastotehtävät"
 msgid "What you will unlock:"
 msgstr "Mitä saat käyttöösi:"
 
+msgid "Writing the answer..."
+msgstr "Kirjoitetaan vastausta..."
+
 msgid "You have already paid"
 msgstr "Olet jo maksanut"
 
@@ -5508,6 +5514,9 @@ msgstr "Ennakkoilmoittautumiset tallennettu!"
 
 msgid "Provisional registration"
 msgstr "Väliaikainen Ilmoittautuminen"
+
+msgid "Reading your question..."
+msgstr "Luetaan kysymystäsi..."
 
 msgid "Referred Friend Discount"
 msgstr "Suositellun ystävän alennus"
@@ -6394,6 +6403,9 @@ msgstr "Sekä %(tokens)s että %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Hahmojen inventaariopoolien tunnisteet"
 
+msgid "Checking your event settings..."
+msgstr "Tarkistetaan tapahtumasi asetuksia..."
+
 msgid "Choice available, click to lock"
 msgstr "Valinta käytettävissä, klikkaa lukitaksesi"
 
@@ -7169,6 +7181,9 @@ msgstr "Yksi symboli enemmän tai vähemmän kuin odotettiin"
 
 msgid "Reserved word, please choose another!"
 msgstr "Varattu sana, valitse toinen!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Haetaan oppaista ja ohjeista..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Valitse organisaatio, johon haluat siirtyä"
@@ -9872,6 +9887,10 @@ msgstr ""
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valinnainen) Onko ominaisuus näkyvissä käyttäjille: true tai false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+"Kysy mitä tahansa LarpManagerista, esim. miten avaan ilmoittautumiset?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12414,12 +12433,6 @@ msgstr ""
 "Syötä hahmosi yksityiset tiedot, jotka näkyvät vain sinulle ja järjestäjille"
 
 msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"En löytänyt dokumentaatiosta mitään olennaista. Kokeile avata tukipyyntö."
-
-msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
 "casting page."
 msgstr ""
@@ -14959,6 +14972,13 @@ msgid ""
 msgstr ""
 "Kun olet suorittanut maksun, palaa tälle sivulle ja lataa alle Paypalin "
 "lähettämän vahvistuksen kuvakaappaus."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Organisaatiosi on saavuttanut ilmaisen paketin päivittäisen kysymysrajan "
+"avustajalle, yritä uudelleen huomenna"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

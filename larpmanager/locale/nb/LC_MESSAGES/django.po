@@ -215,6 +215,9 @@ msgstr "Regel"
 msgid "Save"
 msgstr "Lagre"
 
+msgid "Send"
+msgstr "Send"
+
 msgid "Sent"
 msgstr "Sendt"
 
@@ -5077,6 +5080,9 @@ msgstr "Lagertildelinger"
 msgid "What you will unlock:"
 msgstr "Hva du vil låse opp:"
 
+msgid "Writing the answer..."
+msgstr "Skriver svaret..."
+
 msgid "You have already paid"
 msgstr "Du har allerede betalt"
 
@@ -5508,6 +5514,9 @@ msgstr "Forhåndsregistreringene er lagret!"
 
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
+
+msgid "Reading your question..."
+msgstr "Leser spørsmålet ditt..."
 
 msgid "Referred Friend Discount"
 msgstr "Rabatt for henviste venner"
@@ -6394,6 +6403,9 @@ msgstr "Både %(tokens)s og %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Etiketter for karakterinventar-poolen"
 
+msgid "Checking your event settings..."
+msgstr "Sjekker arrangementsinnstillingene dine..."
+
 msgid "Choice available, click to lock"
 msgstr "Valg tilgjengelig, klikk for å låse"
 
@@ -7170,6 +7182,9 @@ msgstr "Ett symbol mer eller mindre enn forventet"
 
 msgid "Reserved word, please choose another!"
 msgstr "Reservert ord, velg et annet!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Søker i veiledningene og tutorialene..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Velg organisasjonen du vil gå videre til"
@@ -9861,6 +9876,10 @@ msgstr ""
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valgfritt) Om evnen er synlig for brukerne: true eller false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+"Spør om hva som helst om LarpManager, f.eks. hvordan åpner jeg påmeldingen?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr "Bekreft at karakteren din %(name)s er klar til å foreslås for staben!"
@@ -12407,12 +12426,6 @@ msgid ""
 msgstr ""
 "Legg inn privat informasjon om karakteren din, kun synlig for deg og "
 "arrangørene"
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Jeg fant ikke noe relevant i dokumentasjonen. Prøv å åpne en supportsak."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "
@@ -14964,6 +14977,13 @@ msgid ""
 msgstr ""
 "Når du har gjennomført betalingen, går du tilbake til denne siden og laster "
 "opp skjermbildet av bekreftelsen fra Paypal nedenfor."
+
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Organisasjonen din har nådd den daglige grensen for spørsmål til assistenten"
+" i gratisplanen. Prøv igjen i morgen"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

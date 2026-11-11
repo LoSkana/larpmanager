@@ -115,14 +115,8 @@ class ConfigForm(BaseModelForm):
         """
         super().__init__(*args, **kwargs)
 
-        # Initialize configuration attributes
-        self.config_fields = []
-        self._section = None
-        self._section_slug = None
-        self.jump_section = None
-
         # Set up initial configurations
-        self.set_configs()
+        self.collect_configs()
 
         # Restrict sections to a demo type's allow-list, if any, and auto-open them
         self._filter_fields_by_demo_type()
@@ -135,6 +129,14 @@ class ConfigForm(BaseModelForm):
         # If in frame mode with a specific section, remove fields from other sections
         if self.params.get("frame") and self.jump_section:
             self._filter_fields_by_section()
+
+    def collect_configs(self) -> None:
+        """Reset the configuration state and fill config_fields from set_configs."""
+        self.config_fields = []
+        self._section = None
+        self._section_slug = None
+        self.jump_section = None
+        self.set_configs()
 
     @abstractmethod
     def set_configs(self) -> None:
