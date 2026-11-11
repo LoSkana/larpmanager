@@ -215,6 +215,9 @@ msgstr "Regel"
 msgid "Save"
 msgstr "Spara"
 
+msgid "Send"
+msgstr "Skicka"
+
 msgid "Sent"
 msgstr "Skickad"
 
@@ -5077,6 +5080,9 @@ msgstr "Lageruppdrag"
 msgid "What you will unlock:"
 msgstr "Vad du kommer att låsa upp:"
 
+msgid "Writing the answer..."
+msgstr "Skriver svaret..."
+
 msgid "You have already paid"
 msgstr "Du har redan betalat"
 
@@ -5508,6 +5514,9 @@ msgstr "Förhandsanmälningar sparade!"
 
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
+
+msgid "Reading your question..."
+msgstr "Läser din fråga..."
 
 msgid "Referred Friend Discount"
 msgstr "Rabatt för värvade vänner"
@@ -6394,6 +6403,9 @@ msgstr "Både %(tokens)s och %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Etiketter för Pooler i karaktärsinventeringen"
 
+msgid "Checking your event settings..."
+msgstr "Kollar dina eventinställningar..."
+
 msgid "Choice available, click to lock"
 msgstr "Val tillgängligt, klicka för att låsa"
 
@@ -7169,6 +7181,9 @@ msgstr "En symbol mer eller mindre än förväntat"
 
 msgid "Reserved word, please choose another!"
 msgstr "Reserverat ord, välj ett annat!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Söker i guiderna och handledningarna..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Välj den organisation som du vill gå vidare till"
@@ -9845,6 +9860,9 @@ msgstr ""
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valfritt) Om funktionen är synlig för användarna: true eller false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Fråga vad som helst om LarpManager, t.ex. hur öppnar jag anmälningar?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12393,13 +12411,6 @@ msgid ""
 msgstr ""
 "Ange privat information om din karaktär, som bara är synlig för dig och "
 "arrangörerna"
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Jag kunde inte hitta något relevant i dokumentationen. Prova att öppna ett "
-"supportärende."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "

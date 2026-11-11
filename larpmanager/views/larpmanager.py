@@ -103,7 +103,12 @@ from larpmanager.utils.auth.permission import has_association_permission, has_ev
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH, get_chat_answer
+from larpmanager.utils.larpmanager.chat import (
+    CHAT_MAX_QUESTION_LENGTH,
+    build_chat_context,
+    clean_history,
+    get_chat_answer,
+)
 from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
@@ -536,12 +541,13 @@ def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
 def chat_ask(request: HttpRequest) -> Any:
     """AJAX endpoint for the live chat assistant.
 
-    Answers are grounded in the guides and tutorials and cached per question and page, so
-    the Anthropic API is only called for new, matchable questions.
+    Answers are grounded in the documentation and in the state of the event or organization
+    the user manages, and cached per question and context.
 
     Args:
-        request: HTTP request object, expects POST with "question" and optional "page",
-            the name of the view the user is on.
+        request: HTTP request object, expects POST with "question", and optionally "page" (the
+            name of the view the user is on), "run" (the slug of the run the page belongs to)
+            and "history" (JSON list of the previous user/assistant messages).
 
     Returns:
         JsonResponse: {"answer": "...", "sources": [{"title": "...", "url": "..."}]}
@@ -560,9 +566,36 @@ def chat_ask(request: HttpRequest) -> Any:
     if len(question) > CHAT_MAX_QUESTION_LENGTH:
         return JsonResponse({"error": _("Your question is too long")}, status=400)
 
-    LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+    chat_log = LarpManagerChatLog.objects.create(member=request.user.member, question=question)
 
-    return JsonResponse(get_chat_answer(question, request.POST.get("page", "")))
+    context = get_context(request)
+    chat_context = build_chat_context(
+        request.POST.get("page", ""),
+        run=_get_chat_run(request, context, request.POST.get("run", "")),
+        association_id=context["association_id"] if context.get("association_role") else None,
+        association_features=context.get("features"),
+    )
+    result = get_chat_answer(question, chat_context, clean_history(request.POST.get("history", "")))
+
+    chat_log.answer = result["answer"]
+    chat_log.save(update_fields=["answer"])
+    return JsonResponse(result)
+
+
+def _get_chat_run(request: HttpRequest, context: dict, run_slug: str) -> Run | None:
+    """Return the run of the given slug in the current association, if the user has a role on it."""
+    event_slug, _separator, number = run_slug.partition("-")
+    if not event_slug or (number and not number.isdigit()) or "event_role" not in context:
+        return None
+    if not has_event_permission(request, context, run_slug):
+        return None
+    return (
+        Run.objects.filter(
+            event__association_id=context["association_id"], event__slug=event_slug, number=int(number or 1)
+        )
+        .select_related("event")
+        .first()
+    )
 
 
 def ticket(request: HttpRequest, reason: Any = "") -> Any:

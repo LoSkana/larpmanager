@@ -1,0 +1,15 @@
+{% load i18n %}
+{% if is_larpmanager_skin %}
+    <form class="dashboard-ask-bar" autocomplete="off">
+        <i class="fa-solid fa-comment-dots"></i>
+        <input type="text"
+               class="dashboard-ask-input"
+               maxlength="{{ chat_max_question_length }}"
+               name="question"
+               aria-label="{% trans "Ask a question" %}"
+               placeholder="{% trans "Ask anything about LarpManager, e.g. how do I open registrations?" %}">
+        <button type="submit" aria-label="{% trans "Send" %}">
+            <i class="fa-solid fa-paper-plane"></i>
+        </button>
+    </form>
+{% endif %}

@@ -5770,6 +5770,18 @@ msgstr ""
 msgid "Read more:"
 msgstr ""
 
+msgid "Reading your question..."
+msgstr ""
+
+msgid "Checking your event settings..."
+msgstr ""
+
+msgid "Searching the guides and tutorials..."
+msgstr ""
+
+msgid "Writing the answer..."
+msgstr ""
+
 msgid "Are you sure you want to delete this element?"
 msgstr ""
 
@@ -8552,6 +8564,12 @@ msgid "Sent"
 msgstr ""
 
 msgid "Redeemed"
+msgstr ""
+
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+
+msgid "Send"
 msgstr ""
 
 #, python-format
@@ -13020,11 +13038,6 @@ msgid "Deliveries"
 msgstr ""
 
 msgid "Plot Roles"
-msgstr ""
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
 msgstr ""
 
 #, python-format

@@ -215,6 +215,9 @@ msgstr "Regel"
 msgid "Save"
 msgstr "Speichern"
 
+msgid "Send"
+msgstr "Senden"
+
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -5077,6 +5080,9 @@ msgstr "Lagerzuweisungen"
 msgid "What you will unlock:"
 msgstr "Was du freischalten wirst:"
 
+msgid "Writing the answer..."
+msgstr "Schreibe die Antwort..."
+
 msgid "You have already paid"
 msgstr "Du hast bereits bezahlt"
 
@@ -5508,6 +5514,9 @@ msgstr "Vorregistrierungen gespeichert!"
 
 msgid "Provisional registration"
 msgstr "Vorläufige Registrierung"
+
+msgid "Reading your question..."
+msgstr "Lese deine Frage..."
 
 msgid "Referred Friend Discount"
 msgstr "Rabatt für geworbene Freunde"
@@ -6394,6 +6403,9 @@ msgstr "Sowohl %(tokens)s als auch %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Bezeichnungen für den Charakter-Inventar-Pool"
 
+msgid "Checking your event settings..."
+msgstr "Prüfe deine Event-Einstellungen..."
+
 msgid "Choice available, click to lock"
 msgstr "Auswahl verfügbar, zum Sperren anklicken"
 
@@ -7169,6 +7181,9 @@ msgstr "Ein Zeichen mehr oder weniger als erwartet"
 
 msgid "Reserved word, please choose another!"
 msgstr "Reserviertes Wort, bitte wähle ein anderes!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Durchsuche die Anleitungen und Tutorials..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Wähle die Organisation aus, zu der du fortfahren möchtest"
@@ -10030,6 +10045,9 @@ msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Optional) Ob die Fähigkeit für Nutzer sichtbar ist: „true“ oder „false“"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Frag alles über LarpManager, z. B. wie öffne ich die Anmeldungen?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12785,13 +12803,6 @@ msgid ""
 msgstr ""
 "Gib private Informationen über deinen Charakter ein, die nur für dich und "
 "die Organisatoren sichtbar sind"
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Ich konnte in der Dokumentation nichts Passendes finden. Versuch es mit "
-"einem Support-Ticket."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "

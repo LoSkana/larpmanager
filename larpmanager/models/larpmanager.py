@@ -55,6 +55,8 @@ class LarpManagerChatLog(BaseModel):
 
     question = models.TextField()
 
+    answer = models.TextField(blank=True, default="")
+
 
 class LarpManagerReview(BaseModel):
     """Model for storing user reviews and testimonials.

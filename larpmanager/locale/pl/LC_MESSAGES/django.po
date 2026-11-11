@@ -215,6 +215,9 @@ msgstr "Zasada"
 msgid "Save"
 msgstr "Zapisz"
 
+msgid "Send"
+msgstr "Wyślij"
+
 msgid "Sent"
 msgstr "Wysłany"
 
@@ -5077,6 +5080,9 @@ msgstr "Zadania magazynowe"
 msgid "What you will unlock:"
 msgstr "Co odblokujesz:"
 
+msgid "Writing the answer..."
+msgstr "Piszę odpowiedź..."
+
 msgid "You have already paid"
 msgstr "Już zapłaciłeś"
 
@@ -5508,6 +5514,9 @@ msgstr "Wstępne rejestracje zapisane!"
 
 msgid "Provisional registration"
 msgstr "Rejestracja tymczasowa"
+
+msgid "Reading your question..."
+msgstr "Czytam twoje pytanie..."
 
 msgid "Referred Friend Discount"
 msgstr "Zniżka dla poleconego znajomego"
@@ -6394,6 +6403,9 @@ msgstr "Zarówno %(tokens)s, jak i %(credits)s"
 msgid "Character Inventory Pool Labels"
 msgstr "Etykiety Pool ekwipunku postaci"
 
+msgid "Checking your event settings..."
+msgstr "Sprawdzam ustawienia twojego wydarzenia..."
+
 msgid "Choice available, click to lock"
 msgstr "Dostępny wybór, kliknij, aby zablokować"
 
@@ -7169,6 +7181,9 @@ msgstr "O jeden symbol więcej lub mniej niż oczekiwano"
 
 msgid "Reserved word, please choose another!"
 msgstr "Słowo zastrzeżone, wybierz inne!"
+
+msgid "Searching the guides and tutorials..."
+msgstr "Przeszukuję przewodniki i samouczki..."
 
 msgid "Select the organisation to proceed to"
 msgstr "Wybierz organizację, do której chcesz przejść"
@@ -9897,6 +9912,9 @@ msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Opcjonalnie) Czy zdolność jest widoczna dla użytkowników: true lub false"
 
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr "Zapytaj o cokolwiek w LarpManagerze, np. jak otworzyć zapisy?"
+
 #, python-format
 msgid "Confirm your character %(name)s is ready to propose to the staff!"
 msgstr ""
@@ -12482,13 +12500,6 @@ msgid ""
 msgstr ""
 "Wpisz prywatne informacje o swojej postaci, widoczne tylko dla ciebie i "
 "organizatorów"
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
-msgstr ""
-"Nie udało mi się znaleźć niczego przydatnego w dokumentacji. Spróbuj "
-"otworzyć zgłoszenie do pomocy technicznej."
 
 msgid ""
 "If enabled, organizers can edit the preferences of participants from the "

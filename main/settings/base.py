@@ -414,6 +414,9 @@ AWS_SNS_TOPIC_ARN = None
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
 
+# Development only: without an API key, use the credentials of a local "ant auth login"
+ANTHROPIC_USE_LOCAL_LOGIN = False
+
 # Optional CLI agent used for translation instead of DeepL.
 LLM_TRANSLATION_AGENT = None
 LLM_TRANSLATION_MODEL = None

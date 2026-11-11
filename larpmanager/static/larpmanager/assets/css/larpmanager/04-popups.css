@@ -661,8 +661,8 @@ dialog::backdrop {
 }
 
 #chat-widget-dialog {
-  width: 26em;
-  height: 34em;
+  width: 40em;
+  height: 38em;
   border-radius: 2em;
   background-color: var(--sec-clr);
   color: var(--pri-clr) !important;
@@ -725,7 +725,55 @@ dialog::backdrop {
 }
 
 .chat-widget-message.chat-widget-pending {
-  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  white-space: normal;
+}
+
+.chat-widget-spinner {
+  width: 1.8em;
+  height: 1.8em;
+  flex-shrink: 0;
+  animation: chat-widget-spin 1.6s linear infinite;
+}
+
+.chat-widget-pending-text {
+  opacity: 0.75;
+  font-style: italic;
+}
+
+@keyframes chat-widget-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-widget-spinner {
+    animation: none;
+  }
+}
+
+.chat-widget-message.chat-widget-rich {
+  white-space: normal;
+}
+
+.chat-widget-message.chat-widget-rich p {
+  margin: 0 0 0.5em 0;
+}
+
+.chat-widget-message.chat-widget-rich ol,
+.chat-widget-message.chat-widget-rich ul {
+  margin: 0 0 0.5em 0;
+  padding-left: 1.4em;
+}
+
+.chat-widget-message.chat-widget-rich a {
+  text-decoration: underline;
 }
 
 #chat-widget-form {
