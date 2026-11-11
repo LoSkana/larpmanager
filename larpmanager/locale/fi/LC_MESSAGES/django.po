@@ -14974,6 +14974,13 @@ msgstr ""
 "lähettämän vahvistuksen kuvakaappaus."
 
 msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Organisaatiosi on saavuttanut ilmaisen paketin päivittäisen kysymysrajan "
+"avustajalle, yritä uudelleen huomenna"
+
+msgid ""
 "A measure of how much to favor participants who completed full payment "
 "earlier (0=default disabled, 1=normal, 10=strong)."
 msgstr ""

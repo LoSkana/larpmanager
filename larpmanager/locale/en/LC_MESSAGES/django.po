@@ -13722,6 +13722,11 @@ msgstr ""
 msgid "Your question is too long"
 msgstr ""
 
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr ""
 

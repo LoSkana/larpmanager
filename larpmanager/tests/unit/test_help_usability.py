@@ -33,6 +33,7 @@ from django.test import RequestFactory, override_settings
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import clear_event_features_cache
 from larpmanager.models.access import EventPermission, PermissionModule
+from larpmanager.models.association import AssociationPlan
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Event
 from larpmanager.models.larpmanager import LarpManagerChatLog, LarpManagerGuide, LarpManagerTutorial
@@ -40,11 +41,15 @@ from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.core.base import add_intro_driver
 from larpmanager.utils.core.context_processors import cache_association
 from larpmanager.utils.larpmanager.chat import (
+    CHAT_FREE_DAILY_LIMIT,
     CHAT_MAX_QUESTION_LENGTH,
     CHAT_MAX_TOOL_ROUNDS,
     build_chat_context,
     clean_history,
+    count_chat_answer,
     get_chat_answer,
+    get_chat_quota_key,
+    is_chat_quota_reached,
 )
 from larpmanager.utils.larpmanager.query import _tutorial_doc, get_tutorial_doc, search_guides, search_tutorials
 from larpmanager.utils.services.association import get_activation_checklist
@@ -374,6 +379,38 @@ class TestChat(BaseTestCase):
         self.assertEqual(response.status_code, 400)
         answer.assert_not_called()
         self.assertFalse(LarpManagerChatLog.objects.exists())
+
+    def test_free_plan_daily_quota(self) -> None:
+        """Free plan associations get a limited number of questions per day, paid plans none."""
+        association = self.get_association()
+        association.plan = AssociationPlan.FREE
+        association.save()
+        quota_key = get_chat_quota_key(association.id)
+        for _i in range(CHAT_FREE_DAILY_LIMIT):
+            self.assertFalse(is_chat_quota_reached(quota_key))
+            count_chat_answer(quota_key)
+        self.assertTrue(is_chat_quota_reached(quota_key))
+
+        association.plan = AssociationPlan.SUPPORT
+        association.save()
+        self.assertIsNone(get_chat_quota_key(association.id))
+        self.assertIsNone(get_chat_quota_key(0))
+
+    def test_unavailable_answers_are_not_counted(self) -> None:
+        """Answers prevented by a service failure do not use the daily quota."""
+        association = self.get_association()
+        association.plan = AssociationPlan.FREE
+        association.save()
+        request = RequestFactory().post("/", {"question": "How do I open registrations?"})
+        request.user = self.get_user()
+        request.association = {"id": association.id, "main_domain": "larpmanager.com"}
+        with (
+            patch("larpmanager.views.larpmanager.get_context", return_value={"association_id": association.id}),
+            patch("larpmanager.views.larpmanager.get_chat_answer", return_value={"answer": "x", "unavailable": True}),
+        ):
+            response = chat_ask(request)
+        self.assertNotIn("unavailable", json.loads(response.content))
+        self.assertIsNone(cache.get(get_chat_quota_key(association.id)[0]))
 
     def test_run_context_requires_a_role(self) -> None:
         """The event is used as context only for users with a role on it."""

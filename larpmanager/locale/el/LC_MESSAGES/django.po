@@ -15348,6 +15348,13 @@ msgstr ""
 "Paypal."
 
 msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Ο οργανισμός σου έφτασε το ημερήσιο όριο ερωτήσεων προς τον βοηθό για το "
+"δωρεάν πρόγραμμα, δοκίμασε ξανά αύριο"
+
+msgid ""
 "A measure of how much to favor participants who completed full payment "
 "earlier (0=default disabled, 1=normal, 10=strong)."
 msgstr ""

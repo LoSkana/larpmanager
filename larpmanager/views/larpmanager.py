@@ -107,7 +107,10 @@ from larpmanager.utils.larpmanager.chat import (
     CHAT_MAX_QUESTION_LENGTH,
     build_chat_context,
     clean_history,
+    count_chat_answer,
     get_chat_answer,
+    get_chat_quota_key,
+    is_chat_quota_reached,
 )
 from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
@@ -566,6 +569,18 @@ def chat_ask(request: HttpRequest) -> Any:
     if len(question) > CHAT_MAX_QUESTION_LENGTH:
         return JsonResponse({"error": _("Your question is too long")}, status=400)
 
+    quota_key = get_chat_quota_key(request.association["id"])
+    if is_chat_quota_reached(quota_key):
+        return JsonResponse(
+            {
+                "error": _(
+                    "Your organization has reached the daily limit of questions to the assistant for the free plan, "
+                    "please try again tomorrow"
+                )
+            },
+            status=429,
+        )
+
     chat_log = LarpManagerChatLog.objects.create(member=request.user.member, question=question)
 
     context = get_context(request)
@@ -576,6 +591,8 @@ def chat_ask(request: HttpRequest) -> Any:
         association_features=context.get("features"),
     )
     result = get_chat_answer(question, chat_context, clean_history(request.POST.get("history", "")))
+    if not result.pop("unavailable", False):
+        count_chat_answer(quota_key)
 
     chat_log.answer = result["answer"]
     chat_log.save(update_fields=["answer"])

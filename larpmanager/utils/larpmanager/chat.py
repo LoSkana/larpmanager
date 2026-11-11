@@ -20,6 +20,8 @@
 import hashlib
 import json
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 import anthropic
 from django.conf import settings as conf_settings
@@ -27,12 +29,13 @@ from django.core.cache import cache
 from django.urls import NoReverseMatch, reverse
 from django.utils.translation import get_language, gettext as _, override
 
+from larpmanager.cache.basic import get_association_basic_cache
 from larpmanager.cache.config import get_element_configs
 from larpmanager.cache.feature import get_event_features
 from larpmanager.forms.association import ExeConfigForm
 from larpmanager.forms.event import OrgaConfigForm
 from larpmanager.models.access import AssociationPermission, EventPermission
-from larpmanager.models.association import Association
+from larpmanager.models.association import Association, AssociationPlan
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Event, Run
 from larpmanager.utils.larpmanager.query import (
@@ -60,6 +63,7 @@ CHAT_MAX_HISTORY_MESSAGES = 6
 CHAT_MAX_HISTORY_LENGTH = 4000
 CHAT_TIMEOUT = 90.0
 CHAT_MAX_CONFIG_VALUE_LENGTH = 40
+CHAT_FREE_DAILY_LIMIT = 5
 
 # Placeholder of the current event slug in the page paths given to the model
 EVENT_PLACEHOLDER = "{event}"
@@ -455,6 +459,7 @@ def _unavailable_answer() -> dict:
     return {
         "answer": str(_("The assistant is temporarily unavailable, please try again later.")),
         "sources": [],
+        "unavailable": True,
     }
 
 
@@ -474,7 +479,8 @@ def get_chat_answer(
         use_cache: Whether to reuse and store cached answers.
 
     Returns:
-        Dict with the Markdown "answer" and the "sources" list of {"title", "url"} it relied on.
+        Dict with the Markdown "answer" and the "sources" list of {"title", "url"} it relied on;
+        "unavailable" is set when a service failure prevented a real answer.
 
     """
     question = (question or "").strip()
@@ -520,3 +526,41 @@ def get_chat_answer(
 def _with_links(result: dict, run_slug: str) -> dict:
     """Return a copy of an answer with its event links resolved for the user."""
     return {**result, "answer": _resolve_links(result["answer"], run_slug)}
+
+
+def get_chat_quota_key(association_id: int) -> tuple[str, int] | None:
+    """Return the cache key and timeout of today's answer counter, or None if the association has no quota.
+
+    Only free plan associations have a daily quota, which resets at midnight in their timezone.
+    """
+    if not association_id:
+        return None
+
+    plan = Association.objects.filter(pk=association_id).values_list("plan", flat=True).first()
+    if plan != AssociationPlan.FREE:
+        return None
+
+    timezone_name = get_association_basic_cache(association_id).get("timezone") or "UTC"
+    try:
+        now = datetime.now(ZoneInfo(timezone_name))
+    except (KeyError, ValueError):
+        now = datetime.now(ZoneInfo("UTC"))
+    midnight = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    return f"chat_quota_{association_id}_{now.date().isoformat()}", int((midnight - now).total_seconds()) + 60
+
+
+def is_chat_quota_reached(quota_key: tuple[str, int] | None) -> bool:
+    """Return whether the daily answers of the quota are all used."""
+    return quota_key is not None and (cache.get(quota_key[0]) or 0) >= CHAT_FREE_DAILY_LIMIT
+
+
+def count_chat_answer(quota_key: tuple[str, int] | None) -> None:
+    """Count an answer given against the daily quota."""
+    if quota_key is None:
+        return
+    cache_key, timeout = quota_key
+    cache.add(cache_key, 0, timeout=timeout)
+    try:
+        cache.incr(cache_key)
+    except ValueError:
+        cache.set(cache_key, 1, timeout=timeout)

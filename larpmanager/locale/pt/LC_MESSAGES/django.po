@@ -15086,6 +15086,13 @@ msgstr ""
 "captura de ecrã da confirmação enviada pelo Paypal."
 
 msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"A tua organização atingiu o limite diário de perguntas ao assistente do "
+"plano gratuito, tenta novamente amanhã"
+
+msgid ""
 "A measure of how much to favor participants who completed full payment "
 "earlier (0=default disabled, 1=normal, 10=strong)."
 msgstr ""

@@ -15230,6 +15230,13 @@ msgstr ""
 "gestuurd."
 
 msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+"Je organisatie heeft de dagelijkse limiet aan vragen aan de assistent voor "
+"het gratis abonnement bereikt, probeer het morgen opnieuw"
+
+msgid ""
 "A measure of how much to favor participants who completed full payment "
 "earlier (0=default disabled, 1=normal, 10=strong)."
 msgstr ""
