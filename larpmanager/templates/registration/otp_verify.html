@@ -15,7 +15,7 @@
             <br />
             <br />
             <p class="password_reset">
-                <a href="{% url 'login' %}">{% trans "Cancel" %}</a>
+                <a href="{% url 'login' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">{% trans "Cancel" %}</a>
             </p>
         </form>
     </div>

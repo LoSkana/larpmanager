@@ -89,7 +89,7 @@ class TokenAuthMiddleware:
 
             # Parse current URL to remove token parameter
             parsed = urlparse(request.get_full_path())
-            query = parse_qs(parsed.query)
+            query = parse_qs(parsed.query, keep_blank_values=True)
 
             # Remove token from query parameters and rebuild URL
             query.pop("token", None)

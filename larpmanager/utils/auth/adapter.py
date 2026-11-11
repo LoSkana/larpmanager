@@ -26,7 +26,6 @@ from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
@@ -157,21 +156,28 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         if not user.email:
             return
 
-        try:
-            # Look for existing user with matching email address
-            user = User.objects.get(email=user.email)
+        # Never link to an existing account on an email the provider states as unverified
+        if sociallogin.account.extra_data.get("email_verified") is False:
+            return
 
-            # Connect the social account to the existing user
-            sociallogin.connect(request, user)
-
-            # Update member profile with social login information
-            self.update_member(user, sociallogin)
-        except ObjectDoesNotExist:
+        # Look for existing user with matching email address (case-insensitive),
+        # preferring an exact match, then the oldest account
+        email = user.email.strip()
+        candidates = User.objects.filter(email__iexact=email).order_by("id")
+        existing_user = candidates.filter(email=email).first() or candidates.first()
+        if not existing_user:
             # No existing user found - let normal signup process continue
             logger.debug(
                 "No existing user found for email %s - proceeding with signup",
                 sociallogin.account.extra_data.get("email"),
             )
+            return
+
+        # Connect the social account to the existing user
+        sociallogin.connect(request, existing_user)
+
+        # Update member profile with social login information
+        self.update_member(existing_user, sociallogin)
 
     def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
         """Save new user from social login."""

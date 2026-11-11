@@ -24,15 +24,17 @@ import secrets
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+from urllib.parse import urlsplit, urlunsplit
 
 import magic
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, redirect_to_login
 from django.core.cache import cache
 from django.core.files.storage import default_storage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
@@ -40,7 +42,7 @@ from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
-from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, session_token_key
+from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, safe_local_url, session_token_key
 from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
@@ -142,6 +144,7 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
         request: HTTP request object containing user authentication data
         subdomain: Target subdomain to redirect to (e.g., 'app', 'admin')
         path: Optional path to append to the redirect URL. Defaults to empty string.
+            Overridden by a same-site 'next' query parameter, if present.
 
     Returns:
         HttpResponse: Redirect response to the target subdomain URL with session token,
@@ -154,13 +157,15 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     # Check if user is authenticated, redirect to login if not
     user = request.user
     if not user.is_authenticated:
-        return redirect("/login/")
+        return redirect_to_login(request.get_full_path(), reverse("login"))
+
+    target = safe_local_url(request.GET.get("next")) or f"/{path}"
 
     # In dev/test there is a single host serving every association: switch
     # association via session instead of building a (non-resolvable) subdomain URL
     if getattr(request, "enviro", None) in ("dev", "test"):
         request.session["debug_slug"] = subdomain
-        return redirect(f"/{path}")
+        return redirect(target)
 
     # Generate secure random token for cross-subdomain authentication
     token = secrets.token_urlsafe(32)
@@ -168,9 +173,12 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     # Store token in cache with user ID and short timeout for security
     cache.set(session_token_key(token), user.id, timeout=SESSION_TOKEN_TTL)
 
-    # Build redirect URL with subdomain and token
+    # Build redirect URL with subdomain and token, keeping any query of the target
     base_domain = get_base_domain(request)
-    return redirect(f"{request.scheme}://{subdomain}.{base_domain}/{path}?token={token}")
+    parts = urlsplit(target)
+    query = f"{parts.query}&token={token}" if parts.query else f"token={token}"
+    target = urlunsplit(("", "", parts.path, query, parts.fragment))
+    return redirect(f"{request.scheme}://{subdomain}.{base_domain}{target}")
 
 
 def get_base_domain(request: HttpRequest) -> str:
