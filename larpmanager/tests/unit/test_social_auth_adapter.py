@@ -38,6 +38,7 @@ from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory
 
 from larpmanager.middleware.sso import SocialLoginTargetMiddleware
+from larpmanager.middleware.token import TokenAuthMiddleware
 from larpmanager.models.member import Member
 from larpmanager.templatetags.show_tags import auth_next_query, get_social_login_url
 from larpmanager.utils.auth.adapter import MyAccountAdapter, MySocialAccountAdapter
@@ -564,6 +565,19 @@ class TestAfterLogin:
         query = parse_qs(target.query)
         assert query["ticket"] == ["a"]
         assert "token" in query
+
+    def test_token_middleware_keeps_destination(self) -> None:
+        """Stripping the token lands on the 'next' page with its whole query, blank values included."""
+        request = self._request("/after_login/test-org/", {"next": "/event/test/register/?ticket=&step=2"})
+        hop = urlparse(after_login(request, "test-org").url)
+
+        landing_query = hop.query.replace("token=", "token=forged-")
+        landing = RequestFactory().get(f"{hop.path}?{landing_query}", HTTP_HOST="larpmanager.com")
+        response = TokenAuthMiddleware(lambda _request: HttpResponse())(landing)
+
+        target = urlparse(response.url)
+        assert target.path == "/event/test/register/"
+        assert parse_qs(target.query, keep_blank_values=True) == {"ticket": [""], "step": ["2"]}
 
     def test_anonymous_keeps_destination(self) -> None:
         """An anonymous hit is sent to login, coming back here afterwards."""
