@@ -1,19 +1,21 @@
-{% load static i18n %}
+{% load static i18n show_tags %}
 <div class="sidebar-section">
     <span class="sidebar-link-wrap">
-        <a class="sidebar-link" href="{% url 'login' %}">
+        <a class="sidebar-link" href="{% url 'login' %}{% auth_next_query %}">
             <i class="fa-solid fa-right-to-bracket"></i>
             <span>Log In</span>
         </a>
     </span>
     <span class="sidebar-link-wrap">
-        <a class="sidebar-link" href="{% url 'registration_register' %}">
+        <a class="sidebar-link"
+           href="{% url 'registration_register' %}{% auth_next_query %}">
             <i class="fa-solid fa-user-plus"></i>
             <span>{% trans "Register" %}</span>
         </a>
     </span>
     <span class="sidebar-link-wrap">
-        <a class="sidebar-link" href="{% url 'password_reset' %}">
+        <a class="sidebar-link"
+           href="{% url 'password_reset' %}{% auth_next_query %}">
             <i class="fa-solid fa-key"></i>
             <span>{% trans "Password reset" %}</span>
         </a>

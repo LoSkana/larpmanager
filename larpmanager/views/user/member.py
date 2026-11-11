@@ -94,6 +94,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import CharacterConfig
+from larpmanager.utils.auth.sso import safe_local_url
 from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
@@ -1416,4 +1417,6 @@ def otp_verify(request: HttpRequest) -> HttpResponse:
 
     context = get_optional_context(request)
     context["form"] = form
+    next_url = safe_local_url(request.session.get("otp_next_url"))
+    context["next_url"] = next_url if next_url != "/" else None
     return render(request, "registration/otp_verify.html", context)

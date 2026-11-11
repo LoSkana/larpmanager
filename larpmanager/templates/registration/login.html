@@ -42,14 +42,10 @@
             </table>
             <input type="submit" class="login_go" value="{% trans "Submit" %}" />
             <p class="registration_register v22_only_mobile">
-                {% if request.GET.next %}
-                    <a href="{% url 'registration_register' %}?next={{ request.GET.next|urlencode }}">{% trans "Register" %}</a>
-                {% else %}
-                    <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
-                {% endif %}
+                <a href="{% url 'registration_register' %}{% auth_next_query %}">{% trans "Register" %}</a>
             </p>
             <p class="password_reset v22_only_mobile">
-                <a href="{% url 'password_reset' %}">{% trans "Password reset" %}</a>
+                <a href="{% url 'password_reset' %}{% auth_next_query %}">{% trans "Password reset" %}</a>
             </p>
         </form>
     </div>
