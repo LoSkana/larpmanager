@@ -35,12 +35,14 @@ function parseLocalNum(num) {
 
 var submitted = {{ submitted | safe }};
 
- var price_regex = /(\d+(?:\.\d+)?){{ currency_symbol }}/g;
+ // currency symbol escaped, so symbols like "$" are not read as regex anchors
+ var currency_regex = '{{ currency_symbol|escapejs }}'.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+ var price_regex = new RegExp('(\\d+(?:\\.\\d+)?)' + currency_regex, 'g');
 
  function get_price(s) {
      found = s.match(price_regex);
             if (!found) return 0;
-    v = parseFloat(found[0].replace("{{ currency_symbol }}", ""));
+    v = parseFloat(found[0].replace("{{ currency_symbol|escapejs }}", ""));
     return v;
  }
 

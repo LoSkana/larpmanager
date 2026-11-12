@@ -81,4 +81,4 @@ def test_empty_state(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/discounts/")
     empty_state = page.locator(".empty-state")
     expect_normalized(page, empty_state, "Discounts offer reduced prices or promo codes to participants.")
-    expect(empty_state.get_by_role("button", name="New discount")).to_be_visible()
+    expect(page.get_by_role("link", name="New", exact=True)).to_have_count(1)

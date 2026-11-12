@@ -47,6 +47,7 @@ from larpmanager.utils.io.download.experience import (
     export_character_configs,
     export_criterions,
     export_deliveries,
+    export_exclusives,
     export_modifiers,
     export_rules,
 )
@@ -110,6 +111,7 @@ __all__ = [
     "export_data",
     "export_deliveries",
     "export_event",
+    "export_exclusives",
     "export_modifiers",
     "export_plot_rels",
     "export_registration_form",

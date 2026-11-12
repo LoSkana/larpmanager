@@ -638,6 +638,12 @@ def click_and_wait_question(page: Any, name: str) -> None:
     raise last_error
 
 
+def fill_slug(locator, value):
+    """Open the collapsed slug field and fill it."""
+    locator.locator(".slug_change").click()
+    locator.locator("#slug").fill(value)
+
+
 def fill_date(locator, selector, value):
     """Fill a date_p input by setting value via JS, bypassing the datetimepicker popup."""
     locator.locator(selector).evaluate(

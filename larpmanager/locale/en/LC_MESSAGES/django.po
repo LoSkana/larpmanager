@@ -16,7 +16,7 @@ msgstr ""
 msgid "Expenses"
 msgstr ""
 
-msgid "Total of expenses submitted by collaborators and approved"
+msgid "Total of expenses submitted by collaborators"
 msgstr ""
 
 msgid "Outflows"
@@ -260,6 +260,9 @@ msgstr ""
 msgid "Value must be greater than or equal to 0"
 msgstr ""
 
+msgid "The name must contain letters or numbers"
+msgstr ""
+
 msgid "Settings"
 msgstr ""
 
@@ -371,10 +374,10 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
-msgid "Past events"
+msgid "Hide past events"
 msgstr ""
 
-msgid "If selected, a link to past events is shown in the calendar."
+msgid "If selected, the link to past events is not shown."
 msgstr ""
 
 msgid "Characters shortcut"
@@ -1648,6 +1651,14 @@ msgid ""
 "uppercase in the description of the known abilities."
 msgstr ""
 
+msgid "Exclusive groups"
+msgstr ""
+
+msgid ""
+"If enabled, you can define groups of abilities of which a character can "
+"obtain only a maximum number"
+msgstr ""
+
 msgid "Auto buy"
 msgstr ""
 
@@ -2347,6 +2358,20 @@ msgid ""
 "the description of their abilities"
 msgstr ""
 
+msgid "Exclusive group"
+msgstr ""
+
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number; staff can always assign any ability"
+msgstr ""
+
+msgid "Select at least two abilities."
+msgstr ""
+
+msgid "The maximum must be lower than the number of abilities in the group."
+msgstr ""
+
 msgid "Rule"
 msgstr ""
 
@@ -2801,6 +2826,26 @@ msgstr ""
 msgid "Invalid HTML: %(error)s"
 msgstr ""
 
+msgid ""
+"This URL is not available: check the suggested one or choose another one"
+msgstr ""
+
+msgid "Slug already used!"
+msgstr ""
+
+msgid "Reserved word, please choose another!"
+msgstr ""
+
+msgid "Please select this file again"
+msgstr ""
+
+msgid ""
+"Only lowercase letters and numbers allowed, no spaces or special characters"
+msgstr ""
+
+msgid "The URL cannot be built from this name, please choose one"
+msgstr ""
+
 msgid "Manage all warehouse items, their containers, tags, and quantities"
 msgstr ""
 
@@ -3080,6 +3125,10 @@ msgid ""
 msgstr ""
 
 msgid "Welcome to LarpManager!"
+msgstr ""
+
+#, python-format
+msgid "Welcome to the staff of %(organization)s!"
 msgstr ""
 
 #, python-format
@@ -3984,10 +4033,6 @@ msgstr ""
 msgid "Your organization's unique subdomain in the platform"
 msgstr ""
 
-msgid ""
-"Only lowercase letters and numbers allowed, no spaces or special characters"
-msgstr ""
-
 msgid "Logo"
 msgstr ""
 
@@ -4413,6 +4458,14 @@ msgid ""
 "Enter whether the ability is visible to users, and can be freely purchased"
 msgstr ""
 
+msgid "Creation only"
+msgstr ""
+
+msgid ""
+"If checked, participants can obtain this ability only while their character "
+"is not yet approved"
+msgstr ""
+
 msgid "Pre-requisites"
 msgstr ""
 
@@ -4476,6 +4529,15 @@ msgstr ""
 msgid ""
 "If you select one (or more) factions, this criterion applies only to "
 "characters belonging to all of them"
+msgstr ""
+
+msgid "The abilities belonging to this exclusive group"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum number of abilities of this group a character can obtain"
 msgstr ""
 
 msgid "Single choice"
@@ -5684,6 +5746,12 @@ msgstr ""
 msgid "Requirements:"
 msgstr ""
 
+msgid "Exclusive group:"
+msgstr ""
+
+msgid "Available only until the character is approved"
+msgstr ""
+
 msgid "Confirm"
 msgstr ""
 
@@ -5706,6 +5774,18 @@ msgid "The assistant is temporarily unavailable, please try again later."
 msgstr ""
 
 msgid "Read more:"
+msgstr ""
+
+msgid "Reading your question..."
+msgstr ""
+
+msgid "Checking your event settings..."
+msgstr ""
+
+msgid "Searching the guides and tutorials..."
+msgstr ""
+
+msgid "Writing the answer..."
 msgstr ""
 
 msgid "Are you sure you want to delete this element?"
@@ -5765,6 +5845,11 @@ msgstr ""
 msgid "Here is a quick tour of the dashboard"
 msgstr ""
 
+msgid ""
+"A short video shows every step, from your first event to your first "
+"participant"
+msgstr ""
+
 msgid "Workspace selector"
 msgstr ""
 
@@ -5784,6 +5869,12 @@ msgid "How it is organized"
 msgstr ""
 
 msgid "Read the key concepts"
+msgstr ""
+
+msgid "Watch the guide"
+msgstr ""
+
+msgid "Open the guide"
 msgstr ""
 
 msgid "Welcome to"
@@ -6117,9 +6208,6 @@ msgid "Do you confirm?"
 msgstr ""
 
 msgid "Add option"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 msgid "Assigned automatically when the participant cannot answer the question"
@@ -6580,6 +6668,9 @@ msgid "Move up"
 msgstr ""
 
 msgid "Move down"
+msgstr ""
+
+msgid "Change"
 msgstr ""
 
 msgid "View photos and media from the event"
@@ -8080,6 +8171,9 @@ msgstr ""
 msgid "Next events"
 msgstr ""
 
+msgid "Past events"
+msgstr ""
+
 msgid "Tell me more"
 msgstr ""
 
@@ -8371,6 +8465,18 @@ msgstr ""
 msgid "Create your organization"
 msgstr ""
 
+msgid "Search guides"
+msgstr ""
+
+msgid "No guide matches your search"
+msgstr ""
+
+msgid "Watch"
+msgstr ""
+
+msgid "Read"
+msgstr ""
+
 msgid "Partners"
 msgstr ""
 
@@ -8464,6 +8570,12 @@ msgid "Sent"
 msgstr ""
 
 msgid "Redeemed"
+msgstr ""
+
+msgid "Ask anything about LarpManager, e.g. how do I open registrations?"
+msgstr ""
+
+msgid "Send"
 msgstr ""
 
 #, python-format
@@ -9349,9 +9461,6 @@ msgstr ""
 msgid "Discounts offer reduced prices or promo codes to participants."
 msgstr ""
 
-msgid "New discount"
-msgstr ""
-
 msgid ""
 "List of personal expenses submitted for this event. Upload receipts and "
 "track approval status."
@@ -9820,6 +9929,11 @@ msgid ""
 "experience points."
 msgstr ""
 
+msgid ""
+"No exclusive groups defined yet. Use the button above to create the first "
+"group."
+msgstr ""
+
 msgid "New cost"
 msgstr ""
 
@@ -9920,9 +10034,6 @@ msgid ""
 "plots, factions, and more"
 msgstr ""
 
-msgid "Read"
-msgstr ""
-
 msgid ""
 "No writing elements are available for this event yet. Create characters, "
 "plots, factions, or other elements to see them listed here."
@@ -9941,14 +10052,6 @@ msgstr ""
 
 #, python-format
 msgid "%(name)s form"
-msgstr ""
-
-msgid ""
-"Questions collect the information you need from participants when they "
-"register."
-msgstr ""
-
-msgid "New question"
 msgstr ""
 
 msgid "Installments"
@@ -10134,9 +10237,6 @@ msgstr ""
 msgid ""
 "Tickets are the options participants choose when they register, each with "
 "its own price and availability."
-msgstr ""
-
-msgid "New ticket"
 msgstr ""
 
 msgid "Transfer registration"
@@ -10344,6 +10444,11 @@ msgstr ""
 msgid ""
 "Note that existing calls with the same name, will be overwritten with the "
 "uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing exclusive groups with the same name, will be overwritten "
+"with the uploaded data."
 msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
@@ -10806,9 +10911,6 @@ msgid ""
 "allegiance."
 msgstr ""
 
-msgid "New faction"
-msgstr ""
-
 msgid "Selectable"
 msgstr ""
 
@@ -10837,9 +10939,6 @@ msgid ""
 msgstr ""
 
 msgid "Plots are storylines that involve several characters."
-msgstr ""
-
-msgid "New plot"
 msgstr ""
 
 msgid "Progress step"
@@ -10881,9 +10980,6 @@ msgstr ""
 
 msgid ""
 "Quests are the building blocks of character sheets, each with its own traits."
-msgstr ""
-
-msgid "New quest"
 msgstr ""
 
 msgid "Tagged sides"
@@ -10938,6 +11034,48 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
+msgstr ""
+
+#, python-format
+msgid "Hi %(name)s,"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have just been given your first staff role in <b>%(association_name)s</"
+"b>, welcome aboard!"
+msgstr ""
+
+msgid "Here's the link to the management panel"
+msgstr ""
+
+msgid "You might want to keep this email handy."
+msgstr ""
+
+msgid "To get started, check these out"
+msgstr ""
+
+msgid "Your first event"
+msgstr ""
+
+msgid ""
+"A short video guide that shows every step, from your first event to your "
+"first participant"
+msgstr ""
+
+msgid "Guides"
+msgstr ""
+
+msgid "We suggest watching all the videos in the \\"
+msgstr ""
+
+msgid "Short guides to help you set up your events"
+msgstr ""
+
+msgid "Glad to have you with us!"
+msgstr ""
+
+msgid "The LarpManager team"
 msgstr ""
 
 #, python-format
@@ -12238,6 +12376,11 @@ msgstr ""
 msgid "Manage the game calls participants must remember"
 msgstr ""
 
+msgid ""
+"Manage the groups of abilities of which a character can obtain only a "
+"maximum number"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -12680,6 +12823,11 @@ msgstr ""
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 
+msgid ""
+"(Optional) Whether the ability can be obtained only before the character is "
+"approved: true or false"
+msgstr ""
+
 msgid "The criterion's number (unique identifier)"
 msgstr ""
 
@@ -12738,6 +12886,15 @@ msgid "The call's name, written in uppercase in the ability descriptions"
 msgstr ""
 
 msgid "(Optional) The call's description"
+msgstr ""
+
+msgid "The exclusive group's name"
+msgstr ""
+
+msgid "Maximum number of abilities of the group a character can obtain"
+msgstr ""
+
+msgid "Names of the abilities in the group, comma-separated"
 msgstr ""
 
 msgid "The ability type's name"
@@ -12892,11 +13049,6 @@ msgid "Deliveries"
 msgstr ""
 
 msgid "Plot Roles"
-msgstr ""
-
-msgid ""
-"I could not find anything relevant in the documentation. Try opening a "
-"support ticket."
 msgstr ""
 
 #, python-format
@@ -13179,6 +13331,12 @@ msgid ""
 msgstr ""
 
 msgid "Registrations closed"
+msgstr ""
+
+msgid "This event has concluded"
+msgstr ""
+
+msgid "This event has been cancelled"
 msgstr ""
 
 msgid "Registrations for this event are currently closed"
@@ -13584,6 +13742,11 @@ msgstr ""
 msgid "Your question is too long"
 msgstr ""
 
+msgid ""
+"Your organization has reached the daily limit of questions to the assistant "
+"for the free plan, please try again tomorrow"
+msgstr ""
+
 msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr ""
 
@@ -13592,6 +13755,12 @@ msgstr ""
 
 #, python-format
 msgid "Welcome to %(organization)s!"
+msgstr ""
+
+#, python-format
+msgid ""
+"%(organization)s was already created with this form: open the form again to "
+"create another one"
 msgstr ""
 
 msgid "New organization created"
@@ -13696,9 +13865,30 @@ msgid ""
 "feedback"
 msgstr ""
 
+msgid "Debrief questions collect the feedback of participants after the event."
+msgstr ""
+
 msgid ""
 "Manage the questions participants answer on the characters they would like "
 "to play"
+msgstr ""
+
+msgid ""
+"Matchmaker questions collect what participants would like to play, to help "
+"you assign characters."
+msgstr ""
+
+msgid "Manage the questions players answer when they send a signup request"
+msgstr ""
+
+msgid ""
+"Request questions collect the information you need to approve a player, "
+"before they can register."
+msgstr ""
+
+msgid ""
+"Questions collect the information you need from participants when they "
+"register."
 msgstr ""
 
 msgid "View balances and transfer history for this character inventory"
@@ -14236,12 +14426,6 @@ msgstr ""
 
 msgid ""
 "The reservation of these discounts has expired, so they were not applied"
-msgstr ""
-
-msgid "This event has concluded"
-msgstr ""
-
-msgid "This event has been cancelled"
 msgstr ""
 
 msgid "Your signup request has been submitted!"

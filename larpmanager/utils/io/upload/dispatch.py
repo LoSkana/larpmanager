@@ -28,6 +28,7 @@ from larpmanager.utils.io.upload.experience import (
     calls_load,
     criterions_load,
     deliveries_load,
+    exclusives_load,
     modifiers_load,
     rules_load,
 )
@@ -71,6 +72,7 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
         "exp_modifier": lambda: modifiers_load(context, upload_form_data),
         "exp_criterion": lambda: criterions_load(context, upload_form_data),
         "exp_call": lambda: calls_load(context, upload_form_data),
+        "exp_exclusive": lambda: exclusives_load(context, upload_form_data),
         "exp_deliverie": lambda: deliveries_load(context, upload_form_data),
         "registration_ticket": lambda: tickets_load(context, upload_form_data),
     }

@@ -24,7 +24,7 @@ import random
 import re
 import unicodedata
 from datetime import date, timedelta
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
@@ -32,8 +32,10 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import transaction
 from django.db.models import Avg, Count, Min, Sum
 from django.http import (
     Http404,
@@ -101,7 +103,15 @@ from larpmanager.utils.auth.permission import has_association_permission, has_ev
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH, get_chat_answer
+from larpmanager.utils.larpmanager.chat import (
+    CHAT_MAX_QUESTION_LENGTH,
+    build_chat_context,
+    clean_history,
+    count_chat_answer,
+    get_chat_answer,
+    get_chat_quota_key,
+    is_chat_quota_reached,
+)
 from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
@@ -116,6 +126,9 @@ from larpmanager.utils.users.accessibility import accessibility_from_post, save_
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
+if TYPE_CHECKING:
+    from uuid import UUID
+
 # Refuse oversized SNS bodies before parsing them
 MAX_SNS_PAYLOAD_SIZE = 256 * 1024
 
@@ -127,6 +140,9 @@ SUPPRESSIONS_PER_PAGE = 100
 
 # Window in which re-submitting the same demo type reuses the demo already created
 DEMO_SESSION_REUSE_SECONDS = 300
+
+# Seconds within which a repeated submit of the organization form leads to the organization already created
+JOIN_TOKEN_TIMEOUT_SECONDS = 300
 
 
 def lm_home(request: HttpRequest) -> Any:
@@ -528,12 +544,13 @@ def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
 def chat_ask(request: HttpRequest) -> Any:
     """AJAX endpoint for the live chat assistant.
 
-    Answers are grounded in the guides and tutorials and cached per question and page, so
-    the Anthropic API is only called for new, matchable questions.
+    Answers are grounded in the documentation and in the state of the event or organization
+    the user manages, and cached per question and context.
 
     Args:
-        request: HTTP request object, expects POST with "question" and optional "page",
-            the name of the view the user is on.
+        request: HTTP request object, expects POST with "question", and optionally "page" (the
+            name of the view the user is on), "run" (the slug of the run the page belongs to)
+            and "history" (JSON list of the previous user/assistant messages).
 
     Returns:
         JsonResponse: {"answer": "...", "sources": [{"title": "...", "url": "..."}]}
@@ -552,9 +569,50 @@ def chat_ask(request: HttpRequest) -> Any:
     if len(question) > CHAT_MAX_QUESTION_LENGTH:
         return JsonResponse({"error": _("Your question is too long")}, status=400)
 
-    LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+    quota_key = get_chat_quota_key(request.association["id"])
+    if is_chat_quota_reached(quota_key):
+        return JsonResponse(
+            {
+                "error": _(
+                    "Your organization has reached the daily limit of questions to the assistant for the free plan, "
+                    "please try again tomorrow"
+                )
+            },
+            status=429,
+        )
 
-    return JsonResponse(get_chat_answer(question, request.POST.get("page", "")))
+    chat_log = LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+
+    context = get_context(request)
+    chat_context = build_chat_context(
+        request.POST.get("page", ""),
+        run=_get_chat_run(request, context, request.POST.get("run", "")),
+        association_id=context["association_id"] if context.get("association_role") else None,
+        association_features=context.get("features"),
+    )
+    result = get_chat_answer(question, chat_context, clean_history(request.POST.get("history", "")))
+    if not result.pop("unavailable", False):
+        count_chat_answer(quota_key)
+
+    chat_log.answer = result["answer"]
+    chat_log.save(update_fields=["answer"])
+    return JsonResponse(result)
+
+
+def _get_chat_run(request: HttpRequest, context: dict, run_slug: str) -> Run | None:
+    """Return the run of the given slug in the current association, if the user has a role on it."""
+    event_slug, _separator, number = run_slug.partition("-")
+    if not event_slug or (number and not number.isdigit()) or "event_role" not in context:
+        return None
+    if not has_event_permission(request, context, run_slug):
+        return None
+    return (
+        Run.objects.filter(
+            event__association_id=context["association_id"], event__slug=event_slug, number=int(number or 1)
+        )
+        .select_related("event")
+        .first()
+    )
 
 
 def ticket(request: HttpRequest, reason: Any = "") -> Any:
@@ -740,13 +798,20 @@ def get_started_real(request: HttpRequest) -> Any:
     if "red" in context:
         return redirect(context["red"])
 
-    joined_association = _join_form(context, request)
+    joined_association, is_new = _join_form(context, request)
     if joined_association:
-        # send message
-        messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
-        # send email
-        if request.association["skin_id"] == 1:
-            join_email(joined_association)
+        if is_new:
+            # send message
+            messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
+            # send email
+            if request.association["skin_id"] == 1:
+                join_email(joined_association)
+        else:
+            messages.warning(
+                request,
+                _("%(organization)s was already created with this form: open the form again to create another one")
+                % {"organization": joined_association.name},
+            )
         # redirect
         return redirect("after_login", subdomain=joined_association.slug, path="manage")
 
@@ -754,7 +819,18 @@ def get_started_real(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/get_started_real.html", context)
 
 
-def _join_form(context: dict, request: HttpRequest) -> Association | None:
+def _join_token_key(member: Member, token: UUID) -> str:
+    """Return the cache key linking a rendering of the join form to its organization."""
+    return f"join_token_{member.id}_{token}"
+
+
+def _resubmitted_association(member: Member, token: UUID | None) -> Association | None:
+    """Return the organization already created by this rendering of the join form, if any."""
+    association_id = cache.get(_join_token_key(member, token)) if token else None
+    return Association.objects.filter(pk=association_id).first() if association_id else None
+
+
+def _join_form(context: dict, request: HttpRequest) -> tuple[Association | None, bool]:
     """Process association creation form for new users.
 
     Handles form validation, association creation, user role assignment,
@@ -765,8 +841,8 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
         request: Django HTTP request object containing POST data and user info.
 
     Returns:
-        Created Association object if form submission is successful and valid,
-        None if GET request or form validation fails.
+        The association, or None if GET request or form validation fails, and whether
+        it was created now rather than by a previous submit of the same form.
 
     Note:
         Updates context dictionary with form instance for template rendering.
@@ -776,48 +852,65 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
     if request.method == "POST":
         # Initialize and validate the association creation form
         form = FirstAssociationForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Create association with inherited skin from request context
-            new_association: Association = form.save(commit=False)
-            new_association.skin_id = request.association["skin_id"]
-            new_association.lite_mode = True
-            new_association.save()
+        member = context["member"]
+        new_association: Association | None = None
+        # Validated before locking the member, as it processes the uploaded files
+        is_valid = form.is_valid()
+        join_token = form.cleaned_data.get("join_token")
 
-            save_single_config(new_association, "intro_driver", "welcome")
+        with transaction.atomic():
+            # Repeated submits of a member run one at a time, so that the later ones find the first result
+            Member.objects.select_for_update().get(pk=member.pk)
+            existing_association = _resubmitted_association(member, join_token)
+            if existing_association:
+                return existing_association, False
 
-            # Create admin role for the new association and assign creator
-            (admin_role, _created) = AssociationRole.objects.get_or_create(
-                association=new_association,
-                number=1,
-                name="Admin",
-            )
-            admin_role.members.add(context["member"])
-            admin_role.save()
+            if is_valid:
+                # Create association with inherited skin from request context
+                form.instance.skin_id = request.association["skin_id"]
+                form.instance.lite_mode = True
+                new_association = form.save_unique_slug()
 
-            # Update membership status to joined for the creator
-            membership = get_user_membership(context["member"], new_association.id)
-            membership.status = MembershipStatus.JOINED
-            membership.save()
+            if new_association:
+                save_single_config(new_association, "intro_driver", "welcome")
 
+                # Create admin role for the new association and assign creator
+                (admin_role, _created) = AssociationRole.objects.get_or_create(
+                    association=new_association,
+                    number=1,
+                    name="Admin",
+                )
+                admin_role.members.add(member)
+                admin_role.save()
+
+                # Update membership status to joined for the creator
+                membership = get_user_membership(member, new_association.id)
+                membership.status = MembershipStatus.JOINED
+                membership.save()
+
+                if join_token:
+                    cache.set(_join_token_key(member, join_token), new_association.id, JOIN_TOKEN_TIMEOUT_SECONDS)
+
+        if new_association:
             # Send notification emails to all configured administrators
             for _admin_name, admin_email in conf_settings.ADMINS:
                 subject = _("New organization created")
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
                     "name": new_association.name,
                     "slug": new_association.slug,
-                    "user": context["member"],
-                    "email": context["member"].email,
+                    "user": member,
+                    "email": member.email,
                 }
                 my_send_mail(subject, body, admin_email)
 
-            return new_association
+            return new_association, True
     else:
         # Initialize empty form for GET requests
         form = FirstAssociationForm()
 
     # Add form to context for template rendering
     context["form"] = form
-    return None
+    return None, False
 
 
 def discover(request: HttpRequest) -> Any:
@@ -889,9 +982,12 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
 
 
 def guides(request: HttpRequest) -> Any:
-    """Display list of published guides for LarpManager users."""
+    """Display published guides for LarpManager users, by group in order of first appearance."""
     context = get_lm_contact(request)
-    context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    groups = {}
+    for guide_item in LarpManagerGuide.objects.filter(published=True).order_by("number"):
+        groups.setdefault(guide_item.group or "", []).append(guide_item)
+    context["groups"] = groups
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
@@ -931,7 +1027,8 @@ def guide(request: HttpRequest, slug: Any) -> Any:
         msg = "guide not found"
         raise Http404(msg) from err
 
-    context["og_image"] = context["guide"].thumb.url
+    if context["guide"].photo:
+        context["og_image"] = context["guide"].thumb.url
     context["og_title"] = f"{context['guide'].title} - LarpManager"
     context["og_description"] = f"{context['guide'].description} - LarpManager"
     context["iframe"] = request.GET.get("in_iframe") == "1"

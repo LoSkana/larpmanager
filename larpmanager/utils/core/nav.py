@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.registrations.characters import is_character_access_locked
@@ -499,6 +500,32 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     return items
 
 
+def _user_nav_profile_flags(request: HttpRequest) -> tuple[bool, bool]:
+    """Return whether the user has registrations, and whether to show the accounting link."""
+    member = getattr(getattr(request, "user", None), "member", None)
+    if not member:
+        return False, False
+
+    flags_cache_key = _user_nav_profile_flags_cache_key(member.id)
+    flags = cache.get(flags_cache_key)
+    if flags is None:
+        qs = Registration.objects.filter(member=member)
+        flags = {
+            "has_registrations": qs.exists(),
+            "has_paid_registrations": qs.filter(tot_iscr__gt=0).exists(),
+        }
+        cache.set(flags_cache_key, flags, _USER_NAV_CACHE_TIMEOUT)
+    if flags["has_paid_registrations"]:
+        return flags["has_registrations"], True
+
+    # Credits and tokens are reachable only from the accounting page
+    association_id = request.association.get("id")
+    if not association_id:
+        return flags["has_registrations"], False
+    membership = get_user_membership(member, association_id)
+    return flags["has_registrations"], membership.credit > 0 or membership.tokens > 0
+
+
 def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     """Build home shortcut navigation item list from request."""
     if not hasattr(request, "association"):
@@ -508,21 +535,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     allowed_sidebar = request.association.get("demo_allowed_sidebar")
     active = request.resolver_match.url_name if request.resolver_match else ""
 
-    member = getattr(getattr(request, "user", None), "member", None)
-    has_registrations = False
-    has_paid_registrations = False
-    if member:
-        flags_cache_key = _user_nav_profile_flags_cache_key(member.id)
-        flags = cache.get(flags_cache_key)
-        if flags is None:
-            qs = Registration.objects.filter(member=member)
-            flags = {
-                "has_registrations": qs.exists(),
-                "has_paid_registrations": qs.filter(tot_iscr__gt=0).exists(),
-            }
-            cache.set(flags_cache_key, flags, _USER_NAV_CACHE_TIMEOUT)
-        has_registrations = flags["has_registrations"]
-        has_paid_registrations = flags["has_paid_registrations"]
+    has_registrations, show_accounting = _user_nav_profile_flags(request)
 
     items: list[dict[str, Any]] = []
 
@@ -550,7 +563,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
             )
         )
 
-    if has_paid_registrations:
+    if show_accounting:
         items.append(
             _item(
                 reverse("accounting"),
@@ -562,7 +575,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
             )
         )
 
-    if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
+    if request.association.get("has_past_events") and not request.association.get("calendar_hide_past_events"):
         _append(
             items,
             _item(
@@ -572,7 +585,6 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 "",
                 active=active == "calendar_past",
                 home=True,
-                sidebar_gate=("past_events", allowed_sidebar),
             ),
         )
 

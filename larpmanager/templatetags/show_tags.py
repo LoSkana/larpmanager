@@ -41,6 +41,7 @@ from larpmanager.accounting.base import _format_decimal
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import display_filename, get_option_form_text
 from larpmanager.models.writing import Character, FactionType, get_event_elements
+from larpmanager.utils.auth.sso import get_auth_next_url
 from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.io.pdf import get_trait_character
@@ -888,7 +889,8 @@ def get_social_login_url(context: dict, provider: str) -> str:
 
     Google's OAuth redirect URI is only registered for the main domain, so a login
     started on an association subdomain must begin on the main domain instead,
-    carrying a 'next' pointing back to /after_login/<slug>/ to return afterwards.
+    carrying a 'next' pointing back to /after_login/<slug>/ to return afterwards,
+    which in turn carries the page to land on in the subdomain.
     This must be resolved server-side (not via client JS) so it can't race with
     the page load and silently fall back to a same-domain login.
     """
@@ -898,8 +900,20 @@ def get_social_login_url(context: dict, provider: str) -> str:
 
     main_domain = association["main_domain"]
     next_url = f"https://{main_domain}/after_login/{association['slug']}/"
+    destination = get_auth_next_url(context.get("request"))
+    if destination:
+        next_url += "?" + urlencode({REDIRECT_FIELD_NAME: destination})
     url = reverse(provider + "_login")
     return f"https://{main_domain}{url}?{urlencode({REDIRECT_FIELD_NAME: next_url})}"
+
+
+@register.simple_tag(takes_context=True)
+def auth_next_query(context: dict) -> str:
+    """Return the '?next=...' query for login/signup links, so the user comes back here."""
+    next_url = get_auth_next_url(context.get("request"))
+    if not next_url:
+        return ""
+    return "?" + urlencode({REDIRECT_FIELD_NAME: next_url})
 
 
 @register.filter

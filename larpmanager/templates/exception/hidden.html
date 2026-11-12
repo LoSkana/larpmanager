@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n static %}
+{% load i18n static show_tags %}
 {% block body_class %}
     error-page
 {% endblock body_class %}
@@ -12,5 +12,5 @@
     {% trans "The event you requested is only visible to participants logged into the system." %}
     <br />
     <br />
-    {% trans "Wanna connect?" %} <a href="{% url 'login' %}">{% trans "Login" %}</a>
+    {% trans "Wanna connect?" %} <a href="{% url 'login' %}{% auth_next_query %}">{% trans "Login" %}</a>
 {% endblock content %}

@@ -422,7 +422,8 @@ def auto_relationships_check(live_server: Any, page: Any) -> None:
 
     for name, text in (
         ("AutoSheetA", "manual sheet text"),
-        ("AutoSheetB", "Text"),
+        # the main sheet text is not named as source
+        ("AutoSheetB", ""),
         ("AutoFactionA", "manual faction text"),
         ("AutoFactionB", "AutoFaction"),
         ("AutoPlotA", "manual plot text"),
@@ -430,4 +431,5 @@ def auto_relationships_check(live_server: Any, page: Any) -> None:
     ):
         entry = relationships.filter(has_text=name)
         expect(entry).to_have_count(1)
-        expect(entry).to_contain_text(text)
+        if text:
+            expect(entry).to_contain_text(text)

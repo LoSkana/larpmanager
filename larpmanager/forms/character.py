@@ -1509,9 +1509,8 @@ class OrgaWritingQuestionForm(BaseModelForm):
                     continue
 
             # Handle character type 'c' - requires 'exp_rules' config
-            elif choice[0] == "c":
-                if not get_event_config(self.params["event"].id, "exp_rules"):
-                    continue
+            elif choice[0] == "c" and not get_event_config(self.params["event"].id, "exp_rules"):
+                continue
 
             # Add valid choice to final list
             filtered_choices.append(choice)

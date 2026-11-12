@@ -43,7 +43,7 @@
                 {% include "elements/run_list.html" with list=future %}
             {% endif %}
         </div>
-        {% if 'past_events' in association.features %}
+        {% if association.has_past_events and not association.calendar_hide_past_events %}
             <div class="nav no_v22">
                 <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>
             </div>

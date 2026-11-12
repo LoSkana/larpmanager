@@ -95,9 +95,11 @@ def _rank_sections(sections: list[tuple[Any, str, str]], search_text: str) -> li
 def _tutorial_doc(tutorial: LarpManagerTutorial, section_title: str, text: str) -> dict[str, str]:
     """Build the result for a tutorial section, linked through its anchor."""
     url = reverse("tutorials", args=[tutorial.slug])
+    ref = tutorial.slug
     if section_title:
         url += f"#{slugify(section_title)}"
-    return {"title": tutorial.name, "section": section_title, "url": url, "text": text}
+        ref += f"#{slugify(section_title)}"
+    return {"title": tutorial.name, "section": section_title, "url": url, "text": text, "ref": ref}
 
 
 def search_guides(search_text: str) -> list[dict[str, str]]:
@@ -174,3 +176,39 @@ def get_tutorial_doc(tutorial_reference: str) -> dict[str, str] | None:
         if section_slug and slugify(section_title) == section_slug:
             return _tutorial_doc(tutorial, section_title, content)
     return _tutorial_doc(tutorial, "", _html_to_text(tutorial.descr))
+
+
+def get_tutorial_index() -> list[tuple[str, str, list[str]]]:
+    """Return every tutorial as (slug, name, section titles), in display order."""
+    return [
+        (tutorial.slug, tutorial.name, [title for title, _content in _html_sections(tutorial.descr)])
+        for tutorial in LarpManagerTutorial.objects.order_by("order", "slug")
+    ]
+
+
+def _html_to_markdown(html: str | None) -> str:
+    """Convert simple HTML (headings, paragraphs, lists, links) to compact Markdown."""
+    soup = BeautifulSoup(html or "", "html.parser")
+    for link in soup.find_all("a"):
+        href = link.get("href", "")
+        link.replace_with(f"[{link.get_text(strip=True)}]({href})" if href else link.get_text())
+    lines = []
+    for element in soup.find_all(["h2", "h3", "h4", "p", "li"]):
+        text = " ".join(element.get_text(" ", strip=True).split())
+        if not text:
+            continue
+        if element.name in {"h2", "h3", "h4"}:
+            lines.append(f"\n### {text}")
+        elif element.name == "li":
+            lines.append(f"- {text}")
+        else:
+            lines.append(text)
+    return "\n".join(lines).strip()
+
+
+def get_guides_markdown() -> list[tuple[str, str, str]]:
+    """Return every published guide as (title, url, Markdown text), in display order."""
+    return [
+        (guide.title, reverse("guide", args=[guide.slug]), _html_to_markdown(guide.text))
+        for guide in LarpManagerGuide.objects.filter(published=True).order_by("number", "slug")
+    ]

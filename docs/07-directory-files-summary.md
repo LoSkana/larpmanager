@@ -155,7 +155,7 @@ Django management commands for administrative operations and automation. Key com
 
 **check_payments.py**: Payment verification and processing command.
 
-**dump_test.py**: Export test database fixtures to SQL file.
+**dump_test.py**: Export test database fixtures to SQL file. Normalizes dynamic values (dates, passwords, media tokens) so repeated dumps are identical; `--check` dumps twice and fails if the dumps differ.
 
 **export_features.py**: Export feature flags and permissions to JSON fixtures.
 

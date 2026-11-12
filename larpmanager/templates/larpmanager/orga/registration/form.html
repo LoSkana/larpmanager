@@ -115,9 +115,7 @@
     </tbody>
 </table>
 {% if not list %}
-    {% trans "Questions collect the information you need from participants when they register." as empty_text %}
-    {% trans "New question" as empty_new %}
-    {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
+    {% include "elements/table/empty_state.html" with text=empty_text %}
 {% endif %}
 {% include "elements/table/footer.html" %}
 {% endblock content %}

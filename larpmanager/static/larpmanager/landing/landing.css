@@ -1091,43 +1091,151 @@ body.landing .compare-note {
   margin-top: 2rem;
 }
 
-body.landing .guide-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
+body.landing .guide-search {
+  position: relative;
+  margin-bottom: 2rem;
 }
 
-body.landing .guide-card {
+body.landing .guide-search i {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+}
+
+body.landing .guide-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.6rem;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+
+body.landing .guide-no-results {
+  color: var(--text-dim);
+  text-align: center;
+}
+
+body.landing .guide-group {
+  margin-bottom: 2.5rem;
+}
+
+body.landing .guide-group h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+body.landing .guide-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.9rem 1.2rem;
   background: var(--card);
   border: 1px solid var(--line);
-  padding: 1.6rem 1.7rem;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  border-bottom-width: 0;
   transition: border-color 0.15s ease;
 }
 
-body.landing .guide-card:hover {
-  border-color: var(--teal-deep);
+body.landing .guide-row:last-child,
+body.landing .guide-row:has(+ .guide-row[hidden]) {
+  border-bottom-width: 1px;
 }
 
-body.landing .guide-card h3 {
-  font-size: 1.15rem;
+body.landing .guide-group[hidden],
+body.landing .guide-row[hidden],
+body.landing .guide-no-results[hidden] {
+  display: none;
 }
 
-body.landing .guide-card p {
+body.landing .guide-row-text h3 {
+  font-size: 1.05rem;
   margin: 0;
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  flex: 1;
 }
 
-body.landing .guide-card span {
+body.landing .guide-row-text h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.landing .guide-row-text h3 a:hover {
+  color: var(--teal-deep);
+}
+
+body.landing .guide-row-text p {
+  margin: 0.15rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+body.landing .guide-row-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+body.landing .guide-watch,
+body.landing .guide-read {
   color: var(--teal-deep);
   font-size: 0.88rem;
   font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.landing .guide-watch {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--teal-deep);
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+body.landing .guide-watch:hover {
+  background: var(--teal-deep);
+  color: #fff;
+}
+
+body.landing .guide-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 1.5rem;
+  border: 0;
+}
+
+.guide-video-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: min(90vw, 960px, calc((100vh - 7rem) * 16 / 9));
+  max-width: none;
+  margin: 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #0a1418;
+  color: #fff;
+  box-shadow: 0 0 39px 12px rgba(0, 0, 0, 0.75);
+}
+
+.guide-video-modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.landing .guide-video-modal h2 {
+  margin: 0 2rem 0.8rem 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+body.landing .guide-video-modal .guide-video {
+  margin-bottom: 0;
 }
 
 /* ---------- Feature grids / solution pages ---------- */
@@ -1382,6 +1490,15 @@ body.landing .slug_pre {
   border-radius: 4px;
   padding: 0.5rem 0.8rem;
   margin: 0;
+}
+
+body.landing .slug_change {
+  font-size: 0.82rem;
+}
+
+body.landing #id_submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
 }
 
 body.landing .slug_war {
@@ -1929,9 +2046,14 @@ body.landing #iframe-indicator {
 
   body.landing .prob-grid,
   body.landing .feat-grid,
-  body.landing .guide-grid,
   body.landing .plan-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.landing .guide-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
   }
 
   body.landing .open .wrap {

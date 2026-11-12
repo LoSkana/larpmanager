@@ -1102,3 +1102,16 @@
     icon: bullhorn
     feature: exp_calls
     module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Exclusive groups
+    descr: Manage the groups of abilities of which a character can obtain only a maximum
+      number
+    slug: orga_exp_exclusives
+    number: 98
+    config: experience
+    active_if: exp_exclusives
+    hidden: false
+    icon: layer-group
+    feature: exp_exclusives
+    module: experience

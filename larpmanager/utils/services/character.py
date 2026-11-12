@@ -92,8 +92,9 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
     """
     relationship_text_mapping = {}
     character_data_mapping = {}
+    auto_uuids: set[str] = set()
 
-    _build_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
+    _build_relationships_mappings(context, character_data_mapping, relationship_text_mapping, auto_uuids)
 
     _build_player_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
 
@@ -114,8 +115,8 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
             continue
 
         relationship_entry = character_data_mapping[character_uuid]
-        # Filter empty relationships if restrict is enabled
-        if restrict and len(relationship_text_mapping[character_uuid]) == 0:
+        # Filter empty relationships if restrict is enabled, keeping the ones created from references
+        if restrict and len(relationship_text_mapping[character_uuid]) == 0 and character_uuid not in auto_uuids:
             continue
 
         # Add relationship text and calculate font size based on content length
@@ -195,7 +196,12 @@ def _build_player_relationships_mappings(
     context["pr"] = player_relationships_mapping
 
 
-def _build_relationships_mappings(context: dict, character_data_mapping: dict, relationship_text_mapping: dict) -> None:
+def _build_relationships_mappings(
+    context: dict,
+    character_data_mapping: dict,
+    relationship_text_mapping: dict,
+    auto_uuids: set[str],
+) -> None:
     """Build mappings for system-defined character relationships.
 
     Processes Relationship objects for the source character, retrieves target
@@ -210,6 +216,7 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
             data mappings. Updated in-place.
         relationship_text_mapping: Dictionary to populate with character UUID to
             relationship text mappings. Updated in-place.
+        auto_uuids: Set to populate with the UUIDs of targets of relationships created from references.
 
     Side Effects:
         - Updates character_data_mapping with character data for all relationship targets
@@ -219,12 +226,12 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
 
     """
     # Process character relationships from the source
-    queryset = Relationship.objects.values_list("target__number", "text").filter(source=context["character"])
+    queryset = Relationship.objects.values_list("target__number", "text", "auto").filter(source=context["character"])
     relationship_rows = list(queryset)
 
     # Collect numbers of characters not already in cache
     cached_chars = context.get("chars", {})
-    missing_numbers = [num for num, _ in relationship_rows if num not in cached_chars]
+    missing_numbers = [row[0] for row in relationship_rows if row[0] not in cached_chars]
 
     # Bulk fetch missing characters
     bulk_fetched: dict = {}
@@ -235,7 +242,7 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
         ):
             bulk_fetched[target_character.number] = target_character
 
-    for target_character_number, relationship_text in relationship_rows:
+    for target_character_number, relationship_text, is_auto in relationship_rows:
         # Check if character data is already cached in context
         if target_character_number in cached_chars:
             character_data = cached_chars[target_character_number]
@@ -261,6 +268,8 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
         character_data["factions_list"] = ", ".join(character_data["factions_list"])
         character_data_mapping[character_data["uuid"]] = character_data
         relationship_text_mapping[character_data["uuid"]] = relationship_text
+        if is_auto:
+            auto_uuids.add(character_data["uuid"])
 
 
 def get_character_sheet(context: dict) -> None:
@@ -863,15 +872,8 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         for number in extract_char_numbers_from_texts([text]):
             sources_map.setdefault(number, set()).add(source_name)
 
-    sheet_name = next(
-        (
-            q["name"]
-            for q in get_cached_writing_questions(character.event_id, QuestionApplicable.CHARACTER)
-            if q["typ"] == WritingQuestionType.SHEET
-        ),
-        WritingQuestionType.SHEET.label,
-    )
-    _add_refs(character.text or "", sheet_name)
+    # The main sheet text is the obvious source, so it is not named
+    _add_refs(character.text or "", "")
 
     for answer in WritingAnswer.objects.filter(element_id=character.pk, deleted__isnull=True).select_related(
         "question"
@@ -923,7 +925,7 @@ def _persist_auto_relationships(character: Character, sources_map: dict[int, set
             if number not in ref_chars_by_number or number in existing_manual_targets:
                 continue
             ref_char = ref_chars_by_number[number]
-            source_text = ", ".join(f"<b><i>{s}</i></b>" for s in sorted(sources))
+            source_text = ", ".join(f"<b><i>{s}</i></b>" for s in sorted(sources) if s)
             updated = Relationship.objects.filter(
                 source=character, target=ref_char, auto=True, deleted__isnull=True
             ).update(text=source_text)

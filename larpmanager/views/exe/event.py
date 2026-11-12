@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -102,8 +103,8 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
         er.members.add(context["member"])
         er.save()
 
-        # Refresh cached event links for user navigation
-        reset_event_links(context["member"].id, context["association_id"])
+        # Refresh cached event links for user navigation, once the event is visible to other requests
+        transaction.on_commit(lambda: reset_event_links(context["member"].id, context["association_id"]))
 
         # Set intro_driver to "first_event" if this is the first event for the association
         # (reuses the pre-creation check from context)

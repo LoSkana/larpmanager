@@ -33,6 +33,8 @@ import re
 import time
 from typing import TYPE_CHECKING
 
+from django.utils.http import url_has_allowed_host_and_scheme
+
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
@@ -56,6 +58,23 @@ PENDING_AUTH_NEXT_URL_SESSION_KEY = "pending_auth_next_url"
 # Discard the stashed next url after this many seconds, so an abandoned login or
 # signup cannot redirect a later, unrelated one to a stale destination
 PENDING_AUTH_NEXT_URL_MAX_AGE = SSO_SLUG_MAX_AGE
+
+# Pages of the authentication flow itself: a link to login/signup shown on one of
+# them must pass through their own 'next' instead of pointing back to them
+AUTH_FLOW_PATHS = ("/register/",)
+AUTH_FLOW_PATH_PREFIXES = (
+    "/login/",
+    "/signup/",
+    "/password_reset/",
+    "/reset/",
+    "/accounts/",
+    "/after_login/",
+)
+
+# Session key holding (next_url, timestamp) of the page a password reset started
+# from, set when the emailed reset link is opened and kept until the new password
+# is set (bounded by PASSWORD_RESET_TIMEOUT)
+PASSWORD_RESET_NEXT_URL_SESSION_KEY = "password_reset_next_url"  # noqa: S105  # session key, not a secret
 
 _AFTER_LOGIN_RE = re.compile(r"/after_login/(?P<slug>[-\w]+)/")
 
@@ -123,3 +142,56 @@ def pop_pending_next_url(request: HttpRequest) -> str | None:
         return None
 
     return next_url
+
+
+def safe_local_url(url: str | None) -> str | None:
+    """Return url only if it is a same-site path (no scheme or host), else None."""
+    if not url or not url.startswith("/"):
+        return None
+    if not url_has_allowed_host_and_scheme(url, allowed_hosts=None):
+        return None
+    return url
+
+
+def get_auth_next_url(request: HttpRequest | None) -> str | None:
+    """Return where to land after a login/signup started from the current page.
+
+    On authentication pages the incoming 'next' is passed through; elsewhere
+    the current page itself is the destination. The home page is omitted, being
+    the default landing anyway.
+    """
+    if request is None:
+        return None
+    if request.path in AUTH_FLOW_PATHS or request.path.startswith(AUTH_FLOW_PATH_PREFIXES):
+        next_url = safe_local_url(request.GET.get("next"))
+    else:
+        next_url = safe_local_url(request.get_full_path())
+    if next_url == "/":
+        return None
+    return next_url
+
+
+def stash_password_reset_next_url(request: HttpRequest, next_url: str) -> None:
+    """Remember the 'next' url carried by the emailed password reset link."""
+    request.session[PASSWORD_RESET_NEXT_URL_SESSION_KEY] = [next_url, time.time()]
+
+
+def pop_password_reset_next_url(request: HttpRequest, max_age: int) -> str | None:
+    """Return and clear the stashed password reset 'next' url, ignoring stale entries."""
+    session = getattr(request, "session", None)
+    if session is None:
+        return None
+
+    stashed = session.pop(PASSWORD_RESET_NEXT_URL_SESSION_KEY, None)
+    if not stashed:
+        return None
+
+    try:
+        next_url, stashed_at = stashed
+    except (TypeError, ValueError):
+        return None
+
+    if time.time() - stashed_at > max_age:
+        return None
+
+    return safe_local_url(next_url)

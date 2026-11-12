@@ -31,6 +31,7 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
+from larpmanager.utils.core.common import get_coming_runs
 
 logger = logging.getLogger(__name__)
 
@@ -142,12 +143,15 @@ def init_cache_association(a_slug: str) -> dict | None:
         end__isnull=False,
     ).exists()
 
+    # Check if association has past runs to link from calendar and sidebar
+    association_dict["has_past_events"] = get_coming_runs(association.id, future=False).exists()
+
     # Add configs
     temp_context = {}
     for config in [
         "user_characters_shortcut",
         "user_registrations_shortcut",
-        "calendar_past_events",
+        "calendar_hide_past_events",
     ]:
         association_dict[config] = get_association_config(association.id, config, context=temp_context)
 

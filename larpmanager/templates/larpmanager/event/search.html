@@ -9,7 +9,7 @@
 {% block content %}
     {% if hide_login %}
         <p>
-            <i>{% trans "Characters are only visible to logged in users:" %} <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
+            <i>{% trans "Characters are only visible to logged in users:" %} <a href="{% url 'login' %}{% auth_next_query %}">{% trans "Login" %}</a></i>
         </p>
     {% elif hide_signup %}
         <p>

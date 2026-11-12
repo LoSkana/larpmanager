@@ -42,10 +42,10 @@ def test_config_toggle(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     # Organization option, activated then deactivated
-    go_to(page, live_server, "/manage/config/calendar_past_events/on")
-    expect(page.locator("#id_calendar_past_events")).to_be_checked()
-    go_to(page, live_server, "/manage/config/calendar_past_events/off")
-    expect(page.locator("#id_calendar_past_events")).not_to_be_checked()
+    go_to(page, live_server, "/manage/config/calendar_hide_past_events/on")
+    expect(page.locator("#id_calendar_hide_past_events")).to_be_checked()
+    go_to(page, live_server, "/manage/config/calendar_hide_past_events/off")
+    expect(page.locator("#id_calendar_hide_past_events")).not_to_be_checked()
 
     # Event option, activated then deactivated
     go_to(page, live_server, "/test/manage/config/show_export/on")

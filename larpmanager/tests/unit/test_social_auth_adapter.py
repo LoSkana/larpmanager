@@ -28,18 +28,27 @@ from __future__ import annotations
 
 import time
 from unittest.mock import Mock
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 from allauth.socialaccount.models import SocialAccount, SocialLogin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory
 
 from larpmanager.middleware.sso import SocialLoginTargetMiddleware
+from larpmanager.middleware.token import TokenAuthMiddleware
 from larpmanager.models.member import Member
+from larpmanager.templatetags.show_tags import auth_next_query, get_social_login_url
 from larpmanager.utils.auth.adapter import MyAccountAdapter, MySocialAccountAdapter
-from larpmanager.utils.auth.sso import SSO_SLUG_MAX_AGE, SSO_SLUG_SESSION_KEY
+from larpmanager.utils.auth.sso import (
+    SSO_SLUG_MAX_AGE,
+    SSO_SLUG_SESSION_KEY,
+    get_auth_next_url,
+    safe_local_url,
+)
+from larpmanager.views.base import after_login
 
 
 @pytest.mark.django_db
@@ -98,6 +107,87 @@ class TestSocialAuthAdapter:
 
         # Verify no duplicate user was created
         assert User.objects.filter(email=existing_email).count() == 1
+
+    def test_pre_social_login_links_by_email_case_insensitive(self) -> None:
+        """Test that social login links an existing user whose email differs only in case."""
+        existing_user = User.objects.create_user(
+            username="Mixed.Case_unique@example.com", email="Mixed.Case_unique@example.com", password="testpass123"
+        )
+        if not hasattr(existing_user, "member"):
+            Member.objects.create(user=existing_user, name="Mixed", surname="Case")
+
+        request = RequestFactory().get("/accounts/google/login/callback/")
+        request.user = Mock()
+
+        provider_email = "mixed.case_unique@example.com"
+        social_account = Mock(spec=SocialAccount)
+        social_account.extra_data = {"email": provider_email, "given_name": "Mixed", "family_name": "Case"}
+        social_account.provider = "google"
+        sociallogin = SocialLogin(user=User(username="mixed", email=provider_email), account=social_account)
+
+        MySocialAccountAdapter().pre_social_login(request, sociallogin)
+
+        assert sociallogin.user.id == existing_user.id
+        assert User.objects.filter(email__iexact=provider_email).count() == 1
+
+    @staticmethod
+    def _sociallogin(provider_email: str, extra: dict | None = None) -> SocialLogin:
+        social_account = Mock(spec=SocialAccount)
+        social_account.extra_data = {
+            "email": provider_email,
+            "given_name": "Dup",
+            "family_name": "User",
+            **(extra or {}),
+        }
+        social_account.provider = "google"
+        return SocialLogin(user=User(username="dup", email=provider_email), account=social_account)
+
+    @staticmethod
+    def _callback_request() -> HttpRequest:
+        request = RequestFactory().get("/accounts/google/login/callback/")
+        request.user = Mock()
+        return request
+
+    def test_pre_social_login_links_oldest_user_when_email_duplicated(self) -> None:
+        """Test that social login links the oldest user when several share the email in a different case."""
+        oldest_user = User.objects.create_user(
+            username="Dup_unique@example.com", email="Dup_unique@example.com", password="testpass123"
+        )
+        User.objects.create_user(username="dup_newer_unique", email="dUp_unique@example.com", password="testpass123")
+        if not hasattr(oldest_user, "member"):
+            Member.objects.create(user=oldest_user, name="Dup", surname="User")
+
+        sociallogin = self._sociallogin("dup_unique@example.com")
+        MySocialAccountAdapter().pre_social_login(self._callback_request(), sociallogin)
+
+        assert sociallogin.user.id == oldest_user.id
+
+    def test_pre_social_login_prefers_exact_email_match(self) -> None:
+        """Test that social login links the user whose email matches exactly over older case variants."""
+        User.objects.create_user(
+            username="Exact_unique@example.com", email="Exact_unique@example.com", password="testpass123"
+        )
+        exact_user = User.objects.create_user(
+            username="exact_newer_unique", email="exact_unique@example.com", password="testpass123"
+        )
+        if not hasattr(exact_user, "member"):
+            Member.objects.create(user=exact_user, name="Exact", surname="User")
+
+        sociallogin = self._sociallogin("exact_unique@example.com")
+        MySocialAccountAdapter().pre_social_login(self._callback_request(), sociallogin)
+
+        assert sociallogin.user.id == exact_user.id
+
+    def test_pre_social_login_skips_unverified_email(self) -> None:
+        """Test that social login never links an existing user on an unverified provider email."""
+        User.objects.create_user(
+            username="unverified_unique@example.com", email="unverified_unique@example.com", password="testpass123"
+        )
+
+        sociallogin = self._sociallogin("unverified_unique@example.com", {"email_verified": False})
+        MySocialAccountAdapter().pre_social_login(self._callback_request(), sociallogin)
+
+        assert sociallogin.user.id is None
 
     def test_pre_social_login_creates_new_user_if_no_email_match(self) -> None:
         """Test that social login creates new user when email doesn't exist.
@@ -370,3 +460,130 @@ class TestStashedSlugFallback:
         redirect_url = MyAccountAdapter().get_login_redirect_url(request)
 
         assert "/after_login/" not in redirect_url
+
+
+class TestAuthNextDestination:
+    """Test that the page a login starts from survives the authentication flow."""
+
+    @staticmethod
+    def _request(path: str, params: dict | None = None) -> HttpRequest:
+        request = RequestFactory().get(path, params or {})
+        request.association = {"id": 2, "slug": "test-org", "main_domain": "larpmanager.com"}
+        return request
+
+    def test_next_url_is_current_page(self) -> None:
+        """Outside auth pages, the current page is the destination."""
+        request = self._request("/event/test/register/", {"ticket": "a"})
+
+        assert get_auth_next_url(request) == "/event/test/register/?ticket=a"
+
+    def test_next_url_passes_through_on_login_page(self) -> None:
+        """On the login page the incoming 'next' is kept instead of the login page itself."""
+        request = self._request("/login/", {"next": "/event/test/register/"})
+
+        assert get_auth_next_url(request) == "/event/test/register/"
+
+    def test_next_url_skips_home(self) -> None:
+        """The home page is the default landing, so it is not carried."""
+        assert get_auth_next_url(self._request("/")) is None
+
+    def test_next_url_register_subpages_are_destinations(self) -> None:
+        """Only the signup page itself passes 'next' through, not its sub pages."""
+        assert get_auth_next_url(self._request("/register/conditions/")) == "/register/conditions/"
+
+    def test_next_url_rejects_external(self) -> None:
+        """An external 'next' is never propagated."""
+        request = self._request("/login/", {"next": "https://evil.example/"})
+
+        assert get_auth_next_url(request) is None
+        assert safe_local_url("//evil.example/") is None
+
+    def test_social_login_url_carries_destination(self) -> None:
+        """A subdomain Google login brings the user back to the page it started for."""
+        request = self._request("/login/", {"next": "/event/test/register/"})
+
+        url = get_social_login_url({"association": request.association, "request": request}, "google")
+
+        query = parse_qs(urlparse(url).query)
+        after_login = urlparse(query["next"][0])
+        assert after_login.path == "/after_login/test-org/"
+        assert parse_qs(after_login.query)["next"] == ["/event/test/register/"]
+
+    def test_auth_next_query(self) -> None:
+        """Login links point back to the current page."""
+        request = self._request("/event/test/")
+
+        assert auth_next_query({"request": request}) == "?next=%2Fevent%2Ftest%2F"
+
+
+@pytest.mark.django_db
+class TestAfterLogin:
+    """Test the cross-subdomain hop after a social login."""
+
+    @pytest.fixture(autouse=True)
+    def _allowed_hosts(self, settings: object) -> None:
+        settings.ALLOWED_HOSTS = ["larpmanager.com"]
+
+    @staticmethod
+    def _request(path: str, params: dict | None = None) -> HttpRequest:
+        request = RequestFactory().get(path, params or {}, HTTP_HOST="larpmanager.com")
+        request.user = Mock(is_authenticated=True, id=1)
+        request.enviro = "prod"
+        return request
+
+    def test_redirects_to_next_with_token(self) -> None:
+        """The destination page is kept, with the token appended to its query."""
+        request = self._request("/after_login/test-org/", {"next": "/event/test/register/?ticket=a"})
+
+        response = after_login(request, "test-org")
+
+        target = urlparse(response.url)
+        assert target.netloc == "test-org.larpmanager.com"
+        assert target.path == "/event/test/register/"
+        query = parse_qs(target.query)
+        assert query["ticket"] == ["a"]
+        assert "token" in query
+
+    def test_ignores_external_next(self) -> None:
+        """An external 'next' falls back to the subdomain path."""
+        request = self._request("/after_login/test-org/", {"next": "https://evil.example/"})
+
+        response = after_login(request, "test-org")
+
+        target = urlparse(response.url)
+        assert target.netloc == "test-org.larpmanager.com"
+        assert target.path == "/"
+
+    def test_token_precedes_fragment(self) -> None:
+        """The token is kept in the query even when the destination has a fragment."""
+        request = self._request("/after_login/test-org/", {"next": "/event/test/?ticket=a#form"})
+
+        response = after_login(request, "test-org")
+
+        target = urlparse(response.url)
+        assert target.fragment == "form"
+        query = parse_qs(target.query)
+        assert query["ticket"] == ["a"]
+        assert "token" in query
+
+    def test_token_middleware_keeps_destination(self) -> None:
+        """Stripping the token lands on the 'next' page with its whole query, blank values included."""
+        request = self._request("/after_login/test-org/", {"next": "/event/test/register/?ticket=&step=2"})
+        hop = urlparse(after_login(request, "test-org").url)
+
+        landing_query = hop.query.replace("token=", "token=forged-")
+        landing = RequestFactory().get(f"{hop.path}?{landing_query}", HTTP_HOST="larpmanager.com")
+        response = TokenAuthMiddleware(lambda _request: HttpResponse())(landing)
+
+        target = urlparse(response.url)
+        assert target.path == "/event/test/register/"
+        assert parse_qs(target.query, keep_blank_values=True) == {"ticket": [""], "step": ["2"]}
+
+    def test_anonymous_keeps_destination(self) -> None:
+        """An anonymous hit is sent to login, coming back here afterwards."""
+        request = self._request("/after_login/test-org/")
+        request.user = Mock(is_authenticated=False)
+
+        response = after_login(request, "test-org")
+
+        assert parse_qs(urlparse(response.url).query)["next"] == ["/after_login/test-org/"]

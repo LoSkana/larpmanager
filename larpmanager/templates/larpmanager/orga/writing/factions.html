@@ -5,8 +5,7 @@
 {% endblock title %}
 {% block empty_state %}
     {% trans "Factions group characters together, for example by team, family or allegiance." as empty_text %}
-    {% trans "New faction" as empty_new %}
-    {% include "elements/table/empty_state.html" with text=empty_text new_label=empty_new %}
+    {% include "elements/table/empty_state.html" with text=empty_text %}
 {% endblock empty_state %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}

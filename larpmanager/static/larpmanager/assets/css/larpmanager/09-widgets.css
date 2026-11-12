@@ -605,6 +605,10 @@ body.association.new_v20 .user_resize {
   font-style: italic;
 }
 
+.ability-card-creation {
+  font-weight: bold;
+}
+
 .ability-show-more-btn {
   grid-column: 1 / -1;
   padding: 0.5em 1.5em;

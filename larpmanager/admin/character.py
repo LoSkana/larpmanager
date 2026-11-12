@@ -31,6 +31,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -191,6 +192,16 @@ class CallExpAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("id", "event", "name", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(ExclusiveExp)
+class ExclusiveExpAdmin(DefModelAdmin):
+    """Admin interface for ExclusiveExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "max_count", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "abilities"]
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 

@@ -51,6 +51,15 @@ def test_orga_form_writing_config(pw_page: Any) -> None:
     form_other_writing(page)
 
 
+def expect_second_character_field(page: Any, name: str) -> None:
+    """Open a new character form, and check the field shown after the name."""
+    sidebar(page, "Characters")
+    page.get_by_role("link", name="New").click()
+    expect(get_modal_iframe(page).locator('label[id^="lbl_id_"]').nth(1)).to_contain_text(name)
+    page.locator(".modal-close-btn").click()
+    page.locator("#lm-modal").wait_for(state="hidden")
+
+
 def feature_fields(page: Any) -> None:
     # set feature
     sidebar(page, "Features")
@@ -58,6 +67,7 @@ def feature_fields(page: Any) -> None:
     submit_confirm(page)
 
     # reorder test
+    expect_second_character_field(page, "Presentation")
     sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private")
     drag_reorder(
@@ -66,6 +76,7 @@ def feature_fields(page: Any) -> None:
         page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
     )
     expect_normalized(page, page.locator("#one"), "Name Name Public Text Sheet Private Presentation Presentation Public")
+    expect_second_character_field(page, "Text")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()

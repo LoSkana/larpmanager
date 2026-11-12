@@ -40,6 +40,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
 )
@@ -67,6 +68,7 @@ from larpmanager.utils.io.upload import (
     calls_load,
     criterions_load,
     deliveries_load,
+    exclusives_load,
     form_load,
     modifiers_load,
     registrations_load,
@@ -669,6 +671,11 @@ def _exec_calls(context: dict, df: pd.DataFrame) -> list[str]:
     return calls_load(ctx, _FakeForm(first=_fake_csv(df)))
 
 
+def _exec_exclusives(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_exclusive"}
+    return exclusives_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
 def _exec_registration(context: dict, df: pd.DataFrame) -> list[str]:
     ctx = {**context, "typ": "registration"}
     return registrations_load(ctx, _FakeForm(first=_fake_csv(df)))
@@ -753,6 +760,7 @@ def _preview_experience(context: dict, dfs: dict[str, pd.DataFrame], sections: l
         "criterions": lambda df: _preview_criterions(context, df),
         "deliveries": lambda df: _preview_deliveries(context, df),
         "calls": lambda df: _preview_by_name(context, df, CallExp, str(_("Calls"))),
+        "exclusives": lambda df: _preview_by_name(context, df, ExclusiveExp, str(_("Exclusive groups"))),
     }
     for stem, preview in previews.items():
         if stem in dfs:
@@ -847,6 +855,7 @@ def _exec_experience(context: dict, dfs: dict[str, pd.DataFrame], logs: list[str
         "criterions": _exec_criterions,
         "deliveries": _exec_deliveries,
         "calls": _exec_calls,
+        "exclusives": _exec_exclusives,
     }
     for stem, executor in executors.items():
         if stem in dfs:

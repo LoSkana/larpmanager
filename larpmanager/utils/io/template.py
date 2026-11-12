@@ -93,6 +93,7 @@ def build_upload_template(context: dict, upload_type: str) -> list[tuple[str, li
         "exp_modifier": _modifier_template,
         "exp_criterion": _criterion_template,
         "exp_call": _call_template,
+        "exp_exclusive": _exclusive_template,
         "exp_deliverie": _delivery_template,
     }
     return builders.get(upload_type, _form_template)(context)
@@ -137,6 +138,7 @@ def _ability_template(context: dict) -> Any:
         "prerequisites": "Prerequisite abilities, comma-separated",
         "requirements": "Character options, comma-separated",
         "visible": "true",
+        "creation_only": "false",
         "system": "Experience system name",
     }
     column_names = list(context["columns"][0].keys())
@@ -159,6 +161,14 @@ def _call_template(context: dict) -> Any:
     column_names = list(context["columns"][0].keys())
     example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("calls", column_names, [example_row])]
+
+
+def _exclusive_template(context: dict) -> Any:
+    """Generate template for exclusive group uploads with example data."""
+    field_example_values = {"name": "Fighting styles", "max": "1", "abilities": "Ability names, comma-separated"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("exclusives", column_names, [example_row])]
 
 
 def _rule_template(context: dict) -> Any:

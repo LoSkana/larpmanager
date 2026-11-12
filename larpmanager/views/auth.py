@@ -22,24 +22,30 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from axes.utils import reset as axes_reset
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordResetConfirmView, PasswordResetView
 from django.db import IntegrityError
 from django.urls import reverse
-from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.http import url_has_allowed_host_and_scheme, urlencode
 from django.utils.translation import gettext_lazy as _
 from django_registration import signals
 from django_registration.backends.one_step.views import RegistrationView
 
 from larpmanager.models.member import Member, Membership, MembershipStatus
-from larpmanager.utils.auth.sso import pop_pending_next_url
+from larpmanager.utils.auth.sso import (
+    pop_password_reset_next_url,
+    pop_pending_next_url,
+    safe_local_url,
+    stash_password_reset_next_url,
+)
 from larpmanager.views.base import AssocVersionMixin
 
 if TYPE_CHECKING:
     from django.forms import Form
-    from django.http import HttpResponse
+    from django.http import HttpRequest, HttpResponse
 
 
 class MyRegistrationView(AssocVersionMixin, RegistrationView):
@@ -148,9 +154,33 @@ class MyRegistrationView(AssocVersionMixin, RegistrationView):
 class MyPasswordResetView(AssocVersionMixin, PasswordResetView):
     """View for MyPasswordReset."""
 
+    email_template_name = "registration/password_reset_email_next.html"
+
+    def form_valid(self, form: Form) -> HttpResponse:
+        """Send the reset email, its link carrying the page to return to once the password is set."""
+        next_url = safe_local_url(self.request.POST.get("next") or self.request.GET.get("next"))
+        next_query = "?" + urlencode({"next": next_url}) if next_url else ""
+        self.extra_email_context = {**(self.extra_email_context or {}), "next_query": next_query}
+        return super().form_valid(form)
+
 
 class MyPasswordResetConfirmView(AssocVersionMixin, PasswordResetConfirmView):
     """View for MyPasswordResetConfirm."""
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Remember the 'next' of the emailed link, lost when redirecting to the set-password page."""
+        next_url = safe_local_url(request.GET.get("next"))
+        if next_url:
+            stash_password_reset_next_url(request, next_url)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self) -> str:
+        """Go to the reset complete page, carrying the page the reset started from."""
+        success_url = super().get_success_url()
+        next_url = pop_password_reset_next_url(self.request, settings.PASSWORD_RESET_TIMEOUT)
+        if next_url:
+            success_url += "?" + urlencode({"next": next_url})
+        return success_url
 
     def form_valid(self, form: Form) -> HttpResponse:
         """Handle valid password reset form submission.

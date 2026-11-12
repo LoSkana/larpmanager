@@ -19,18 +19,24 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import itertools
 from collections import defaultdict
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.db.models import Q, QuerySet
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.db import IntegrityError, transaction
+from django.db.models import Q, QuerySet, UniqueConstraint
 from django.forms.widgets import MediaAsset, Textarea, Widget
 from django.middleware.csp import get_nonce
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.html import format_html, format_html_join
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.widgets import ReCaptchaV3
 from django_select2 import forms as s2forms
@@ -76,6 +82,8 @@ from larpmanager.utils.auth.permission import LITE_PERMISSIONS
 from larpmanager.utils.services.playing_filter import filter_playing_characters
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
+
     from django.http import HttpRequest
 
     from larpmanager.forms.base import BaseModelForm
@@ -217,11 +225,196 @@ class TimePickerInput(forms.TextInput):
     input_type = "time_p"
 
 
+SLUG_UNAVAILABLE_ERROR = _("This URL is not available: check the suggested one or choose another one")
+SLUG_USED_ERROR = _("Slug already used!")
+SLUG_RESERVED_ERROR = _("Reserved word, please choose another!")
+SLUG_RESELECT_FILE_ERROR = _("Please select this file again")
+# Characters of a slug that a numbered variant can replace at the maximum length
+SLUG_SUFFIX_MAX_DIGITS = 6
+
+# Hyphens are excluded because run URLs use them to separate the run number
+UrlSlugValidator = RegexValidator(
+    r"^[0-9a-z]*$", _("Only lowercase letters and numbers allowed, no spaces or special characters")
+)
+
+
 class SlugInput(forms.TextInput):
-    """Slug input widget with special formatting."""
+    """Slug input collapsed behind a preview; left closed, the slug is generated from the name."""
 
     input_type = "slug"
     template_name = "forms/widgets/slug.html"
+    opened = False
+    auto = False
+    help_text = ""
+
+    def value_from_datadict(self, data: Any, files: Any, name: str) -> Any:
+        """Read the value, remembering if it was generated instead of chosen by the user."""
+        self.auto = self.auto or data.get(f"{name}_auto") == "1"
+        return super().value_from_datadict(data, files, name)
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add to the context whether the input starts open, if its value is generated, and its help text."""
+        context = super().get_context(name, value, attrs)
+        context["widget"]["opened"] = self.opened or bool(value)
+        context["widget"]["auto"] = self.auto or not value
+        context["widget"]["help_text"] = self.help_text
+        return context
+
+
+class SlugFormMixin:
+    """Validate a slug field, generating the slug from the "name" field when left blank.
+
+    The field stays collapsed unless the slug cannot be used: the user is then asked to
+    confirm a suggestion, so that nothing is saved under an unexpected URL.
+    Subclasses define where a slug must be unique and which slugs are reserved.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Make the slug optional, moving its help text inside the collapsed section."""
+        super().__init__(*args, **kwargs)
+
+        if "slug" in self.fields:
+            field = self.fields["slug"]
+            field.required = False
+            field.validators.append(UrlSlugValidator)
+            field.widget.help_text = field.help_text
+            field.help_text = ""
+
+    def slug_scope(self) -> QuerySet:
+        """Return the objects among which the slug must be unique."""
+        raise NotImplementedError
+
+    def reserved_slugs(self) -> Collection[str]:
+        """Return the slugs that cannot be used."""
+        raise NotImplementedError
+
+    @cached_property
+    def _reserved_slugs(self) -> Collection[str]:
+        """Return the reserved slugs, computed once per form."""
+        return self.reserved_slugs()
+
+    def slug_error(self, slug: str) -> str | None:
+        """Return the reason why a slug cannot be used, or None if it is available."""
+        if slug in self._reserved_slugs:
+            return SLUG_RESERVED_ERROR
+
+        if self.slug_scope().filter(slug=slug).exists():
+            return SLUG_USED_ERROR
+
+        return None
+
+    def clean(self) -> dict[str, Any] | None:
+        """Ask to select uploaded files again when the slug must be fixed."""
+        cleaned_data = super().clean()
+
+        if "slug" in self.errors:
+            self._ask_files_again()
+
+        return cleaned_data
+
+    def _ask_files_again(self) -> None:
+        """Report uploaded files, as browsers cannot fill a file input again and they would be silently lost."""
+        for name in self.fields:
+            if self.add_prefix(name) in self.files:
+                self.add_error(name, SLUG_RESELECT_FILE_ERROR)
+
+    def clean_slug(self) -> str:
+        """Validate the slug, or generate one when left blank or matching the slug of the name."""
+        data: str = self.cleaned_data["slug"]
+
+        if not data or data == self.slug_from_name():
+            return self.generate_slug()
+
+        error = self.slug_error(data)
+        if error:
+            raise ValidationError(error)
+
+        return data
+
+    def slug_from_name(self) -> str:
+        """Build an alphanumeric slug from the validated name, empty if there is none."""
+        name = self.cleaned_data.get("name", "")
+        return slugify(name).replace("-", "").replace("_", "")[: self.fields["slug"].max_length]
+
+    def generate_slug(self) -> str:
+        """Build the slug from the name, empty if the name is invalid as the form already reports it.
+
+        Raises:
+            ValidationError: If the name gives no usable slug, or the slug is not available.
+
+        """
+        if "name" not in self.cleaned_data:
+            return ""
+
+        base = self.slug_from_name()
+
+        if not base:
+            self.fields["slug"].widget.opened = True
+            raise ValidationError(_("The URL cannot be built from this name, please choose one"))
+
+        if self.slug_error(base) is None:
+            return base
+
+        self.suggest_slug(base)
+        raise ValidationError(SLUG_UNAVAILABLE_ERROR)
+
+    def suggest_slug(self, base: str) -> None:
+        """Open the slug field with the first available numbered variant."""
+        field = self.fields["slug"]
+        prefix = base[: field.max_length - SLUG_SUFFIX_MAX_DIGITS]
+        taken = set(self.slug_scope().filter(slug__startswith=prefix).values_list("slug", flat=True))
+
+        for counter in itertools.count(2):
+            suffix = str(counter)
+            suggestion = f"{base[: field.max_length - len(suffix)]}{suffix}"
+            if suggestion not in taken and suggestion not in self._reserved_slugs:
+                break
+
+        field.widget.opened = True
+        field.widget.auto = True
+        self.data = self.data.copy()
+        self.data[self.add_prefix("slug")] = suggestion
+
+    def save_unique_slug(self) -> Any:
+        """Save the form, reporting a slug taken by a concurrent request as a form error.
+
+        Returns:
+            The saved instance, or None if the slug was taken.
+
+        """
+        # The slug is set only on creation, so an edit cannot conflict
+        if self.instance.pk:
+            return self.save()
+
+        try:
+            with transaction.atomic():
+                return self.save()
+        except IntegrityError as error:
+            if not self._is_slug_conflict(error):
+                raise
+            self._report_taken_slug()
+            return None
+
+    def _report_taken_slug(self) -> None:
+        """Report a slug found taken on save, suggesting another one only if it was generated."""
+        base = self.slug_from_name()
+
+        if base and (self.fields["slug"].widget.auto or self.cleaned_data["slug"] == base):
+            self.suggest_slug(base)
+            self.add_error("slug", SLUG_UNAVAILABLE_ERROR)
+        else:
+            self.add_error("slug", SLUG_USED_ERROR)
+
+        self._ask_files_again()
+
+    def _is_slug_conflict(self, error: IntegrityError) -> bool:
+        """Return whether the error comes from a database constraint on the slug."""
+        diagnostics = getattr(error.__cause__, "diag", None)
+        violated = getattr(diagnostics, "constraint_name", None)
+        return any(
+            isinstance(constraint, UniqueConstraint) and "slug" in constraint.fields and constraint.name == violated
+            for constraint in self._meta.model._meta.constraints  # noqa: SLF001
+        )
 
 
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):

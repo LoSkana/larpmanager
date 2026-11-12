@@ -30,6 +30,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
 )
@@ -107,6 +108,8 @@ def _apply_ability_field(
         _assign_system(context, ability_element, logs, str(field_value))
     elif field_name == "visible":
         ability_element.visible = str(field_value).lower().strip() == "true"
+    elif field_name == "creation_only":
+        ability_element.creation_only = str(field_value).lower().strip() == "true"
     elif field_name in _ABILITY_PLAIN_FIELDS:
         setattr(ability_element, field_name, field_value)
     else:
@@ -248,6 +251,63 @@ def _call_load(context: dict, csv_row: dict) -> str:
     return _row_result(status, logs)
 
 
+def exclusives_load(context: dict, form: Form) -> list[str]:
+    """Load exclusive groups from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+
+    if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
+        for exclusive_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_exclusive_load(context, exclusive_row))
+    return processing_logs
+
+
+@transaction.atomic
+def _exclusive_load(context: dict, csv_row: dict) -> str:
+    """Load exclusive group data from a CSV row for bulk import, matching existing groups by name."""
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
+
+    parent_event = get_event_class_parent(context["event"].id, ExclusiveExp, context=context)
+
+    # Match the stored group ignoring case, so a different casing updates it instead of duplicating it
+    exclusive = ExclusiveExp.objects.filter(event_id=parent_event, name__iexact=name).order_by("number").first()
+    was_created = exclusive is None
+    if was_created:
+        exclusive = ExclusiveExp(event_id=parent_event, name=name)
+
+    logs = []
+    abilities_value = None
+    for field_name, field_value in csv_row.items():
+        if field_name == "name" or _is_missing(field_value) or _is_blank(field_value):
+            continue
+        if field_name == "max":
+            try:
+                max_count = _to_int(field_value)
+            except ValueError:
+                max_count = 0
+            if max_count < 1:
+                logs.append(f"WARN - invalid max ignored: {field_value}")
+            else:
+                exclusive.max_count = max_count
+        elif field_name == "abilities":
+            abilities_value = str(field_value)
+        else:
+            logs.append(f"WARN - unknown column ignored: {field_name}")
+
+    exclusive.save()
+    if abilities_value is not None:
+        # The uploaded list replaces the stored abilities of the group
+        exclusive.abilities.clear()
+        _assign_abilities(context, exclusive, logs, abilities_value)
+    save_log(context, ExclusiveExp, exclusive, operation_type=LogOperationType.UPLOAD)
+
+    status = f"OK - Created {exclusive}" if was_created else f"OK - Updated {exclusive}"
+    return _row_result(status, logs)
+
+
 def rules_load(context: dict, form: Form) -> list[str]:
     """Load rules from uploaded file and process each row."""
     (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
@@ -327,7 +387,8 @@ def _rule_load(context: dict, csv_row: dict) -> str:
     if abilities_value:
         _assign_abilities(context, rule, logs, abilities_value)
 
-    return f"OK - Created {rule}" if was_created else f"OK - Updated {rule}"
+    status = f"OK - Created rule {number}" if was_created else f"OK - Updated rule {number}"
+    return _row_result(status, logs)
 
 
 def modifiers_load(context: dict, form: Form) -> list[str]:
@@ -384,7 +445,8 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     modifier.save()
     save_log(context, ModifierExp, modifier, operation_type=LogOperationType.UPLOAD)
 
-    return f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"
+    status = f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"
+    return _row_result(status, logs)
 
 
 def criterions_load(context: dict, form: Form) -> list[str]:

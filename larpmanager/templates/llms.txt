@@ -46,7 +46,7 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 - **Characters** *(event)*: Enables the creation, editing, and assignment of characters to registered participants. Foundation for most writing features.
 - **Character Form / Custom Fields** *(event)*: Add any number of character fields to track attributes such as group affiliation, special status, mana, etc.
 - **Character Writing** *(event)*: Staff-written characters with pre-configured fields (background, public information, secret info) and rich-text editing via TinyMCE.
-- **Character Creation / Player Editor** *(event)*: Allows participants to create and modify their own characters freely, with configurable limits on what can be edited.
+- **Character Creation** *(event)*: Allows participants to create and modify their own characters freely, with configurable limits on what can be edited.
 - **Character Customization** *(event)*: Enables participants to customize specific attributes (name, pronoun, public info, etc.) of the characters assigned to them.
 - **Player Relationships** *(event)*: Enables participants to write their own list of character relationships.
 - **Character Inventory** *(event)*: Allows characters to have inventories managed in game.

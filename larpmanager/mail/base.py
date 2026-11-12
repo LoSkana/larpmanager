@@ -25,14 +25,14 @@ from typing import TYPE_CHECKING, Any
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F
+from django.db.models import F, Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _, override
 
-from larpmanager.cache.basic import get_event_association_id, get_run_basic_cache
+from larpmanager.cache.basic import get_association_basic_cache, get_event_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
@@ -109,6 +109,67 @@ def join_email(association: Any) -> None:
         )
         feedback_delay_seconds = 3600 * 24 * 4
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
+
+
+def _is_first_role(
+    member_id: int, association_id: int, association_role_id: int | None, event_role_id: int | None
+) -> bool:
+    """Return True if the member holds no association or event role in the association besides the given one."""
+    other_association_roles = AssociationRole.objects.filter(association_id=association_id, members=member_id)
+    if association_role_id:
+        other_association_roles = other_association_roles.exclude(pk=association_role_id)
+    if other_association_roles.exists():
+        return False
+
+    other_event_roles = EventRole.objects.filter(event__association_id=association_id, members=member_id)
+    if event_role_id:
+        other_event_roles = other_event_roles.exclude(pk=event_role_id)
+    return not other_event_roles.exists()
+
+
+def send_first_role_email(
+    member: Member,
+    association_id: int,
+    manage_url: str,
+    context_object: Any,
+    association_role_id: int | None = None,
+    event_role_id: int | None = None,
+) -> None:
+    """Send the welcome email with guide links to a member receiving the first role in a LarpManager association.
+
+    Skipped for white-label skins and for the sole role holder of the association (the creator,
+    who already receives the welcome email for new organizations).
+    """
+    association_cache = get_association_basic_cache(association_id)
+    if association_cache["domain"] != "larpmanager.com":
+        return
+
+    if not _is_first_role(member.pk, association_id, association_role_id, event_role_id):
+        return
+
+    other_staff = Member.objects.filter(
+        Q(association_roles__association_id=association_id) | Q(event_roles__event__association_id=association_id)
+    ).exclude(pk=member.pk)
+    if not other_staff.exists():
+        return
+
+    association_name = association_cache["name"]
+    activate(member.language)
+    subject = hdr_association(association_id) + _("Welcome to the staff of %(organization)s!") % {
+        "organization": association_name
+    }
+    body = render_to_string(
+        "mails/first_role.html",
+        {
+            "member": member,
+            "association_name": association_name,
+            "manage_url": manage_url,
+            "guide_url": get_url(reverse("guide", args=["first"])),
+            "guides_url": get_url(reverse("guides")),
+            "tutorials_url": get_association_url(reverse("tutorials"), association_id),
+        },
+    )
+    my_send_mail(subject, body, member, context_object)
 
 
 def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
@@ -201,6 +262,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
     url = get_url(reverse("manage"), instance.association)
     body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
     my_send_mail(subj, body, mb, instance.association)
+    send_first_role_email(mb, instance.association_id, url, instance.association, association_role_id=instance.pk)
 
     # Notify existing executives about the new role assignment
     # Skip notification to the member who just received the role
@@ -286,6 +348,7 @@ def _add_member_event_role(
     url = get_association_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), association_id)
     body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
     my_send_mail(subj, body, mb, run or instance.event)
+    send_first_role_email(mb, association_id, url, run or instance.event, event_role_id=instance.pk)
 
     # Notify organizers, skipping the member itself
     for m in orgas:

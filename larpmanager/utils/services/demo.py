@@ -56,6 +56,7 @@ from larpmanager.models.experience import (
     CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -402,6 +403,7 @@ def _clone_experience(clone_context: CloneContext, event_pk: int) -> None:
     _copy_all(clone_context, RuleExp, event_filter)
     _copy_all(clone_context, DeliveryExp, event_filter)
     _copy_all(clone_context, CallExp, event_filter)
+    _copy_all(clone_context, ExclusiveExp, event_filter)
 
 
 def _clone_castings(clone_context: CloneContext) -> None:

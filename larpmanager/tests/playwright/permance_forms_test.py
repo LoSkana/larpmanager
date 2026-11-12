@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import fill_slug, check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
     sidebar, \
     get_modal_iframe, save_modal, fill_date
 
@@ -172,13 +172,13 @@ def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
 def check_exe_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
     page.locator("#main_form").get_by_role("link", name=re.compile(r"^Interface")).click()
-    page.locator("#id_calendar_past_events").check()
+    page.locator("#id_calendar_hide_past_events").check()
     page.locator("#id_calendar_authors").check()
     page.locator("#id_calendar_tagline").check()
     submit_confirm(page)
     sidebar(page, "Configuration")
     page.locator("#main_form").get_by_role("link", name=re.compile(r"^Interface")).click()
-    expect(page.locator("#id_calendar_past_events")).to_be_checked()
+    expect(page.locator("#id_calendar_hide_past_events")).to_be_checked()
     expect(page.locator("#id_calendar_website")).not_to_be_checked()
     expect(page.locator("#id_calendar_where")).not_to_be_checked()
     expect(page.locator("#id_calendar_authors")).to_be_checked()
@@ -232,7 +232,7 @@ def _campaign_config_permanence(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("child campaign")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("childcampaign")
+    fill_slug(edit_iframe, "childcampaign")
     expect(edit_iframe.locator("#slug")).to_have_value("childcampaign")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
