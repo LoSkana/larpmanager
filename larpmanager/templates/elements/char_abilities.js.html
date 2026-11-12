@@ -200,6 +200,13 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        // Order by cost, then system, then name
+        allMatches.sort(function(a, b) {
+            return (a.ab.cost - b.ab.cost)
+                || a.ab.system.localeCompare(b.ab.system)
+                || a.ab.name.localeCompare(b.ab.name);
+        });
+
         if (allMatches.length === 0) {
             $emptyMsg.show();
             return;
