@@ -320,6 +320,17 @@ _MEALS_MAP = {
 }
 
 
+MAX_LATITUDE = 90
+MAX_LONGITUDE = 180
+
+
+def get_player_ticket_prices(event_id: int) -> dict:
+    """Return the minimum (costo) and maximum (costo_max) price of the player tickets of an event."""
+    return RegistrationTicket.objects.filter(event_id=event_id, tier__in=PLAYER_TIERS, deleted__isnull=True).aggregate(
+        costo=Min("price"), costo_max=Max("price")
+    )
+
+
 def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     """Build the payload with the event data."""
     days = (run.end - run.start).days + 1 if run.start and run.end else None
@@ -328,9 +339,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
         run=run, cancellation_date__isnull=True, ticket__tier__in=PLAYER_TIERS
     ).count()
 
-    ticket_prices = RegistrationTicket.objects.filter(
-        event_id=run.event_id, tier__in=PLAYER_TIERS, deleted__isnull=True
-    ).aggregate(costo=Min("price"), costo_max=Max("price"))
+    ticket_prices = get_player_ticket_prices(run.event_id)
 
     # Load publication metadata from EventConfig
     genre_map = _get_genre_slug_map()

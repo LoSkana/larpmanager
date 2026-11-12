@@ -223,7 +223,7 @@ The Prologue feature allows organizers to create introductory texts for each act
 
 ### Promotion Feature
 
-Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging.
+Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging. Organizations can also push events to external platforms: ILDB, with their own credentials, and LARP Radar, by opting in through the `radar_enabled` configuration.
 
 ### Quests and Traits Feature
 

@@ -414,6 +414,10 @@ AWS_SNS_TOPIC_ARN = None
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
 
+# LARP Radar partner API (optional - publication is disabled if the key is unset)
+LARP_RADAR_API_KEY = None
+LARP_RADAR_ORIGIN = 'https://larpmanager.com'
+
 # Development only: without an API key, use the credentials of a local "ant auth login"
 ANTHROPIC_USE_LOCAL_LOGIN = False
 

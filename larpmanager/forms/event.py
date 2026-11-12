@@ -90,6 +90,8 @@ from larpmanager.utils.core.copy_class import copy_class
 from larpmanager.utils.core.validators import FileTypeValidator
 from larpmanager.utils.io.pdf.engine import PDF_FONT_TYPES, PDF_PAGE_SIZE_CHOICES
 from larpmanager.utils.publication.ildb import (
+    MAX_LATITUDE,
+    MAX_LONGITUDE,
     PromotionAccommodation,
     PromotionAccommodationType,
     PromotionEventType,
@@ -2508,14 +2510,27 @@ class OrgaPreferencesForm(ExePreferencesForm):
             extra_fields.append((field_id, field_label))
 
 
-def validate_coordinate(value: str) -> None:
-    """Validate that a string is a valid decimal coordinate number."""
+def validate_coordinate(value: str, limit: int) -> None:
+    """Validate that a string is a decimal coordinate number within the limit, in absolute value."""
     if not value:
         return
     try:
-        float(value)
+        coordinate = float(value)
     except ValueError as err:
         raise ValidationError(_("Enter a valid number")) from err
+    # Negated to also reject nan
+    if not abs(coordinate) <= limit:
+        raise ValidationError(_("Enter a valid number"))
+
+
+def validate_latitude(value: str) -> None:
+    """Validate a latitude value."""
+    validate_coordinate(value, MAX_LATITUDE)
+
+
+def validate_longitude(value: str) -> None:
+    """Validate a longitude value."""
+    validate_coordinate(value, MAX_LONGITUDE)
 
 
 class OrgaPromotionForm(ConfigForm):
@@ -2600,12 +2615,12 @@ class OrgaPromotionForm(ConfigForm):
             ConfigType.CHAR,
             _("Latitude"),
             _("Latitude coordinate of the event location"),
-            [validate_coordinate],
+            [validate_latitude],
         )
         self.add_configs(
             "pub_lon",
             ConfigType.CHAR,
             _("Longitude"),
             _("Longitude coordinate of the event location"),
-            [validate_coordinate],
+            [validate_longitude],
         )

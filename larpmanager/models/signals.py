@@ -341,10 +341,13 @@ from larpmanager.utils.io.pdf import (
 from larpmanager.utils.larpmanager.tasks import events_detached, notify_admins
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.publication.base import (
+    publish_association_radar,
     publish_event,
     publish_event_role,
     publish_registration,
 )
+from larpmanager.utils.publication.ildb import ILDB_CONFIG_KEY, ILDB_TEAM_CONFIG_KEY
+from larpmanager.utils.publication.radar import RADAR_ENABLED_CONFIG, RADAR_RUN_CONFIG
 from larpmanager.utils.registrations.signals import (
     apply_registration_post_save_updates,
     process_registration_event_change,
@@ -723,8 +726,14 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
-    """Clear association config cache after save."""
+    """Clear association config cache after save, refresh dependent dashboard actions, publish on Radar opt-in."""
     reset_association_configs(instance.association_id)
+
+    if instance.name in (ILDB_CONFIG_KEY, ILDB_TEAM_CONFIG_KEY, RADAR_ENABLED_CONFIG):
+        clear_widget_cache_association(instance.association_id)
+
+    if instance.name == RADAR_ENABLED_CONFIG and instance.value == "True":
+        publish_association_radar(instance.association_id)
 
 
 @receiver(post_save, sender=AssociationSkin)
@@ -936,6 +945,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 
     # Default event setup
     create_default_event_setup(instance)
+
+    # The dashboard actions depend on the event visibility
+    clear_widget_cache_association(instance.association_id)
 
     # Schedule event publication (skip if being soft-deleted)
     if instance.deleted is None:
@@ -1713,6 +1725,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     # Clear association cache to update onboarding status
     clear_association_cache(get_run_basic_cache(instance.id)["association_slug"])
 
+    # The dashboard actions depend on the run status and dates
+    clear_widget_cache_association(get_run_basic_cache(instance.id)["association_id"])
+
     # Schedule publication for this run's event
     publish_event(instance.event_id)
 
@@ -1726,6 +1741,10 @@ def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> No
     """Reset run config cache when related instance is saved."""
     reset_run_configs(instance.run_id)
     reset_cache_config_run(instance.run_id)
+
+    # The dashboard actions list the runs not yet published
+    if instance.name == RADAR_RUN_CONFIG:
+        reset_widgets(instance)
 
 
 @receiver(pre_save, sender=SpeedLarp)

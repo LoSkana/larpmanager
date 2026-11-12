@@ -778,6 +778,12 @@ msgstr ""
 msgid "Your team ID."
 msgstr ""
 
+msgid ""
+"If selected, visible upcoming events with description and coordinates are "
+"published on LARP Radar, sharing the event data and the organization main "
+"email."
+msgstr ""
+
 msgid "App Integration"
 msgstr ""
 
@@ -12511,6 +12517,11 @@ msgstr ""
 msgid "Generate a new ILDB token"
 msgstr ""
 
+#, python-format
+msgid ""
+"Not yet on LARP Radar, check description and coordinates: <b>%(list)s</b>."
+msgstr ""
+
 msgid "Set up the membership request text"
 msgstr ""
 
@@ -13085,6 +13096,15 @@ msgid "Internal catering"
 msgstr ""
 
 msgid "External catering"
+msgstr ""
+
+msgid "Event published on LARP Radar:"
+msgstr ""
+
+#, python-format
+msgid ""
+"The event <strong>%(event)s</strong> has been automatically published on "
+"LARP Radar."
 msgstr ""
 
 #, python-format

@@ -162,6 +162,10 @@ AWS_SES_REGION_NAME = os.environ.get('AWS_SES_REGION_NAME', 'us-east-1')
 AWS_SES_CONFIGURATION_SET = os.environ.get('AWS_SES_CONFIGURATION_SET')
 AWS_SNS_TOPIC_ARN = os.environ.get('AWS_SNS_TOPIC_ARN')
 
+# LARP Radar partner API (optional - publication is disabled if the key is unset)
+LARP_RADAR_API_KEY = os.environ.get('LARP_RADAR_API_KEY')
+LARP_RADAR_ORIGIN = os.environ.get('LARP_RADAR_ORIGIN', 'https://larpmanager.com')
+
 _docker = os.environ.get('DOCKER') == 'true'
 
 SECURE_SSL_REDIRECT = not _docker

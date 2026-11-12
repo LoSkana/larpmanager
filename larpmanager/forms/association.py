@@ -55,6 +55,7 @@ from larpmanager.models.association import (
 )
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.versions import VERSIONS
+from larpmanager.utils.publication.radar import is_radar_available
 
 RESERVED_SUBDOMAINS = frozenset({"admin", "api", "ftp", "mail", "smtp", "staging", "www"})
 NAME_WITHOUT_ALPHANUMERIC_ERROR = _("The name must contain letters or numbers")
@@ -897,6 +898,17 @@ class ExeConfigForm(ConfigForm):
         field_label = "ILDB - Team ID"
         field_help_text = _("Your team ID.")
         self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
+
+        if is_radar_available(self.instance.id):
+            self.add_configs(
+                "radar_enabled",
+                ConfigType.BOOL,
+                "LARP Radar",
+                _(
+                    "If selected, visible upcoming events with description and coordinates are published on "
+                    "LARP Radar, sharing the event data and the organization main email."
+                ),
+            )
 
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""
