@@ -4336,6 +4336,9 @@ msgstr "Historická rezidence"
 msgid "Information saved!"
 msgstr "Informace uloženy!"
 
+msgid "Inherit appearance"
+msgstr "Zdědit vzhled"
+
 msgid "Invite a character"
 msgstr "Pozvi postavu"
 
@@ -15715,6 +15718,14 @@ msgstr ""
 "Ahoj! Zaregistroval/a ses na %(event)s, ale ještě sis nedoplnil/a svůj "
 "profil. Zabere to jen 5 minut, <a href='%(url)s'>klikni sem</a>, abys "
 "formulář vyplnil/a."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Pokud je zapnuto, nová událost přidaná do kampaně převezme vzhled (motiv, "
+"barvy, obrázky, písma a vlastní CSS) nejnovější události kampaně."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

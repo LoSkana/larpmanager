@@ -368,7 +368,7 @@ from larpmanager.utils.services.character import (
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     create_default_event_setup,
-    inherit_previous_campaign_roles,
+    inherit_previous_campaign_data,
     on_event_features_m2m_changed,
     prepare_campaign_event_data,
     update_run_plan_on_event_change,
@@ -947,8 +947,8 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Default event setup
     create_default_event_setup(instance)
 
-    # Campaign events may inherit the roles of the previous event
-    inherit_previous_campaign_roles(instance)
+    # Campaign events may inherit roles and appearance of the previous event
+    inherit_previous_campaign_data(instance)
 
     # The dashboard actions depend on the event visibility
     clear_widget_cache_association(instance.association_id)

@@ -4336,6 +4336,9 @@ msgstr "Historyczna rezydencja"
 msgid "Information saved!"
 msgstr "Informacje zapisane!"
 
+msgid "Inherit appearance"
+msgstr "Dziedzicz wygląd"
+
 msgid "Invite a character"
 msgstr "Zaproś postać"
 
@@ -16037,6 +16040,15 @@ msgstr ""
 "Cześć! Zarejestrowałeś się na %(event)s, ale jeszcze nie uzupełniłeś swojego"
 " profilu. Zajmie to tylko 5 minut – <a href='%(url)s'>kliknij tutaj</a>, "
 "żeby wypełnić formularz."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Jeśli włączysz tę opcję, nowe wydarzenie dodane do kampanii otrzyma wygląd "
+"(motyw, kolory, obrazy, czcionki i własny CSS) najnowszego wydarzenia "
+"kampanii."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

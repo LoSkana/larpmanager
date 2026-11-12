@@ -27,7 +27,7 @@ from django.db.models import F, Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import _get_event_parent_id, get_run_basic_cache
+from larpmanager.cache.basic import _get_event_parent_id, get_run_basic_cache, reset_event_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
@@ -49,10 +49,11 @@ from larpmanager.cache.run import reset_cache_config_run, reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
+from larpmanager.forms.event import OrgaAppearanceForm
 from larpmanager.mail.registration import notify_character_full_options
 from larpmanager.models.access import EventRole, get_event_organizers_by_event
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
-from larpmanager.models.event import Event, Run
+from larpmanager.models.event import Event, EventConfig, Run
 from larpmanager.models.experience import SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -68,6 +69,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_class_parent, get_event_elements
 from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.copy import copy_appearance_fields
 from larpmanager.utils.registrations.characters import (
     get_character_full_options,
     get_character_full_options_message,
@@ -690,12 +692,11 @@ def assign_previous_campaign_character(registration: Any) -> None:
     new_character_relation.save()
 
 
-def inherit_previous_campaign_roles(event: Event) -> None:
-    """Copy roles of the most recent campaign event into an event just attached to the campaign.
+def inherit_previous_campaign_data(event: Event) -> None:
+    """Copy roles and appearance of the most recent campaign event into an event just attached to the campaign.
 
-    Runs only when the event's parent changed (creation included), the campaign feature is active
-    and the campaign_inherit_roles config is enabled. Roles are matched by number; members and
-    permissions are added without removing existing ones.
+    Runs only when the event's parent changed (creation included) and the campaign feature is active.
+    Each part is copied only if its config (campaign_inherit_roles, campaign_inherit_appearance) is enabled.
     """
     parent_id = event.parent_id
     if event.deleted or event.template or not parent_id:
@@ -704,7 +705,13 @@ def inherit_previous_campaign_roles(event: Event) -> None:
     if getattr(event, "_old_parent_id", None) == parent_id:
         return
 
-    if "campaign" not in get_event_features(event.id) or not get_event_config(event.id, "campaign_inherit_roles"):
+    features = get_event_features(event.id)
+    if "campaign" not in features:
+        return
+
+    inherit_roles = get_event_config(event.id, "campaign_inherit_roles")
+    inherit_appearance = get_event_config(event.id, "campaign_inherit_appearance")
+    if not inherit_roles and not inherit_appearance:
         return
 
     # Most recent event of the campaign, by last run end date
@@ -717,7 +724,16 @@ def inherit_previous_campaign_roles(event: Event) -> None:
     if not previous_run:
         return
 
-    source_roles = EventRole.objects.filter(event_id=previous_run.event_id).prefetch_related("members", "permissions")
+    if inherit_roles:
+        _inherit_campaign_roles(event, previous_run.event_id)
+
+    if inherit_appearance:
+        _inherit_campaign_appearance(event, previous_run.event, features)
+
+
+def _inherit_campaign_roles(event: Event, source_event_id: int) -> None:
+    """Copy roles matched by number; members and permissions are added without removing existing ones."""
+    source_roles = EventRole.objects.filter(event_id=source_event_id).prefetch_related("members", "permissions")
     with transaction.atomic():
         for source_role in source_roles:
             (target_role, _created) = EventRole.objects.get_or_create(
@@ -727,6 +743,24 @@ def inherit_previous_campaign_roles(event: Event) -> None:
             )
             target_role.permissions.add(*source_role.permissions.all())
             target_role.members.add(*source_role.members.all())
+
+
+def _inherit_campaign_appearance(event: Event, source_event: Event, features: dict) -> None:
+    """Copy appearance fields, custom css and theme from the source event."""
+    context = {"features": features, "association_id": event.association_id}
+    copy_appearance_fields(context, event, source_event)
+
+    # Persist with update to avoid re-triggering the event save signals
+    field_names = [*OrgaAppearanceForm.Meta.fields, "css_code"]
+    Event.objects.filter(pk=event.pk).update(**{name: getattr(event, name) for name in field_names})
+
+    source_theme = EventConfig.objects.filter(event_id=source_event.id, name="theme").first()
+    if source_theme:
+        EventConfig.objects.update_or_create(event_id=event.id, name="theme", defaults={"value": source_theme.value})
+
+    reset_event_configs(event.id)
+    reset_event_basic_cache(event.id)
+    clear_event_cache_all_runs(event.id)
 
 
 def reset_all_run(run_id: int) -> None:

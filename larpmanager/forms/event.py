@@ -948,6 +948,18 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("campaign_inherit_roles", ConfigType.BOOL, inherit_roles_label, inherit_roles_help_text)
 
+        inherit_appearance_label = _("Inherit appearance")
+        inherit_appearance_help_text = _(
+            "If enabled, a new event added to the campaign receives the appearance (theme, colors, images, "
+            "fonts and custom CSS) of the most recent event of the campaign.",
+        )
+        self.add_configs(
+            "campaign_inherit_appearance",
+            ConfigType.BOOL,
+            inherit_appearance_label,
+            inherit_appearance_help_text,
+        )
+
     def set_config_experience(self) -> None:
         """Configure the experience points settings, if the experience feature is enabled."""
         if "experience" not in self.params["features"]:

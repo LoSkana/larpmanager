@@ -18,13 +18,13 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""Tests for the campaign_inherit_roles config: new campaign events copy the roles of the last event."""
+"""Tests for the campaign_inherit_* configs: new campaign events copy roles and appearance of the last event."""
 
 from datetime import date
 
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.base import Feature
-from larpmanager.models.event import EventConfig, Run
+from larpmanager.models.event import Event, EventConfig, Run
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -72,3 +72,45 @@ class TestCampaignInheritRoles(BaseTestCase):
         new_event = self.create_event(name="Next Chapter", parent=parent)
 
         assert not EventRole.objects.filter(event=new_event, number=2).exists()
+
+
+class TestCampaignInheritAppearance(BaseTestCase):
+    """Appearance of the most recent campaign event is inherited by a new child event."""
+
+    def _setup_campaign(self, *, inherit: bool) -> Event:
+        """Create a campaign parent with a previous child event holding a custom appearance."""
+        parent = self.create_event(name="Campaign Parent")
+        campaign_feature, _created = Feature.objects.get_or_create(slug="campaign", defaults={"name": "Campaign"})
+        parent.features.add(campaign_feature)
+        if inherit:
+            EventConfig.objects.create(event=parent, name="campaign_inherit_appearance", value="True")
+
+        Run.objects.filter(event=parent).update(end=date(2024, 1, 1))
+
+        previous = self.create_event(name="Previous Chapter", parent=parent)
+        Run.objects.filter(event=previous).update(end=date(2025, 1, 1))
+        Event.objects.filter(pk=previous.pk).update(pri_rgb="#112233", sec_rgb="#445566")
+        EventConfig.objects.create(event=previous, name="theme", value="halo")
+
+        return parent
+
+    def test_appearance_inherited_when_enabled(self) -> None:
+        """A new child event receives colors and theme of the last campaign event."""
+        parent = self._setup_campaign(inherit=True)
+
+        new_event = self.create_event(name="Next Chapter", parent=parent)
+
+        new_event.refresh_from_db()
+        assert new_event.pri_rgb == "#112233"
+        assert new_event.sec_rgb == "#445566"
+        assert EventConfig.objects.get(event=new_event, name="theme").value == "halo"
+
+    def test_appearance_not_inherited_when_disabled(self) -> None:
+        """Without the config, the new child event keeps its own appearance."""
+        parent = self._setup_campaign(inherit=False)
+
+        new_event = self.create_event(name="Next Chapter", parent=parent)
+
+        new_event.refresh_from_db()
+        assert new_event.pri_rgb != "#112233"
+        assert not EventConfig.objects.filter(event=new_event, name="theme", value="halo").exists()

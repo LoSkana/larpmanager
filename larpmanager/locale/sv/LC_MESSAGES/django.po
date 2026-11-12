@@ -4336,6 +4336,9 @@ msgstr "Historisk bostad"
 msgid "Information saved!"
 msgstr "Informationen har sparats!"
 
+msgid "Inherit appearance"
+msgstr "Ärv utseende"
+
 msgid "Invite a character"
 msgstr "Bjud in en karaktär"
 
@@ -15927,6 +15930,15 @@ msgstr ""
 "Hej! Du har anmält dig till %(event)s men har ännu inte fyllt i din profil. "
 "Det tar bara 5 minuter – <a href='%(url)s'>klicka här</a> för att fylla i "
 "formuläret."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Om det är aktiverat får ett nytt evenemang som läggs till i kampanjen samma "
+"utseende (tema, färger, bilder, typsnitt och anpassad CSS) som kampanjens "
+"senaste evenemang."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

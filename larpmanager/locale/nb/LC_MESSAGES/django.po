@@ -4336,6 +4336,9 @@ msgstr "Historisk bolig"
 msgid "Information saved!"
 msgstr "Informasjonen er lagret!"
 
+msgid "Inherit appearance"
+msgstr "Arv utseende"
+
 msgid "Invite a character"
 msgstr "Inviter en karakter"
 
@@ -15942,6 +15945,15 @@ msgstr ""
 "Hei! Du har meldt deg på %(event)s, men har ikke fylt ut profilen din ennå. "
 "Det tar bare 5 minutter – <a href='%(url)s'>klikk her</a> for å fylle ut "
 "skjemaet."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Hvis aktivert, får et nytt arrangement som legges til i kampanjen utseendet "
+"(tema, farger, bilder, skrifttyper og egendefinert CSS) fra det nyeste "
+"arrangementet i kampanjen."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "
