@@ -2850,6 +2850,9 @@ msgstr "Korkea kontrasti"
 msgid "Inflows total"
 msgstr "Tulot yhteensä"
 
+msgid "Inherit roles"
+msgstr "Peri roolit"
+
 msgid "Internal link"
 msgstr "Sisäinen linkki"
 
@@ -4332,6 +4335,9 @@ msgstr "Historiallinen asuinpaikka"
 
 msgid "Information saved!"
 msgstr "Tiedot tallennettu!"
+
+msgid "Inherit appearance"
+msgstr "Peri ulkoasu"
 
 msgid "Invite a character"
 msgstr "Kutsu hahmoa"
@@ -15702,6 +15708,13 @@ msgstr ""
 "kokemuksesi aste ja ilmoita lopuksi tarkalleen kokemuksesi ala."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Jos tämä on käytössä, kampanjaan lisättävä uusi tapahtuma saa kampanjan "
+"viimeisimmän tapahtuman roolit jäsenineen ja käyttöoikeuksineen."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -15934,6 +15947,15 @@ msgstr ""
 "Hei! Olet ilmoittautunut %(event)s -tapahtumaan, mutta et ole vielä "
 "täyttänyt profiiliasi. Se vie vain 5 minuuttia. <a href='%(url)s'>Klikkaa "
 "tästä</a> täyttääksesi lomakkeen."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Jos tämä on käytössä, kampanjaan lisätty uusi tapahtuma saa kampanjan "
+"viimeisimmän tapahtuman ulkoasun (teeman, värit, kuvat, fontit ja mukautetun"
+" CSS:n)."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

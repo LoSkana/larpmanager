@@ -1587,6 +1587,23 @@ msgid ""
 "the character they played in the previous run."
 msgstr ""
 
+msgid "Inherit roles"
+msgstr ""
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their "
+"members and permissions, of the most recent event of the campaign."
+msgstr ""
+
+msgid "Inherit appearance"
+msgstr ""
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+
 msgid "Experience points"
 msgstr ""
 

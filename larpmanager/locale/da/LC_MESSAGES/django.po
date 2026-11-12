@@ -2850,6 +2850,9 @@ msgstr "Høj kontrast"
 msgid "Inflows total"
 msgstr "Samlede indbetalinger"
 
+msgid "Inherit roles"
+msgstr "Arv roller"
+
 msgid "Internal link"
 msgstr "Internt link"
 
@@ -4332,6 +4335,9 @@ msgstr "Historisk residens"
 
 msgid "Information saved!"
 msgstr "Oplysninger gemt!"
+
+msgid "Inherit appearance"
+msgstr "Arv udseende"
 
 msgid "Invite a character"
 msgstr "Invitér en karakter"
@@ -15614,6 +15620,13 @@ msgstr ""
 "erfaringsniveau, og beskriv til sidst præcist dit erfaringsområde."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Hvis aktiveret, får en ny begivenhed, der tilføjes til kampagnen, rollerne "
+"med deres medlemmer og tilladelser fra kampagnens seneste begivenhed."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -15848,6 +15861,15 @@ msgstr ""
 "Hej! Du er tilmeldt %(event)s, men har endnu ikke udfyldt din profil. Det "
 "tager kun 5 minutter, <a href='%(url)s'>klik her</a> for at udfylde "
 "formularen."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Hvis aktiveret, får en ny begivenhed, der tilføjes til kampagnen, udseendet "
+"(tema, farver, billeder, skrifttyper og tilpasset CSS) fra kampagnens "
+"seneste begivenhed."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

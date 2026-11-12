@@ -2850,6 +2850,9 @@ msgstr "Hoog contrast"
 msgid "Inflows total"
 msgstr "Totale inkomsten"
 
+msgid "Inherit roles"
+msgstr "Rollen overnemen"
+
 msgid "Internal link"
 msgstr "Interne link"
 
@@ -4332,6 +4335,9 @@ msgstr "Historische woonplaats"
 
 msgid "Information saved!"
 msgstr "Informatie opgeslagen!"
+
+msgid "Inherit appearance"
+msgstr "Uiterlijk overnemen"
 
 msgid "Invite a character"
 msgstr "Nodig een personage uit"
@@ -15972,6 +15978,14 @@ msgstr ""
 "en geef tot slot precies aan wat je vakgebied is."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Als dit is ingeschakeld, krijgt een nieuw evenement dat aan de campagne "
+"wordt toegevoegd de rollen, met hun leden en rechten, van het meest recente "
+"evenement van de campagne."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16216,6 +16230,15 @@ msgstr ""
 "Hoi! Je hebt je aangemeld voor %(event)s, maar je hebt je profiel nog niet "
 "compleet gemaakt. Het kost maar 5 minuten, <a href='%(url)s'>klik hier</a> "
 "om het formulier in te vullen."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Als dit is ingeschakeld, krijgt een nieuw evenement dat aan de campagne "
+"wordt toegevoegd het uiterlijk (thema, kleuren, afbeeldingen, lettertypen en"
+" aangepaste CSS) van het meest recente evenement van de campagne."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

@@ -2850,6 +2850,9 @@ msgstr "Υψηλή αντίθεση"
 msgid "Inflows total"
 msgstr "Σύνολο εισροών"
 
+msgid "Inherit roles"
+msgstr "Κληρονόμηση ρόλων"
+
 msgid "Internal link"
 msgstr "Εσωτερικός σύνδεσμος"
 
@@ -4332,6 +4335,9 @@ msgstr "Ιστορική κατοικία"
 
 msgid "Information saved!"
 msgstr "Οι πληροφορίες αποθηκεύτηκαν!"
+
+msgid "Inherit appearance"
+msgstr "Κληρονόμηση εμφάνισης"
 
 msgid "Invite a character"
 msgstr "Πρόσκληση χαρακτήρα"
@@ -16101,6 +16107,14 @@ msgstr ""
 "σου."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Αν είναι ενεργό, ένα νέο event που προστίθεται στην καμπάνια παίρνει τους "
+"ρόλους, μαζί με τα μέλη και τα δικαιώματά τους, από το πιο πρόσφατο event "
+"της καμπάνιας."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16343,6 +16357,15 @@ msgstr ""
 "Γεια! Εγγράφηκες στο %(event)s αλλά δεν έχεις ολοκληρώσει ακόμα το προφίλ "
 "σου. Χρειάζονται μόλις 5 λεπτά, <a href='%(url)s'>κάνε κλικ εδώ</a> για να "
 "συμπληρώσεις τη φόρμα."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Αν είναι ενεργό, ένα νέο event που προστίθεται στην καμπάνια παίρνει την "
+"εμφάνιση (θέμα, χρώματα, εικόνες, γραμματοσειρές και προσαρμοσμένο CSS) του "
+"πιο πρόσφατου event της καμπάνιας."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

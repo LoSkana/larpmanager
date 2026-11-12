@@ -941,6 +941,25 @@ class OrgaConfigForm(ConfigForm):
             disable_auto_assign_help_text,
         )
 
+        inherit_roles_label = _("Inherit roles")
+        inherit_roles_help_text = _(
+            "If enabled, a new event added to the campaign receives the roles, with their members and "
+            "permissions, of the most recent event of the campaign.",
+        )
+        self.add_configs("campaign_inherit_roles", ConfigType.BOOL, inherit_roles_label, inherit_roles_help_text)
+
+        inherit_appearance_label = _("Inherit appearance")
+        inherit_appearance_help_text = _(
+            "If enabled, a new event added to the campaign receives the appearance (theme, colors, images, "
+            "fonts and custom CSS) of the most recent event of the campaign.",
+        )
+        self.add_configs(
+            "campaign_inherit_appearance",
+            ConfigType.BOOL,
+            inherit_appearance_label,
+            inherit_appearance_help_text,
+        )
+
     def set_config_experience(self) -> None:
         """Configure the experience points settings, if the experience feature is enabled."""
         if "experience" not in self.params["features"]:
@@ -1811,12 +1830,16 @@ class OrgaRunForm(ConfigForm):
         )
 
         writing_elements = _get_writing_elements()
+        feature_mapping = _get_writing_mapping()
 
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
         for writing_element_key, writing_element_label, writing_element_type in writing_elements:
-            if writing_element_key in ["plot", "prologue"]:
+            if (
+                writing_element_key in ["plot", "prologue"]
+                or feature_mapping.get(writing_element_key) not in self.params["features"]
+            ):
                 continue
             questions = [
                 q

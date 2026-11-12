@@ -2850,6 +2850,9 @@ msgstr "Contrasto elevato"
 msgid "Inflows total"
 msgstr "Entrate totali"
 
+msgid "Inherit roles"
+msgstr "Eredita ruoli"
+
 msgid "Internal link"
 msgstr "Link interno"
 
@@ -4332,6 +4335,9 @@ msgstr "Residenza storica"
 
 msgid "Information saved!"
 msgstr "Informazioni salvate!"
+
+msgid "Inherit appearance"
+msgstr "Eredita aspetto"
 
 msgid "Invite a character"
 msgstr "Invita un personaggio"
@@ -15975,6 +15981,13 @@ msgstr ""
 "di esperienza, ed infine indica in modo preciso il tuo campo di esperienza."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Se attivo, un nuovo evento aggiunto alla campagna riceve i ruoli, con i "
+"relativi membri e permessi, dell'evento più recente della campagna."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16217,6 +16230,15 @@ msgstr ""
 "Ciao! Ti sei registrato a %(event)s ma non hai ancora completato il tuo "
 "profilo. Ci vogliono solo 5 minuti: <a href='%(url)s'>clicca qui</a> per "
 "compilare il modulo."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Se attivo, un nuovo evento aggiunto alla campagna riceve l'aspetto (tema, "
+"colori, immagini, font e CSS personalizzato) dell'evento più recente della "
+"campagna."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "
