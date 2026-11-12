@@ -2195,6 +2195,9 @@ msgstr "Massaal verwijderen"
 msgid "Button text"
 msgstr "Knoptekst"
 
+msgid "Buy ability"
+msgstr "Vaardigheid kopen"
+
 msgid "Calculated:"
 msgstr "Berekend:"
 
@@ -3179,9 +3182,6 @@ msgstr "Vermenigvuldiging"
 
 msgid "No users found"
 msgstr "Geen gebruikers gevonden"
-
-msgid "Obtain ability"
-msgstr "Vaardigheid verwerven"
 
 msgid "One-time token"
 msgstr "Eenmalig token"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s gebruikt"
 msgid "After saving, add another"
 msgstr "Na opslaan nog een toevoegen"
 
+msgid "Buy the selected ability?"
+msgstr "De geselecteerde vaardigheid kopen?"
+
 msgid "Character Inventory Types"
 msgstr "Soorten personage-inventaris"
 
@@ -6075,9 +6078,6 @@ msgstr "Naam van de toe te kennen badge."
 
 msgid "No guide matches your search"
 msgstr "Geen enkele gids komt overeen met je zoekopdracht"
-
-msgid "Obtain the selected ability?"
-msgstr "De geselecteerde vaardigheid verkrijgen?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6571,9 +6571,6 @@ msgstr "Terugbetalingsverzoekitem toegevoegd"
 
 msgid "Select and activate key features"
 msgstr "Belangrijke functies selecteren en activeren"
-
-msgid "Select the new ability to obtain"
-msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
 
 msgid "Select your casting preferences!"
 msgstr "Kies je voorkeuren voor de casting!"
@@ -15195,6 +15192,14 @@ msgid ""
 msgstr ""
 "Scan deze QR-code met Google Authenticator, Authy of een andere compatibele "
 "TOTP-app en voer de 6-cijferige code in om te bevestigen."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Er zijn nu geen vaardigheden die je kunt kopen. Nieuwe vaardigheden worden "
+"ontgrendeld naarmate je ervaringspunten verdient of aan hun vereisten "
+"voldoet."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

@@ -43,7 +43,7 @@ function wrapCalls(root) {
 }
 
 window.addEventListener('DOMContentLoaded', function() {
-    $('form[enctype="multipart/form-data"]').attr('data-confirm', '{% filter escapejs %}{% trans "Obtain the selected ability?" %}{% endfilter %}');
+    $('form[enctype="multipart/form-data"]').attr('data-confirm', '{% filter escapejs %}{% trans "Buy the selected ability?" %}{% endfilter %}');
 
     const typeOrder = {{ type_available | safe }};
     const typeIds = Object.keys(typeOrder);

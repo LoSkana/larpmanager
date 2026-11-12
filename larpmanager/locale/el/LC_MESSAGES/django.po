@@ -2195,6 +2195,9 @@ msgstr "Μαζική διαγραφή"
 msgid "Button text"
 msgstr "Κείμενο κουμπιού"
 
+msgid "Buy ability"
+msgstr "Αγορά ικανότητας"
+
 msgid "Calculated:"
 msgstr "Υπολογισμένο:"
 
@@ -3179,9 +3182,6 @@ msgstr "Πολλαπλασιασμός"
 
 msgid "No users found"
 msgstr "Δεν βρέθηκαν χρήστες"
-
-msgid "Obtain ability"
-msgstr "Απόκτηση ικανότητας"
 
 msgid "One-time token"
 msgstr "Token μίας χρήσης"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s χρησιμοποιήθηκαν"
 msgid "After saving, add another"
 msgstr "Μετά την αποθήκευση, πρόσθεσε άλλο"
 
+msgid "Buy the selected ability?"
+msgstr "Θέλεις να αγοράσεις την επιλεγμένη ικανότητα;"
+
 msgid "Character Inventory Types"
 msgstr "Τύποι αποθέματος χαρακτήρων"
 
@@ -6075,9 +6078,6 @@ msgstr "Όνομα του badge που θα απονεμηθεί."
 
 msgid "No guide matches your search"
 msgstr "Κανένας οδηγός δεν ταιριάζει με την αναζήτησή σου"
-
-msgid "Obtain the selected ability?"
-msgstr "Να αποκτήσεις την επιλεγμένη ικανότητα;"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6571,9 +6571,6 @@ msgstr "Προστέθηκε στοιχείο αιτήματος επιστρο�
 
 msgid "Select and activate key features"
 msgstr "Επίλεξε και ενεργοποίησε βασικές λειτουργίες"
-
-msgid "Select the new ability to obtain"
-msgstr "Επίλεξε τη νέα ικανότητα που θα αποκτήσεις"
 
 msgid "Select your casting preferences!"
 msgstr "Επίλεξε τις προτιμήσεις σου για το casting!"
@@ -15310,6 +15307,14 @@ msgstr ""
 "Σκάναρε αυτόν τον κωδικό QR με το Google Authenticator, το Authy ή "
 "οποιαδήποτε συμβατή εφαρμογή TOTP και έπειτα εισήγαγε τον 6ψήφιο κωδικό για "
 "επιβεβαίωση."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Δεν υπάρχουν ικανότητες που μπορείς να αγοράσεις αυτή τη στιγμή. Νέες "
+"ξεκλειδώνονται καθώς κερδίζεις πόντους εμπειρίας ή καλύπτεις τις "
+"προϋποθέσεις τους."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

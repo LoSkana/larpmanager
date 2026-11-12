@@ -2195,6 +2195,9 @@ msgstr "Massradering"
 msgid "Button text"
 msgstr "Knapptext"
 
+msgid "Buy ability"
+msgstr "Köp förmåga"
+
 msgid "Calculated:"
 msgstr "Beräknad:"
 
@@ -3179,9 +3182,6 @@ msgstr "Multiplikation"
 
 msgid "No users found"
 msgstr "Inga användare hittades"
-
-msgid "Obtain ability"
-msgstr "Förvärva färdighet"
 
 msgid "One-time token"
 msgstr "Engångstoken"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s använda"
 msgid "After saving, add another"
 msgstr "Efter att du har sparat, lägg till en till"
 
+msgid "Buy the selected ability?"
+msgstr "Köpa den valda förmågan?"
+
 msgid "Character Inventory Types"
 msgstr "Typer av karaktärsinventarier"
 
@@ -6075,9 +6078,6 @@ msgstr "Namn på badge som ska tilldelas."
 
 msgid "No guide matches your search"
 msgstr "Ingen guide matchar din sökning"
-
-msgid "Obtain the selected ability?"
-msgstr "Skaffa den valda förmågan?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6571,9 +6571,6 @@ msgstr "Ersättningspost tillagd"
 
 msgid "Select and activate key features"
 msgstr "Välj och aktivera viktiga funktioner"
-
-msgid "Select the new ability to obtain"
-msgstr "Välj den nya färdighet som ska förvärvas"
 
 msgid "Select your casting preferences!"
 msgstr "Välj dina Casting-preferenser!"
@@ -14932,6 +14929,13 @@ msgid ""
 msgstr ""
 "Skanna denna QR-kod med Google Authenticator, Authy eller någon kompatibel "
 "TOTP-app och ange sedan den 6-siffriga koden för att bekräfta."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Det finns inga förmågor du kan köpa just nu. Nya låses upp när du får "
+"erfarenhetspoäng eller uppfyller deras krav."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

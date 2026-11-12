@@ -179,5 +179,5 @@ def approve_character(live_server: Any, page: Any) -> None:
 
 def player_after_approval(live_server: Any, page: Any) -> None:
     open_abilities(live_server, page)
-    expect(page.locator(".ability-cards-grid")).not_to_contain_text("noble birth")
-    expect(page.locator("#one")).to_contain_text("No abilities found")
+    expect(page.locator(".ability-cards-grid")).to_have_count(0)
+    expect(page.locator("#one")).to_contain_text("There are no abilities you can buy right now")

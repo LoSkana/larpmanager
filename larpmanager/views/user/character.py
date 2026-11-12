@@ -1142,6 +1142,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
         str(typ_id): data["name"] for typ_id, data in sorted(context["available"].items(), key=lambda x: x[1]["order"])
     }
     context["type_available"] = json.dumps(type_available_dict)
+    context["has_available"] = bool(context["available"])
     # Serialize available with string keys for safe JS embedding
     context["available"] = json.dumps({str(k): v for k, v in context["available"].items()})
 

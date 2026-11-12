@@ -2195,6 +2195,9 @@ msgstr "Usuwanie zbiorcze"
 msgid "Button text"
 msgstr "Tekst przycisku"
 
+msgid "Buy ability"
+msgstr "Kup umiejętność"
+
 msgid "Calculated:"
 msgstr "Obliczony:"
 
@@ -3179,9 +3182,6 @@ msgstr "Mnożenie"
 
 msgid "No users found"
 msgstr "Nie znaleziono użytkowników"
-
-msgid "Obtain ability"
-msgstr "Uzyskaj zdolność"
 
 msgid "One-time token"
 msgstr "Jednorazowy token"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s zużyto"
 msgid "After saving, add another"
 msgstr "Po zapisaniu dodaj kolejny"
 
+msgid "Buy the selected ability?"
+msgstr "Kupić wybraną umiejętność?"
+
 msgid "Character Inventory Types"
 msgstr "Rodzaje ekwipunku postaci"
 
@@ -6075,9 +6078,6 @@ msgstr "Nazwa badge do przyznania."
 
 msgid "No guide matches your search"
 msgstr "Żaden poradnik nie pasuje do Twojego wyszukiwania"
-
-msgid "Obtain the selected ability?"
-msgstr "Uzyskać wybraną umiejętność?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6571,9 +6571,6 @@ msgstr "Dodano pozycję wniosku o zwrot kosztów"
 
 msgid "Select and activate key features"
 msgstr "Wybierz i aktywuj kluczowe funkcje"
-
-msgid "Select the new ability to obtain"
-msgstr "Wybierz nową zdolność do zdobycia"
 
 msgid "Select your casting preferences!"
 msgstr "Wybierz swoje preferencje dotyczące Castingu!"
@@ -15022,6 +15019,13 @@ msgstr ""
 "Zeskanuj ten kod QR za pomocą Google Authenticator, Authy lub dowolnej "
 "kompatybilnej aplikacji TOTP, a następnie wprowadź 6-cyfrowy kod, aby "
 "potwierdzić."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Nie ma teraz żadnych umiejętności, które możesz kupić. Nowe odblokowują się,"
+" gdy zdobywasz punkty doświadczenia lub spełniasz ich wymagania."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

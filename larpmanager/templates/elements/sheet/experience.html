@@ -1,10 +1,30 @@
 {% load show_tags i18n %}
 {% if features.experience and not exp_auto_buy %}
     <h1 class="c">{% trans "Experience points" %}</h1>
-    {% if exp_systems_data %}
+    {% if exp_systems_data|length > 1 %}
+        <table class="exp-systems-table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Total" %}</th>
+                    <th>{% trans "Used" %}</th>
+                    <th>{% trans "Available" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sys in exp_systems_data %}
+                    <tr>
+                        <th scope="row">{{ sys.name }}</th>
+                        <td>{{ sys.tot }}</td>
+                        <td class="exp-stat-used">{{ sys.used }}</td>
+                        <td class="exp-stat-avail">{{ sys.avail }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif exp_systems_data %}
         {% for sys in exp_systems_data %}
             <div class="exp-summary">
-                {% if exp_systems_data|length > 1 %}<span class="exp-system-name">{{ sys.name }}</span>{% endif %}
                 {% if pdf %}
                     <table class="exp-stat-row">
                         <tr>

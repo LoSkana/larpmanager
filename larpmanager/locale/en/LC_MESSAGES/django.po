@@ -5728,7 +5728,7 @@ msgstr ""
 msgid "You have not reached the minimum number of preferences"
 msgstr ""
 
-msgid "Obtain the selected ability?"
+msgid "Buy the selected ability?"
 msgstr ""
 
 msgid "All"
@@ -6727,7 +6727,7 @@ msgstr ""
 msgid "The character has missing values in required fields:"
 msgstr ""
 
-msgid "Obtain ability"
+msgid "Buy ability"
 msgstr ""
 
 msgid "Search abilities"
@@ -6736,7 +6736,9 @@ msgstr ""
 msgid "No abilities found."
 msgstr ""
 
-msgid "Select the new ability to obtain"
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
 msgstr ""
 
 msgid "Confirm character"

@@ -2195,6 +2195,9 @@ msgstr "Suppression en bloc"
 msgid "Button text"
 msgstr "Texte du bouton"
 
+msgid "Buy ability"
+msgstr "Acheter la compétence"
+
 msgid "Calculated:"
 msgstr "Calculé:"
 
@@ -3179,9 +3182,6 @@ msgstr "Multiplication"
 
 msgid "No users found"
 msgstr "Aucun utilisateur trouvé"
-
-msgid "Obtain ability"
-msgstr "Acquérir une compétence"
 
 msgid "One-time token"
 msgstr "Jeton unique"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s utilisés"
 msgid "After saving, add another"
 msgstr "Après l'enregistrement, ajoute-en un autre"
 
+msgid "Buy the selected ability?"
+msgstr "Acheter la compétence sélectionnée ?"
+
 msgid "Character Inventory Types"
 msgstr "Types d'inventaire des personnages"
 
@@ -6075,9 +6078,6 @@ msgstr "Nom du badge à attribuer."
 
 msgid "No guide matches your search"
 msgstr "Aucun guide ne correspond à ta recherche"
-
-msgid "Obtain the selected ability?"
-msgstr "Obtenir la capacité sélectionnée ?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6571,9 +6571,6 @@ msgstr "Ligne de demande de remboursement ajoutée"
 
 msgid "Select and activate key features"
 msgstr "Sélectionne et active les fonctionnalités clés"
-
-msgid "Select the new ability to obtain"
-msgstr "Sélectionne la nouvelle compétence à acquérir"
 
 msgid "Select your casting preferences!"
 msgstr "Choisis tes préférences de casting!"
@@ -15313,6 +15310,14 @@ msgstr ""
 "Scanne ce code QR avec Google Authenticator, Authy ou toute autre "
 "application TOTP compatible, puis saisis le code à 6 chiffres pour "
 "confirmer."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Il n'y a aucune compétence que tu peux acheter pour le moment. De nouvelles "
+"compétences se débloquent à mesure que tu gagnes des points d'expérience ou "
+"que tu remplis leurs prérequis."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "
