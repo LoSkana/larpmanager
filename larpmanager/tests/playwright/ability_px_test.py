@@ -314,7 +314,8 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
         Experience points 12 Total 3 Used 9 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
         double shield (2) - This text should show awards 2 first live """,
     )
-    expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
+    expect(page.locator(".ability-cards-grid")).to_have_count(0)
+    expect(page.locator("#one")).to_contain_text("There are no abilities you can buy right now")
 
     # remove ability
     page.locator(".inline-p", has_text="double shield").get_by_role("link").click()
