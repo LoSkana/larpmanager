@@ -293,8 +293,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show requirements: sword1
-        Select the new ability to obtain
+        Buy ability All base ability double shield 2 This text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
 
@@ -311,7 +310,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        """Obtain ability all No abilities found. Select the new ability to obtain
+        """
         Experience points 12 Total 3 Used 9 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
         double shield (2) - This text should show awards 2 first live """,
     )
@@ -324,8 +323,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show requirements: sword1
-        Select the new ability to obtain
+        Buy ability All base ability double shield 2 This text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
         Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
@@ -354,8 +352,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2
-        this text should show requirements: sword1 Select the new ability to obtain
+        Buy ability All base ability double shield 2
+        this text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
         Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
@@ -370,7 +368,6 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All No abilities found. Select the new ability to obtain
         Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
         double shield (0) - This text should show awards 2 first live""",
     )
@@ -385,8 +382,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2
-        this text should show requirements: sword1 Select the new ability to obtain
+        Buy ability All base ability double shield 2
+        this text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
         Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
@@ -418,7 +415,6 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All No abilities found. Select the new ability to obtain
         Experience points 12 Total 4 Used 8 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
         double shield (3) - This text should show awards 2 first live""",
     )

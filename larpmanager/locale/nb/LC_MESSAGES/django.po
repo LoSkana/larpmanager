@@ -2195,6 +2195,9 @@ msgstr "Bulk-sletting"
 msgid "Button text"
 msgstr "Knappetekst"
 
+msgid "Buy ability"
+msgstr "Kjøp evne"
+
 msgid "Calculated:"
 msgstr "Beregnet:"
 
@@ -3179,9 +3182,6 @@ msgstr "Multiplikasjon"
 
 msgid "No users found"
 msgstr "Ingen brukere funnet"
-
-msgid "Obtain ability"
-msgstr "Tilegn deg en ferdighet"
 
 msgid "One-time token"
 msgstr "Engangstoken"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s brukt"
 msgid "After saving, add another"
 msgstr "Legg til en til etter lagring"
 
+msgid "Buy the selected ability?"
+msgstr "Vil du kjøpe den valgte evnen?"
+
 msgid "Character Inventory Types"
 msgstr "Typer av karakterinventar"
 
@@ -6075,9 +6078,6 @@ msgstr "Navn på badge som skal tildeles."
 
 msgid "No guide matches your search"
 msgstr "Ingen guide passer til søket ditt"
-
-msgid "Obtain the selected ability?"
-msgstr "Skaffe deg den valgte evnen?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6568,9 +6568,6 @@ msgstr "Refusjonsforespørsel-element lagt til"
 
 msgid "Select and activate key features"
 msgstr "Velg og aktiver viktige funksjoner"
-
-msgid "Select the new ability to obtain"
-msgstr "Velg den nye evnen som skal tilegnes"
 
 msgid "Select your casting preferences!"
 msgstr "Velg Casting-preferansene dine!"
@@ -14925,6 +14922,13 @@ msgstr ""
 "Skann denne QR-koden med Google Authenticator, Authy eller en hvilken som "
 "helst kompatibel TOTP-app, og skriv deretter inn den sekssifrede koden for å"
 " bekrefte."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Det finnes ingen evner du kan kjøpe akkurat nå. Nye låses opp etter hvert "
+"som du får erfaringspoeng eller oppfyller kravene for dem."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

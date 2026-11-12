@@ -2195,6 +2195,9 @@ msgstr "Joukkopoisto"
 msgid "Button text"
 msgstr "Painikkeen teksti"
 
+msgid "Buy ability"
+msgstr "Osta kyky"
+
 msgid "Calculated:"
 msgstr "Laskettu:"
 
@@ -3179,9 +3182,6 @@ msgstr "Kertolasku"
 
 msgid "No users found"
 msgstr "Käyttäjiä ei löytynyt"
-
-msgid "Obtain ability"
-msgstr "Hanki taito"
 
 msgid "One-time token"
 msgstr "Kertakäyttöinen tunniste"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s käytetty"
 msgid "After saving, add another"
 msgstr "Tallenna ja lisää toinen"
 
+msgid "Buy the selected ability?"
+msgstr "Haluatko ostaa valitun kyvyn?"
+
 msgid "Character Inventory Types"
 msgstr "Hahmojen inventaariotyypit"
 
@@ -6075,9 +6078,6 @@ msgstr "Myönnettävän Badgen nimi."
 
 msgid "No guide matches your search"
 msgstr "Hakuasi vastaavia oppaita ei löytynyt"
-
-msgid "Obtain the selected ability?"
-msgstr "Hankitaanko valittu kyky?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6568,9 +6568,6 @@ msgstr "Korvaushakemuksen kohta lisätty"
 
 msgid "Select and activate key features"
 msgstr "Valitse ja aktivoi tärkeimmät ominaisuudet"
-
-msgid "Select the new ability to obtain"
-msgstr "Valitse uusi hankittava kyky"
 
 msgid "Select your casting preferences!"
 msgstr "Valitse Casting-mieltymyksesi!"
@@ -14921,6 +14918,13 @@ msgstr ""
 "Skannaa tämä QR-koodi Google Authenticatorilla, Authy:lla tai millä tahansa "
 "yhteensopivalla TOTP-sovelluksella ja syötä sitten 6-numeroinen koodi "
 "vahvistukseksi."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Juuri nyt ei ole kykyjä, joita voisit ostaa. Uusia avautuu, kun keräät "
+"kokemuspisteitä tai täytät niiden vaatimukset."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "

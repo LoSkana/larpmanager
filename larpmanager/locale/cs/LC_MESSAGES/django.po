@@ -2195,6 +2195,9 @@ msgstr "Hromadné odstranění"
 msgid "Button text"
 msgstr "Text tlačítka"
 
+msgid "Buy ability"
+msgstr "Koupit schopnost"
+
 msgid "Calculated:"
 msgstr "Vypočítáno:"
 
@@ -3179,9 +3182,6 @@ msgstr "Násobení"
 
 msgid "No users found"
 msgstr "Nenalezeni žádní uživatelé"
-
-msgid "Obtain ability"
-msgstr "Získat dovednost"
 
 msgid "One-time token"
 msgstr "Jednorázový žeton"
@@ -5594,6 +5594,9 @@ msgstr "%(used)s / %(total)s použito"
 msgid "After saving, add another"
 msgstr "Po uložení přidat další"
 
+msgid "Buy the selected ability?"
+msgstr "Koupit vybranou schopnost?"
+
 msgid "Character Inventory Types"
 msgstr "Typy inventáře postav"
 
@@ -6075,9 +6078,6 @@ msgstr "Název badge, který má být udělen."
 
 msgid "No guide matches your search"
 msgstr "Tvému hledání neodpovídá žádný návod"
-
-msgid "Obtain the selected ability?"
-msgstr "Získat vybranou schopnost?"
 
 #, python-format
 msgid "Option %(name)s deactivated!"
@@ -6568,9 +6568,6 @@ msgstr "Přidána položka žádosti o vrácení peněz"
 
 msgid "Select and activate key features"
 msgstr "Vyber a aktivuj klíčové funkce"
-
-msgid "Select the new ability to obtain"
-msgstr "Vyber novou dovednost, kterou chceš získat"
 
 msgid "Select your casting preferences!"
 msgstr "Vyber si své preference pro Casting!"
@@ -14718,6 +14715,13 @@ msgid ""
 msgstr ""
 "Naskenuj tento QR kód pomocí aplikace Google Authenticator, Authy nebo jiné "
 "kompatibilní aplikace TOTP a poté zadej šestimístný kód pro potvrzení."
+
+msgid ""
+"There are no abilities you can buy right now. New ones unlock as you gain "
+"experience points or meet their requirements."
+msgstr ""
+"Momentálně si nemůžeš koupit žádné schopnosti. Nové se odemknou, jakmile "
+"získáš zkušenostní body nebo splníš jejich požadavky."
 
 msgid ""
 "Total of all expenses incurred for the event, both personal and "
