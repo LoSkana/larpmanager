@@ -2850,6 +2850,9 @@ msgstr "Hoher Kontrast"
 msgid "Inflows total"
 msgstr "Einnahmen insgesamt"
 
+msgid "Inherit roles"
+msgstr "Rollen übernehmen"
+
 msgid "Internal link"
 msgstr "Interner Link"
 
@@ -16137,6 +16140,14 @@ msgid ""
 msgstr ""
 "Klicke auf die Rollen, an denen du mitarbeiten möchtest, gib dann dein "
 "Erfahrungsniveau an und gib schließlich dein Fachgebiet genau an."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Wenn aktiviert, erhält ein neues Event, das zur Kampagne hinzugefügt wird, "
+"die Rollen samt ihren Mitgliedern und Berechtigungen vom neuesten Event der "
+"Kampagne."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "

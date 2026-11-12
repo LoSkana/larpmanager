@@ -2850,6 +2850,9 @@ msgstr "Korkea kontrasti"
 msgid "Inflows total"
 msgstr "Tulot yhteensä"
 
+msgid "Inherit roles"
+msgstr "Peri roolit"
+
 msgid "Internal link"
 msgstr "Sisäinen linkki"
 
@@ -15700,6 +15703,13 @@ msgid ""
 msgstr ""
 "Napsauta rooleja, joiden parissa haluat tehdä yhteistyötä, syötä sitten "
 "kokemuksesi aste ja ilmoita lopuksi tarkalleen kokemuksesi ala."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Jos tämä on käytössä, kampanjaan lisättävä uusi tapahtuma saa kampanjan "
+"viimeisimmän tapahtuman roolit jäsenineen ja käyttöoikeuksineen."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "

@@ -2850,6 +2850,9 @@ msgstr "Contraste élevé"
 msgid "Inflows total"
 msgstr "Recettes totales"
 
+msgid "Inherit roles"
+msgstr "Hériter des rôles"
+
 msgid "Internal link"
 msgstr "Lien interne"
 
@@ -16105,6 +16108,14 @@ msgid ""
 msgstr ""
 "Clique sur les rôles sur lesquels tu aimerais collaborer, puis entre ton "
 "niveau d'expérience, et enfin indique précisément ton domaine d'expertise."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Si cette option est activée, un nouvel événement ajouté à la campagne reçoit"
+" les rôles, avec leurs membres et leurs permissions, de l'événement le plus "
+"récent de la campagne."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "

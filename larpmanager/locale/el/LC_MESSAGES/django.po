@@ -2850,6 +2850,9 @@ msgstr "Υψηλή αντίθεση"
 msgid "Inflows total"
 msgstr "Σύνολο εισροών"
 
+msgid "Inherit roles"
+msgstr "Κληρονόμηση ρόλων"
+
 msgid "Internal link"
 msgstr "Εσωτερικός σύνδεσμος"
 
@@ -16099,6 +16102,14 @@ msgstr ""
 "Πάτησε στους ρόλους στους οποίους θα ήθελες να συνεργαστείς, έπειτα εισήγαγε"
 " το επίπεδο εμπειρίας σου και τέλος δήλωσε με ακρίβεια τον τομέα εμπειρίας "
 "σου."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Αν είναι ενεργό, ένα νέο event που προστίθεται στην καμπάνια παίρνει τους "
+"ρόλους, μαζί με τα μέλη και τα δικαιώματά τους, από το πιο πρόσφατο event "
+"της καμπάνιας."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "

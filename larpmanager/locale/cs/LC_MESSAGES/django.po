@@ -2850,6 +2850,9 @@ msgstr "Vysoký kontrast"
 msgid "Inflows total"
 msgstr "Celkové příjmy"
 
+msgid "Inherit roles"
+msgstr "Dědit role"
+
 msgid "Internal link"
 msgstr "Interní odkaz"
 
@@ -15476,6 +15479,13 @@ msgid ""
 msgstr ""
 "Klikni na role, na kterých chceš spolupracovat, poté zadej úroveň svých "
 "zkušeností a nakonec přesně uveď svou odbornost."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Pokud je tato možnost zapnutá, nová událost přidaná do kampaně převezme "
+"role, včetně jejich členů a oprávnění, z nejnovější události kampaně."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "

@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.db.models import Prefetch, Q
+from django.db.models import F, Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
@@ -688,6 +688,45 @@ def assign_previous_campaign_character(registration: Any) -> None:
             attribute_value = getattr(previous_character_relation, "custom_" + custom_attribute_name)
             setattr(new_character_relation, "custom_" + custom_attribute_name, attribute_value)
     new_character_relation.save()
+
+
+def inherit_previous_campaign_roles(event: Event) -> None:
+    """Copy roles of the most recent campaign event into an event just attached to the campaign.
+
+    Runs only when the event's parent changed (creation included), the campaign feature is active
+    and the campaign_inherit_roles config is enabled. Roles are matched by number; members and
+    permissions are added without removing existing ones.
+    """
+    parent_id = event.parent_id
+    if event.deleted or event.template or not parent_id:
+        return
+
+    if getattr(event, "_old_parent_id", None) == parent_id:
+        return
+
+    if "campaign" not in get_event_features(event.id) or not get_event_config(event.id, "campaign_inherit_roles"):
+        return
+
+    # Most recent event of the campaign, by last run end date
+    previous_run = (
+        Run.objects.filter(Q(event__parent_id=parent_id) | Q(event_id=parent_id), event__deleted__isnull=True)
+        .exclude(event_id=event.id)
+        .order_by(F("end").desc(nulls_last=True), "-pk")
+        .first()
+    )
+    if not previous_run:
+        return
+
+    source_roles = EventRole.objects.filter(event_id=previous_run.event_id).prefetch_related("members", "permissions")
+    with transaction.atomic():
+        for source_role in source_roles:
+            (target_role, _created) = EventRole.objects.get_or_create(
+                event_id=event.id,
+                number=source_role.number,
+                defaults={"name": source_role.name},
+            )
+            target_role.permissions.add(*source_role.permissions.all())
+            target_role.members.add(*source_role.members.all())
 
 
 def reset_all_run(run_id: int) -> None:

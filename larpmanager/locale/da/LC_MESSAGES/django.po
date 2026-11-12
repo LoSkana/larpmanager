@@ -2850,6 +2850,9 @@ msgstr "Høj kontrast"
 msgid "Inflows total"
 msgstr "Samlede indbetalinger"
 
+msgid "Inherit roles"
+msgstr "Arv roller"
+
 msgid "Internal link"
 msgstr "Internt link"
 
@@ -15612,6 +15615,13 @@ msgid ""
 msgstr ""
 "Klik på de roller, du gerne vil samarbejde om, angiv derefter dit "
 "erfaringsniveau, og beskriv til sidst præcist dit erfaringsområde."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Hvis aktiveret, får en ny begivenhed, der tilføjes til kampagnen, rollerne "
+"med deres medlemmer og tilladelser fra kampagnens seneste begivenhed."
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
