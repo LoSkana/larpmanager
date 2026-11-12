@@ -1017,6 +1017,30 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
+msgid "The question is shown, and can be filled by the player"
+msgstr ""
+
+msgid "The question needs to be filled by the player"
+msgstr ""
+
+msgid "The question is shown read only, the player cannot change it"
+msgstr ""
+
+msgid "The question is not shown to the player"
+msgstr ""
+
+msgid "Characters can be filtered according to this question"
+msgstr ""
+
+msgid "The answer to this question is publicly visible"
+msgstr ""
+
+msgid "The answer to this question is only visible to the participant"
+msgstr ""
+
+msgid "The answer is hidden to all participants"
+msgstr ""
+
 msgid "Manage the selectable options for a character form question"
 msgstr ""
 

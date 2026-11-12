@@ -7418,6 +7418,9 @@ msgstr "CSS-koodi PDF-tulostuksen mukauttamiseen."
 msgid "The following registrations were drawn:"
 msgstr "Seuraavat ilmoittautumiset arvottiin:"
 
+msgid "The question is not shown to the player"
+msgstr "Kysymystä ei näytetä pelaajalle"
+
 msgid "The question status, allowed values are"
 msgstr "Kysymyksen tila, sallitut arvot ovat"
 
@@ -7505,6 +7508,9 @@ msgstr "Kuvat ja videot onnistuneesti ladattu!"
 
 msgid "Set casting options in the configuration"
 msgstr "Määritä casting-vaihtoehdot asetuksissa"
+
+msgid "The answer is hidden to all participants"
+msgstr "Vastaus on piilotettu kaikilta osallistujilta"
 
 msgid "The collection was delivered to the user"
 msgstr "Keräys jaettiin käyttäjälle"
@@ -8115,6 +8121,9 @@ msgstr "Määritä liput ja ilmoittautumislomake."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Vaihtoehto '%(option)s' vaatii: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Pelaajan täytyy täyttää kysymys"
+
 msgid "View the list of characters and participants!"
 msgstr "Näytä hahmojen ja osallistujien luettelo!"
 
@@ -8326,6 +8335,9 @@ msgstr "Kaikkien hahmolomakkeiden alussa näkyvä teksti"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Tähän eksklusiiviseen ryhmään kuuluvat kyvyt"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Vastaus tähän kysymykseen näkyy julkisesti"
 
 msgid "The name of the question this option belongs to"
 msgstr "Kysymyksen nimi, johon tämä vaihtoehto kuuluu"
@@ -8808,6 +8820,9 @@ msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr ""
 "Casting-asetukset tallennettu tyypille '%(type)s' tapahtumassa %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Hahmoja voi suodattaa tämän kysymyksen perusteella"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr ""
 "Valitse, miten osallistujat maksavat, ja avaa sitten ilmoittautuminen."
@@ -8935,6 +8950,9 @@ msgstr ""
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet vaativat 'Hahmoa', joka ei ole aktiivinen"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Kysymys näytetään, ja pelaaja voi täyttää sen"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Tämä kutsu lähetettiin eri sähköpostiosoitteeseen."
@@ -9480,6 +9498,9 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Tämän tapahtuman kiltojen enimmäismäärä on saavutettu"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "Kysymys näytetään vain luku -tilassa, eikä pelaaja voi muuttaa sitä"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Käyttäjä on lähettänyt pyynnön ilmoittautua tähän tapahtumaan."
 
@@ -9674,6 +9695,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Määrittää, kuinka usein muistutussähköposteja lähetetään päivinä (oletus: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Vastaus tähän kysymykseen näkyy vain osallistujalle"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Nämä työpajat sinun on suoritettava ennen kuin voit pelata."

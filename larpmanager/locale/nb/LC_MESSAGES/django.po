@@ -7419,6 +7419,9 @@ msgstr "CSS-koden for å tilpasse PDF-utskrift."
 msgid "The following registrations were drawn:"
 msgstr "Følgende registreringer ble trukket ut:"
 
+msgid "The question is not shown to the player"
+msgstr "Spørsmålet vises ikke for spilleren"
+
 msgid "The question status, allowed values are"
 msgstr "Spørsmålsstatus, tillatte verdier er"
 
@@ -7506,6 +7509,9 @@ msgstr "Bilder og videoer er lastet opp vellykket!"
 
 msgid "Set casting options in the configuration"
 msgstr "Angi casting-alternativene i konfigurasjonen"
+
+msgid "The answer is hidden to all participants"
+msgstr "Svaret er skjult for alle deltakere"
 
 msgid "The collection was delivered to the user"
 msgstr "Innsamlingen ble levert til brukeren"
@@ -8116,6 +8122,9 @@ msgstr "Sett opp billettene og påmeldingsskjemaet."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Valget '%(option)s' krever: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Spørsmålet må fylles ut av spilleren"
+
 msgid "View the list of characters and participants!"
 msgstr "Se listen over karakterer og deltakere!"
 
@@ -8326,6 +8335,9 @@ msgstr "Tekst som vises i begynnelsen av alle karakterarkene"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Evnene som hører til denne eksklusive gruppen"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Svaret på dette spørsmålet er offentlig synlig"
 
 msgid "The name of the question this option belongs to"
 msgstr "Navnet på spørsmålet dette alternativet hører til"
@@ -8802,6 +8814,9 @@ msgstr "Til slutt ber vi deg om å fylle ut profilen din."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-preferanser lagret på '%(type)s' for %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Karakterer kan filtreres etter dette spørsmålet"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Velg hvordan deltakerne betaler, og åpne deretter påmeldingen."
 
@@ -8926,6 +8941,9 @@ msgstr "Skann deltakernes QR-koder på stedet for å markere dem som til stede"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Noen funksjoner krever «Karakter», som ikke er aktiv."
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Spørsmålet vises og kan fylles ut av spilleren"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Denne invitasjonen ble sendt til en annen e-postadresse."
@@ -9468,6 +9486,9 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Det maksimale antallet gilder for dette arrangementet er nådd"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "Spørsmålet vises skrivebeskyttet, og spilleren kan ikke endre det"
+
 msgid "The user has submitted a request to register for this event."
 msgstr ""
 "Brukeren har sendt inn en forespørsel om å melde seg på dette arrangementet."
@@ -9660,6 +9681,9 @@ msgstr "Valgfri merknad om dette tokenet (f.eks. mottakerens navn, formål)"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr "Angir hvor ofte påminnelses-e-poster sendes, i dager (standard: 5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Svaret på dette spørsmålet er bare synlig for deltakeren"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Dette er verkstedene du må fullføre før du kan spille."

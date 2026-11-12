@@ -7419,6 +7419,9 @@ msgstr "CSS kód pro přizpůsobení tisku PDF."
 msgid "The following registrations were drawn:"
 msgstr "Byly vylosovány tyto registrace:"
 
+msgid "The question is not shown to the player"
+msgstr "Otázka se hráči nezobrazí"
+
 msgid "The question status, allowed values are"
 msgstr "Stav otázky, povolené hodnoty jsou"
 
@@ -7506,6 +7509,9 @@ msgstr "Fotografie a videa byly úspěšně nahrány!"
 
 msgid "Set casting options in the configuration"
 msgstr "Nastav možnosti Casting v konfiguraci"
+
+msgid "The answer is hidden to all participants"
+msgstr "Odpověď je skrytá všem účastníkům"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
@@ -8116,6 +8122,9 @@ msgstr "Nastav vstupenky a registrační formulář."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Volba '%(option)s' vyžaduje: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Hráč musí otázku vyplnit"
+
 msgid "View the list of characters and participants!"
 msgstr "Zobrazit seznam postav a účastníků!"
 
@@ -8326,6 +8335,9 @@ msgstr "Text zobrazený na začátku všech listů postav"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Schopnosti patřící do této exkluzivní skupiny"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Odpověď na tuto otázku je veřejně viditelná"
 
 msgid "The name of the question this option belongs to"
 msgstr "Název otázky, ke které tato možnost patří"
@@ -8803,6 +8815,9 @@ msgstr "V posledním kroku tě požádáme o vyplnění tvého profilu."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Předvolby Castingu uložené na '%(type)s' pro %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Postavy můžeš filtrovat podle této otázky"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Vyber, jak budou účastníci platit, a pak otevři registrace."
 
@@ -8926,6 +8941,9 @@ msgstr "Naskenuj na místě QR kódy účastníků a označ je jako přítomné"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Postava\", která není aktivní"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Otázka se zobrazí a hráč ji může vyplnit"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
@@ -9451,6 +9469,9 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Byl dosažen maximální počet cechů pro tuto akci"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "Otázka se zobrazí jen pro čtení, hráč ji nemůže změnit"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Uživatel podal žádost o registraci na tuto akci."
 
@@ -9629,6 +9650,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Nastavuje, jak často se odesílají připomínací e-maily, ve dnech (výchozí: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Odpověď na tuto otázku vidí jen účastník"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Tyto semináře musíš dokončit, abys mohl/a hrát."
