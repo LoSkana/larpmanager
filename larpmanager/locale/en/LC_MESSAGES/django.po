@@ -729,6 +729,30 @@ msgid ""
 "panel."
 msgstr ""
 
+msgid "Cancellations"
+msgstr ""
+
+msgid "Refund percentage"
+msgstr ""
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+
+msgid "Only tokens"
+msgstr ""
+
+msgid "Both tokens and credits"
+msgstr ""
+
+msgid "Return as"
+msgstr ""
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled registration."
+msgstr ""
+
 msgid "Treasury"
 msgstr ""
 
@@ -3072,10 +3096,6 @@ msgid ""
 "page</a>.</i>"
 msgstr ""
 
-#, python-format
-msgid " for %(user)s"
-msgstr ""
-
 msgid "Donation Received"
 msgstr ""
 
@@ -3220,6 +3240,10 @@ msgid "Your preferences have been saved in the system:"
 msgstr ""
 
 msgid "Elements you wish to avoid in the assignment:"
+msgstr ""
+
+#, python-format
+msgid " for %(user)s"
 msgstr ""
 
 msgid "Daily Summary"
@@ -3733,6 +3757,14 @@ msgstr ""
 #, python-format
 msgid ""
 "A payment of <b>%(amount).2f %(currency)s</b> was recorded for this event."
+msgstr ""
+
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr ""
+
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
 msgstr ""
 
 #, python-format
@@ -9408,18 +9440,6 @@ msgstr ""
 msgid "Money"
 msgstr ""
 
-msgid "Refund details"
-msgstr ""
-
-msgid "Amount kept"
-msgstr ""
-
-msgid "Refund amount"
-msgstr ""
-
-msgid "Refund method"
-msgstr ""
-
 msgid "Refunds are unavailable because neither tokens nor credits are enabled."
 msgstr ""
 
@@ -9430,16 +9450,17 @@ msgstr ""
 msgid "Both %(tokens)s and %(credits)s"
 msgstr ""
 
-msgid "Refund percentage"
+msgid "Share of fee"
+msgstr ""
+
+msgctxt "refund"
+msgid "Amount"
 msgstr ""
 
 msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 
 msgid "Issue this refund to the participant?"
-msgstr ""
-
-msgid "Cancellations"
 msgstr ""
 
 msgid "Review all cancelled registrations and track their refund status"

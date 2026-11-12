@@ -541,6 +541,10 @@ msgstr "Ylläpitäjät"
 msgid "Amount"
 msgstr "Määrä"
 
+msgctxt "refund"
+msgid "Amount"
+msgstr "Summa"
+
 msgid "Annual"
 msgstr "Vuosittainen"
 
@@ -1709,6 +1713,9 @@ msgstr "Pyydetty"
 msgid "Residence"
 msgstr "Asuinpaikka"
 
+msgid "Return as"
+msgstr "Palauta muodossa"
+
 msgid "Set quest"
 msgstr "Aseta Quest"
 
@@ -2168,9 +2175,6 @@ msgstr "Maatilamatkailu"
 msgid "Amount Paid"
 msgstr "Maksettu summa"
 
-msgid "Amount kept"
-msgstr "Pidätetty summa"
-
 msgid "Amount paid"
 msgstr "Maksettu määrä"
 
@@ -2314,6 +2318,9 @@ msgstr "Seuraavat tapahtumat"
 
 msgid "Not scanned"
 msgstr "Ei skannattu"
+
+msgid "Only tokens"
+msgstr "Vain tokenit"
 
 msgid "Outstanding"
 msgstr "Puuttuu"
@@ -2658,6 +2665,9 @@ msgstr "Vieritä oikealle"
 msgid "Set deployed"
 msgstr "Merkitse sijoitetuksi"
 
+msgid "Share of fee"
+msgstr "Osuus maksusta"
+
 msgid "Show history"
 msgstr "Näytä historia"
 
@@ -2942,12 +2952,6 @@ msgstr "Julkaise henkilöstö"
 
 msgid "Question type"
 msgstr "Kysymyksen tyyppi"
-
-msgid "Refund amount"
-msgstr "Palautussumma"
-
-msgid "Refund method"
-msgstr "Palautustapa"
 
 msgid "Registrations"
 msgstr "Ilmoittautumiset"
@@ -3236,9 +3240,6 @@ msgstr "Edistymisen vaiheet"
 
 msgid "Prologue types"
 msgstr "Prologityypit"
-
-msgid "Refund details"
-msgstr "Palautustiedot"
 
 msgid "Remove consent"
 msgstr "Poista suostumus"
@@ -4164,7 +4165,7 @@ msgid "Reduce animations"
 msgstr "Vähennä animaatioita"
 
 msgid "Refund percentage"
-msgstr "Palautusprosentti"
+msgstr "Hyvityksen prosenttiosuus"
 
 msgid "Registration Form"
 msgstr "Rekisteröintilomake"
@@ -5271,6 +5272,9 @@ msgstr "lähetä äänesi täällä!"
 
 msgid "Association Translation"
 msgstr "Yhdistyksen käännös"
+
+msgid "Both tokens and credits"
+msgstr "Sekä tokenit että krediitit"
 
 msgid "Cancelled Registrations"
 msgstr "Peruutetut Ilmoittautumiset"
@@ -8038,6 +8042,10 @@ msgstr "Sinun täytyy ilmoittautua valitaksesi mieltymyksesi!"
 msgid "You will no longer receive messages from us."
 msgstr "Et enää saa meiltä viestejä."
 
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr "%(elements)s myönnetty tapahtumaan %(event)s käyttäjälle %(user)s"
+
 msgid "Address blocked after a bounce or a complaint"
 msgstr "Osoite estetty palautuneen viestin tai valituksen jälkeen"
 
@@ -9884,6 +9892,10 @@ msgstr ""
 "Sinun on ilmoittauduttava tapahtumaan ennen kuin voit vastata näihin "
 "kysymyksiin"
 
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
+msgstr "%(user)s on saanut %(amount).2f %(elements)s syystä '%(reason)s'."
+
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valinnainen) Onko ominaisuus näkyvissä käyttäjille: true tai false"
 
@@ -11362,6 +11374,13 @@ msgid ""
 msgstr ""
 "Questit ovat hahmolomakkeiden rakennuspalikoita, ja jokaisella on omat "
 "Traitit."
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled "
+"registration."
+msgstr ""
+"Palautustapa, joka on valmiiksi valittuna, kun teet palautuksen perutusta "
+"ilmoittautumisesta."
 
 msgid ""
 "The event will not take place: hidden from users and excluded from "
@@ -14408,6 +14427,13 @@ msgid ""
 msgstr ""
 "Quest-luokkia ei ole vielä luotu. Lisää Quest-tyyppi yllä olevan painikkeen "
 "avulla, jotta voit järjestellä Questejasi."
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+"Palautettava prosenttiosuus ilmoittautumismaksusta, valmiiksi valittuna, kun"
+" teet palautuksen perutusta ilmoittautumisesta."
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"

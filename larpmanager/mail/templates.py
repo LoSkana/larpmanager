@@ -260,8 +260,24 @@ def get_pay_money_email(curr_sym: str, instance: AccountingItemPayment, run: Run
     return subject, body
 
 
-def get_assignment_email(credits_name: str, instance: AccountingItemOther) -> tuple[str, str]:
-    """Generate email subject and body for assignment notification."""
+def get_assignment_email(
+    credits_name: str, instance: AccountingItemOther, *, for_organizer: bool = False
+) -> tuple[str, str]:
+    """Generate email subject and body for assignment notification, to the recipient or to the organizers."""
+    if for_organizer:
+        subject = hdr(instance) + _("%(elements)s issued for %(event)s to %(user)s") % {
+            "elements": credits_name,
+            "event": instance.run,
+            "user": instance.member,
+        }
+        body = _("%(user)s has received %(amount).2f %(elements)s for '%(reason)s'.") % {
+            "user": instance.member,
+            "amount": instance.value,
+            "elements": credits_name,
+            "reason": instance.descr,
+        }
+        return subject, body
+
     if instance.run:
         subject = hdr(instance) + _("%(elements)s received for %(event)s") % {
             "elements": credits_name,

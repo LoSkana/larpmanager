@@ -208,16 +208,17 @@ class Command(BaseCommand):
         sorted_po = polib.POFile()
         sorted_po.metadata = po.metadata
 
-        # Sort entries by message ID length first, then alphabetically
-        sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid))
+        # Sort entries by message ID length first, then alphabetically, then by context
+        sorted_entries = sorted(po, key=lambda element: (len(element.msgid), element.msgid, element.msgctxt or ""))
 
-        # Use set to track already processed message IDs for deduplication
+        # Use set to track already processed (context, message ID) pairs for deduplication
         cache = set()
         for entry in sorted_entries:
-            # Skip duplicate entries based on message ID
-            if entry.msgid in cache:
+            # Skip duplicate entries based on context and message ID
+            entry_key = (entry.msgctxt, entry.msgid)
+            if entry_key in cache:
                 continue
-            cache.add(entry.msgid)
+            cache.add(entry_key)
             sorted_po.append(entry)
 
         # Save the processed PO file to the specified path

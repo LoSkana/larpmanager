@@ -21,65 +21,57 @@
                 {% if registration.tot_iscr %}{{ registration.tot_iscr | floatformat:"0" }}{% endif %}
             </td>
             <td id="tot_payed"></td>
-            <td id="pay_money">
-                {% if registration.payments.a %}{{ registration.payments.a | floatformat:"0" }}{% endif %}
-            </td>
-            {% if features.tokens %}
-                <td id="pay_token">
-                    {% if registration.payments.c %}{{ registration.payments.c | floatformat:"0" }}{% endif %}
-                </td>
-            {% endif %}
-            {% if features.credits %}
-                <td id="pay_credit">
-                    {% if registration.payments.b %}{{ registration.payments.b | floatformat:"0" }}{% endif %}
-                </td>
-            {% endif %}
+            <td id="pay_money">{{ registration.payments.a|default:0|floatformat:"0" }}</td>
+            {% if features.tokens %}<td id="pay_token">{{ registration.payments.c|default:0|floatformat:"0" }}</td>{% endif %}
+            {% if features.credits %}<td id="pay_credit">{{ registration.payments.b|default:0|floatformat:"0" }}</td>{% endif %}
         </tr>
     </table>
-    <h3>{% trans "Refund details" %}</h3>
-    <table>
-        <tr>
-            <th>{% trans "Amount kept" %}</th>
-            <th>{% trans "Refund amount" %}</th>
-            {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
-            {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
-        </tr>
-        <tr>
-            <td id="ref_tot"></td>
-            <td id="ref"></td>
-            {% if features.tokens %}<td id="ref_token">0</td>{% endif %}
-            {% if features.credits %}<td id="ref_credit">0</td>{% endif %}
-        </tr>
-    </table>
-    <h3>{% trans "Refund method" %}</h3>
-    {% if not features.tokens and not features.credits %}
-        <div class="alert alert-warning">
-            {% trans "Refunds are unavailable because neither tokens nor credits are enabled." %}
-        </div>
-    {% elif features.tokens and not features.credits %}
-        <div class="nav typ">
-            <a id="typ_t" href="#" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
-        </div>
-    {% elif features.credits and not features.tokens %}
-        <div class="nav typ">
-            <a id="typ_c" href="#" class="sel">{% trans "Only" %} {{ credits_name }}</a>
-        </div>
-    {% else %}
-        <div class="nav typ">
-            <a id="typ_t" href="#">{% trans "Only" %} {{ tokens_name }}</a>
-            <a id="typ_c" href="#">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
-        </div>
-    {% endif %}
-    <br />
-    <h3>{% trans "Refund percentage" %}</h3>
-    <div class="nav p">
-        {% for i in '0123456789'|make_list %}
-            <a id="p_{{ forloop.counter }}" href="#">{{ forloop.counter }}0 %</a>
-        {% endfor %}
+    <div class="refund-row">
+        <h3>{% trans "Return as" %}</h3>
+        {% if not features.tokens and not features.credits %}
+            <div class="alert alert-warning">
+                {% trans "Refunds are unavailable because neither tokens nor credits are enabled." %}
+            </div>
+        {% elif features.tokens and not features.credits %}
+            <div class="nav typ">
+                <a id="typ_t" href="#" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
+            </div>
+        {% elif features.credits and not features.tokens %}
+            <div class="nav typ">
+                <a id="typ_c" href="#" class="sel">{% trans "Only" %} {{ credits_name }}</a>
+            </div>
+        {% else %}
+            <div class="nav typ">
+                <a id="typ_t" href="#">{% trans "Only" %} {{ tokens_name }}</a>
+                <a id="typ_c" href="#">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
+            </div>
+        {% endif %}
     </div>
-    <br />
+    <div class="refund-row">
+        <h3>{% trans "Share of fee" %}</h3>
+        <div class="nav p">
+            {% for i in '0123456789'|make_list %}
+                <a id="p_{{ forloop.counter0 }}" href="#">{% widthratio forloop.counter0 1 10 %}</a>
+            {% endfor %}
+            <a id="p_10" href="#">100</a>
+        </div>
+    </div>
     <form id="ref_form" action="{{ request.path }}" method="post">
         {% csrf_token %}
+        <div class="refund-row">
+            <h3>
+                <label for="ref_amount">{% trans "Amount" context "refund" %}</label>
+            </h3>
+            <input type="number" id="ref_amount" min="0" step="1" value="0" />
+            {% if features.tokens %}
+                {{ tokens_name }}:
+                <span id="ref_token">0</span>
+            {% endif %}
+            {% if features.credits %}
+                {{ credits_name }}:
+                <span id="ref_credit">0</span>
+            {% endif %}
+        </div>
         <input type="hidden" id="inp_token" name="inp_token" value="0" />
         <input type="hidden" id="inp_credit" name="inp_credit" value="0" />
         <input type="submit" value="{% trans "Confirm" %}">
@@ -88,22 +80,31 @@
 {% block js %}
     <script nonce="{{ csp_nonce }}">
 var typ = null;
-var perc = null;
 
-function compute() {
-    if ((typ == null) || (perc == null)) return;
-
+function totPaid() {
     var pay_money = parseInt($('#pay_money').html()) || 0;
     var pay_token = parseInt($('#pay_token').html()) || 0;
     var pay_credit = parseInt($('#pay_credit').html()) || 0;
-    var tot_pay = pay_money + pay_token + pay_credit;
+    return pay_money + pay_token + pay_credit;
+}
+
+// Refund is the amount paid minus the non-refunded share of the registration fee
+function applyRefundPerc(perc) {
+    var tot_pay = totPaid();
+    var tot_iscr = parseInt($('#tot_iscr').html()) || tot_pay;
+    var kept = Math.round(tot_iscr / 100.0 * (100 - perc));
+    $('#ref_amount').val(Math.max(0, tot_pay - kept));
+    compute();
+}
+
+function compute() {
+    if (typ == null) return;
+
+    var pay_token = parseInt($('#pay_token').html()) || 0;
+    var tot_pay = totPaid();
     $('#tot_payed').html(tot_pay);
 
-    var rest_tot = Math.ceil(tot_pay / 100.0 * perc);
-    $('#ref_tot').html(tot_pay - rest_tot);
-
-    var rest = Math.max(0, rest_tot - (tot_pay - tot_pay));
-    $('#ref').html(rest);
+    var rest = Math.max(0, parseInt($('#ref_amount').val()) || 0);
 
     if (typ == 't') {
         var token_elem = $('#ref_token');
@@ -121,7 +122,7 @@ function compute() {
     }
 
     var ref_token = Math.min(rest, pay_token);
-    rest -= pay_token;
+    rest -= ref_token;
 
     var token_elem = $('#ref_token');
     if (token_elem.length) {
@@ -152,22 +153,27 @@ function select_p(id) {
     $('.p a').removeClass('sel');
     $('#p_' + id).addClass('sel');
 
-    perc = parseInt(id) * 10;
-
-    compute();
+    applyRefundPerc(parseInt(id) * 10);
 
     return false;
 }
 
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function(){
-        // Select default type based on available features
-        {% if features.tokens %}
+        // Select type from config when both are available, otherwise based on available features
+        {% if features.tokens and features.credits and refund_method %}
+            select_typ('{{ refund_method }}');
+        {% elif features.tokens %}
             select_typ('t');
         {% elif features.credits %}
             select_typ('c');
         {% endif %}
-        select_p('7');
+        {% if refund_perc_index is not None %}select_p('{{ refund_perc_index }}');{% endif %}
+
+        $('#ref_amount').on('input', function() {
+            $('.p a').removeClass('sel');
+            compute();
+        });
 
         $('.nav.typ a').on('click', function(event) {
             event.preventDefault();

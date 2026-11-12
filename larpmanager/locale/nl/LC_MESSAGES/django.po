@@ -541,6 +541,10 @@ msgstr "Beheerders"
 msgid "Amount"
 msgstr "Som"
 
+msgctxt "refund"
+msgid "Amount"
+msgstr "Bedrag"
+
 msgid "Annual"
 msgstr "Jaarlijks"
 
@@ -1709,6 +1713,9 @@ msgstr "Gevraagd"
 msgid "Residence"
 msgstr "Woonplaats"
 
+msgid "Return as"
+msgstr "Terugbetalen als"
+
 msgid "Set quest"
 msgstr "Quest instellen"
 
@@ -2168,9 +2175,6 @@ msgstr "Agrotoerisme"
 msgid "Amount Paid"
 msgstr "Betaald bedrag"
 
-msgid "Amount kept"
-msgstr "Ingehouden bedrag"
-
 msgid "Amount paid"
 msgstr "Betaald bedrag"
 
@@ -2314,6 +2318,9 @@ msgstr "Komende evenementen"
 
 msgid "Not scanned"
 msgstr "Niet gescand"
+
+msgid "Only tokens"
+msgstr "Alleen tokens"
 
 msgid "Outstanding"
 msgstr "Openstaand"
@@ -2658,6 +2665,9 @@ msgstr "Scroll naar rechts"
 msgid "Set deployed"
 msgstr "Markeren als geplaatst"
 
+msgid "Share of fee"
+msgstr "Deel van het inschrijvingsgeld"
+
 msgid "Show history"
 msgstr "Toon geschiedenis"
 
@@ -2942,12 +2952,6 @@ msgstr "Personeel publiceren"
 
 msgid "Question type"
 msgstr "Type vraag"
-
-msgid "Refund amount"
-msgstr "Terug te betalen bedrag"
-
-msgid "Refund method"
-msgstr "Terugbetalingswijze"
 
 msgid "Registrations"
 msgstr "Registraties"
@@ -3236,9 +3240,6 @@ msgstr "Voortgangsstappen"
 
 msgid "Prologue types"
 msgstr "Proloogtypen"
-
-msgid "Refund details"
-msgstr "Informatie over terugbetalingen"
 
 msgid "Remove consent"
 msgstr "Toestemming verwijderen"
@@ -5271,6 +5272,9 @@ msgstr "breng hier je stem uit!"
 
 msgid "Association Translation"
 msgstr "Vertaling van de vereniging"
+
+msgid "Both tokens and credits"
+msgstr "Zowel tokens als credits"
 
 msgid "Cancelled Registrations"
 msgstr "Geannuleerde registraties"
@@ -8039,6 +8043,10 @@ msgstr "Je moet je inschrijven om je voorkeuren te selecteren!"
 msgid "You will no longer receive messages from us."
 msgstr "Je zult niet langer berichten van ons ontvangen."
 
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr "%(elements)s uitgegeven voor %(event)s aan %(user)s"
+
 msgid "Address blocked after a bounce or a complaint"
 msgstr "Adres geblokkeerd na een bounce of een klacht"
 
@@ -9966,6 +9974,10 @@ msgstr ""
 "Je moet je voor het evenement registreren voordat je deze vragen kunt "
 "beantwoorden"
 
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
+msgstr "%(user)s heeft %(amount).2f %(elements)s ontvangen voor '%(reason)s'."
+
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Optioneel) Of de vaardigheid zichtbaar is voor gebruikers: true of false"
@@ -11563,6 +11575,13 @@ msgid ""
 "Quests are the building blocks of character sheets, each with its own "
 "traits."
 msgstr "Quests zijn de bouwstenen van personagesheets, elk met eigen traits."
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled "
+"registration."
+msgstr ""
+"Terugbetalingsmethode die vooraf geselecteerd is bij het terugbetalen van "
+"een geannuleerde inschrijving."
 
 msgid ""
 "The event will not take place: hidden from users and excluded from "
@@ -14660,6 +14679,14 @@ msgid ""
 msgstr ""
 "Er zijn nog geen questcategorieën aangemaakt. Gebruik de knop hierboven om "
 "een questtype toe te voegen en je quests te ordenen."
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+"Percentage van het inschrijvingsgeld dat wordt terugbetaald, vooraf "
+"geselecteerd wanneer je een terugbetaling doet voor een geannuleerde "
+"inschrijving."
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"

@@ -541,6 +541,10 @@ msgstr "Administradores"
 msgid "Amount"
 msgstr "Suma"
 
+msgctxt "refund"
+msgid "Amount"
+msgstr "Importe"
+
 msgid "Annual"
 msgstr "Anual"
 
@@ -1709,6 +1713,9 @@ msgstr "Solicitado"
 msgid "Residence"
 msgstr "Residencia"
 
+msgid "Return as"
+msgstr "Devolver como"
+
 msgid "Set quest"
 msgstr "Establecer Quest"
 
@@ -2168,9 +2175,6 @@ msgstr "Agroturismo"
 msgid "Amount Paid"
 msgstr "Importe pagado"
 
-msgid "Amount kept"
-msgstr "Importe retenido"
-
 msgid "Amount paid"
 msgstr "Importe pagado"
 
@@ -2314,6 +2318,9 @@ msgstr "Próximos eventos"
 
 msgid "Not scanned"
 msgstr "No escaneado"
+
+msgid "Only tokens"
+msgstr "Solo tokens"
 
 msgid "Outstanding"
 msgstr "Pendiente"
@@ -2658,6 +2665,9 @@ msgstr "Desplázate hacia la derecha"
 msgid "Set deployed"
 msgstr "Marcar como desplegado"
 
+msgid "Share of fee"
+msgstr "Parte de la cuota"
+
 msgid "Show history"
 msgstr "Mostrar historial"
 
@@ -2942,12 +2952,6 @@ msgstr "Publicar el personal"
 
 msgid "Question type"
 msgstr "Tipo de pregunta"
-
-msgid "Refund amount"
-msgstr "Importe del reembolso"
-
-msgid "Refund method"
-msgstr "Forma de reembolso"
 
 msgid "Registrations"
 msgstr "Inscripciones"
@@ -3236,9 +3240,6 @@ msgstr "Pasos de progreso"
 
 msgid "Prologue types"
 msgstr "Tipos de prólogo"
-
-msgid "Refund details"
-msgstr "Detalles del reembolso"
 
 msgid "Remove consent"
 msgstr "Eliminar el consentimiento"
@@ -5271,6 +5272,9 @@ msgstr "envía tu voto aquí!"
 
 msgid "Association Translation"
 msgstr "Traducción de la Asociación"
+
+msgid "Both tokens and credits"
+msgstr "Tanto tokens como créditos"
 
 msgid "Cancelled Registrations"
 msgstr "Inscripciones canceladas"
@@ -8040,6 +8044,10 @@ msgstr "¡Debes inscribirte para seleccionar tus preferencias!"
 msgid "You will no longer receive messages from us."
 msgstr "Dejarás de recibir mensajes nuestros."
 
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr "%(elements)s emitidos para %(event)s a %(user)s"
+
 msgid "Address blocked after a bounce or a complaint"
 msgstr "Dirección bloqueada tras un rebote o una queja"
 
@@ -9968,6 +9976,10 @@ msgstr ""
 msgid "You must register for the event before answering these questions"
 msgstr "Debes registrarte en el evento antes de responder a estas preguntas"
 
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
+msgstr "%(user)s ha recibido %(amount).2f %(elements)s por '%(reason)s'."
+
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Opcional) Si la habilidad es visible para los usuarios: true o false"
 
@@ -11553,6 +11565,13 @@ msgid ""
 msgstr ""
 "Las Quest son los componentes básicos de las fichas de personaje, cada una "
 "con sus propios Trait."
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled "
+"registration."
+msgstr ""
+"Método de reembolso preseleccionado al emitir un reembolso por una "
+"inscripción cancelada."
 
 msgid ""
 "The event will not take place: hidden from users and excluded from "
@@ -14654,6 +14673,13 @@ msgid ""
 msgstr ""
 "Aún no se ha creado ninguna categoría de Quest. Usa el botón de arriba para "
 "añadir un tipo de Quest y organizar tus Quest."
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+"Porcentaje de la cuota de inscripción que se reembolsa, preseleccionado al "
+"emitir un reembolso por una inscripción cancelada."
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"
