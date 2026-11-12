@@ -635,15 +635,23 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
     try:
         pdf_bytes = _render_pdf(html_content, output_filename)
     except LayoutError:
-        # An inline-block taller than a page cannot be split; retry laying it out inline
-        logger.warning("PDF layout overflow for %s, retrying without inline-block", output_filename)
+        # A line box taller than a page (inline-block, or stacked inline images) cannot be split;
+        # retry laying out inline-blocks inline and images as blocks of their own
+        logger.warning("PDF layout overflow for %s, retrying with block images", output_filename)
         html_content = _INLINE_BLOCK_RE.sub("display: inline", html_content)
+        html_content = _HEAD_END_RE.sub(lambda matched: _BLOCK_IMAGES_CSS + matched.group(0), html_content, count=1)
+        if _BLOCK_IMAGES_CSS not in html_content:
+            html_content = _BLOCK_IMAGES_CSS + html_content
         pdf_bytes = _render_pdf(html_content, output_filename)
 
     Path(output_filename).write_bytes(pdf_bytes)
 
 
 _INLINE_BLOCK_RE = re.compile(r"display\s*:\s*inline-block", re.IGNORECASE)
+
+_HEAD_END_RE = re.compile(r"</head\s*>", re.IGNORECASE)
+
+_BLOCK_IMAGES_CSS = "<style>img { display: block; }</style>"
 
 
 def _render_pdf(html_content: str, output_filename: str) -> bytes:
