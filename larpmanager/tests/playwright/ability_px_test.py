@@ -73,6 +73,8 @@ def test_exp(pw_page: Any) -> None:
 
     free_invisible_not_auto_assigned(page, live_server)
 
+    hidden_visible_characters(page, live_server)
+
     endpoint_test(page, live_server)
 
 
@@ -461,6 +463,70 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Abilities").click()
     expect(page.locator("#one")).not_to_contain_text("hidden_zero")
+
+
+def hidden_visible_characters(page: Any, live_server: Any) -> None:
+    """Test that a hidden ability can be bought only by the characters it is visible to."""
+    # Create hidden ability: the characters list shows only when visible is unchecked
+    go_to(page, live_server, "/test/manage/experience/abilities/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_typ-container").click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
+    edit_iframe.locator("#id_name").fill("secret art")
+    edit_iframe.locator("#id_cost").fill("1")
+    visible_characters_row = edit_iframe.locator("#id_visible_characters_tr")
+    expect(visible_characters_row).to_be_hidden()
+    edit_iframe.locator("#id_visible").uncheck()
+    expect(visible_characters_row).to_be_visible()
+    save_modal(page, edit_iframe)
+
+    # Hidden ability without characters is not available to the player
+    go_to(page, live_server, "/test/gallery/")
+    page.get_by_role("link", name="Test Character").nth(1).click()
+    page.get_by_role("link", name="Abilities").click()
+    _wait_lm_ready(page)
+    expect(page.locator("#one")).not_to_contain_text("secret art")
+
+    # Create a second character, assigned to the same participant
+    go_to(page, live_server, "/test/manage/characters/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Other Character")
+    save_modal(page, edit_iframe)
+
+    sidebar(page, "Registrations")
+    page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("oth")
+    edit_iframe.get_by_role("option", name="Other Character").click()
+    save_modal(page, edit_iframe)
+
+    # Make the hidden ability visible to the first character only
+    go_to(page, live_server, "/test/manage/experience/abilities/")
+    page.locator("tr", has_text="secret art").locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
+    visible_characters_row = edit_iframe.locator("#id_visible_characters_tr")
+    expect(visible_characters_row).to_be_visible()
+    char_dual_pick(visible_characters_row, "te", "Test Character")
+    save_modal(page, edit_iframe)
+
+    # Now the character can buy it
+    go_to(page, live_server, "/test/character/u1/abilities/")
+    _wait_lm_ready(page)
+    expect(page.locator(".ability-cards-grid")).to_contain_text("secret art")
+    page.locator(".ability-card", has_text="secret art").click()
+    submit_confirm(page)
+    _wait_lm_ready(page)
+    expect(page.locator(".inline-p", has_text="secret art")).to_be_visible()
+
+    # The character left off the list still cannot see it
+    go_to(page, live_server, "/test/character/u2/abilities/")
+    _wait_lm_ready(page)
+    expect(page.locator("#one")).to_contain_text("Other Character")
+    expect(page.locator("#one")).to_contain_text("Experience points")
+    expect(page.locator("#one")).not_to_contain_text("secret art")
 
 
 def endpoint_test(page: Any, live_server: Any) -> None:

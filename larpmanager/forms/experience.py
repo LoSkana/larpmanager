@@ -132,6 +132,8 @@ class OrgaAbilityExpForm(ExpBaseForm):
 
     page_info = _("Manage the abilities participants can purchase with experience points for this event")
 
+    load_js: ClassVar[list] = ["ability-visible-characters"]
+
     class Meta:
         model = AbilityExp
         exclude = ("number",)
@@ -141,6 +143,7 @@ class OrgaAbilityExpForm(ExpBaseForm):
             "system": SystemExpS2Widget,
             "typ": AbilityTypePxS2Widget,
             "characters": CharacterDualListWidget,
+            "visible_characters": CharacterDualListWidget,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
             "template": AbilityTemplateS2WidgetMulti,
@@ -161,7 +164,15 @@ class OrgaAbilityExpForm(ExpBaseForm):
             self.configure_field_event("system", event)
 
         # Configure event-specific widgets
-        for field_name in ["typ", "characters", "prerequisites", "requirements", "template", "dependents"]:
+        for field_name in [
+            "typ",
+            "characters",
+            "visible_characters",
+            "prerequisites",
+            "requirements",
+            "template",
+            "dependents",
+        ]:
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
                 self.configure_field_event(field_name, event)
 
@@ -175,6 +186,7 @@ class OrgaAbilityExpForm(ExpBaseForm):
         # Remove user-experience fields if exp_user is disabled
         if not exp_user:
             self.delete_field("visible")
+            self.delete_field("visible_characters")
 
         # Creation only is meaningful only for participants creating characters under the review process
         creation_review = "user_character" in self.params.get("features", {}) and get_event_config(

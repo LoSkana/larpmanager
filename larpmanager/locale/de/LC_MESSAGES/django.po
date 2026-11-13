@@ -2129,6 +2129,9 @@ msgstr "Benutzerdaten"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
+msgid "Visible to"
+msgstr "Sichtbar für"
+
 msgid "Volunteers"
 msgstr "Freiwillige"
 
@@ -11618,6 +11621,13 @@ msgstr ""
 "Wenn aktiviert, wird das automatische Speichern beim Bearbeiten von "
 "Textelementen deaktiviert."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Wenn die Fähigkeit nicht sichtbar ist, können diese Charaktere sie trotzdem "
+"sehen und kaufen"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -12048,6 +12058,13 @@ msgid ""
 msgstr ""
 "Du musst mindestens eine Option festlegen, bevor du eine Auswahl- oder "
 "Rangfolge-Frage speicherst."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Optional) Charaktere, die die Fähigkeit sehen können, wenn sie nicht "
+"sichtbar ist, durch Kommas getrennt"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

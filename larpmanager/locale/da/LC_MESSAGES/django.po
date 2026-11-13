@@ -2129,6 +2129,9 @@ msgstr "Brugerdata"
 msgid "Visibility"
 msgstr "Synlighed"
 
+msgid "Visible to"
+msgstr "Synlig for"
+
 msgid "Volunteers"
 msgstr "Frivillige"
 
@@ -11215,6 +11218,11 @@ msgstr ""
 "Hvis aktiveret, deaktiveres automatisk lagring under redigering af "
 "skriveelementer."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr "Hvis evnen ikke er synlig, kan disse karakterer stadig se og købe den"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11615,6 +11623,13 @@ msgid ""
 msgstr ""
 "Du skal oprette mindst én mulighed, før du gemmer et valg- eller "
 "rangeringsspørgsmål."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Valgfrit) Karakterer, der kan se evnen, når den ikke er synlig, "
+"kommasepareret"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

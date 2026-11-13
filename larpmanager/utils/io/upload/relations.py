@@ -29,6 +29,7 @@ from larpmanager.utils.io.upload.constants import (
     _REL_FACTIONS,
     _REL_PREREQUISITES,
     _REL_REQUIREMENTS,
+    _REL_VISIBLE_CHARACTERS,
     MAX_COMMA_VALUES,
 )
 from larpmanager.utils.io.upload.parsing import _to_decimal, _to_int
@@ -131,6 +132,11 @@ def _assign_factions(context: dict, element: Any, logs: list[str], value: str) -
 def _assign_characters(context: dict, element: Any, logs: list[str], value: str) -> None:
     """Assign characters to an element from comma-separated names."""
     _assign_relation(context, element, logs, value, _REL_CHARACTERS)
+
+
+def _assign_visible_characters(context: dict, element: AbilityExp, logs: list[str], value: str) -> None:
+    """Assign the characters that can see a hidden ability from comma-separated names."""
+    _assign_relation(context, element, logs, value, _REL_VISIBLE_CHARACTERS)
 
 
 def _assign_numeric(element: Any, logs: list[str], field_name: str, value: object, *, decimal: bool = False) -> None:

@@ -582,7 +582,7 @@ def _copy_experience(
         source_event_id,
         AbilityExp,
         source_ids=ability_ids,
-        skip_m2m=("characters", "prerequisites", "requirements"),
+        skip_m2m=("characters", "visible_characters", "prerequisites", "requirements"),
     )
     remap_fk(AbilityExp, ability_map, system_map, "system")
     remap_fk(AbilityExp, ability_map, type_map, "typ")
@@ -590,6 +590,7 @@ def _copy_experience(
 
     characters = _element_map(target_event_id, source_event_id, Character, character_map)
     remap_m2m(AbilityExp, ability_map, characters, "characters")
+    remap_m2m(AbilityExp, ability_map, characters, "visible_characters")
     remap_m2m(
         AbilityExp,
         ability_map,

@@ -2129,6 +2129,9 @@ msgstr "Údaje o uživatelích"
 msgid "Visibility"
 msgstr "Viditelnost"
 
+msgid "Visible to"
+msgstr "Viditelné pro"
+
 msgid "Volunteers"
 msgstr "Dobrovolníci"
 
@@ -11132,6 +11135,12 @@ msgstr ""
 "Pokud je povoleno, automatické ukládání při úpravě textových prvků bude "
 "vypnuto."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Pokud schopnost není viditelná, tyto postavy ji přesto můžou vidět a koupit"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11520,6 +11529,13 @@ msgid ""
 msgstr ""
 "Než uložíš otázku s výběrem nebo s pořadím, musíš definovat alespoň jednu "
 "možnost."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Volitelné) Postavy, které schopnost vidí, i když není viditelná, oddělené "
+"čárkami"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

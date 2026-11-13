@@ -61,6 +61,7 @@ from larpmanager.utils.io.upload.relations import (
     _assign_requirements,
     _assign_system,
     _assign_type,
+    _assign_visible_characters,
     _resolve_exp_system,
 )
 
@@ -108,6 +109,8 @@ def _apply_ability_field(
         _assign_system(context, ability_element, logs, str(field_value))
     elif field_name == "visible":
         ability_element.visible = str(field_value).lower().strip() == "true"
+    elif field_name == "visible_characters":
+        _assign_visible_characters(context, ability_element, logs, str(field_value))
     elif field_name == "creation_only":
         ability_element.creation_only = str(field_value).lower().strip() == "true"
     elif field_name in _ABILITY_PLAIN_FIELDS:
