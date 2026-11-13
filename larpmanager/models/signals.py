@@ -50,9 +50,9 @@ from larpmanager.accounting.registration import (
     process_registration_pre_save,
 )
 from larpmanager.accounting.token_credit import (
-    update_credit_on_expense_save,
-    update_token_credit_on_other_save,
-    update_token_credit_on_payment_save,
+    is_balance_payment,
+    refresh_balances_on_save,
+    store_previous_balance_owner,
 )
 from larpmanager.accounting.vat import calculate_payment_vat
 from larpmanager.cache.accounting import refresh_member_accounting_cache
@@ -368,6 +368,7 @@ from larpmanager.utils.services.character import (
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
     create_default_event_setup,
+    inherit_previous_campaign_data,
     on_event_features_m2m_changed,
     prepare_campaign_event_data,
     update_run_plan_on_event_change,
@@ -375,6 +376,7 @@ from larpmanager.utils.services.event import (
 from larpmanager.utils.services.experience import (
     _recalcuate_characters_experience_points,
     calculate_character_experience_points,
+    on_ability_visible_characters_m2m_changed,
     on_experience_characters_m2m_changed,
     on_modifier_abilities_m2m_changed,
     on_rule_abilities_m2m_changed,
@@ -508,8 +510,9 @@ def pre_save_accounting_item_donation(
 
 @receiver(pre_save, sender=AccountingItemExpense)
 def pre_save_accounting_item_expense(sender: type, instance: AccountingItemExpense, **kwargs: Any) -> None:
-    """Send approval email when expense is saved."""
+    """Send approval email and remember the previous balance owner when expense is saved."""
     send_expense_approval_email(instance)
+    store_previous_balance_owner(instance)
 
 
 @receiver(post_save, sender=AccountingItemExpense)
@@ -522,7 +525,7 @@ def post_save_accounting_item_expense(
     """Send expense notification and update credit balance."""
     if created:
         send_expense_notification_email(instance)
-    update_credit_on_expense_save(instance)
+    refresh_balances_on_save(instance)
 
 
 @receiver(pre_save, sender=AccountingItemMembership)
@@ -537,6 +540,7 @@ def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, 
     if is_clone_active():
         return
     send_token_credit_notification_email(instance)
+    store_previous_balance_owner(instance)
 
 
 @receiver(post_save, sender=AccountingItemOther)
@@ -551,7 +555,7 @@ def post_save_other_accounting_cache(
         return
 
     # Update token credit based on the OtherAccounting instance
-    update_token_credit_on_other_save(instance)
+    refresh_balances_on_save(instance)
 
 
 @receiver(pre_save, sender=AccountingItemPayment)
@@ -560,6 +564,7 @@ def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayme
     if is_clone_active():
         return
     handle_accounting_item_payment_pre_save(instance)
+    store_previous_balance_owner(instance)
 
 
 @receiver(post_save, sender=AccountingItemPayment)
@@ -573,14 +578,16 @@ def post_save_payment_accounting_cache(
     # Send confirmation payment
     send_payment_confirmation_email(instance)
 
+    # Update token credits first, so the registration recalculation sees the right balances
+    refresh_balances_on_save(instance)
+
     # Update registration and member accounting cache if payment has associated registration
     if instance.registration and instance.registration.run_id:
-        instance.registration.save()
+        # Balance payments are created while the registration accounting is already being recomputed
+        if not is_balance_payment(instance):
+            instance.registration.save()
         run_id = instance.registration.run_id
         refresh_member_accounting_cache(run_id, instance.member_id)
-
-    # Update token credits based on payment changes
-    update_token_credit_on_payment_save(instance, created=created)
 
     # Calculate and update VAT information for the payment
     calculate_payment_vat(instance)
@@ -945,6 +952,9 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 
     # Default event setup
     create_default_event_setup(instance)
+
+    # Campaign events may inherit roles and appearance of the previous event
+    inherit_previous_campaign_data(instance)
 
     # The dashboard actions depend on the event visibility
     clear_widget_cache_association(instance.association_id)
@@ -1885,6 +1895,7 @@ def on_plot_characters_refs_changed(
 
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryExp.characters.through)
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityExp.characters.through)
+m2m_changed.connect(on_ability_visible_characters_m2m_changed, sender=AbilityExp.visible_characters.through)
 m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierExp.abilities.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RuleExp.abilities.through)
 

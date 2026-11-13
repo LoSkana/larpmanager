@@ -2129,6 +2129,9 @@ msgstr "Δεδομένα χρηστών"
 msgid "Visibility"
 msgstr "Ορατότητα"
 
+msgid "Visible to"
+msgstr "Ορατή σε"
+
 msgid "Volunteers"
 msgstr "Εθελοντές"
 
@@ -2230,6 +2233,9 @@ msgstr "Συνδέσεις"
 
 msgid "Cover image"
 msgstr "Εικόνα εξωφύλλου"
+
+msgid "Custom IBAN"
+msgstr "Προσαρμοσμένο IBAN"
 
 msgid "Description"
 msgstr "Περιγραφή"
@@ -2849,6 +2855,9 @@ msgstr "Υψηλή αντίθεση"
 
 msgid "Inflows total"
 msgstr "Σύνολο εισροών"
+
+msgid "Inherit roles"
+msgstr "Κληρονόμηση ρόλων"
 
 msgid "Internal link"
 msgstr "Εσωτερικός σύνδεσμος"
@@ -4332,6 +4341,9 @@ msgstr "Ιστορική κατοικία"
 
 msgid "Information saved!"
 msgstr "Οι πληροφορίες αποθηκεύτηκαν!"
+
+msgid "Inherit appearance"
+msgstr "Κληρονόμηση εμφάνισης"
 
 msgid "Invite a character"
 msgstr "Πρόσκληση χαρακτήρα"
@@ -7413,6 +7425,9 @@ msgstr "Ο κώδικας CSS για την προσαρμογή της εκτύ
 msgid "The following registrations were drawn:"
 msgstr "Κληρώθηκαν οι ακόλουθες εγγραφές:"
 
+msgid "The question is not shown to the player"
+msgstr "Η ερώτηση δεν εμφανίζεται στον παίκτη"
+
 msgid "The question status, allowed values are"
 msgstr "Η κατάσταση της ερώτησης, οι επιτρεπόμενες τιμές είναι"
 
@@ -7500,6 +7515,9 @@ msgstr "Οι φωτογραφίες και τα βίντεο ανέβηκαν μ
 
 msgid "Set casting options in the configuration"
 msgstr "Ρύθμισε τις επιλογές casting στη διαμόρφωση"
+
+msgid "The answer is hidden to all participants"
+msgstr "Η απάντηση είναι κρυφή για όλους τους συμμετέχοντες"
 
 msgid "The collection was delivered to the user"
 msgstr "Η συλλογή παραδόθηκε στον χρήστη"
@@ -8114,6 +8132,9 @@ msgstr "Ρύθμισε τα εισιτήρια και τη φόρμα εγγρα
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Η επιλογή '%(option)s' απαιτεί: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Ο παίκτης πρέπει να συμπληρώσει την ερώτηση"
+
 msgid "View the list of characters and participants!"
 msgstr "Δες τη λίστα χαρακτήρων και συμμετεχόντων!"
 
@@ -8327,6 +8348,9 @@ msgstr "Κείμενο που εμφανίζεται στην αρχή όλων 
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Οι ικανότητες που ανήκουν σε αυτή την αποκλειστική ομάδα"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Η απάντηση σε αυτή την ερώτηση είναι ορατή σε όλους"
 
 msgid "The name of the question this option belongs to"
 msgstr "Το όνομα της ερώτησης στην οποία ανήκει αυτή η επιλογή"
@@ -8832,6 +8856,9 @@ msgstr "Ως τελευταίο βήμα, συμπλήρωσε το προφίλ
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Αποθηκεύτηκαν προτιμήσεις Casting για «%(type)s» για %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Μπορείς να φιλτράρεις τους χαρακτήρες με βάση αυτή την ερώτηση"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr ""
 "Επίλεξε πώς θα πληρώνουν οι συμμετέχοντες και μετά άνοιξε τις εγγραφές."
@@ -8968,6 +8995,9 @@ msgstr ""
 msgid "Some features require 'Character', which is not active"
 msgstr ""
 "Ορισμένες λειτουργίες απαιτούν το «Χαρακτήρας», το οποίο δεν είναι ενεργό"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Η ερώτηση εμφανίζεται και ο παίκτης μπορεί να τη συμπληρώσει"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Αυτή η πρόσκληση στάλθηκε σε διαφορετική διεύθυνση email."
@@ -9569,6 +9599,10 @@ msgstr "Έλεγξε και έγκρινε τα αιτήματα εξόδων π
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Έχει επιτευχθεί ο μέγιστος αριθμός guilds για αυτή την εκδήλωση"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr ""
+"Η ερώτηση εμφανίζεται μόνο για ανάγνωση, ο παίκτης δεν μπορεί να την αλλάξει"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Ο χρήστης υπέβαλε αίτημα εγγραφής σε αυτή την εκδήλωση."
 
@@ -9785,6 +9819,9 @@ msgstr "Προαιρετική σημείωση για αυτό το token (π.�
 msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Ορίζει κάθε πόσες ημέρες αποστέλλονται email υπενθύμισης (προεπιλογή: 5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Η απάντηση σε αυτή την ερώτηση είναι ορατή μόνο στον συμμετέχοντα"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr ""
@@ -11589,6 +11626,13 @@ msgstr ""
 "Αν ενεργοποιηθεί, η αυτόματη αποθήκευση κατά την επεξεργασία στοιχείων "
 "συγγραφής θα απενεργοποιηθεί."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Αν η ικανότητα δεν είναι ορατή, αυτοί οι χαρακτήρες μπορούν να τη δουν και "
+"να την αγοράσουν"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -12019,6 +12063,13 @@ msgid ""
 msgstr ""
 "Πρέπει να ορίσεις τουλάχιστον μία επιλογή πριν αποθηκεύσεις μια ερώτηση "
 "επιλογής ή κατάταξης."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Προαιρετικό) Χαρακτήρες που μπορούν να δουν την ικανότητα όταν δεν είναι "
+"ορατή, χωρισμένοι με κόμμα"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -16101,6 +16152,14 @@ msgstr ""
 "σου."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Αν είναι ενεργό, ένα νέο event που προστίθεται στην καμπάνια παίρνει τους "
+"ρόλους, μαζί με τα μέλη και τα δικαιώματά τους, από το πιο πρόσφατο event "
+"της καμπάνιας."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16196,6 +16255,14 @@ msgstr ""
 "Αν είναι ενεργό, οι παίκτες μπορούν να δημιουργήσουν, να επιλέξουν ή να δουν"
 " τους χαρακτήρες τους μόνο αφού ανεβάσουν αποδεικτικό πληρωμής (ή κάνουν "
 "πληρωμή) για την εγγραφή τους."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Αν υπάρχει, ορίζει το IBAN που εμφανίζεται στους συμμετέχοντες για τραπεζικά"
+" εμβάσματα αυτού του event, αντί για εκείνο που έχει οριστεί στα στοιχεία "
+"πληρωμής του οργανισμού."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
@@ -16343,6 +16410,15 @@ msgstr ""
 "Γεια! Εγγράφηκες στο %(event)s αλλά δεν έχεις ολοκληρώσει ακόμα το προφίλ "
 "σου. Χρειάζονται μόλις 5 λεπτά, <a href='%(url)s'>κάνε κλικ εδώ</a> για να "
 "συμπληρώσεις τη φόρμα."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Αν είναι ενεργό, ένα νέο event που προστίθεται στην καμπάνια παίρνει την "
+"εμφάνιση (θέμα, χρώματα, εικόνες, γραμματοσειρές και προσαρμοσμένο CSS) του "
+"πιο πρόσφατου event της καμπάνιας."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

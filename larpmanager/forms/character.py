@@ -1404,10 +1404,10 @@ class OrgaWritingQuestionForm(BaseModelForm):
             visible_choices = {v for v, _ in self.fields["status"].choices}
 
             help_texts = {
-                QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
-                QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-                QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
-                QuestionStatus.HIDDEN: "The question is not shown to the player",
+                QuestionStatus.OPTIONAL: _("The question is shown, and can be filled by the player"),
+                QuestionStatus.MANDATORY: _("The question needs to be filled by the player"),
+                QuestionStatus.DISABLED: _("The question is shown read only, the player cannot change it"),
+                QuestionStatus.HIDDEN: _("The question is not shown to the player"),
             }
 
             self.fields["status"].help_text = ", ".join(
@@ -1436,10 +1436,10 @@ class OrgaWritingQuestionForm(BaseModelForm):
             visible_choices = {v for v, _ in self.fields["visibility"].choices}
 
             help_texts = {
-                QuestionVisibility.SEARCHABLE: "Characters can be filtered according to this question",
-                QuestionVisibility.PUBLIC: "The answer to this question is publicly visible",
-                QuestionVisibility.PRIVATE: "The answer to this question is only visible to the participant",
-                QuestionVisibility.HIDDEN: "The answer is hidden to all participants",
+                QuestionVisibility.SEARCHABLE: _("Characters can be filtered according to this question"),
+                QuestionVisibility.PUBLIC: _("The answer to this question is publicly visible"),
+                QuestionVisibility.PRIVATE: _("The answer to this question is only visible to the participant"),
+                QuestionVisibility.HIDDEN: _("The answer is hidden to all participants"),
             }
 
             self.fields["visibility"].help_text = ", ".join(
@@ -1545,6 +1545,13 @@ class OrgaWritingQuestionForm(BaseModelForm):
     def clean_editable(self) -> str:
         """Join editable field values into comma-separated string."""
         return ",".join(self.cleaned_data["editable"])
+
+    def clean(self) -> dict:
+        """Force hidden visibility on questions with hidden status."""
+        cleaned_data = super().clean()
+        if cleaned_data.get("status") == QuestionStatus.HIDDEN and "visibility" in self.fields:
+            cleaned_data["visibility"] = QuestionVisibility.HIDDEN
+        return cleaned_data
 
     def save(self, commit: bool = True) -> WritingQuestion:  # noqa: FBT001, FBT002
         """Save form with applicable type from context for new instances."""

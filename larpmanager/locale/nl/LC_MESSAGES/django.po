@@ -2129,6 +2129,9 @@ msgstr "Gebruikersgegevens"
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
+msgid "Visible to"
+msgstr "Zichtbaar voor"
+
 msgid "Volunteers"
 msgstr "Vrijwilligers"
 
@@ -2230,6 +2233,9 @@ msgstr "Verbindingen"
 
 msgid "Cover image"
 msgstr "Afbeelding omslag"
+
+msgid "Custom IBAN"
+msgstr "Aangepaste IBAN"
 
 msgid "Description"
 msgstr "Beschrijving"
@@ -2849,6 +2855,9 @@ msgstr "Hoog contrast"
 
 msgid "Inflows total"
 msgstr "Totale inkomsten"
+
+msgid "Inherit roles"
+msgstr "Rollen overnemen"
 
 msgid "Internal link"
 msgstr "Interne link"
@@ -4332,6 +4341,9 @@ msgstr "Historische woonplaats"
 
 msgid "Information saved!"
 msgstr "Informatie opgeslagen!"
+
+msgid "Inherit appearance"
+msgstr "Uiterlijk overnemen"
 
 msgid "Invite a character"
 msgstr "Nodig een personage uit"
@@ -7412,6 +7424,9 @@ msgstr "De CSS-code om het afdrukken van PDF's aan te passen."
 msgid "The following registrations were drawn:"
 msgstr "De volgende inschrijvingen zijn getrokken:"
 
+msgid "The question is not shown to the player"
+msgstr "De vraag wordt niet aan de speler getoond"
+
 msgid "The question status, allowed values are"
 msgstr "De vraagstatus, toegestane waarden zijn"
 
@@ -7499,6 +7514,9 @@ msgstr "Foto's en video's succesvol geüpload!"
 
 msgid "Set casting options in the configuration"
 msgstr "Castingopties instellen in de configuratie"
+
+msgid "The answer is hidden to all participants"
+msgstr "Het antwoord is verborgen voor alle deelnemers"
 
 msgid "The collection was delivered to the user"
 msgstr "De opbrengst van de inzamelactie is aan de gebruiker overhandigd."
@@ -8113,6 +8131,9 @@ msgstr "Stel de tickets en het inschrijfformulier in."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "De optie '%(option)s' vereist: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "De vraag moet door de speler worden ingevuld"
+
 msgid "View the list of characters and participants!"
 msgstr "Bekijk de lijst met personages en deelnemers!"
 
@@ -8326,6 +8347,9 @@ msgstr "Tekst die aan het begin van alle personagefiches staat"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "De vaardigheden die bij deze exclusieve groep horen"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Het antwoord op deze vraag is openbaar zichtbaar"
 
 msgid "The name of the question this option belongs to"
 msgstr "De naam van de vraag waar deze optie bij hoort"
@@ -8812,6 +8836,9 @@ msgstr "Als laatste stap vragen we je om je profiel in te vullen."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-voorkeuren opgeslagen op '%(type)s' voor %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Personages kunnen op basis van deze vraag worden gefilterd"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Kies hoe deelnemers betalen en open daarna de inschrijvingen."
 
@@ -8940,6 +8967,9 @@ msgstr ""
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Sommige functies vereisen 'Personage', dat niet actief is."
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "De vraag wordt getoond en kan door de speler worden ingevuld"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Deze uitnodiging is naar een ander e-mailadres gestuurd."
@@ -9516,6 +9546,9 @@ msgstr "De onkostendeclaraties van medewerkers controleren en goedkeuren"
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Het maximum aantal gilden voor dit evenement is bereikt"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "De vraag wordt alleen-lezen getoond, de speler kan deze niet wijzigen"
+
 msgid "The user has submitted a request to register for this event."
 msgstr ""
 "De gebruiker heeft een aanvraag ingediend om zich voor dit evenement in te "
@@ -9729,6 +9762,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Bepaalt hoe vaak herinneringsmails worden verstuurd, in dagen (standaard: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Het antwoord op deze vraag is alleen zichtbaar voor de deelnemer"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Dit zijn de workshops die je moet voltooien voordat je kunt spelen."
@@ -11490,6 +11526,13 @@ msgstr ""
 "Indien ingeschakeld, wordt automatisch opslaan tijdens het bewerken van "
 "schrijfelementen uitgeschakeld."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Als de vaardigheid niet zichtbaar is, kunnen deze personages haar toch zien "
+"en kopen"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11910,6 +11953,13 @@ msgid ""
 msgstr ""
 "Je moet minstens één optie aanmaken voordat je een keuze- of "
 "rangschikkingsvraag opslaat."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Optioneel) Personages die de vaardigheid kunnen zien als die niet zichtbaar"
+" is, gescheiden door komma's"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -15972,6 +16022,14 @@ msgstr ""
 "en geef tot slot precies aan wat je vakgebied is."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Als dit is ingeschakeld, krijgt een nieuw evenement dat aan de campagne "
+"wordt toegevoegd de rollen, met hun leden en rechten, van het meest recente "
+"evenement van de campagne."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16068,6 +16126,14 @@ msgstr ""
 "Als dit is ingeschakeld, kunnen spelers hun personages pas aanmaken, kiezen "
 "of openen nadat ze een betalingsbewijs hebben geüpload (of een betaling "
 "hebben gedaan) voor hun inschrijving."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Indien ingevuld, is dit de IBAN die deelnemers zien voor "
+"bankoverschrijvingen voor dit evenement, in plaats van de IBAN in de "
+"betaalgegevens van de organisatie."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
@@ -16216,6 +16282,15 @@ msgstr ""
 "Hoi! Je hebt je aangemeld voor %(event)s, maar je hebt je profiel nog niet "
 "compleet gemaakt. Het kost maar 5 minuten, <a href='%(url)s'>klik hier</a> "
 "om het formulier in te vullen."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Als dit is ingeschakeld, krijgt een nieuw evenement dat aan de campagne "
+"wordt toegevoegd het uiterlijk (thema, kleuren, afbeeldingen, lettertypen en"
+" aangepaste CSS) van het meest recente evenement van de campagne."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

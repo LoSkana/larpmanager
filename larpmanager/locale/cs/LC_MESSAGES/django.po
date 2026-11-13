@@ -2129,6 +2129,9 @@ msgstr "Údaje o uživatelích"
 msgid "Visibility"
 msgstr "Viditelnost"
 
+msgid "Visible to"
+msgstr "Viditelné pro"
+
 msgid "Volunteers"
 msgstr "Dobrovolníci"
 
@@ -2230,6 +2233,9 @@ msgstr "Připojení"
 
 msgid "Cover image"
 msgstr "Obrázek na obálce"
+
+msgid "Custom IBAN"
+msgstr "Vlastní IBAN"
 
 msgid "Description"
 msgstr "Popis"
@@ -2849,6 +2855,9 @@ msgstr "Vysoký kontrast"
 
 msgid "Inflows total"
 msgstr "Celkové příjmy"
+
+msgid "Inherit roles"
+msgstr "Dědit role"
 
 msgid "Internal link"
 msgstr "Interní odkaz"
@@ -4332,6 +4341,9 @@ msgstr "Historická rezidence"
 
 msgid "Information saved!"
 msgstr "Informace uloženy!"
+
+msgid "Inherit appearance"
+msgstr "Zdědit vzhled"
 
 msgid "Invite a character"
 msgstr "Pozvi postavu"
@@ -7413,6 +7425,9 @@ msgstr "CSS kód pro přizpůsobení tisku PDF."
 msgid "The following registrations were drawn:"
 msgstr "Byly vylosovány tyto registrace:"
 
+msgid "The question is not shown to the player"
+msgstr "Otázka se hráči nezobrazí"
+
 msgid "The question status, allowed values are"
 msgstr "Stav otázky, povolené hodnoty jsou"
 
@@ -7500,6 +7515,9 @@ msgstr "Fotografie a videa byly úspěšně nahrány!"
 
 msgid "Set casting options in the configuration"
 msgstr "Nastav možnosti Casting v konfiguraci"
+
+msgid "The answer is hidden to all participants"
+msgstr "Odpověď je skrytá všem účastníkům"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
@@ -8110,6 +8128,9 @@ msgstr "Nastav vstupenky a registrační formulář."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Volba '%(option)s' vyžaduje: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Hráč musí otázku vyplnit"
+
 msgid "View the list of characters and participants!"
 msgstr "Zobrazit seznam postav a účastníků!"
 
@@ -8320,6 +8341,9 @@ msgstr "Text zobrazený na začátku všech listů postav"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Schopnosti patřící do této exkluzivní skupiny"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Odpověď na tuto otázku je veřejně viditelná"
 
 msgid "The name of the question this option belongs to"
 msgstr "Název otázky, ke které tato možnost patří"
@@ -8797,6 +8821,9 @@ msgstr "V posledním kroku tě požádáme o vyplnění tvého profilu."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Předvolby Castingu uložené na '%(type)s' pro %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Postavy můžeš filtrovat podle této otázky"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Vyber, jak budou účastníci platit, a pak otevři registrace."
 
@@ -8920,6 +8947,9 @@ msgstr "Naskenuj na místě QR kódy účastníků a označ je jako přítomné"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Postava\", která není aktivní"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Otázka se zobrazí a hráč ji může vyplnit"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
@@ -9445,6 +9475,9 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Byl dosažen maximální počet cechů pro tuto akci"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "Otázka se zobrazí jen pro čtení, hráč ji nemůže změnit"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Uživatel podal žádost o registraci na tuto akci."
 
@@ -9623,6 +9656,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Nastavuje, jak často se odesílají připomínací e-maily, ve dnech (výchozí: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Odpověď na tuto otázku vidí jen účastník"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Tyto semináře musíš dokončit, abys mohl/a hrát."
@@ -11126,6 +11162,12 @@ msgstr ""
 "Pokud je povoleno, automatické ukládání při úpravě textových prvků bude "
 "vypnuto."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Pokud schopnost není viditelná, tyto postavy ji přesto můžou vidět a koupit"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11514,6 +11556,13 @@ msgid ""
 msgstr ""
 "Než uložíš otázku s výběrem nebo s pořadím, musíš definovat alespoň jednu "
 "možnost."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Volitelné) Postavy, které schopnost vidí, i když není viditelná, oddělené "
+"čárkami"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -15478,6 +15527,13 @@ msgstr ""
 "zkušeností a nakonec přesně uveď svou odbornost."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Pokud je tato možnost zapnutá, nová událost přidaná do kampaně převezme "
+"role, včetně jejich členů a oprávnění, z nejnovější události kampaně."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -15567,6 +15623,14 @@ msgid ""
 msgstr ""
 "Pokud je zapnuto, hráči můžou vytvořit, vybrat nebo zobrazit své postavy až "
 "po nahrání dokladu o platbě (nebo provedení platby) za svou registraci."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Pokud je vyplněný, určuje IBAN, který se účastníkům zobrazí pro bankovní "
+"převody na tuto událost místo IBANu nastaveného v platebních údajích "
+"organizace."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
@@ -15705,6 +15769,14 @@ msgstr ""
 "Ahoj! Zaregistroval/a ses na %(event)s, ale ještě sis nedoplnil/a svůj "
 "profil. Zabere to jen 5 minut, <a href='%(url)s'>klikni sem</a>, abys "
 "formulář vyplnil/a."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Pokud je zapnuto, nová událost přidaná do kampaně převezme vzhled (motiv, "
+"barvy, obrázky, písma a vlastní CSS) nejnovější události kampaně."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

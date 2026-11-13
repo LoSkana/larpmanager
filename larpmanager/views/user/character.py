@@ -1107,13 +1107,18 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     multiple_systems = len(context["exp_systems_data"]) > 1
     exclusive_labels = get_ability_exclusive_labels(context["event"].id, exp_context[0])
     context["available"] = {}
-    for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
+    available_abilities = sorted(
+        get_available_ability_exp(char, exp_avail_by_system, exp_context),
+        key=lambda ab: (ab.cost, ab.system.order, ab.system.name, ab.name.lower()),
+    )
+    for rank, ability in enumerate(available_abilities):
         if ability.typ is None:
             continue
         # Create type entry if it doesn't exist
         if ability.typ.uuid not in context["available"]:
-            context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
+            context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.order, "list": {}}
         context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = {
+            "rank": rank,
             "name": ability.name,
             "cost": ability.cost,
             "descr": ability.get_description or "",
@@ -1139,7 +1144,8 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
 
     # Create ordered list of available types for template rendering
     type_available_dict = {
-        str(typ_id): data["name"] for typ_id, data in sorted(context["available"].items(), key=lambda x: x[1]["order"])
+        str(typ_id): data["name"]
+        for typ_id, data in sorted(context["available"].items(), key=lambda x: (x[1]["order"], x[1]["name"]))
     }
     context["type_available"] = json.dumps(type_available_dict)
     context["has_available"] = bool(context["available"])

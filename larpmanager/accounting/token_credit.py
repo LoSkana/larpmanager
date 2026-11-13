@@ -76,15 +76,7 @@ def _apply_tokens(
     membership.tokens -= tokens_to_use
     membership.save()
 
-    # Create payment record for token usage
-    AccountingItemPayment.objects.get_or_create(
-        pay=PaymentChoices.TOKEN,
-        value=tokens_to_use,
-        member_id=registration.member_id,
-        registration=registration,
-        association_id=association_id,
-        defaults={},
-    )
+    _create_balance_payment(registration, PaymentChoices.TOKEN, tokens_to_use, association_id)
     return remaining - tokens_to_use
 
 
@@ -117,16 +109,27 @@ def _apply_credits(
     membership.credit -= credits_to_use
     membership.save()
 
-    # Create payment record for credit usage with get_or_create for idempotency
-    AccountingItemPayment.objects.get_or_create(
-        pay=PaymentChoices.CREDIT,
-        value=credits_to_use,
+    _create_balance_payment(registration, PaymentChoices.CREDIT, credits_to_use, association_id)
+    return remaining - credits_to_use
+
+
+def _create_balance_payment(
+    registration: Registration, pay: PaymentChoices, value: Decimal, association_id: int
+) -> None:
+    """Create the payment record for a balance already deducted from the membership.
+
+    The item is flagged so its post_save neither re-saves the registration (the caller is already
+    recomputing its accounting) nor recalculates the balance (already updated by the caller).
+    """
+    payment = AccountingItemPayment(
+        pay=pay,
+        value=value,
         member_id=registration.member_id,
         registration=registration,
         association_id=association_id,
-        defaults={},
     )
-    return remaining - credits_to_use
+    payment._from_balance = True  # noqa: SLF001
+    payment.save()
 
 
 def registration_tokens_credits_use(
@@ -270,7 +273,7 @@ def registration_tokens_credits_overpay(
             remaining_overpay -= amount_to_cut
 
 
-def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Registration]:
+def get_regs_paying_incomplete(association: Association | int | None = None) -> QuerySet[Registration]:
     """Get registrations with incomplete payments (excluding small differences)."""
     # Get base registration queryset, optionally filtered by association
     registration_queryset = get_regs(association)
@@ -283,7 +286,7 @@ def get_regs_paying_incomplete(association: Association = None) -> QuerySet[Regi
     return registration_queryset.filter(Q(diff__lte=-0.05) | Q(diff__gte=0.05))
 
 
-def get_regs(association: Association) -> QuerySet[Registration]:
+def get_regs(association: Association | int | None) -> QuerySet[Registration]:
     """Get active registrations (not cancelled, not from completed events).
 
     Retrieves all registrations that are still active by filtering out cancelled
@@ -317,133 +320,144 @@ def get_regs(association: Association) -> QuerySet[Registration]:
     return registrations_queryset
 
 
-def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, created: bool) -> None:
-    """Handle accounting item payment post-save token/credit updates."""
-    if not created and instance.registration:
-        update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
+def is_balance_payment(instance: AccountingItemPayment) -> bool:
+    """Return True if the payment was created by applying the member's tokens or credits."""
+    return getattr(instance, "_from_balance", False)
 
 
-def update_token_credit_on_other_save(accounting_item: AccountingItemOther) -> None:
-    """Handle accounting item other save for token/credit updates."""
-    if not accounting_item.member:
+def _balance_owner(
+    item: AccountingItemOther | AccountingItemPayment | AccountingItemExpense,
+) -> tuple[int, bool] | None:
+    """Return (member_id, is_token) of the balance the item counts towards, or None if it counts towards none."""
+    if not item.member_id or not getattr(item, "is_approved", True):
+        return None
+    if isinstance(item, AccountingItemPayment):
+        if item.pay == PaymentChoices.MONEY:
+            return None
+        return item.member_id, item.pay == PaymentChoices.TOKEN
+    if isinstance(item, AccountingItemOther):
+        return item.member_id, item.oth == OtherChoices.TOKEN
+    return item.member_id, False
+
+
+def store_previous_balance_owner(
+    instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense,
+) -> None:
+    """Remember the balance owner before save, so a change of member, type or approval refreshes the old one."""
+    if not instance.pk:
+        return
+    previous = type(instance).objects.filter(pk=instance.pk).first()
+    if previous:
+        instance._previous_balance_owner = _balance_owner(previous)  # noqa: SLF001
+
+
+def refresh_balances_on_save(
+    instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense,
+) -> None:
+    """Recalculate the token/credit balances affected by the saved (or soft deleted) item."""
+    if isinstance(instance, AccountingItemPayment) and is_balance_payment(instance):
         return
 
-    update_token_credit(accounting_item, token=accounting_item.oth == OtherChoices.TOKEN)
-
-
-def update_credit_on_expense_save(expense_item: AccountingItemExpense) -> None:
-    """Handle accounting item expense save for credit updates."""
-    if not expense_item.member or not expense_item.is_approved:
-        return
-
-    update_token_credit(expense_item, token=False)
+    owners = {_balance_owner(instance), getattr(instance, "_previous_balance_owner", None)}
+    for owner in owners:
+        if owner:
+            member_id, token = owner
+            update_token_credit(instance, member_id=member_id, token=token)
 
 
 def update_token_credit(
     accounting_item: AccountingItemOther | AccountingItemPayment | AccountingItemExpense,
     *,
+    member_id: int,
     token: bool,
 ) -> None:
-    """Update member's token or credit balance based on accounting item."""
+    """Update the member's token or credit balance."""
     if token:
-        update_tokens(accounting_item)
+        update_tokens(member_id, accounting_item.association_id)
     else:
-        update_credits(accounting_item)
+        update_credits(member_id, accounting_item.association_id)
 
 
-def update_tokens(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
-    """Recalculate and update member's token balance from all token transactions.
-
-    Args:
-        instance: Accounting item that triggered the update
-
-    """
-    association_id = instance.association_id
+def update_tokens(member_id: int, association_id: int) -> None:
+    """Recalculate and update member's token balance from all token transactions."""
     features = get_association_features(association_id)
     if "tokens" not in features:
         return
 
     # Get all tokens given to the member
-    membership = get_user_membership(instance.member, association_id)
     tokens_given = AccountingItemOther.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         oth=OtherChoices.TOKEN,
         association_id=association_id,
     )
 
     # Get all tokens used by the member
     tokens_used = AccountingItemPayment.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         pay=PaymentChoices.TOKEN,
         association_id=association_id,
     )
 
     # Calculate and save new token balance
+    membership, _created = Membership.objects.get_or_create(member_id=member_id, association_id=association_id)
     membership.tokens = get_sum(tokens_given) - get_sum(tokens_used)
     membership.save()
 
-    _save_all_regs(instance)
+    _save_all_regs(member_id, association_id)
 
 
-def _save_all_regs(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
+def _save_all_regs(member_id: int, association_id: int) -> None:
     """Trigger accounting recalculation on member's incomplete registrations."""
-    # Trigger accounting updates on registrations with incomplete payments
     for registration in (
-        get_regs_paying_incomplete(instance.association)
-        .filter(member_id=instance.member_id)
+        get_regs_paying_incomplete(association_id)
+        .filter(member_id=member_id)
         .select_related("run", "run__event", "ticket", "member")
     ):
         registration.save()
 
 
-def update_credits(instance: AccountingItemOther | AccountingItemPayment | AccountingItemExpense) -> None:
-    """Recalculate and update member's credit balance from all credit transactions.
-
-    Args:
-        instance: Accounting item that triggered the update
-
-    """
-    association_id = instance.association_id
+def update_credits(member_id: int, association_id: int) -> None:
+    """Recalculate and update member's credit balance from all credit transactions."""
     features = get_association_features(association_id)
     if "credits" not in features:
         return
 
     # Get all approved expenses for the member
-    membership = get_user_membership(instance.member, association_id)
     credit_expenses = AccountingItemExpense.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         is_approved=True,
         association_id=association_id,
     )
 
     # Get all credits given to the member
     credits_given = AccountingItemOther.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         oth=OtherChoices.CREDIT,
         association_id=association_id,
     )
 
     # Get all credits used by the member
     credits_used = AccountingItemPayment.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         pay=PaymentChoices.CREDIT,
         association_id=association_id,
     )
 
     # Get all refunds given to the member
     credits_refunded = AccountingItemOther.objects.filter(
-        member_id=instance.member_id,
+        member_id=member_id,
         oth=OtherChoices.REFUND,
         association_id=association_id,
     )
 
     # Calculate and save new credit balance (expenses + credits - used - refunds)
+    membership, _created = Membership.objects.get_or_create(member_id=member_id, association_id=association_id)
     membership.credit = (
         get_sum(credit_expenses) + get_sum(credits_given) - (get_sum(credits_used) + get_sum(credits_refunded))
     )
     membership.save()
 
-    _save_all_regs(instance)
+    _save_all_regs(member_id, association_id)
 
 
 def handle_tokes_credits(

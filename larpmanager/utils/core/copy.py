@@ -320,7 +320,7 @@ def copy_event(
     copy_actions = {
         "event": lambda: _copy_event_fields(context, target_event, source_event),
         "config": lambda: copy_class(target_event_id, source_event_id, EventConfig),
-        "appearance": lambda: _copy_appearance_fields(context, target_event, source_event),
+        "appearance": lambda: copy_appearance_fields(context, target_event, source_event),
         "text": lambda: copy_class(
             target_event_id, source_event_id, EventText, source_ids=picks.get("text"), match_fields=("typ", "language")
         ),
@@ -347,7 +347,7 @@ def _copy_event_fields(context: dict, event: object, parent_event: object) -> No
     event.name = "copy - " + event.name
 
 
-def _copy_appearance_fields(context: dict, child_event: object, parent_event: object) -> None:
+def copy_appearance_fields(context: dict, child_event: object, parent_event: object) -> None:
     """Copy appearance fields from parent to child event."""
     for field_name in get_all_fields_from_form(OrgaAppearanceForm, context):
         if field_name == "event_css":
@@ -582,7 +582,7 @@ def _copy_experience(
         source_event_id,
         AbilityExp,
         source_ids=ability_ids,
-        skip_m2m=("characters", "prerequisites", "requirements"),
+        skip_m2m=("characters", "visible_characters", "prerequisites", "requirements"),
     )
     remap_fk(AbilityExp, ability_map, system_map, "system")
     remap_fk(AbilityExp, ability_map, type_map, "typ")
@@ -590,6 +590,7 @@ def _copy_experience(
 
     characters = _element_map(target_event_id, source_event_id, Character, character_map)
     remap_m2m(AbilityExp, ability_map, characters, "characters")
+    remap_m2m(AbilityExp, ability_map, characters, "visible_characters")
     remap_m2m(
         AbilityExp,
         ability_map,

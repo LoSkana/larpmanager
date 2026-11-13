@@ -778,8 +778,17 @@ form .plot {
 }
 
 .feature_checkbox {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   padding: 0.5em;
+}
+
+.feature_checkbox input[type="checkbox"],
+.new_v20 .form_container table .feature_checkbox input[type="checkbox"] {
+  margin: 0 !important;
+  flex-shrink: 0;
+  z-index: auto;
 }
 
 .feature_checkbox label {
@@ -799,7 +808,8 @@ form .plot {
 }
 
 .feature_checkbox a {
-  margin-left: 0.5em;
+  margin-left: 0.1em;
+  align-self: flex-start;
 }
 
 /* ---------------------------------------------------------------------------

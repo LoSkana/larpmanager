@@ -1426,10 +1426,10 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
         visible_choices = {v for v, _ in self.fields["status"].choices}
         help_texts = {
-            QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
-            QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-            QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
-            QuestionStatus.HIDDEN: "The question is not shown to the player",
+            QuestionStatus.OPTIONAL: _("The question is shown, and can be filled by the player"),
+            QuestionStatus.MANDATORY: _("The question needs to be filled by the player"),
+            QuestionStatus.DISABLED: _("The question is shown read only, the player cannot change it"),
+            QuestionStatus.HIDDEN: _("The question is not shown to the player"),
         }
         self.fields["status"].help_text = ", ".join(
             f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
