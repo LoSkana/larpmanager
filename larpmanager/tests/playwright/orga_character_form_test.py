@@ -145,7 +145,7 @@ def show_chars(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/run")
-    for s in range(0, 13):
+    for s in range(0, 12):
         page.locator(f"#id_show_character_{s}").check()
     submit_confirm(page)
 
