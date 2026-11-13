@@ -2234,6 +2234,9 @@ msgstr "Anslutningar"
 msgid "Cover image"
 msgstr "Omslagsbild"
 
+msgid "Custom IBAN"
+msgstr "Anpassat IBAN"
+
 msgid "Description"
 msgstr "Beskrivning"
 
@@ -15803,6 +15806,14 @@ msgstr ""
 "Om detta är aktiverat kan spelare skapa, välja eller komma åt sina "
 "karaktärer först efter att de har laddat upp ett betalningsbevis (eller "
 "gjort en betalning) för sin anmälan."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Om det anges är detta IBAN-numret som visas för deltagarna vid "
+"banköverföringar för det här eventet, i stället för det som angetts i "
+"organisationens betalningsuppgifter."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

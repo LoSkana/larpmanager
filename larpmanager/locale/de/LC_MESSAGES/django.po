@@ -2234,6 +2234,9 @@ msgstr "Verbindungen"
 msgid "Cover image"
 msgstr "Titelbild"
 
+msgid "Custom IBAN"
+msgstr "Eigene IBAN"
+
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -16267,6 +16270,14 @@ msgstr ""
 "Wenn aktiviert, können Spieler ihre Charaktere erst erstellen, auswählen "
 "oder darauf zugreifen, nachdem sie einen Zahlungsnachweis für ihre Anmeldung"
 " hochgeladen (oder eine Zahlung getätigt) haben."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Falls angegeben, ist dies die IBAN, die den Teilnehmenden für Überweisungen "
+"zu diesem Event angezeigt wird, anstelle der in den Zahlungsdetails der "
+"Organisation hinterlegten."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

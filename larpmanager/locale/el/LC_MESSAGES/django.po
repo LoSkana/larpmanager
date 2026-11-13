@@ -2234,6 +2234,9 @@ msgstr "Συνδέσεις"
 msgid "Cover image"
 msgstr "Εικόνα εξωφύλλου"
 
+msgid "Custom IBAN"
+msgstr "Προσαρμοσμένο IBAN"
+
 msgid "Description"
 msgstr "Περιγραφή"
 
@@ -16227,6 +16230,14 @@ msgstr ""
 "Αν είναι ενεργό, οι παίκτες μπορούν να δημιουργήσουν, να επιλέξουν ή να δουν"
 " τους χαρακτήρες τους μόνο αφού ανεβάσουν αποδεικτικό πληρωμής (ή κάνουν "
 "πληρωμή) για την εγγραφή τους."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Αν υπάρχει, ορίζει το IBAN που εμφανίζεται στους συμμετέχοντες για τραπεζικά"
+" εμβάσματα αυτού του event, αντί για εκείνο που έχει οριστεί στα στοιχεία "
+"πληρωμής του οργανισμού."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
