@@ -541,6 +541,10 @@ msgstr "Administratorer"
 msgid "Amount"
 msgstr "Beløb"
 
+msgctxt "refund"
+msgid "Amount"
+msgstr "Beløb"
+
 msgid "Annual"
 msgstr "Årlig"
 
@@ -1712,6 +1716,9 @@ msgstr "Anmodet"
 msgid "Residence"
 msgstr "Bopæl"
 
+msgid "Return as"
+msgstr "Refundér som"
+
 msgid "Set quest"
 msgstr "Angiv quest"
 
@@ -2180,9 +2187,6 @@ msgstr "Agriturisme"
 msgid "Amount Paid"
 msgstr "Betalt beløb"
 
-msgid "Amount kept"
-msgstr "Beløb beholdt"
-
 msgid "Amount paid"
 msgstr "Betalt beløb"
 
@@ -2329,6 +2333,9 @@ msgstr "Næste events"
 
 msgid "Not scanned"
 msgstr "Ikke scannet"
+
+msgid "Only tokens"
+msgstr "Kun tokens"
 
 msgid "Outstanding"
 msgstr "Udestående"
@@ -2676,6 +2683,9 @@ msgstr "Rul til højre"
 msgid "Set deployed"
 msgstr "Markér som opstillet"
 
+msgid "Share of fee"
+msgstr "Andel af gebyret"
+
 msgid "Show history"
 msgstr "Vis historik"
 
@@ -2964,12 +2974,6 @@ msgstr "Offentliggør staff"
 msgid "Question type"
 msgstr "Spørgsmålstype"
 
-msgid "Refund amount"
-msgstr "Refusionsbeløb"
-
-msgid "Refund method"
-msgstr "Refusionsmetode"
-
 msgid "Registrations"
 msgstr "Tilmeldinger"
 
@@ -3257,9 +3261,6 @@ msgstr "Fremskridtstrin"
 
 msgid "Prologue types"
 msgstr "Prologtyper"
-
-msgid "Refund details"
-msgstr "Refusionsdetaljer"
 
 msgid "Remove consent"
 msgstr "Fjern samtykke"
@@ -5307,6 +5308,9 @@ msgstr "afgiv din stemme her!"
 
 msgid "Association Translation"
 msgstr "Foreningsoversættelse"
+
+msgid "Both tokens and credits"
+msgstr "Både tokens og kreditter"
 
 msgid "Cancelled Registrations"
 msgstr "Annullerede tilmeldinger"
@@ -8080,6 +8084,10 @@ msgstr "Du skal tilmelde dig for at vælge dine præferencer!"
 msgid "You will no longer receive messages from us."
 msgstr "Du vil ikke længere modtage beskeder fra os."
 
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr "%(elements)s udstedt for %(event)s til %(user)s"
+
 msgid "Address blocked after a bounce or a complaint"
 msgstr "Adresse blokeret efter en afvisning eller en klage"
 
@@ -9885,6 +9893,10 @@ msgstr "Du kan også uploade en anden fil med registreringsmulighederne:"
 msgid "You must register for the event before answering these questions"
 msgstr "Du skal tilmelde dig eventet, før du kan besvare disse spørgsmål"
 
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
+msgstr "%(user)s har modtaget %(amount).2f %(elements)s for '%(reason)s'."
+
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valgfrit) Om evnen er synlig for brugere: true eller false"
 
@@ -11344,6 +11356,13 @@ msgid ""
 "Quests are the building blocks of character sheets, each with its own "
 "traits."
 msgstr "Quests er byggestenene i karakterark, hver med sine egne traits."
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled "
+"registration."
+msgstr ""
+"Refunderingsmetode, der er valgt på forhånd, når du refunderer en annulleret"
+" tilmelding."
 
 msgid ""
 "The event will not take place: hidden from users and excluded from "
@@ -14414,6 +14433,13 @@ msgid ""
 msgstr ""
 "Der er endnu ikke oprettet nogen quest-kategorier. Brug knappen ovenfor til "
 "at tilføje en quest-type for at organisere dine quests."
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+"Procentdel af tilmeldingsgebyret, der refunderes, forudvalgt når du udsteder"
+" en refusion for en annulleret tilmelding."
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"

@@ -1027,3 +1027,21 @@ body.floating_iframe .inner {
   height: 20px;
   border-radius: 3px;
 }
+
+/* Cancellation refund page: section title inline with its controls */
+.refund-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.refund-row h3,
+.refund-row .nav {
+  margin: 0;
+}
+
+.refund-row input[type="number"] {
+  width: 8em;
+}

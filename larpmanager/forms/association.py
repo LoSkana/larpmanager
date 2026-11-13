@@ -829,6 +829,32 @@ class ExeConfigForm(ConfigForm):
                 help_text_credit_readonly_event,
             )
 
+        # Configure preselected refund percentage for cancelled registrations
+        if "tokens" in self.params["features"] or "credits" in self.params["features"]:
+            self.set_section("cancellation_refund", _("Cancellations"))
+            perc_choices = [("", "---")] + [(str(perc), f"{perc} %") for perc in range(0, 101, 10)]
+            self.add_configs(
+                "cancellation_refund_perc",
+                ConfigType.CHOICE,
+                _("Refund percentage"),
+                _(
+                    "Percentage of the registration fee refunded, preselected when issuing a refund "
+                    "for a cancelled registration."
+                ),
+                perc_choices,
+            )
+
+            # Preselected refund method, only meaningful when both tokens and credits are active
+            if "tokens" in self.params["features"] and "credits" in self.params["features"]:
+                method_choices = [("", "---"), ("t", _("Only tokens")), ("c", _("Both tokens and credits"))]
+                self.add_configs(
+                    "cancellation_refund_method",
+                    ConfigType.CHOICE,
+                    _("Return as"),
+                    _("Refund method preselected when issuing a refund for a cancelled registration."),
+                    method_choices,
+                )
+
         # Configure treasury management and appointee selection
         if "treasurer" in self.params["features"]:
             self.set_section("treasurer", _("Treasury"))

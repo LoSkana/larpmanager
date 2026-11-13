@@ -541,6 +541,10 @@ msgstr "Admins"
 msgid "Amount"
 msgstr "Summe"
 
+msgctxt "refund"
+msgid "Amount"
+msgstr "Betrag"
+
 msgid "Annual"
 msgstr "Jährlich"
 
@@ -1712,6 +1716,9 @@ msgstr "Angefordert"
 msgid "Residence"
 msgstr "Wohnort"
 
+msgid "Return as"
+msgstr "Erstatten als"
+
 msgid "Set quest"
 msgstr "Quest festlegen"
 
@@ -2180,9 +2187,6 @@ msgstr "Agritourismus"
 msgid "Amount Paid"
 msgstr "Gezahlter Betrag"
 
-msgid "Amount kept"
-msgstr "Einbehaltener Betrag"
-
 msgid "Amount paid"
 msgstr "Gezahlter Betrag"
 
@@ -2329,6 +2333,9 @@ msgstr "Kommende Veranstaltungen"
 
 msgid "Not scanned"
 msgstr "Nicht gescannt"
+
+msgid "Only tokens"
+msgstr "Nur Token"
 
 msgid "Outstanding"
 msgstr "Ausstehend"
@@ -2676,6 +2683,9 @@ msgstr "Nach rechts scrollen"
 msgid "Set deployed"
 msgstr "Als aufgestellt markieren"
 
+msgid "Share of fee"
+msgstr "Anteil der Gebühr"
+
 msgid "Show history"
 msgstr "Verlauf anzeigen"
 
@@ -2964,12 +2974,6 @@ msgstr "Personal veröffentlichen"
 msgid "Question type"
 msgstr "Art der Frage"
 
-msgid "Refund amount"
-msgstr "Rückerstattungsbetrag"
-
-msgid "Refund method"
-msgstr "Rückerstattungsmethode"
-
 msgid "Registrations"
 msgstr "Anmeldungen"
 
@@ -3257,9 +3261,6 @@ msgstr "Fortschrittsschritte"
 
 msgid "Prologue types"
 msgstr "Prologtypen"
-
-msgid "Refund details"
-msgstr "Details zur Rückerstattung"
 
 msgid "Remove consent"
 msgstr "Zustimmung aufheben"
@@ -4193,7 +4194,7 @@ msgid "Reduce animations"
 msgstr "Animationen reduzieren"
 
 msgid "Refund percentage"
-msgstr "Rückerstattungsprozentsatz"
+msgstr "Erstattungsprozentsatz"
 
 msgid "Registration Form"
 msgstr "Anmeldeformular"
@@ -5307,6 +5308,9 @@ msgstr "Gib hier deine Stimme ab!"
 
 msgid "Association Translation"
 msgstr "Vereins-Übersetzung"
+
+msgid "Both tokens and credits"
+msgstr "Sowohl Token als auch Credits"
 
 msgid "Cancelled Registrations"
 msgstr "Annullierte Anmeldungen"
@@ -8083,6 +8087,10 @@ msgstr "Du musst dich anmelden, um deine Präferenzen auszuwählen!"
 msgid "You will no longer receive messages from us."
 msgstr "Du wirst keine Nachrichten mehr von uns erhalten."
 
+#, python-format
+msgid "%(elements)s issued for %(event)s to %(user)s"
+msgstr "%(elements)s für %(event)s an %(user)s vergeben"
+
 msgid "Address blocked after a bounce or a complaint"
 msgstr "Adresse nach einer Unzustellbarkeit oder Beschwerde gesperrt"
 
@@ -10102,6 +10110,10 @@ msgstr ""
 "Du musst dich für das Event anmelden, bevor du diese Fragen beantworten "
 "kannst"
 
+#, python-format
+msgid "%(user)s has received %(amount).2f %(elements)s for '%(reason)s'."
+msgstr "%(user)s hat %(amount).2f %(elements)s für '%(reason)s' erhalten."
+
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Optional) Ob die Fähigkeit für Nutzer sichtbar ist: „true“ oder „false“"
@@ -11755,6 +11767,13 @@ msgid ""
 "traits."
 msgstr ""
 "Quests sind die Bausteine der Charakterbögen, jede mit ihren eigenen Traits."
+
+msgid ""
+"Refund method preselected when issuing a refund for a cancelled "
+"registration."
+msgstr ""
+"Rückerstattungsmethode, die vorausgewählt ist, wenn du eine Rückerstattung "
+"für eine stornierte Anmeldung ausstellst."
 
 msgid ""
 "The event will not take place: hidden from users and excluded from "
@@ -14880,6 +14899,13 @@ msgid ""
 msgstr ""
 "Es wurden noch keine Quest-Kategorien angelegt. Nutze die Schaltfläche oben,"
 " um einen Quest-Typ hinzuzufügen und deine Quests zu organisieren."
+
+msgid ""
+"Percentage of the registration fee refunded, preselected when issuing a "
+"refund for a cancelled registration."
+msgstr ""
+"Prozentsatz der Anmeldegebühr, der erstattet wird; wird vorausgewählt, wenn "
+"du eine Erstattung für eine stornierte Anmeldung vornimmst."
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"

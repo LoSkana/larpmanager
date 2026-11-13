@@ -1347,6 +1347,16 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
     # Get payment history for display in template
     get_registration_payments(context["registration"])
 
+    # Preselected percentage of the registration fee refunded, if configured
+    refund_perc = get_association_config(context["association_id"], "cancellation_refund_perc", context=context)
+    if refund_perc:
+        context["refund_perc_index"] = int(refund_perc) // 10
+
+    # Preselected refund method, if configured
+    context["refund_method"] = get_association_config(
+        context["association_id"], "cancellation_refund_method", context=context
+    )
+
     # Render the refund form template
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", context)
 

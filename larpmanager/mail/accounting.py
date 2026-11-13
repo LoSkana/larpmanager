@@ -388,10 +388,7 @@ def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
         for event_organizer in get_event_organizers(instance.run_id):
             # Localize email content for each organizer
             activate(event_organizer.language)
-            email_subject, email_body = get_assignment_email(credits_name, instance)
-
-            # Add member information to subject for organizer context
-            email_subject += _(" for %(user)s") % {"user": instance.member}
+            email_subject, email_body = get_assignment_email(credits_name, instance, for_organizer=True)
             my_send_mail(email_subject, email_body, event_organizer, instance)
 
 
@@ -409,8 +406,7 @@ def notify_token(instance: Any, tokens_name: str) -> None:
     if instance.run:
         for organizer in get_event_organizers(instance.run_id):
             activate(organizer.language)
-            email_subject, email_body = get_assignment_email(tokens_name, instance)
-            email_subject += _(" for %(user)s") % {"user": instance.member}
+            email_subject, email_body = get_assignment_email(tokens_name, instance, for_organizer=True)
             my_send_mail(email_subject, email_body, organizer, instance)
 
 
