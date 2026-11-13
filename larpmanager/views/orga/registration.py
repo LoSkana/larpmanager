@@ -95,6 +95,7 @@ from larpmanager.utils.registrations.questions import (
     get_registration_choices_by_question,
 )
 from larpmanager.utils.security.confirm import confirm_post
+from larpmanager.utils.services.bulk import handle_bulk_registrations
 from larpmanager.utils.users.member_flags import get_member_flags_html, member_flags_active
 from larpmanager.views.orga.member import member_field_correct
 
@@ -522,6 +523,10 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Handle AJAX and download POST requests
     if request.method == "POST":
+        # Execute bulk operation on the selected registrations
+        if request.POST.get("operation"):
+            handle_bulk_registrations(request, context)
+
         # Return popup detail view for specific registration/question
         if request.POST.get("popup") == "1":
             return registrations_popup(request, context)
@@ -587,6 +592,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Enable bulk upload functionality
     context["upload"] = "registrations"
+    handle_bulk_registrations(request, context)
     context["download"] = 1
 
     # Enable export view if configured

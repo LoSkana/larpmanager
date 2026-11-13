@@ -13605,7 +13605,31 @@ msgstr ""
 msgid "Set deployed"
 msgstr ""
 
+msgid "Set value"
+msgstr ""
+
+msgid "Set ticket"
+msgstr ""
+
+msgid "Add value"
+msgstr ""
+
+msgid "Remove value"
+msgstr ""
+
 msgid "Selected items will be removed from their area"
+msgstr ""
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr ""
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr ""
+
+#, python-format
+msgid "Remove from '%(name)s'"
 msgstr ""
 
 msgid "Your registration ticket"

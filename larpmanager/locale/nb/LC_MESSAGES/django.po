@@ -1508,6 +1508,9 @@ msgstr "Evner"
 msgid "Accepted:"
 msgstr "Akseptert:"
 
+msgid "Add value"
+msgstr "Legg til verdi"
+
 msgid "Algorithm"
 msgstr "Algoritme"
 
@@ -1711,6 +1714,9 @@ msgstr "Bolig"
 
 msgid "Set quest"
 msgstr "Sett Quest"
+
+msgid "Set value"
+msgstr "Angi verdi"
 
 msgid "Short url"
 msgstr "Kort nettadresse"
@@ -2071,6 +2077,9 @@ msgstr "Merk som lastet"
 
 msgid "Set locked"
 msgstr "Lås"
+
+msgid "Set ticket"
+msgstr "Angi billett"
 
 msgid "Short name"
 msgstr "Kort navn"
@@ -2642,6 +2651,9 @@ msgstr "Relasjon"
 
 msgid "Remove admin"
 msgstr "Fjern administrator"
+
+msgid "Remove value"
+msgstr "Fjern verdi"
 
 msgid "Request for:"
 msgstr "Forespørsel om:"
@@ -3272,6 +3284,10 @@ msgstr "Følsomme data"
 
 msgid "Session active"
 msgstr "Aktiv økt"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Angi '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Angi Quest-type"
@@ -3952,6 +3968,10 @@ msgstr "Aktivering mislyktes"
 
 msgid "Active collection"
 msgstr "Aktiv innsamling"
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Legg til i '%(name)s'"
 
 msgid "Additional fields"
 msgstr "Ytterligere felt"
@@ -5243,6 +5263,10 @@ msgstr "Snarvei til registreringer"
 
 msgid "Reimbursement Approved"
 msgstr "Godkjent refusjon"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Fjern fra '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

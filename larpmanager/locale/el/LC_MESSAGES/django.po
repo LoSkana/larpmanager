@@ -1508,6 +1508,9 @@ msgstr "Ικανότητες"
 msgid "Accepted:"
 msgstr "Έγινε δεκτό:"
 
+msgid "Add value"
+msgstr "Προσθήκη τιμής"
+
 msgid "Algorithm"
 msgstr "Αλγόριθμος"
 
@@ -1711,6 +1714,9 @@ msgstr "Τόπος διαμονής"
 
 msgid "Set quest"
 msgstr "Ορισμός Quest"
+
+msgid "Set value"
+msgstr "Ορισμός τιμής"
 
 msgid "Short url"
 msgstr "Σύντομο URL"
@@ -2071,6 +2077,9 @@ msgstr "Ορισμός ως φορτωμένο"
 
 msgid "Set locked"
 msgstr "Ορισμός ως κλειδωμένο"
+
+msgid "Set ticket"
+msgstr "Ορισμός εισιτηρίου"
 
 msgid "Short name"
 msgstr "Σύντομο όνομα"
@@ -2642,6 +2651,9 @@ msgstr "Σχέση"
 
 msgid "Remove admin"
 msgstr "Αφαίρεση διαχειριστή"
+
+msgid "Remove value"
+msgstr "Αφαίρεση τιμής"
 
 msgid "Request for:"
 msgstr "Αίτημα για:"
@@ -3272,6 +3284,10 @@ msgstr "Ευαίσθητα δεδομένα"
 
 msgid "Session active"
 msgstr "Η συνεδρία είναι ενεργή"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Ορισμός '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Ορισμός τύπου Quest"
@@ -3952,6 +3968,10 @@ msgstr "Η ενεργοποίηση απέτυχε"
 
 msgid "Active collection"
 msgstr "Ενεργή συλλογή χρημάτων"
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Προσθήκη στο '%(name)s'"
 
 msgid "Additional fields"
 msgstr "Πρόσθετα πεδία"
@@ -5243,6 +5263,10 @@ msgstr "Συντόμευση εγγραφών"
 
 msgid "Reimbursement Approved"
 msgstr "Εγκρίθηκε η επιστροφή χρημάτων"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Αφαίρεση από '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

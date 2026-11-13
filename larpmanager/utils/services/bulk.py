@@ -36,12 +36,23 @@ if TYPE_CHECKING:
 import datetime as dt
 
 from larpmanager.cache.bulk import get_bulk_options_cache
+from larpmanager.cache.character import clear_event_cache_all_runs
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
+from larpmanager.cache.registration_counts import clear_registration_counts_cache
+from larpmanager.cache.registration_lookup import get_registration_tickets
+from larpmanager.cache.run import get_event_and_children_runs
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
-from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingQuestionType
+from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
+    RegistrationChoice,
+    WritingAnswer,
+    WritingChoice,
+    WritingQuestionType,
+)
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
     WarehouseArea,
@@ -50,6 +61,7 @@ from larpmanager.models.miscellanea import (
     WarehouseItemAssignment,
     WarehouseTag,
 )
+from larpmanager.models.registration import Registration
 from larpmanager.models.writing import (
     Character,
     CharacterConfig,
@@ -177,8 +189,9 @@ def _get_bulk_params(request: HttpRequest) -> tuple[list[str], int, int]:
 
     """
     # Extract and validate operation parameter, default to 0 for invalid values
+    # Per-question operations are encoded as "<operation>_<question uuid>"
     try:
-        operation_code = int(request.POST.get("operation", "0"))
+        operation_code = int(request.POST.get("operation", "0").split("_")[0])
     except (ValueError, TypeError):
         operation_code = 0
 
@@ -235,6 +248,13 @@ class Operations(models.IntegerChoices):
     SET_ASSIGNMENT_LOADED = 32, _("Set loaded")
     SET_ASSIGNMENT_DEPLOYED = 33, _("Set deployed")
     DEL_ITEM_AREA = 34, _("Remove from area")
+    SET_CHAR_QUESTION = 35, _("Set value")
+    SET_REG_QUESTION = 36, _("Set value")
+    SET_REG_TICKET = 37, _("Set ticket")
+    ADD_CHAR_QUESTION = 38, _("Add value")
+    DEL_CHAR_QUESTION = 39, _("Remove value")
+    ADD_REG_QUESTION = 40, _("Add value")
+    DEL_REG_QUESTION = 41, _("Remove value")
 
 
 def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[str]) -> QuerySet:
@@ -246,6 +266,8 @@ def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[s
     """
     if model_class is WarehouseItem:
         base = WarehouseItem.objects.filter(association_id=context["association_id"])
+    elif model_class is Registration:
+        base = Registration.objects.filter(run_id=context["run"].id)
     else:
         base = get_event_elements(context["event"].id, model_class, context=context)
     return base.filter(uuid__in=object_uuids)
@@ -715,7 +737,16 @@ def exec_set_char_status(context: dict, target: str, uuids: list[str]) -> str:
     if target not in CharacterStatus.values:
         msg = "invalid character status"
         raise ValueError(msg)
-    get_event_elements(context["event"].id, Character, context=context).filter(uuid__in=uuids).update(status=target)
+    # Save each changed character so status emails and cache refreshes fire
+    characters = (
+        get_event_elements(context["event"].id, Character, context=context)
+        .filter(uuid__in=uuids)
+        .exclude(status=target)
+        .select_related("player", "event")
+    )
+    for character in characters:
+        character.status = target
+        character.save()
     return dict(CharacterStatus.choices).get(target, target)
 
 
@@ -765,6 +796,157 @@ def _add_char_hide_locked_options(context: dict) -> None:
         context["bulk"].append(_bulk_op(Operations.SET_CHAR_LOCKED, _bulk_bool_choices()))
 
 
+def _choice_questions(questions: list[dict], typ: str) -> list[dict]:
+    """Return the questions of the given type that have at least one option."""
+    return [question for question in questions if question["typ"] == typ and question["options"]]
+
+
+BULK_QUESTION_NAME_MAX_LENGTH = 30
+
+# Per-question bulk operations: (operation, question type, label)
+CHAR_QUESTION_OPS = (
+    (Operations.SET_CHAR_QUESTION, BaseQuestionType.SINGLE, _("Set '%(name)s'")),
+    (Operations.ADD_CHAR_QUESTION, BaseQuestionType.MULTIPLE, _("Add to '%(name)s'")),
+    (Operations.DEL_CHAR_QUESTION, BaseQuestionType.MULTIPLE, _("Remove from '%(name)s'")),
+)
+REG_QUESTION_OPS = (
+    (Operations.SET_REG_QUESTION, BaseQuestionType.SINGLE, _("Set '%(name)s'")),
+    (Operations.ADD_REG_QUESTION, BaseQuestionType.MULTIPLE, _("Add to '%(name)s'")),
+    (Operations.DEL_REG_QUESTION, BaseQuestionType.MULTIPLE, _("Remove from '%(name)s'")),
+)
+
+
+def _bulk_question_ops(question_ops: tuple, questions: list[dict]) -> list[dict]:
+    """Build the per-question bulk operations of choice questions, listing their options as targets."""
+    return [
+        {
+            "idx": f"{int(operation)}_{question['uuid']}",
+            "label": label % {"name": question["name"][:BULK_QUESTION_NAME_MAX_LENGTH]},
+            "objs": [{"uuid": option["uuid"], "name": option["name"]} for option in question["options"]],
+        }
+        for question in questions
+        for operation, typ, label in question_ops
+        if question["typ"] == typ and question["options"]
+    ]
+
+
+def _find_question_option(questions: list[dict], option_uuid: str, typ: str) -> tuple[dict, dict]:
+    """Return the question of the given type and its option matching the given option UUID."""
+    for question in _choice_questions(questions, typ):
+        for option in question["options"]:
+            if str(option["uuid"]) == option_uuid:
+                return question, option
+    msg = "invalid option"
+    raise ValueError(msg)
+
+
+def _char_questions(context: dict) -> list[dict]:
+    """Return the cached character writing questions of the event."""
+    return get_cached_writing_questions(context["event"].id, QuestionApplicable.CHARACTER)
+
+
+def _set_single_choice(
+    choice_model: type, owner_field: str, owner_ids: list[int], question_id: int, option_id: int
+) -> set[int]:
+    """Make option the only choice of question for each owner, touching only owners with a different value.
+
+    Returns the ids of the owners whose choice changed.
+    """
+    choices = choice_model.objects.filter(**{f"{owner_field}__in": owner_ids}, question_id=question_id)
+    with transaction.atomic():
+        stale = choices.exclude(option_id=option_id)
+        changed_ids = set(stale.values_list(owner_field, flat=True))
+        stale.delete()
+        already_set = set(choices.filter(option_id=option_id).values_list(owner_field, flat=True))
+        missing_ids = [owner_id for owner_id in owner_ids if owner_id not in already_set]
+        choice_model.objects.bulk_create(
+            [
+                choice_model(**{owner_field: owner_id}, question_id=question_id, option_id=option_id)
+                for owner_id in missing_ids
+            ]
+        )
+    return changed_ids | set(missing_ids)
+
+
+def _add_choice(
+    choice_model: type, owner_field: str, owner_ids: list[int], question_id: int, option_id: int
+) -> set[int]:
+    """Add option to the choices of question for each owner not having it yet.
+
+    Returns the ids of the owners whose choices changed.
+    """
+    choices = choice_model.objects.filter(**{f"{owner_field}__in": owner_ids}, question_id=question_id)
+    already_set = set(choices.filter(option_id=option_id).values_list(owner_field, flat=True))
+    missing_ids = [owner_id for owner_id in owner_ids if owner_id not in already_set]
+    choice_model.objects.bulk_create(
+        [
+            choice_model(**{owner_field: owner_id}, question_id=question_id, option_id=option_id)
+            for owner_id in missing_ids
+        ]
+    )
+    return set(missing_ids)
+
+
+def _remove_choice(
+    choice_model: type, owner_field: str, owner_ids: list[int], question_id: int, option_id: int
+) -> set[int]:
+    """Remove option from the choices of question for each owner.
+
+    Returns the ids of the owners whose choices changed.
+    """
+    choices = choice_model.objects.filter(
+        **{f"{owner_field}__in": owner_ids}, question_id=question_id, option_id=option_id
+    )
+    changed_ids = set(choices.values_list(owner_field, flat=True))
+    choices.delete()
+    return changed_ids
+
+
+# Question type and choice update function of each per-question operation
+QUESTION_CHOICE_ACTIONS = {
+    Operations.SET_CHAR_QUESTION: (BaseQuestionType.SINGLE, _set_single_choice),
+    Operations.ADD_CHAR_QUESTION: (BaseQuestionType.MULTIPLE, _add_choice),
+    Operations.DEL_CHAR_QUESTION: (BaseQuestionType.MULTIPLE, _remove_choice),
+    Operations.SET_REG_QUESTION: (BaseQuestionType.SINGLE, _set_single_choice),
+    Operations.ADD_REG_QUESTION: (BaseQuestionType.MULTIPLE, _add_choice),
+    Operations.DEL_REG_QUESTION: (BaseQuestionType.MULTIPLE, _remove_choice),
+}
+
+
+def _exec_char_question(operation: Operations, context: dict, target: str, uuids: list[str]) -> str:
+    """Update the choices of a writing question for the specified characters, according to operation."""
+    typ, update_choices = QUESTION_CHOICE_ACTIONS[operation]
+    question, option = _find_question_option(_char_questions(context), target, typ)
+    character_ids = list(
+        get_event_elements(context["event"].id, Character, context=context)
+        .filter(uuid__in=uuids)
+        .values_list("id", flat=True)
+    )
+    with transaction.atomic():
+        changed_ids = update_choices(WritingChoice, "element_id", character_ids, question["id"], option["id"])
+    if changed_ids:
+        clear_event_cache_all_runs(context["event"].id)
+        for run in get_event_and_children_runs(context["event"].id):
+            clear_registration_counts_cache(run.id)
+
+    return f"{question['name']}: {option['name']}"
+
+
+def exec_set_char_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the chosen option of a single choice writing question for the specified characters."""
+    return _exec_char_question(Operations.SET_CHAR_QUESTION, context, target, uuids)
+
+
+def exec_add_char_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Add an option to a multiple choice writing question for the specified characters."""
+    return _exec_char_question(Operations.ADD_CHAR_QUESTION, context, target, uuids)
+
+
+def exec_del_char_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Remove an option from a multiple choice writing question for the specified characters."""
+    return _exec_char_question(Operations.DEL_CHAR_QUESTION, context, target, uuids)
+
+
 def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
     """Process bulk operations on character objects.
 
@@ -800,6 +982,9 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             Operations.SET_CHAR_STATUS: exec_set_char_status,
             Operations.SET_CHAR_HIDE: exec_set_char_hide,
             Operations.SET_CHAR_LOCKED: exec_set_char_locked,
+            Operations.SET_CHAR_QUESTION: exec_set_char_question,
+            Operations.ADD_CHAR_QUESTION: exec_add_char_question,
+            Operations.DEL_CHAR_QUESTION: exec_del_char_question,
         }
         # Execute the bulk operation and raise exception to return result
         raise ReturnNowError(exec_bulk(request, context, mapping, Character, allow_delete=True))
@@ -868,6 +1053,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
         )
 
     _add_char_hide_locked_options(context)
+    context["bulk"].extend(_bulk_question_ops(CHAR_QUESTION_OPS, _char_questions(context)))
     _add_bulk_delete_option(request, context)
 
 
@@ -1059,3 +1245,76 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
         _bulk_op(Operations.SET_ABILITY_TYPE, get_bulk_options_cache(context["event"].id, "ability_types")),
     ]
     _add_bulk_delete_option(request, context)
+
+
+def _exec_reg_question(operation: Operations, context: dict, target: str, uuids: list[str]) -> str:
+    """Update the choices of a registration question for the specified registrations, according to operation."""
+    typ, update_choices = QUESTION_CHOICE_ACTIONS[operation]
+    question, option = _find_question_option(get_cached_registration_questions(context["event"].id), target, typ)
+    registration_ids = list(_scoped_bulk_queryset(context, Registration, uuids).values_list("id", flat=True))
+    with transaction.atomic():
+        changed_ids = update_choices(
+            RegistrationChoice, "registration_id", registration_ids, question["id"], option["id"]
+        )
+        _recompute_registrations(context, changed_ids)
+
+    return f"{question['name']}: {option['name']}"
+
+
+def exec_set_reg_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the chosen option of a single choice registration question for the specified registrations."""
+    return _exec_reg_question(Operations.SET_REG_QUESTION, context, target, uuids)
+
+
+def exec_add_reg_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Add an option to a multiple choice registration question for the specified registrations."""
+    return _exec_reg_question(Operations.ADD_REG_QUESTION, context, target, uuids)
+
+
+def exec_del_reg_question(context: dict, target: str, uuids: list[str]) -> str:
+    """Remove an option from a multiple choice registration question for the specified registrations."""
+    return _exec_reg_question(Operations.DEL_REG_QUESTION, context, target, uuids)
+
+
+def _recompute_registrations(context: dict, registration_ids: set[int], ticket_id: int | None = None) -> None:
+    """Re-save the changed registrations, optionally setting their ticket, to update totals, accounting and caches."""
+    if not registration_ids:
+        return
+    with transaction.atomic():
+        for registration in Registration.objects.filter(run_id=context["run"].id, id__in=registration_ids):
+            if ticket_id is not None:
+                registration.ticket_id = ticket_id
+            registration.save()
+    clear_registration_counts_cache(context["run"].id)
+
+
+def exec_set_reg_ticket(context: dict, target: str, uuids: list[str]) -> str:
+    """Set the ticket of the specified registrations."""
+    ticket = next(
+        (ticket for ticket in get_registration_tickets(context["event"].id) if str(ticket["uuid"]) == target), None
+    )
+    if not ticket:
+        msg = "invalid ticket"
+        raise ValueError(msg)
+    to_change = _scoped_bulk_queryset(context, Registration, uuids).exclude(ticket_id=ticket["id"])
+    _recompute_registrations(context, set(to_change.values_list("id", flat=True)), ticket_id=ticket["id"])
+
+    return ticket["name"]
+
+
+def handle_bulk_registrations(request: HttpRequest, context: dict) -> None:
+    """Handle bulk operations on registrations: set the ticket, update the choices of choice questions."""
+    if request.POST:
+        mapping = {
+            Operations.SET_REG_TICKET: exec_set_reg_ticket,
+            Operations.SET_REG_QUESTION: exec_set_reg_question,
+            Operations.ADD_REG_QUESTION: exec_add_reg_question,
+            Operations.DEL_REG_QUESTION: exec_del_reg_question,
+        }
+        raise ReturnNowError(exec_bulk(request, context, mapping, Registration))
+
+    tickets = [
+        {"uuid": ticket["uuid"], "name": ticket["name"]} for ticket in get_registration_tickets(context["event"].id)
+    ]
+    context["bulk"] = [_bulk_op(Operations.SET_REG_TICKET, tickets)]
+    context["bulk"].extend(_bulk_question_ops(REG_QUESTION_OPS, get_cached_registration_questions(context["event"].id)))

@@ -1508,6 +1508,9 @@ msgstr "Schopnosti"
 msgid "Accepted:"
 msgstr "Přijato:"
 
+msgid "Add value"
+msgstr "Přidat hodnotu"
+
 msgid "Algorithm"
 msgstr "Algoritmus"
 
@@ -1711,6 +1714,9 @@ msgstr "Rezidence"
 
 msgid "Set quest"
 msgstr "Nastavit Quest"
+
+msgid "Set value"
+msgstr "Nastavit hodnotu"
 
 msgid "Short url"
 msgstr "Krátká url adresa"
@@ -2071,6 +2077,9 @@ msgstr "Označit jako naložené"
 
 msgid "Set locked"
 msgstr "Nastavit jako zamčené"
+
+msgid "Set ticket"
+msgstr "Nastavit vstupenku"
 
 msgid "Short name"
 msgstr "Krátký název"
@@ -2642,6 +2651,9 @@ msgstr "Vztah"
 
 msgid "Remove admin"
 msgstr "Odstranit správce"
+
+msgid "Remove value"
+msgstr "Odebrat hodnotu"
 
 msgid "Request for:"
 msgstr "Žádost o:"
@@ -3272,6 +3284,10 @@ msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Nastavit '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Nastavit typ Questu"
@@ -3952,6 +3968,10 @@ msgstr "Aktivace se nezdařila"
 
 msgid "Active collection"
 msgstr "Aktivní sbírka"
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Přidat do '%(name)s'"
 
 msgid "Additional fields"
 msgstr "Další pole"
@@ -5243,6 +5263,10 @@ msgstr "Zkratka pro registrace"
 
 msgid "Reimbursement Approved"
 msgstr "Proplacení schváleno"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Odebrat z '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

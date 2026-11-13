@@ -1508,6 +1508,9 @@ msgstr "Capaciteiten"
 msgid "Accepted:"
 msgstr "Geaccepteerd:"
 
+msgid "Add value"
+msgstr "Waarde toevoegen"
+
 msgid "Algorithm"
 msgstr "Algoritme"
 
@@ -1711,6 +1714,9 @@ msgstr "Woonplaats"
 
 msgid "Set quest"
 msgstr "Quest instellen"
+
+msgid "Set value"
+msgstr "Waarde instellen"
 
 msgid "Short url"
 msgstr "Korte url"
@@ -2071,6 +2077,9 @@ msgstr "Markeren als geladen"
 
 msgid "Set locked"
 msgstr "Vergrendeld instellen"
+
+msgid "Set ticket"
+msgstr "Ticket instellen"
 
 msgid "Short name"
 msgstr "Korte naam"
@@ -2642,6 +2651,9 @@ msgstr "Relatie"
 
 msgid "Remove admin"
 msgstr "Beheerder verwijderen"
+
+msgid "Remove value"
+msgstr "Waarde verwijderen"
 
 msgid "Request for:"
 msgstr "Verzoek om:"
@@ -3272,6 +3284,10 @@ msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "'%(name)s' instellen"
 
 msgid "Set quest type"
 msgstr "Questtype instellen"
@@ -3952,6 +3968,10 @@ msgstr "Activering mislukt"
 
 msgid "Active collection"
 msgstr "Actieve inzameling"
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Toevoegen aan '%(name)s'"
 
 msgid "Additional fields"
 msgstr "Extra velden"
@@ -5243,6 +5263,10 @@ msgstr "Snelkoppeling registraties"
 
 msgid "Reimbursement Approved"
 msgstr "Vergoeding goedgekeurd"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Verwijderen uit '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

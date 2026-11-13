@@ -1508,6 +1508,9 @@ msgstr "Fähigkeiten"
 msgid "Accepted:"
 msgstr "Angenommen:"
 
+msgid "Add value"
+msgstr "Wert hinzufügen"
+
 msgid "Algorithm"
 msgstr "Algorithmus"
 
@@ -1711,6 +1714,9 @@ msgstr "Wohnort"
 
 msgid "Set quest"
 msgstr "Quest festlegen"
+
+msgid "Set value"
+msgstr "Wert festlegen"
 
 msgid "Short url"
 msgstr "Kurze URL"
@@ -2071,6 +2077,9 @@ msgstr "Als geladen markieren"
 
 msgid "Set locked"
 msgstr "Als gesperrt festlegen"
+
+msgid "Set ticket"
+msgstr "Ticket festlegen"
 
 msgid "Short name"
 msgstr "Kurzer Name"
@@ -2642,6 +2651,9 @@ msgstr "Beziehung"
 
 msgid "Remove admin"
 msgstr "Admin entfernen"
+
+msgid "Remove value"
+msgstr "Wert entfernen"
 
 msgid "Request for:"
 msgstr "Antrag auf:"
@@ -3272,6 +3284,10 @@ msgstr "Sensible Daten"
 
 msgid "Session active"
 msgstr "Sitzung aktiv"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "'%(name)s' festlegen"
 
 msgid "Set quest type"
 msgstr "Questtyp festlegen"
@@ -3952,6 +3968,10 @@ msgstr "Aktivierung fehlgeschlagen"
 
 msgid "Active collection"
 msgstr "Aktive Sammlung"
+
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Zu '%(name)s' hinzufügen"
 
 msgid "Additional fields"
 msgstr "Zusätzliche Felder"
@@ -5243,6 +5263,10 @@ msgstr "Verknüpfung zu den Anmeldungen"
 
 msgid "Reimbursement Approved"
 msgstr "Erstattung genehmigt"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Aus '%(name)s' entfernen"
 
 #, python-format
 msgid "Role approval %(role)s"

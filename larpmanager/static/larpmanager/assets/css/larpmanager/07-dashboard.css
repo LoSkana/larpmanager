@@ -157,6 +157,18 @@
   display: inline-block;
 }
 
+/* Bulk panel takes its own row below the toolbar buttons */
+#main_bulk {
+  flex-basis: 100%;
+  width: 100%;
+}
+
+/* Toggle button whose panel is open */
+.button.my_toggle.select {
+  background-color: rgb(var(--ter-rgb));
+  color: rgb(var(--sec-rgb));
+}
+
 .sticky-message {
   background-color: rgba(var(--pri-rgb), 0.085);
   border: solid 1px rgba(var(--pri-rgb), 0.5);
