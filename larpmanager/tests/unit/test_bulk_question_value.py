@@ -22,11 +22,13 @@
 
 import json
 from decimal import Decimal
+from unittest.mock import patch
 
 import pytest
 from django.core.cache import cache
 from django.test import RequestFactory
 
+from larpmanager.models.event import EventConfig
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -38,7 +40,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.registration import RegistrationTicket
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.services.bulk import Operations, handle_bulk_characters, handle_bulk_registrations
@@ -172,3 +174,103 @@ class TestBulkQuestionValue(BaseTestCase):
             op["label"] for op in context["bulk"] if op["idx"] == f"{int(Operations.SET_REG_QUESTION)}_{question.uuid}"
         ]
         assert labels == ["Set '" + "A" * 30 + "'"]
+
+    def test_character_multiple_choice(self) -> None:
+        """Add and remove operations update one option of a multiple choice question, keeping the others."""
+        question = WritingQuestion.objects.create(
+            event=self.event, applicable=QuestionApplicable.CHARACTER, typ=BaseQuestionType.MULTIPLE, name="Skills"
+        )
+        fight = WritingOption.objects.create(event=self.event, question=question, name="Fight")
+        magic = WritingOption.objects.create(event=self.event, question=question, name="Magic")
+        char_1 = Character.objects.create(event=self.event, name="One")
+        char_2 = Character.objects.create(event=self.event, name="Two")
+        WritingChoice.objects.create(element_id=char_1.id, question=question, option=fight)
+        WritingChoice.objects.create(element_id=char_1.id, question=question, option=magic)
+
+        request = self.factory.get("/")
+        request.user = self.get_user()
+        context = self._context()
+        handle_bulk_characters(request, context)
+        ops = {op["idx"]: op for op in context["bulk"] if str(op["idx"]).endswith(f"_{question.uuid}")}
+        add_idx = f"{int(Operations.ADD_CHAR_QUESTION)}_{question.uuid}"
+        del_idx = f"{int(Operations.DEL_CHAR_QUESTION)}_{question.uuid}"
+        assert set(ops) == {add_idx, del_idx}
+        assert ops[add_idx]["label"] == "Add to 'Skills'"
+        assert ops[del_idx]["label"] == "Remove from 'Skills'"
+
+        uuids = [str(char_1.uuid), str(char_2.uuid)]
+        assert self._post(handle_bulk_characters, add_idx, str(fight.uuid), uuids) == {"res": "ok"}
+        assert set(WritingChoice.objects.filter(element_id=char_1.id).values_list("option_id", flat=True)) == {
+            fight.id,
+            magic.id,
+        }
+        assert WritingChoice.objects.filter(element_id=char_1.id, option=fight).count() == 1
+        assert list(WritingChoice.objects.filter(element_id=char_2.id).values_list("option_id", flat=True)) == [
+            fight.id
+        ]
+
+        assert self._post(handle_bulk_characters, del_idx, str(fight.uuid), uuids) == {"res": "ok"}
+        assert list(WritingChoice.objects.filter(element_id=char_1.id).values_list("option_id", flat=True)) == [
+            magic.id
+        ]
+        assert not WritingChoice.objects.filter(element_id=char_2.id).exists()
+
+        # Single choice operation is not allowed on a multiple choice question
+        res = self._post(
+            handle_bulk_characters,
+            f"{int(Operations.SET_CHAR_QUESTION)}_{question.uuid}",
+            str(fight.uuid),
+            uuids,
+        )
+        assert "error" in res
+
+    def test_registration_multiple_choice(self) -> None:
+        """Add and remove operations update one option of a multiple choice registration question."""
+        question = RegistrationQuestion.objects.create(event=self.event, typ=BaseQuestionType.MULTIPLE, name="Extras")
+        bag = RegistrationOption.objects.create(event=self.event, question=question, name="Bag")
+        tent = RegistrationOption.objects.create(
+            event=self.event, question=question, name="Tent", price=Decimal("15.00")
+        )
+        registration = self.create_registration(run=self.run)
+        RegistrationChoice.objects.create(registration=registration, question=question, option=bag)
+
+        request = self.factory.get("/")
+        request.user = self.get_user()
+        context = self._context()
+        handle_bulk_registrations(request, context)
+        add_idx = f"{int(Operations.ADD_REG_QUESTION)}_{question.uuid}"
+        del_idx = f"{int(Operations.DEL_REG_QUESTION)}_{question.uuid}"
+        assert [op["idx"] for op in context["bulk"]] == [Operations.SET_REG_TICKET, add_idx, del_idx]
+
+        assert self._post(handle_bulk_registrations, add_idx, str(tent.uuid), [str(registration.uuid)]) == {"res": "ok"}
+        choices = RegistrationChoice.objects.filter(registration=registration, question=question)
+        assert set(choices.values_list("option_id", flat=True)) == {bag.id, tent.id}
+
+        assert self._post(handle_bulk_registrations, del_idx, str(bag.uuid), [str(registration.uuid)]) == {"res": "ok"}
+        assert list(choices.values_list("option_id", flat=True)) == [tent.id]
+
+    def test_character_status(self) -> None:
+        """Set status is offered only with character approval, and saves each changed character."""
+        request = self.factory.get("/")
+        request.user = self.get_user()
+        status_idx = int(Operations.SET_CHAR_STATUS)
+        for value, expected in (("False", False), ("True", True)):
+            EventConfig.objects.update_or_create(
+                event=self.event, name="user_character_approval", defaults={"value": value}
+            )
+            cache.clear()
+            context = self._context()
+            handle_bulk_characters(request, context)
+            assert (status_idx in [op["idx"] for op in context["bulk"]]) == expected
+
+        char_1 = Character.objects.create(event=self.event, name="One", status=CharacterStatus.PROPOSED)
+        char_2 = Character.objects.create(event=self.event, name="Two", status=CharacterStatus.APPROVED)
+        uuids = [str(char_1.uuid), str(char_2.uuid)]
+        with patch("larpmanager.models.signals.send_character_status_update_email") as mock_email:
+            assert self._post(handle_bulk_characters, status_idx, CharacterStatus.APPROVED, uuids) == {"res": "ok"}
+        # Only the character actually changing status is saved
+        assert mock_email.call_count == 1
+        char_1.refresh_from_db()
+        assert char_1.status == CharacterStatus.APPROVED
+
+        assert self._post(handle_bulk_characters, status_idx, "invalid", uuids) == {"error": "not found"}

@@ -1508,6 +1508,9 @@ msgstr "Capaciteiten"
 msgid "Accepted:"
 msgstr "Geaccepteerd:"
 
+msgid "Add value"
+msgstr "Waarde toevoegen"
+
 msgid "Algorithm"
 msgstr "Algoritme"
 
@@ -2642,6 +2645,9 @@ msgstr "Relatie"
 
 msgid "Remove admin"
 msgstr "Beheerder verwijderen"
+
+msgid "Remove value"
+msgstr "Waarde verwijderen"
 
 msgid "Request for:"
 msgstr "Verzoek om:"
@@ -3957,6 +3963,10 @@ msgstr "Activering mislukt"
 msgid "Active collection"
 msgstr "Actieve inzameling"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Toevoegen aan '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Extra velden"
 
@@ -5247,6 +5257,10 @@ msgstr "Snelkoppeling registraties"
 
 msgid "Reimbursement Approved"
 msgstr "Vergoeding goedgekeurd"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Verwijderen uit '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

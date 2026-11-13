@@ -1508,6 +1508,9 @@ msgstr "Evner"
 msgid "Accepted:"
 msgstr "Godkendt:"
 
+msgid "Add value"
+msgstr "Tilføj værdi"
+
 msgid "Algorithm"
 msgstr "Algoritme"
 
@@ -2642,6 +2645,9 @@ msgstr "Relation"
 
 msgid "Remove admin"
 msgstr "Fjern admin"
+
+msgid "Remove value"
+msgstr "Fjern værdi"
 
 msgid "Request for:"
 msgstr "Anmodning for:"
@@ -3957,6 +3963,10 @@ msgstr "Aktivering mislykkedes"
 msgid "Active collection"
 msgstr "Aktiv indsamling"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Tilføj til '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Yderligere felter"
 
@@ -5247,6 +5257,10 @@ msgstr "Genvej til tilmeldinger"
 
 msgid "Reimbursement Approved"
 msgstr "Refusion godkendt"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Fjern fra '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

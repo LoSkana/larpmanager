@@ -1508,6 +1508,9 @@ msgstr "Capacités"
 msgid "Accepted:"
 msgstr "Accepté:"
 
+msgid "Add value"
+msgstr "Ajouter une valeur"
+
 msgid "Algorithm"
 msgstr "Algorithme"
 
@@ -2642,6 +2645,9 @@ msgstr "Lien"
 
 msgid "Remove admin"
 msgstr "Supprimer l'administrateur"
+
+msgid "Remove value"
+msgstr "Retirer une valeur"
 
 msgid "Request for:"
 msgstr "Demande de:"
@@ -3957,6 +3963,10 @@ msgstr "Échec de l'activation"
 msgid "Active collection"
 msgstr "Cagnotte active"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Ajouter à '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Champs supplémentaires"
 
@@ -5247,6 +5257,10 @@ msgstr "Raccourci inscriptions"
 
 msgid "Reimbursement Approved"
 msgstr "Remboursement approuvé"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Retirer de '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

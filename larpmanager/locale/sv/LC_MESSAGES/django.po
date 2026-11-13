@@ -1508,6 +1508,9 @@ msgstr "Förmågor"
 msgid "Accepted:"
 msgstr "Godkänd:"
 
+msgid "Add value"
+msgstr "Lägg till värde"
+
 msgid "Algorithm"
 msgstr "Algoritm"
 
@@ -2642,6 +2645,9 @@ msgstr "Relation"
 
 msgid "Remove admin"
 msgstr "Ta bort administratör"
+
+msgid "Remove value"
+msgstr "Ta bort värde"
 
 msgid "Request for:"
 msgstr "Begäran om:"
@@ -3957,6 +3963,10 @@ msgstr "Aktivering misslyckades"
 msgid "Active collection"
 msgstr "Aktiv insamling"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Lägg till i '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Ytterligare fält"
 
@@ -5247,6 +5257,10 @@ msgstr "Genväg till registreringar"
 
 msgid "Reimbursement Approved"
 msgstr "Ersättning godkänd"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Ta bort från '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

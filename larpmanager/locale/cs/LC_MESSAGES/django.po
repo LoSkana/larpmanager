@@ -1508,6 +1508,9 @@ msgstr "Schopnosti"
 msgid "Accepted:"
 msgstr "Přijato:"
 
+msgid "Add value"
+msgstr "Přidat hodnotu"
+
 msgid "Algorithm"
 msgstr "Algoritmus"
 
@@ -2642,6 +2645,9 @@ msgstr "Vztah"
 
 msgid "Remove admin"
 msgstr "Odstranit správce"
+
+msgid "Remove value"
+msgstr "Odebrat hodnotu"
 
 msgid "Request for:"
 msgstr "Žádost o:"
@@ -3957,6 +3963,10 @@ msgstr "Aktivace se nezdařila"
 msgid "Active collection"
 msgstr "Aktivní sbírka"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Přidat do '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Další pole"
 
@@ -5247,6 +5257,10 @@ msgstr "Zkratka pro registrace"
 
 msgid "Reimbursement Approved"
 msgstr "Proplacení schváleno"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Odebrat z '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

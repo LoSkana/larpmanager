@@ -1508,6 +1508,9 @@ msgstr "Taidot"
 msgid "Accepted:"
 msgstr "Hyväksytty:"
 
+msgid "Add value"
+msgstr "Lisää arvo"
+
 msgid "Algorithm"
 msgstr "Algoritmi"
 
@@ -2642,6 +2645,9 @@ msgstr "Suhde"
 
 msgid "Remove admin"
 msgstr "Poista järjestelmänvalvoja"
+
+msgid "Remove value"
+msgstr "Poista arvo"
 
 msgid "Request for:"
 msgstr "Pyyntö:"
@@ -3957,6 +3963,10 @@ msgstr "Aktivointi epäonnistui"
 msgid "Active collection"
 msgstr "Aktiivinen keräys"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Lisää kohteeseen '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Lisäkentät"
 
@@ -5247,6 +5257,10 @@ msgstr "Ilmoittautumispikakuvake"
 
 msgid "Reimbursement Approved"
 msgstr "Korvaus hyväksytty"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Poista kohteesta '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

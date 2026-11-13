@@ -1508,6 +1508,9 @@ msgstr "Evner"
 msgid "Accepted:"
 msgstr "Akseptert:"
 
+msgid "Add value"
+msgstr "Legg til verdi"
+
 msgid "Algorithm"
 msgstr "Algoritme"
 
@@ -2642,6 +2645,9 @@ msgstr "Relasjon"
 
 msgid "Remove admin"
 msgstr "Fjern administrator"
+
+msgid "Remove value"
+msgstr "Fjern verdi"
 
 msgid "Request for:"
 msgstr "Forespørsel om:"
@@ -3957,6 +3963,10 @@ msgstr "Aktivering mislyktes"
 msgid "Active collection"
 msgstr "Aktiv innsamling"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Legg til i '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Ytterligere felt"
 
@@ -5247,6 +5257,10 @@ msgstr "Snarvei til registreringer"
 
 msgid "Reimbursement Approved"
 msgstr "Godkjent refusjon"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Fjern fra '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"

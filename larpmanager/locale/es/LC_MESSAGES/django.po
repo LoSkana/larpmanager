@@ -1508,6 +1508,9 @@ msgstr "Habilidades"
 msgid "Accepted:"
 msgstr "Aceptado:"
 
+msgid "Add value"
+msgstr "Añadir valor"
+
 msgid "Algorithm"
 msgstr "Algoritmo"
 
@@ -2642,6 +2645,9 @@ msgstr "Relación"
 
 msgid "Remove admin"
 msgstr "Eliminar al administrador"
+
+msgid "Remove value"
+msgstr "Quitar valor"
 
 msgid "Request for:"
 msgstr "Solicitud de:"
@@ -3957,6 +3963,10 @@ msgstr "Error en la activación"
 msgid "Active collection"
 msgstr "Colecta activa"
 
+#, python-format
+msgid "Add to '%(name)s'"
+msgstr "Añadir a '%(name)s'"
+
 msgid "Additional fields"
 msgstr "Campos adicionales"
 
@@ -5247,6 +5257,10 @@ msgstr "Acceso directo a las inscripciones"
 
 msgid "Reimbursement Approved"
 msgstr "Reembolso aprobado"
+
+#, python-format
+msgid "Remove from '%(name)s'"
+msgstr "Quitar de '%(name)s'"
 
 #, python-format
 msgid "Role approval %(role)s"
