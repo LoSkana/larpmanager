@@ -788,6 +788,7 @@ form .plot {
 .new_v20 .form_container table .feature_checkbox input[type="checkbox"] {
   margin: 0 !important;
   flex-shrink: 0;
+  z-index: auto;
 }
 
 .feature_checkbox label {
