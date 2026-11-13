@@ -22,7 +22,7 @@
 
 import pytest
 
-from larpmanager.models.form import WritingQuestion, WritingQuestionType
+from larpmanager.models.form import RegistrationQuestion, RegistrationQuestionType, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.io.upload import element_load
@@ -190,3 +190,32 @@ class TestUploadFunctions(BaseTestCase):
             WritingQuestion.objects.filter(event=event, typ=WritingQuestionType.COMPUTED).values_list("name", flat=True)
         )
         self.assertEqual(names, {"Hit Points", "Mana"})
+
+    def test_questions_load_matches_reserved_registration_types(self) -> None:
+        """Test that reserved registration types are matched by type, not duplicated under another name."""
+        event = self.create_event(name="Reserved Event", slug="reserved")
+        context = {"event": event}
+
+        row = {"name": "Biglietto", "typ": "ticket", "status": "optional"}
+        result = _questions_load(context, row, is_registration=True)
+        self.assertIn("Updated", result)
+
+        tickets = RegistrationQuestion.objects.filter(event=event, typ=RegistrationQuestionType.TICKET)
+        self.assertEqual(tickets.count(), 1)
+        self.assertEqual(tickets.first().name, "Biglietto")
+
+        row = {"name": "Donation", "typ": "pay_what_you_want", "status": "optional"}
+        self.assertIn("Created", _questions_load(context, row, is_registration=True))
+        row = {"name": "Free donation", "typ": "pay_what_you_want", "status": "optional"}
+        self.assertIn("Updated", _questions_load(context, row, is_registration=True))
+        self.assertEqual(RegistrationQuestion.objects.filter(event=event, typ=RegistrationQuestionType.PWYW).count(), 1)
+
+    def test_questions_load_rejects_unknown_registration_type(self) -> None:
+        """Test that an unknown type is rejected without leaving a stray question behind."""
+        event = self.create_event(name="Unknown Type Event", slug="unknowntype")
+        context = {"event": event}
+
+        row = {"name": "Strange", "typ": "not-a-type", "status": "optional"}
+        result = _questions_load(context, row, is_registration=True)
+        self.assertIn("ERR", result)
+        self.assertFalse(RegistrationQuestion.objects.filter(event=event, name="Strange").exists())

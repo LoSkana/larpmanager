@@ -29,6 +29,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
     RegistrationQuestionApplicable,
+    RegistrationQuestionType,
     WritingOption,
     WritingQuestion,
     WritingQuestionType,
@@ -44,6 +45,7 @@ from larpmanager.utils.io.upload.features import (
 )
 from larpmanager.utils.io.upload.parsing import (
     _get_row_name,
+    _is_missing,
     _skip_row_field,
     _to_decimal,
     _to_int,
@@ -133,21 +135,54 @@ def form_load(
 
 
 def _get_or_create_registration_question(
-    context: dict, question_name: str, applicable: str = RegistrationQuestionApplicable.REGISTRATION
-) -> tuple[RegistrationQuestion, bool]:
+    context: dict,
+    question_name: str,
+    row_data: dict,
+    field_mappings: dict,
+    applicable: str = RegistrationQuestionApplicable.REGISTRATION,
+) -> tuple[RegistrationQuestion, bool] | str:
     """Get or create a registration question instance.
+
+    Reserved system types (ticket, pay what you want, ...) are unique per form, so they
+    are matched by type before falling back to the name lookup.
 
     Args:
         context: Context dictionary containing event information
         question_name: Name of the question to create or retrieve
+        row_data: Row data containing the optional typ field
+        field_mappings: Field validation mappings
         applicable: Which form the question belongs to (RegistrationQuestionApplicable);
             scopes both the lookup and the value set on creation, so uploading to one
             form never matches or edits a same-named question of the other form
 
     Returns:
-        Tuple of (question_instance, was_created)
+        Tuple of (question_instance, was_created) or error string
 
     """
+    raw_typ = "" if _is_missing(row_data.get("typ")) else str(row_data["typ"]).lower().strip()
+    typ_value = field_mappings["typ"].get(raw_typ, "")
+    if raw_typ and not typ_value:
+        return f"ERR - unknow value {row_data['typ']} for field typ"
+
+    multi_instance_types = BaseQuestionType.get_basic_types() | {
+        RegistrationQuestionType.LIKERT,
+        RegistrationQuestionType.RANKING,
+    }
+    if typ_value and typ_value not in multi_instance_types:
+        if typ_value == RegistrationQuestionType.FACTION_PREFERENCE:
+            if applicable != RegistrationQuestionApplicable.MATCHMAKER:
+                return "ERR - faction preference applicable only to matchmaker form"
+        elif applicable != RegistrationQuestionApplicable.REGISTRATION:
+            return f"ERR - type {raw_typ} applicable only to registration form"
+
+        matching_by_type = RegistrationQuestion.objects.filter(
+            event=context["event"],
+            typ=typ_value,
+            applicable=applicable,
+        )
+        if matching_by_type.exists():
+            return matching_by_type.first(), False
+
     matching_questions = RegistrationQuestion.objects.filter(
         event=context["event"],
         name__iexact=question_name,
@@ -301,12 +336,12 @@ def _questions_load(
 
     # Get or create the question instance
     if is_registration:
-        question_instance, was_created = _get_or_create_registration_question(context, question_name, applicable)
+        result = _get_or_create_registration_question(context, question_name, row_data, field_mappings, applicable)
     else:
         result = _get_or_create_writing_question(context, question_name, row_data, field_mappings)
-        if isinstance(result, str):
-            return result
-        question_instance, was_created = result
+    if isinstance(result, str):
+        return result
+    question_instance, was_created = result
 
     # Keep name in sync with the csv, even for questions matched by type
     question_instance.name = question_name
@@ -337,8 +372,8 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     """Generate mappings for question field types and attributes.
 
     Args:
-        is_registration: When False (character form), includes additional
-                        WritingQuestionType values in the type mapping.
+        is_registration: Selects RegistrationQuestionType (True) or WritingQuestionType
+            (False) values to add to the type mapping.
 
     Returns:
         Dictionary containing inverted mappings for question types, status,
@@ -353,16 +388,12 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
         "visibility": invert_dict(QuestionVisibility.get_mapping()),
     }
 
-    # Add writing-specific question types if needed (character form upload)
-    if not is_registration:
-        # update typ with WritingQuestionType values not covered by BaseQuestionType mapping
-        question_type_mapping = mappings["typ"]
-
-        # Iterate through writing question type choices
-        for question_type_key, _label in WritingQuestionType.choices:
-            # Add missing keys to maintain consistency
-            if question_type_key not in question_type_mapping:
-                question_type_mapping[question_type_key] = question_type_key
+    # Add the form-specific question types not covered by BaseQuestionType mapping
+    question_type_choices = RegistrationQuestionType.choices if is_registration else WritingQuestionType.choices
+    question_type_mapping = mappings["typ"]
+    for question_type_key, _label in question_type_choices:
+        if question_type_key not in question_type_mapping:
+            question_type_mapping[question_type_key] = question_type_key
 
     return mappings
 
