@@ -291,6 +291,34 @@ def _registration_column_names(context: dict) -> None:
     context["columns"] = [columns]
 
 
+def _get_character_writing_names(context: dict) -> None:
+    """Add character-specific upload fields and extra columns to the context."""
+    context["fields"]["player"] = "skip"
+    context["fields"]["email"] = "skip"
+
+    # Add status field if approval feature is enabled
+    if get_event_config(context["event"].id, "user_character_approval"):
+        context["fields"]["status"] = "character_status"
+
+    # Add assigned field if assigned feature is enabled
+    if "assigned" in context["features"]:
+        context["fields"]["assigned"] = "character_assigned"
+
+    # Abilities are exported for reference only, ignored on upload
+    if "experience" in context["features"]:
+        context["fields"]["abilities"] = "skip"
+
+    # Add relationship columns if feature is enabled
+    if "relationships" in context["features"]:
+        context["columns"].append(
+            {
+                "source": _("First character in the relationship (origin)"),
+                "target": _("Second character in the relationship (destination)"),
+                "text": _("Description of the relationship from source to target"),
+            },
+        )
+
+
 def _get_writing_names(context: dict) -> None:
     """Get writing field names and types for download context.
 
@@ -328,26 +356,7 @@ def _get_writing_names(context: dict) -> None:
 
     # Configure character-specific fields and columns
     if context["writing_typ"] == QuestionApplicable.CHARACTER:
-        context["fields"]["player"] = "skip"
-        context["fields"]["email"] = "skip"
-
-        # Add status field if approval feature is enabled
-        if get_event_config(context["event"].id, "user_character_approval"):
-            context["fields"]["status"] = "character_status"
-
-        # Add assigned field if assigned feature is enabled
-        if "assigned" in context["features"]:
-            context["fields"]["assigned"] = "character_assigned"
-
-        # Add relationship columns if feature is enabled
-        if "relationships" in context["features"]:
-            context["columns"].append(
-                {
-                    "source": _("First character in the relationship (origin)"),
-                    "target": _("Second character in the relationship (destination)"),
-                    "text": _("Description of the relationship from source to target"),
-                },
-            )
+        _get_character_writing_names(context)
 
     # Configure plot-specific columns
     elif context["writing_typ"] == QuestionApplicable.PLOT:
