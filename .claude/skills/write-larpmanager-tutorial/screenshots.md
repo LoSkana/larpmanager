@@ -7,8 +7,10 @@ Crop = the part of the page to keep (see **Screenshots** in `SKILL.md` for gener
 
 Status (2026-09-26): all tutorials are captured by the Playwright scripts in `playwright/` (see **Taking them** in
 `SKILL.md`). Output goes to `tutorial_screenshots/<order>_<slug>_<nn>.png`, where `<nn>` is the image number below,
-plus `<order>_<slug>.json` with CSS width/height and alt text for each image. The tutorial HTML references them as
-`/media/tutorial_screenshots/<file>` (manage-events #2 reuses `170_characters_03.png`).
+plus `<order>_<slug>.json` with CSS width/height and alt text for each image. They are converted to WebP into
+`larpmanager/static/tutorials/` and the tutorial HTML references them as `/static/tutorials/<file>.webp`
+(manage-events #2 reuses `170_characters_03.webp`). Images uploaded by hand are named by their position with an `x`
+suffix when the number was already used (e.g. `110_registration-form_06x.webp`).
 
 Images not recaptured, and why (the tutorial HTML is already updated: dropped images are removed and the sentence
 before them names the field instead):
@@ -235,6 +237,7 @@ editor screenshots (hover popup, character finder, highlighted reference; former
 | 8 | Character form (Assigned on) | Assigned select |
 | 9 | Character form (Progress on) | Progress select |
 | 10 | `event/manage/characters/` | Toolbar: New, Progress, Assignments, Progress - Assignments |
+| 11 | Field form, single choice (Maximum available on) | Option editor with the Maximum column filled |
 
 ## 200 character-creation
 
@@ -267,11 +270,12 @@ editor screenshots (hover popup, character finder, highlighted reference; former
 | 4 | `event/manage/config/experience/` | Experience points section |
 | 5 | Player, character sidebar | "Abilities" entry |
 | 6 | Player, abilities page | Obtain ability picker + XP counters |
-| 7 | Player, abilities page | Owned abilities with remove (undo) control |
+| 7 | Player, abilities page | Owned abilities with remove (undo) control (file `205_xp_07b`) |
 | 8 | Ability form | Visible checkbox |
 | 9 | `event/manage/writing/form/` > New | Type select open on "Computed" |
 | 10 | `event/manage/experience/rules/` > New | Rule form |
 | 11 | `event/manage/experience/modifiers/` > New | Modifier form |
+| 12 | Player, abilities page (Exclusive groups on) | Ability cards with creation only and exclusive group notes |
 
 ## 210 factions
 

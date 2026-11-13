@@ -1,18 +1,17 @@
 """Check a tutorials JSON export against the writing rules in SKILL.md.
 
-Usage: .venv/bin/python .claude/skills/write-larpmanager-tutorial/check_tutorials.py [export.json] [--slug SLUG]
+Usage: .venv/bin/python .claude/skills/write-larpmanager-tutorial/check_tutorials.py [tutorial.yaml] [--slug SLUG]
 
 Reports, per tutorial:
 - bold labels not found among the English UI strings (label drift);
 - redirect links whose URL does not resolve, or without the "Event >" / "Organization >" scope;
 - links to other tutorials or sections that do not exist;
-- images without alt text or size, and old-style screenshots outside /media/tutorial_screenshots/;
+- images without alt text or size, outside /static/tutorials/ or whose file is missing;
 - banned wording ("the system", "X panel", typos seen before) and editor leftovers.
 """
 
 import argparse
 import html
-import json
 import os
 import re
 import sys
@@ -20,6 +19,7 @@ import unicodedata
 from pathlib import Path
 
 import django
+import yaml
 from django.apps import apps
 from django.urls import Resolver404, resolve
 
@@ -55,13 +55,6 @@ ACCEPTED_LABELS = {
 }
 
 # Screenshots kept from the previous set on purpose (see screenshots.md)
-ACCEPTED_OLD_SCREENSHOTS = {
-    "20260819112015_232dde853e514ce7b74ec23385d73ff4", "20260915140908_71a29ba58dbc470b847fb34fc",
-    "20260915141140_76757d84a0cb4233833e69189", "20260915155308_69a6126f7d3147cd96c5dcd45",
-    "20260915141502_fb87da03918a48dcb1ba8faa3", "20260401112817_7353d0e8456a473180f424f68",
-    "20260401113010_8844731d33db45fb88d9eb4c5",
-}
-
 # Tutorials quoted from external authors: wording rules are not applied
 QUOTED_TUTORIALS = {"ensemble"}
 
@@ -158,8 +151,11 @@ def check(tutorials: list[dict], only: str | None) -> int:
                 issues.append(f"image without alt: {img[:80]}")
             if "width=" not in img or "height=" not in img:
                 issues.append(f"image without size: {img[:80]}")
-            if "/media/tutorial_screenshots/" not in img and not any(k in img for k in ACCEPTED_OLD_SCREENSHOTS):
-                issues.append(f"old screenshot: {img[:80]}")
+            src = re.search(r'src="([^"]*)"', img)
+            if not src or not src.group(1).startswith("/static/tutorials/"):
+                issues.append(f"image outside /static/tutorials/: {img[:80]}")
+            elif not (ROOT / "larpmanager" / src.group(1).lstrip("/")).exists():
+                issues.append(f"image file missing: {src.group(1)}")
         if "[SCREENSHOT" in descr:
             issues.append("screenshot placeholder left")
 
@@ -207,10 +203,10 @@ PROPER_NOUNS = {
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("export", nargs="?", default=str(Path(__file__).resolve().parent / "LarpManagerTutorial-2026-09-26.json"))
+    parser.add_argument("fixture", nargs="?", default=str(ROOT / "larpmanager" / "fixtures" / "tutorial.yaml"))
     parser.add_argument("--slug")
     args = parser.parse_args()
-    tutorials = json.loads(Path(args.export).read_text(encoding="utf-8"))
+    tutorials = [entry["fields"] for entry in yaml.safe_load(Path(args.fixture).read_text(encoding="utf-8"))]
     check(tutorials, args.slug)
 
 

@@ -2,6 +2,10 @@
 
 echo "Git pull main repository..."
 git pull
+git lfs pull
+
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$DIR/check_lfs.sh" || exit 1
 
 pip install .
 python manage.py compilemessages
@@ -15,7 +19,6 @@ python manage.py reset_cache
 echo "Stop tasks..."
 pkill -f process_tasks
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$DIR/entrypoint.sh"
 
 echo "Graceful restart..."

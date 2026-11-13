@@ -37,6 +37,14 @@ Refer to the `LICENSE` file for full terms.
 
 ## Quick start (Docker)
 
+Tutorial screenshots and test fixtures are stored with [Git LFS](https://git-lfs.com/): install it and download them in your clone before starting (the container refuses to start if they are missing):
+
+```
+sudo apt install git-lfs
+git lfs install
+git lfs pull
+```
+
 If you want an easy and fast deploy, set the environment variables see below for [instructions](#environment) on their values:
 
 ```
@@ -187,6 +195,8 @@ sudo systemctl enable docker
 Portainer must already be installed and running. If not, follow the
 [official install guide](https://docs.portainer.io/start/install-ce/server/docker/linux).
 
+The repository uses Git LFS for tutorial screenshots: use a local clone where you ran `git lfs install && git lfs pull`.
+
 ### Deploy the stack
 
 1. In Portainer, go to **Stacks -> Add stack**
@@ -304,7 +314,7 @@ Install Python dependencies:
 uv pip install -r pyproject.toml
 ```
 
-Install and activate LFS to handle big files:
+Install and activate LFS to handle big files (test fixtures and tutorial screenshots):
    ```bash
    sudo apt install git-lfs
    git lfs install
