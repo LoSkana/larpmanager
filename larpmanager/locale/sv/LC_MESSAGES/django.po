@@ -1712,6 +1712,9 @@ msgstr "Bostad"
 msgid "Set quest"
 msgstr "Ställ in Quest"
 
+msgid "Set value"
+msgstr "Ange värde"
+
 msgid "Short url"
 msgstr "Kort url"
 
@@ -2071,6 +2074,9 @@ msgstr "Markera som lastad"
 
 msgid "Set locked"
 msgstr "Lås"
+
+msgid "Set ticket"
+msgstr "Ange biljett"
 
 msgid "Short name"
 msgstr "Kort namn"
@@ -3266,6 +3272,10 @@ msgstr "Känsliga uppgifter"
 
 msgid "Session active"
 msgstr "Session aktiv"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Ange '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Ange Quest-typ"

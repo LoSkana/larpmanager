@@ -1712,6 +1712,9 @@ msgstr "Asuinpaikka"
 msgid "Set quest"
 msgstr "Aseta Quest"
 
+msgid "Set value"
+msgstr "Aseta arvo"
+
 msgid "Short url"
 msgstr "Lyhyt url"
 
@@ -2071,6 +2074,9 @@ msgstr "Merkitse lastatuksi"
 
 msgid "Set locked"
 msgstr "Aseta lukituksi"
+
+msgid "Set ticket"
+msgstr "Aseta lippu"
 
 msgid "Short name"
 msgstr "Lyhyt nimi"
@@ -3266,6 +3272,10 @@ msgstr "Arkaluonteiset tiedot"
 
 msgid "Session active"
 msgstr "Istunto aktiivinen"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Aseta '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Aseta Questin tyyppi"

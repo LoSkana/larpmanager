@@ -1712,6 +1712,9 @@ msgstr "Residenza"
 msgid "Set quest"
 msgstr "Imposta Quest"
 
+msgid "Set value"
+msgstr "Imposta valore"
+
 msgid "Short url"
 msgstr "URL corto"
 
@@ -2071,6 +2074,9 @@ msgstr "Segna come caricato"
 
 msgid "Set locked"
 msgstr "Imposta come bloccato"
+
+msgid "Set ticket"
+msgstr "Imposta biglietto"
 
 msgid "Short name"
 msgstr "Nome breve"
@@ -3266,6 +3272,10 @@ msgstr "Dati sensibili"
 
 msgid "Session active"
 msgstr "Sessione attiva"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Imposta '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Imposta il tipo di Quest"

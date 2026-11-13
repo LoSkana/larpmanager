@@ -1712,6 +1712,9 @@ msgstr "Bopæl"
 msgid "Set quest"
 msgstr "Angiv quest"
 
+msgid "Set value"
+msgstr "Angiv værdi"
+
 msgid "Short url"
 msgstr "Kort URL"
 
@@ -2071,6 +2074,9 @@ msgstr "Markér som læsset"
 
 msgid "Set locked"
 msgstr "Sæt som låst"
+
+msgid "Set ticket"
+msgstr "Angiv billet"
 
 msgid "Short name"
 msgstr "Kort navn"
@@ -3266,6 +3272,10 @@ msgstr "Følsomme data"
 
 msgid "Session active"
 msgstr "Session aktiv"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Angiv '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Angiv questtype"

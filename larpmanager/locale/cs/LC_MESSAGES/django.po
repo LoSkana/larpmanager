@@ -1712,6 +1712,9 @@ msgstr "Rezidence"
 msgid "Set quest"
 msgstr "Nastavit Quest"
 
+msgid "Set value"
+msgstr "Nastavit hodnotu"
+
 msgid "Short url"
 msgstr "Krátká url adresa"
 
@@ -2071,6 +2074,9 @@ msgstr "Označit jako naložené"
 
 msgid "Set locked"
 msgstr "Nastavit jako zamčené"
+
+msgid "Set ticket"
+msgstr "Nastavit vstupenku"
 
 msgid "Short name"
 msgstr "Krátký název"
@@ -3266,6 +3272,10 @@ msgstr "Citlivé údaje"
 
 msgid "Session active"
 msgstr "Relace aktivní"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Nastavit '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Nastavit typ Questu"

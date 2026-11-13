@@ -1712,6 +1712,9 @@ msgstr "Woonplaats"
 msgid "Set quest"
 msgstr "Quest instellen"
 
+msgid "Set value"
+msgstr "Waarde instellen"
+
 msgid "Short url"
 msgstr "Korte url"
 
@@ -2071,6 +2074,9 @@ msgstr "Markeren als geladen"
 
 msgid "Set locked"
 msgstr "Vergrendeld instellen"
+
+msgid "Set ticket"
+msgstr "Ticket instellen"
 
 msgid "Short name"
 msgstr "Korte naam"
@@ -3266,6 +3272,10 @@ msgstr "Gevoelige gegevens"
 
 msgid "Session active"
 msgstr "Sessie actief"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "'%(name)s' instellen"
 
 msgid "Set quest type"
 msgstr "Questtype instellen"

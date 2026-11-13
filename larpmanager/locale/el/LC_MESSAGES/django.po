@@ -1712,6 +1712,9 @@ msgstr "Τόπος διαμονής"
 msgid "Set quest"
 msgstr "Ορισμός Quest"
 
+msgid "Set value"
+msgstr "Ορισμός τιμής"
+
 msgid "Short url"
 msgstr "Σύντομο URL"
 
@@ -2071,6 +2074,9 @@ msgstr "Ορισμός ως φορτωμένο"
 
 msgid "Set locked"
 msgstr "Ορισμός ως κλειδωμένο"
+
+msgid "Set ticket"
+msgstr "Ορισμός εισιτηρίου"
 
 msgid "Short name"
 msgstr "Σύντομο όνομα"
@@ -3266,6 +3272,10 @@ msgstr "Ευαίσθητα δεδομένα"
 
 msgid "Session active"
 msgstr "Η συνεδρία είναι ενεργή"
+
+#, python-format
+msgid "Set '%(name)s'"
+msgstr "Ορισμός '%(name)s'"
 
 msgid "Set quest type"
 msgstr "Ορισμός τύπου Quest"
