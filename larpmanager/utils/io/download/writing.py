@@ -22,12 +22,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from bs4 import BeautifulSoup
+from django.db.models import Prefetch
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
+from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationAnswer,
@@ -389,7 +391,7 @@ def _row_header_registration(
 def _row_header_character(
     context: dict, el: object, member: object | None, header_columns: list, row_values: list
 ) -> None:
-    """Append number, player, status, and assigned columns based on enabled features and configs."""
+    """Append number, player, status, assigned, and abilities columns based on enabled features and configs."""
     features = context.get("features", {})
 
     if get_event_config(context["event"].id, "writing_number"):
@@ -407,6 +409,10 @@ def _row_header_character(
     if "assigned" in features:
         header_columns.append("assigned")
         row_values.append(el.assigned.user.email if el.assigned else "")
+
+    if "experience" in features:
+        header_columns.append("abilities")
+        row_values.append(", ".join(ability.name for ability in el.exp_ability_list.all()))
 
 
 def _expand_val(values: list, element: object, field_name: str) -> None:
@@ -628,6 +634,10 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
     # Optimize character queries by prefetching factions and selecting player data
     if model_name == "character":
         queryset = queryset.prefetch_related("factions_list").select_related("player", "assigned")
+        if "experience" in context["features"]:
+            queryset = queryset.prefetch_related(
+                Prefetch("exp_ability_list", queryset=AbilityExp.objects.order_by("typ__order", "order", "name"))
+            )
 
     # Handle registration-specific filtering and data enrichment
     if model_name == "registration":
