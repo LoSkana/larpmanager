@@ -31,6 +31,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -54,7 +55,7 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.utils import get_sum
-from larpmanager.utils.core.common import get_display_choice
+from larpmanager.utils.core.common import get_display_choice, local_day_start
 
 logger = logging.getLogger(__name__)
 
@@ -337,7 +338,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
         details["exp"] = get_accounting_detail(
             _("Expenses"),
             run,
-            _("Total of expenses submitted by collaborators and approved"),
+            _("Total of expenses submitted by collaborators"),
             AccountingItemExpense,
             ExpenseChoices.choices,
             "exp",
@@ -422,6 +423,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
             AccountingItemDiscount,
             None,
             None,
+            filter_by_registration=True,
         )
 
     # Process registrations: get theoretical total based on selected ticket tiers
@@ -441,14 +443,29 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     # Balance = net profit or loss
     if summary["revenue"] and summary["costs"]:
         summary["balance"] = summary["revenue"] - summary["costs"]
+    _store_run_balance(run, summary["revenue"] - summary["costs"])
 
     # Apply organization tax if enabled
     summary["tax"] = 0
     if "organization_tax" in features:
-        tax_percentage = int(get_association_config(run.event.association_id, "organization_tax_perc"))
+        tax_percentage = int(get_association_config(get_run_association_id(run.id), "organization_tax_perc"))
         summary["tax"] = summary["revenue"] * tax_percentage / 100
 
     return summary, details
+
+
+def _store_run_balance(run: Run, balance: Decimal) -> None:
+    """Persist the run balance, used by the organization global balance once the run is concluded."""
+    if run.balance == balance:
+        return
+    run.balance = balance
+    Run.objects.filter(pk=run.pk).update(balance=balance)
+
+
+def refresh_concluded_run_balance(run: Run) -> None:
+    """Recompute the stored balance of a run when it is concluded."""
+    if run.development == DevelopStatus.DONE:
+        get_run_accounting(run, {})
 
 
 def check_accounting(association_id: int) -> None:
@@ -492,7 +509,7 @@ def check_run_accounting(run: Run) -> None:
 
     # Create audit record with calculated balance (bank_sum set to 0 as default)
     RecordAccounting.objects.create(
-        association=run.event.association, run=run, global_sum=summary.get("balance", 0), bank_sum=0
+        association_id=get_run_association_id(run.id), run=run, global_sum=summary.get("balance", 0), bank_sum=0
     )
 
 
@@ -526,11 +543,13 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
     # Determine the date range for filtering accounting records
     if year:
         start_date = date(year, 1, 1)
-        end_date = date(year, 12, 31)
+        end_date = date(year + 1, 1, 1)
     else:
         # Use a very wide range to capture all records
         start_date = date(1990, 1, 1)
         end_date = date(2990, 1, 1)
+    start_datetime = local_day_start(start_date)
+    end_datetime = local_day_start(end_date)
 
     # Calculate executive-level outflows (not associated with any specific run)
     context["outflow_exec_sum"] = get_sum(
@@ -538,7 +557,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             run=None,
             association_id=context["association_id"],
             payment_date__gte=start_date,
-            payment_date__lte=end_date,
+            payment_date__lt=end_date,
         ),
     )
     # Calculate executive-level inflows (not associated with any specific run)
@@ -547,7 +566,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
             run=None,
             association_id=context["association_id"],
             payment_date__gte=start_date,
-            payment_date__lte=end_date,
+            payment_date__lt=end_date,
         ),
     )
 
@@ -555,24 +574,24 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
     context["membership_sum"] = get_sum(
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
     # Calculate donations received
     context["donations_sum"] = get_sum(
         AccountingItemDonation.objects.filter(
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
     # Calculate collections (gifts/prepaid credits) received
     context["collections_sum"] = get_sum(
         AccountingItemCollection.objects.filter(
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -581,7 +600,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         AccountingItemInflow.objects.filter(
             association_id=context["association_id"],
             payment_date__gte=start_date,
-            payment_date__lte=end_date,
+            payment_date__lt=end_date,
         ),
     )
     # Calculate all outflows for the association
@@ -589,7 +608,7 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         AccountingItemOutflow.objects.filter(
             association_id=context["association_id"],
             payment_date__gte=start_date,
-            payment_date__lte=end_date,
+            payment_date__lt=end_date,
         ),
     )
 
@@ -598,16 +617,16 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         AccountingItemPayment.objects.filter(
             pay=PaymentChoices.MONEY,
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
     # Calculate transaction fees charged by payment processors
     context["transactions_sum"] = get_sum(
         AccountingItemTransaction.objects.filter(
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
     # Calculate total refunds issued
@@ -615,8 +634,8 @@ def association_accounting_data(context: dict, year: int | None = None) -> None:
         AccountingItemOther.objects.filter(
             oth=OtherChoices.REFUND,
             association_id=context["association_id"],
-            created__gte=start_date,
-            created__lte=end_date,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -659,8 +678,8 @@ def association_accounting(context: dict) -> None:
 
     # Build year range dictionary from current year to association creation
     association = Association.objects.only("created").get(pk=context["association_id"])
-    start_year = int(association.created.year)
-    end_year = int(timezone.now().date().year)
+    start_year = int(timezone.localtime(association.created).year)
+    end_year = int(timezone.localdate().year)
     context["sum_year"] = {}
     while end_year >= start_year:
         context["sum_year"][end_year] = 1
@@ -670,7 +689,9 @@ def association_accounting(context: dict) -> None:
 def association_accounting_summary(context: dict) -> dict:
     """Computes association global financial position."""
     # Initialize member balance tracking
-    context.update({"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0})
+    context.update(
+        {"list": [], "tokens_sum": 0, "credits_sum": 0, "balance_sum": 0, "tokens_count": 0, "credits_count": 0}
+    )
 
     # Gather all members with non-zero tokens or credits
     for membership in (
@@ -688,6 +709,8 @@ def association_accounting_summary(context: dict) -> dict:
         # Accumulate total tokens and credits outstanding
         context["tokens_sum"] += membership.tokens
         context["credits_sum"] += membership.credit
+        context["tokens_count"] += 1 if membership.tokens else 0
+        context["credits_count"] += 1 if membership.credit else 0
 
     # Fetch all non-draft, non-cancelled runs for the association
     context["runs"] = (

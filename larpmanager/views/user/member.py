@@ -42,6 +42,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
+from django.db.models import Prefetch
 from django.http import (
     Http404,
     HttpRequest,
@@ -61,6 +62,7 @@ from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.character import update_member_event_character_cache
 from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.forms.member import (
     AvatarForm,
@@ -92,9 +94,18 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import CharacterConfig
-from larpmanager.utils.core.base import get_context
+from larpmanager.utils.auth.sso import safe_local_url
+from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import get_badge, get_channel, get_contact, welcome_user
 from larpmanager.utils.core.exceptions import check_association_feature
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -108,6 +119,11 @@ logger = logging.getLogger(__name__)
 
 # Lifetime of the signed unsubscribe token published in the List-Unsubscribe header
 UNSUBSCRIBE_TOKEN_MAX_AGE = 86400 * 100
+
+PROFILE_STALE_MESSAGE = _(
+    "Your profile was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
 
 
 def language(request: HttpRequest) -> HttpResponse:
@@ -174,6 +190,8 @@ def language(request: HttpRequest) -> HttpResponse:
 
 def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member: Member) -> HttpResponseRedirect:
     """Perform profile save and checks for after-save redirects."""
+    clear_draft(member, draft_element_key(context, "profile", member))
+
     profile = form.save()
     save_log(context, Member, profile, profile.uuid)
 
@@ -220,6 +238,11 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
     return redirect("home")
 
 
+def _profile_ajax(request: HttpRequest, context: dict, member: Member) -> JsonResponse:
+    """Stash the profile form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "profile", member)
+
+
 @login_required
 def profile(request: HttpRequest) -> Any:
     """Display and manage user profile information.
@@ -235,10 +258,22 @@ def profile(request: HttpRequest) -> Any:
     member = context["member"]
     members_fields = context["members_fields"]
 
+    context["auto_save"] = 1
+    init_auto_save(context, member)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _profile_ajax(request, context, member)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(member, draft_element_key(context, "profile", member), member.updated)
+
     # Handle POST request (form submission)
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=member, context=context)
-        if form.is_valid():
+        if is_stale(context, request, member):
+            messages.error(request, PROFILE_STALE_MESSAGE)
+        elif form.is_valid():
             return _save_profile(request, context, form, member)
 
     # Handle GET request (display form)
@@ -340,19 +375,33 @@ def profile_upload(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"res": "ko"})
 
     img = form.cleaned_data["image"]
+    if not img:
+        return JsonResponse({"res": "ko"})
 
     try:
         img_data = normalize_profile_image(img.read())
     except (OSError, UnidentifiedImageError, ValueError):
-        logger.exception("Failed to normalize profile image")
-        return JsonResponse({"res": "ko"})
+        logger.exception("Failed to normalize profile image for member %s", request.user.member.pk)
+        return JsonResponse(
+            {
+                "res": "ko",
+                "error": str(_("The image file appears to be corrupted or invalid. Please try a different photo.")),
+            },
+        )
 
     n_path = f"member/{request.user.member.pk}_{uuid4().hex}.jpg"
 
     path = default_storage.save(n_path, ContentFile(img_data))
     request.user.member.profile = path
     request.user.member.save()
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    update_member_event_character_cache(request.user.member)
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required
@@ -396,9 +445,16 @@ def profile_rotate(request: HttpRequest, rotation_angle: int) -> JsonResponse:
         logger.exception("Failed to rotate profile image")
         return JsonResponse({"res": "ko"})
     request.user.member.save()
+    update_member_event_character_cache(request.user.member)
 
     # Return success response with thumbnail URL
-    return JsonResponse({"res": "ok", "src": request.user.member.profile_thumb.url})
+    return JsonResponse(
+        {
+            "res": "ok",
+            "src": request.user.member.profile_thumb.url,
+            "base_updated": f"{request.user.member.updated.timestamp():.6f}",
+        },
+    )
 
 
 @login_required
@@ -559,7 +615,7 @@ def membership(request: HttpRequest) -> HttpResponse:
     # Check if membership fee has been paid for current year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=timezone.now().year,
+        year=timezone.localdate().year,
         member_id=context["member"].id,
     ).exists()
 
@@ -587,8 +643,30 @@ def membership_request_test(request: HttpRequest) -> HttpResponse:
     return render(request, "pdf/membership/request.html", context)
 
 
+def _get_public_larp_history(member: Member, association_id: int) -> list[Registration]:
+    """Return member's active registrations in the association, each with its characters (uuid -> name)."""
+    registrations = list(
+        Registration.objects.filter(
+            cancellation_date__isnull=True,
+            member=member,
+            run__event__association_id=association_id,
+        )
+        .order_by("-run__end")
+        .select_related("run", "run__event")
+        .prefetch_related(Prefetch("rcrs", queryset=RegistrationCharacterRel.objects.select_related("character")))
+    )
+    for registration in registrations:
+        # Use custom name if available, otherwise use character name
+        registration.chars = {
+            rcr.character.uuid: rcr.custom_name or rcr.character.name
+            for rcr in registration.rcrs.all()
+            if rcr.character
+        }
+    return registrations
+
+
 @login_required
-def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Complex profile view with feature-dependent sections
+def public(request: HttpRequest, slug: str) -> HttpResponse:
     """Display public member profile information.
 
     Shows publicly visible member data while respecting privacy settings,
@@ -620,39 +698,16 @@ def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Com
 
     # Add badges if badge feature is enabled for association
     if "badge" in context["features"]:
-        context["badges"] = []
-        for badge in (
-            context["member_public"].badges.filter(association_id=context["association_id"]).order_by("number")
-        ):
-            context["badges"].append(badge.show())
+        context["badges"] = [
+            badge.show()
+            for badge in context["member_public"]
+            .badges.filter(association_id=context["association_id"])
+            .order_by("number")
+        ]
 
     # Add LARP history if enabled in association configuration
-    association_id = context["association_id"]
-    if get_association_config(association_id, "player_larp_history"):
-        # Fetch registrations with related run and event data
-        context["regs"] = (
-            Registration.objects.filter(
-                cancellation_date__isnull=True,
-                member=context["member_public"],
-                run__event__association_id=context["association_id"],
-            )
-            .order_by("-run__end")
-            .select_related("run", "run__event")
-            .prefetch_related("rcrs")
-        )
-
-        # Process character information for each registration
-        for el in context["regs"]:
-            el.chars = {}
-
-            for rcr in el.rcrs.select_related("character").all():
-                if not rcr.character:
-                    continue
-                # Use custom name if available, otherwise use character name
-                name = rcr.character.name
-                if rcr.custom_name:
-                    name = rcr.custom_name
-                el.chars[rcr.character.uuid] = name
+    if get_association_config(context["association_id"], "player_larp_history"):
+        context["regs"] = _get_public_larp_history(context["member_public"], context["association_id"])
 
     # Validate and mark social contact as URL if valid
     validate = URLValidator()
@@ -781,7 +836,7 @@ def badge(request: HttpRequest, badge_uuid: str) -> HttpResponse:
         context["list"].append(el)
 
     # Shuffle members using deterministic daily seed
-    v = timezone.now().date() - date(1970, 1, 1)
+    v = timezone.localdate() - date(1970, 1, 1)
     random.Random(v.days).shuffle(context["list"])  # noqa: S311
 
     return render(request, "larpmanager/general/badge.html", context)
@@ -934,13 +989,13 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
 
     resolved = _unsubscribe_token(token)
     if not resolved:
-        return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
+        return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), "error": True})
 
     email, association = resolved
 
     if request.method == "POST" and request.POST.get("confirm"):
         ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
-        return render(request, "larpmanager/general/unsubscribe.html", ctx)
+        return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), **ctx})
 
     has_regs = (
         Registration.objects.filter(
@@ -953,7 +1008,7 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
         else False
     )
     ctx = {"email": email, "is_org": bool(association), "has_registrations": has_regs}
-    return render(request, "larpmanager/general/unsubscribe.html", ctx)
+    return render(request, "larpmanager/general/unsubscribe.html", {**get_optional_context(request), **ctx})
 
 
 @login_required
@@ -979,7 +1034,7 @@ def vote(request: HttpRequest) -> HttpResponse:
     check_association_feature(request, context, "vote")
 
     # Set current year for membership and voting validation
-    context["year"] = timezone.now().year
+    context["year"] = timezone.localdate().year
 
     # Check if membership payment is required and completed
     if "membership" in context["features"]:
@@ -1360,4 +1415,8 @@ def otp_verify(request: HttpRequest) -> HttpResponse:
     else:
         form = OTPVerifyForm()
 
-    return render(request, "registration/otp_verify.html", {"form": form})
+    context = get_optional_context(request)
+    context["form"] = form
+    next_url = safe_local_url(request.session.get("otp_next_url"))
+    context["next_url"] = next_url if next_url != "/" else None
+    return render(request, "registration/otp_verify.html", context)

@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
@@ -8,16 +28,23 @@ from django.core import signing
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import Association, get_url, hdr
+from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
+from larpmanager.models.association import Association
+from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationChoice, RegistrationQuestionType
 from larpmanager.models.member import Membership, get_user_membership
-from larpmanager.utils.users.registration import get_registration_options
+from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_run
+from larpmanager.utils.registrations.characters import format_full_options, get_character_full_options
+from larpmanager.utils.registrations.questions import get_ranking_names
 
 if TYPE_CHECKING:
     from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment
     from larpmanager.models.event import Run
+    from larpmanager.models.form import WritingOption
     from larpmanager.models.registration import Registration
+    from larpmanager.models.writing import Character
 
 
 def format_decimal_amount(value: float) -> str:
@@ -102,7 +129,7 @@ def _get_wire_payment_info(payment_url: str, *, require_receipt: bool) -> str:
 
 def get_registration_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for new registration organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration for %(event)s by %(user)s") % email_context
     email_body = _("The user has confirmed their registration for this event.")
     email_body += registration_options(instance)
     return email_subject, email_body
@@ -110,7 +137,7 @@ def get_registration_new_organizer_email(instance: Registration, email_context: 
 
 def get_registration_update_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration update organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration updated for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration updated for %(event)s by %(user)s") % email_context
     email_body = _("The user has updated their registration details for this event.")
     email_body += registration_options(instance)
     return email_subject, email_body
@@ -118,16 +145,39 @@ def get_registration_update_organizer_email(instance: Registration, email_contex
 
 def get_registration_cancel_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration cancellation organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration canceled for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration canceled for %(event)s by %(user)s") % email_context
     email_body = _("The registration for this event has been canceled.")
     return email_subject, email_body
 
 
 def get_registration_request_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for new signup request organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration request for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request for %(event)s by %(user)s") % email_context
     email_body = _("The user has submitted a request to register for this event.")
     return email_subject, email_body
+
+
+def get_character_full_options_organizer_email(character: Character, run: Run) -> tuple[str, str]:
+    """Generate email subject and body for a character not assigned since its options have no spots left."""
+    email_subject = hdr_run(run.id) + _("Character not assigned: %(character)s") % {"character": character.name}
+    email_body = "<p>" + get_character_full_options_organizer_text(character, run) + "</p>"
+    return email_subject, email_body
+
+
+def get_character_full_options_organizer_text(
+    character: Character, run: Run, full_options: list[WritingOption] | None = None
+) -> str:
+    """Return the description of a character not assigned since its options have no spots left."""
+    text = _("The character %(character)s could not be assigned") % {"character": escape(character.name)}
+    if character.player:
+        text += " " + _("to %(player)s") % {"player": escape(str(character.player))}
+
+    if full_options is None:
+        full_options = get_character_full_options(run.id, character.id)
+    if not full_options:
+        return text + ". " + _("The spots of its options are now available again.")
+
+    return text + ", " + _("no spots left for") + ": " + escape(format_full_options(full_options))
 
 
 def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
@@ -297,11 +347,12 @@ def registration_options(registration_instance: Any) -> str:
             email_body += f" - {escape(registration_instance.ticket.description)}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(registration_instance.member, registration_instance.run.event.association_id)
-    event_features = get_event_features(registration_instance.run.event_id)
+    run_cache = get_run_basic_cache(registration_instance.run_id)
+    get_user_membership(registration_instance.member, run_cache["association_id"])
+    event_features = get_event_features(run_cache["event_id"])
 
     # Get currency symbol for formatting monetary amounts
-    currency_symbol = registration_instance.run.event.association.get_currency_symbol()
+    currency_symbol = run_cache["currency_symbol"]
 
     # Display total registration fee if greater than zero
     if registration_instance.tot_iscr > 0:
@@ -353,7 +404,8 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
     """
     # Build the payment URL using the event and run slug
-    full_payment_url = get_url("accounting/pay", instance.run.event)
+    context: dict = {}
+    full_payment_url = get_association_url("accounting/pay", get_run_association_id(instance.run_id, context=context))
     payment_url = f"{full_payment_url}/{instance.run.get_slug()}"
 
     # Prepare template data for localization
@@ -378,7 +430,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         )
         body += " " + _("Please make sure to send your payment on time, or we might have to cancel your spot.")
 
-    body += get_payment_info(instance.run.event.association_id, payment_url)
+    body += get_payment_info(get_run_association_id(instance.run_id, context=context), payment_url)
     return body
 
 
@@ -439,3 +491,87 @@ def get_password_reset_url(membership: Membership) -> str:
     """Get password reset url."""
     reset_token_parts = membership.password_reset.split("#")
     return get_url(f"reset/{reset_token_parts[0]}/{reset_token_parts[1]}/", membership.association)
+
+
+def _format_text_answer(question: dict, answer_text: str) -> str:
+    """Format a text answer for display, resolving ranking uuids into comma-separated option names."""
+    if question["typ"] != RegistrationQuestionType.RANKING:
+        return answer_text
+    names_by_uuid = {str(option["uuid"]): option["name"] for option in question["options"]}
+    return ", ".join(get_ranking_names(answer_text, names_by_uuid))
+
+
+def get_registration_options(instance: object) -> list[tuple[str, str]]:
+    """Get formatted list of registration options and answers for display.
+
+    This function retrieves all registration questions for a given event run,
+    filters out skipped questions based on features, and returns the answers
+    in a formatted list of question-answer pairs.
+
+    Args:
+        instance: Registration instance containing the run and event information.
+
+    Returns:
+        List of tuples where each tuple contains:
+            - question_name (str): The name of the registration question
+            - answer_text (str): The formatted answer text (comma-separated for choices)
+
+    Note:
+        Questions are filtered based on event features and individual skip conditions.
+        Choice questions are formatted as comma-separated option names.
+
+    """
+    formatted_results = []
+    applicable_questions = []
+    question_ids_cache = []
+
+    # Get event features and filter applicable questions
+    event_id = get_run_event_id(instance.run_id)
+    event_features = get_event_features(event_id)
+    for question in get_cached_registration_questions(event_id):
+        if skip_registration_question(question, instance, event_features):
+            continue
+        applicable_questions.append(question)
+        question_ids_cache.append(question["id"])
+
+    # Fetch text answers for all relevant questions
+    text_answers_by_question = {}
+    for answer in RegistrationAnswer.objects.filter(
+        question_id__in=question_ids_cache,
+        registration=instance,
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            RegistrationQuestionType.RANKING,
+        ],
+    ):
+        text_answers_by_question[answer.question_id] = answer.text
+
+    # Fetch choice answers and group by question
+    choice_options_by_question = {}
+    for choice in RegistrationChoice.objects.filter(
+        question_id__in=question_ids_cache,
+        registration=instance,
+        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
+    ).select_related(
+        "option",
+    ):
+        if choice.question_id not in choice_options_by_question:
+            choice_options_by_question[choice.question_id] = []
+        choice_options_by_question[choice.question_id].append(choice.option)
+
+    # Build result list with question names and formatted answers
+    if len(applicable_questions) > 0:
+        for question in applicable_questions:
+            # Handle multiple choice questions
+            if question["id"] in choice_options_by_question:
+                formatted_choices = ",".join([option.name for option in choice_options_by_question[question["id"]]])
+                formatted_results.append((question["name"], formatted_choices))
+
+            # Handle text answer questions, resolving ranking uuids into option names
+            if question["id"] in text_answers_by_question:
+                answer_text = _format_text_answer(question, text_answers_by_question[question["id"]])
+                formatted_results.append((question["name"], answer_text))
+
+    return formatted_results

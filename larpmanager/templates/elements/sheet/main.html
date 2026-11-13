@@ -1,31 +1,17 @@
 {% load show_tags i18n %}
-{% if not light_pdf %}
-    <table id="event_links">
-        <tr>
-            <td>
-                <a href="https://{{ event.association.slug }}.{{ association.main_domain }}/{{ event.slug }}/{{ run.number }}">Gallery</a>
-            </td>
-            {% if event.website %}
-                <td>
-                    <a href="{{ event.website }}">Website</a>
-                </td>
-            {% endif %}
-            {% for el in buttons %}
-                <td>
-                    <a href="{{ el.2 }}">{{ el.0 }}</a>
-                </td>
-            {% endfor %}
-        </tr>
-    </table>
-{% endif %}
 <h1 id="char_name">{{ sheet_char.name }}</h1>
 <span id="char_present">
     {% include "elements/sheet/presentation.html" %}
     {% include "elements/sheet/fields.html" with char=sheet_char %}
 </span>
-{% include "elements/sheet/teaser.html" %}
+{% include "elements/sheet/teaser.html" with char=sheet_char %}
 <hr />
+{% include "elements/sheet/texts.html" with char=sheet_char %}
 {% include "elements/sheet/experience.html" %}
 {% include "elements/sheet/factions.html" %}
 {% include "elements/sheet/guilds.html" %}
-{% include "elements/sheet/texts.html" with char=sheet_char %}
+{% include "elements/sheet/plots.html" %}
+{% include "elements/sheet/quests.html" %}
+{% include "elements/sheet/speedlarp.html" %}
+{% include "elements/sheet/prologue.html" %}
+{% include "pdf/sheets/relationships.html" %}

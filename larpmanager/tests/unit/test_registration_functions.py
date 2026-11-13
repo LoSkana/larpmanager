@@ -174,7 +174,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("50.00"), association=association
+            registration=registration, disc=discount, value=Decimal("50.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -227,7 +227,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("30.00"), association=association
+            registration=registration, disc=discount, value=Decimal("30.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -296,7 +296,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -337,7 +337,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -363,7 +363,7 @@ class TestRegistrationCalculationFunctions(BaseTestCase):
         )
         discount.runs.add(run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("100.00"), association=association
+            registration=registration, disc=discount, value=Decimal("100.00"), association=association
         )
 
         result = get_registration_iscr(registration)
@@ -581,7 +581,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         self.assertEqual(result, 0)
 
@@ -596,7 +596,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
             event=run.event, date=registration.created.date() - timedelta(days=1), amount=Decimal("15.00")
         )
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         self.assertEqual(result, Decimal("15.00"))
 
@@ -611,7 +611,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
             event=run.event, date=registration.created.date() - timedelta(days=1), amount=Decimal("15.00")
         )
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         # Waiting tier should not have surcharge
         self.assertEqual(result, 0)

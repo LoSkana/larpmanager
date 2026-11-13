@@ -1,0 +1,48 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Calls" %} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block content %}
+    {% include "elements/table/header.html" %}
+    <table id="calls"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_exp_calls">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="reorder-handle"></th>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}">
+                    <td></td>
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_exp_calls_edit' run.get_slug el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.descr | safe | clean_tags | truncatechars:80 }}</td>
+                    <td>
+                        <a href="{% url 'orga_exp_calls_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_v18"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No calls defined yet. Use the button above to create the first call." %}</p>
+    {% endif %}
+    {% include "elements/table/footer.html" %}
+{% endblock content %}

@@ -25,17 +25,27 @@ from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Count, Max, Subquery
 from django.http import Http404
 from django.utils import timezone
 from django.utils.translation import gettext as _
+from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
+from larpmanager.cache.basic import (
+    _get_event_parent_id,
+    get_event_association_id,
+    get_event_basic_cache,
+    get_run_association_id,
+)
 from larpmanager.cache.config import get_association_config
-from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.run import get_event_run_ids
+from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     PaymentInvoice,
@@ -44,6 +54,7 @@ from larpmanager.models.accounting import (
     RefundRequest,
     RefundStatus,
 )
+from larpmanager.models.association import Association
 from larpmanager.models.casting import Casting, Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, ProgressStep, RegistrationStatus, Run
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
@@ -53,7 +64,7 @@ from larpmanager.models.form import (
     RegistrationQuestionApplicable,
     WritingQuestion,
 )
-from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
+from larpmanager.models.member import LogOperationType, Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
 from larpmanager.models.registration import (
     Registration,
@@ -62,7 +73,7 @@ from larpmanager.models.registration import (
     RegistrationQuota,
     RegistrationTicket,
 )
-from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.models.writing import Character, CharacterStatus, get_event_elements
 from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_features
 from larpmanager.utils.publication.ildb import (
     ILDB_CONFIG_KEY,
@@ -70,8 +81,9 @@ from larpmanager.utils.publication.ildb import (
     ILDB_RUN_CONFIG,
     ILDB_TEAM_CONFIG_KEY,
 )
+from larpmanager.utils.publication.radar import RADAR_RUN_CONFIG, get_publishable_runs, is_radar_enabled
+from larpmanager.utils.registrations.availability import registration_available
 from larpmanager.utils.users.deadlines import check_run_deadlines
-from larpmanager.utils.users.registration import registration_available
 
 
 def _compute_registration_status_code(run: Run) -> tuple[str, Any]:
@@ -133,7 +145,7 @@ def _compute_registration_status(run: Run) -> str:
 
     if status_code == "future":
         if opening_datetime:
-            formatted_opening_date = opening_datetime.strftime(format_datetime)
+            formatted_opening_date = timezone.localtime(opening_datetime).strftime(format_datetime)
             return _("Registrations opening on: %(date)s") % {"date": formatted_opening_date}
         return _("Registrations opening not set")
 
@@ -142,7 +154,7 @@ def _compute_registration_status(run: Run) -> str:
 
 def _compute_registration_counts(run: Run) -> dict:
     """Compute registration counts: total, per-ticket and per-tier breakdown."""
-    counts = get_registration_counts(run)
+    counts = get_registration_counts(run.id, run.event_id)
 
     total = counts.get("count_reg", 0)
     if not total:
@@ -178,7 +190,20 @@ def _init_deadline_widget_cache(run: Run) -> dict:
 
     # Extract the counts
     counts = {}
-    for category in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]:
+    for category in [
+        "pay",
+        "pay_del",
+        "casting",
+        "memb",
+        "memb_del",
+        "fee",
+        "fee_del",
+        "profile",
+        "profile_del",
+        "char",
+        "char_confirm",
+        "debrief",
+    ]:
         if category in deadline_data:
             counts[category] = len(deadline_data[category])
 
@@ -191,25 +216,31 @@ def _init_user_character_widget_cache(run: Run) -> dict:
     counts = {}
 
     # Get all characters for this run
-    characters = run.event.get_elements(Character)
+    characters = get_event_elements(run.event_id, Character)
 
-    # Count by status
-    counts["creation"] = characters.filter(status=CharacterStatus.CREATION).count()
-    counts["proposed"] = characters.filter(status=CharacterStatus.PROPOSED).count()
-    counts["review"] = characters.filter(status=CharacterStatus.REVIEW).count()
-    counts["approved"] = characters.filter(status=CharacterStatus.APPROVED).count()
+    # Count by status in a single grouped query
+    status_counts = dict(characters.values_list("status").annotate(cnt=Count("id")).values_list("status", "cnt"))
+    counts["creation"] = status_counts.get(CharacterStatus.CREATION, 0)
+    counts["proposed"] = status_counts.get(CharacterStatus.PROPOSED, 0)
+    counts["review"] = status_counts.get(CharacterStatus.REVIEW, 0)
+    counts["approved"] = status_counts.get(CharacterStatus.APPROVED, 0)
 
     return counts
 
 
 def _init_progress_widget_cache(run: Run) -> dict:
     """Compute character counts by progress step for widget cache."""
-    characters = run.event.get_elements(Character)
-    steps = ProgressStep.objects.filter(event=run.event, deleted=None).order_by("order")
+    characters = get_event_elements(run.event_id, Character)
+    steps = ProgressStep.objects.filter(event_id=run.event_id, deleted=None).order_by("order")
+
+    # Single grouped query
+    counts_by_progress = dict(
+        characters.values_list("progress").annotate(cnt=Count("id")).values_list("progress", "cnt")
+    )
 
     step_counts = []
     for step in steps:
-        count = characters.filter(progress=step).count()
+        count = counts_by_progress.get(step.id, 0)
         if count:
             step_counts.append({"name": step.name, "count": count})
 
@@ -217,7 +248,7 @@ def _init_progress_widget_cache(run: Run) -> dict:
     if step_counts:
         result["steps"] = step_counts
 
-    no_step_count = characters.filter(progress__isnull=True).count()
+    no_step_count = counts_by_progress.get(None, 0)
     if no_step_count:
         result["no_step"] = no_step_count
 
@@ -229,7 +260,7 @@ def _init_casting_widget_cache(run: Run) -> dict:
     counts = {}
 
     # Get all characters for this run
-    characters = run.event.get_elements(Character)
+    characters = get_event_elements(run.event_id, Character)
     all_character_ids = set(characters.values_list("id", flat=True))
 
     # Precompute list of assigned character IDs via RegistrationCharacterRel
@@ -300,34 +331,65 @@ def _init_orga_log_widget_cache(run: Run) -> dict:
     """Compute log statistics and recent logs for event dashboard."""
     base_query = Log.objects.filter(run_id=run.id)
 
-    # Count logs by operation type
-    operation_counts = {}
-    for op_type, op_label in LogOperationType.choices:
-        count = base_query.filter(operation_type=op_type).count()
-        if count > 0:
-            operation_counts[op_type] = {"label": op_label, "count": count}
+    # Count logs by operation type in a single grouped query
+    counts_by_type = dict(
+        base_query.values_list("operation_type").annotate(cnt=Count("id")).values_list("operation_type", "cnt")
+    )
+    operation_counts = {
+        op_type: {"label": op_label, "count": counts_by_type[op_type]}
+        for op_type, op_label in LogOperationType.choices
+        if counts_by_type.get(op_type, 0) > 0
+    }
 
     # Get recent logs (last 5)
     recent_logs = base_query.select_related("member").order_by("-created")[:5]
 
-    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+    return {
+        "operation_counts": operation_counts,
+        "recent_logs": list(recent_logs),
+        "total_count": sum(counts_by_type.values()),
+    }
 
 
 def _init_exe_log_widget_cache(association_id: int) -> dict:
     """Compute log statistics and recent logs for organization dashboard."""
     base_query = Log.objects.filter(association_id=association_id)
 
-    # Count logs by operation type
-    operation_counts = {}
-    for op_type, op_label in LogOperationType.choices:
-        count = base_query.filter(operation_type=op_type).count()
-        if count > 0:
-            operation_counts[op_type] = {"label": op_label, "count": count}
+    # Count logs by operation type in a single grouped query
+    counts_by_type = dict(
+        base_query.values_list("operation_type").annotate(cnt=Count("id")).values_list("operation_type", "cnt")
+    )
+    operation_counts = {
+        op_type: {"label": op_label, "count": counts_by_type[op_type]}
+        for op_type, op_label in LogOperationType.choices
+        if counts_by_type.get(op_type, 0) > 0
+    }
 
     # Get recent logs (last 5)
     recent_logs = base_query.select_related("member", "run__event").order_by("-created")[:5]
 
-    return {"operation_counts": operation_counts, "recent_logs": list(recent_logs), "total_count": base_query.count()}
+    return {
+        "operation_counts": operation_counts,
+        "recent_logs": list(recent_logs),
+        "total_count": sum(counts_by_type.values()),
+    }
+
+
+def _is_demo_association(association_id: int) -> bool:
+    """Return True if the association is a demo instance (skips OTP checks)."""
+    return Association.objects.filter(id=association_id, demo_type__isnull=False).exists()
+
+
+def _members_without_otp(members: list[Member]) -> list[str]:
+    """Return display names of members whose user has no confirmed OTP (TOTP) device."""
+    if not members:
+        return []
+
+    user_ids = [member.user_id for member in members]
+    confirmed_user_ids = set(
+        TOTPDevice.objects.filter(user_id__in=user_ids, confirmed=True).values_list("user_id", flat=True)
+    )
+    return [str(member) for member in members if member.user_id not in confirmed_user_ids]
 
 
 def _init_exe_actions_cache(association_id: int) -> dict:
@@ -345,12 +407,17 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     )
 
     ongoing_runs_data = []
+    parent_names: dict[int, str] = {}
+    event_cache_context: dict = {}
     for run in ongoing_runs:
+        parent_id = _get_event_parent_id(run.event_id, event_cache_context)
+        if parent_id and parent_id not in parent_names:
+            parent_names[parent_id] = get_event_basic_cache(parent_id, context=event_cache_context)["name"]
         run_data = {
             "slug": run.get_slug,
             "name": str(run),
             "pretty_dates": run.pretty_dates,
-            "parent": str(run.event.parent) if run.event.parent else None,
+            "parent": parent_names.get(parent_id),
             "development_display": run.get_development_display(),
             "registration_status": _compute_registration_status(run),
             "registration_counts": _compute_registration_counts(run),
@@ -363,7 +430,7 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     runs_to_conclude = Run.objects.filter(
         event__association_id=association_id,
         development__in=[DevelopStatus.START, DevelopStatus.SHOW],
-        end__lt=timezone.now().date(),
+        end__lt=timezone.localdate(),
     )
     count = runs_to_conclude.count()
     if count > 0:
@@ -378,17 +445,23 @@ def _init_exe_actions_cache(association_id: int) -> dict:
         data["pending_expenses"] = {"count": pending_expenses_count}
 
     # Pending invoice approvals split by type
-    for typ, key in [
-        (PaymentType.REGISTRATION, "pending_invoices_registration"),
-        (PaymentType.DONATE, "pending_invoices_donation"),
-        (PaymentType.COLLECTION, "pending_invoices_collection"),
-        (PaymentType.MEMBERSHIP, "pending_invoices_membership"),
-    ]:
-        count = PaymentInvoice.objects.filter(
+    invoice_type_keys = {
+        PaymentType.REGISTRATION: "pending_invoices_registration",
+        PaymentType.DONATE: "pending_invoices_donation",
+        PaymentType.COLLECTION: "pending_invoices_collection",
+        PaymentType.MEMBERSHIP: "pending_invoices_membership",
+    }
+    invoice_counts_by_type = dict(
+        PaymentInvoice.objects.filter(
             association_id=association_id,
             status=PaymentStatus.SUBMITTED,
-            typ=typ,
-        ).count()
+            typ__in=invoice_type_keys,
+        )
+        .values_list("typ")
+        .annotate(count=Count("id"))
+    )
+    for typ, key in invoice_type_keys.items():
+        count = invoice_counts_by_type.get(typ, 0)
         if count > 0:
             data[key] = {"count": count}
 
@@ -423,7 +496,39 @@ def _init_exe_actions_cache(association_id: int) -> dict:
 
     data.update(_get_ildb_actions_data(association_id))
 
+    data.update(_get_radar_actions_data(association_id))
+
+    data.update(_get_exe_otp_actions_data(association_id))
+
     return data
+
+
+def _get_exe_otp_actions_data(association_id: int) -> dict:
+    """Return OTP-missing entries for association executives and event organizers."""
+    result = {}
+
+    if _is_demo_association(association_id):
+        return result
+
+    executive_roles = AssociationRole.objects.filter(association_id=association_id).prefetch_related("members")
+    executives_by_id = {member.id: member for role in executive_roles for member in role.members.all()}
+    executives = list(executives_by_id.values())
+    missing_executives = _members_without_otp(executives)
+    if missing_executives:
+        result["otp_missing_executives"] = {"count": len(missing_executives), "names": missing_executives}
+
+    one_month_ago = timezone.localdate() - timedelta(days=30)
+    organizer_roles = (
+        EventRole.objects.filter(event__association_id=association_id, number=1, event__runs__end__gte=one_month_ago)
+        .distinct()
+        .prefetch_related("members")
+    )
+    organizers_by_id = {member.id: member for role in organizer_roles for member in role.members.all()}
+    missing_organizers = _members_without_otp(list(organizers_by_id.values()))
+    if missing_organizers:
+        result["otp_missing_event_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
+
+    return result
 
 
 def _get_ildb_actions_data(association_id: int) -> dict:
@@ -443,7 +548,7 @@ def _is_ildb_token_expired(association_id: int) -> bool:
     if not expire_val:
         return False
     try:
-        return date.fromisoformat(expire_val) < timezone.now().date()
+        return date.fromisoformat(expire_val) < timezone.localdate()
     except ValueError:
         return False
 
@@ -454,7 +559,7 @@ def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
     team_id = get_association_config(association_id, ILDB_TEAM_CONFIG_KEY)
     if not api_key or not team_id:
         return []
-    one_month_ago = timezone.now().date() - timedelta(days=30)
+    one_month_ago = timezone.localdate() - timedelta(days=30)
     candidate_runs = Run.objects.filter(event__association_id=association_id, end__gte=one_month_ago).order_by("end")
     unpublished = []
     for run in candidate_runs:
@@ -464,9 +569,19 @@ def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
     return unpublished
 
 
+def _get_radar_actions_data(association_id: int) -> dict:
+    """Return the visible upcoming runs not yet published on LARP Radar."""
+    if not is_radar_enabled(association_id):
+        return {}
+    candidate_runs = get_publishable_runs(association_id).order_by("end")
+    unpublished = [run.search for run in candidate_runs if not run.get_config(RADAR_RUN_CONFIG)]
+    return {"radar_unpublished_runs": {"count": len(unpublished), "runs": unpublished}} if unpublished else {}
+
+
 def _init_orga_actions_cache(run: Run) -> dict:
     """Compute all action counts for event organizer dashboard."""
     data = {}
+    context: dict = {}
 
     # Pending expenses (for orga level)
     pending_expenses_count = AccountingItemExpense.objects.filter(run=run, is_approved=False).count()
@@ -489,7 +604,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Registration questions without options
     registration_questions_without_options = list(
-        run.event.get_elements(RegistrationQuestion)
+        get_event_elements(run.event_id, RegistrationQuestion, context=context)
         .filter(applicable=RegistrationQuestionApplicable.REGISTRATION)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
@@ -503,7 +618,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Writing questions without options
     writing_questions_without_options = list(
-        run.event.get_elements(WritingQuestion)
+        get_event_elements(run.event_id, WritingQuestion, context=context)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
@@ -515,9 +630,9 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Installments with both deadlines
-    installments_with_both_deadlines = run.event.get_elements(RegistrationInstallment).filter(
-        date_deadline__isnull=False, days_deadline__isnull=False
-    )
+    installments_with_both_deadlines = get_event_elements(
+        run.event_id, RegistrationInstallment, context=context
+    ).filter(date_deadline__isnull=False, days_deadline__isnull=False)
     if installments_with_both_deadlines.exists():
         data["installments_both_deadlines"] = {
             "count": installments_with_both_deadlines.count(),
@@ -525,24 +640,28 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Tickets missing final installment
-    tickets_missing_final_installment = run.event.get_elements(RegistrationTicket).exclude(installments__amount=0)
+    tickets_missing_final_installment = get_event_elements(run.event_id, RegistrationTicket, context=context).exclude(
+        installments__amount=0
+    )
     if tickets_missing_final_installment.exists():
         data["tickets_missing_final_installment"] = {
             "count": tickets_missing_final_installment.count(),
             "names": [t.name for t in tickets_missing_final_installment],
         }
 
-    _init_orga_actions_writing(data, run)
+    _init_orga_actions_writing(data, run, context)
 
     # Registration quotas existence check
-    data["has_registration_quotas"] = run.event.get_elements(RegistrationQuota).exists()
+    data["has_registration_quotas"] = get_event_elements(run.event_id, RegistrationQuota, context=context).exists()
 
     # Registration installments existence check
-    data["has_registration_installments"] = run.event.get_elements(RegistrationInstallment).exists()
+    data["has_registration_installments"] = get_event_elements(
+        run.event_id, RegistrationInstallment, context=context
+    ).exists()
 
     # Open help questions (last 90 days, most recent per member, user-originated and not closed)
     base_queryset = HelpQuestion.objects.filter(
-        association_id=run.event.association_id, run=run, created__gte=timezone.now() - timedelta(days=90)
+        association_id=get_run_association_id(run.id), run=run, created__gte=timezone.now() - timedelta(days=90)
     )
     latest_created_per_member = (
         base_queryset.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
@@ -553,25 +672,47 @@ def _init_orga_actions_cache(run: Run) -> dict:
     if open_questions_count > 0:
         data["open_help_questions"] = {"count": open_questions_count}
 
+    data.update(_get_orga_otp_actions_data(run))
+
     return data
 
 
-def _init_orga_actions_writing(data: dict, run: Run) -> None:
+def _get_orga_otp_actions_data(run: Run) -> dict:
+    """Return OTP-missing entries for event organizers of the given run."""
+    result = {}
+
+    if _is_demo_association(get_run_association_id(run.id)):
+        return result
+
+    organizer_role = EventRole.objects.filter(event_id=run.event_id, number=1).first()
+    organizers = list(organizer_role.members.all()) if organizer_role else []
+    missing_organizers = _members_without_otp(organizers)
+    if missing_organizers:
+        result["otp_missing_organizers"] = {"count": len(missing_organizers), "names": missing_organizers}
+
+    return result
+
+
+def _init_orga_actions_writing(data: dict, run: Run, context: dict) -> None:
     """Compute writing action counts for event organizer dashboard."""
     # Character existence check
-    data["has_characters"] = run.event.get_elements(Character).exists()
+    data["has_characters"] = get_event_elements(run.event_id, Character, context=context).exists()
 
     # Pending character approvals
-    proposed_characters_count = run.event.get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
+    proposed_characters_count = (
+        get_event_elements(run.event_id, Character, context=context).filter(status=CharacterStatus.PROPOSED).count()
+    )
     if proposed_characters_count > 0:
         data["proposed_characters"] = {"count": proposed_characters_count}
 
     # Quest types existence check
-    data["has_quest_types"] = run.event.get_elements(QuestType).exists()
+    data["has_quest_types"] = get_event_elements(run.event_id, QuestType, context=context).exists()
 
     # Quest types without quests
     unused_quest_types = list(
-        run.event.get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
+        get_event_elements(run.event_id, QuestType, context=context)
+        .annotate(quest_count=Count("quests"))
+        .filter(quest_count=0)
     )
     if unused_quest_types:
         data["quest_types_without_quests"] = {
@@ -580,16 +721,22 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         }
 
     # Quests without traits
-    unused_quests = list(run.event.get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0))
+    unused_quests = list(
+        get_event_elements(run.event_id, Quest, context=context)
+        .annotate(trait_count=Count("traits"))
+        .filter(trait_count=0)
+    )
     if unused_quests:
         data["quests_without_traits"] = {"count": len(unused_quests), "names": [q.name for q in unused_quests]}
 
     # Ability types existence check
-    data["has_ability_types"] = run.event.get_elements(AbilityTypeExp).exists()
+    data["has_ability_types"] = get_event_elements(run.event_id, AbilityTypeExp, context=context).exists()
 
     # Ability types without abilities
     ability_types_without_abilities = list(
-        run.event.get_elements(AbilityTypeExp).annotate(ability_count=Count("abilities")).filter(ability_count=0)
+        get_event_elements(run.event_id, AbilityTypeExp, context=context)
+        .annotate(ability_count=Count("abilities"))
+        .filter(ability_count=0)
     )
     if ability_types_without_abilities:
         data["ability_types_without_abilities"] = {
@@ -598,14 +745,14 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         }
 
     # Delivery EXP existence check
-    data["has_delivery_px"] = run.event.get_elements(DeliveryExp).exists()
+    data["has_delivery_px"] = get_event_elements(run.event_id, DeliveryExp, context=context).exists()
 
 
 def _init_milestones_widget_cache(run: Run) -> dict:
     """Compute 5 most urgent non-completed milestones for widget cache."""
-    today = timezone.now().date()
+    today = timezone.localdate()
     milestones = (
-        Milestone.objects.filter(event=run.event)
+        Milestone.objects.filter(event_id=run.event_id)
         .exclude(status=MilestoneStatus.COMPLETED)
         .select_related("assigned")
         .order_by("deadline")[:5]
@@ -719,8 +866,7 @@ def clear_widget_cache_for_runs(run_ids: list[int]) -> None:
 
 def clear_widget_cache_for_event(event_id: int) -> None:
     """Clear widget cache for all runs in an event."""
-    run_ids = Run.objects.filter(event_id=event_id).values_list("id", flat=True)
-    clear_widget_cache_for_runs(list(run_ids))
+    clear_widget_cache_for_runs(get_event_run_ids(event_id))
 
 
 def clear_widget_cache_for_association(association_id: int) -> None:
@@ -734,13 +880,28 @@ def clear_widget_cache_for_association(association_id: int) -> None:
     clear_widget_cache_association(association_id)
 
 
+def on_association_pre_save_timezone_reset_widgets(instance: Association) -> None:
+    """Clear widget caches of the association runs after commit when its timezone changes."""
+    if not instance.pk:
+        return
+    previous_timezone = Association.objects.filter(pk=instance.pk).values_list("timezone", flat=True).first()
+    if previous_timezone is not None and previous_timezone != instance.timezone:
+        association_id = instance.pk
+        transaction.on_commit(lambda: clear_widget_cache_for_association(association_id))
+
+
 def reset_widgets(instance: Any) -> None:
     """Reset widget cache data for related elements."""
-    if hasattr(instance, "run") and instance.run:
-        clear_widget_cache(instance.run.id)
-        clear_widget_cache_association(instance.run.event.association_id)
-    elif hasattr(instance, "event") and instance.event:
-        clear_widget_cache_for_event(instance.event.id)
-        clear_widget_cache_association(instance.event.association_id)
-    elif hasattr(instance, "association_id") and instance.association_id:
-        clear_widget_cache_association(instance.association_id)
+    run_id = getattr(instance, "run_id", None)
+    if run_id:
+        clear_widget_cache(run_id)
+        clear_widget_cache_association(get_run_association_id(run_id))
+
+    event_id = getattr(instance, "event_id", None)
+    if event_id:
+        clear_widget_cache_for_event(event_id)
+        clear_widget_cache_association(get_event_association_id(event_id))
+
+    association_id = getattr(instance, "association_id", None)
+    if association_id:
+        clear_widget_cache_association(association_id)

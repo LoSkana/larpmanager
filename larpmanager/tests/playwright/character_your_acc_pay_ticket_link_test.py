@@ -70,7 +70,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     # Setup NPC ticket
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Tickets ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Tickets")).click()
     page.locator("#id_ticket_npc").check()
     submit_confirm(page)
 
@@ -119,6 +119,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     """Test that direct ticket link works when registration is not yet open."""
 
     page.get_by_role("link", name="Event").first.click()
+    _wait_lm_ready(page)
     expand_options(page)
     page.locator('label[for="id_form2-registration_status_3"]').click()
     fill_date(page, "#id_form2-registration_open", "2099-12-31")
@@ -214,7 +215,11 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
     expect_normalized(page, page.locator("body"), "Test Character - Test Larp")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Player: Admin Test Presentation Test Teaser Test Text",
+    )
 
 
 def check_accounting_pay_link(page: Any, live_server: Any) -> None:
@@ -275,6 +280,32 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/accounting/pay/test/paypal/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")
 
+    check_paypal_v2_not_configured(page, live_server)
+
+
+def check_paypal_v2_not_configured(page: Any, live_server: Any) -> None:
+    # legacy paypal is not offered, the new one is
+    go_to(page, live_server, "/manage/methods/")
+    expect(page.get_by_role("checkbox", name="Paypal (legacy)")).to_have_count(0)
+    page.get_by_role("checkbox", name="Paypal", exact=True).check()
+    page.locator("#id_paypal_v2_descr").wait_for(state="visible")
+    page.locator("#id_paypal_v2_descr").fill("paypal new")
+    page.locator("#id_paypal_v2_fee").fill("3")
+    page.locator("#id_paypal_v2_client_id").fill("client")
+    page.locator("#id_paypal_v2_secret").fill("secret")
+    # blank once stripped, so the webhook id is saved as missing
+    page.locator("#id_paypal_v2_webhook_id").fill(" ")
+    submit_confirm(page)
+
+    # without credentials the payment is not started
+    go_to(page, live_server, "/accounting/pay/test/paypal_v2/")
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "This payment method is temporarily unavailable. Please choose another payment method, or contact the organizers.",
+    )
+    expect(page.get_by_role("link", name="Pay with PayPal")).to_have_count(0)
+
 
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions
@@ -325,11 +356,15 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # set independ factions, check
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Campaign ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Campaign")).click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
     sidebar(page, "Factions")
-    expect_normalized(page, page.locator("#one"), "No elements are currently available")
+    expect_normalized(
+        page,
+        page.locator(".empty-state p"),
+        "Factions group characters together, for example by team, family or allegiance.",
+    )
 
     # add new factions
     page.get_by_role("link", name="New").click()

@@ -22,8 +22,9 @@ from __future__ import annotations
 import json
 import random
 import re
+import unicodedata
 from datetime import date, timedelta
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from bs4 import BeautifulSoup
 from django.conf import settings as conf_settings
@@ -31,8 +32,10 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db import transaction
 from django.db.models import Avg, Count, Min, Sum
 from django.http import (
     Http404,
@@ -56,6 +59,7 @@ from django_ratelimit.core import is_ratelimited
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import (
@@ -97,8 +101,18 @@ from larpmanager.models.utils import my_uuid_short
 from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.common import ensure_timezone_aware
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.larpmanager.chat import get_chat_answer
+from larpmanager.utils.larpmanager.chat import (
+    CHAT_MAX_QUESTION_LENGTH,
+    build_chat_context,
+    clean_history,
+    count_chat_answer,
+    get_chat_answer,
+    get_chat_quota_key,
+    is_chat_quota_reached,
+)
+from larpmanager.utils.larpmanager.csp import record_csp_report
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
     delete_run_task,
@@ -108,17 +122,27 @@ from larpmanager.utils.larpmanager.tasks import (
 )
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
+from larpmanager.utils.users.accessibility import accessibility_from_post, save_accessibility
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
+if TYPE_CHECKING:
+    from uuid import UUID
+
 # Refuse oversized SNS bodies before parsing them
 MAX_SNS_PAYLOAD_SIZE = 256 * 1024
+
+# Refuse oversized CSP violation reports before parsing them
+MAX_CSP_REPORT_SIZE = 16 * 1024
 
 # Suppressed addresses shown per page in the admin listing
 SUPPRESSIONS_PER_PAGE = 100
 
 # Window in which re-submitting the same demo type reuses the demo already created
 DEMO_SESSION_REUSE_SECONDS = 300
+
+# Seconds within which a repeated submit of the organization form leads to the organization already created
+JOIN_TOKEN_TIMEOUT_SECONDS = 300
 
 
 def lm_home(request: HttpRequest) -> Any:
@@ -453,6 +477,15 @@ def toggle_sidebar(request: HttpRequest) -> Any:
     return JsonResponse({"status": "success"})
 
 
+@require_POST
+def set_accessibility(request: HttpRequest) -> JsonResponse:
+    """Save the accessibility preferences chosen in the accessibility panel."""
+    tokens = accessibility_from_post(request.POST)
+    response = JsonResponse({"classes": [f"a11y-{token}" for token in tokens]})
+    save_accessibility(request, response, tokens)
+    return response
+
+
 @login_required
 def debug_mail(request: HttpRequest) -> Any:
     """Send reminder emails to all registrations for debugging.
@@ -511,14 +544,16 @@ def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
 def chat_ask(request: HttpRequest) -> Any:
     """AJAX endpoint for the live chat assistant.
 
-    Answers are grounded in the guides/tutorials cache and cached per question, so the
-    Anthropic API is only called for new, matchable questions.
+    Answers are grounded in the documentation and in the state of the event or organization
+    the user manages, and cached per question and context.
 
     Args:
-        request: HTTP request object, expects POST with "question".
+        request: HTTP request object, expects POST with "question", and optionally "page" (the
+            name of the view the user is on), "run" (the slug of the run the page belongs to)
+            and "history" (JSON list of the previous user/assistant messages).
 
     Returns:
-        JsonResponse: {"answer": "..."}
+        JsonResponse: {"answer": "...", "sources": [{"title": "...", "url": "..."}]}
 
     """
     if request.method != "POST":
@@ -531,10 +566,53 @@ def chat_ask(request: HttpRequest) -> Any:
     if not question:
         return JsonResponse({"error": _("Please write a question")}, status=400)
 
-    LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+    if len(question) > CHAT_MAX_QUESTION_LENGTH:
+        return JsonResponse({"error": _("Your question is too long")}, status=400)
 
-    answer = get_chat_answer(question)
-    return JsonResponse({"answer": answer})
+    quota_key = get_chat_quota_key(request.association["id"])
+    if is_chat_quota_reached(quota_key):
+        return JsonResponse(
+            {
+                "error": _(
+                    "Your organization has reached the daily limit of questions to the assistant for the free plan, "
+                    "please try again tomorrow"
+                )
+            },
+            status=429,
+        )
+
+    chat_log = LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+
+    context = get_context(request)
+    chat_context = build_chat_context(
+        request.POST.get("page", ""),
+        run=_get_chat_run(request, context, request.POST.get("run", "")),
+        association_id=context["association_id"] if context.get("association_role") else None,
+        association_features=context.get("features"),
+    )
+    result = get_chat_answer(question, chat_context, clean_history(request.POST.get("history", "")))
+    if not result.pop("unavailable", False):
+        count_chat_answer(quota_key)
+
+    chat_log.answer = result["answer"]
+    chat_log.save(update_fields=["answer"])
+    return JsonResponse(result)
+
+
+def _get_chat_run(request: HttpRequest, context: dict, run_slug: str) -> Run | None:
+    """Return the run of the given slug in the current association, if the user has a role on it."""
+    event_slug, _separator, number = run_slug.partition("-")
+    if not event_slug or (number and not number.isdigit()) or "event_role" not in context:
+        return None
+    if not has_event_permission(request, context, run_slug):
+        return None
+    return (
+        Run.objects.filter(
+            event__association_id=context["association_id"], event__slug=event_slug, number=int(number or 1)
+        )
+        .select_related("event")
+        .first()
+    )
 
 
 def ticket(request: HttpRequest, reason: Any = "") -> Any:
@@ -628,7 +706,7 @@ def _recent_session_demo(request: HttpRequest) -> tuple[str, str] | None:
         return None
 
     created = parse_datetime(recent.get("created", "") or "")
-    if not created or (timezone.now() - created).total_seconds() > DEMO_SESSION_REUSE_SECONDS:
+    if not created or (timezone.now() - ensure_timezone_aware(created)).total_seconds() > DEMO_SESSION_REUSE_SECONDS:
         return None
 
     if not Association.objects.filter(slug=recent["slug"]).exists():
@@ -666,17 +744,17 @@ def _launch_demo(request: HttpRequest) -> Any:
 
 
 def get_started(request: HttpRequest) -> Any:
-    """Show the entry funnel: start a pre-populated demo or create a real association.
+    """Show the entry funnel: start a pre-populated demo, or a link to create a real association.
 
     The primary call to action is launching a demo instance cloned from a
-    demo type's template association; creating an empty real association
-    is offered as a secondary path.
+    demo type's template association; creating an empty real association is
+    offered as a secondary path, handled by the dedicated `get_started_real` view.
 
     Args:
         request: Django HTTP request object
 
     Returns:
-        HttpResponse: Rendered get started page or redirect after creation
+        HttpResponse: Rendered get started page
 
     """
     context = get_lm_contact(request)
@@ -687,27 +765,72 @@ def get_started(request: HttpRequest) -> Any:
     if request.method == "POST" and request.POST.get("demo_uuid"):
         return _launch_demo(request)
 
-    # Secondary path: create a real empty association (requires login)
+    demo_types = LarpManagerDemoType.objects.filter(active=True).order_by("order")
+    if not demo_types.exists():
+        # Nothing to demo: skip straight to creating a real association
+        return redirect("get_started_real")
+
     if request.user.is_authenticated:
-        joined_association = _join_form(context, request)
-        if joined_association:
+        # Retrive personal registration, managed events / orgas (if the user is looking for that)
+        get_personal_area(context)
+
+    context["demo_types"] = demo_types
+    context["texts"] = get_larpmanager_texts()
+    return render(request, "larpmanager/landing/get_started.html", context)
+
+
+@login_required
+def get_started_real(request: HttpRequest) -> Any:
+    """Show the form to create a new (empty) real association.
+
+    Split out of `get_started` so login can be enforced with the standard
+    `login_required` redirect, which round-trips the user straight back to
+    this page (no anchor/scroll workaround needed).
+
+    Args:
+        request: Django HTTP request object
+
+    Returns:
+        HttpResponse: Rendered form page, or redirect after creation
+
+    """
+    context = get_lm_contact(request)
+    if "red" in context:
+        return redirect(context["red"])
+
+    joined_association, is_new = _join_form(context, request)
+    if joined_association:
+        if is_new:
             # send message
             messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
             # send email
             if request.association["skin_id"] == 1:
                 join_email(joined_association)
-            # redirect
-            return redirect("after_login", subdomain=joined_association.slug, path="manage")
+        else:
+            messages.warning(
+                request,
+                _("%(organization)s was already created with this form: open the form again to create another one")
+                % {"organization": joined_association.name},
+            )
+        # redirect
+        return redirect("after_login", subdomain=joined_association.slug, path="manage")
 
-        # Retrive personal registration, managed events / orgas (if the user is looking for that)
-        get_personal_area(context)
-
-    context["demo_types"] = LarpManagerDemoType.objects.filter(active=True).order_by("order")
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/landing/get_started.html", context)
+    return render(request, "larpmanager/landing/get_started_real.html", context)
 
 
-def _join_form(context: dict, request: HttpRequest) -> Association | None:
+def _join_token_key(member: Member, token: UUID) -> str:
+    """Return the cache key linking a rendering of the join form to its organization."""
+    return f"join_token_{member.id}_{token}"
+
+
+def _resubmitted_association(member: Member, token: UUID | None) -> Association | None:
+    """Return the organization already created by this rendering of the join form, if any."""
+    association_id = cache.get(_join_token_key(member, token)) if token else None
+    return Association.objects.filter(pk=association_id).first() if association_id else None
+
+
+def _join_form(context: dict, request: HttpRequest) -> tuple[Association | None, bool]:
     """Process association creation form for new users.
 
     Handles form validation, association creation, user role assignment,
@@ -718,8 +841,8 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
         request: Django HTTP request object containing POST data and user info.
 
     Returns:
-        Created Association object if form submission is successful and valid,
-        None if GET request or form validation fails.
+        The association, or None if GET request or form validation fails, and whether
+        it was created now rather than by a previous submit of the same form.
 
     Note:
         Updates context dictionary with form instance for template rendering.
@@ -729,51 +852,67 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
     if request.method == "POST":
         # Initialize and validate the association creation form
         form = FirstAssociationForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Create association with inherited skin from request context
-            new_association: Association = form.save(commit=False)
-            new_association.skin_id = request.association["skin_id"]
-            new_association.lite_mode = True
-            new_association.save()
+        member = context["member"]
+        new_association: Association | None = None
+        # Validated before locking the member, as it processes the uploaded files
+        is_valid = form.is_valid()
+        join_token = form.cleaned_data.get("join_token")
 
-            save_single_config(new_association, "intro_driver", "welcome")
+        with transaction.atomic():
+            # Repeated submits of a member run one at a time, so that the later ones find the first result
+            Member.objects.select_for_update().get(pk=member.pk)
+            existing_association = _resubmitted_association(member, join_token)
+            if existing_association:
+                return existing_association, False
 
-            # Create admin role for the new association and assign creator
-            (admin_role, _created) = AssociationRole.objects.get_or_create(
-                association=new_association,
-                number=1,
-                name="Admin",
-            )
-            admin_role.members.add(context["member"])
-            admin_role.save()
+            if is_valid:
+                # Create association with inherited skin from request context
+                form.instance.skin_id = request.association["skin_id"]
+                form.instance.lite_mode = True
+                new_association = form.save_unique_slug()
 
-            # Update membership status to joined for the creator
-            membership = get_user_membership(context["member"], new_association.id)
-            membership.status = MembershipStatus.JOINED
-            membership.save()
+            if new_association:
+                save_single_config(new_association, "intro_driver", "welcome")
 
+                # Create admin role for the new association and assign creator
+                (admin_role, _created) = AssociationRole.objects.get_or_create(
+                    association=new_association,
+                    number=1,
+                    name="Admin",
+                )
+                admin_role.members.add(member)
+                admin_role.save()
+
+                # Update membership status to joined for the creator
+                membership = get_user_membership(member, new_association.id)
+                membership.status = MembershipStatus.JOINED
+                membership.save()
+
+                if join_token:
+                    cache.set(_join_token_key(member, join_token), new_association.id, JOIN_TOKEN_TIMEOUT_SECONDS)
+
+        if new_association:
             # Send notification emails to all configured administrators
             for _admin_name, admin_email in conf_settings.ADMINS:
                 subject = _("New organization created")
                 body = _("Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s") % {
                     "name": new_association.name,
                     "slug": new_association.slug,
-                    "user": context["member"],
-                    "email": context["member"].email,
+                    "user": member,
+                    "email": member.email,
                 }
                 my_send_mail(subject, body, admin_email)
 
-            return new_association
+            return new_association, True
     else:
         # Initialize empty form for GET requests
         form = FirstAssociationForm()
 
     # Add form to context for template rendering
     context["form"] = form
-    return None
+    return None, False
 
 
-@cache_page(60 * 15)
 def discover(request: HttpRequest) -> Any:
     """Display discovery page with featured content."""
     context = get_lm_contact(request)
@@ -839,24 +978,30 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["opened"] = tutorial
 
-    # Track tutorial visit for activation checklist
-    member = context.get("member")
-    if member:
-        for membership in member.memberships.filter(association__lite_mode=True).select_related("association"):
-            save_single_config(membership.association, "exe_tutorial_suggestion", value=True)
-
     return render(request, "larpmanager/landing/tutorials.html", context)
 
 
-@cache_page(60 * 15)
 def guides(request: HttpRequest) -> Any:
-    """Display list of published guides for LarpManager users."""
+    """Display published guides for LarpManager users, by group in order of first appearance."""
     context = get_lm_contact(request)
-    context["list"] = LarpManagerGuide.objects.filter(published=True).order_by("number")
+    groups = {}
+    for guide_item in LarpManagerGuide.objects.filter(published=True).order_by("number"):
+        groups.setdefault(guide_item.group or "", []).append(guide_item)
+    context["groups"] = groups
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
     return render(request, "larpmanager/landing/guides.html", context)
+
+
+def concepts(request: HttpRequest) -> Any:
+    """Display the primer on the key concepts of the platform, on the main site and on any organization site."""
+    context = get_context(request, check_main_site=request.association["id"] == 0)
+    context["lm"] = 1
+    context["iframe"] = request.GET.get("in_iframe") == "1"
+    if request.association["id"] == 0:
+        context["texts"] = get_larpmanager_texts()
+    return render(request, "larpmanager/landing/concepts.html", context)
 
 
 def guide(request: HttpRequest, slug: Any) -> Any:
@@ -882,7 +1027,8 @@ def guide(request: HttpRequest, slug: Any) -> Any:
         msg = "guide not found"
         raise Http404(msg) from err
 
-    context["og_image"] = context["guide"].thumb.url
+    if context["guide"].photo:
+        context["og_image"] = context["guide"].thumb.url
     context["og_title"] = f"{context['guide'].title} - LarpManager"
     context["og_description"] = f"{context['guide'].description} - LarpManager"
     context["iframe"] = request.GET.get("in_iframe") == "1"
@@ -922,7 +1068,6 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     return render(request, "larpmanager/landing/blog.html", context)
 
 
-@cache_page(60 * 15)
 def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page."""
     context = get_lm_contact(request)
@@ -930,7 +1075,6 @@ def privacy(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/privacy.html", context)
 
 
-@cache_page(60 * 15)
 def usage(request: HttpRequest) -> Any:
     """Display usage/terms page."""
     context = get_lm_contact(request)
@@ -939,7 +1083,6 @@ def usage(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/usage.html", context)
 
 
-@cache_page(60 * 15)
 def about_us(request: HttpRequest) -> Any:
     """Display about us page."""
     context = get_lm_contact(request)
@@ -969,7 +1112,7 @@ def get_personal_area(context: dict) -> None:
     all_regs = get_member_registrations(member).order_by("-run__start")
     regs_by_assoc: dict = {}
     for reg in all_regs:
-        regs_by_assoc.setdefault(reg.run.event.association_id, []).append(reg)
+        regs_by_assoc.setdefault(get_run_association_id(reg.run_id, context=context), []).append(reg)
 
     registration_list = []
     for association_id, regs in regs_by_assoc.items():
@@ -1016,6 +1159,148 @@ def lm_list(request: HttpRequest) -> Any:
     return render(request, "larpmanager/larpmanager/list.html", context)
 
 
+# Common gTLDs seen in real addresses (any 2-letter label is accepted below as a
+# ccTLD, this list only covers non-2-letter TLDs)
+NEWSLETTER_KNOWN_GTLDS = {
+    "com",
+    "net",
+    "org",
+    "info",
+    "biz",
+    "edu",
+    "gov",
+    "mil",
+    "int",
+    "coop",
+    "name",
+    "pro",
+    "mobi",
+    "aero",
+    "museum",
+    "jobs",
+    "travel",
+    "asia",
+    "app",
+    "dev",
+    "io",
+    "me",
+    "tv",
+    "eu",
+    "xyz",
+    "online",
+    "site",
+    "club",
+    "shop",
+    "store",
+    "tech",
+    "email",
+    "cloud",
+    "live",
+    "studio",
+    "agency",
+    "events",
+    "games",
+    "group",
+    "guide",
+    "guru",
+    "house",
+    "media",
+    "news",
+    "social",
+    "software",
+    "solutions",
+    "systems",
+    "team",
+    "tools",
+    "world",
+    "zone",
+}
+
+# Decimal-dot obfuscated local part, e.g. "105.110.102...@nospam.com" (anti-scraper encoding)
+NEWSLETTER_DECIMAL_OBFUSCATION_RE = re.compile(r"^(\d{1,3}\.){4,}\d{1,3}$")
+
+NEWSLETTER_JUNK_DOMAINS = {"nospam.com", "example.com", "domain.com", "email.com", "test.com"}
+
+NEWSLETTER_ROLE_LOCALPARTS = {
+    "abuse",
+    "postmaster",
+    "mailer-daemon",
+    "noreply",
+    "no-reply",
+    "donotreply",
+    "do-not-reply",
+    "webmaster",
+    "hostmaster",
+}
+
+# Disposable/throwaway mail providers: real inbox, but not worth keeping on a newsletter list
+NEWSLETTER_DISPOSABLE_DOMAINS = {
+    "mailinator.com",
+    "guerrillamail.com",
+    "guerrillamail.info",
+    "10minutemail.com",
+    "yopmail.com",
+    "tempmail.com",
+    "temp-mail.org",
+    "throwawaymail.com",
+    "trashmail.com",
+    "getnada.com",
+    "sharklasers.com",
+    "dispostable.com",
+    "fakeinbox.com",
+    "maildrop.cc",
+}
+
+NEWSLETTER_EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}$")
+
+NEWSLETTER_CCTLD_LENGTH = 2
+NEWSLETTER_MAX_LOCAL_LENGTH = 64
+NEWSLETTER_MAX_DOMAIN_LENGTH = 253
+NEWSLETTER_MAX_ADDRESS_LENGTH = 254
+
+
+def _is_plausible_tld(domain: str) -> bool:
+    """Check the domain's trailing label looks like a real TLD, not a scraped URL glued on."""
+    tld = domain.rsplit(".", 1)[-1]
+    return tld.isalpha() and (len(tld) == NEWSLETTER_CCTLD_LENGTH or tld in NEWSLETTER_KNOWN_GTLDS)
+
+
+def clean_newsletter_email(raw_email: str) -> str | None:
+    """Recover a plausible real email from a raw scraped/pasted token, or None if unsalvageable.
+
+    Filters out common scraper junk: image filenames, decimal-obfuscated addresses,
+    URL-encoded prefixes, domains with a scraped URL path/query glued on, malformed
+    dot placement, oversized addresses, role/system mailboxes and disposable providers.
+    """
+    token = re.sub(r"%[0-9A-Fa-f]{2}", "", raw_email)
+    token = "".join(ch for ch in token if unicodedata.category(ch)[0] != "C")
+    token = token.strip().strip(",;").lower()
+
+    if not token or token.count("@") != 1:
+        return None
+
+    local, _, domain = token.partition("@")
+
+    is_valid = (
+        not any(c in token for c in "()[]{}<> \t")
+        and len(local) <= NEWSLETTER_MAX_LOCAL_LENGTH
+        and len(domain) <= NEWSLETTER_MAX_DOMAIN_LENGTH
+        and len(token) <= NEWSLETTER_MAX_ADDRESS_LENGTH
+        and not local.startswith(".")
+        and not local.endswith(".")
+        and ".." not in local
+        and not NEWSLETTER_DECIMAL_OBFUSCATION_RE.match(local)
+        and domain not in NEWSLETTER_JUNK_DOMAINS
+        and domain not in NEWSLETTER_DISPOSABLE_DOMAINS
+        and not any(kw in domain for kw in ("demo", "test"))
+        and NEWSLETTER_EMAIL_RE.match(token)
+        and _is_plausible_tld(domain)
+        and local not in NEWSLETTER_ROLE_LOCALPARTS
+    )
+
+    return token if is_valid else None
+
+
 @login_required
 def lm_newsletter(request: HttpRequest) -> Any:
     """Manage LarpManager newsletter recipients."""
@@ -1027,21 +1312,27 @@ def lm_newsletter(request: HttpRequest) -> Any:
         if status_value not in NewsletterStatus.values:
             status_value = NewsletterStatus.NON_ACTIVE
         force_status = "force_status" in request.POST
-        count = 0
+        results = {"new": [], "updated": [], "ignored": [], "invalid": []}
         for orig_email in re.split(r"[\s,;|]+", emails_text):
-            email = orig_email.strip().lower()
-            if not email or "@" not in email:
+            email = clean_newsletter_email(orig_email)
+            if not email:
+                if orig_email.strip():
+                    results["invalid"].append(orig_email.strip())
                 continue
             obj, created = LarpManagerNewsletter.objects.get_or_create(
                 email=email,
                 defaults={"status": status_value},
             )
-            if not created and force_status:
+            if created:
+                results["new"].append(email)
+            elif force_status and obj.status != status_value:
                 obj.status = status_value
                 obj.save(update_fields=["status"])
-            count += 1
-        messages.success(request, f"{count} emails updated")
-        return redirect(request.path_info)
+                results["updated"].append(email)
+            else:
+                results["ignored"].append(email)
+        context["results"] = results
+        return render(request, "larpmanager/larpmanager/newsletter_result.html", context)
 
     show_active = request.GET.get("active", "1") == "1"
     show_non_active = request.GET.get("non_active", "0") == "1"
@@ -1052,9 +1343,10 @@ def lm_newsletter(request: HttpRequest) -> Any:
     if show_non_active:
         statuses.append(NewsletterStatus.NON_ACTIVE)
 
-    context["newsletter_list"] = (
-        LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("email") if statuses else []
+    newsletter_list = (
+        list(LarpManagerNewsletter.objects.filter(status__in=statuses).order_by("created")) if statuses else []
     )
+    context["newsletter_list"] = [entry for entry in newsletter_list if clean_newsletter_email(entry.email)]
     context["show_active"] = show_active
     context["show_non_active"] = show_non_active
     context["newsletter_statuses"] = NewsletterStatus.choices
@@ -1087,6 +1379,23 @@ def ses_notification(request: HttpRequest) -> HttpResponse:
 
     handle_sns_payload(payload)
     return JsonResponse({"res": "ok"})
+
+
+@csrf_exempt
+@require_POST
+@ratelimit(key="ip", rate="60/m", block=True)
+def csp_report(request: HttpRequest) -> HttpResponse:
+    """Collect a Content-Security-Policy violation report sent by the browser."""
+    if len(request.body) > MAX_CSP_REPORT_SIZE:
+        return HttpResponse(status=413)
+
+    try:
+        payload = json.loads(request.body.decode())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return HttpResponse(status=400)
+
+    record_csp_report(payload)
+    return HttpResponse(status=204)
 
 
 @login_required
@@ -1179,7 +1488,7 @@ def lm_payments(request: HttpRequest) -> HttpResponse:
     context["totals"] = {}
 
     # Calculate yearly payment totals from current year to oldest
-    for year in list(range(timezone.now().year, que["oldest_date"].year - 1, -1)):
+    for year in list(range(timezone.localdate().year, que["oldest_date"].year - 1, -1)):
         start_of_year = date(year, 1, 1)
         end_of_year = date(year, 12, 31)
 
@@ -1203,7 +1512,7 @@ def get_run_lm_payment(run: Any) -> None:
         Modifies run object with features, active_registrations, and total attributes
 
     """
-    run.features = len(get_association_features(run.event.association_id)) + len(get_event_features(run.event_id))
+    run.features = len(get_association_features(get_run_association_id(run.id))) + len(get_event_features(run.event_id))
     run.active_registrations = (
         Registration.objects.filter(run__id=run.id, cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])
@@ -1248,7 +1557,7 @@ def lm_send(request: HttpRequest) -> Any:
             subj = request.POST["subject"]
             body = request.POST["body"]
             interval = int(request.POST.get("interval", 1))
-            send_mail_exec(players, subj, body, interval=interval)
+            send_mail_exec(players, subj, body, interval=interval, skip_limit=True)
             messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
@@ -1347,13 +1656,13 @@ def lm_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Show run deletion confirmation page and process deletion."""
     check_lm_admin(request)
     run = get_object_or_404(Run, uuid=run_uuid)
-    registration_count = Registration.objects.filter(run__event=run.event).count()
+    registration_count = Registration.objects.filter(run__event_id=run.event_id).count()
 
     if request.method == "POST":
-        delete_run_task(str(run.uuid))
+        delete_run_task(str(run.uuid), whole_event=True)
         return redirect("lm_events_delete_wait", run_uuid=run_uuid)
 
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["run"] = run
     context["registration_count"] = registration_count
     return render(request, "larpmanager/larpmanager/delete_event.html", context)
@@ -1364,7 +1673,7 @@ def lm_events_delete_wait(request: HttpRequest, run_uuid: str) -> HttpResponse:
     """Poll until the run is gone, then confirm deletion."""
     check_lm_admin(request)
     deleted = not Run.objects.filter(uuid=run_uuid).exists()
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["deleted"] = deleted
     context["label"] = f"Run {run_uuid}"
     context["cancel_url"] = reverse("lm_list")
@@ -1376,7 +1685,7 @@ def lm_clean_wait(request: HttpRequest, association_slug: str) -> HttpResponse:
     """Poll until the association is gone, then confirm deletion."""
     check_lm_admin(request)
     deleted = not Association.objects.filter(slug=association_slug).exists()
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     context["deleted"] = deleted
     context["label"] = f"Association {association_slug}"
     context["cancel_url"] = reverse("lm_list")
@@ -1398,7 +1707,7 @@ def donate(request: HttpRequest) -> Any:
         HttpResponseForbidden: If bot detected
 
     """
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     if context["association_id"] != 0:
         return redirect("accounting_donate")
 

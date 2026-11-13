@@ -18,12 +18,14 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+import json
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -31,15 +33,17 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.config import save_single_config
+from larpmanager.cache.config import reset_event_configs, save_single_config
 from larpmanager.cache.warehouse import get_association_warehouse_cache, get_event_warehouse_assignments_cache
 from larpmanager.forms.miscellanea import (
     UploadAlbumsForm,
 )
 from larpmanager.forms.warehouse import OrgaWarehouseItemCommitRemainingForm
+from larpmanager.models.event import Event, EventConfig
 from larpmanager.models.miscellanea import (
     Album,
     Log,
+    LogOperationType,
     Milestone,
     MilestoneStatus,
     OneTimeAccessToken,
@@ -55,13 +59,14 @@ from larpmanager.models.miscellanea import (
     WorkshopQuestion,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.models.writing import get_event_elements
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_album_cod, get_element, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
-from larpmanager.utils.services.bulk import handle_bulk_orga_items
+from larpmanager.utils.services.bulk import handle_bulk_orga_items, handle_bulk_orga_manifest
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 
@@ -373,7 +378,7 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_warehouse_area")
 
     # Retrieve all warehouse areas for the event
-    context["list"] = context["event"].get_elements(WarehouseArea)
+    context["list"] = get_event_elements(context["event"].id, WarehouseArea, context=context)
 
     return render(request, "larpmanager/orga/warehouse/area.html", context)
 
@@ -409,7 +414,7 @@ def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
     handle_bulk_orga_items(request, context)
 
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
-    assignments_cache = get_event_warehouse_assignments_cache(context["event"])
+    assignments_cache = get_event_warehouse_assignments_cache(context["event"].id)
 
     context["list"] = []
     items = WarehouseItem.objects.filter(association_id=context["association_id"])
@@ -516,7 +521,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, area_
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"]):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"]
+    ):
         item = item_all[el.item_id]
 
         # Mark items assigned to current area and track assignment details
@@ -572,7 +579,11 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
     context["items"] = {}
 
     # Iterate through all warehouse item assignments for this event
-    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+    for el in (
+        get_event_elements(context["event"].id, WarehouseItemAssignment, context=context)
+        .select_related("area", "item")
+        .order_by("item__name", "area__name")
+    ):
         # Check if item is already in our items dictionary
         if el.item_id not in context["items"]:
             # First time seeing this item, initialize it with empty assignment list
@@ -592,56 +603,24 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
 
 @login_required
 def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Generate a warehouse manifest view organized by area for an event.
+    """List all warehouse item assignments of the event in a single table, one row per item and area.
 
-    Creates a comprehensive manifest of all warehouse items assigned to this event,
-    grouped by their warehouse areas. This view serves as the central hub for
-    warehouse management, showing what items are assigned to each area and whether
-    quantities have been committed to the warehouse inventory.
-
-    The manifest displays item assignments across all areas and provides access to
-    the quantity commit functionality if enabled and not yet executed for this event.
-
-    Args:
-        request: HTTP request object containing user and session data
-        event_slug: Event slug identifier to locate the specific event
-
-    Returns:
-        HttpResponse: Rendered template with context containing:
-            - area_list: Dictionary of WarehouseArea objects with their assigned items
-            - warehouse_committed: Boolean flag indicating if quantities are committed
-            - optionals: Warehouse configuration options (quantity tracking, etc.)
-
-    Raises:
-        PermissionDenied: If user lacks orga_warehouse_manifest permission
-
+    Rows can be marked as loaded/deployed, and bulk moved to another area or removed.
+    Also exposes the quantity commit link if quantity tracking is enabled and not yet committed.
     """
-    # Check user permissions and get base context for the event
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
-    # Initialize area list dictionary and retrieve warehouse feature configurations
-    context["area_list"] = {}
-    get_warehouse_optionals(context, [])
+    handle_bulk_orga_manifest(request, context)
 
-    # Check if warehouse quantities have been committed for this event
-    # This flag controls UI elements for the commit functionality
+    get_warehouse_optionals(context, [])
     context["warehouse_committed"] = context["event"].get_config("warehouse_committed")
 
-    # Iterate through all warehouse item assignments for this event
-    # Group items by their assigned areas for organized manifest display
-    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
-        # Create area entry in the list if this is the first item for this area
-        if el.area_id not in context["area_list"]:
-            context["area_list"][el.area_id] = el.area
+    context["list"] = (
+        get_event_elements(context["event"].id, WarehouseItemAssignment, context=context)
+        .select_related("area", "item", "item__container")
+        .order_by("area__name", "item__name")
+    )
 
-        # Initialize the items list attribute on the area object if needed
-        if not hasattr(context["area_list"][el.area_id], "items"):
-            context["area_list"][el.area_id].items = []
-
-        # Add this item assignment to its area's items list
-        context["area_list"][el.area_id].items.append(el)
-
-    # Render the warehouse manifest template with organized data
     return render(request, "larpmanager/orga/warehouse/manifest.html", context)
 
 
@@ -869,7 +848,9 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
     # Key: item_id, Value: sum of all quantities assigned to that item
     # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"], loaded=True
+    ):
         if el.quantity:
             item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
@@ -933,7 +914,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
         - Modifies WarehouseItem.quantity values in database
         - Deletes WarehouseItem records with final quantity <= 0
         - Sets event config 'warehouse_committed' to True
-        - Creates Log entry with category 'warehouse'
+        - Creates a WarehouseCommit Log entry
 
     """
     # Check user permissions for warehouse manifest access
@@ -952,52 +933,69 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
         messages.warning(request, _("Quantity tracking is not enabled for this organization"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
-    # Aggregate total assigned quantities per item across all areas
-    # Key: item_id, Value: sum of all quantities assigned to that item
-    # Only process items with "loaded" status for this event
-    item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
-        if el.quantity:
-            item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
+    with transaction.atomic():
+        # Lock the event row so concurrent commits are serialized, then recheck the flag
+        Event.objects.select_for_update().filter(pk=context["event"].id).first()
+        if EventConfig.objects.filter(event_id=context["event"].id, name="warehouse_committed", value="True").exists():
+            messages.warning(request, _("Warehouse quantities already committed for this event"))
+            return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
-    # Initialize tracking variables for audit log and user feedback
-    items_updated: int = 0
-    items_deleted: int = 0
-    items_modified: list[str] = []
+        # Aggregate total assigned quantities per item across all areas
+        # Key: item_id, Value: sum of all quantities assigned to that item
+        # Only process items with "loaded" status for this event
+        item_assignments: dict[int, int] = {}
+        for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+            event=context["event"], loaded=True
+        ):
+            if el.quantity:
+                item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
-    # Process each item that has assignments, updating or deleting as needed
-    for item in WarehouseItem.objects.filter(id__in=item_assignments.keys()):
-        assigned_quantity = item_assignments[item.id]
-        current_quantity = item.quantity or 0
-        final_quantity = current_quantity - assigned_quantity
+        # Initialize tracking variables for audit log and user feedback
+        items_updated: int = 0
+        items_deleted: int = 0
+        items_modified: list[str] = []
 
-        if assigned_quantity > 0:
-            if final_quantity <= 0:
-                # Delete item if all inventory has been assigned (or over-assigned)
-                items_modified.append(f"DELETED: {item.name} (was {current_quantity}, assigned {assigned_quantity})")
-                item.delete()
-                items_deleted += 1
-            else:
-                # Reduce item quantity by the assigned amount
-                items_modified.append(
-                    f"UPDATED: {item.name} ({current_quantity} -> {final_quantity}, assigned {assigned_quantity})",
-                )
-                item.quantity = final_quantity
-                item.save()
-                items_updated += 1
+        # Process each item that has assignments, updating or deleting as needed
+        for item in WarehouseItem.objects.select_for_update().filter(id__in=item_assignments.keys()):
+            assigned_quantity = item_assignments[item.id]
+            current_quantity = item.quantity or 0
+            final_quantity = current_quantity - assigned_quantity
 
-    # Mark event as having committed quantities to prevent duplicate commits
-    save_single_config(context["event"], "warehouse_committed", "True")
+            if assigned_quantity > 0:
+                if final_quantity <= 0:
+                    # Delete item if all inventory has been assigned (or over-assigned)
+                    items_modified.append(
+                        f"DELETED: {item.name} (was {current_quantity}, assigned {assigned_quantity})"
+                    )
+                    item.delete()
+                    items_deleted += 1
+                else:
+                    # Reduce item quantity by the assigned amount
+                    items_modified.append(
+                        f"UPDATED: {item.name} ({current_quantity} -> {final_quantity}, assigned {assigned_quantity})",
+                    )
+                    item.quantity = final_quantity
+                    item.save()
+                    items_updated += 1
 
-    # Create comprehensive audit log entry with all changes
-    Log.objects.create(
-        association=context["association"],
-        member=context["member"],
-        event=context["event"],
-        category="warehouse",
-        description=f"Committed warehouse quantities: {items_updated} items updated, {items_deleted} items deleted",
-        note="\n".join(items_modified) if items_modified else "No items modified",
-    )
+        # Mark event as having committed quantities to prevent duplicate commits
+        save_single_config(context["event"], "warehouse_committed", "True")
+
+        # Create audit log entry with all changes
+        summary = f"Committed warehouse quantities: {items_updated} items updated, {items_deleted} items deleted"
+        Log.objects.create(
+            member=context["member"],
+            cls="WarehouseCommit",
+            eid=context["event"].id,
+            dct=json.dumps(items_modified),
+            operation_type=LogOperationType.UPDATE,
+            element_name=summary,
+            run=context["run"],
+            association_id=context["association_id"],
+        )
+
+    # Reset again after commit so a concurrent read cannot leave a stale cached flag
+    reset_event_configs(context["event"].id)
 
     # Display success message with statistics to user
     messages.success(
@@ -1018,7 +1016,7 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
         {
             "selrel": ("member",),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("operation_type", _("Operation")),
                 ("element_name", _("Element")),
                 ("info", _("Info")),
@@ -1027,6 +1025,8 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
             "callbacks": {
                 "operation_type": lambda el: el.get_operation_type_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"operation_type": ["operation_type"]},
         }
     )
 
@@ -1043,7 +1043,7 @@ def orga_log(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_milestones(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display milestones for an event run in the organizer dashboard."""
     context = check_event_context(request, event_slug, "orga_milestones")
-    today = timezone.now().date()
+    today = timezone.localdate()
     milestones = Milestone.objects.filter(event=context["event"]).select_related("assigned").order_by("deadline")
     for m in milestones:
         if m.deadline:

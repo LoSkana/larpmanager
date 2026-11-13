@@ -30,7 +30,8 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.cache.registration import get_registration_counts, get_registration_tickets, get_ticket_form_text
+from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.registration_lookup import get_registration_tickets, get_ticket_form_text
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
@@ -54,6 +55,7 @@ from larpmanager.models.form import (
     RegistrationQuestionApplicable,
     RegistrationQuestionType,
 )
+from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -65,9 +67,10 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import decimal_to_str
-from larpmanager.models.writing import Character, Faction
+from larpmanager.models.writing import Character, Faction, get_event_elements
 from larpmanager.utils.core.common import get_time_diff_today
-from larpmanager.utils.users.registration import get_reduced_available_count
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
+from larpmanager.utils.registrations.signals import get_reduced_available_count
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -122,7 +125,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Get current registration counts for quota calculations and availability checks
         # This data determines ticket availability and waiting list status
-        registration_counts = get_registration_counts(run)
+        registration_counts = get_registration_counts(run.id, run.event_id)
 
         # Initialize ticket selection field and retrieve help text for user guidance
         # Creates the primary ticket selection interface with availability info
@@ -166,7 +169,7 @@ class RegistrationForm(BaseRegistrationForm):
             if key not in self.fields:
                 continue
             tm = [str(i) for i in question.get("tickets_map", []) if i is not None]
-            if not ticket or ticket not in tm:
+            if tm and ticket not in tm:
                 self.fields[key].required = False
 
     def init_additionals(self) -> None:
@@ -177,7 +180,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Get max_length from cached registration questions
         max_tickets = 5
-        for q in get_cached_registration_questions(self.params.get("run").event):
+        for q in get_cached_registration_questions(self.params.get("run").event_id):
             if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
                 max_tickets = q["max_length"]
                 break
@@ -197,7 +200,7 @@ class RegistrationForm(BaseRegistrationForm):
         if "bring_friend" not in self.params.get("features"):
             return
 
-        if self.instance.pk and self.initial["modified"] > 0:
+        if self.instance.pk and self.instance.modified > 0:
             return
 
         help_text_message = _(
@@ -216,7 +219,7 @@ class RegistrationForm(BaseRegistrationForm):
         self.tickets_map = {}
         if self.waiting_check:
             return
-        self._init_registration_question(self.instance, event)
+        self._init_registration_question(self.instance, event.id)
         for question in self.questions:
             self.init_question(question, registration_counts)
         self.tickets_map = json.dumps(self.tickets_map)
@@ -252,7 +255,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_surcharge(self, event: Event) -> None:
         """Initialize date-based surcharge field if applicable."""
         # date surcharge
-        surcharge = get_date_surcharge(self.instance, event)
+        surcharge = get_date_surcharge(self.instance, event.id)
         if surcharge == 0:
             return
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
@@ -318,7 +321,7 @@ class RegistrationForm(BaseRegistrationForm):
 
                         # Add surcharge information to label if applicable
                         if registration_quota.surcharge > 0:
-                            label += f" ({registration_quota.surcharge}€)"
+                            label += f" ({registration_quota.surcharge}{self.params['currency_symbol']})"
                         quota_choices.append((registration_quota.quotas, label))
 
         # Set default quota option if no valid quotas were found
@@ -387,7 +390,8 @@ class RegistrationForm(BaseRegistrationForm):
                 attrs={"class": "my-radio-class"},
                 descriptions=ticket_descriptions,
                 metadata=ticket_metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
@@ -531,7 +535,7 @@ class RegistrationForm(BaseRegistrationForm):
                 return True
         return False
 
-    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket | dict) -> bool:  # noqa: C901 - Complex ticket eligibility logic
+    def skip_ticket_type(self, event: Event, run: Run, ticket: RegistrationTicket | dict) -> bool:
         """Determine if a ticket type should be skipped for the current member.
 
         This method checks various conditions to determine whether a specific ticket
@@ -562,41 +566,32 @@ class RegistrationForm(BaseRegistrationForm):
         if "ticket" in self.params and self.params["ticket"] == str(ticket_uuid):
             return False
 
-        result = False
-
         # Hide new player tickets if member has previous non-waiting/staff/npc registrations
         if ticket_tier == TicketTier.NEW_PLAYER:
-            past_regs = Registration.objects.filter(cancellation_date__isnull=True)
-            past_regs = past_regs.exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
-            past_regs = past_regs.filter(member=self.params["member"]).exclude(run=run)
-            if past_regs.exists():
-                result = True
+            return self._has_past_registrations(run)
 
         # Show waiting tickets only if run allows waiting or member already has waiting ticket
-        elif ticket_tier == TicketTier.WAITING:
-            if "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING):
-                result = True
+        if ticket_tier == TicketTier.WAITING:
+            return "waiting" not in self.run_status and not self.has_ticket(TicketTier.WAITING)
 
-        # Handle filler ticket visibility based on event config and member status
-        elif ticket_tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", context=self.params)
-            if filler_alway:
-                # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
-                if (
-                    "filler" not in self.run_status
-                    and "primary" not in self.run_status
-                    and not self.has_ticket(TicketTier.FILLER)
-                ):
-                    result = True
-            # Without filler_always, show only if run supports filler or member has filler ticket
-            elif "filler" not in self.run_status and not self.has_ticket(TicketTier.FILLER):
-                result = True
+        # Show filler tickets only if run supports filler (or primary, with filler_always) or member has filler ticket
+        if ticket_tier == TicketTier.FILLER:
+            allowed_status = {"filler"}
+            if get_event_config(event.id, "filler_always", context=self.params):
+                allowed_status.add("primary")
+            return not (allowed_status & set(self.run_status)) and not self.has_ticket(TicketTier.FILLER)
 
         # Show primary tickets only if run supports primary registration or member has primary ticket
-        elif "primary" not in self.run_status and not self.has_ticket_primary():
-            result = True
+        return "primary" not in self.run_status and not self.has_ticket_primary()
 
-        return result
+    def _has_past_registrations(self, run: Run) -> bool:
+        """Check if member has active registrations to other runs, excluding waiting/staff/npc tickets."""
+        return (
+            Registration.objects.filter(cancellation_date__isnull=True, member=self.params["member"])
+            .exclude(ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC])
+            .exclude(run=run)
+            .exists()
+        )
 
     def clean(self) -> dict:
         """Validate form data and check for valid friend codes."""
@@ -612,7 +607,7 @@ class RegistrationForm(BaseRegistrationForm):
             if cod:
                 try:
                     # Look for registration with matching special code in same event
-                    Registration.objects.get(uuid=cod, run__event=run.event)
+                    Registration.objects.get(uuid=cod, run__event_id=run.event_id)
                 except ObjectDoesNotExist:
                     # Add error if friend code not found
                     self.add_error("bring_friend", "I'm sorry, this friend code was not found")
@@ -650,24 +645,21 @@ class RegistrationGiftForm(RegistrationForm):
             if key in self.mandatory:
                 self.mandatory.remove(key)
 
-        self.has_mandatory = len(self.mandatory) > 0
+        self._has_mandatory = len(self.mandatory) > 0
 
 
-class MatchmakerForm(BaseRegistrationForm):
-    """Player-facing form for the matchmaker questions (e.g. "what would you like to play").
+class SingleApplicableRegistrationForm(BaseRegistrationForm):
+    """General base for player-facing forms, bound to an existing Registration, yet managed separately."""
 
-    Bound to an existing Registration; fully separate from the standard RegistrationForm
-    and from the casting (preference/ranking) feature - only handles questions with
-    applicable=RegistrationQuestionApplicable.MATCHMAKER, reusing the same
-    answer/choice save machinery as the standard registration form.
-    """
+    # The type of registration questions to handle
+    applicable: RegistrationQuestionApplicable
 
     class Meta:
         model = Registration
         fields = ()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with the matchmaker questions for the current event."""
+        """Initialize form with the applicable-scoped questions for the current event."""
         super().__init__(*args, **kwargs)
 
         self.questions = []
@@ -675,17 +667,17 @@ class MatchmakerForm(BaseRegistrationForm):
         self.section_descriptions = {}
         self.profiles = {}
 
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
         for question in self.questions:
-            self._init_matchmaker_field(question)
+            self._init_applicable_field(question)
 
-    def _init_questions(self, event: Event) -> None:
-        """Load only the matchmaker-applicable registration questions."""
-        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.MATCHMAKER)
+    def _init_questions(self, event_id: int) -> None:
+        """Load only the questions matching this form's applicable value."""
+        self.questions = get_cached_registration_questions(event_id, applicable=self.applicable)
 
-    def _init_matchmaker_field(self, question: dict) -> None:
-        """Initialize a single matchmaker question field (mirrors RegistrationForm.init_question)."""
+    def _init_applicable_field(self, question: dict) -> None:
+        """Initialize a single question field (mirrors RegistrationForm.init_question)."""
         if skip_registration_question(question, self.instance, self.params["features"]):
             return
 
@@ -702,9 +694,21 @@ class MatchmakerForm(BaseRegistrationForm):
                 self.section_descriptions[question["section_name"]] = question["section_description"]
 
     def save(self, commit: bool = True) -> Registration:  # noqa: FBT001, FBT002, ARG002
-        """Save answers/choices for the matchmaker questions onto the bound registration."""
+        """Save answers/choices for the applicable-scoped questions onto the bound registration."""
         self.save_registration_questions(self.instance, is_organizer=False)
         return self.instance
+
+
+class MatchmakerForm(SingleApplicableRegistrationForm):
+    """Player-facing form for the matchmaker questions (e.g. "what would you like to play")."""
+
+    applicable = RegistrationQuestionApplicable.MATCHMAKER
+
+
+class DebriefForm(SingleApplicableRegistrationForm):
+    """Player-facing form for the debrief questions (post-event feedback from participants)."""
+
+    applicable = RegistrationQuestionApplicable.DEBRIEF
 
 
 class RequestApprovalForm(BaseRegistrationForm):
@@ -734,17 +738,17 @@ class RequestApprovalForm(BaseRegistrationForm):
         self.section_descriptions = {}
         self.profiles = {}
 
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
         for question in self.questions:
             self._init_request_field(question)
 
         # Keep the confirmation checkbox first
         self.fields = {"confirm": self.fields.pop("confirm"), **self.fields}
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Load only the request-applicable registration questions."""
-        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.REQUEST)
+        self.questions = get_cached_registration_questions(event_id, applicable=RegistrationQuestionApplicable.REQUEST)
 
     def _init_request_field(self, question: dict) -> None:
         """Initialize a single request question field (mirrors RegistrationForm.init_question)."""
@@ -818,9 +822,12 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         """
         super().__init__(*args, **kwargs)
 
+        # Warnings for characters assigned over the spots of their options, filled on save
+        self.full_options_warnings: list[str] = []
+
         # Extract run and event from params
         self.run = self.params["run"]
-        self.event = self.params["run"].event
+        self.event_id = self.params["run"].event_id
 
         # Configure member widget with association
         self.configure_field_association("member", self.params["association_id"])
@@ -867,7 +874,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get max_length from cached registration questions (avoids a DB query)
         max_tickets = 5
-        for q in get_cached_registration_questions(self.params["run"].event):
+        for q in get_cached_registration_questions(self.params["run"].event_id):
             if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
                 max_tickets = q["max_length"]
                 break
@@ -937,7 +944,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 attrs={"class": "my-radio-class"},
                 descriptions=orga_descriptions,
                 metadata=orga_metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 
@@ -998,7 +1006,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         taken_characters = taken_characters - mine
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
-            queryset=self.params["run"].event.get_elements(Character).exclude(pk__in=taken_characters),
+            queryset=get_event_elements(self.params["run"].event_id, Character, context=self.params).exclude(
+                pk__in=taken_characters
+            ),
             widget=S2WidgetMulti(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1033,7 +1043,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get available traits (excluding those assigned to others)
         available = (
-            Trait.objects.filter(event=self.event).exclude(id__in=already_assigned_trait_ids).select_related("quest")
+            Trait.objects.filter(event_id=self.event_id)
+            .exclude(id__in=already_assigned_trait_ids)
+            .select_related("quest")
         )
 
         for qt in self.params["quest_types"].values():
@@ -1094,15 +1106,19 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get current and new character sets
         old = set(self.get_init_multi_character())
-        new = set(self.cleaned_data["characters_new"].values_list("pk", flat=True))
+        new_characters = {character.pk: character for character in self.cleaned_data["characters_new"]}
+        new = set(new_characters)
 
         # Remove characters no longer selected
         for ch in old - new:
             RegistrationCharacterRel.objects.filter(character_id=ch, registration_id=instance.pk).delete()
 
-        # Add newly selected characters
+        # Add newly selected characters, warning about those exceeding the spots of their options
         for ch in new - old:
             RegistrationCharacterRel.objects.create(character_id=ch, registration_id=instance.pk)
+            full_options = get_character_full_options(instance.run_id, ch)
+            if full_options:
+                self.full_options_warnings.append(get_character_full_options_warning(new_characters[ch], full_options))
         return None
 
     def clean_characters_new(self) -> Any:
@@ -1166,6 +1182,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         # Handle auto ticket
         if hasattr(self, "_single_ticket"):
             self.instance.ticket_id = self._single_ticket["id"]
+
+        # Let the save signals add their warnings, shown to the organizer
+        self.instance._full_options_warnings = self.full_options_warnings  # noqa: SLF001
 
         # Call parent save method to get the instance
         return super(BaseRegistrationForm, self).save(commit=commit)
@@ -1389,7 +1408,10 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         elif "factions" in self.fields:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.id, str(m))
+                for m in get_event_elements(self.params["run"].event_id, Faction, context=self.params).order_by(
+                    "number"
+                )
             ]
 
         if "gift" not in features:
@@ -1406,7 +1428,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         help_texts = {
             QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
             QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-            QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+            QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
             QuestionStatus.HIDDEN: "The question is not shown to the player",
         }
         self.fields["status"].help_text = ", ".join(
@@ -1422,7 +1444,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
         # Add type of registration question to the available types, scoped to the current form
         # (the special reserved types below only make sense for the standard registration form)
-        registration_questions = get_cached_registration_questions(self.params["event"], applicable=registration_typ)
+        registration_questions = get_cached_registration_questions(self.params["event"].id, applicable=registration_typ)
         already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
@@ -1457,7 +1479,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
                 return False
 
             # check the feature is active
-            if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
+            if choice[0] != "ticket" and choice[0] not in self.params["features"]:
                 return False
 
         return True
@@ -1500,6 +1522,11 @@ class OrgaRegistrationOptionForm(BaseModelForm):
         question = self.params.get("question")
         if question and question.applicable != RegistrationQuestionApplicable.REGISTRATION:
             self.delete_field("price")
+
+        # Ranking options are ordered, not selected: no price nor availability limit
+        if question and question.typ == RegistrationQuestionType.RANKING:
+            self.delete_field("price")
+            self.delete_field("max_available")
 
     def clean_price(self) -> Any:
         """Treat blank price as 0."""
@@ -1728,6 +1755,18 @@ class PreRegistrationForm(BaseForm):
             label=_("General information"),
             help_text=_("Is there anything else you would like to tell us?"),
         )
+
+        membership = self.context.get("membership")
+        if not membership or membership.status == MembershipStatus.EMPTY:
+            self.fields["share"] = forms.BooleanField(
+                required=True,
+                label=_("Authorisation"),
+                help_text=_(
+                    "Do you consent to the sharing of your personal data in accordance with the GDPR and our "
+                    "Privacy Policy",
+                )
+                + "?",
+            )
 
 
 class RegistrationTransferForm(BaseForm):

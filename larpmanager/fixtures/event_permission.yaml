@@ -432,6 +432,18 @@
     module: registration
 - model: larpmanager.eventpermission
   fields:
+    name: Check-in
+    descr: Scan participant QR codes on-site to mark them present
+    slug: orga_checkin
+    number: 131
+    config: null
+    active_if: null
+    hidden: false
+    icon: qrcode
+    feature: checkin
+    module: registration
+- model: larpmanager.eventpermission
+  fields:
     name: Sections
     descr: Manage the registration sections
     slug: orga_registration_sections
@@ -466,6 +478,18 @@
     icon: users
     feature: matchmaker
     module: matchmaker
+- model: larpmanager.eventpermission
+  fields:
+    name: Debrief answers
+    descr: Review participant answers to the debrief questions
+    slug: orga_debrief_answers
+    number: 110
+    config: null
+    active_if: null
+    hidden: false
+    icon: comment-dots
+    feature: debrief
+    module: registration
 - model: larpmanager.eventpermission
   fields:
     name: Surcharges
@@ -1066,3 +1090,28 @@
     icon: users
     feature: guild
     module: writing
+- model: larpmanager.eventpermission
+  fields:
+    name: Calls
+    descr: Manage the game calls participants must remember
+    slug: orga_exp_calls
+    number: 97
+    config: experience
+    active_if: exp_calls
+    hidden: false
+    icon: bullhorn
+    feature: exp_calls
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
+    name: Exclusive groups
+    descr: Manage the groups of abilities of which a character can obtain only a maximum
+      number
+    slug: orga_exp_exclusives
+    number: 98
+    config: experience
+    active_if: exp_exclusives
+    hidden: false
+    icon: layer-group
+    feature: exp_exclusives
+    module: experience

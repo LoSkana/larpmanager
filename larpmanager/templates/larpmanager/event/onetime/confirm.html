@@ -147,11 +147,17 @@
                     {% csrf_token %}
                     <button type="submit" class="btn-confirm">{% trans "I Understand - Access Content" %}</button>
                 </form>
-                <a href="#" onclick="history.back(); return false;" class="btn-cancel">{% trans "Cancel" %}</a>
+                <a href="#" class="btn-cancel">{% trans "Cancel" %}</a>
             </div>
             <div class="onetime-info onetime-info-footer">
                 <p>{% trans "This content is protected and cannot be downloaded or recorded." %}</p>
             </div>
         </div>
+        <script nonce="{{ csp_nonce }}">
+            document.querySelector('.btn-cancel').addEventListener('click', function(event) {
+                event.preventDefault();
+                history.back();
+            });
+        </script>
     </body>
 </html>

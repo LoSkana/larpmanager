@@ -1,21 +1,26 @@
 {% load show_tags i18n %}
+{% count_public_questions char.questions as block_count %}
 {% if char.teaser and show_character.teaser %}
-    <h2 class="c">{{ writing_fields.character.names.teaser }}</h2>
+    {% if block_count > 1 %}<h2 class="c">{{ writing_fields.character.names.teaser }}</h2>{% endif %}
     <div class="plot teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
-{% for fnum in char.factions %}
-    {% with factions|get:fnum as fact %}
-        {% if not fact.typ == 'g' %}
-            {% if show_faction and fact.number %}
-                <h2 class="c">
-                    <a href="{% url 'faction' run.get_slug fact.uuid %}">{{ fact.name }}</a>
-                </h2>
-            {% else %}
-                <h2>{{ fact.name }}</h2>
+{% for idx, question in char.questions.items %}
+    {% if question.typ == 'p' or question.typ == 'e' %}
+        {% with char.fields|get:idx as field %}
+            {% if field and question.visibility != 'e' %}
+                {% if screen or question.printable %}
+                    <div class="go-block">
+                        {% if block_count > 1 %}<b>{{ question.name }}:</b>{% endif %}
+                        <div class="plot">
+                            {% if question.typ == 'e' %}
+                                {% show_char field run 1 %}
+                            {% else %}
+                                {{ field|linebreaksbr }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
-            {% if fact.teaser and show_faction.teaser %}
-                <div class="plot">{% show_char fact.teaser run 1 %}</div>
-            {% endif %}
-        {% endif %}
-    {% endwith %}
+        {% endwith %}
+    {% endif %}
 {% endfor %}

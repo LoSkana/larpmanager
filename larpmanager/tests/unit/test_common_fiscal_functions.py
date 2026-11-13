@@ -28,13 +28,12 @@ from larpmanager.utils.core.common import cantor, check_already, get_channel
 from larpmanager.utils.users.fiscal_code import (
     _calculate_consonants,
     _calculate_vowels,
-    _clean_birth_place,
     _extract_birth_date,
     _extract_first_name,
     _extract_last_name,
-    _slugify,
     calculate_fiscal_code,
 )
+from larpmanager.utils.users.municipalities import _clean_birth_place, _slugify
 
 
 class TestCommonUtilityFunctions(BaseTestCase):

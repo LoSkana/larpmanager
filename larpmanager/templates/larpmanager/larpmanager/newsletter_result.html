@@ -1,0 +1,44 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    Newsletter
+{% endblock title %}
+{% block content %}
+    <table>
+        <tr>
+            <th>New</th>
+            <td>{{ results.new|length }}</td>
+        </tr>
+        <tr>
+            <th>Updated</th>
+            <td>{{ results.updated|length }}</td>
+        </tr>
+        <tr>
+            <th>Ignored (already present)</th>
+            <td>{{ results.ignored|length }}</td>
+        </tr>
+        <tr>
+            <th>Invalid</th>
+            <td>{{ results.invalid|length }}</td>
+        </tr>
+    </table>
+    {% if results.new %}
+        <h3>New</h3>
+        <p>{{ results.new|join:", " }}</p>
+    {% endif %}
+    {% if results.updated %}
+        <h3>Updated</h3>
+        <p>{{ results.updated|join:", " }}</p>
+    {% endif %}
+    {% if results.ignored %}
+        <h3>Ignored (already present)</h3>
+        <p>{{ results.ignored|join:", " }}</p>
+    {% endif %}
+    {% if results.invalid %}
+        <h3>Invalid</h3>
+        <p>{{ results.invalid|join:", " }}</p>
+    {% endif %}
+    <p>
+        <a href="{% url 'lm_newsletter' %}">Back</a>
+    </p>
+{% endblock content %}

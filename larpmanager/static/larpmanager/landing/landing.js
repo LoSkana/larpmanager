@@ -62,95 +62,164 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Slug field: clean input, live domain preview (vanilla port of lm.js slug logic)
-    var slugInput = document.getElementById('slug');
-    if (slugInput) {
-        var slugWarTimeout = null;
-
-        var updateSlugPreview = function (value) {
-            document.querySelectorAll('.slug_pre').forEach(function (preview) {
-                preview.textContent = 'Preview: https://' + value + (window.base_domain || '');
-            });
-        };
-
-        var cleanSlug = function (value) {
-            return value
-                .normalize('NFKD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .toLowerCase()
-                .replace(/[^a-z0-9]/g, '');
-        };
-
-        slugInput.addEventListener('input', function () {
-            slugInput.dataset.touched = '1';
-            var cleaned = cleanSlug(slugInput.value);
-            if (cleaned !== slugInput.value) {
-                slugInput.value = cleaned;
-                document.querySelectorAll('.slug_war').forEach(function (warning) {
-                    warning.classList.remove('hide');
-                });
-                clearTimeout(slugWarTimeout);
-                slugWarTimeout = setTimeout(function () {
-                    document.querySelectorAll('.slug_war').forEach(function (warning) {
-                        warning.classList.add('hide');
-                    });
-                }, 3000);
-            }
-            updateSlugPreview(cleaned);
+    // Slug field with live domain preview
+    var refreshSlugPreview = createSlugField('#id_name', function (slug) {
+        document.querySelectorAll('.slug_pre').forEach(function (preview) {
+            preview.textContent = slug ? 'Preview: https://' + slug + (window.base_domain || '') : 'Preview:';
         });
+    });
+    var nameInput = document.getElementById('id_name');
 
-        var nameInput = document.getElementById('id_name');
-        if (nameInput) {
-            nameInput.addEventListener('input', function () {
-                if (!slugInput.dataset.touched) {
-                    var autoSlug = cleanSlug(nameInput.value);
-                    slugInput.value = autoSlug;
-                    updateSlugPreview(autoSlug);
+    if (refreshSlugPreview && nameInput) {
+        refreshSlugPreview();
+
+        // Block organization names without letters or numbers, and repeated submits
+        var associationForm = nameInput.closest('form');
+        if (associationForm) {
+            var submitButton = associationForm.querySelector('[type="submit"]');
+            var resubmitDelay = 15000;
+            var enableSubmit = function () {
+                submitButton.disabled = false;
+            };
+
+            associationForm.addEventListener('submit', function (event) {
+                if (!/[\p{L}\p{N}]/u.test(nameInput.value)) {
+                    event.preventDefault();
+                    nameInput.setCustomValidity(nameInput.dataset.invalidMessage);
+                    nameInput.reportValidity();
+                } else {
+                    nameInput.setCustomValidity('');
+                    submitButton.disabled = true;
+                    // An interrupted submit never navigates away, so it cannot block the form forever
+                    setTimeout(enableSubmit, resubmitDelay);
                 }
             });
+            nameInput.addEventListener('input', function () {
+                nameInput.setCustomValidity('');
+            });
+            // A page restored from the back/forward cache can be submitted again
+            window.addEventListener('pageshow', enableSubmit);
         }
     }
 
-    // Demo launch: cloning takes a few seconds, so lock the cards and show progress.
+    // Demo launch: confirm in a modal first (cloning takes a few seconds), then submit.
     var demoForms = document.querySelectorAll('.get-started-demo-form');
-    var demoBuilding = document.getElementById('get-started-building');
+    var demoModal = document.getElementById('demo-confirm-modal');
+    var demoConfirmStep = document.getElementById('demo-confirm-step');
+    var demoBuildingStep = document.getElementById('demo-building-step');
+    var demoProceedButton = document.getElementById('demo-confirm-proceed');
+    var demoCloseButton = document.getElementById('demo-confirm-close');
+    var pendingDemoForm = null;
 
-    var setDemoLoading = function (loading, activeForm) {
+    if (demoModal && demoConfirmStep && demoBuildingStep && demoProceedButton) {
         demoForms.forEach(function (form) {
             var card = form.querySelector('.get-started-card');
             if (!card) {
                 return;
             }
-            card.disabled = loading;
-            card.classList.toggle('get-started-card-pending', loading && form === activeForm);
+            card.addEventListener('click', function () {
+                pendingDemoForm = form;
+                demoConfirmStep.classList.remove('hide');
+                demoBuildingStep.classList.add('hide');
+                demoModal.showModal();
+            });
         });
-        if (demoBuilding) {
-            demoBuilding.classList.toggle('hide', !loading);
-        }
-        document.body.classList.toggle('get-started-locked', loading);
-    };
 
-    demoForms.forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (form.dataset.submitted) {
-                event.preventDefault();
+        demoProceedButton.addEventListener('click', function () {
+            if (!pendingDemoForm) {
                 return;
             }
-            form.dataset.submitted = '1';
-            setDemoLoading(true, form);
+            demoConfirmStep.classList.add('hide');
+            demoBuildingStep.classList.remove('hide');
+            pendingDemoForm.requestSubmit();
         });
-    });
+
+        if (demoCloseButton) {
+            demoCloseButton.addEventListener('click', function () {
+                demoModal.close();
+            });
+        }
+
+        // Close when clicking the backdrop (outside the dialog bounds)
+        demoModal.addEventListener('click', function (event) {
+            var rect = demoModal.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) {
+                demoModal.close();
+            }
+        });
+    }
+
+    // Guides list: filter rows by search terms, hiding the groups left empty.
+    var guideSearch = document.getElementById('guide-search');
+    var guideNoResults = document.getElementById('guide-no-results');
+
+    if (guideSearch && guideNoResults) {
+        guideSearch.addEventListener('input', function () {
+            var terms = guideSearch.value.toLowerCase().split(/\s+/).filter(Boolean);
+            var anyVisible = false;
+            document.querySelectorAll('.guide-group').forEach(function (group) {
+                var groupVisible = false;
+                group.querySelectorAll('.guide-row').forEach(function (row) {
+                    var text = row.dataset.search.toLowerCase();
+                    row.hidden = !terms.every(function (term) {
+                        return text.indexOf(term) !== -1;
+                    });
+                    groupVisible = groupVisible || !row.hidden;
+                });
+                group.hidden = !groupVisible;
+                anyVisible = anyVisible || groupVisible;
+            });
+            guideNoResults.hidden = anyVisible;
+        });
+    }
+
+    // Guides list: play a video in a modal, loading YouTube only on request.
+    var guideVideoModal = document.getElementById('guide-video-modal');
+    var guideVideoFrame = document.getElementById('guide-video-frame');
+    var guideVideoTitle = document.getElementById('guide-video-title');
+    var guideVideoClose = document.getElementById('guide-video-close');
+
+    if (guideVideoModal && guideVideoFrame && guideVideoTitle && guideVideoClose) {
+        document.querySelectorAll('.guide-watch').forEach(function (button) {
+            button.addEventListener('click', function () {
+                guideVideoTitle.textContent = button.dataset.title;
+                guideVideoFrame.title = button.dataset.title;
+                guideVideoFrame.src = 'https://www.youtube.com/embed/' +
+                    encodeURIComponent(button.dataset.videoId) + '?autoplay=1';
+                guideVideoModal.showModal();
+            });
+        });
+
+        guideVideoClose.addEventListener('click', function () {
+            guideVideoModal.close();
+        });
+
+        // Close when clicking the backdrop (outside the dialog bounds)
+        guideVideoModal.addEventListener('click', function (event) {
+            var rect = guideVideoModal.getBoundingClientRect();
+            if (event.clientX < rect.left || event.clientX > rect.right ||
+                event.clientY < rect.top || event.clientY > rect.bottom) {
+                guideVideoModal.close();
+            }
+        });
+
+        // Unload the player on every kind of close, so the audio stops
+        guideVideoModal.addEventListener('close', function () {
+            guideVideoFrame.src = 'about:blank';
+        });
+    }
 
     // Coming back with the browser back button may restore the frozen page from
-    // the bfcache: unlock the cards so the user can start another demo
+    // the bfcache: close any stuck modal so the user can start another demo
     window.addEventListener('pageshow', function (event) {
         if (!event.persisted) {
             return;
         }
-        demoForms.forEach(function (form) {
-            delete form.dataset.submitted;
-        });
-        setDemoLoading(false, null);
+        pendingDemoForm = null;
+        if (demoModal && demoModal.open) {
+            demoModal.close();
+        }
     });
 
     window._lmReady = true;

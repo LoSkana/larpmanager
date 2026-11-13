@@ -68,9 +68,24 @@ window.jump_to = function(target) {
 window.openLmModal = function(content, cssClass) {
     const dialog = document.getElementById('lm-modal');
     dialog.className = cssClass || 'popup';
-    document.getElementById('lm-modal-content').innerHTML = content;
+    document.getElementById('lm-modal-content').innerHTML =
+        '<button class="modal-close-btn">&times;</button>' + content;
+    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.requestCloseLmModal();
+    });
     dialog.showModal();
 };
+
+// Esc on the shared modal goes through the unsaved edits check.
+document.addEventListener('DOMContentLoaded', function() {
+    const dialog = document.getElementById('lm-modal');
+    if (!dialog) return;
+    dialog.addEventListener('cancel', function(e) {
+        e.preventDefault();
+        window.requestCloseLmModal();
+    });
+});
 
 // Close the shared modal dialog if open.
 window.closeLmModal = function() {
@@ -78,18 +93,142 @@ window.closeLmModal = function() {
     if (dialog && dialog.open) dialog.close();
 };
 
-// Close the modal when clicking the backdrop (outside the dialog bounds).
-(function() {
-    const dialog = document.getElementById('lm-modal');
-    if (!dialog) return;
-    dialog.addEventListener('click', function(e) {
-        const rect = dialog.getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
-            window.closeLmModal();
-        }
+// Open the collapsed sections containing a form field and scroll to it.
+window.show_form_field = function(fieldId) {
+    // forms not rendered by the shared templates have no field row id
+    let row = $('#' + fieldId + '_tr');
+    if (!row.length) {
+        const field = $('#' + fieldId);
+        row = field.closest('tr').length ? field.closest('tr') : field;
+    }
+    if (!row.length) return;
+    row.parents('.hide').removeClass('hide').show();
+    $('.my_toggle').each(function() { syncToggleAria(this); });
+    window.jump_to(row);
+};
+
+// Error summary links jump to their field, and the first one is shown on load.
+$(document).on('click', '.form-error-link', function(e) {
+    e.preventDefault();
+    window.show_form_field($(this).data('field'));
+});
+
+$(function() {
+    const firstError = $('.form-error-link').first();
+    if (firstError.length) window.show_form_field(firstError.data('field'));
+});
+
+// Ask confirmation in a dialog stacked over any open modal, calling onConfirm if accepted.
+window.lmConfirm = function(message, onConfirm) {
+    // deferred so callers can resubmit forms outside the submit event
+    if (window.lmTesting) {
+        setTimeout(onConfirm, 0);
+        return;
+    }
+    const dialog = document.getElementById('lm-confirm');
+    dialog.querySelector('.confirm-message').textContent = message;
+    dialog.querySelector('.confirm-ok').onclick = function() {
+        dialog.close();
+        onConfirm();
+    };
+    dialog.querySelector('.confirm-cancel').onclick = function() {
+        dialog.close();
+    };
+    dialog.showModal();
+    // safe default, so Enter does not trigger destructive actions
+    dialog.querySelector('.confirm-cancel').focus();
+};
+
+// Track unsaved user edits in the main edit forms.
+window.lmFormDirty = false;
+
+// Last submit of the main edit forms, whose navigation leaves without warning.
+let lmFormSubmit = null;
+
+function markFormDirty() {
+    window.lmFormDirty = true;
+    lmFormSubmit = null;
+}
+
+$(document).on('input change select2:select select2:unselect', '#main_form, #manage_form', function(e) {
+    // ignore changes triggered by scripts
+    if (e.originalEvent || e.type.startsWith('select2')) markFormDirty();
+});
+
+// Rich text editors inside the main edit forms mark them dirty too.
+function trackEditorDirty(editor) {
+    const element = editor.getElement();
+    if (!element || !element.closest('#main_form, #manage_form')) return;
+    editor.on('input change undo redo', markFormDirty);
+}
+
+window.addEventListener('load', function() {
+    if (!window.tinymce) return;
+    tinymce.get().forEach(trackEditorDirty);
+    tinymce.on('AddEditor', function(e) {
+        trackEditorDirty(e.editor);
     });
-})();
+});
+
+// Warn before leaving a page with unsaved edits, unless drafts are kept by autosave.
+window.addEventListener('beforeunload', function(e) {
+    if (!window.lmFormDirty || window.lmTesting || window.lmDraftAutosave) return;
+    // checked now, so handlers that cancel the submit after it was recorded are honored
+    if (lmFormSubmit && !lmFormSubmit.isDefaultPrevented()) return;
+    e.preventDefault();
+    e.returnValue = '';
+});
+
+// Close the shared modal, asking first if its iframe holds unsaved edits.
+window.requestCloseLmModal = function() {
+    const iframe = document.querySelector('#lm-modal iframe');
+    let dirty = false;
+    try {
+        dirty = !!(iframe && iframe.contentWindow.lmFormDirty);
+    } catch (_err) {}
+    if (!dirty) {
+        window.closeLmModal();
+        return;
+    }
+    window.lmConfirm(document.getElementById('lm-confirm').dataset.discardText, window.closeLmModal);
+};
+
+// Links, buttons and forms with data-confirm ask confirmation before proceeding.
+$(document).on('click', 'a[data-confirm], button[data-confirm], input[data-confirm]', function(e) {
+    const el = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (el.dataset.confirmed) {
+        delete el.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.lmConfirm(el.dataset.confirm, function() {
+        el.dataset.confirmed = '1';
+        el.click();
+    });
+});
+
+$(document).on('submit', 'form[data-confirm]', function(e) {
+    const form = this;
+    if (window.lmTesting || e.isDefaultPrevented()) return;
+    if (form.dataset.confirmed) {
+        delete form.dataset.confirmed;
+        return;
+    }
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const submitter = e.originalEvent ? e.originalEvent.submitter : null;
+    window.lmConfirm(form.dataset.confirm, function() {
+        form.dataset.confirmed = '1';
+        form.requestSubmit(submitter);
+    });
+});
+
+// Edits stay unsaved until the page actually navigates away with the submit.
+$(document).on('submit', '#main_form, #manage_form', function(e) {
+    lmFormSubmit = e;
+});
 
 /**
  * Open a dialog modal with an iframe and a close button
@@ -102,9 +241,8 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
     const frame = `
         <div class="frame-container">
-            <button class="modal-close-btn">&times;</button>
-            <div class="frame-loading" style="display:none;"></div>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
+            <div class="frame-loading is-hidden"></div>
+            <iframe src="${iframeUrl}" width="100%"></iframe>
         </div>
     `;
 
@@ -117,7 +255,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const loading = dialog.querySelector('.frame-loading');
 
     const spinnerTimeout = setTimeout(function() {
-        if (!revealed && loading) loading.style.display = '';
+        if (!revealed && loading) loading.classList.remove('is-hidden');
     }, 500);
 
     function revealIframe() {
@@ -125,7 +263,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         revealed = true;
         clearTimeout(spinnerTimeout);
         iframe.style.visibility = 'visible';
-        if (loading) loading.style.display = 'none';
+        if (loading) loading.classList.add('is-hidden');
         if (modalClass === 'popup_edit') {
             try {
                 const iframeTitle = iframe.contentDocument && iframe.contentDocument.title;
@@ -158,22 +296,34 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
                 window.location.href = e.data.redirect_url;
             } else {
                 window.closeLmModal();
+                showFrameMessages(e.data.messages);
                 if (typeof onClose === 'function') setTimeout(onClose, 300);
             }
         }
     }
     window.addEventListener('message', onIframeMessage);
 
-    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
-        e.preventDefault();
-        window.closeLmModal();
-        restoreTitle();
-    });
+    dialog.addEventListener('close', restoreTitle, { once: true });
 
     dialog.addEventListener('close', function() {
         window.removeEventListener('message', onIframeMessage);
         restoreTitle();
     }, { once: true });
+}
+
+// Show as toasts the messages forwarded by a form saved inside a modal iframe.
+function showFrameMessages(messages) {
+    (messages || []).forEach(function(message) {
+        $.toast({
+            text: message.text,
+            showHideTransition: 'slide',
+            icon: message.icon,
+            position: 'top-center',
+            textAlign: 'center',
+            // errors stay until closed, others hide after 5 seconds
+            hideAfter: message.icon === 'error' ? false : 5000
+        });
+    });
 }
 
 // Toggle the mobile sidebar visibility and swap the open/close buttons.
@@ -212,11 +362,13 @@ window.addTinyMCETextarea = function(sel) {
 
 // ========== Init: Headings ==========
 
-// Fit banner/sidebar/header titles with textfill and strip trailing ":" from table header labels.
+// Fit banner/sidebar/header titles with textfill (skipped on v22) and strip trailing ":" from table header labels.
 function initHeadings() {
-    $('.association #banner h1').textfill({});
-    $('#sidebar h1').textfill({});
-    $('#header h1').textfill({});
+    if (!$('body').hasClass('new_v22')) {
+        $('.association #banner h1').textfill({});
+        $('#sidebar h1').textfill({});
+        $('#header h1').textfill({});
+    }
 
     // strip trailing ":" from table header labels
     $("th label").each(function() {
@@ -331,6 +483,12 @@ function initFeatureModals() {
         window.openIframeModal($(this).data('iframe-url'), 'popup_tutorial');
     });
 
+    $(document).on('click', function(event) {
+        if (!$(event.target).closest('#tv22-help summary').length) {
+            $('#tv22-help').removeAttr('open');
+        }
+    });
+
     $('.feature_checkbox a').click(function(event) {
         event.preventDefault();
 
@@ -438,39 +596,20 @@ function initDatepickers() {
 
 // ========== Init: Slug field ==========
 
-// Sanitize manual slug input and auto-generate the slug from the name until the user edits it.
 function initSlugField() {
-    let slugTouched = false;
-    let slugTimeout;
-
-    $('#slug').on('input', function (e) {
-        slugTouched = true;
-
-        let v = $(this).val();
-        var sl = new RegExp('[^a-z0-9]');
-        if (sl.test(v)) {
-            $('.slug_war').fadeIn(200);
-
-            clearTimeout(slugTimeout);
-            slugTimeout = setTimeout(function() {
-                $('.slug_war').fadeOut(200);
-            }, 3000);
-
-            v = v.replace(sl, '');
-            $(this).val(v);
-        }
-
-        $(this).trigger('slug:changed', [v]);
+    const refreshSlugPreview = createSlugField('#id_name, #id_form1-name', function (slug) {
+        $('#slug').trigger('slug:changed', [slug]);
     });
+    if (!refreshSlugPreview) {
+        return;
+    }
 
-    $('#id_name, #id_form1-name').on('input', function (e) {
-        if (!slugTouched) {
-            let nameVal = $(this).val();
-            let autoSlug = slugify(nameVal);
-            autoSlug = autoSlug.replaceAll('-', '');
-            $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
-        }
-    });
+    // Wait for the page scripts to bind their slug:changed handlers, even if the load event already fired
+    if (document.readyState === 'complete') {
+        setTimeout(refreshSlugPreview);
+    } else {
+        $(window).on('load', refreshSlugPreview);
+    }
 }
 
 // ========== Init: Toggles ==========
@@ -498,6 +637,7 @@ function initToggles() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
         el.toggle();
+        $(this).find('.sl-show, .sl-hide').toggleClass('hide');
 
          if (el.is(":visible")) {
              var elements = document.getElementsByClassName(k);
@@ -506,13 +646,40 @@ function initToggles() {
                 window.jump_to('.' + k);
             }
             $(this).addClass('select');
+            // datatables built while hidden need their column widths recomputed
+            el.find('table.go_datatable').each(function() {
+                if (window.datatables && window.datatables[this.id]) window.datatables[this.id].columns.adjust();
+            });
         } else {
             $(this).removeClass('select');
         }
+        syncToggleAria(this);
 
         return false;
 
     });
+
+    // Space activates toggles like buttons, Enter too when the toggle is not a link
+    $(document).on("keydown", ".my_toggle", function(e) {
+        if (e.key === ' ' || (e.key === 'Enter' && !(this.tagName === 'A' && this.hasAttribute('href')))) {
+            e.preventDefault();
+            $(this).trigger('click');
+        }
+    });
+
+    // links keep their role, other elements become focusable buttons
+    $('.my_toggle').each(function() {
+        var isLink = this.tagName === 'A' && this.hasAttribute('href');
+        if (!isLink && this.tagName !== 'BUTTON' && !this.hasAttribute('role')) $(this).attr('role', 'button');
+        if (!isLink && !this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
+        syncToggleAria(this);
+    });
+}
+
+// Reflect the visibility of a toggle's target blocks in its aria-expanded state.
+function syncToggleAria(toggle) {
+    var target = $('.' + $(toggle).attr('tog'));
+    $(toggle).attr('aria-expanded', target.is(':visible') ? 'true' : 'false');
 }
 
 // ========== Init: Datatable links / delete confirm ==========
@@ -545,6 +712,17 @@ function initDatatableLinks() {
 // ========== Init: Popups ==========
 
 // Open inline .show_popup content in the modal and wire AJAX post_popup handlers.
+// Open [data-popup-image] thumbnails full size in #imagePopup, closing it on click.
+function initImagePopup() {
+    $(document).on('click', '[data-popup-image]', function() {
+        $('#popupImg').attr('src', this.dataset.popupImage);
+        $('#imagePopup').css('display', 'flex');
+    });
+    $(document).on('click', '#imagePopup', function() {
+        $(this).hide();
+    });
+}
+
 function initPopups() {
     $(document).on("click", ".show_popup", function() {
         num = $(this).attr("pop");
@@ -562,6 +740,20 @@ function initPopups() {
     });
 
     post_popup();
+
+    // Read-only member status flags popup (orga_payments, exe_payments).
+    $(document).on('click', '.member_flags_eye', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('turl'),
+            method: 'POST',
+            data: { mid: $(this).attr('mid') },
+        }).done(function (res) {
+            if (res.k == 0) return;
+            window.openLmModal(res.v, 'popup');
+        });
+    });
 }
 
 // ========== Init: Table search ==========
@@ -598,14 +790,12 @@ function initFadeIns() {
 
 // ========== Init: Misc ==========
 
-// Leftover setup: hide empty info box, resize fields, clipboard buttons, select chevrons,
+// Leftover setup: hide empty info box, clipboard buttons, select chevrons,
 // conditional fields, new-url handlers, and removal of empty page-info.
 function initMisc() {
     if ($('.info').is(':empty')) {
         $('.info').hide();
     }
-
-    resize_fields();
 
     copyClipboardButton();
 
@@ -651,6 +841,7 @@ $(document).ready(function() {
     initToggles();
     initFeatureModals();
     initPopups();
+    initImagePopup();
     initTableSearch();
 
     // Tables
@@ -674,7 +865,7 @@ function replaceNewUrl() {
             newUrl = href;
         } else {
             let currentUrl = window.location.href;
-            let cleanedUrl = currentUrl.split('#')[0];
+            let cleanedUrl = currentUrl.split('#')[0].split('?')[0];
             newUrl = cleanedUrl + 'new/';
         }
         if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
@@ -724,28 +915,36 @@ function refreshDatatables() {
         const savedStates = {};
         let $emptyAnchor = null;
 
-        // page was empty (no tables) but now has content: replace the whole content wrapper
-        if (!$('table.go_datatable').length && $newTables.length) {
+        // page was empty (no tables) or gained new tables: replace the whole content wrapper
+        const oldIds = $('table.go_datatable').map(function() { return this.id; }).get();
+        const hasNewTables = $newTables.filter(function() { return this.id && !oldIds.includes(this.id); }).length > 0;
+        if ((!oldIds.length && $newTables.length) || hasNewTables) {
             const $page = $('[class^="page_"], [class*=" page_"]').first();
             const $newPage = $newDoc.find('[class^="page_"], [class*=" page_"]').first();
             if ($page.length && $newPage.length) {
+                // keep the hidden split lists the user opened
+                const openTogs = $page.find('.my_toggle.select').map(function() { return $(this).attr('tog'); }).get();
                 $page.html($newPage.html());
+                openTogs.forEach(function(tog) {
+                    $page.find('.' + tog).show();
+                    $page.find('.my_toggle[tog="' + tog + '"]').addClass('select').each(function() { syncToggleAria(this); });
+                });
                 // rebuild column index map from the freshly injected table headers
                 if (typeof window.buildHideColumnsIndexMap === 'function') window.buildHideColumnsIndexMap();
                 // do NOT suppress trigger togs: apply default column visibility (hidden columns)
                 data_tables();
                 if (typeof window.reloadActiveQuestions === 'function') window.reloadActiveQuestions();
                 if (typeof window.applyColumnToggles === 'function') window.applyColumnToggles();
-                resize_fields();
                 $(window).scrollTop(savedScrollTop);
                 window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
                 return;
             }
         }
 
-        // nearest heading right before a table (skipping <hr>), or empty set
+        // nearest heading right before a table or its .split_list wrapper (skipping <hr>), or empty set
         function headingFor($table) {
-            let node = $table[0].previousElementSibling;
+            const $wrapper = $table.parent('.split_list');
+            let node = ($wrapper.length ? $wrapper[0] : $table[0]).previousElementSibling;
             while (node && node.tagName === 'HR') node = node.previousElementSibling;
             return node && node.tagName === 'H2' ? $(node) : $();
         }
@@ -786,16 +985,23 @@ function refreshDatatables() {
                 const $newHeading = $newTable.length ? headingFor($newTable) : $();
                 if ($oldHeading.length && $newHeading.length) {
                     $oldHeading.html($newHeading.html());
+                    // keep the select state of a toggle whose list is open
+                    $oldHeading.find('.my_toggle').each(function() {
+                        $(this).toggleClass('select', $('.' + $(this).attr('tog')).is(':visible'));
+                        syncToggleAria(this);
+                    });
                 }
             } else {
                 // no rows left in new page (group/last element deleted): remove table and heading
-                const $anchorRef = $oldHeading.length ? $oldHeading : $oldTable;
+                const $oldWrapper = $oldTable.parent('.split_list');
+                const $oldBlock = $oldWrapper.length ? $oldWrapper : $oldTable;
+                const $anchorRef = $oldHeading.length ? $oldHeading : $oldBlock;
                 if (!$emptyAnchor) $emptyAnchor = $('<span>').insertBefore($anchorRef);
                 // remove a leading <hr> separator if it belongs to this block
                 const prev = $anchorRef[0].previousElementSibling;
                 if (prev && prev.tagName === 'HR') prev.remove();
                 $oldHeading.remove();
-                $oldTable.remove();
+                $oldBlock.remove();
             }
         });
 
@@ -837,7 +1043,6 @@ function refreshDatatables() {
         if (typeof window.applyColumnToggles === 'function') {
             window.applyColumnToggles();
         }
-        resize_fields();
         $(window).scrollTop(savedScrollTop);
         window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     }).fail(function() {
@@ -970,6 +1175,11 @@ function data_tables() {
 
     window.datatables = window.datatables || {};
 
+    // when the page already offers an explicit CSV export button (see elements/table/header.html),
+    // drop the redundant 'csv' DataTables export button to avoid duplicate export options
+    var has_explicit_export = document.querySelector('.orga-buttons a[href*="/export/"]') !== null;
+    var dt_export_buttons = has_explicit_export ? ['copy', 'excel', 'pdf', 'print'] : ['copy', 'csv', 'excel', 'pdf', 'print'];
+
     $('table.go_datatable').each(function() {
         const $table = $(this);
 
@@ -1025,18 +1235,22 @@ function data_tables() {
         var no_buttons = $table.attr('no_buttons') !== undefined;
         // opt-in: keep export buttons also on short tables, that would otherwise get the minimal layout
         var force_buttons = !no_buttons && $table.attr('force_buttons') !== undefined;
-        var export_buttons = { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] };
+        // opt-in: add a global text search box, for tables where per-column searchDropdown isn't enough
+        var show_search = $table.attr('show_search') !== undefined;
+        var export_buttons = { buttons: dt_export_buttons };
+        var search_top_start = show_search ? 'search' : null;
 
         var dtConfig = {
+            language: window.dt_language || {},
             scrollX: true,
             responsive: window.enviro === 'prod',
             stateSave: false,
             paging: full_layout,
             layout: full_layout
                 ? (no_buttons
-                    ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
-                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
-                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null,
+                    ? { topStart: search_top_start, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
+                    : { topStart: search_top_start, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
+                : { topStart: search_top_start, topEnd: null, bottomStart: null, bottomEnd: null,
                     bottom2: force_buttons ? export_buttons : null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
@@ -1175,14 +1389,15 @@ function data_tables() {
         var thList = $table.find('thead th');
         var disable_sort_columns = [];
 
-        // disable sort for empty thead th
+        // disable sort for empty thead th, and for columns not backed by the database
         thList.each(function (index) {
-            if ($(this).text().trim() === '') {
+            if ($(this).text().trim() === '' || $(this).attr('no_sort') !== undefined) {
                 disable_sort_columns.push(index);
             }
         });
 
         const table = new DataTable('#' + tableId, {
+            language: window.dt_language || {},
             lengthMenu: [[25, 50, 100, 250, 500, 1000, 2500, 5000, 10000], [25, 50, 100, 250, 500, 1000, 2500, 5000, 10000]],
             ajax: {
                 url: url,
@@ -1205,7 +1420,7 @@ function data_tables() {
                 { searchable: false, targets: disable_sort_columns },
                 { columnControl: [], targets: disable_sort_columns }
             ],
-            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },
+            layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: dt_export_buttons } },
             /*
             initComplete: function () {
                 this.api()
@@ -1433,6 +1648,38 @@ function reload_has_tooltip(parent='') {
 
 }
 
+// Show the description of the calls in the ability descriptions; bound on first hover, so it also works on
+// elements added later, and inside a modal dialog the tooltip is placed in the dialog to stay above it.
+$(document).on('mouseenter', '.exp-call', function(event) {
+    const $call = $(this);
+    if ($call.data('qtip')) return;
+    const $dialog = $call.closest('dialog');
+    $call.qtip({
+        content: {
+            text: $call.attr('data-call-descr')
+        }, style: {
+            classes: 'qtip-dark qtip-rounded qtip-shadow'
+        }, show: {
+            event: event.type,
+            ready: true
+        }, position: {
+            my: 'top center',
+            at: 'bottom center',
+            container: $dialog.length ? $dialog : $(document.body),
+            viewport: window
+        }
+    }, event);
+});
+
+// Remove the calls tooltips placed in a modal dialog when it closes, since its content is replaced on reopen.
+// The close event does not bubble, so it is caught in the capture phase.
+document.addEventListener('close', function(event) {
+    if (event.target.tagName !== 'DIALOG') return;
+    $(event.target).find('.exp-call').each(function() {
+        if ($(this).data('qtip')) $(this).qtip('destroy', true);
+    });
+}, true);
+
 // Add translated qtip tooltips to edit/up/down/trash action icons that lack one.
 function add_icon_tooltips() {
     // Dictionary mapping icon classes to their tooltip texts
@@ -1498,23 +1745,6 @@ function selectLanguage(lang) {
     xhttp.open("POST", set_language_url, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("language=" + lang);
-}
-
-// Scale writing-table cell font size down as text length grows (excluding popup text).
-function resize_fields() {
-    $(".writing td").each(function( index ) {
-
-        var textLength = stripHTML($(this).text()).length;
-
-       $(this).find('.popup_text').each(function () {
-           textLength -= stripHTML($(this).text()).length;
-        });
-
-        fontSize = Math.max(50, Math.round(100 - textLength / 7));
-
-        $(this).css('font-size', fontSize + '%');
-    });
-
 }
 
 // Return an HTML-escaped (XSS-safe) version of the input string.
@@ -1595,3 +1825,133 @@ function copyClipboardButton() {
 }
 
 });
+
+// Max size of picked files buffered in memory, larger ones are uploaded as picked.
+const LM_FILE_BUFFER_MAX = 10 * 1024 * 1024;
+// Max wait for a picked file to be read, before using it as picked.
+const LM_FILE_BUFFER_TIMEOUT = 30000;
+
+// Show a persistent error toast about picked files.
+function warnFileError(text) {
+    if (!text || !$.toast) return;
+    $.toast({
+        text: text,
+        showHideTransition: 'slide',
+        icon: 'error',
+        position: 'top-center',
+        textAlign: 'center',
+        hideAfter: false
+    });
+}
+
+// Read a file in memory; resolves to the original if too big, or to null if unreadable.
+function bufferFile(file) {
+    if (file.size > LM_FILE_BUFFER_MAX) return Promise.resolve(file);
+    let timer;
+    const read = file.arrayBuffer().then(function(buffer) {
+        return new File([buffer], file.name, {type: file.type, lastModified: file.lastModified});
+    });
+    const timeout = new Promise(function(resolve, reject) {
+        timer = setTimeout(function() { reject(new Error('timeout')); }, LM_FILE_BUFFER_TIMEOUT);
+    });
+    return Promise.race([read, timeout]).catch(function(err) {
+        console.error('Failed to read file:', err);
+        return null;
+    }).finally(function() {
+        clearTimeout(timer);
+    });
+}
+
+// Read files in memory so cloud-backed files stay uploadable, warning once if any is too big or unreadable.
+function bufferFiles(files) {
+    if (files.some(function(file) { return file.size > LM_FILE_BUFFER_MAX; })) {
+        warnFileError(window.lmFileTooLargeText);
+    }
+    return Promise.all(files.map(bufferFile)).then(function(buffered) {
+        if (buffered.includes(null)) warnFileError(window.lmFileReadErrorText);
+        return buffered.map(function(file, idx) { return file || files[idx]; });
+    });
+}
+
+// Read a single file in memory; resolves to the original if too big or unreadable.
+window.lmBufferFile = function(file) {
+    return bufferFiles([file]).then(function(buffered) { return buffered[0]; });
+};
+
+// Buffer files picked in any file input.
+document.addEventListener('change', function(event) {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement) || input.type !== 'file') return;
+    // a newer pick (or a clear) on the same input supersedes any pending one
+    input.lmPicked = null;
+    input.lmBuffering = null;
+    input.lmPending = false;
+    if (!input.files || !input.files.length || typeof DataTransfer === 'undefined') return;
+
+    const picked = Array.from(input.files);
+    input.lmPicked = picked;
+    input.lmPending = true;
+
+    // exposed so other change handlers reuse the buffered files instead of reading them again
+    input.lmBuffering = bufferFiles(picked);
+    input.lmBuffering.then(function(buffered) {
+        if (input.lmPicked !== picked) return;
+        if (buffered.every(function(file, idx) { return file === picked[idx]; })) return;
+        try {
+            const transfer = new DataTransfer();
+            buffered.forEach(function(file) { transfer.items.add(file); });
+            input.files = transfer.files;
+        } catch (err) {
+            console.error('Failed to replace picked files:', err);
+        }
+    }).finally(function() {
+        if (input.lmPicked === picked) input.lmPending = false;
+    });
+}, true);
+
+// Whether a file input of the form is still being buffered.
+function formHasPendingFiles(form) {
+    return Array.from(form.elements).some(function(el) { return el.lmPending; });
+}
+
+// Run callback once all files picked in the form are buffered, right away if none is pending.
+function whenFilesBuffered(form, callback) {
+    if (!formHasPendingFiles(form)) return callback();
+    const wait = setInterval(function() {
+        if (formHasPendingFiles(form)) return;
+        clearInterval(wait);
+        callback();
+    }, 100);
+}
+
+// Delay form submit until its picked files are buffered, sending it once.
+document.addEventListener('submit', function(event) {
+    const form = event.target;
+    if (!formHasPendingFiles(form)) return;
+    const submitter = event.submitter;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    if (form.lmAwaitingFiles) return;
+    form.lmAwaitingFiles = true;
+    whenFilesBuffered(form, function() {
+        form.lmAwaitingFiles = false;
+        if (!form.requestSubmit) return nativeFormSubmit.call(form);
+        form.requestSubmit(submitter && submitter.form === form ? submitter : undefined);
+    });
+}, true);
+
+// Exposed for code that reads a form outside of its submit event (eg building a FormData).
+window.lmWhenFilesBuffered = whenFilesBuffered;
+
+// Programmatic submits skip the submit event, so they are delayed here.
+const nativeFormSubmit = HTMLFormElement.prototype.submit;
+HTMLFormElement.prototype.submit = function() {
+    const form = this;
+    if (!formHasPendingFiles(form)) return nativeFormSubmit.call(form);
+    if (form.lmAwaitingFiles) return;
+    form.lmAwaitingFiles = true;
+    whenFilesBuffered(form, function() {
+        form.lmAwaitingFiles = false;
+        nativeFormSubmit.call(form);
+    });
+};

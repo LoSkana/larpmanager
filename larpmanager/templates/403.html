@@ -6,8 +6,18 @@
 {% block nav %}
 {% endblock nav %}
 {% block title %}
-    403 - Permission denied
+    403 - {% trans "Permission denied" %}
 {% endblock title %}
 {% block content %}
-    You don't have permission to access this page. Maybe check that you are logged in with the correct username?
+    <h2>{% trans "You don't have permission to access this page." %}</h2>
+    {% if user.is_authenticated %}
+        <p>
+            {% blocktrans trimmed with name=user.member.display_member %}
+                You are logged in as {{ name }}. If you should have access, ask an organizer to grant you the required role, or log in with a different account.
+            {% endblocktrans %}
+        </p>
+    {% else %}
+        <p>{% trans "Log in to access this page." %}</p>
+    {% endif %}
+    {% include "elements/error_actions.html" %}
 {% endblock content %}

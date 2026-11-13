@@ -25,10 +25,12 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
 from django.db.models import Max, Prefetch
 from django.db.models.functions import Length, Substr
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -52,7 +54,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.member import Member
-from larpmanager.models.utils import strip_tags
+from larpmanager.models.utils import display_filename, strip_tags
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -62,19 +64,21 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
+    get_event_class_parent,
+    get_event_elements,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import _process_working_ticket
 from larpmanager.utils.edit.options_inline import (
+    check_writing_form_type,
     options_inline_delete,
     options_inline_reorder,
     options_inline_save,
 )
 from larpmanager.utils.edit.orga import (
     OrgaAction,
-    check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
     orga_delete,
@@ -133,7 +137,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "used_key": f"exp_used_{sys.uuid}",
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
-            for sys in get_event_exp_systems(context["event"])
+            for sys in get_event_exp_systems(context["event"].id)
         ]
 
     return writing_list(request, context, Character, "character")
@@ -248,12 +252,14 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     context = check_event_context(request, event_slug, "orga_characters")
 
     # Get parent event to ensure character belongs to this event
-    parent_event = context["event"].get_class_parent(Character)
+    parent_event = get_event_class_parent(context["event"].id, Character, context=context)
 
     # Plots are not inherited in campaigns: keep only the ones of this event
     plots_prefetch = Prefetch(
         "plots",
-        queryset=Plot.objects.filter(event=context["event"].get_class_parent(Plot)).prefetch_related("characters"),
+        queryset=Plot.objects.filter(
+            event=get_event_class_parent(context["event"].id, Plot, context=context)
+        ).prefetch_related("characters"),
     )
 
     # Load character with prefetched factions and plots, filtered by event
@@ -326,42 +332,82 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
     max_length = 100
 
     # Get the specific question being processed
-    question = event.get_elements(WritingQuestion).get(uuid=q_uuid, applicable=applicable)
+    question = get_event_elements(event.id, WritingQuestion, context=context).get(uuid=q_uuid, applicable=applicable)
 
     # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        # Build choice options dictionary
-        cho = {}
-        for opt in event.get_elements(WritingOption).filter(question=question):
-            cho[opt.id] = opt.name
-
-        # Process choices and group by element UUID
-        for el in (
-            WritingChoice.objects.filter(question=question, element_id__in=element_ids)
-            .select_related("option")
-            .order_by("option__order")
-        ):
-            element_uuid = str(element_mapping[el.element_id])
-            if element_uuid not in res:
-                res[element_uuid] = []
-            res[element_uuid].append(cho[el.option_id])
+        _orga_writing_choices(context, element_ids, element_mapping, event, question, res)
 
     # Handle text and computed questions
-    elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED]:
-        # Query answers with text truncation for preview
-        que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
-        que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("element_id", "short_text")
+    elif question.typ in [BaseQuestionType.TEXT, WritingQuestionType.COMPUTED, WritingQuestionType.CONCEPT]:
+        _orga_writing_answers(element_ids, element_mapping, max_length, popup, question, res)
 
-        # Process each answer and mark long texts for popup display
-        for el in que:
-            answer = el["short_text"]
-            element_uuid = str(element_mapping[el["element_id"]])
-            if len(answer) == max_length:
-                popup.append(element_uuid)
-            res[element_uuid] = answer
+    # Handle file questions: render a download link from the stored storage path
+    elif question.typ == WritingQuestionType.FILE:
+        _orga_writing_files(element_ids, element_mapping, question, res)
 
     return JsonResponse({"res": res, "popup": popup, "q_uuid": str(question.uuid)})
+
+
+def _orga_writing_files(
+    element_ids: list[int], element_mapping: dict[int, str], question: WritingQuestion, res: dict[str, str]
+) -> None:
+    """Populate res with download links for file-type writing answers, keyed by element uuid."""
+    que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids).values("element_id", "text")
+    for el in que:
+        if not el["text"]:
+            continue
+        element_uuid = str(element_mapping[el["element_id"]])
+        res[element_uuid] = format_html(
+            '<a href="{}" target="_blank">{}</a>', default_storage.url(el["text"]), display_filename(el["text"])
+        )
+
+
+def _orga_writing_answers(
+    element_ids: list[int],
+    element_mapping: dict[int, str],
+    max_length: int,
+    popup: list[str],
+    question: WritingQuestion,
+    res: dict[str, str],
+) -> None:
+    """Populate res with truncated text answers, keyed by element uuid, marking long ones for popup display."""
+    # Query answers with text truncation for preview
+    que = WritingAnswer.objects.filter(question=question, element_id__in=element_ids)
+    que = que.annotate(short_text=Substr("text", 1, max_length))
+    que = que.values("element_id", "short_text")
+    # Process each answer and mark long texts for popup display
+    for el in que:
+        answer = el["short_text"]
+        element_uuid = str(element_mapping[el["element_id"]])
+        if len(answer) == max_length:
+            popup.append(element_uuid)
+        res[element_uuid] = answer
+
+
+def _orga_writing_choices(
+    context: dict[str, Any],
+    element_ids: list[int],
+    element_mapping: dict[int, str],
+    event: Event,
+    question: WritingQuestion,
+    res: dict[str, list[str]],
+) -> None:
+    """Populate res with lists of chosen option names, keyed by element uuid, ordered by option order."""
+    # Build choice options dictionary
+    cho = {}
+    for opt in get_event_elements(event.id, WritingOption, context=context).filter(question=question):
+        cho[opt.id] = opt.name
+    # Process choices and group by element UUID
+    for el in (
+        WritingChoice.objects.filter(question=question, element_id__in=element_ids)
+        .select_related("option")
+        .order_by("option__order")
+    ):
+        element_uuid = str(element_mapping[el.element_id])
+        if element_uuid not in res:
+            res[element_uuid] = []
+        res[element_uuid].append(cho[el.option_id])
 
 
 @login_required
@@ -389,14 +435,11 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
     context = check_event_context(request, event_slug, "orga_characters")
     check_writing_form_type(context, writing_type)
 
-    # Get the parent event if this is a child event
     event = context["event"]
-    if event.parent:
-        event = event.parent
 
     # Retrieve the specific writing question from POST data
     q_uuid = request.POST.get("q_uuid")
-    question = event.get_elements(WritingQuestion).get(uuid=q_uuid)
+    question = get_event_elements(event.id, WritingQuestion, context=context).get(uuid=q_uuid)
 
     # Only process single or multiple choice questions
     if question.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
@@ -404,7 +447,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
     # Build mapping of option IDs to option names
     cho = {}
-    for opt in event.get_elements(WritingOption).filter(question=question):
+    for opt in get_event_elements(event.id, WritingOption, context=context).filter(question=question):
         cho[opt.id] = opt.name
 
     # Load event cache and create character ID to number mapping
@@ -429,7 +472,7 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
     """Process all character choices for a question."""
     res = {}
     player_ids = {}
-    character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
+    character_ids = get_event_elements(event.id, Character, context=context).values_list("id", flat=True)
     writing_number = get_event_config(context["event"].id, "writing_number", context=context)
     for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
         # Skip if character not in current event mapping
@@ -506,7 +549,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
     context["download"] = 1
 
     # Retrieve and order writing questions for the specified form type
-    context["list"] = get_cached_writing_questions(context["event"], context["writing_typ"])
+    context["list"] = get_cached_writing_questions(context["event"].id, context["writing_typ"])
 
     # Set approval configuration and status flags for template rendering
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
@@ -647,9 +690,9 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     uuid_map = {}
 
     # Get all characters for the event
-    for ch_id, ch_uuid, ch_number, ch_name, ch_text in (
-        context["event"].get_elements(Character).values_list("id", "uuid", "number", "name", "text")
-    ):
+    for ch_id, ch_uuid, ch_number, ch_name, ch_text in get_event_elements(
+        context["event"].id, Character, context=context
+    ).values_list("id", "uuid", "number", "name", "text"):
         check_chars[ch_number] = {"id": ch_id, "number": ch_number, "name": ch_name, "text": ch_text or ""}
         id_number_map[ch_id] = ch_number
         uuid_map[ch_number] = ch_uuid
@@ -658,7 +701,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Append plot-related text content if plot feature is enabled
     if "plot" in context["features"]:
-        event = context["event"].get_class_parent(Character)
+        event = get_event_class_parent(context["event"].id, Character, context=context)
         que = PlotCharacterRel.objects.filter(character__event=event).select_related("character")
         que = que.exclude(text__isnull=True).exclude(text__exact="")
 
@@ -751,8 +794,7 @@ def check_writings(
         cache[element_name] = {}
         # check s: all characters currently listed has
         for element in (
-            context["event"]
-            .get_elements(element_type)
+            get_event_elements(context["event"].id, element_type, context=context)
             .annotate(characters_map=ArrayAgg("characters__id"))
             .prefetch_related("characters")
         ):
@@ -789,13 +831,15 @@ def check_speedlarp(checks: Any, context: dict, id_number_map: Any) -> None:
 
     checks["speed_larps_double"] = []
     checks["speed_larps_missing"] = []
-    max_speedlarp_type = context["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
+    max_speedlarp_type = get_event_elements(context["event"].id, SpeedLarp, context=context).aggregate(Max("typ"))[
+        "typ__max"
+    ]
     if not max_speedlarp_type or max_speedlarp_type == 0:
         return
 
     speedlarp_assignments = {}
-    for speedlarp_element in (
-        context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters__id"))
+    for speedlarp_element in get_event_elements(context["event"].id, SpeedLarp, context=context).annotate(
+        characters_map=ArrayAgg("characters__id")
     ):
         check_speedlarp_prepare(speedlarp_element, id_number_map, speedlarp_assignments)
     for character_number, character in context["chars"].items():
@@ -850,9 +894,9 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
     try:
         # Get element based on type (Trait or Character)
         if element_type.lower() == "trait":
-            el = context["event"].get_elements(Trait).get(pk=idx)
+            el = get_event_elements(context["event"].id, Trait, context=context).get(pk=idx)
         else:
-            el = context["event"].get_elements(Character).get(pk=idx)
+            el = get_event_elements(context["event"].id, Character, context=context).get(pk=idx)
 
         # Return the element's number
         return JsonResponse({"res": "ok", "number": el.number})
@@ -1011,6 +1055,7 @@ def _get_excel_form(
     """
     # Check user permissions and setup base context
     context = check_event_context(request, event_slug, f"orga_{element_type}s")
+    context["excel_edit"] = True
     if not is_submit:
         get_event_cache_all(context)
 
@@ -1021,8 +1066,7 @@ def _get_excel_form(
 
     # Fetch the writing question with proper filtering
     question = (
-        context["event"]
-        .get_elements(WritingQuestion)
+        get_event_elements(context["event"].id, WritingQuestion, context=context)
         .select_related("event")
         .filter(applicable=context["writing_typ"])
         .get(uuid=question_uuid)
@@ -1030,7 +1074,11 @@ def _get_excel_form(
 
     # Setup applicable type context and fetch target element
     context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
-    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=edit_uuid)
+    element = (
+        get_event_elements(context["event"].id, context["applicable"], context=context)
+        .select_related("event")
+        .get(uuid=edit_uuid)
+    )
     context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes
@@ -1053,6 +1101,10 @@ def _get_excel_form(
     field_key = f"que_{question.uuid}"
     if question.typ not in BaseQuestionType.get_basic_types():
         field_key = question.typ
+
+    # The other answers are not on the page: gate the options here, as the client side cannot
+    if hasattr(form, "filter_gated_choices"):
+        form.filter_gated_choices(field_key)
 
     # Filter form to show only the relevant question field
     if field_key in form.fields:
@@ -1084,7 +1136,7 @@ def _get_question_update(context: dict, element: Any) -> str:
 
     """
     # Handle cover question type - return image thumbnail HTML
-    if context["question"].typ in [WritingQuestionType.COVER]:
+    if context["question"].typ == WritingQuestionType.COVER:
         return f"""
                 <a href="{element.thumb.url}">
                     <img src="{element.thumb.url}"
@@ -1112,7 +1164,11 @@ def _get_question_update(context: dict, element: Any) -> str:
         # get option names
         if not isinstance(display_value, list):
             display_value = [display_value]
-        query = context["event"].get_elements(WritingOption).filter(uuid__in=display_value).order_by("order")
+        query = (
+            get_event_elements(context["event"].id, WritingOption, context=context)
+            .filter(uuid__in=display_value)
+            .order_by("order")
+        )
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit

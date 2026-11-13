@@ -32,7 +32,7 @@
     {% if frame %}
         {% include "elements/helpers/iframe_resize.js" %}
     {% else %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
     $(document).ready(function() {
         $('#confirm_action_cancel').on('click', function(e) {
             e.preventDefault();

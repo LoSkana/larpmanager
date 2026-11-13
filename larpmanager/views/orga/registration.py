@@ -34,6 +34,7 @@ from django.db.models import Prefetch
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
@@ -49,7 +50,7 @@ from larpmanager.accounting.registration import (
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
+from larpmanager.cache.registration_lookup import get_active_registrations, get_registration_tickets
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
@@ -62,8 +63,6 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
-from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
-from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -71,6 +70,7 @@ from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
     RegistrationQuestionApplicable,
+    RegistrationQuestionType,
 )
 from larpmanager.models.member import LogOperationType, Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -80,18 +80,22 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import get_option_form_text
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, get_event_class_parent
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import (
-    get_discount,
-    get_element_event,
-    get_registration,
-    get_time_diff,
-)
+from larpmanager.utils.core.checks import check_event_context
+from larpmanager.utils.core.common import get_discount, get_element_event, get_time_diff
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
+from larpmanager.utils.registrations.context import _get_registration_fields, get_pre_registration, get_registration
+from larpmanager.utils.registrations.features import _save_questbuilder, lottery_info
+from larpmanager.utils.registrations.questions import (
+    get_ordered_registration_questions,
+    get_ranking_names,
+    get_registration_answers_by_question,
+    get_registration_choices_by_question,
+)
 from larpmanager.utils.security.confirm import confirm_post
+from larpmanager.utils.users.member_flags import get_member_flags_html, member_flags_active
 from larpmanager.views.orga.member import member_field_correct
 
 if TYPE_CHECKING:
@@ -206,7 +210,7 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
 
         # Check for provisional status first, then map ticket tier to type
         if is_registration_provisional(
-            registration, event=context["event"], features=context["features"], context=context
+            registration, event_id=context["event"].id, features=context["features"], context=context
         ):
             registration_type = ("0", _("Provisional"))
         elif ticket.get("tier") in ticket_types:
@@ -370,7 +374,9 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
         registration = Registration.objects.get(uuid=registration_uuid, run=context["run"])
 
         # Get question from cache instead of DB
-        cached_questions = get_cached_registration_questions(context["event"].get_class_parent(RegistrationQuestion))
+        cached_questions = get_cached_registration_questions(
+            get_event_class_parent(context["event"].id, RegistrationQuestion, context=context)
+        )
         question = None
         for q in cached_questions:
             if str(q["uuid"]) == str(question_uuid):
@@ -424,49 +430,13 @@ def _orga_registrations_prepare(context: dict) -> None:
     for ticket in tickets:
         ticket["emails"] = []
         context["reg_tickets"][ticket["id"]] = ticket
-    event_questions = get_cached_registration_questions(context["event"])
+    event_questions = get_cached_registration_questions(context["event"].id)
     context["reg_questions"] = _get_registration_fields(context, context["member"], event_questions)
     context["text_field_uuids"] = [
         str(q["uuid"]) for q in event_questions if q["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
     ]
 
     context["no_grouping"] = get_event_config(context["event"].id, "registration_no_grouping", context=context)
-
-
-def _get_registration_fields(context: dict, member: Any, event_questions: list | None = None) -> dict:
-    """Get registration questions that are accessible to the given member.
-
-    Args:
-        context: Context dictionary containing event, features, run, and all_runs information
-        member: Member object to check question access permissions for
-        event_questions: Pre-fetched list of questions; fetched from cache if not provided
-
-    Returns:
-        Dictionary mapping question IDs to RegistrationQuestion objects that the member can access
-
-    """
-    registration_questions = {}
-
-    if event_questions is None:
-        event_questions = get_cached_registration_questions(context["event"])
-
-    for question in event_questions:
-        # Check if question has access restrictions enabled
-        allowed_map = question.get("allowed_map", [])
-        if "reg_que_allowed" in context["features"] and allowed_map and allowed_map[0]:
-            current_run_id = context["run"].id
-
-            # Check if user is an organizer for this run
-            is_organizer = 1 in context["all_runs"].get(current_run_id, {})
-
-            # Skip question if user is not organizer and not in allowed list
-            if not is_organizer and member.id not in allowed_map:
-                continue
-
-        # Add accessible question to results
-        registration_questions[question["uuid"]] = question
-
-    return registration_questions
 
 
 def _orga_registrations_discount(context: dict) -> None:
@@ -476,14 +446,18 @@ def _orga_registrations_discount(context: dict) -> None:
 
     # Initialize discount tracking structures
     context["reg_discounts"] = {}
-    discount_items_query = AccountingItemDiscount.objects.filter(run=context["run"])
+    discount_items_query = AccountingItemDiscount.objects.filter(registration__run=context["run"])
 
-    # Process each discount item and organize by member
-    for accounting_item_discount in discount_items_query.select_related("member", "disc").exclude(hide=True):
-        regs_list_add(context, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.member)
-        if accounting_item_discount.member_id not in context["reg_discounts"]:
-            context["reg_discounts"][accounting_item_discount.member_id] = []
-        context["reg_discounts"][accounting_item_discount.member_id].append(accounting_item_discount.disc.name)
+    # Process each discount item and organize by registration
+    for accounting_item_discount in discount_items_query.select_related("registration__member", "disc").exclude(
+        hide=True
+    ):
+        regs_list_add(
+            context, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.registration.member
+        )
+        context["reg_discounts"].setdefault(accounting_item_discount.registration_id, []).append(
+            accounting_item_discount.disc.name
+        )
 
 
 def _orga_registrations_text_fields(context: dict) -> None:
@@ -495,7 +469,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
     """
     text_field_uuids = context["text_field_uuids"]
 
-    cached_registration_fields = get_cache_registration_field(context["run"])
+    cached_registration_fields = get_cache_registration_field(context["run"].id, context["run"].event_id)
     for registration in context["registration_list"]:
         registration_uuid = str(registration.uuid)
         if registration_uuid not in cached_registration_fields:
@@ -583,7 +557,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list_factions"] = {}
 
     # Query active (non-cancelled, non-pending) registrations ordered by last update
-    que = get_active_registrations(context["run"]).order_by("-updated")
+    que = get_active_registrations(context["run"].id).order_by("-updated")
     context["registration_list"] = list(que.select_related("member"))
 
     _registrations_prepare_membership(context)
@@ -594,8 +568,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         _orga_registrations_standard(r, context)
 
         # Add discount information if available
-        if "discount" in context["features"] and r.member_id in context["reg_discounts"]:
-            r.discounts = context["reg_discounts"][r.member_id]
+        if "discount" in context["features"] and r.id in context["reg_discounts"]:
+            r.discounts = context["reg_discounts"][r.id]
 
         # Add questbuilder trait information
         _orga_registrations_traits(r, context)
@@ -651,7 +625,8 @@ def _load_preferences_columns(context: dict) -> None:
     """Load and configure column visibility preferences for registration list.
 
     Loads user's saved column visibility preferences from member configuration.
-    If no preferences are set, automatically enables the ticket column by default.
+    If no preferences are set, enables the ticket column (and additional tickets
+    column, if the feature is active) by default.
 
     Args:
         context: Context dictionary containing member, event, and reg_questions data
@@ -674,13 +649,16 @@ def _load_preferences_columns(context: dict) -> None:
     except (json.JSONDecodeError, ValueError):
         default_fields = []
 
-    # If user hasn't set preferences, automatically open ticket column by default
+    # If user hasn't set preferences, automatically open default columns
     if not default_fields:
-        # Find the ticket question ID to add to default fields
-        for question_uuid, question in context["reg_questions"].items():
-            if question["typ"] == "ticket":
-                default_fields.append(f".lq_{question_uuid}")
-                break
+        default_types = {"ticket"}
+        if "additional_tickets" in context.get("features", {}):
+            default_types.add("additional_tickets")
+        default_fields.extend(
+            f".lq_{question_uuid}"
+            for question_uuid, question in context["reg_questions"].items()
+            if question["typ"] in default_types
+        )
 
     context["default_fields"] = json.dumps(default_fields)
 
@@ -693,8 +671,59 @@ def orga_registrations_accounting(request: HttpRequest, event_slug: str) -> Json
     return JsonResponse(res)
 
 
+def _get_ranking_form_list(context: dict, question: dict) -> dict[str, str]:
+    """Map registration uuid to the comma-separated ranked option names of a ranking question."""
+    names_by_uuid = {str(option["uuid"]): option["name"] for option in question.get("options", [])}
+    answers = RegistrationAnswer.objects.filter(question_id=question["id"], registration__run=context["run"])
+    return {
+        str(answer["registration__uuid"]): ", ".join(get_ranking_names(answer["text"], names_by_uuid))
+        for answer in answers.values("text", "registration__uuid")
+    }
+
+
+def _can_access_registration_question(context: dict, question: dict) -> bool:
+    """Check if the user may see answers of a question restricted to specific organizers."""
+    allowed_map = question.get("allowed_map")
+    if "reg_que_allowed" not in context["features"] or not allowed_map or not allowed_map[0]:
+        return True
+    organizer = 1 in context["all_runs"].get(context["run"].id, {})
+    return organizer or context["member"].id in allowed_map
+
+
+def _get_choice_form_list(context: dict, question: dict) -> dict[str, list[str]]:
+    """Map registration uuids to the chosen option texts of a single/multiple choice question."""
+    # Use cached options instead of DB query
+    option_texts = {opt["id"]: get_option_form_text(opt) for opt in question.get("options", [])}
+
+    # Still need to query choices as they're registration-specific
+    res = {}
+    for el in RegistrationChoice.objects.filter(
+        question_id=question["id"], registration__run=context["run"]
+    ).select_related("registration"):
+        res.setdefault(str(el.registration.uuid), []).append(option_texts[el.option_id])
+    return res
+
+
+def _get_text_form_list(context: dict, question: dict) -> tuple[dict[str, str], list[str]]:
+    """Map registration uuids to truncated text answers; also return uuids whose answer was truncated."""
+    max_length = 100
+    answers = (
+        RegistrationAnswer.objects.filter(question_id=question["id"], registration__run=context["run"])
+        .annotate(short_text=Substr("text", 1, max_length))
+        .values("registration_id", "short_text", "registration__uuid")
+    )
+    res = {}
+    popup = []
+    for el in answers:
+        answer = el["short_text"]
+        if len(answer) == max_length:
+            popup.append(el["registration__uuid"])
+        res[el["registration__uuid"]] = answer
+    return res, popup
+
+
 @login_required
-def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  # noqa: C901 - Complex form list management with POST handling
+def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:
     """Handle registration form list management for event organizers.
 
     Args:
@@ -710,52 +739,25 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
     q_uuid = request.POST.get("q_uuid")
 
     # Get question from cache instead of DB query
-    cached_questions = get_cached_registration_questions(context["event"])
-    q = None
-    for question in cached_questions:
-        if str(question["uuid"]) == str(q_uuid):
-            q = question
-            break
-
-    if not q:
+    q = next(
+        (
+            question
+            for question in get_cached_registration_questions(context["event"].id)
+            if str(question["uuid"]) == str(q_uuid)
+        ),
+        None,
+    )
+    if not q or not _can_access_registration_question(context, q):
         return None
-
-    # Check allowed permissions
-    if "reg_que_allowed" in context["features"] and q.get("allowed_map") and q["allowed_map"][0]:
-        run_id = context["run"].id
-        organizer = 1 in context["all_runs"].get(run_id, {})
-        if not organizer and context["member"].id not in q["allowed_map"]:
-            return None
 
     res = {}
     popup = []
-
-    max_length = 100
-
     if q["typ"] in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
-        # Use cached options instead of DB query
-        cho = {}
-        for opt in q.get("options", []):
-            cho[opt["id"]] = get_option_form_text(opt)
-
-        # Still need to query choices as they're registration-specific
-        for el in RegistrationChoice.objects.filter(
-            question_id=q["id"], registration__run=context["run"]
-        ).select_related("registration"):
-            reg_uuid = str(el.registration.uuid)
-            if reg_uuid not in res:
-                res[reg_uuid] = []
-            res[reg_uuid].append(cho[el.option_id])
-
+        res = _get_choice_form_list(context, q)
     elif q["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH]:
-        que = RegistrationAnswer.objects.filter(question_id=q["id"], registration__run=context["run"])
-        que = que.annotate(short_text=Substr("text", 1, max_length))
-        que = que.values("registration_id", "short_text", "registration__uuid")
-        for el in que:
-            answer = el["short_text"]
-            if len(answer) == max_length:
-                popup.append(el["registration__uuid"])
-            res[el["registration__uuid"]] = answer
+        res, popup = _get_text_form_list(context, q)
+    elif q["typ"] == RegistrationQuestionType.RANKING:
+        res = _get_ranking_form_list(context, q)
 
     return JsonResponse({"res": res, "popup": popup, "q_uuid": str(q["uuid"])})
 
@@ -855,6 +857,9 @@ def _save_registration_edit(
         return redirect("orga_registrations", event_slug=context["run"].get_slug())
 
     save_log(context, Registration, registration, registration_uuid)
+
+    for warning in form.full_options_warnings:
+        messages.warning(request, warning)
 
     # Save registration-specific questions and answers
     form.save_registration_questions(registration)
@@ -962,36 +967,10 @@ def orga_registrations_delete(request: HttpRequest, event_slug: str, registratio
 
     registration = context["registration"]
     text = _("Registration")
-    context["el_name"] = f"{text} - {registration.member} - {registration.ticket.name}"
+    context["el_name"] = f"{text} - {registration.member}"
+    if registration.ticket:
+        context["el_name"] += f" - {registration.ticket.name}"
     return render(request, "elements/dashboard/delete_confirm.html", context)
-
-
-def _save_questbuilder(context: dict, form: object, registration: Any) -> None:
-    """Save quest type assignments from questbuilder form.
-
-    Args:
-        context: Context dictionary containing event and run data
-        form: Form containing quest type selections
-        registration: Registration object for the member
-
-    """
-    for qt in QuestType.objects.filter(event=context["event"]):
-        trait_uuid = form.cleaned_data.get(f"qt_{qt.uuid}")
-        base_kwargs = {
-            "run": context["run"],
-            "member": registration.member,
-            "typ": qt.number,
-        }
-
-        if not trait_uuid or trait_uuid == "0":
-            AssignmentTrait.objects.filter(**base_kwargs).delete()
-            continue
-
-        trait = get_element_event(context, trait_uuid, Trait)
-        AssignmentTrait.objects.update_or_create(
-            **base_kwargs,
-            defaults={"trait": trait},
-        )
 
 
 @login_required
@@ -1039,7 +1018,7 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Collect all active (non-pending) registration IDs for the current run
-    registration_ids = [str(registration.id) for registration in get_active_registrations(context["run"])]
+    registration_ids = [str(registration.id) for registration in get_active_registrations(context["run"].id)]
 
     # Trigger background registration checks
     check_registration_background(registration_ids)
@@ -1052,10 +1031,9 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, registrat
     context = check_event_context(request, event_slug, "orga_registrations")
     get_registration(context, registration_uuid)
 
-    # Get active discounts for this registration's member
+    # Get active discounts for this registration
     context["active"] = AccountingItemDiscount.objects.filter(
-        run=context["run"],
-        member=context["registration"].member,
+        registration=context["registration"],
     ).select_related("disc")
 
     # Get discounts of this run not already applied to the registration
@@ -1087,11 +1065,10 @@ def orga_registration_discount_add(
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
 
-    # Skip if the same discount is already applied to this member for this run
+    # Skip if the same discount is already applied to this registration
     (_item, created) = AccountingItemDiscount.objects.get_or_create(
-        member=context["registration"].member,
+        registration=context["registration"],
         disc=context["discount"],
-        run=context["run"],
         defaults={
             "value": context["discount"].value,
             "association_id": context["association_id"],
@@ -1119,11 +1096,10 @@ def orga_registration_discount_del(
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
 
-    # Delete the discount accounting item for this member/run and save registration
+    # Delete the discount accounting item for this registration and save registration
     AccountingItemDiscount.objects.filter(
         disc=context["discount"],
-        member=context["registration"].member,
-        run=context["run"],
+        registration=context["registration"],
     ).delete()
     context["registration"].save()
 
@@ -1138,8 +1114,6 @@ def orga_registration_discount_del(
 @login_required
 def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display pending signup requests, with their answers to the request questions."""
-    from larpmanager.views.orga.form import get_ordered_registration_questions  # noqa: PLC0415
-
     context = check_event_context(request, event_slug, "orga_registration_requests")
     context["list"] = list(
         Registration.objects.filter(run=context["run"], pending=True).order_by("-created").select_related("member")
@@ -1155,23 +1129,22 @@ def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpRes
     question_ids = [question.id for question in questions]
     registration_ids = [registration.id for registration in context["list"]]
 
-    answers_by_registration: dict[int, dict[int, str]] = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids, registration_id__in=registration_ids):
-        answers_by_registration.setdefault(answer.registration_id, {})[answer.question_id] = answer.text
-
-    choices_by_registration: dict[int, dict[int, list[str]]] = {}
-    for choice in RegistrationChoice.objects.filter(
-        question_id__in=question_ids, registration_id__in=registration_ids
-    ).select_related("option"):
-        choices_by_registration.setdefault(choice.registration_id, {}).setdefault(choice.question_id, []).append(
-            choice.option.name
-        )
+    answers_by_registration = get_registration_answers_by_question(question_ids, registration_id__in=registration_ids)
+    choices_by_registration = get_registration_choices_by_question(question_ids, registration_id__in=registration_ids)
+    ranking_names = {
+        question.id: {str(option.uuid): option.name for option in question.options.all()}
+        for question in questions
+        if question.typ == RegistrationQuestionType.RANKING
+    }
 
     for registration in context["list"]:
         cells = []
         for question in questions:
             if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
                 value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            elif question.id in ranking_names:
+                raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
+                value = ", ".join(get_ranking_names(raw, ranking_names[question.id]))
             else:
                 value = answers_by_registration.get(registration.id, {}).get(question.id, "")
             cells.append(value)
@@ -1287,7 +1260,7 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
             r.accounting_refunds = refunds[r.id]
         get_accounting_refund(r)
 
-        r.days = get_time_diff(context["run"].end, r.cancellation_date.date())
+        r.days = get_time_diff(context["run"].end, timezone.localtime(r.cancellation_date).date())
     return render(request, "larpmanager/orga/accounting/cancellations.html", context)
 
 
@@ -1372,50 +1345,6 @@ def orga_cancellation_refund(request: HttpRequest, event_slug: str, registration
     return render(request, "larpmanager/orga/accounting/cancellation_refund.html", context)
 
 
-def get_pre_registration(event: Any) -> dict[str, list | dict[int, int]]:
-    """Get pre-registration data for an event.
-
-    Args:
-        event: The event to get pre-registration data for.
-
-    Returns:
-        Dictionary containing:
-        - 'list': All pre-registrations for the event
-        - 'pred': Pre-registrations from members who haven't signed up yet
-        - Additional keys with preference counts
-
-    """
-    # Initialize result dictionary with empty lists
-    result_data = {"list": [], "pred": []}
-
-    # Get set of member IDs who have already registered for this event
-    signed_member_ids = set(
-        Registration.objects.filter(run__event=event, cancellation_date__isnull=True, pending=False).values_list(
-            "member_id", flat=True
-        )
-    )
-
-    # Get all pre-registrations ordered by preference and creation date
-    pre_registrations = PreRegistration.objects.filter(event=event).order_by("pref", "created")
-
-    # Process each pre-registration
-    for pre_registration in pre_registrations.select_related("member"):
-        # Check if member hasn't signed up yet
-        if pre_registration.member_id not in signed_member_ids:
-            result_data["pred"].append(pre_registration)
-        else:
-            # Mark as already signed up
-            pre_registration.signed = True
-
-        # Add to main list and count preferences
-        result_data["list"].append(pre_registration)
-        if pre_registration.pref not in result_data:
-            result_data[pre_registration.pref] = 0
-        result_data[pre_registration.pref] += 1
-
-    return result_data
-
-
 @login_required
 def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Handle pre-registrations view for organization users."""
@@ -1429,35 +1358,6 @@ def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpRespons
     context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences")
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", context)
-
-
-def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001
-    """Add lottery-related information to the context dictionary.
-
-    Args:
-        request: HTTP request object
-        context: Context dictionary to update with lottery info
-
-    """
-    # Get number of lottery draws from event configuration
-    context["num_draws"] = int(get_event_config(context["event"].id, "lottery_num_draws", context=context))
-
-    # Get lottery ticket configuration
-    context["ticket"] = get_event_config(context["event"].id, "lottery_ticket", context=context)
-
-    # Count active lottery registrations
-    context["num_lottery"] = Registration.objects.filter(
-        run=context["run"],
-        ticket__tier=TicketTier.LOTTERY,
-        cancellation_date__isnull=True,
-    ).count()
-
-    # Count definitive (confirmed) registrations excluding special tiers
-    context["num_def"] = (
-        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
-        .exclude(ticket__tier__in=[TicketTier.LOTTERY, TicketTier.STAFF, TicketTier.NPC, TicketTier.WAITING])
-        .count()
-    )
 
 
 @login_required
@@ -1503,7 +1403,7 @@ def orga_lottery(request: HttpRequest, event_slug: str) -> HttpResponse:
         chosen = regs[0:to_upgrade]
 
         # Get the target ticket for upgrading selected registrations
-        ticket = get_object_or_404(RegistrationTicket, event=context["run"].event, name=context["ticket"])
+        ticket = get_object_or_404(RegistrationTicket, event_id=context["run"].event_id, name=context["ticket"])
 
         # Upgrade chosen registrations to the target ticket tier
         for el in chosen:
@@ -1548,7 +1448,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     """
     # Check organizer permissions for registration management
-    context = check_event_context(request, event_slug, "orga_registrations")
+    context = check_event_context(request, event_slug, ["orga_registrations", "orga_characters"])
     member_uuid = request.POST.get("mid")
 
     # Validate member existence
@@ -1557,8 +1457,14 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    # Verify member has an active registration for this event
-    if not get_active_registrations(context["run"]).filter(member=member).exists():
+    # Verify member has an active registration for this event, or plays one of its characters
+    is_registered = get_active_registrations(context["run"].id).filter(member=member).exists()
+    if (
+        not is_registered
+        and not Character.objects.filter(
+            event_id=get_event_class_parent(context["event"].id, Character, context=context), player=member
+        ).exists()
+    ):
         return JsonResponse({"k": 0})
 
     # Build member information HTML starting with name and profile
@@ -1566,7 +1472,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
 
     # Add profile image if available
     if member.profile:
-        text += f"<img src='{member.profile_thumb.url}' style='width: 15em; margin: 1em; border-radius: 5%;' />"
+        text += f"<img src='{member.profile_thumb.url}' class='member-popup-thumb' />"
 
     # Always include email address
     text += f"<p><b>Email</b>: {member.email}</p>"
@@ -1610,5 +1516,9 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
         # Only display fields with actual values
         if value:
             text += f"<p><b>{field_label}</b>: {value}</p>"
+
+    # Append member status flags, if the pseudo-feature is active for the association
+    if member_flags_active(context["association_id"], context):
+        text += get_member_flags_html(member, context["association_id"])
 
     return JsonResponse({"k": 1, "v": text})

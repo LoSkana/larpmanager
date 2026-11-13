@@ -1,37 +1,40 @@
 {% extends "base.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Ability" %} - {{ character }} - {{ run.search }}
+    {% trans "Abilities" %} - {{ character }} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <h2>{% trans "Obtain ability" %}</h2>
-    <form action="{{ request.path }}"
-          method="post"
-          enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" id="ability_type" name="ability_type" value="">
-        <input type="hidden" id="ability_select" name="ability_select" value="">
-        <div class="ability-selector">
-            <div class="ability-top-row">
-                <div class="ability-search-bar">
-                    <input type="text"
-                           id="ability_search"
-                           placeholder="{% trans 'Search abilities' %}..."
-                           autocomplete="off">
+    <div class="sheet">
+        {% if has_available %}
+            <h1 class="c">{% trans "Buy ability" %}</h1>
+            <form action="{{ request.path }}"
+                  method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="ability_type" name="ability_type" value="">
+                <input type="hidden" id="ability_select" name="ability_select" value="">
+                <div class="ability-selector">
+                    <div class="ability-top-row">
+                        <input type="submit" value="{% trans "Confirm" %}" disabled>
+                        <div class="ability-search-bar">
+                            <input type="text"
+                                   id="ability_search"
+                                   placeholder="{% trans 'Search abilities' %}..."
+                                   autocomplete="off">
+                        </div>
+                        <div class="ability-type-tabs" id="ability_type_tabs"></div>
+                    </div>
+                    <div class="ability-cards-grid" id="ability_cards_grid"></div>
+                    <div class="ability-empty-msg" id="ability_empty_msg">{% trans "No abilities found." %}</div>
                 </div>
-                <div class="ability-type-tabs" id="ability_type_tabs"></div>
-            </div>
-            <div class="ability-cards-grid" id="ability_cards_grid"></div>
-            <div class="ability-empty-msg" id="ability_empty_msg">{% trans "No abilities found." %}</div>
-        </div>
-        <div class="ability-submit-row">
-            <p>
-                <i>{% trans "Select the new ability to obtain" %}</i>
+            </form>
+        {% else %}
+            <p class="ability-empty-msg">
+                {% trans "There are no abilities you can buy right now. New ones unlock as you gain experience points or meet their requirements." %}
             </p>
-            <input type="submit" value="{% trans "Submit" %}" disabled>
-        </div>
-    </form>
-    {% include "elements/sheet/experience.html" %}
+        {% endif %}
+        {% include "elements/sheet/experience.html" %}
+    </div>
 {% endblock content %}
 {% block js2 %}
     {% include "elements/char_abilities.js.html" %}

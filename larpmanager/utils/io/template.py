@@ -44,6 +44,7 @@ TEMPLATE_VALUE_MAPPING = {
     WritingQuestionType.COVER: "element cover (utils path)",
     WritingQuestionType.FACTIONS: "faction names (comma separated)",
     WritingQuestionType.TITLE: "title short text",
+    WritingQuestionType.CONCEPT: "concept short text (staff only)",
     WritingQuestionType.MIRROR: "name of mirror character",
     WritingQuestionType.HIDE: "hide (true or false)",
     WritingQuestionType.LOCKED: "locked (true or false)",
@@ -57,6 +58,7 @@ TEMPLATE_VALUE_MAPPING = {
     RegistrationQuestionType.PWYW: "amount of free donation",
     RegistrationQuestionType.QUOTA: "number of quotas to split the fee",
     RegistrationQuestionType.SURCHARGE: "surcharge applied",
+    RegistrationQuestionType.RANKING: "option names in order of preference (comma separated)",
 }
 
 
@@ -86,9 +88,12 @@ def build_upload_template(context: dict, upload_type: str) -> list[tuple[str, li
     builders = {
         "registration_ticket": _ticket_template,
         "exp_abilitie": _ability_template,
+        "exp_ability_type": _ability_type_template,
         "exp_rule": _rule_template,
         "exp_modifier": _modifier_template,
         "exp_criterion": _criterion_template,
+        "exp_call": _call_template,
+        "exp_exclusive": _exclusive_template,
         "exp_deliverie": _delivery_template,
     }
     return builders.get(upload_type, _form_template)(context)
@@ -133,12 +138,37 @@ def _ability_template(context: dict) -> Any:
         "prerequisites": "Prerequisite abilities, comma-separated",
         "requirements": "Character options, comma-separated",
         "visible": "true",
+        "creation_only": "false",
         "system": "Experience system name",
     }
     column_names = list(context["columns"][0].keys())
     example_row_values = [field_example_values.get(column_name, "") for column_name in column_names]
     export_data.append(("abilities", column_names, [example_row_values]))
     return export_data
+
+
+def _ability_type_template(context: dict) -> Any:
+    """Generate template for ability type uploads with example data."""
+    field_example_values = {"name": "Ability type name"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("ability_types", column_names, [example_row])]
+
+
+def _call_template(context: dict) -> Any:
+    """Generate template for call uploads with example data."""
+    field_example_values = {"name": "STUN", "descr": "Call description"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("calls", column_names, [example_row])]
+
+
+def _exclusive_template(context: dict) -> Any:
+    """Generate template for exclusive group uploads with example data."""
+    field_example_values = {"name": "Fighting styles", "max": "1", "abilities": "Ability names, comma-separated"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("exclusives", column_names, [example_row])]
 
 
 def _rule_template(context: dict) -> Any:
@@ -300,7 +330,7 @@ def _reg_template(
             row_values.append(default_values[key])
         else:
             field_type = context["fields"][key]
-            row_values.append(value_mapping[field_type])
+            row_values.append(value_mapping.get(field_type, ""))
 
     # Create export tuple with template name, keys, and values
     return [(f"{template_type} - template", column_keys, [row_values])]

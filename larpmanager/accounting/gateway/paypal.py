@@ -63,7 +63,7 @@ def get_paypal_form(request: HttpRequest, context: dict, invoice: PaymentInvoice
         "invoice": invoice.cod,
         "notify_url": request.build_absolute_uri(reverse("paypal-ipn")),
         "return": request.build_absolute_uri(reverse("accounting_payed", args=[invoice.uuid])),
-        "cancel_return": request.build_absolute_uri(reverse("accounting_cancelled")),
+        "cancel_return": request.build_absolute_uri(reverse("accounting_cancelled")) + f"?invoice={invoice.uuid}",
     }
     context["paypal_form"] = PayPalPaymentsForm(initial=paypal_payment_data)
 

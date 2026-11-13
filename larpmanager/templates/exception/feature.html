@@ -12,6 +12,19 @@
     {% trans "To use the feature you requested, you need to activate the following feature:" %} {{ feature.name }}
     <br />
     <br />
+    {% if feature.descr %}
+        <p>{% trans feature.descr %}</p>
+    {% endif %}
+    {% if feature.tutorial %}
+        <p>
+            <a href="{% url 'tutorials' %}{{ feature.tutorial }}"
+               target="_blank"
+               rel="noopener">
+                <i class="fa-solid fa-graduation-cap"></i>
+                {% trans "Tutorial" %}
+            </a>
+        </p>
+    {% endif %}
     {% if permission %}
         {% trans "Do you want to proceed?" %}
         {% if run %}

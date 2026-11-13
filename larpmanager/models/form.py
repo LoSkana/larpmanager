@@ -93,7 +93,9 @@ WritingQuestionType = extend_textchoices(
         ("COVER", "cover", _("Cover")),
         ("FACTIONS", "faction", _("Factions")),
         ("TITLE", "title", _("Title")),
+        ("CONCEPT", "concept", _("Concept")),
         ("MIRROR", "mirror", _("Mirror")),
+        ("FILE", "file", _("File")),
         ("HIDE", "hide", _("Hide")),
         ("LOCKED", "locked", _("Locked")),
         ("PROGRESS", "progress", _("Progress")),
@@ -120,6 +122,7 @@ def get_writing_max_length() -> Any:
         WritingQuestionType.SHEET,
         WritingQuestionType.TEASER,
         WritingQuestionType.TEXT,
+        WritingQuestionType.CONCEPT,
         WritingQuestionType.PARAGRAPH,
         WritingQuestionType.MULTIPLE,
         WritingQuestionType.EDITOR,
@@ -136,6 +139,8 @@ RegistrationQuestionType = extend_textchoices(
         ("QUOTA", "reg_quotas", _("Payment Installments")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
         ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
+        ("LIKERT", "l", _("Likert scale")),
+        ("RANKING", "r", _("Ranking")),
     ],
 )
 
@@ -145,7 +150,7 @@ class QuestionStatus(models.TextChoices):
 
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
-    DISABLED = "d", _("Disabled")
+    DISABLED = "d", _("Read only")
     HIDDEN = "h", _("Hidden")
 
     @classmethod
@@ -219,6 +224,7 @@ class RegistrationQuestionApplicable(models.TextChoices):
     REGISTRATION = "r", "registration"
     MATCHMAKER = "m", "matchmaker"
     REQUEST = "q", "request"
+    DEBRIEF = "b", "debrief"
 
 
 def _get_registration_mapping() -> dict[str, str | None]:
@@ -230,6 +236,7 @@ def _get_registration_mapping() -> dict[str, str | None]:
         "registration": None,
         "matchmaker": "matchmaker",
         "request": "config:registration_approval_process",
+        "debrief": "debrief",
     }
 
 
@@ -237,6 +244,7 @@ REGISTRATION_TYPE_TO_APPLICABLE = {
     "registration": RegistrationQuestionApplicable.REGISTRATION,
     "matchmaker": RegistrationQuestionApplicable.MATCHMAKER,
     "request": RegistrationQuestionApplicable.REQUEST,
+    "debrief": RegistrationQuestionApplicable.DEBRIEF,
 }
 
 REGISTRATION_APPLICABLE_TO_TYPE = {value: key for key, value in REGISTRATION_TYPE_TO_APPLICABLE.items()}
@@ -315,9 +323,24 @@ class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
         help_text=_("Select the types of writing elements that this question applies to"),
     )
 
+    requirements = models.ManyToManyField(
+        "WritingOption",
+        related_name="gated_questions",
+        blank=True,
+        verbose_name=_("Prerequisites"),
+        help_text=_("Enter other options that must be selected for this question to be shown"),
+    )
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Save the question, forcing concept questions to stay hidden from participants."""
+        if self.typ == WritingQuestionType.CONCEPT:
+            self.visibility = QuestionVisibility.HIDDEN
+            self.status = QuestionStatus.HIDDEN
+        super().save(*args, **kwargs)
 
     def show(self) -> dict[str, Any]:
         """Return JSON-serializable dictionary of object attributes."""
@@ -408,7 +431,10 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
     max_available = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
-        help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
+        help_text=_(
+            "Optional - Maximum number of characters assigned to participants of each run that can select it "
+            "(0 = unlimited)"
+        ),
     )
 
     requirements = models.ManyToManyField(
@@ -418,6 +444,16 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
         blank=True,
         verbose_name=_("Prerequisites"),
         help_text=_("Enter other options that must be selected for this option to be selectable"),
+    )
+
+    default = models.BooleanField(
+        default=False,
+        verbose_name=_("Default"),
+        help_text=_(
+            "Indicate whether this option is assigned automatically, when the question cannot be "
+            "answered by the participant and no option was chosen; if several options are marked, "
+            "the first one whose prerequisites are satisfied is assigned",
+        ),
     )
 
     tickets = models.ManyToManyField(
@@ -456,6 +492,7 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
         data["description"] = self.description
         data["order"] = self.order
         data["max_available"] = self.max_available
+        data["default"] = self.default
 
         # Preserve tickets_map annotation if it exists (added by cache queries)
         if hasattr(self, "tickets_map"):
@@ -559,7 +596,8 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
         verbose_name=_("Maximum length"),
         help_text=_(
             "Optional - For text questions, maximum number of characters; For multiple options, maximum "
-            "number of options (0 = no limit)",
+            "number of options; For Likert scale questions, maximum value of the scale; For ranking "
+            "questions, number of options to rank (0 = no limit)",
         ),
     )
 

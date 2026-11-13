@@ -128,9 +128,9 @@
                             {% if features.discount %}
                                 <th class="disc">{% trans "Discounts" %}</th>
                             {% endif %}
-                            <th class="date">{% trans "Creation" %} (y/m/d)</th>
-                            <th class="date">{% trans "Last change" %} (y/m/d)</th>
-                            <th class="date">{% trans "Full payment" %} (y/m/d)</th>
+                            <th class="date">{% trans "Creation" %}</th>
+                            <th class="date">{% trans "Last change" %}</th>
+                            <th class="date">{% trans "Full payment" %}</th>
                             {% if features.reg_quotas or features.reg_installments %}
                                 <th class="acc quota">{% trans "Next quota" %}</th>
                             {% endif %}
@@ -272,10 +272,10 @@
                                         <a href="{% url 'orga_registration_discounts' run.get_slug registration.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
-                                <td class="date">{{ registration.created | date:"y/m/d H:i" }}</td>
-                                <td class="date">{{ registration.updated | date:"y/m/d H:i" }}</td>
-                                <td class="date">
-                                    {% if registration.payment_date %}{{ registration.payment_date | date:"y/m/d H:i" }}{% endif %}
+                                <td class="date" data-order="{{ registration.created|date:'U' }}">{{ registration.created|date:'d/m/Y H:i' }}</td>
+                                <td class="date" data-order="{{ registration.updated|date:'U' }}">{{ registration.updated|date:'d/m/Y H:i' }}</td>
+                                <td class="date" data-order="{{ registration.payment_date|date:'U' }}">
+                                    {% if registration.payment_date %}{{ registration.payment_date|date:'d/m/Y H:i' }}{% endif %}
                                 </td>
                                 {% if features.reg_quotas or features.reg_installments %}
                                     <td class="acc quota"
@@ -339,9 +339,8 @@
         <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
     {% else %}
         <br />
-        <p class="no-elements-available">
-            <i>{% trans "No registrations have been received for this event yet" %}</i>
-        </p>
+        {% trans "Participants appear here as soon as they register for this event." as empty_text %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     <div class="table-footer-row">
         {% include "elements/table/footer.html" %}
@@ -362,7 +361,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 var url_load_questions = "{% url 'orga_registration_form_list' run.get_slug %}";
 var url_load_questions_email = "{% url 'orga_registration_form_email' run.get_slug %}";
 
@@ -473,37 +472,8 @@ window.addEventListener('DOMContentLoaded', function() {
             return false;
         });
 
-        $(document).on('click', '.post_popup_member', function (e) {
-
-                // Show spinner only after 500ms delay
-                let spinnerTimeout = setTimeout(function() {
-                    start_spinner();
-                }, 500);
-
-                request = $.ajax({
-                    url: "{% url 'orga_registration_member' run.get_slug %}",
-                    method: "POST",
-                    data: { mid: $(this).attr("pop") },
-                    datatype: "json",
-                });
-
-                request.done(function(res) {
-                    // Clear the spinner timeout since request completed
-                    clearTimeout(spinnerTimeout);
-
-                    if (res.k == 0) return;
-                    stop_spinner();
-
-                    window.openLmModal(res.v, 'popup');
-
-                    $('#lm-modal').scrollTop( 0 );
-                    $('#lm-modal .hide').hide();
-                });
-
-                return false;
-            });
-
     });
 });
     </script>
+    {% include "elements/table/member_popup.js" %}
 {% endblock js %}

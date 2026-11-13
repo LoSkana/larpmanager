@@ -30,6 +30,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.mail.suppression import get_suppressed_emails
@@ -38,7 +39,7 @@ from larpmanager.models.event import PreRegistration, Run
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     _get_help_questions,
     format_email_body,
@@ -216,14 +217,14 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get members already registered for current or future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.localdate()).values_list(
             "member_id",
             flat=True,
         ),
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get all active association members (exclude empty memberships)
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -267,14 +268,14 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Get list of members already registered for current/future runs
     already = list(
-        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.now().date()).values_list(
+        Registration.objects.filter(run__event=context["event"], run__end__gte=timezone.localdate()).values_list(
             "member_id",
             flat=True,
         ),
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get active association members
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -405,15 +406,22 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
     return render(request, "larpmanager/orga/users/questions_answer.html", context)
 
 
+def _orga_questions_close_name(request: HttpRequest, event_slug: str, member_uuid: str) -> str:
+    """Return the label of the help question being closed."""
+    check_event_context(request, event_slug, "orga_questions")
+    member = get_member(member_uuid)
+    return str(_("Close question of %(member)s") % {"member": member})
+
+
 @login_required
-@confirm_post
+@confirm_post(el_name=_orga_questions_close_name)
 def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")
 
     member = get_member(member_uuid)
     # Get the most recent help question for this member and run
-    h = (
+    question = (
         HelpQuestion.objects.filter(
             member_id=member.id,
             association_id=context["association_id"],
@@ -423,9 +431,10 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str
         .first()
     )
 
-    # Mark the question as closed and save
-    h.closed = True
-    h.save()
+    # Mark the question as closed and save if it exists
+    if question:
+        question.closed = True
+        question.save()
 
     return redirect("orga_questions", event_slug=event_slug)
 
@@ -458,7 +467,7 @@ def send_mail_batch(
     if not association_id and run_id:
         run = Run.objects.filter(pk=run_id).select_related("event").first()
         if run:
-            association_id = run.event.association_id
+            association_id = get_run_association_id(run.id)
 
     # Keep only recipients who consented to share their data with the association
     recipients = split_recipients(player_ids)
@@ -551,9 +560,16 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
             # These functions control how data is displayed in the template
             "callbacks": {
                 "body": format_email_body,
-                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "sent": lambda el: timezone.localtime(el.sent).strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
                 "skipped": format_email_skipped,
+            },
+            # DB paths for related and callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "subj": ["email_content__subj"],
+                "body": ["email_content__body"],
+                "sent": ["sent"],
+                "skipped": ["skipped"],
             },
         },
     )
@@ -616,7 +632,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
             flat=True,
         ),
     )
-    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
+    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event_id)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member

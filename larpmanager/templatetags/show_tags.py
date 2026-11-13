@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING, Any
 from allauth.utils import get_request_param
 from django import template
 from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.core.files.storage import default_storage
 from django.db.models import Max
 from django.templatetags.static import static
 from django.urls import reverse
@@ -37,14 +38,16 @@ from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import _format_decimal
-from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
-from larpmanager.models.utils import get_option_form_text
-from larpmanager.models.writing import Character, FactionType
+from larpmanager.models.utils import display_filename, get_option_form_text
+from larpmanager.models.writing import Character, FactionType, get_event_elements
+from larpmanager.utils.auth.sso import get_auth_next_url
 from larpmanager.utils.core.common import clean_html, html_clean
+from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.io.pdf import get_trait_character
 from larpmanager.utils.larpmanager.versions import VERSIONS
 from larpmanager.utils.services.association import get_hint_for_slug
+from larpmanager.utils.services.experience import add_calls_tooltips
 
 _VERSION_BODY_CLASS_START = min(v["number"] for v in VERSIONS)
 
@@ -78,6 +81,12 @@ def clean_tags(tx: str) -> str:
 
 
 @register.filter
+def calls_tooltip(text: str, calls: list) -> str:
+    """Add a hover tooltip with the description to the calls found in the text."""
+    return add_calls_tooltips(text, calls)
+
+
+@register.filter
 def get(value: dict[str, Any], arg: str) -> Any:
     """Template filter to get dictionary value by key."""
     if arg is not None and value:
@@ -89,6 +98,37 @@ def get(value: dict[str, Any], arg: str) -> Any:
             # This can happen when iterating over cached data with dict keys
             return ""
     return ""
+
+
+@register.simple_tag
+def count_sheet_titles(
+    fields: dict[str, Any],
+    questions: dict[str, Any],
+    screen: bool,  # noqa: FBT001
+    text_content: str = "",
+    show_text: bool = False,  # noqa: FBT001, FBT002
+    visibility_e_only: bool = True,  # noqa: FBT001, FBT002
+    teaser_content: str = "",
+    show_teaser: bool = False,  # noqa: FBT001, FBT002
+) -> int:
+    """Count how many questions/text blocks would render a title header in a character sheet section."""
+    count = 0
+    for idx, question in questions.items():
+        typ = question.get("typ")
+        if typ in ("e", "p"):
+            if visibility_e_only and question.get("visibility") != "e":
+                continue
+            if fields.get(idx) and (screen or question.get("printable")):
+                count += 1
+        elif (typ == "text" and text_content and show_text) or (typ == "teaser" and teaser_content and show_teaser):
+            count += 1
+    return count
+
+
+@register.simple_tag
+def count_public_questions(questions: dict[str, Any]) -> int:
+    """Count questions for the character, excluding the name question."""
+    return len([q for q in questions.values() if q.get("typ") != "name"])
 
 
 def get_tooltip(context: dict, character: dict[str, Any]) -> str:
@@ -363,7 +403,9 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
 
     # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
-        context["max_ch_number"] = run.event.get_elements(Character).aggregate(Max("number"))["number__max"]
+        context["max_ch_number"] = get_event_elements(run.event_id, Character, context=context).aggregate(
+            Max("number")
+        )["number__max"]
 
     # Handle case where no characters exist in the event
     if not context["max_ch_number"]:
@@ -571,6 +613,8 @@ _ALLOWED_HTML_TAGS = {
     "tr",
     "th",
     "td",
+    "details",
+    "summary",
 }
 
 _ALLOWED_HTML_ATTRS: dict[str, set[str]] = {
@@ -845,7 +889,8 @@ def get_social_login_url(context: dict, provider: str) -> str:
 
     Google's OAuth redirect URI is only registered for the main domain, so a login
     started on an association subdomain must begin on the main domain instead,
-    carrying a 'next' pointing back to /after_login/<slug>/ to return afterwards.
+    carrying a 'next' pointing back to /after_login/<slug>/ to return afterwards,
+    which in turn carries the page to land on in the subdomain.
     This must be resolved server-side (not via client JS) so it can't race with
     the page load and silently fall back to a same-domain login.
     """
@@ -855,8 +900,20 @@ def get_social_login_url(context: dict, provider: str) -> str:
 
     main_domain = association["main_domain"]
     next_url = f"https://{main_domain}/after_login/{association['slug']}/"
+    destination = get_auth_next_url(context.get("request"))
+    if destination:
+        next_url += "?" + urlencode({REDIRECT_FIELD_NAME: destination})
     url = reverse(provider + "_login")
     return f"https://{main_domain}{url}?{urlencode({REDIRECT_FIELD_NAME: next_url})}"
+
+
+@register.simple_tag(takes_context=True)
+def auth_next_query(context: dict) -> str:
+    """Return the '?next=...' query for login/signup links, so the user comes back here."""
+    next_url = get_auth_next_url(context.get("request"))
+    if not next_url:
+        return ""
+    return "?" + urlencode({REDIRECT_FIELD_NAME: next_url})
 
 
 @register.filter
@@ -871,6 +928,31 @@ def remove(value: Any, args: Any) -> Any:
     args = args.replace("_", " ")
     txt = re.sub(re.escape(args), "", value, flags=re.IGNORECASE)
     return txt.strip()
+
+
+@register.filter
+def storage_url(path: Any, obj: object = None) -> Any:
+    """Template filter to resolve a stored file path to its downloadable URL.
+
+    Storage backends serving files from a relative path (e.g. local filesystem)
+    return a domain-less URL, which only works embedded in the page it was
+    rendered on. Passing obj (an Association, or anything carrying one) makes
+    the URL absolute, so it also works out of that context, e.g. in a PDF.
+    """
+    if not path:
+        return ""
+    url = default_storage.url(path)
+    if obj and not url.startswith(("http://", "https://")):
+        url = get_url(url.lstrip("/"), obj)
+    return url
+
+
+@register.filter
+def storage_filename(path: Any) -> Any:
+    """Template filter to extract the display filename from a stored file path."""
+    if not path:
+        return ""
+    return display_filename(path)
 
 
 @register.simple_tag

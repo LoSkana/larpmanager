@@ -27,6 +27,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
+from larpmanager.accounting.gateway import LEGACY_PAYMENT_METHODS
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
@@ -250,7 +251,7 @@ class ExeOutflowForm(BaseModelForm):
 
         # Set default payment date to today if not already provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = timezone.now().date().isoformat()
+            self.initial["payment_date"] = timezone.localdate().isoformat()
             # ~ else:
             # ~ self.initial['payment_date'] = self.instance.payment_date.isoformat()
 
@@ -294,7 +295,7 @@ class ExeInflowForm(BaseModelForm):
 
         # Set default payment date to today if not provided
         if "payment_date" not in self.initial or not self.initial["payment_date"]:
-            self.initial["payment_date"] = timezone.now().date().isoformat()
+            self.initial["payment_date"] = timezone.localdate().isoformat()
 
         # Invoice field is always required
         self.fields["invoice"].required = True
@@ -359,7 +360,7 @@ class ExeInvoiceForm(BaseModelForm):
 class ExeCreditForm(BaseModelForm):
     """Form for ExeCredit."""
 
-    page_info = _("Manage all credit assignments issued to members across events")
+    page_info = _("Manage all credit assignments issued to users across events")
 
     class Meta:
         model = AccountingItemOther
@@ -390,7 +391,7 @@ class ExeCreditForm(BaseModelForm):
 class ExeTokenForm(BaseModelForm):
     """Form for ExeToken."""
 
-    page_info = _("Manage all token assignments issued to members across events")
+    page_info = _("Manage all token assignments issued to users across events")
 
     class Meta:
         model = AccountingItemOther
@@ -536,7 +537,7 @@ class OrgaDiscountForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
         # Build choices from all runs in the same event
-        choices = [(m.id, str(m)) for m in Run.objects.filter(event=self.params["run"].event)]
+        choices = [(m.id, str(m)) for m in Run.objects.filter(event_id=self.params["run"].event_id)]
 
         # Create multiple choice field with checkbox widgets
         widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
@@ -544,6 +545,7 @@ class OrgaDiscountForm(BaseModelForm):
             choices=choices,
             widget=widget,
             required=False,
+            label=_("Sessions"),
             help_text=_("The sessions for which the discount is available"),
         )
 
@@ -698,9 +700,17 @@ class ExePaymentSettingsForm(BaseModelForm):
             models.Q(nationality__isnull=True) | models.Q(nationality="") | models.Q(nationality=assoc_nationality)
         )
 
-        self.fields["payment_methods"].queryset = PaymentMethod.objects.filter(nationality_filter).order_by("id")
+        # Legacy methods are offered only to associations that still have them enabled
+        enabled_slugs = set(self.instance.payment_methods.values_list("slug", flat=True)) if self.instance.pk else set()
+        available_methods = (
+            PaymentMethod.objects.filter(nationality_filter)
+            .exclude(slug__in=[slug for slug in LEGACY_PAYMENT_METHODS if slug not in enabled_slugs])
+            .order_by("id")
+        )
 
-        self.methods = PaymentMethod.objects.filter(nationality_filter).order_by("id")
+        self.fields["payment_methods"].queryset = available_methods
+
+        self.methods = available_methods
         self.section_descriptions = {}
         for el in self.methods:
             self.section_descriptions[el.name] = el.instructions

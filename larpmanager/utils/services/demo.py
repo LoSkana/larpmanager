@@ -53,8 +53,10 @@ from larpmanager.models.event import Event, EventButton, EventConfig, EventText,
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -165,7 +167,7 @@ def _compute_date_delta(template: Association) -> timedelta:
     ]
     if not first_start:
         return timedelta(0)
-    target_start = timezone.now().date() + relativedelta(months=1)
+    target_start = timezone.localdate() + relativedelta(months=1)
     return target_start - first_start
 
 
@@ -400,6 +402,8 @@ def _clone_experience(clone_context: CloneContext, event_pk: int) -> None:
     _copy_all(clone_context, CriterionExp, event_filter)
     _copy_all(clone_context, RuleExp, event_filter)
     _copy_all(clone_context, DeliveryExp, event_filter)
+    _copy_all(clone_context, CallExp, event_filter)
+    _copy_all(clone_context, ExclusiveExp, event_filter)
 
 
 def _clone_castings(clone_context: CloneContext) -> None:

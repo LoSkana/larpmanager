@@ -19,19 +19,20 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from contextlib import suppress
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
 import holidays
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import F, Q
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import escape
-from django.utils.translation import activate, gettext_lazy as _
+from django.utils.translation import activate, gettext_lazy as _, override
 
+from larpmanager.cache.basic import get_association_basic_cache, get_event_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
@@ -41,13 +42,14 @@ from larpmanager.models.access import (
     EventRole,
     RoleInvite,
     get_association_executives,
-    get_event_organizers,
+    get_event_organizers_by_event,
 )
-from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
+from larpmanager.models.association import Association, get_association_maintainers
 from larpmanager.models.casting import AssignmentTrait, Casting
-from larpmanager.models.event import EventTextType
+from larpmanager.models.event import EventTextType, Run
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_association, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.services.miscellanea import _newsletter_set_active
 
@@ -67,7 +69,7 @@ def check_holiday() -> bool:
 
     """
     # Get current date
-    today = timezone.now().date()
+    today = timezone.localdate()
 
     # Check holidays in major countries
     for country_code in ["US", "IT", "CN", "UK"]:
@@ -100,16 +102,77 @@ def join_email(association: Any) -> None:
         my_send_mail(welcome_subject, welcome_body, executive_member)
 
         activate(executive_member.language)
-        feedback_subject = "We'd love your feedback on LarpManager"
+        feedback_subject = "Need any help with LarpManager?"
         feedback_body = render_to_string(
             "mails/help_association.html",
             {"member": executive_member, "association": association},
         )
-        feedback_delay_seconds = 3600 * 24 * 2
+        feedback_delay_seconds = 3600 * 24 * 4
         my_send_mail(feedback_subject, feedback_body, executive_member, schedule=feedback_delay_seconds)
 
 
-def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001, C901
+def _is_first_role(
+    member_id: int, association_id: int, association_role_id: int | None, event_role_id: int | None
+) -> bool:
+    """Return True if the member holds no association or event role in the association besides the given one."""
+    other_association_roles = AssociationRole.objects.filter(association_id=association_id, members=member_id)
+    if association_role_id:
+        other_association_roles = other_association_roles.exclude(pk=association_role_id)
+    if other_association_roles.exists():
+        return False
+
+    other_event_roles = EventRole.objects.filter(event__association_id=association_id, members=member_id)
+    if event_role_id:
+        other_event_roles = other_event_roles.exclude(pk=event_role_id)
+    return not other_event_roles.exists()
+
+
+def send_first_role_email(
+    member: Member,
+    association_id: int,
+    manage_url: str,
+    context_object: Any,
+    association_role_id: int | None = None,
+    event_role_id: int | None = None,
+) -> None:
+    """Send the welcome email with guide links to a member receiving the first role in a LarpManager association.
+
+    Skipped for white-label skins and for the sole role holder of the association (the creator,
+    who already receives the welcome email for new organizations).
+    """
+    association_cache = get_association_basic_cache(association_id)
+    if association_cache["domain"] != "larpmanager.com":
+        return
+
+    if not _is_first_role(member.pk, association_id, association_role_id, event_role_id):
+        return
+
+    other_staff = Member.objects.filter(
+        Q(association_roles__association_id=association_id) | Q(event_roles__event__association_id=association_id)
+    ).exclude(pk=member.pk)
+    if not other_staff.exists():
+        return
+
+    association_name = association_cache["name"]
+    activate(member.language)
+    subject = hdr_association(association_id) + _("Welcome to the staff of %(organization)s!") % {
+        "organization": association_name
+    }
+    body = render_to_string(
+        "mails/first_role.html",
+        {
+            "member": member,
+            "association_name": association_name,
+            "manage_url": manage_url,
+            "guide_url": get_url(reverse("guide", args=["first"])),
+            "guides_url": get_url(reverse("guides")),
+            "tutorials_url": get_association_url(reverse("tutorials"), association_id),
+        },
+    )
+    my_send_mail(subject, body, member, context_object)
+
+
+def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle association role changes and send notifications.
 
     This function is triggered when members are added or removed from association roles.
@@ -133,43 +196,39 @@ def on_association_roles_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noq
         - Triggers member association join process
 
     """
-    # Extract signal parameters with type safety
-    model = kwargs.pop("model", None)
-    if model == Member:
-        action = kwargs.pop("action", None)
-        instance: AssociationRole | None = kwargs.pop("instance", None)
-        if not instance:
-            return
-        pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    if kwargs.pop("model", None) != Member:
+        return
+    action = kwargs.pop("action", None)
+    instance: AssociationRole | None = kwargs.pop("instance", None)
+    if not instance:
+        return
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
-        # Handle role removal or clear - invalidate cache immediately
-        # This ensures permissions are updated when roles are removed
-        if action in ("post_remove", "post_clear"):
-            if pk_set:
-                for mid in pk_set:
-                    mb = Member.objects.get(pk=mid)
-                    # Reset cached event links to reflect permission changes
-                    reset_event_links(mb.id, instance.association_id)
-            return
+    # Role removal or clear: invalidate cached links so permissions update
+    if action in ("post_remove", "post_clear"):
+        _reset_members_links(pk_set, instance.association_id)
+        return
 
-        # Only process role additions from this point forward
-        if action != "post_add":
-            return
+    if action != "post_add":
+        return
 
-        # Get association executives for notification purposes
-        # Handle case where association might not have executives yet
-        try:
-            exes = get_association_executives(instance.association)
-        except ObjectDoesNotExist:
-            exes = []
+    try:
+        exes = get_association_executives(instance.association)
+    except ObjectDoesNotExist:
+        exes = []
 
-        # Process each member being added to the role
-        for mid in pk_set:
-            _add_member_association_role(exes, instance, mid)
-            if instance.number == 1:
-                mb = Member.objects.filter(pk=mid).first()
-                if mb and mb.email:
-                    _newsletter_set_active(mb.email)
+    for mid in pk_set:
+        _add_member_association_role(exes, instance, mid)
+        if instance.number == 1:
+            mb = Member.objects.filter(pk=mid).first()
+            if mb and mb.email:
+                _newsletter_set_active(mb.email)
+
+
+def _reset_members_links(pk_set: set[int] | None, association_id: int) -> None:
+    """Reset cached event links for each member in pk_set."""
+    for mid in pk_set or []:
+        reset_event_links(int(mid), association_id)
 
 
 def _add_member_association_role(exes: list[Member], instance: AssociationRole, mid: int | str) -> None:
@@ -201,8 +260,9 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
     activate(mb.language)
     subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
     url = get_url(reverse("manage"), instance.association)
-    body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
+    body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
     my_send_mail(subj, body, mb, instance.association)
+    send_first_role_email(mb, instance.association_id, url, instance.association, association_role_id=instance.pk)
 
     # Notify existing executives about the new role assignment
     # Skip notification to the member who just received the role
@@ -219,7 +279,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
         my_send_mail(subj, body, m, instance.association)
 
 
-def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001, C901
+def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
     """Handle event role changes and send notifications.
 
     Args:
@@ -240,82 +300,90 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
         m2m_changed signal to handle role assignment notifications.
 
     """
-    # Extract signal parameters with type safety
-    model = kwargs.pop("model", None)
-    if model == Member:
-        action = kwargs.pop("action", None)
-        instance: EventRole | None = kwargs.pop("instance", None)
-        pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    if kwargs.pop("model", None) != Member:
+        return
+    action = kwargs.pop("action", None)
+    instance: EventRole | None = kwargs.pop("instance", None)
+    if not instance or action not in ("post_add", "post_remove", "post_clear"):
+        return
+    pk_set: list[int] | None = kwargs.pop("pk_set", None)
+    association_id = get_event_association_id(instance.event_id)
 
-        # Handle role removal or clear - invalidate cache immediately
-        # Cache invalidation ensures permission changes take effect
-        if action in ("post_remove", "post_clear"):
-            if pk_set:
-                for mid in pk_set:
-                    mb = Member.objects.get(pk=mid)
-                    reset_event_links(mb.id, instance.event.association_id)
-            return
+    # Role removal or clear: invalidate cached links so permissions update
+    if action in ("post_remove", "post_clear"):
+        _reset_members_links(pk_set, association_id)
+        return
 
-        # Only process role additions from this point
-        if action != "post_add":
-            return
+    try:
+        orgas = get_event_organizers_by_event(instance.event_id)
+    except ObjectDoesNotExist:
+        orgas = []
 
-        # Get event organizers for notification purposes
-        # Gracefully handle cases where event has no organizers yet
-        try:
-            orgas = get_event_organizers(instance.event)
-        except ObjectDoesNotExist:
-            orgas = []
-
-        # Process each member that was added to the role
-        for mid in pk_set:
-            mb = Member.objects.get(pk=mid)
-            # Ensure member is part of the association
-            mb.join(instance.event.association)
-            # Invalidate cached permissions for the member
-            reset_event_links(mb.id, instance.event.association_id)
-            if instance.number == 1 and mb.email:
-                _newsletter_set_active(mb.email)
-
-            # Send approval notification to the member
-            # Use member's preferred language for personalized communication
-            activate(mb.language)
-            subj = hdr(instance.event.association) + _("Role approval %(role)s per %(event)s") % {
-                "role": instance.name,
-                "event": instance.event,
-            }
-            url = get_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), instance.event.association)
-            body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
-            my_send_mail(subj, body, mb, instance.event)
-
-            # Notify organizers about the new role assignment
-            # Skip self-notification if the organizer assigned themselves
-            for m in orgas:
-                if m.pk == int(mid):
-                    continue
-                # Use organizer's preferred language for notification
-                activate(m.language)
-                subj = hdr(instance.event.association) + _("Approval %(user)s as %(role)s for %(event)s") % {
-                    "user": mb,
-                    "role": instance.name,
-                    "event": instance.event,
-                }
-                body = _("The user has been assigned the specified role.")
-                my_send_mail(subj, body, m, instance.event)
+    # Mails are tied to the latest run, so they use its archive and SMTP settings
+    run = _latest_event_run(instance.event_id)
+    for mid in pk_set:
+        _add_member_event_role(orgas, instance, mid, association_id, run)
 
 
-def send_role_invite_email(invite: RoleInvite) -> None:
-    """Send invitation email with redeem link to invited email address."""
+def _latest_event_run(event_id: int) -> Run | None:
+    """Return the run of the event with the latest end date, runs without one coming last."""
+    return Run.objects.filter(event_id=event_id).order_by(F("end").desc(nulls_last=True), "-pk").first()
+
+
+def _add_member_event_role(
+    orgas: list[Member], instance: EventRole, mid: int | str, association_id: int, run: Run | None = None
+) -> None:
+    """Join member to association, reset its links, and notify member and organizers of the event role."""
+    mb = Member.objects.get(pk=mid)
+    mb.join(association_id)
+    reset_event_links(mb.id, association_id)
+    if instance.number == 1 and mb.email:
+        _newsletter_set_active(mb.email)
+
+    activate(mb.language)
+    subj = hdr_association(association_id) + _("Role approval %(role)s per %(event)s") % {
+        "role": instance.name,
+        "event": instance.event,
+    }
+    url = get_association_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), association_id)
+    body = _("Access the management panel <a href='%(url)s'>from here</a>!") % {"url": url}
+    my_send_mail(subj, body, mb, run or instance.event)
+    send_first_role_email(mb, association_id, url, run or instance.event, event_role_id=instance.pk)
+
+    # Notify organizers, skipping the member itself
+    for m in orgas:
+        if m.pk == int(mid):
+            continue
+        activate(m.language)
+        subj = hdr_association(association_id) + _("Approval %(user)s as %(role)s for %(event)s") % {
+            "user": mb,
+            "role": instance.name,
+            "event": instance.event,
+        }
+        body = _("The user has been assigned the specified role.")
+        my_send_mail(subj, body, m, run or instance.event)
+
+
+def send_role_invite_email(invite: RoleInvite, run: Run | None = None) -> None:
+    """Send invitation email with redeem link, in the language of the invited member when already registered."""
     role = invite.role()
     association = invite.association
-    activate("en")
-    subj = hdr(association) + _("You have been invited to the role: %(role)s") % {"role": role.name}
-    redeem_url = get_url(reverse("role_invite_redeem", kwargs={"token": invite.token}), association)
-    body = _("You have been invited to join as %(role)s") % {"role": role.name}
-    body += ".<br/><br/>"
-    body += _("Click <a href='%(url)s'>here</a> to accept the invitation") % {"url": redeem_url}
-    body += "."
-    my_send_mail(subj, body, invite.email, association)
+    member = Member.objects.filter(email__iexact=invite.email).first()
+    # Scoped override: the view keeps the language of the sender for its own messages
+    with override(member.language if member else "en"):
+        if invite.event:
+            subj = hdr(association) + _("You have been invited to the role %(role)s for %(event)s") % {
+                "role": role.name,
+                "event": invite.event,
+            }
+        else:
+            subj = hdr(association) + _("You have been invited to the role: %(role)s") % {"role": role.name}
+        redeem_url = get_url(reverse("role_invite_redeem", kwargs={"token": invite.token}), association)
+        body = _("You have been invited to join as %(role)s") % {"role": role.name}
+        body += ".<br/><br/>"
+        body += _("Click <a href='%(url)s'>here</a> to accept the invitation") % {"url": redeem_url}
+        body += "."
+    my_send_mail(subj, body, member or invite.email, run or association)
 
 
 def bring_friend_instructions(registration: Registration, context: dict) -> None:
@@ -342,12 +410,13 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     activate(registration.member.language)
 
     # Build email subject with event header and localized message
-    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s!") % {"event": registration.run}
+    email_subject = hdr_run(registration.run_id) + _("Bring a friend to %(event)s!") % {"event": registration.run}
 
     # Start email body with the user's personal discount code
     email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
+    currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
     email_body += (
         "<br /><br />"
         + _("Copy this code and share it with friends!")
@@ -358,14 +427,14 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
-            "currency": registration.run.event.association.get_currency_symbol(),
+            "currency": currency_symbol,
         }
         + " "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration.")
         % {
             "amount_from": context["bring_friend_discount_from"],
-            "currency": registration.run.event.association.get_currency_symbol(),
+            "currency": currency_symbol,
         }
     )
 
@@ -404,8 +473,10 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     # Set language context to member's preferred language
     activate(instance.member.language)
 
+    run_cache = get_run_basic_cache(instance.run_id)
+
     # Skip email if character mail is disabled for this event
-    if get_event_config(instance.run.event_id, "mail_character"):
+    if get_event_config(run_cache["event_id"], "mail_character"):
         return
 
     # Get trait and quest display information for the current run
@@ -413,7 +484,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     quest_display = instance.trait.quest.show(instance.run)
 
     # Build email subject with event header and localized text
-    subject = hdr(instance.run.event) + _("Trait assigned for %(event)s") % {"event": instance.run}
+    subject = hdr_run(instance.run_id) + _("Trait assigned for %(event)s") % {"event": instance.run}
 
     # Create main email body with trait assignment details
     body = _(
@@ -422,14 +493,14 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     ) % {"event": instance.run, "trait": trait_display["name"], "quest": quest_display["name"]}
 
     # Add character access link to the email body
-    character_url = get_url(
+    character_url = get_association_url(
         reverse("character_your", kwargs={"event_slug": instance.run.get_slug()}),
-        instance.run.event,
+        run_cache["association_id"],
     )
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": character_url}
 
     # Append custom assignment message if configured for this event
-    custom_assignment_message = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(run_cache["event_id"], EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         body += "<br />" + custom_assignment_message
 
@@ -469,7 +540,7 @@ def mail_confirm_casting(
     activate(member.language)
 
     # Build email subject with event header and casting confirmation message
-    email_subject = hdr(run.event) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
+    email_subject = hdr_run(run.id) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
         "type": preference_category_name,
         "event": run,
     }
@@ -519,9 +590,7 @@ def send_character_status_update_email(instance: Character) -> None:
         return
 
     # Skip if status is the same as the old one
-    old_status = None
-    with suppress(ObjectDoesNotExist):
-        old_status = Character.objects.get(pk=instance.pk).status
+    old_status = Character.objects.filter(pk=instance.pk).values_list("status", flat=True).first()
 
     if old_status == instance.status:
         return

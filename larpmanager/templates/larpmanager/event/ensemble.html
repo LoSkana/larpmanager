@@ -618,7 +618,7 @@
     </style>
 {% endblock css %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     (function () {
         const STORAGE_KEY = 'ensemble_mode_{{ run.event.slug }}';
         const defaultMode = '{{ ensemble_default_mode }}';

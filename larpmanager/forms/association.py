@@ -18,16 +18,18 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import logging
+import uuid
+from collections.abc import Collection
 from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.db.models import QuerySet
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
-from larpmanager.cache.config import reset_element_configs, save_all_element_configs
+from larpmanager.cache.config import reset_association_configs, save_all_element_configs
 from larpmanager.cache.feature import get_association_features, reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
@@ -35,18 +37,28 @@ from larpmanager.forms.config import ConfigForm, ConfigType
 from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssociationMemberS2WidgetMulti,
+    SlugFormMixin,
     SlugInput,
     WritingTinyMCE,
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
+    validate_css,
 )
 from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
-from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
+from larpmanager.models.association import (
+    Association,
+    AssociationSkin,
+    AssociationText,
+    AssociationTextType,
+    AssociationTranslation,
+)
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.versions import VERSIONS
+from larpmanager.utils.publication.radar import is_radar_available
 
-logger = logging.getLogger(__name__)
+RESERVED_SUBDOMAINS = frozenset({"admin", "api", "ftp", "mail", "smtp", "staging", "www"})
+NAME_WITHOUT_ALPHANUMERIC_ERROR = _("The name must contain letters or numbers")
 
 
 class ExeAssociationForm(BaseModelForm):
@@ -222,18 +234,18 @@ class ExeAssociationTextForm(BaseModelForm):
                 association_id=self.params.get("association_id"), default=True, typ=typ
             )
             # Ensure we're not comparing against the current instance
-            if res.count() > 0 and res.first().pk != self.instance.pk:
+            first = res.first()
+            if first and first.pk != self.instance.pk:
                 self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
         res = AssociationText.objects.filter(
             association_id=self.params.get("association_id"), language=language, typ=typ
         )
-        if res.count() > 0:
-            first = res.first()
-            # Ensure we're not comparing against the current instance
-            if first.pk != self.instance.pk:
-                self.add_error("language", "There is already a language of this type!")
+        first = res.first()
+        # Ensure we're not comparing against the current instance
+        if first and first.pk != self.instance.pk:
+            self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 
@@ -331,6 +343,7 @@ class ExeAppearanceForm(BaseModelCssForm):
             "Freely insert CSS commands, they will be reported in all pages  in the space of "
             "your Organization. In this way you can customize freely the appearance.",
         ),
+        validators=[validate_css],
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -346,7 +359,7 @@ class ExeAppearanceForm(BaseModelCssForm):
         """Save form and persist theme configuration."""
         instance = super().save(commit=commit)
         save_all_element_configs(instance, {"theme": self.cleaned_data.get("theme", AppearanceTheme.NEBULA)})
-        reset_element_configs(instance)
+        reset_association_configs(instance.id)
         return instance
 
     @staticmethod
@@ -440,9 +453,9 @@ class ExeConfigForm(ConfigForm):
         """Configure interface and calendar display settings."""
         self.set_section("interface", _("Interface"))
 
-        past_events_label = _("Past events")
-        past_events_help_text = _("If selected, a link to past events is shown in the calendar.")
-        self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
+        past_events_label = _("Hide past events")
+        past_events_help_text = _("If selected, the link to past events is not shown.")
+        self.add_configs("calendar_hide_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         if self.params.get("skin_id") == 1:
             field_label = _("Characters shortcut")
@@ -522,6 +535,13 @@ class ExeConfigForm(ConfigForm):
         payment_received_label = _("Payments received")
         payment_received_help_text = _("If selected, send organizers an email for each payment received.")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
+
+        # Configure payment approval reminder toggle
+        payment_reminder_label = _("Payments to approve reminders")
+        payment_reminder_help_text = _(
+            "If selected, send a reminder email to organizers for payments still awaiting approval."
+        )
+        self.add_configs("mail_payment_reminder", ConfigType.BOOL, payment_reminder_label, payment_reminder_help_text)
 
         if "custom_mail" in self.params["features"]:
             self.set_section("custom_mail_server", _("Customised mail server"))
@@ -606,6 +626,13 @@ class ExeConfigForm(ConfigForm):
         field_label = _("Event history")
         field_help_text = _("If enabled, a user's public page shows a list of all events they have attended.")
         self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
+
+        field_label = _("User flags")
+        field_help_text = _(
+            "If enabled, allows defining custom status flags for users and shows "
+            "them to organizers handling registrations and payments."
+        )
+        self.add_configs("member_flags_active", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure deadline management if feature is enabled
         if "deadlines" in self.params["features"]:
@@ -872,6 +899,17 @@ class ExeConfigForm(ConfigForm):
         field_help_text = _("Your team ID.")
         self.add_configs("ildb_team_id", ConfigType.CHAR, field_label, field_help_text)
 
+        if is_radar_available(self.instance.id):
+            self.add_configs(
+                "radar_enabled",
+                ConfigType.BOOL,
+                "LARP Radar",
+                _(
+                    "If selected, visible upcoming events with description and coordinates are published on "
+                    "LARP Radar, sharing the event data and the organization main email."
+                ),
+            )
+
     def set_config_integration(self) -> None:
         """Configure app integration redirect settings for associations."""
         if "app_integration" not in self.params["features"]:
@@ -997,7 +1035,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 
-class FirstAssociationForm(BaseModelForm):
+class FirstAssociationForm(SlugFormMixin, BaseModelForm):
     """Form for creating a new association during initial setup.
 
     Simplified form for first-time association creation
@@ -1006,29 +1044,37 @@ class FirstAssociationForm(BaseModelForm):
 
     class Meta:
         model = Association
-        fields = ("name", "profile", "slug", "payment_currency")
+        fields = ("name", "profile", "slug", "payment_currency", "timezone")
         widgets: ClassVar[dict] = {
             "slug": SlugInput,
         }
 
-    def clean_slug(self) -> str:
-        """Validate that the slug is unique across all associations."""
-        data: str = self.cleaned_data["slug"]
-        logger.debug("Validating association slug: %s", data)
+    # Identifies a rendering of the form, to recognize a repeated submit
+    join_token = forms.UUIDField(required=False, initial=uuid.uuid4, widget=forms.HiddenInput)
 
-        # Check if slug is already used by other associations
-        lst = Association.objects.filter(slug=data)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form, adding the message shown when the browser rejects the name."""
+        super().__init__(*args, **kwargs)
 
-        # Exclude current instance from validation if editing existing association
-        if self.instance is not None and self.instance.pk is not None:
-            lst = lst.exclude(pk=self.instance.pk)
+        self.fields["name"].widget.attrs["data-invalid-message"] = NAME_WITHOUT_ALPHANUMERIC_ERROR
 
-        # Raise validation error if slug already exists
-        if lst.count() > 0:
-            msg = "Slug already used!"
-            raise ValidationError(msg)
+    def clean_name(self) -> str:
+        """Reject names without any letter or number."""
+        data: str = self.cleaned_data["name"]
+
+        if not any(character.isalnum() for character in data):
+            raise ValidationError(NAME_WITHOUT_ALPHANUMERIC_ERROR)
 
         return data
+
+    def slug_scope(self) -> QuerySet:
+        """Return the associations among which the slug must be unique."""
+        return Association.objects.all()
+
+    def reserved_slugs(self) -> Collection[str]:
+        """Return the technical subdomains and the main domains labels, as the domain root would load them."""
+        main_domains = AssociationSkin.objects.values_list("domain", flat=True)
+        return RESERVED_SUBDOMAINS | {domain.split(".")[0] for domain in main_domains}
 
 
 class ExeQuickSetupForm(QuickSetupForm):

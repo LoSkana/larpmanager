@@ -22,6 +22,7 @@ import csv
 import io
 import json
 import logging
+from collections.abc import Callable
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -50,6 +51,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
+    CharacterStatus,
     Faction,
     Guild,
     GuildMembership,
@@ -59,11 +61,13 @@ from larpmanager.models.writing import (
     RelationshipTag,
     SpeedLarp,
     Writing,
+    get_event_class_parent,
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.autosave import set_auto_save_writing
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
 from larpmanager.utils.services.bulk import (
@@ -114,7 +118,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
 
     # Initialize assignment tracking if feature is enabled
     if "assigned" in features:
-        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event)}
+        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event.id)}
         context["assigned_map"] = dict.fromkeys(context["assigned"], 0)
 
     # Initialize combined progress/assignment tracking if both features enabled
@@ -178,13 +182,15 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
     attribute_type = request.POST.get("tp", "")
 
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)  # noqa: SLF001  # Django model metadata
-    questions_list = get_cached_writing_questions(context["event"], applicable)
+    questions_list = get_cached_writing_questions(context["event"].id, applicable)
     # Convert questions list to dict keyed by UUID for lookup
     questions = {str(q["uuid"]): q for q in questions_list}
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(uuid=element_uuid, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(
+            uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ, context=context)
+        )
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -264,7 +270,7 @@ def writing_post(request: HttpRequest, context: dict, writing_element_type: Any,
         raise ReturnNowError(writing_popup(request, context, writing_element_type))
 
 
-def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with feature-dependent filtering
+def writing_list(
     request: HttpRequest,
     context: dict,
     writing_type: type[Model],
@@ -303,41 +309,9 @@ def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with fe
     text_fields, writing = writing_list_query(context, event, writing_type)
 
     # Apply type-specific context modifications based on model type
-    if issubclass(writing_type, Character):
-        writing_list_char(context)
-
-    if issubclass(writing_type, Plot):
-        writing_list_plot(context)
-
-    if issubclass(writing_type, Faction):
-        writing_list_faction(context)
-
-    if issubclass(writing_type, Guild):
-        writing_list_guild(context)
-
-    # Handle speed LARP specific context setup
-    if issubclass(writing_type, SpeedLarp):
-        writing_list_speedlarp(context)
-
-    if issubclass(writing_type, Prologue):
-        writing_list_prologue(context)
-
-    # Configure quest and quest type specific contexts
-    if issubclass(writing_type, Quest):
-        writing_list_quest(context)
-
-    if issubclass(writing_type, QuestType):
-        writing_list_questtype(context)
-
-    # Add prerequisites prefetching for ability experience types
-    if issubclass(writing_type, AbilityExp):
-        context["list"] = context["list"].prefetch_related("prerequisites")
-
-    # Add the number of tagged relationship sides, to avoid a count query per tag
-    if issubclass(writing_type, RelationshipTag):
-        context["list"] = context["list"].annotate(
-            relationships_count=Count("relationships", filter=Q(relationships__deleted=None)),
-        )
+    for model_class, list_handler in _get_writing_list_handlers():
+        if issubclass(writing_type, model_class):
+            list_handler(context)
 
     # Setup writing-specific context if writing elements exist
     if writing:
@@ -367,6 +341,34 @@ def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with fe
 
     # Render the appropriate template based on the name parameter
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
+
+
+def _writing_list_ability_exp(context: dict) -> None:
+    """Prefetch prerequisites for ability lists."""
+    context["list"] = context["list"].prefetch_related("prerequisites")
+
+
+def _writing_list_relationship_tag(context: dict) -> None:
+    """Annotate the number of tagged relationship sides, to avoid a count query per tag."""
+    context["list"] = context["list"].annotate(
+        relationships_count=Count("relationships", filter=Q(relationships__deleted=None)),
+    )
+
+
+def _get_writing_list_handlers() -> list[tuple[type[Model], Callable[[dict], None]]]:
+    """Return (model class, context handler) pairs applied to writing lists of matching type."""
+    return [
+        (Character, writing_list_char),
+        (Plot, writing_list_plot),
+        (Faction, writing_list_faction),
+        (Guild, writing_list_guild),
+        (SpeedLarp, writing_list_speedlarp),
+        (Prologue, writing_list_prologue),
+        (Quest, writing_list_quest),
+        (QuestType, writing_list_questtype),
+        (AbilityExp, _writing_list_ability_exp),
+        (RelationshipTag, _writing_list_relationship_tag),
+    ]
 
 
 def writing_bulk(context: dict, request: HttpRequest, typ: Any) -> None:
@@ -399,7 +401,7 @@ def _get_custom_form(context: dict) -> None:
     # default name for fields
     context["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
-    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
     context["form_questions"] = {}
     for question in questions:
         question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
@@ -430,7 +432,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
     deferred_text_fields = ["teaser", "text"]
-    context["list"] = model_type.objects.filter(event=event.get_class_parent(model_type))
+    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type, context=context))
 
     # Optimize query with select_related for Writing models with progress tracking
     if is_writing_model and hasattr(model_type, "progress"):
@@ -454,7 +456,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
 
 def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
     """Add editor/paragraph-type question fields to text fields list and retrieve cached data."""
-    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    writing_questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
     text_fields.extend([question["uuid"] for question in writing_questions if question["typ"] in ALLOWED_TYPES])
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
@@ -468,7 +470,9 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, context["event"].get_class_parent(element_type))
+    cached_text_fields = get_cache_text_field(
+        element_type, get_event_class_parent(context["event"].id, element_type, context=context)
+    )
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
@@ -482,7 +486,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
 
 def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
-    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
 
     try:
         name_question = next(q for q in questions if q["typ"] == WritingQuestionType.NAME)
@@ -495,17 +499,19 @@ def _prepare_writing_list(context: dict) -> None:
     if context["default_fields"] == "[]" and context.get("writing_typ"):
         def_types = get_def_writing_types()
         question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
+        if model_name == "character" and "user_character" in context["features"]:
+            question_field_list.insert(0, "player")
         if question_field_list:
             context["default_fields"] = json.dumps(question_field_list)
 
-    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
+    set_auto_save_writing(context)
 
     context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", context=context)
 
 
 def writing_list_plot(context: dict) -> None:
     """Build character associations for plot list display."""
-    event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
+    event_relationships = get_event_rels_cache(context["event"].id).get("plots", {})
 
     for plot in context["list"]:
         plot.character_rels = event_relationships.get(plot.id, {}).get("character_rels", [])
@@ -514,7 +520,7 @@ def writing_list_plot(context: dict) -> None:
 def writing_list_faction(context: dict) -> None:
     """Enriches faction objects with their character relationships from event cache."""
     # Retrieve cached faction relationships for the event
-    faction_relationships = get_event_rels_cache(context["event"]).get("factions", {})
+    faction_relationships = get_event_rels_cache(context["event"].id).get("factions", {})
 
     # Attach character relationships to each faction in the list
     for faction in context["list"]:
@@ -544,7 +550,7 @@ def writing_list_guild(context: dict) -> None:
 def writing_list_speedlarp(context: dict) -> None:
     """Enriches speedlarp list items with their character relationships from event cache."""
     # Retrieve speedlarp relationships from cached event data
-    speedlarp_relationships = get_event_rels_cache(context["event"]).get("speedlarps", {})
+    speedlarp_relationships = get_event_rels_cache(context["event"].id).get("speedlarps", {})
 
     # Attach character relationships to each speedlarp item
     for speedlarp_item in context["list"]:
@@ -554,7 +560,7 @@ def writing_list_speedlarp(context: dict) -> None:
 def writing_list_prologue(context: dict) -> None:
     """Enrich prologue list items with character relationships from cache."""
     # Retrieve cached prologue relationships for the event
-    prologue_relationships = get_event_rels_cache(context["event"]).get("prologues", {})
+    prologue_relationships = get_event_rels_cache(context["event"].id).get("prologues", {})
 
     # Attach character relationships to each prologue in the list
     for prologue in context["list"]:
@@ -564,7 +570,7 @@ def writing_list_prologue(context: dict) -> None:
 def writing_list_quest(context: dict) -> None:
     """Enrich quest list with trait relationships from cache."""
     # Retrieve cached quest relationships for the event
-    quest_relationships = get_event_rels_cache(context["event"]).get("quests", {})
+    quest_relationships = get_event_rels_cache(context["event"].id).get("quests", {})
 
     # Attach trait relationships to each quest in the list
     for quest in context["list"]:
@@ -574,14 +580,14 @@ def writing_list_quest(context: dict) -> None:
 def writing_list_questtype(context: dict) -> None:
     """Add quest relationships to each quest type in the context list."""
     # Retrieve cached quest type relationships for the event
-    quest_type_relationships = get_event_rels_cache(context["event"]).get("questtypes", {})
+    quest_type_relationships = get_event_rels_cache(context["event"].id).get("questtypes", {})
 
     # Attach quest relationships to each quest type element
     for quest_type in context["list"]:
         quest_type.quest_rels = quest_type_relationships.get(quest_type.id, {}).get("quest_rels", [])
 
 
-def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex character enhancement with multiple feature integrations
+def writing_list_char(context: dict) -> None:
     """Enhance character list with feature-specific data and relationships.
 
     This function modifies the character list in the context by adding feature-specific
@@ -599,13 +605,34 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
         None: Modifies context dictionary in place
 
     """
-    # Add player relationship if user_character feature is enabled
+    split_by_status = "user_character" in context["features"] and get_event_config(
+        context["event"].id, "user_character_approval", context=context
+    )
+
+    _writing_list_char_query(context, split_by_status=split_by_status)
+
+    # Add character configs (last point where we modify the query, first point where we manipulate the list)
+    char_add_addit(context)
+
+    _writing_list_char_rels(context)
+
+    # ---- MANIPULATE LIST
+
+    if "user_character" in context["features"]:
+        for character in context["list"]:
+            if character.player:
+                character.player_display = character.player.display_member(context)
+
+    _writing_list_char_split(context, split_by_status=split_by_status)
+
+
+def _writing_list_char_query(context: dict, *, split_by_status: bool) -> None:
+    """Extend the character list query with player and registration status data."""
     if "user_character" in context["features"]:
         context["list"] = context["list"].select_related("player")
 
-    # Add registration status annotation for campaign events
-    if "campaign" in context["features"]:
-        # add check if the character is signed up to the event
+    # Add registration status annotation for campaign events or status split
+    if "campaign" in context["features"] or split_by_status:
         context["list"] = context["list"].annotate(
             has_registration=Exists(
                 RegistrationCharacterRel.objects.filter(
@@ -616,65 +643,65 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
             ),
         )
 
-    # Add character configs (last point where we modify the query, first point where we manipulate the list)
-    char_add_addit(context)
 
-    # Get cached relationship data for the event
-    event_relationships = get_event_rels_cache(context["event"]).get("characters", {})
+def _writing_list_char_rels(context: dict) -> None:
+    """Attach cached relationship data (relationships, plots, factions, ...) of enabled features to characters."""
+    event_relationships = get_event_rels_cache(context["event"].id).get("characters", {})
 
-    # Add relationship data based on enabled features
+    rel_keys = [
+        f"{feature}_rels"
+        for feature in ("relationships", "plot", "faction", "speedlarp", "prologue")
+        if feature in context["features"]
+    ]
+
+    # Add per-tag relationship counts, when the config is enabled
     if "relationships" in context["features"]:
-        for character in context["list"]:
-            character.relationships_rels = event_relationships.get(character.id, {}).get("relationships_rels", [])
-
-        # Add per-tag relationship counts, when the config is enabled
         context["writing_relationship_tags"] = get_event_config(
             context["event"].id, "writing_relationship_tags", context=context
         )
         if context["writing_relationship_tags"]:
-            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
-            for character in context["list"]:
-                character.relationship_tag_counts = event_relationships.get(character.id, {}).get(
-                    "relationship_tag_counts", {}
-                )
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
+            rel_keys.append("relationship_tag_counts")
 
-    # Add plot relationship data
-    if "plot" in context["features"]:
-        for character in context["list"]:
-            character.plot_rels = event_relationships.get(character.id, {}).get("plot_rels", [])
+    for character in context["list"]:
+        character_rels = event_relationships.get(character.id, {})
+        for key in rel_keys:
+            setattr(character, key, character_rels.get(key, {} if key == "relationship_tag_counts" else []))
 
-    # Add faction relationship data
-    if "faction" in context["features"]:
-        for character in context["list"]:
-            character.faction_rels = event_relationships.get(character.id, {}).get("faction_rels", [])
 
-    # Add speedlarp relationship data
-    if "speedlarp" in context["features"]:
-        for character in context["list"]:
-            character.speedlarp_rels = event_relationships.get(character.id, {}).get("speedlarp_rels", [])
-
-    # Add prologue relationship data
-    if "prologue" in context["features"]:
-        for character in context["list"]:
-            character.prologue_rels = event_relationships.get(character.id, {}).get("prologue_rels", [])
-
-    # ---- MANIPULATE LIST
-
-    if "user_character" in context["features"]:
-        for character in context["list"]:
-            if character.player:
-                character.player_display = character.player.display_member(context)
-
+def _writing_list_char_split(context: dict, *, split_by_status: bool) -> None:
+    """Split the character list by approval status and/or registration status, if configured."""
     context["campaign_split_registration"] = get_event_config(
         context["event"].id, "campaign_split_registration", context=context
     )
+    campaign_split = "campaign" in context["features"] and context["campaign_split_registration"]
+    all_chars = list(context["list"])
+
     # Split list by registration status if config is enabled
-    if "campaign" in context["features"] and context["campaign_split_registration"]:
-        all_chars = list(context["list"])
-        context["split_lists"] = [
-            {"title": "", "list": [c for c in all_chars if c.has_registration]},
-            {"title": _("Characters not participating"), "list": [c for c in all_chars if not c.has_registration]},
-        ]
+    if not split_by_status:
+        if campaign_split:
+            context["split_lists"] = [
+                {"title": "", "list": [c for c in all_chars if c.has_registration]},
+                {"title": _("Characters not participating"), "list": [c for c in all_chars if not c.has_registration]},
+            ]
+        return
+
+    # Split signed up characters by approval status, then list those not signed up
+    if not all_chars:
+        return
+    signed_up = [c for c in all_chars if c.has_registration]
+    context["split_lists"] = [
+        {"title": label, "list": [c for c in signed_up if c.status == value], "count": True}
+        for value, label in CharacterStatus.choices
+    ]
+    not_signed_up = {"list": [c for c in all_chars if not c.has_registration], "count": True}
+    # campaign split shows them openly, otherwise they are hidden behind a toggle
+    if campaign_split:
+        not_signed_up["title"] = _("Characters not participating")
+    else:
+        not_signed_up["title"] = _("Not signed up")
+        not_signed_up["hidden"] = "chars_not_signed_up"
+    context["split_lists"].append(not_signed_up)
 
 
 def char_add_addit(context: dict) -> None:

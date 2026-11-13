@@ -1,5 +1,5 @@
 {% load i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     // ========== Configuration ==========
@@ -11,7 +11,8 @@ window.addEventListener('DOMContentLoaded', function() {
         'orga_event',
         'orga_quick',
         'exe_quick',
-        'config'
+        'config',
+        'exe_templates'
         // Add more as needed
     ];
 
@@ -38,10 +39,14 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Reload the current dashboard page
+     * Reload the current dashboard page, or navigate to a redirect URL if given
      */
-    function reloadDashboard() {
-        window.location.reload();
+    function reloadDashboard(redirectUrl) {
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        } else {
+            window.location.reload();
+        }
     }
 
     // ========== Event Handlers ==========
@@ -73,7 +78,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (document.querySelector('#lm-modal.popup_dashboard iframe')) {
                     closeDashboardModal();
                     setTimeout(function() {
-                        reloadDashboard();
+                        reloadDashboard(e.data.redirect_url);
                     }, 300);
                 }
                 break;

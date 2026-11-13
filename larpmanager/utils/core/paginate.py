@@ -1,9 +1,30 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 import logging
 from decimal import Decimal
 from typing import Any
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db.models import (
     Case,
     DecimalField,
@@ -22,6 +43,7 @@ from django.db.models.functions import Cast, Coalesce
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.accounting import (
@@ -37,6 +59,16 @@ from larpmanager.models.accounting import (
 from larpmanager.models.member import Membership
 
 logger = logging.getLogger(__name__)
+
+# ColumnControl search logic mapped to (ORM lookup, negated); unknown logics fall back to contains
+_SEARCH_LOGIC_LOOKUPS = {
+    "contains": ("icontains", False),
+    "notContains": ("icontains", True),
+    "equal": ("iexact", False),
+    "notEqual": ("iexact", True),
+    "starts": ("istartswith", False),
+    "ends": ("iendswith", False),
+}
 
 
 def paginate(
@@ -79,6 +111,12 @@ def paginate(
             context["table_name"] = f"{model_name}_{context['association_id']}"
         else:
             context["table_name"] = f"{model_name}_{context['run'].get_slug()}"
+
+        # Callback columns without a DB path cannot be sorted or searched
+        field_db_paths = context.get("field_db_paths", {})
+        context["unsortable_fields"] = [
+            field_name for field_name in context.get("callbacks", {}) if field_name not in field_db_paths
+        ]
 
         return render(request, template_name, context)
 
@@ -247,7 +285,7 @@ def _set_filtering(
     Args:
         context: Context dictionary containing fields and optional callbacks/afield
         queryset: Django queryset to filter
-        column_filters: Dictionary mapping column indices to filter values
+        column_filters: Dictionary mapping column indices to (search value, search logic) tuples
         field_names: List of field names available on the model
 
     Returns:
@@ -274,8 +312,12 @@ def _set_filtering(
         # Extract field and name from context fields
         field_name, _display_name = context["fields"][field_idx]
 
+        field_db_paths = context.get("field_db_paths", {})
+        # Explicit DB path override takes precedence
+        if field_name in field_db_paths:
+            search_fields = field_db_paths[field_name]
         # Handle special case for run field with search capability
-        if field_name == "run":
+        elif field_name == "run":
             field_name = "run__search"
             additional_field = context.get("afield")
             if additional_field:
@@ -283,12 +325,9 @@ def _set_filtering(
             # Use the constructed path directly, don't apply _get_filter_field
             filter_field = field_name
             search_fields = field_map.get(filter_field, [filter_field])
-        # Check if callback field has an explicit DB path override
+        # Callback fields without a DB path cannot be searched
         elif field_name in context.get("callbacks", {}):
-            field_db_paths = context.get("field_db_paths", {})
-            if field_name not in field_db_paths:
-                continue
-            search_fields = field_db_paths[field_name]
+            continue
         else:
             # Get the correct filter path (handles related fields via selrel)
             filter_field = _get_filter_field(field_names, field_name, context)
@@ -296,12 +335,19 @@ def _set_filtering(
             search_fields = field_map.get(filter_field, [filter_field])
 
         # Build OR query for all mapped fields with case-insensitive search
+        search_value, search_logic = filter_value
+        lookup, is_negated = _SEARCH_LOGIC_LOOKUPS.get(search_logic, ("icontains", False))
         q_filter = Q()
         for search_field in search_fields:
-            q_filter |= Q(**{f"{search_field}__icontains": filter_value})
+            # Choice fields are matched on their display label
+            choice_codes = _get_choice_codes(queryset.model, search_field, search_value, lookup)
+            if choice_codes is not None:
+                q_filter |= Q(**{f"{search_field}__in": choice_codes})
+            else:
+                q_filter |= Q(**{f"{search_field}__{lookup}": search_value})
 
         # Apply the filter to the queryset
-        queryset = queryset.filter(q_filter)
+        queryset = queryset.exclude(q_filter) if is_negated else queryset.filter(q_filter)
 
     return queryset
 
@@ -344,12 +390,12 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
             continue
         field_name, _display_name = context["fields"][field_idx]
 
-        # Skip callback fields unless an explicit DB path override is provided
-        if field_name in context.get("callbacks", {}):
-            field_db_paths = context.get("field_db_paths", {})
-            if field_name not in field_db_paths:
-                continue
+        # Explicit DB path override takes precedence; callback fields without one cannot be sorted
+        field_db_paths = context.get("field_db_paths", {})
+        if field_name in field_db_paths:
             mapped_fields = field_db_paths[field_name]
+        elif field_name in context.get("callbacks", {}):
+            continue
         else:
             # Map field name if transformation exists, otherwise use as-is
             mapped_fields = field_map.get(field_name, [field_name])
@@ -364,12 +410,37 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
     return ordering_fields
 
 
+def _get_choice_codes(model: type[Model], field_path: str, search_value: str, lookup: str) -> list | None:
+    """Return the choice codes whose label matches the search, or None if the path is not a choice field."""
+    field = None
+    for part in field_path.split("__"):
+        try:
+            # noinspection PyProtectedMember
+            field = model._meta.get_field(part)  # noqa: SLF001  # Django model metadata
+        except FieldDoesNotExist:
+            return None
+        if field.is_relation:
+            model = field.related_model
+
+    if field is None or field.is_relation or not field.choices:
+        return None
+
+    search_value = search_value.lower()
+    matchers = {
+        "iexact": lambda label: label == search_value,
+        "istartswith": lambda label: label.startswith(search_value),
+        "iendswith": lambda label: label.endswith(search_value),
+    }
+    matcher = matchers.get(lookup, lambda label: search_value in label)
+    return [code for code, label in field.flatchoices if matcher(str(label).lower())]
+
+
 def _get_field_map() -> dict[str, list[str]]:
     """Return field mapping for member-related queries."""
     return {"member": ["member__surname", "member__name"]}
 
 
-def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, str]]:
+def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[str, tuple[str, str]]]:
     """Extract pagination, ordering, and filtering parameters from DataTables request.
 
     Args:
@@ -380,7 +451,7 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
             - start: Starting record index for pagination
             - length: Number of records to return
             - order: List of column names with ordering prefixes ('-' for desc)
-            - filters: Dictionary mapping column names to search values
+            - filters: Dictionary mapping column names to (search value, search logic) tuples
 
     """
     # Extract pagination parameters
@@ -406,10 +477,11 @@ def _get_query_params(request: HttpRequest) -> tuple[int, int, list[str], dict[s
         if column_name is None:
             break
 
-        # Get fixed search term for this column
-        search_value = request.POST.get(f"columns[{column_index}][search][fixed][0][term]")
-        if search_value and not search_value.startswith("function"):
-            filters[column_name] = search_value
+        # Get ColumnControl search term and logic for this column
+        search_value = request.POST.get(f"columns[{column_index}][columnControl][search][value]")
+        if search_value:
+            search_logic = request.POST.get(f"columns[{column_index}][columnControl][search][logic]", "contains")
+            filters[column_name] = (search_value, search_logic)
         column_index += 1
 
     return start, length, order, filters
@@ -440,19 +512,25 @@ def _prepare_data_json(
 
     # Map field names to lambda functions for data extraction and formatting
     field_to_formatter = {
-        "created": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
-        "payment_date": lambda model_object: model_object.created.strftime("%d/%m/%Y"),
+        "created": lambda model_object: timezone.localtime(model_object.created).strftime("%d/%m/%Y"),
+        "payment_date": lambda model_object: (
+            model_object.payment_date.strftime("%d/%m/%Y") if model_object.payment_date else ""
+        ),
         "member": lambda model_object: str(model_object.member),
         "run": lambda model_object: str(model_object.run) if model_object.run else "",
         "descr": lambda model_object: str(model_object.descr),
         # Convert decimal values to int if they're whole numbers, otherwise keep as string
-        "value": lambda model_object: int(model_object.value)
-        if model_object.value == model_object.value.to_integral()
-        else str(model_object.value),
+        "value": lambda model_object: (
+            int(model_object.value)
+            if model_object.value == model_object.value.to_integral()
+            else str(model_object.value)
+        ),
         "details": lambda model_object: str(model_object.details),
-        "credits": lambda model_object: int(model_object.credits)
-        if model_object.credits == model_object.credits.to_integral()
-        else str(model_object.credits),
+        "credits": lambda model_object: (
+            int(model_object.credits)
+            if model_object.credits == model_object.credits.to_integral()
+            else str(model_object.credits)
+        ),
         "info": lambda model_object: str(model_object.info) if model_object.info else "",
         "vat_ticket": lambda model_object: round(float(model_object.vat_ticket), 2),
         "vat_options": lambda model_object: round(float(model_object.vat_options), 2),

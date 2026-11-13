@@ -32,7 +32,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_register, \
     submit_option, new_option, \
-    get_modal_iframe, save_modal, _wait_lm_ready, sidebar
+    get_modal_iframe, save_modal, _wait_lm_ready, sidebar, expand_options
 
 pytestmark = pytest.mark.e2e
 
@@ -52,11 +52,19 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     field_single_req(page, live_server)
 
+    field_single_andor(page, live_server)
+
+    field_gated_question(page, live_server)
+
     character(page, live_server)
+
+    gated_question_reset(page, live_server)
 
     verify_characters_shortcut(page, live_server)
 
     player_relationships(page, live_server)
+
+    orga_gated_question(page, live_server)
 
 
 def prepare(page: Any, live_server: Any) -> None:
@@ -67,11 +75,11 @@ def prepare(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_max").check()
     page.locator("#id_character_form_wri_que_requirements").check()
     submit_confirm(page)
@@ -212,31 +220,142 @@ def field_single_req(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
 
-def verify_requirements_hidden(page: Any) -> None:
-    """Verify options with unmet requirements are hidden, and shown when requirements are met.
+def field_gated_question(page: Any, live_server: Any) -> None:
+    # Add a mandatory question shown only when "wwww" from "single" is selected
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("gated_q")
+    edit_iframe.locator("#id_status").select_option("m")
+    edit_iframe.locator("select[name=requirements] ~ .select2").click()
+    edit_iframe.locator("select[name=requirements] ~ .select2").get_by_role("searchbox").fill("ww")
+    edit_iframe.get_by_role("option", name=re.compile("wwww")).click()
 
-    Tests both question types:
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("gear_a")
+    submit_option(edit_iframe, iframe)
+
+    save_modal(page, edit_iframe)
+
+
+def field_single_andor(page: Any, live_server: Any) -> None:
+    """Add a question whose options mix requirements on the same and on other questions.
+
+    - "dep_or" requires "ff" and "wwww", both options of "single": either one is enough
+    - "dep_and" requires "wwww" (of "single") and "q2" (of "rrrrrr"): both are needed
+    """
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single_andor")
+
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("dep_or")
+    iframe.searchbox("requirements").fill("ff")
+    iframe.get_by_role("option", name="single - ff").click()
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    submit_option(edit_iframe, iframe)
+
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("dep_and")
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    iframe.searchbox("requirements").fill("q2")
+    iframe.get_by_role("option", name="rrrrrr - q2").click()
+    submit_option(edit_iframe, iframe)
+
+    save_modal(page, edit_iframe)
+
+
+def verify_requirements_and_or(page: Any) -> None:
+    """Verify how multiple requirements of the same option combine.
+
+    Requirements on the same question are alternatives (one of them is enough), while
+    requirements on different questions are all needed:
+    - "dep_or" (u10) requires "ff" (u1) or "wwww" (u3), both of question "single"
+    - "dep_and" (u11) requires "wwww" (u3) and "q2" (u5), of two different questions
+    """
+    dep_or = page.locator('label:has(input[type="radio"][value="u10"])')
+    dep_and = page.locator('label:has(input[type="radio"][value="u11"])')
+
+    # "wwww" is selected: the alternatives are satisfied, while "q2" is still missing
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # "ff" alone satisfies the alternatives too, being on the same question as "wwww"
+    page.locator('label[for="id_que_u4_0"]').click()
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # "q2" on its own is not enough: "wwww" is on another question, so it is needed as well
+    page.locator('label[for="id_que_u5_1"]').click()
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # with both questions answered as required, the option becomes available
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(dep_and).to_be_visible()
+
+    # leave "rrrrrr" empty again, it accepts a single answer
+    page.locator('label[for="id_que_u5_1"]').click()
+    expect(dep_and).to_be_hidden()
+
+
+def verify_requirements_hidden(page: Any) -> None:
+    """Verify elements with unmet requirements are hidden, and shown when requirements are met.
+
+    Tests both options and questions:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
     - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
+    - whole question: "gated_q" (u10) requires "wwww" (u3)
     """
     # the native inputs are visually hidden by lm.css (zero size); the dependency
     # JS toggles the wrapping label, so assert visibility on the label instead
     label_14 = page.locator('label:has(input[type="checkbox"][value="u7"])')
     dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
+    gated_row = page.locator("#id_que_u10_tr")
 
-    # Nothing selected yet in "single" - both dependent options must be hidden
+    # Nothing selected yet in "single" - the dependent options and question must be hidden
     expect(label_14).to_be_hidden()
     expect(dep_b_radio).to_be_hidden()
+    expect(gated_row).to_be_hidden()
 
-    # Select a different option ("rrrr", index 1) - both must still be hidden
+    # Select a different option ("rrrr", index 1) - all must still be hidden
     page.locator('label[for="id_que_u4_1"]').click()
     expect(label_14).to_be_hidden()
     expect(dep_b_radio).to_be_hidden()
+    expect(gated_row).to_be_hidden()
 
-    # Select "wwww" (index 2) - both must become visible
+    # Select "wwww" (index 2) - all must become visible
     page.locator('label[for="id_que_u4_2"]').click()
     expect(label_14).to_be_visible()
     expect(dep_b_radio).to_be_visible()
+    expect(gated_row).to_be_visible()
+
+
+def gated_question_reset(page: Any, live_server: Any) -> None:
+    """Verify a gated question stops being mandatory, and loses its answer, once hidden."""
+    go_to(page, live_server, "/test/character/u3/change/")
+
+    # the requirement is still selected: the question is shown with the stored answer
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
+
+    # select "rrrr": the mandatory question is hidden, and does not block the save
+    # the question has fewer options than the collapse minimum, so they are all shown
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_hidden()
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Status: Approved")
+
+    # selecting the requirement again shows the question, with the answer discarded
+    go_to(page, live_server, "/test/character/u3/change/")
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
 
 
 def character(page: Any, live_server: Any) -> None:
@@ -253,6 +372,8 @@ def character(page: Any, live_server: Any) -> None:
 
     verify_requirements_hidden(page)
 
+    verify_requirements_and_or(page)
+
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 
@@ -263,19 +384,23 @@ def character(page: Any, live_server: Any) -> None:
     page.locator('label[for="id_que_u4_0"]').click()  # ff
     page.locator('label[for="id_que_u4_2"]').click()  # wwww
     page.locator('label[for="id_que_u5_3"]').click()  # 14 (Available 3)
+    # dep_or requires "ff" and "wwww": only "wwww" is selected, and it is enough
+    page.locator('label[for="id_que_u9_0"]').click()  # dep_or
     page.locator("#id_que_u6").click()
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
     page.locator("#id_que_u7").fill("asdsadsa")
+    page.locator('label[for="id_que_u10_0"]').click()  # gear_a, shown by "wwww"
     submit_confirm(page)
 
     # confirm char: after creation the user lands on the character sheet
     expect_normalized(page, page.locator("#one"), "Status: Creation")
-    page.get_by_role("link", name="Edit").click()
-    page.get_by_role("cell", name="Click here to confirm that").click()
+    # the server accepted the alternatives too, not only the option requirements taken all together
+    expect_normalized(page, page.locator("#one"), "dep_or")
+
+    sidebar(page, "Confirm character")
     page.get_by_text("Click here to confirm that").click()
-    page.locator("#id_propose").check()
-    submit_confirm(page)
+    page.get_by_role("button", name="Confirm").click()
 
     # check char
     expect_normalized(page, page.locator("#one"), "Status: Proposed")
@@ -340,3 +465,96 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Verify updated text
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")
+
+
+def orga_gated_question(page: Any, live_server: Any) -> None:
+    """Verify the organizer form is bound by the requirements, exactly as the player form.
+
+    The stored answer of "single" is "rrrr", so the elements requiring "wwww" (u3) start hidden:
+    the option "dep_b" (u9) and the whole question "gated_q" (u10).
+    """
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+
+    gated_row = page.locator("#id_que_u10_tr")
+    dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
+
+    expect(gated_row).to_be_hidden()
+    expect(dep_b_radio).to_be_hidden()
+
+    # selecting the requirement shows them back
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(gated_row).to_be_visible()
+    expect(dep_b_radio).to_be_visible()
+
+    # the answer of the question, given while it is shown, is stored
+    page.locator('label[for="id_que_u10_0"]').click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
+
+    # hiding the question again discards its answer, and does not block the save
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_hidden()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
+
+    orga_gated_collapse(page, live_server)
+
+
+def orga_gated_collapse(page: Any, live_server: Any) -> None:
+    """Verify the collapse toggle and the requirements do not fight over the same options.
+
+    Both hide options: the ones gated by their requirements are left out of the count that decides
+    whether the collapse link is worth showing, and the link keeps collapsing back the others.
+    """
+    # the questions have few options: lower the threshold, so the collapse link is rendered
+    go_to(page, live_server, "/test/manage/config/")
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Display")).click()
+    page.locator("#id_collapse_options_min").fill("2")
+    submit_confirm(page)
+
+    dep_a_option = page.locator('#id_que_u8 .opt-wrap:has-text("dep_a")')
+    dep_b_option = page.locator('#id_que_u8 .opt-wrap:has-text("dep_b")')
+    show_more = page.locator("#id_que_u8 .opt-show-more")
+
+    # store the requirement of "dep_b", so both options of "single_req" are available
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expand_options(page.locator("#id_que_u4"))
+    page.locator('label[for="id_que_u4_2"]').click()
+    # the requirement also shows the mandatory "gated_q", which has to be answered to save
+    expand_options(page.locator("#id_que_u10"))
+    page.locator('label[for="id_que_u10_0"]').click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+
+    # no option of "single_req" is chosen: both start collapsed behind the link
+    expect(show_more).to_be_visible()
+    expect(dep_a_option).to_be_hidden()
+    expect(dep_b_option).to_be_hidden()
+
+    # they are shown together, and collapse back together
+    show_more.click()
+    expect(dep_a_option).to_be_visible()
+    expect(dep_b_option).to_be_visible()
+
+    show_more.click()
+    expect(dep_a_option).to_be_hidden()
+    expect(dep_b_option).to_be_hidden()
+
+    # dropping the requirement gates "dep_b" again, without revealing the collapsed "dep_a"
+    expand_options(page.locator("#id_que_u4"))
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(dep_b_option).to_be_hidden()
+    expect(dep_a_option).to_be_hidden()
+    submit_confirm(page)
+
+    # only "dep_a" is left by the unmet requirement: one option is not worth collapsing
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expect(show_more).to_be_hidden()
+    expect(dep_a_option).to_be_visible()
+    expect(dep_b_option).to_be_hidden()

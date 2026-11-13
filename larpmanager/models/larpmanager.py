@@ -21,6 +21,7 @@
 from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -53,6 +54,8 @@ class LarpManagerChatLog(BaseModel):
     member = models.ForeignKey(Member, on_delete=models.CASCADE)
 
     question = models.TextField()
+
+    answer = models.TextField(blank=True, default="")
 
 
 class LarpManagerReview(BaseModel):
@@ -237,6 +240,21 @@ class LarpManagerGuide(BaseModel):
     )
 
     icon = models.CharField(max_length=100, blank=True, null=True)
+
+    group = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Section of the guides page; guides sharing it are listed together",
+    )
+
+    video_id = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        validators=[RegexValidator(r"^[\w-]+$", "Enter only the YouTube video id, not the full link")],
+        help_text="YouTube video id, embedded at the start of the guide",
+    )
 
     published = models.BooleanField(default=False)
 

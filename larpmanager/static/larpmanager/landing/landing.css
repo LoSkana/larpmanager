@@ -1091,43 +1091,151 @@ body.landing .compare-note {
   margin-top: 2rem;
 }
 
-body.landing .guide-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
+body.landing .guide-search {
+  position: relative;
+  margin-bottom: 2rem;
 }
 
-body.landing .guide-card {
+body.landing .guide-search i {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: var(--text-dim);
+}
+
+body.landing .guide-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.6rem;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font: inherit;
+}
+
+body.landing .guide-no-results {
+  color: var(--text-dim);
+  text-align: center;
+}
+
+body.landing .guide-group {
+  margin-bottom: 2.5rem;
+}
+
+body.landing .guide-group h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+}
+
+body.landing .guide-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.9rem 1.2rem;
   background: var(--card);
   border: 1px solid var(--line);
-  padding: 1.6rem 1.7rem;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  border-bottom-width: 0;
   transition: border-color 0.15s ease;
 }
 
-body.landing .guide-card:hover {
-  border-color: var(--teal-deep);
+body.landing .guide-row:last-child,
+body.landing .guide-row:has(+ .guide-row[hidden]) {
+  border-bottom-width: 1px;
 }
 
-body.landing .guide-card h3 {
-  font-size: 1.15rem;
+body.landing .guide-group[hidden],
+body.landing .guide-row[hidden],
+body.landing .guide-no-results[hidden] {
+  display: none;
 }
 
-body.landing .guide-card p {
+body.landing .guide-row-text h3 {
+  font-size: 1.05rem;
   margin: 0;
-  color: var(--text-dim);
-  font-size: 0.92rem;
-  flex: 1;
 }
 
-body.landing .guide-card span {
+body.landing .guide-row-text h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body.landing .guide-row-text h3 a:hover {
+  color: var(--teal-deep);
+}
+
+body.landing .guide-row-text p {
+  margin: 0.15rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+body.landing .guide-row-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 1rem;
+}
+
+body.landing .guide-watch,
+body.landing .guide-read {
   color: var(--teal-deep);
   font-size: 0.88rem;
   font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+body.landing .guide-watch {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--teal-deep);
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+body.landing .guide-watch:hover {
+  background: var(--teal-deep);
+  color: #fff;
+}
+
+body.landing .guide-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 1.5rem;
+  border: 0;
+}
+
+.guide-video-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: min(90vw, 960px, calc((100vh - 7rem) * 16 / 9));
+  max-width: none;
+  margin: 0;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #0a1418;
+  color: #fff;
+  box-shadow: 0 0 39px 12px rgba(0, 0, 0, 0.75);
+}
+
+.guide-video-modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.landing .guide-video-modal h2 {
+  margin: 0 2rem 0.8rem 0;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+body.landing .guide-video-modal .guide-video {
+  margin-bottom: 0;
 }
 
 /* ---------- Feature grids / solution pages ---------- */
@@ -1384,6 +1492,15 @@ body.landing .slug_pre {
   margin: 0;
 }
 
+body.landing .slug_change {
+  font-size: 0.82rem;
+}
+
+body.landing #id_submit:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 body.landing .slug_war {
   font-size: 0.78rem;
   color: #a33;
@@ -1417,6 +1534,25 @@ body.landing .contact-form table td {
 body.landing .contact-form table th {
   font-weight: 600;
   padding-right: 0.9rem;
+}
+
+body.landing .contact-form .password-field-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+body.landing .contact-form .password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+body.landing .contact-form .password-toggle-icon:hover {
+  opacity: 1;
 }
 
 body.landing .contact-form .allauth_signin {
@@ -1811,7 +1947,12 @@ body.landing #tutorial-descr img {
     flex: 1;
     border-right: 0;
     border-bottom: 1px solid var(--line);
-    padding: 0 0 1rem;
+    padding: 1rem 0 0;
+    order: 2;
+  }
+
+  body.landing #tutorials .feature {
+    order: 1;
   }
 }
 
@@ -1905,9 +2046,14 @@ body.landing #iframe-indicator {
 
   body.landing .prob-grid,
   body.landing .feat-grid,
-  body.landing .guide-grid,
   body.landing .plan-grid {
     grid-template-columns: 1fr;
+  }
+
+  body.landing .guide-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
   }
 
   body.landing .open .wrap {
@@ -2028,50 +2174,63 @@ body.landing .get-started-card:disabled:hover {
   transform: none;
 }
 
-body.landing .get-started-card-pending:disabled {
-  opacity: 1;
-  box-shadow: 0 0 0 3px var(--teal-bright);
-}
-
-body.landing .get-started-building {
+.demo-confirm-modal {
   position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  min-width: 320px;
+  max-width: 30vw;
+  height: fit-content;
+  min-height: 200px;
+  max-height: 40vh;
+  margin: 0;
   padding: 2rem;
-  background: rgba(5, 15, 20, 0.94);
+  border: none;
+  border-radius: 12px;
+  background: #0a1418;
+  color: #fff;
+  box-shadow: 0 0 39px 12px rgba(0, 0, 0, 0.75);
 }
 
-body.landing .get-started-building.hide {
-  display: none;
+.demo-confirm-modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
 }
 
-body.landing .get-started-building-inner {
+@media (max-width: 840px) {
+  .demo-confirm-modal {
+    max-width: 90vw;
+  }
+}
+
+.demo-confirm-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.landing .demo-confirm-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  max-width: 32rem;
+  gap: 1rem;
   text-align: center;
-  color: #fff;
 }
 
-body.landing .get-started-building-inner i {
-  font-size: 3.5rem;
+body.landing .demo-confirm-step.hide {
+  display: none;
+}
+
+body.landing .demo-confirm-step i {
+  font-size: 3rem;
   color: var(--teal-bright);
-}
-
-body.landing .get-started-demo .get-started-building-text {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-body.landing.get-started-locked {
-  overflow: hidden;
 }
 
 body.landing .get-started-card i {
@@ -2111,4 +2270,18 @@ body.landing #get-started-real.hide {
   max-width: 52ch;
   margin: 0 auto 2.5rem;
   text-align: center;
+}
+
+/* ---------- Concepts ---------- */
+body.landing #concepts {
+  text-align: left;
+}
+
+body.landing #concepts dt {
+  font-weight: 700;
+  margin-top: 0.8rem;
+}
+
+body.landing #concepts dd {
+  margin: 0;
 }

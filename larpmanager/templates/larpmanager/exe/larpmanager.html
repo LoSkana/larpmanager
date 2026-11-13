@@ -27,8 +27,8 @@
                 <tr>
                     <td></td>
                     <td>{{ el }}</td>
-                    <td>{{ el.start | date:"Y/m/d" }}</td>
-                    <td>{{ el.end | date:"Y/m/d" }}</td>
+                    <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
+                    <td data-order="{{ el.end|date:'U' }}">{{ el.end|date:'d/m/Y' }}</td>
                     <td>{{ el.features }}</td>
                     <td>{{ el.get_plan_display }}</td>
                     <td>{{ el.active_registrations }}</td>

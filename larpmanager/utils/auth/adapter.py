@@ -26,9 +26,10 @@ from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
+
+from larpmanager.utils.auth.sso import pop_login_slug, pop_pending_next_url
 
 if TYPE_CHECKING:
     from allauth.socialaccount.models import SocialLogin
@@ -48,11 +49,19 @@ def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None
     through the 'next' parameter, set server-side by `get_social_login_url` in
     show_tags.py, pointing to: /after_login/{slug}/
 
+    The callback request itself carries no 'next' (allauth keeps it in its session
+    state), so the slug stashed by SocialLoginTargetMiddleware is used as fallback
+    whenever that state was lost.
+
     Returns:
         str: Redirect URL path, or None to use default behavior
 
     """
-    next_url = request.GET.get("next") or request.POST.get("next")
+    # Prefer the current request's 'next' param; fall back to the one stashed by
+    # SocialLoginTargetMiddleware when this login/signup attempt began, in case
+    # it was lost along the way. That fallback is dropped once read, and ignored
+    # if stale (see PENDING_AUTH_NEXT_URL_MAX_AGE).
+    next_url = request.GET.get("next") or request.POST.get("next") or pop_pending_next_url(request)
 
     if next_url:
         # Validate the next URL for security
@@ -66,7 +75,12 @@ def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None
             # For other valid next URLs, use them
             return next_url
 
-    # No valid next parameter - caller should use default behavior
+    # No usable next parameter: fall back to the subdomain the login started from
+    slug = pop_login_slug(request)
+    if slug:
+        return reverse("after_login", kwargs={"subdomain": slug})
+
+    # Nothing to go back to - caller should use default behavior
     return None
 
 
@@ -142,21 +156,28 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
         if not user.email:
             return
 
-        try:
-            # Look for existing user with matching email address
-            user = User.objects.get(email=user.email)
+        # Never link to an existing account on an email the provider states as unverified
+        if sociallogin.account.extra_data.get("email_verified") is False:
+            return
 
-            # Connect the social account to the existing user
-            sociallogin.connect(request, user)
-
-            # Update member profile with social login information
-            self.update_member(user, sociallogin)
-        except ObjectDoesNotExist:
+        # Look for existing user with matching email address (case-insensitive),
+        # preferring an exact match, then the oldest account
+        email = user.email.strip()
+        candidates = User.objects.filter(email__iexact=email).order_by("id")
+        existing_user = candidates.filter(email=email).first() or candidates.first()
+        if not existing_user:
             # No existing user found - let normal signup process continue
             logger.debug(
                 "No existing user found for email %s - proceeding with signup",
                 sociallogin.account.extra_data.get("email"),
             )
+            return
+
+        # Connect the social account to the existing user
+        sociallogin.connect(request, existing_user)
+
+        # Update member profile with social login information
+        self.update_member(existing_user, sociallogin)
 
     def save_user(self, request: HttpRequest, sociallogin: SocialLogin, form: Form | None = None) -> User:
         """Save new user from social login."""
@@ -184,9 +205,9 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
 class MyAccountAdapter(DefaultAccountAdapter):
     """Custom account adapter for LarpManager.
 
-    Handles redirect URLs for first-time signups (including social OAuth signups).
-    Uses the same logic as MySocialAccountAdapter to respect the 'next' parameter
-    and enable token-based cross-subdomain authentication.
+    Handles redirect URLs for logins and first-time signups (including social OAuth
+    signups). Uses the same logic as MySocialAccountAdapter to respect the 'next'
+    parameter and enable token-based cross-subdomain authentication.
     """
 
     def get_signup_redirect_url(self, request: HttpRequest) -> str:
@@ -196,3 +217,16 @@ class MyAccountAdapter(DefaultAccountAdapter):
 
         # If helper returned a URL, use it; otherwise use default behavior
         return redirect_url if redirect_url is not None else super().get_signup_redirect_url(request)
+
+    def get_login_redirect_url(self, request: HttpRequest) -> str:
+        """Get redirect URL after login, respecting the originating subdomain.
+
+        allauth resolves the post-login redirect through the account adapter (not
+        the social one), so this override is what keeps a social login that lost
+        its session state from landing on the main domain.
+        """
+        # Use common helper method for subdomain-aware redirect logic
+        redirect_url = _get_redirect_url_with_subdomain_support(request)
+
+        # If helper returned a URL, use it; otherwise use default behavior
+        return redirect_url if redirect_url is not None else super().get_login_redirect_url(request)

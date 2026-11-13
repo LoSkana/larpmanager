@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import clear_association_text_cache_on_delete
 from larpmanager.cache.association_translation import clear_association_translation_cache
-from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
+from larpmanager.cache.config import get_association_config, get_event_config, reset_association_configs
 from larpmanager.cache.feature import reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.permission import clear_index_permission_cache
@@ -162,6 +162,9 @@ def apply_skin_features_to_association(association: Association) -> None:
         else:
             association.features.add(*default_features)
 
+        # Features may have been read and cached earlier in the same transaction
+        reset_association_features(association.id)
+
     # Schedule the feature update to run after the current transaction commits
     transaction.on_commit(update_features)
 
@@ -179,8 +182,7 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
         clear_association_translation_cache(association_id, language_code)
 
     # Clear association config cache
-    association_obj = Association.objects.get(id=association_id)
-    reset_element_configs(association_obj)
+    reset_association_configs(association_id)
 
     # Clear permission index caches (for both association and event)
     clear_index_permission_cache("association")
@@ -207,8 +209,8 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
     clear_widget_cache_association(association_id)
 
     # Clear all events' caches for this association
-    for run in Run.objects.filter(event__association_id=association_id):
-        reset_all_run(run.event, run)
+    for run_id in Run.objects.filter(event__association_id=association_id).values_list("id", flat=True):
+        reset_all_run(run_id)
 
 
 def _get_registrations_url(association_id: int) -> str:
@@ -261,7 +263,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
 
     Returns:
         A tuple of (checklist, progress) where:
-            - checklist: list of dicts with keys slug, name, descr, done, url
+            - checklist: list of dicts with keys slug, name, descr, done, url, tutorial
             - progress: integer percentage of completed steps (0-100)
 
     """
@@ -275,16 +277,6 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             return bool(get_association_config(association_id, config_key))
         return any(get_event_config(eid, config_key) for eid in event_ids)
 
-    _not_used = [
-        {
-            "slug": "exe_tutorial",
-            "name": _("Tutorial"),
-            "descr": _("Visit the tutorial to learn the basics"),
-            "done": _done("exe_tutorial"),
-            "url": reverse("tutorials"),
-        }
-    ]
-
     checklist = [
         {
             "slug": "exe_events",
@@ -292,6 +284,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Create your first event"),
             "done": Event.objects.filter(association_id=association_id).exists(),
             "url": reverse("exe_events"),
+            "tutorial": "manage-events/#create-event",
         },
         {
             "slug": "exe_methods",
@@ -299,6 +292,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Configure at least one payment method for participants"),
             "done": _done("exe_methods"),
             "url": reverse("exe_methods"),
+            "tutorial": "payments/#payments",
         },
         {
             "slug": "orga_registration_tickets",
@@ -306,6 +300,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Create at least one ticket type for event registrations"),
             "done": _done("orga_registration_tickets"),
             "url": reverse("redr", kwargs={"path": "event/manage/tickets/"}),
+            "tutorial": "manage-ticket/#manage-tickets",
         },
         {
             "slug": "orga_registration_form",
@@ -313,6 +308,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "descr": _("Define at least one question in the registration form"),
             "done": _done("orga_registration_form"),
             "url": reverse("redr", kwargs={"path": "event/manage/form/"}),
+            "tutorial": "registration-form/#manage-questions",
         },
         {
             "slug": "orga_registrations",
@@ -322,6 +318,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 run__event__association_id=association_id, cancellation_date__isnull=True, pending=False
             ).exists(),
             "url": _get_registrations_url(association_id),
+            "tutorial": "registrations/#manage-registrations",
         },
     ]
 
@@ -333,6 +330,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                 "descr": _("Create at least one character for one of your events"),
                 "done": _done("orga_characters"),
                 "url": reverse("redr", kwargs={"path": "event/manage/characters/"}),
+                "tutorial": "characters/#manage-characters",
             },
             {
                 "slug": "orga_casting",
@@ -342,6 +340,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
                     registration__run__event__association_id=association_id
                 ).exists(),
                 "url": reverse("redr", kwargs={"path": "event/manage/registrations/"}),
+                "tutorial": "registrations/#manage-registrations",
             },
         ]
 

@@ -1,0 +1,197 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+"""Helpers to remember which organization subdomain a social login started from.
+
+Social logins always begin on the main domain (the OAuth redirect URI is only
+registered there), and the target subdomain normally travels in the 'next'
+parameter that django-allauth stashes in its per-attempt session state. That
+state is dropped when more than a handful of logins are pending, so the slug is
+also kept in a single session key that survives, used as a fallback when the
+allauth state is gone.
+"""
+
+from __future__ import annotations
+
+import re
+import time
+from typing import TYPE_CHECKING
+
+from django.utils.http import url_has_allowed_host_and_scheme
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+# Session key holding (slug, timestamp) of the subdomain the login started from
+SSO_SLUG_SESSION_KEY = "sso_login_slug"
+
+# Discard the stashed slug after this many seconds, so an abandoned social login
+# cannot redirect a later, unrelated login away from the main domain
+SSO_SLUG_MAX_AGE = 600
+
+# Lifetime of the one-shot token that carries the login across subdomains: long
+# enough for a slow mobile hop, short enough to stay a single-use handoff
+SESSION_TOKEN_TTL = 300
+
+# Session key holding (next_url, timestamp) of the last login/signup entry point
+# visited, used as a fallback when a user abandons that attempt (e.g. to register
+# through a different entry point) and the query parameter is lost by the time
+# they actually complete authentication
+PENDING_AUTH_NEXT_URL_SESSION_KEY = "pending_auth_next_url"
+
+# Discard the stashed next url after this many seconds, so an abandoned login or
+# signup cannot redirect a later, unrelated one to a stale destination
+PENDING_AUTH_NEXT_URL_MAX_AGE = SSO_SLUG_MAX_AGE
+
+# Pages of the authentication flow itself: a link to login/signup shown on one of
+# them must pass through their own 'next' instead of pointing back to them
+AUTH_FLOW_PATHS = ("/register/",)
+AUTH_FLOW_PATH_PREFIXES = (
+    "/login/",
+    "/signup/",
+    "/password_reset/",
+    "/reset/",
+    "/accounts/",
+    "/after_login/",
+)
+
+# Session key holding (next_url, timestamp) of the page a password reset started
+# from, set when the emailed reset link is opened and kept until the new password
+# is set (bounded by PASSWORD_RESET_TIMEOUT)
+PASSWORD_RESET_NEXT_URL_SESSION_KEY = "password_reset_next_url"  # noqa: S105  # session key, not a secret
+
+_AFTER_LOGIN_RE = re.compile(r"/after_login/(?P<slug>[-\w]+)/")
+
+
+def session_token_key(token: str) -> str:
+    """Return the cache key holding the user id for a cross-subdomain token."""
+    return f"session_token:{token}"
+
+
+def extract_after_login_slug(next_url: str | None) -> str | None:
+    """Return the organization slug of an /after_login/<slug>/ URL, if any."""
+    if not next_url:
+        return None
+    match = _AFTER_LOGIN_RE.search(next_url)
+    return match.group("slug") if match else None
+
+
+def stash_login_slug(request: HttpRequest, slug: str) -> None:
+    """Remember the subdomain slug the current social login started from."""
+    request.session[SSO_SLUG_SESSION_KEY] = [slug, time.time()]
+
+
+def pop_login_slug(request: HttpRequest) -> str | None:
+    """Return and clear the stashed subdomain slug, ignoring stale entries."""
+    session = getattr(request, "session", None)
+    if session is None:
+        return None
+
+    stashed = session.pop(SSO_SLUG_SESSION_KEY, None)
+    if not stashed:
+        return None
+
+    try:
+        slug, stashed_at = stashed
+    except (TypeError, ValueError):
+        return None
+
+    if time.time() - stashed_at > SSO_SLUG_MAX_AGE:
+        return None
+
+    return slug
+
+
+def stash_pending_next_url(request: HttpRequest, next_url: str) -> None:
+    """Remember the 'next' url the current login/signup attempt started with."""
+    request.session[PENDING_AUTH_NEXT_URL_SESSION_KEY] = [next_url, time.time()]
+
+
+def pop_pending_next_url(request: HttpRequest) -> str | None:
+    """Return and clear the stashed 'next' url, ignoring stale entries."""
+    session = getattr(request, "session", None)
+    if session is None:
+        return None
+
+    stashed = session.pop(PENDING_AUTH_NEXT_URL_SESSION_KEY, None)
+    if not stashed:
+        return None
+
+    try:
+        next_url, stashed_at = stashed
+    except (TypeError, ValueError):
+        return None
+
+    if time.time() - stashed_at > PENDING_AUTH_NEXT_URL_MAX_AGE:
+        return None
+
+    return next_url
+
+
+def safe_local_url(url: str | None) -> str | None:
+    """Return url only if it is a same-site path (no scheme or host), else None."""
+    if not url or not url.startswith("/"):
+        return None
+    if not url_has_allowed_host_and_scheme(url, allowed_hosts=None):
+        return None
+    return url
+
+
+def get_auth_next_url(request: HttpRequest | None) -> str | None:
+    """Return where to land after a login/signup started from the current page.
+
+    On authentication pages the incoming 'next' is passed through; elsewhere
+    the current page itself is the destination. The home page is omitted, being
+    the default landing anyway.
+    """
+    if request is None:
+        return None
+    if request.path in AUTH_FLOW_PATHS or request.path.startswith(AUTH_FLOW_PATH_PREFIXES):
+        next_url = safe_local_url(request.GET.get("next"))
+    else:
+        next_url = safe_local_url(request.get_full_path())
+    if next_url == "/":
+        return None
+    return next_url
+
+
+def stash_password_reset_next_url(request: HttpRequest, next_url: str) -> None:
+    """Remember the 'next' url carried by the emailed password reset link."""
+    request.session[PASSWORD_RESET_NEXT_URL_SESSION_KEY] = [next_url, time.time()]
+
+
+def pop_password_reset_next_url(request: HttpRequest, max_age: int) -> str | None:
+    """Return and clear the stashed password reset 'next' url, ignoring stale entries."""
+    session = getattr(request, "session", None)
+    if session is None:
+        return None
+
+    stashed = session.pop(PASSWORD_RESET_NEXT_URL_SESSION_KEY, None)
+    if not stashed:
+        return None
+
+    try:
+        next_url, stashed_at = stashed
+    except (TypeError, ValueError):
+        return None
+
+    if time.time() - stashed_at > max_age:
+        return None
+
+    return safe_local_url(next_url)

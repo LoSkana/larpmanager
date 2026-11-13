@@ -22,13 +22,9 @@
         {{ char_finder_media }}
         {% include "elements/form/char_finder.js" %}
     {% endif %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
-
-        $('form').on('submit', function() {
-            return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
-        });
 
         $('option:selected').each(function(){
             $(this).prop('selected',true);
@@ -49,4 +45,8 @@ window.addEventListener('DOMContentLoaded', function() {
     {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
     {% include "elements/helpers/iframe_resize.js" %}
+    {% if dependencies.options or dependencies.questions %}
+        {% include "elements/form/question_toggle.js" %}
+        {% include "elements/form/option_dependencies.js" %}
+    {% endif %}
 {% endblock js2 %}

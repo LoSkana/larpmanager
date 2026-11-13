@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
-    delete_modal, expand_options, sidebar
+    delete_modal, expand_options, sidebar, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -51,8 +51,8 @@ def test_user_signup_simple(pw_page: Any) -> None:
 def signup(live_server: Any, page: Any) -> None:
     # sign up
     go_to(page, live_server, "/")
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
-    page.get_by_role("link", name="Registration is open!").click()
+    expect_normalized(page, page.locator("#one"), "Registrations are open!")
+    page.get_by_role("link", name="Registrations are open!").click()
     submit_register(page)
 
     # test mails
@@ -108,6 +108,8 @@ def help_questions(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/manage/questions")
     page.get_by_role("link", name="Close", exact=True).click()
+    with page.expect_navigation():
+        get_modal_iframe(page).get_by_role("button", name="Confirm").click(force=True)
     page.get_by_role("link", name="Show closed questions").click()
     submit_confirm(page)
 
@@ -115,7 +117,7 @@ def help_questions(live_server: Any, page: Any) -> None:
 def pre_register(live_server: Any, page: Any) -> None:
     # Set email send
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Email notifications")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()

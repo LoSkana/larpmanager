@@ -14,7 +14,6 @@
     <table id="lm_payments" class="go_datatable mob">
         <thead>
             <tr>
-                <th></th>
                 <th>Nome</th>
                 <th>Association</th>
                 <th>Start</th>
@@ -30,16 +29,17 @@
             <tr>
                 <th>{{ el }}</th>
                 <td>{{ el.event.association }}</td>
-                <td>{{ el.start | date:"Y/m/d" }}</td>
-                <td>
-                    {% if el.end %}{{ el.end | date:"Y/m/d" }}{% endif %}
+                <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
+                <td data-order="{{ el.end|date:'U' }}">
+                    {% if el.end %}{{ el.end|date:'d/m/Y' }}{% endif %}
                 </td>
                 <td>{{ el.features }}</td>
                 <td>{{ el.get_plan_display }}</td>
                 <td>{{ el.active_registrations }}</td>
                 <td>{{ el.total }}</td>
                 <td>
-                    <a href='{% url "lm_payments_confirm" el.uuid %}' class="confirm-link">Confirm</a>
+                    <a href='{% url "lm_payments_confirm" el.uuid %}'
+                       data-confirm="{% trans "Confirm this payment?" %}">Confirm</a>
                 </td>
             {% endfor %}
         </tr>
@@ -53,17 +53,3 @@
         {% endfor %}
     </table>
 {% endblock content %}
-{% block js %}
-    <script>
- window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
-        $('.confirm-link').on('click', function(e) {
-            const confirmAction = window.lmTesting || confirm('Sei sicuro di voler procedere?');
-            if (!confirmAction) {
-                e.preventDefault();
-            }
-        });
-    });
-});
-    </script>
-{% endblock js %}

@@ -1,6 +1,6 @@
 {% load i18n static show_tags compress %}
 {% get_current_language as LANGUAGE_CODE %}<!DOCTYPE HTML>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE }}" class="{{ a11y_classes }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,7 +23,7 @@
                 display: none;
             }
         </style>
-        {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
+        {% if testing %}<script nonce="{{ csp_nonce }}">window.lmTesting = true;</script>{% endif %}
         {% if association.favicon %}
             <link rel="icon" type="image/png" href="{{ association.favicon }}">
             <link rel="apple-touch-icon" href="{{ association.favicon }}">
@@ -40,9 +40,7 @@
               content="{{ association.name }} - {{ association.platform }}">
         {% block css-req %}
         {% endblock css-req %}
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-                integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-                crossorigin="anonymous"></script>
+        <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
         {% block datatables_css %}
             {% if manage %}
                 {% include "elements/structure/datatables-css.html" %}
@@ -94,6 +92,17 @@
             <!-- Page Wrapper -->
             <div id="page-wrapper"
                  class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
+                <script nonce="{{ csp_nonce }}">
+                    (function() {
+                        try {
+                            if (localStorage.getItem('sidebarCollapsed') === '1') {
+                                document.getElementById('sidebar').classList.add('sidebar-collapsed');
+                                document.getElementById('page-wrapper').classList.add('sidebar-collapsed');
+                                document.body.classList.add('sidebar-collapsed');
+                            }
+                        } catch (e) {}
+                    })();
+                </script>
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -101,16 +110,33 @@
         {% if not frame and is_larpmanager_skin %}
             {% include "elements/dashboard/chat.html" %}
         {% endif %}
-        <script>
+        {% if not frame %}
+            {% include "elements/structure/accessibility.html" %}
+        {% endif %}
+        <script nonce="{{ csp_nonce }}">
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
     window.enviro = "{{ request.enviro }}";
+    window.lmFileReadErrorText = '{% filter escapejs %}{% trans "Could not read the selected file. If it is stored in the cloud, download it to your device and retry." %}{% endfilter %}';
+    window.lmFileTooLargeText = '{% filter escapejs %}{% trans "The selected file is too large to be prepared for upload. If it is stored in the cloud, download it to your device and retry." %}{% endfilter %}';
 
 window['icon_texts'] = {
     'edit': '{% filter escapejs %}{% trans "Edit" %}{% endfilter %}',
     'up': '{% filter escapejs %}{% trans "Move up" %}{% endfilter %}',
     'down': '{% filter escapejs %}{% trans "Move down" %}{% endfilter %}',
     'delete': '{% filter escapejs %}{% trans "Delete" %}{% endfilter %}',
+}
+
+window['dt_language'] = {
+    'emptyTable': '{% filter escapejs %}{% trans "Nothing here yet." %}{% endfilter %}',
+    'zeroRecords': '{% filter escapejs %}{% trans "No results match your search." %}{% endfilter %}',
+    'info': '{% filter escapejs %}{% trans "Showing _START_ to _END_ of _TOTAL_ entries" %}{% endfilter %}',
+    'infoEmpty': '{% filter escapejs %}{% trans "No entries" %}{% endfilter %}',
+    'infoFiltered': '{% filter escapejs %}{% trans "(filtered from _MAX_ total entries)" %}{% endfilter %}',
+    'lengthMenu': '{% filter escapejs %}{% trans "_MENU_ entries per page" %}{% endfilter %}',
+    'search': '{% filter escapejs %}{% trans "Search:" %}{% endfilter %}',
+    'loadingRecords': '{% filter escapejs %}{% trans "Loading..." %}{% endfilter %}',
+    'processing': '{% filter escapejs %}{% trans "Loading..." %}{% endfilter %}',
 }
         </script>
         <!-- Scripts -->
@@ -122,12 +148,15 @@ window['icon_texts'] = {
             <script defer
                     src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
         {% endcompress %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
             let url_feature_description = "{% url 'feature_description' %}";
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
         {% include "elements/dashboard/modal.js.html" %}
         {% include "elements/dashboard/chat.js.html" %}
+        {% if not frame %}
+            {% include "elements/structure/accessibility.js.html" %}
+        {% endif %}
         {% if manage %}
             <link rel="stylesheet"
                   href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
@@ -137,6 +166,7 @@ window['icon_texts'] = {
         {% compress js %}
             <script defer src="{% static 'solid_state/assets/js/util.js' %}"></script>
             <script defer src="{% static 'solid_state/assets/js/main.js' %}"></script>
+            <script defer src="{% static 'larpmanager/assets/js/slug-field.js' %}"></script>
             <script defer src="{% static 'larpmanager/assets/js/larpmanager.js' %}"></script>
         {% endcompress %}
         {% block js %}
@@ -149,7 +179,7 @@ window['icon_texts'] = {
             {% endif %}
         {% endblock datatables_js %}
         {{ TINYMCE_DEFAULT_CONFIG|json_script:"tinymce-config" }}
-        <script>
+        <script nonce="{{ csp_nonce }}">
         function setCookie(name,value,days) {
             var expires = "";
             if (days) {
@@ -227,8 +257,19 @@ window['icon_texts'] = {
         <dialog id="lm-modal">
             <div id="lm-modal-content"></div>
         </dialog>
+        <dialog id="lm-confirm"
+                class="popup_confirm"
+                data-discard-text="{% trans "You have unsaved changes. Close without saving?" %}">
+            <div class="confirm-dialog">
+                <p class="confirm-message"></p>
+                <div class="form-actions">
+                    <button type="button" class="btn-save confirm-ok">{% trans "Confirm" %}</button>
+                    <button type="button" class="btn-cancel confirm-cancel">{% trans "Cancel" %}</button>
+                </div>
+            </div>
+        </dialog>
         {% if staging %}
-            <script>
+            <script nonce="{{ csp_nonce }}">
             if (getCookie('staging') != 1) {
                 if (confirm("WARNING - This is a staging server. Let's just check if you're supposed to be here: if you don't know why this message appeared, please click OK.")) {
                   url = window.location.href;

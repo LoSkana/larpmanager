@@ -1,4 +1,5 @@
-# LarpManager - https://larpmanager.coms
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
 #
 # This file is part of LarpManager and is dual-licensed:
 #
@@ -16,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 import logging
 
 from django.contrib import messages
@@ -23,11 +25,14 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.models.inventory import Inventory, InventoryTransfer, InventoryType, PoolLabel, PoolType
+from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.base import check_event_context, get_event_context
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element_event
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.inventory import perform_transfer
@@ -39,7 +44,7 @@ logger = logging.getLogger(__name__)
 def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of all character inventories for an event."""
     context = check_event_context(request, event_slug, "orga_ci_inventory")
-    context["list"] = context["event"].get_elements(Inventory).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Inventory, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/inventories.html", context)
 
 
@@ -65,7 +70,7 @@ def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uu
 def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
-    context["list"] = context["event"].get_elements(PoolType).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, PoolType, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_types.html", context)
 
 
@@ -91,7 +96,7 @@ def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: 
 def orga_ci_inventory_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of inventory types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_inventory_types")
-    context["list"] = context["event"].get_elements(InventoryType).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, InventoryType, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/inventory_types.html", context)
 
 
@@ -117,7 +122,7 @@ def orga_ci_inventory_types_delete(request: HttpRequest, event_slug: str, type_u
 def orga_ci_pool_labels(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool labels for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_labels")
-    context["list"] = context["event"].get_elements(PoolLabel).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, PoolLabel, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_labels.html", context)
 
 
@@ -153,16 +158,28 @@ def orga_ci_inventory_view(request: HttpRequest, event_slug: str, inventory_uuid
         messages.error(request, "You do not have access to this inventory.")
         return redirect("orga_ci_inventory", event_slug=event_slug)
 
+    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
+
+    # Only mark this page as "manage" (loading select2 assets, admin nav) for staff.
+    if context["can_edit_from_npc"]:
+        context["manage"] = 1
+        context["page_info"] = _("View balances and transfer history for this character inventory")
+
     context["inventory"] = ci
     context["pool_balances_list"] = ci.get_pool_balances()
-    context["all_inventories"] = Inventory.objects.filter(event=context["event"]).order_by("number")
+
+    # Transfer target list: alphabetical for usability. Players only see inventories
+    # already assigned to a character (staff still see unassigned ones, to be able
+    # to assign resources to them).
+    all_inventories = Inventory.objects.filter(event=context["event"])
+    if not context["can_edit_from_npc"]:
+        all_inventories = all_inventories.filter(owners__isnull=False).distinct()
+    context["all_inventories"] = all_inventories.order_by("name")
 
     # All incoming + outgoing transfers
     context["transfers"] = InventoryTransfer.objects.filter(
         models.Q(source_inventory=ci) | models.Q(target_inventory=ci)
     ).select_related("source_inventory", "target_inventory", "pool_type", "actor")
-
-    context["can_edit_from_npc"] = has_event_permission(request, context, event_slug, "orga_ci_inventory")
 
     return render(request, "larpmanager/orga/ci/inventory.html", context)
 

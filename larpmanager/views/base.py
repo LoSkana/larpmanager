@@ -24,24 +24,27 @@ import secrets
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+from urllib.parse import urlsplit, urlunsplit
 
 import magic
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, redirect_to_login
 from django.core.cache import cache
 from django.core.files.storage import default_storage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
-from larpmanager.utils.core.base import get_context
+from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, pop_pending_next_url, safe_local_url, session_token_key
+from larpmanager.utils.core.base import get_context, get_optional_context
 from larpmanager.utils.core.common import welcome_user
-from larpmanager.utils.larpmanager.query import query_index
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.services.miscellanea import check_centauri
 from larpmanager.views.larpmanager import lm_home
@@ -73,6 +76,28 @@ class MyLoginView(AssocVersionMixin, LoginView):
     template_name = "registration/login.html"
     authentication_form = MyAuthForm
 
+    def get_success_url(self) -> str:
+        """Get post-login redirect, falling back to the 'next' stashed at login entry.
+
+        The query string 'next' can be lost if the user abandons this attempt
+        (e.g. to register through a different entry point) and comes back to
+        log in without it. SocialLoginTargetMiddleware stashes it as a fallback.
+        """
+        if self.request.GET.get("next") or self.request.POST.get("next"):
+            return super().get_success_url()
+        next_url = pop_pending_next_url(self.request)
+        if next_url and self.get_redirect_url_valid(next_url):
+            return next_url
+        return super().get_success_url()
+
+    def get_redirect_url_valid(self, next_url: str) -> bool:
+        """Check that a stashed 'next' url is safe to redirect to."""
+        return url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure(),
+        )
+
     def form_valid(self, authentication_form: Form) -> HttpResponse:
         """Handle valid login form submission."""
         user = authentication_form.get_user()
@@ -99,7 +124,9 @@ def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
     """Handle 404 errors with custom template."""
     # Render the custom 404 template with exception context
     # The 'exe' variable provides exception details to the template
-    return render(request, "404.html", {"exe": exception})
+    context = get_optional_context(request)
+    context["exe"] = exception
+    return render(request, "404.html", context)
 
 
 def error_500(request: HttpRequest) -> Any:
@@ -117,36 +144,41 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
         request: HTTP request object containing user authentication data
         subdomain: Target subdomain to redirect to (e.g., 'app', 'admin')
         path: Optional path to append to the redirect URL. Defaults to empty string.
+            Overridden by a same-site 'next' query parameter, if present.
 
     Returns:
         HttpResponse: Redirect response to the target subdomain URL with session token,
                      or redirect to login page if user is not authenticated
 
     Note:
-        The session token expires after 60 seconds for security purposes.
+        The session token is single use and expires after SESSION_TOKEN_TTL seconds.
 
     """
     # Check if user is authenticated, redirect to login if not
     user = request.user
     if not user.is_authenticated:
-        return redirect("/login/")
+        return redirect_to_login(request.get_full_path(), reverse("login"))
+
+    target = safe_local_url(request.GET.get("next")) or f"/{path}"
 
     # In dev/test there is a single host serving every association: switch
     # association via session instead of building a (non-resolvable) subdomain URL
     if getattr(request, "enviro", None) in ("dev", "test"):
         request.session["debug_slug"] = subdomain
-        return redirect(f"/{path}")
+        return redirect(target)
 
     # Generate secure random token for cross-subdomain authentication
     token = secrets.token_urlsafe(32)
 
     # Store token in cache with user ID and short timeout for security
-    # Session token has short 60 second timeout for security
-    cache.set(f"session_token:{token}", user.id, timeout=60)
+    cache.set(session_token_key(token), user.id, timeout=SESSION_TOKEN_TTL)
 
-    # Build redirect URL with subdomain and token
+    # Build redirect URL with subdomain and token, keeping any query of the target
     base_domain = get_base_domain(request)
-    return redirect(f"{request.scheme}://{subdomain}.{base_domain}/{path}?token={token}")
+    parts = urlsplit(target)
+    query = f"{parts.query}&token={token}" if parts.query else f"token={token}"
+    target = urlunsplit(("", "", parts.path, query, parts.fragment))
+    return redirect(f"{request.scheme}://{subdomain}.{base_domain}{target}")
 
 
 def get_base_domain(request: HttpRequest) -> str:
@@ -160,12 +192,6 @@ def get_base_domain(request: HttpRequest) -> str:
     base_domain = ".".join(host_parts[-2:]) if len(host_parts) >= minimum_parts_for_base_domain else host_without_port
 
     return f"{base_domain}:{port}" if port else base_domain
-
-
-@require_POST
-def tutorial_query(request: HttpRequest) -> HttpResponse:
-    """Delegate to query_index for tutorial queries."""
-    return query_index(request)
 
 
 def _validate_upload_file(file: Any, file_ext: str) -> str | None:

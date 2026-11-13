@@ -4,11 +4,8 @@
     {% trans "Awards" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
-    {% url 'orga_exp_deliveries_load' run.get_slug as load_url %}
-    {% trans "Load participants" as load_label %}
-    {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" %}
-        {% include "elements/table/header.html" %}
-    {% endwith %}
+    {% trans "Load characters" as load_dropdown_label %}
+    {% include "elements/table/header.html" with extra_dropdown_label=load_dropdown_label extra_dropdown_icon="fas fa-users" extra_dropdown_links=load_options %}
     <table id="deliveries"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"

@@ -27,16 +27,20 @@ import hmac
 import json
 import logging
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 import requests
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest
 from django.urls import reverse
 
+from larpmanager.accounting.gateway import GatewayError
 from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.utils.core.base import get_context, update_payment_details
 from larpmanager.utils.larpmanager.tasks import notify_admins
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +69,7 @@ def get_sumup_form(
 
     Raises:
         KeyError: If required configuration keys are missing from context
-        requests.RequestException: If API requests fail
-        json.JSONDecodeError: If API response is not valid JSON
+        GatewayError: If SumUp cannot be reached or refuses the authentication or the checkout
 
     """
     # Authenticate with SumUp API to obtain access token
@@ -79,32 +82,30 @@ def get_sumup_form(
     }
 
     # Make authentication request and extract token
-    authentication_response = requests.request(
-        "POST",
-        authentication_url,
-        headers=authentication_headers,
-        data=authentication_payload,
-        timeout=30,
-    )
+    try:
+        authentication_response = requests.request(
+            "POST",
+            authentication_url,
+            headers=authentication_headers,
+            data=authentication_payload,
+            timeout=30,
+        )
+    except requests.RequestException as err:
+        msg = f"SumUp authentication request failed: {err}"
+        raise GatewayError(msg) from err
 
     # Validate authentication response
     expected_success_code = 200
     if authentication_response.status_code != expected_success_code:
-        error_msg = f"SumUp authentication failed with status {authentication_response.status_code}: {authentication_response.text}"
-        logger.error(error_msg)
-        notify_admins("SumUp authentication failed", error_msg)
-        msg = "Payment gateway authentication failed"
-        raise Http404(msg)
+        msg = f"SumUp authentication failed with status {authentication_response.status_code}: {authentication_response.text}"
+        raise GatewayError(msg)
 
     try:
         authentication_response_data = json.loads(authentication_response.text)
         access_token = authentication_response_data["access_token"]
     except (json.JSONDecodeError, KeyError) as e:
-        error_msg = f"Failed to parse SumUp authentication response: {e}\nResponse: {authentication_response.text}"
-        logger.exception(error_msg)
-        notify_admins("SumUp authentication JSON error", error_msg)
-        msg = "Invalid response from payment gateway"
-        raise Http404(msg) from e
+        msg = f"Failed to parse SumUp authentication response: {e}\nResponse: {authentication_response.text}"
+        raise GatewayError(msg) from e
 
     # Prepare checkout creation request with invoice details
     checkout_url = "https://api.sumup.com/v0.1/checkouts"
@@ -130,32 +131,30 @@ def get_sumup_form(
     }
 
     # Create checkout session and extract checkout ID
-    checkout_response = requests.request(
-        "POST",
-        checkout_url,
-        headers=checkout_headers,
-        data=checkout_payload,
-        timeout=30,
-    )
+    try:
+        checkout_response = requests.request(
+            "POST",
+            checkout_url,
+            headers=checkout_headers,
+            data=checkout_payload,
+            timeout=30,
+        )
+    except requests.RequestException as err:
+        msg = f"SumUp checkout request failed: {err}"
+        raise GatewayError(msg) from err
 
     # Validate checkout response
     expected_success_code = 201
     if checkout_response.status_code != expected_success_code:
-        error_msg = f"SumUp checkout failed with status {checkout_response.status_code}: {checkout_response.text}"
-        logger.error(error_msg)
-        notify_admins("SumUp checkout failed", error_msg)
-        msg = "Payment checkout creation failed"
-        raise Http404(msg)
+        msg = f"SumUp checkout failed with status {checkout_response.status_code}: {checkout_response.text}"
+        raise GatewayError(msg)
 
     try:
         checkout_response_data = json.loads(checkout_response.text)
         checkout_id = checkout_response_data["id"]
     except (json.JSONDecodeError, KeyError) as e:
-        error_msg = f"Failed to parse SumUp checkout response: {e}\nResponse: {checkout_response.text}"
-        logger.exception(error_msg)
-        notify_admins("SumUp checkout JSON error", error_msg)
-        msg = "Invalid response from payment gateway"
-        raise Http404(msg) from e
+        msg = f"Failed to parse SumUp checkout response: {e}\nResponse: {checkout_response.text}"
+        raise GatewayError(msg) from e
 
     # Store checkout ID in context and update invoice for tracking
     context["sumup_checkout_id"] = checkout_id
@@ -163,7 +162,22 @@ def get_sumup_form(
     invoice.save()
 
 
-def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple security checks require multiple returns
+def _valid_sumup_signature(request: HttpRequest, webhook_secret: str) -> bool:
+    """Check the webhook HMAC-SHA256 signature header against the request body."""
+    signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
+    if not signature_header:
+        logger.error("SumUp webhook: Missing signature header")
+        return False
+
+    expected_signature = hmac.new(webhook_secret.encode("utf-8"), request.body, hashlib.sha256).hexdigest()
+    if not hmac.compare_digest(signature_header, expected_signature):
+        logger.error("SumUp webhook: Invalid signature. Expected: %s, Got: %s", expected_signature, signature_header)
+        return False
+
+    return True
+
+
+def sumup_webhook(request: HttpRequest) -> bool:
     """Handle SumUp webhook notifications for payment processing.
 
     Processes incoming webhook requests from SumUp payment gateway,
@@ -184,22 +198,8 @@ def sumup_webhook(request: HttpRequest) -> bool:  # noqa: PLR0911 - Multiple sec
 
     # Verify HMAC signature if configured
     sumup_webhook_secret = context.get("sumup_webhook_secret")
-    if sumup_webhook_secret:
-        # Get signature from headers
-        signature_header = request.META.get("HTTP_X_SUMUP_SIGNATURE")
-        if not signature_header:
-            logger.error("SumUp webhook: Missing signature header")
-            return False
-
-        # Compute expected signature using HMAC-SHA256
-        expected_signature = hmac.new(sumup_webhook_secret.encode("utf-8"), request.body, hashlib.sha256).hexdigest()
-
-        # Verify signature matches
-        if not hmac.compare_digest(signature_header, expected_signature):
-            logger.error(
-                "SumUp webhook: Invalid signature. Expected: %s, Got: %s", expected_signature, signature_header
-            )
-            return False
+    if sumup_webhook_secret and not _valid_sumup_signature(request, sumup_webhook_secret):
+        return False
 
     # Parse the JSON payload from the webhook request body
     try:

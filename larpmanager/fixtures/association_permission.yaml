@@ -324,6 +324,30 @@
     module: users
 - model: larpmanager.associationpermission
   fields:
+    name: Flags types
+    descr: Define custom status flags for users
+    slug: exe_member_flags
+    number: 41
+    config: null
+    active_if: member_flags_active
+    hidden: false
+    icon: flag
+    feature: member_status_flags
+    module: users
+- model: larpmanager.associationpermission
+  fields:
+    name: User flags
+    descr: View and edit each user's status flags
+    slug: exe_members_flags
+    number: 42
+    config: null
+    active_if: member_flags_active
+    hidden: false
+    icon: users
+    feature: member_status_flags
+    module: users
+- model: larpmanager.associationpermission
+  fields:
     name: Questions
     descr: Manage participant questions and answer them
     slug: exe_questions

@@ -1,5 +1,5 @@
 {% extends parent_template|default:"base.html" %}
-{% load i18n %}
+{% load i18n show_tags %}
 {% block title %}
     {% trans "Register" %}
 {% endblock title %}
@@ -8,7 +8,7 @@
         <div class="form_container user_resize">
             <form id="register_form"
                   method="post"
-                  action="{% url 'registration_register' %}">
+                  action="{% url 'registration_register' %}{% auth_next_query %}">
                 {% csrf_token %}
                 <table>
                     {{ form.as_table }}
@@ -16,11 +16,19 @@
                 {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
                 <input type="submit" id="id_submit"  value="{% trans "Submit" %}" />
             </form>
+            <p class="login_link">
+                {% trans "Already have an account?" %}
+                {% if request.GET.next %}
+                    <a href="{% url 'login' %}?next={{ request.GET.next|urlencode }}">{% trans "Log in" %}</a>
+                {% else %}
+                    <a href="{% url 'login' %}">{% trans "Log in" %}</a>
+                {% endif %}
+            </p>
         </div>
     </div>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
     $(document).ready(function(){
 

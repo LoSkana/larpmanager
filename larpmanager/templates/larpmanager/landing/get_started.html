@@ -32,7 +32,7 @@
                               class="get-started-demo-form">
                             {% csrf_token %}
                             <input type="hidden" name="demo_uuid" value="{{ demo_type.uuid }}">
-                            <button type="submit"
+                            <button type="button"
                                     class="get-started-card"
                                     {% if demo_type.color %}style="border-top-color: {{ demo_type.color }};"{% endif %}>
                                 {% if demo_type.icon %}<i class="{{ demo_type.icon }}"></i>{% endif %}
@@ -42,52 +42,36 @@
                         </form>
                     {% endfor %}
                 </div>
-                <div id="get-started-building" class="get-started-building hide">
-                    <div class="get-started-building-inner">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <p class="get-started-building-text">
-                            {% trans "Preparing your demo, this takes a few seconds - please do not close this page" %}
+                <dialog id="demo-confirm-modal" class="demo-confirm-modal">
+                    <button type="button"
+                            class="demo-confirm-close"
+                            id="demo-confirm-close"
+                            aria-label="{% trans "Close" %}">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <div class="demo-confirm-step" id="demo-confirm-step">
+                        <h2>{% trans "Create a new demo" %}</h2>
+                        <p>
+                            {% trans "A new demo organization will be created just for you, ready to explore as you want. This takes a few seconds." %}
                         </p>
+                        <button type="button" class="btn btn-primary" id="demo-confirm-proceed">{% trans "Proceed" %}</button>
                     </div>
-                </div>
+                    <div class="demo-confirm-step hide" id="demo-building-step">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p>{% trans "Preparing your demo, this takes a few seconds. Please do not close this page!" %}</p>
+                    </div>
+                </dialog>
             </div>
             <div class="get-started-divider">
-                <a href="#get-started-real"
-                   class="get-started-skip"
-                   onclick="document.getElementById('get-started-real').classList.remove('hide');">
-                    {% trans "Skip the demo, create your own organization" %} <i class="fa-solid fa-arrow-down"></i>
+                <a href="{% url 'get_started_real' %}" class="get-started-skip">
+                    {% trans "Skip the demo, create your own organization" %} <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         {% endif %}
-        <div id="get-started-real" class="{% if demo_types %}hide{% endif %}">
-            <h2>{% trans "Create your organization" %}</h2>
-            <div class="about-prose landing-prose">{{ texts.join_content | safe }}</div>
-            {% if request.user.is_authenticated %}
-                <form class="contact-form"
-                      action="{% url 'get_started' %}"
-                      enctype="multipart/form-data"
-                      method="post">
-                    {% csrf_token %}
-                    <table>
-                        {{ form.as_div }}
-                    </table>
-                    <input class="btn btn-primary"
-                           type="submit"
-                           id="id_submit"
-                           value="{% trans "Submit" %}">
-                </form>
-            {% else %}
-                <p>
-                    <a class="btn btn-primary"
-                       href="{% url 'login' %}?next={% url 'get_started' %}">{% trans "Log in to create your organization" %}</a>
-                </p>
-            {% endif %}
-            <div class="contact-alt">{{ texts.desktop_recommendation | safe }}</div>
-        </div>
     </div>
 {% endblock landing_content %}
 {% block landing_final %}
 {% endblock landing_final %}
 {% block js2 %}
-    <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+    <script nonce="{{ csp_nonce }}"> window.base_domain = ".{{ association.base_domain }}"; </script>
 {% endblock js2 %}

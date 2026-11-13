@@ -108,7 +108,7 @@
 {% block js %}
     <script src="{% static 'larpmanager/pswipe/photoswipe.min.js' %}">});</script>
     <script src="{% static 'larpmanager/pswipe/photoswipe-ui-default.min.js' %}">});</script>
-    <script type="text/javascript">
+    <script nonce="{{ csp_nonce }}" type="text/javascript">
     window.addEventListener('DOMContentLoaded', function() {
     (function() {
 

@@ -86,27 +86,40 @@
     </div>
     <div class="hide">{{ avatar_form.image }}</div>
 </div>
-<script>
+<script nonce="{{ csp_nonce }}">
 (function () {
     var uploadUrl = '{{ avatar_upload_url }}';
     var rotateLUrl = '{{ avatar_rotate_l_url }}';
     var rotateRUrl = '{{ avatar_rotate_r_url }}';
     var confirmSel = '{{ avatar_confirm_selector|default:"input[type=submit]" }}';
 
-    function profileUpdate(src) {
+    function profileUpdate(src, baseUpdated) {
         var newUrl = src + '?_=' + (new Date()).getTime();
         $('#profile').attr('src', newUrl).removeClass('hide');
         $('#avatar_no_img').addClass('hide');
         $('#avatar_dropzone').addClass('has-image');
         $('#avatar_rotate_btns').removeClass('hide');
+        // the upload/rotate saved the member record outside the main form, bumping its version
+        // stamp: refresh it here so the later form submit isn't rejected as stale
+        if (baseUpdated) $('#base_updated').val(baseUpdated);
     }
 
-    function doUpload(file) {
-        var fd = new FormData();
-        fd.append('image', file);
+    // incremented on every pick, so only the latest one gets uploaded
+    var uploadSeq = 0;
+
+    function doUpload(bufferedFile) {
+        var seq = ++uploadSeq;
         $('#profile').attr('src', '');
         $('#upload_spinner').removeClass('hide');
         $(confirmSel).prop('disabled', true);
+        bufferedFile.then(function (file) {
+            if (seq === uploadSeq) sendUpload(file);
+        });
+    }
+
+    function sendUpload(file) {
+        var fd = new FormData();
+        fd.append('image', file);
         $.ajax({
             url: uploadUrl,
             type: 'POST',
@@ -114,9 +127,13 @@
             processData: false,
             contentType: false,
             success: function (d) {
-                profileUpdate(d.src);
                 $('#upload_spinner').addClass('hide');
                 $(confirmSel).prop('disabled', false);
+                if (d.res !== 'ok') {
+                    if (!window.lmTesting) alert(d.error || '{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
+                    return;
+                }
+                profileUpdate(d.src, d.base_updated);
             },
             error: function () {
                 $('#upload_spinner').addClass('hide');
@@ -138,23 +155,28 @@
             e.preventDefault();
             $(this).removeClass('drag-over');
             var files = e.originalEvent.dataTransfer.files;
-            if (files.length) doUpload(files[0]);
+            if (files.length) doUpload(window.lmBufferFile(files[0]));
         });
 
         $('#id_image').on('change', function () {
-            if (this.files && this.files[0]) doUpload(this.files[0]);
+            if (!this.files || !this.files[0]) return;
+            // reuse the read already started by the global file input listener
+            var buffering = this.lmBuffering;
+            doUpload(buffering
+                ? buffering.then(function (files) { return files[0]; })
+                : window.lmBufferFile(this.files[0]));
         });
 
         $('#rotate_l_btn').on('click', function (e) {
             e.stopPropagation();
             $('#profile').attr('src', '');
-            $.ajax({ url: rotateLUrl, success: function (d) { profileUpdate(d.src); } });
+            $.ajax({ url: rotateLUrl, success: function (d) { profileUpdate(d.src, d.base_updated); } });
         });
 
         $('#rotate_r_btn').on('click', function (e) {
             e.stopPropagation();
             $('#profile').attr('src', '');
-            $.ajax({ url: rotateRUrl, success: function (d) { profileUpdate(d.src); } });
+            $.ajax({ url: rotateRUrl, success: function (d) { profileUpdate(d.src, d.base_updated); } });
         });
     });
 }());

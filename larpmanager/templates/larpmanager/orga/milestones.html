@@ -63,7 +63,7 @@
     {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
         document.getElementById('toggle-completed').addEventListener('click', function(e) {
             e.preventDefault();
             document.querySelectorAll('#milestones tbody tr.hide').forEach(function(row) {

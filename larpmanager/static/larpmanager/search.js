@@ -410,7 +410,7 @@ function search(key) {
 
             // Add to top navigation and separator
             if (first) first = false; else { top += ", "; characters += '<hr class="clear" />'; }
-            top += "<small style='display: inline-block'><a href='#char{0}'>{1}</a></small>".format(el['uuid'], name);
+            top += "<small class='inline-block'><a href='#char{0}'>{1}</a></small>".format(el['uuid'], name);
 
             // Determine which profile image to use
             var pf = blank;  // Default to blank image

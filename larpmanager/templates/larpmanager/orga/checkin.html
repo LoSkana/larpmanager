@@ -1,0 +1,371 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Check-in" %} {{ gl_name }} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block info %}
+    {% trans "Scan participant QR codes on-site to mark them present. Works offline: scans are queued locally and synced automatically once you're back online." %}
+{% endblock info %}
+{% block content %}
+    <div id="checkin">
+        <div id="checkin_status">
+            <input type="text"
+                   id="checkin_search"
+                   placeholder="{% trans 'Search by player or character name' %}" />
+            <button type="button" id="checkin_scan_btn" class="btn">{% trans "Scan QR code" %}</button>
+            <span id="checkin_sync_state" class="checkin-online">{% trans "Online" %}</span>
+            <span id="checkin_queue_count"></span>
+        </div>
+        <table id="checkin_table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Participant" %}</th>
+                    <th>{% trans "Character" %}</th>
+                    <th>{% trans "Payment" %}</th>
+                    <th>{% trans "Present" %}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- will be filled later -->
+            </tbody>
+        </table>
+        <dialog id="checkin_scan_popup" class="popup_delete">
+            <div id="checkin_reader"></div>
+            <p id="checkin_scan_result"></p>
+            <div id="checkin_scan_detail"></div>
+            <button type="button" id="checkin_scan_close" class="btn">{% trans "Close" %}</button>
+        </dialog>
+        <dialog id="checkin_detail_popup" class="popup_delete">
+            <div id="checkin_detail_content"></div>
+            <button type="button" id="checkin_detail_close" class="btn">{% trans "Close" %}</button>
+        </dialog>
+        <dialog id="checkin_signin_popup" class="popup_delete">
+            <p id="checkin_signin_message"></p>
+            <button type="button" id="checkin_signin_confirm" class="btn">{% trans "Confirm" %}</button>
+            <button type="button" id="checkin_signin_cancel" class="btn">{% trans "Cancel" %}</button>
+        </dialog>
+        <table id="checkin_summary">
+            <tbody>
+                <tr>
+                    <th>{% trans "Present" %}</th>
+                    <td id="checkin_summary_present"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Not scanned" %}</th>
+                    <td id="checkin_summary_remaining"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Total" %}</th>
+                    <td id="checkin_summary_total"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {{ checkin_data|json_script:"checkin_data" }}
+{% endblock content %}
+{% block js %}
+    <script type="text/javascript"
+            src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
+            defer></script>
+    <script nonce="{{ csp_nonce }}" type="text/javascript">
+(function () {
+  "use strict";
+
+  var CHECKIN_DATA = JSON.parse(document.getElementById("checkin_data").textContent);
+  var SCAN_URL = "{% url 'orga_checkin_scan' run.get_slug %}";
+  var CSRF_TOKEN = "{{ csrf_token }}";
+  var QUEUE_KEY = "checkin_queue_{{ run.id }}";
+  var TXT = {
+    payment: "{% filter escapejs %}{% trans "Payment" %}{% endfilter %}",
+    paid: "{% filter escapejs %}{% trans "Paid" %}{% endfilter %}",
+    outstanding: "{% filter escapejs %}{% trans "Outstanding" %}{% endfilter %}",
+    ticket: "{% filter escapejs %}{% trans "Ticket" %}{% endfilter %}",
+    faction: "{% filter escapejs %}{% trans "Faction" %}{% endfilter %}",
+    pendingSync: "{% filter escapejs %}{% trans "Pending sync:" %}{% endfilter %}",
+    yes: "{% filter escapejs %}{% trans "Yes" %}{% endfilter %}",
+    no: "{% filter escapejs %}{% trans "No" %}{% endfilter %}",
+    signIn: "{% filter escapejs %}{% trans "Sign in" %}{% endfilter %}",
+    online: "{% filter escapejs %}{% trans "Online" %}{% endfilter %}",
+    offline: "{% filter escapejs %}{% trans "Offline" %}{% endfilter %}",
+    unknownQr: "{% filter escapejs %}{% trans "Unknown QR code for this event." %}{% endfilter %}",
+    checkedIn: "{% filter escapejs %}{% trans "Checked in:" %}{% endfilter %}",
+    scanRejected: "{% filter escapejs %}{% trans "Scan rejected:" %}{% endfilter %}",
+    confirmCheckin: "{% filter escapejs %}{% trans "Confirm check-in for" %}{% endfilter %}"
+  };
+
+  var byUuid = {};
+  CHECKIN_DATA.forEach(function (row) { byUuid[row.uuid] = row; });
+
+  var searchText = "";
+  var lastScanUuid = null;
+
+  function escapeHtml(text) {
+    var div = document.createElement("div");
+    div.textContent = text == null ? "" : String(text);
+    return div.innerHTML;
+  }
+
+  function matchesSearch(row) {
+    if (!searchText) return true;
+    var haystack = (row.member + " " + row.character).toLowerCase();
+    return haystack.indexOf(searchText) !== -1;
+  }
+
+  function renderDetail(container, row) {
+    var detail = row.detail;
+    var parts = [];
+    if (row.paid) {
+      parts.push("<b>" + escapeHtml(TXT.payment) + ":</b> " + escapeHtml(TXT.paid));
+    } else {
+      parts.push("<b class='checkin-unpaid'>" + escapeHtml(TXT.payment) + ": " + escapeHtml(TXT.outstanding) + "</b>");
+    }
+    if (detail.ticket) parts.push("<b>" + escapeHtml(TXT.ticket) + ":</b> " + escapeHtml(detail.ticket));
+    if (detail.faction) parts.push("<b>" + escapeHtml(TXT.faction) + ":</b> " + escapeHtml(detail.faction));
+    detail.addons.forEach(function (addon) {
+      parts.push("<b>" + escapeHtml(addon.name) + ":</b> " + escapeHtml(addon.value));
+    });
+    detail.character_fields.forEach(function (field) {
+      parts.push("<b>" + escapeHtml(field.name) + ":</b> " + escapeHtml(field.value));
+    });
+    container.innerHTML = parts.join("<br>");
+  }
+
+  function openDetail(uuid) {
+    var row = byUuid[uuid];
+    if (!row) return;
+    renderDetail(document.getElementById("checkin_detail_content"), row);
+    document.getElementById("checkin_detail_popup").showModal();
+  }
+
+  function loadQueue() {
+    try {
+      return JSON.parse(window.localStorage.getItem(QUEUE_KEY) || "[]");
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveQueue(queue) {
+    window.localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+    document.getElementById("checkin_queue_count").textContent =
+      queue.length ? (TXT.pendingSync + " " + queue.length) : "";
+  }
+
+  function renderSummary() {
+    var present = 0;
+    CHECKIN_DATA.forEach(function (row) { if (row.checked_in_at) present += 1; });
+    document.getElementById("checkin_summary_present").textContent = present;
+    document.getElementById("checkin_summary_remaining").textContent = CHECKIN_DATA.length - present;
+    document.getElementById("checkin_summary_total").textContent = CHECKIN_DATA.length;
+  }
+
+  function renderTable() {
+    var tbody = document.querySelector("#checkin_table tbody");
+    tbody.innerHTML = "";
+    CHECKIN_DATA.filter(matchesSearch).forEach(function (row) {
+      var tr = document.createElement("tr");
+      tr.dataset.uuid = row.uuid;
+      tr.innerHTML =
+        "<td><button type='button' class='btn checkin-expand-btn'><i class='fas fa-circle-info'></i></button></td>" +
+        "<td>" + escapeHtml(row.member) + "</td>" +
+        "<td>" + escapeHtml(row.character) + "</td>" +
+        "<td>" + escapeHtml(row.paid ? TXT.paid : TXT.outstanding) + "</td>" +
+        "<td class='checkin-present'>" + escapeHtml(row.checked_in_at ? TXT.yes : TXT.no) + "</td>" +
+        "<td>" + (row.checked_in_at ? "" : "<button type='button' class='btn checkin-signin-btn'>" + escapeHtml(TXT.signIn) + "</button>") + "</td>";
+      tbody.appendChild(tr);
+    });
+  }
+
+  function updateLocalRow(uuid, checkedInAt) {
+    var row = byUuid[uuid];
+    if (!row) return;
+    row.checked_in_at = checkedInAt;
+    renderTable();
+    renderSummary();
+  }
+
+  function postScan(uuid, scannedAt, onDone) {
+    var body = new URLSearchParams();
+    body.set("uuid", uuid);
+    body.set("scanned_at", scannedAt);
+    fetch(SCAN_URL, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": CSRF_TOKEN,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: body.toString()
+    }).then(function (resp) {
+      return resp.json().catch(function () { return null; }).then(function (data) {
+        return { status: resp.status, data: data };
+      });
+    }).then(function (result) {
+      onDone(!!result.data && result.data.res === "ok", result.status, result.data);
+    }).catch(function () {
+      onDone(false, 0, null);
+    });
+  }
+
+  // A 400 response means the server rejected the scan itself (e.g. unknown
+  // uuid) - retrying it will never succeed, so drop it instead of requeuing.
+  // status 0 means the request never reached the server (offline/network
+  // error) - keep it queued for the next sync attempt.
+  function isPermanentFailure(status) {
+    return status >= 400 && status < 500;
+  }
+
+  function flushQueue() {
+    var queue = loadQueue();
+    if (!queue.length) return;
+    var remaining = [];
+    var pending = queue.length;
+    queue.forEach(function (entry) {
+      postScan(entry.uuid, entry.scanned_at, function (ok, status, data) {
+        if (ok && data && data.row) {
+          updateLocalRow(data.row.uuid, data.row.checked_in_at);
+        } else if (!ok && !isPermanentFailure(status)) {
+          remaining.push(entry);
+        }
+        pending -= 1;
+        if (pending === 0) saveQueue(remaining);
+      });
+    });
+  }
+
+  function setOnlineState() {
+    var el = document.getElementById("checkin_sync_state");
+    if (navigator.onLine) {
+      el.textContent = TXT.online;
+      el.className = "checkin-online";
+      flushQueue();
+    } else {
+      el.textContent = TXT.offline;
+      el.className = "checkin-offline";
+    }
+  }
+
+  function handleScan(uuid) {
+    // The camera decodes the same QR many times per second while it stays in view.
+    if (uuid === lastScanUuid) return;
+    lastScanUuid = uuid;
+
+    var scannedAt = new Date().toISOString();
+    var resultEl = document.getElementById("checkin_scan_result");
+    var detailEl = document.getElementById("checkin_scan_detail");
+    detailEl.innerHTML = "";
+
+    // The QR payload is the registration's own uuid, already present in the
+    // locally downloaded list, update the UI immediately regardless of
+    // connectivity, then try to persist the scan to the server.
+    var row = byUuid[uuid];
+    if (!row) {
+      resultEl.textContent = TXT.unknownQr;
+      return;
+    }
+    updateLocalRow(uuid, row.checked_in_at || scannedAt);
+    resultEl.textContent = TXT.checkedIn + " " + row.member;
+    renderDetail(detailEl, row);
+
+    postScan(uuid, scannedAt, function (ok, status, data) {
+      if (ok && data && data.row) {
+        updateLocalRow(data.row.uuid, data.row.checked_in_at);
+      } else if (!isPermanentFailure(status)) {
+        var queue = loadQueue();
+        queue.push({ uuid: uuid, scanned_at: scannedAt });
+        saveQueue(queue);
+      } else {
+        resultEl.textContent = TXT.scanRejected + " " + row.member;
+        detailEl.innerHTML = "";
+        // Allow presenting the same QR again to retry a rejected scan.
+        lastScanUuid = null;
+      }
+    });
+  }
+
+  var scanner = null;
+
+  function openScanner() {
+    var popup = document.getElementById("checkin_scan_popup");
+    lastScanUuid = null;
+    document.getElementById("checkin_scan_result").textContent = "";
+    document.getElementById("checkin_scan_detail").innerHTML = "";
+    popup.showModal();
+    scanner = new Html5Qrcode("checkin_reader");
+    scanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      function (decodedText) { handleScan(decodedText); },
+      function () {}
+    );
+  }
+
+  function closeScanner() {
+    var popup = document.getElementById("checkin_scan_popup");
+    if (scanner) {
+      scanner.stop().catch(function () {});
+      scanner = null;
+    }
+    popup.close();
+  }
+
+  document.getElementById("checkin_scan_btn").addEventListener("click", openScanner);
+  document.getElementById("checkin_scan_close").addEventListener("click", closeScanner);
+
+  document.getElementById("checkin_search").addEventListener("input", function (ev) {
+    searchText = ev.target.value.trim().toLowerCase();
+    renderTable();
+  });
+
+  document.querySelector("#checkin_table tbody").addEventListener("click", function (ev) {
+    var tr = ev.target.closest("tr[data-uuid]");
+    if (!tr) return;
+    var uuid = tr.dataset.uuid;
+
+    if (ev.target.closest(".checkin-expand-btn")) {
+      openDetail(uuid);
+    } else if (ev.target.closest(".checkin-signin-btn")) {
+      confirmSignIn(uuid);
+    }
+  });
+
+  document.getElementById("checkin_detail_close").addEventListener("click", function () {
+    document.getElementById("checkin_detail_popup").close();
+  });
+
+  var signinUuid = null;
+
+  function confirmSignIn(uuid) {
+    var row = byUuid[uuid];
+    if (!row) return;
+    signinUuid = uuid;
+    document.getElementById("checkin_signin_message").textContent =
+      TXT.confirmCheckin + " " + row.member + "?";
+    document.getElementById("checkin_signin_popup").showModal();
+  }
+
+  document.getElementById("checkin_signin_confirm").addEventListener("click", function () {
+    document.getElementById("checkin_signin_popup").close();
+    if (signinUuid) {
+      lastScanUuid = null;
+      handleScan(signinUuid);
+      openDetail(signinUuid);
+    }
+    signinUuid = null;
+  });
+
+  document.getElementById("checkin_signin_cancel").addEventListener("click", function () {
+    document.getElementById("checkin_signin_popup").close();
+    signinUuid = null;
+  });
+  window.addEventListener("online", setOnlineState);
+  window.addEventListener("offline", setOnlineState);
+
+  renderTable();
+  renderSummary();
+  saveQueue(loadQueue());
+  setOnlineState();
+})();
+    </script>
+{% endblock js %}

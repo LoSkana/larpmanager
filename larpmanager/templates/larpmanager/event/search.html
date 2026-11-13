@@ -9,7 +9,7 @@
 {% block content %}
     {% if hide_login %}
         <p>
-            <i>{% trans "Characters are only visible to logged in users:" %} <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
+            <i>{% trans "Characters are only visible to logged in users:" %} <a href="{% url 'login' %}{% auth_next_query %}">{% trans "Login" %}</a></i>
         </p>
     {% elif hide_signup %}
         <p>
@@ -52,13 +52,13 @@
                     {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong." %}
                 </p>
                 <p>
-                    {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#" onclick="false;">{% trans "Example" %}</a>
+                    {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#">{% trans "Example" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
+                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel">{% trans "Included" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
+                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel">{% trans "Excluded" %}</a>
                 </p>
             </div>
         </div>
@@ -67,41 +67,44 @@
                 <input type="text" id="search" placeholder="{% trans "Insert" %}" />
             </div>
         </div>
-        {% if factions and factions|length > 1 %}
-            <div id="factions" class="c nav hide factions">
-                <div class="user_resize">
-                    {% for fnum in factions_typ.s %}
-                        {% with factions|get:fnum as f %}
-                            {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
-                        {% endwith %}
-                    {% endfor %}
-                    {% if factions_typ.t %}
-                        <br />
-                        <br />
-                        {% for fnum in factions_typ.t %}
+        <div class="search-filters">
+            {% if factions and factions|length > 1 %}
+                <div id="factions" class="c nav hide factions search-filter">
+                    <div class="user_resize">
+                        {% for fnum in factions_typ.s %}
                             {% with factions|get:fnum as f %}
                                 {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
                             {% endwith %}
                         {% endfor %}
-                    {% endif %}
+                        {% if factions_typ.t %}
+                            <br />
+                            <br />
+                            {% for fnum in factions_typ.t %}
+                                {% with factions|get:fnum as f %}
+                                    {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
+                                {% endwith %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-        {% for idq, options_id in searchable.items %}
-            <div class="c nav hide custom_field_{{ idq }}">
+            {% endif %}
+            {% for idq, options_id in searchable.items %}
+                <div class="c nav hide custom_field_{{ idq }} search-filter">
+                    <div class="user_resize">
+                        {% with questions|get:idq as question %}<span class="search-filter-label">{{ question.name }}:</span>{% endwith %}
+                        {% for ido in options_id %}
+                            {% with options|get:ido as option %}
+                                <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <div id="spec" class="c nav hide spec search-filter">
                 <div class="user_resize">
-                    {% for ido in options_id %}
-                        {% with options|get:ido as option %}
-                            <a typ="field_{{ idq }}" href="#" tog="{{ ido }}">{{ option.name }}</a>
-                        {% endwith %}
-                    {% endfor %}
+                    {% trans "Player:" %}
+                    <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
                 </div>
-            </div>
-        {% endfor %}
-        <div id="spec" class="c nav hide spec">
-            <div class="user_resize">
-                {% trans "Player:" %}
-                <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
             </div>
         </div>
         <div class="hide link_list">
@@ -143,7 +146,7 @@
     {% endif %}
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window['all'] = {{ chars_json | safe }};
 
 window['facs'] = {{ factions_json | safe }};
@@ -179,6 +182,11 @@ window['fields'] = {}
 window['questions'] = {{ questions_json | safe }};
 window['options'] = {{ options_json | safe }};
 window['searchable'] = {{ searchable_json | safe }};
+
+// Example filter buttons in the instructions are decorative only
+document.addEventListener('click', function(event) {
+    if (event.target.closest('.istr a')) event.preventDefault();
+});
 
     </script>
     {% compress js %}

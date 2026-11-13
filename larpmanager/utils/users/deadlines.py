@@ -25,13 +25,22 @@ from django.conf import settings as conf_settings
 from django.db.models import Count
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
+from larpmanager.models.access import EventRole
 from larpmanager.models.accounting import AccountingItemMembership
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Run
+from larpmanager.models.form import (
+    RegistrationQuestion,
+    RegistrationQuestionApplicable,
+)
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
+from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.registrations.questions import get_answered_registration_ids
 
 
 def get_users_data(member_ids: Any) -> Any:
@@ -44,16 +53,42 @@ def get_users_data(member_ids: Any) -> Any:
     ]
 
 
+def get_event_staff_member_ids(event_id: int) -> set:
+    """Get member IDs holding any event role for the given event."""
+    return set(EventRole.objects.filter(event_id=event_id).values_list("members", flat=True)) - {None}
+
+
 def get_membership_fee_year(association_id: int, year: Any = None) -> set:
     """Get set of member IDs who paid membership fee for given year."""
     if not year:
-        year = timezone.now().year
+        year = timezone.localdate().year
     return set(
         AccountingItemMembership.objects.filter(association_id=association_id, year=year).values_list(
             "member_id",
             flat=True,
         ),
     )
+
+
+def get_run_registrations_and_staff(runs: list[Run]) -> tuple[dict, dict]:
+    """Collect active registrations and event-staff member IDs per run.
+
+    Returns:
+        Tuple of (registrations_by_run, staff_member_ids_by_run), both keyed by run id
+
+    """
+    run_ids = [run.id for run in runs]
+    registrations_by_run = {run.id: [] for run in runs}
+
+    registration_query = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True, pending=False)
+    registration_query = registration_query.exclude(ticket__tier=TicketTier.WAITING)
+    for registration in registration_query:
+        registrations_by_run[registration.run_id].append(registration)
+
+    # Event staff (event role members) must also be checked for membership/fee deadlines, even without a registration
+    staff_member_ids_by_run = {run.id: get_event_staff_member_ids(run.event_id) for run in runs}
+
+    return registrations_by_run, staff_member_ids_by_run
 
 
 def check_run_deadlines(runs: list[Run]) -> list:
@@ -69,30 +104,19 @@ def check_run_deadlines(runs: list[Run]) -> list:
     if not runs:
         return []
 
-    # Collect all run and member IDs
-    run_ids = [run.id for run in runs]
-    registration_ids = []
-    member_ids = []
-    members_by_run = {}
-    registrations_by_run = {}
-    for run in runs:
-        registrations_by_run[run.id] = []
-        members_by_run[run.id] = []
-
-    # Query active registrations
-    registration_query = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True, pending=False)
-    registration_query = registration_query.exclude(ticket__tier=TicketTier.WAITING)
-    for registration in registration_query:
-        registration_ids.append(registration.id)
-        member_ids.append(registration.member_id)
-        registrations_by_run[registration.run_id].append(registration)
+    registrations_by_run, staff_member_ids_by_run = get_run_registrations_and_staff(runs)
+    member_ids = [
+        registration.member_id for registrations in registrations_by_run.values() for registration in registrations
+    ]
+    for staff_member_ids in staff_member_ids_by_run.values():
+        member_ids.extend(staff_member_ids)
 
     # Get tolerance setting
-    tolerance = int(get_association_config(runs[0].event.association_id, "deadlines_tolerance"))
+    association_id = get_run_association_id(runs[0].id)
+    tolerance = int(get_association_config(association_id, "deadline_tolerance"))
 
     # Check membership feature
-    association_id = runs[0].event.association_id
-    now = timezone.now()
+    now = timezone.localtime()
     uses_membership = "membership" in get_association_features(association_id)
 
     # Load memberships and fees
@@ -100,9 +124,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
         membership.member_id: membership
         for membership in Membership.objects.filter(association_id=association_id, member_id__in=member_ids)
     }
-    fees = {}
-    if uses_membership:
-        fees = get_membership_fee_year(association_id)
+    fees = get_membership_fee_year(association_id) if uses_membership else {}
 
     all_results = []
 
@@ -124,6 +146,9 @@ def check_run_deadlines(runs: list[Run]) -> list:
                 "fee_del",
                 "profile",
                 "profile_del",
+                "char",
+                "char_confirm",
+                "debrief",
             ]
         }
         features = get_event_features(run.event_id)
@@ -142,18 +167,35 @@ def check_run_deadlines(runs: list[Run]) -> list:
                     fees,
                     memberships,
                     now,
-                    registration,
+                    (registration.member_id, registration.created),
                     run,
                     tolerance,
                 )
             else:
-                deadlines_profile(deadline_violations, memberships, now, registration, run, tolerance)
+                deadlines_profile(deadline_violations, memberships, now, registration.member_id, run, tolerance)
 
             # Check payment deadlines
             deadlines_payment(deadline_violations, features, registration, tolerance)
 
+        # Check membership/fee deadlines for event staff with no registration on this run
+        registered_member_ids = {registration.member_id for registration in registrations_by_run[run.id]}
+        for staff_member_id in staff_member_ids_by_run[run.id] - registered_member_ids:
+            if uses_membership:
+                deadlines_membership(
+                    deadline_violations, features, fees, memberships, now, (staff_member_id, None), run, tolerance
+                )
+            else:
+                deadlines_profile(deadline_violations, memberships, now, staff_member_id, run, tolerance)
+
         # Check casting deadlines
         deadlines_casting(deadline_violations, features, player_ids, run)
+
+        # Check character creation deadlines
+        deadlines_character(deadline_violations, features, player_ids, run)
+
+        # Check debrief question deadlines
+        deadlines_debrief(deadline_violations, features, player_ids, run)
+
         result = {category: get_users_data(violations) for category, violations in deadline_violations.items()}
         result["run"] = run
         all_results.append(result)
@@ -165,17 +207,17 @@ def deadlines_profile(
     deadline_violations: Any,
     memberships: Any,
     current_datetime: Any,
-    registration: Any,
+    member_id: int,
     event_run: Any,
     tolerance_days: Any,
 ) -> None:
-    """Check profile completion deadlines for registration.
+    """Check profile completion deadlines for a member.
 
     Args:
         deadline_violations (dict): Dictionary to collect deadline violations
         memberships (dict): Member ID to membership mapping
         current_datetime (datetime): Current datetime
-        registration: Registration instance
+        member_id: Member id to check
         event_run: Run instance
         tolerance_days (int): Tolerance days for deadlines
 
@@ -183,7 +225,7 @@ def deadlines_profile(
         Updates deadline_violations with profile deadline violations
 
     """
-    membership = memberships.get(registration.member_id)
+    membership = memberships.get(member_id)
     if not membership:
         return
 
@@ -191,9 +233,9 @@ def deadlines_profile(
         return
 
     if current_datetime.date() + timedelta(days=tolerance_days) > event_run.start:
-        deadline_violations["profile_del"].append(registration.member_id)
+        deadline_violations["profile_del"].append(member_id)
     else:
-        deadline_violations["profile"].append(registration.member_id)
+        deadline_violations["profile"].append(member_id)
 
 
 def deadlines_membership(
@@ -202,13 +244,13 @@ def deadlines_membership(
     members_with_paid_fees: set[int],
     memberships_by_member_id: dict[int, any],
     current_datetime: datetime,
-    registration: any,
+    member_and_registration_created: tuple[int, datetime | None],
     event_run: any,
     tolerance_days: int,
 ) -> None:
-    """Check membership and fee deadlines for registration.
+    """Check membership and fee deadlines for a member.
 
-    Evaluates membership status and fee payment deadlines for a given registration,
+    Evaluates membership status and fee payment deadlines for a given member,
     updating the collect dictionary with any violations found based on tolerance periods.
 
     Args:
@@ -217,7 +259,9 @@ def deadlines_membership(
         members_with_paid_fees: Set of member IDs who have paid their membership fee
         memberships_by_member_id: Mapping from member ID to membership instance
         current_datetime: Current datetime for deadline calculations
-        registration: Registration instance being evaluated
+        member_and_registration_created: Tuple of (member_id, registration creation date).
+            The creation date is None if the member has no registration on the run
+            (e.g. event staff assigned via an event role)
         event_run: Run instance containing event start date
         tolerance_days: Number of days tolerance allowed for deadlines
 
@@ -226,34 +270,40 @@ def deadlines_membership(
         under keys: 'memb', 'memb_del', 'fee', 'fee_del'
 
     """
-    # Get membership for the registered member
-    membership = memberships_by_member_id.get(registration.member_id)
+    member_id, registration_created = member_and_registration_created
+
+    # Get membership for the member
+    membership = memberships_by_member_id.get(member_id)
     if not membership:
         return
 
     # Check if membership is in incomplete states (empty, joined, uploaded)
     if membership.status in [MembershipStatus.EMPTY, MembershipStatus.JOINED, MembershipStatus.UPLOADED]:
-        # Calculate days elapsed since registration creation
-        days_elapsed = current_datetime.date() - registration.created.date()
-        # Classify as delayed if beyond tolerance, otherwise normal violation
-        violation_type = "memb_del" if days_elapsed.days > tolerance_days else "memb"
-        violations_by_type[violation_type].append(registration.member_id)
+        if registration_created:
+            # Calculate days elapsed since registration creation
+            is_delayed = (
+                current_datetime.date() - timezone.localtime(registration_created).date()
+            ).days > tolerance_days
+        else:
+            # No registration (e.g. event staff): classify by proximity to event start instead
+            is_delayed = current_datetime.date() + timedelta(days=tolerance_days) > event_run.start
+        violations_by_type["memb_del" if is_delayed else "memb"].append(member_id)
         return
 
     # Skip further checks if membership is submitted (in review)
-    if membership.status in [MembershipStatus.SUBMITTED]:
+    if membership.status == MembershipStatus.SUBMITTED:
         return
 
     # Determine if fee checking is required (not LAOG event and current year)
     should_check_fee = "laog" not in event_features and event_run.start.year == current_datetime.year
-    if should_check_fee and registration.member_id not in members_with_paid_fees:
+    if should_check_fee and member_id not in members_with_paid_fees:
         # Check if we're within tolerance days of the event start
         if current_datetime.date() + timedelta(days=tolerance_days) > event_run.start:
             # Event is imminent - mark as delayed fee violation
-            violations_by_type["fee_del"].append(registration.member_id)
+            violations_by_type["fee_del"].append(member_id)
         else:
             # Event is still far enough - mark as regular fee violation
-            violations_by_type["fee"].append(registration.member_id)
+            violations_by_type["fee"].append(member_id)
 
 
 def deadlines_payment(deadline_violations: Any, event_features: Any, registration: Any, tolerance_days: Any) -> None:
@@ -313,3 +363,82 @@ def deadlines_casting(collect: Any, features: Any, player_ids: Any, run: Any) ->
     members_with_preferences = Casting.objects.filter(run=run).values_list("member_id", flat=True)
 
     collect["cast"] = set(player_ids) - (set(members_with_characters) | set(members_with_preferences))
+
+
+def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) -> None:
+    """Check self-service character creation/confirmation for players.
+
+    Args:
+        collect (dict): Dictionary to collect deadline violations
+        features (dict): Event features
+        player_ids (list): List of player member IDs
+        run: Run instance
+
+    Side effects:
+        Updates collect with "char" (no character created yet)
+        and "char_confirm" (confirmed but not yet approved) violations
+
+    """
+    if "user_character" not in features:
+        return
+
+    required_characters = int(get_event_config(run.event_id, "user_character_max"))
+    requires_approval = get_event_config(run.event_id, "user_character_approval")
+
+    # characters are an inheritable element: in a campaign they live on the parent event
+    characters_event_id = get_event_class_parent(run.event_id, Character)
+    characters = Character.objects.filter(event_id=characters_event_id, player_id__in=player_ids, deleted__isnull=True)
+
+    total_counts: dict[int, int] = {}
+    unconfirmed_counts: dict[int, int] = {}
+    for player_id, status in characters.values_list("player_id", "status"):
+        total_counts[player_id] = total_counts.get(player_id, 0) + 1
+        if status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+            unconfirmed_counts[player_id] = unconfirmed_counts.get(player_id, 0) + 1
+
+    missing = set()
+    uncorfimed = set()
+    for player_id in player_ids:
+        if total_counts.get(player_id, 0) < required_characters:
+            missing.add(player_id)
+        elif requires_approval and unconfirmed_counts.get(player_id, 0) > 0:
+            uncorfimed.add(player_id)
+
+    collect["char"] = missing
+    if requires_approval:
+        collect["char_confirm"] = uncorfimed
+
+
+def deadlines_debrief(collect: Any, features: Any, player_ids: Any, run: Any) -> None:
+    """Check debrief question submission for players."""
+    if "debrief" not in features:
+        return
+
+    # debrief is only relevant once the run has actually taken place
+    if not run.end or get_time_diff_today(run.end) >= 0:
+        return
+
+    question_ids = list(
+        RegistrationQuestion.objects.filter(
+            event_id=run.event_id, applicable=RegistrationQuestionApplicable.DEBRIEF, deleted__isnull=True
+        ).values_list("id", flat=True)
+    )
+    # Skip if no debrief question set
+    if not question_ids:
+        return
+
+    registrations_by_member = dict(
+        Registration.objects.filter(
+            run=run, member_id__in=player_ids, cancellation_date__isnull=True, pending=False
+        ).values_list("member_id", "id")
+    )
+
+    answered_registration_ids = get_answered_registration_ids(
+        question_ids, registration_id__in=registrations_by_member.values()
+    )
+
+    collect["debrief"] = {
+        member_id
+        for member_id, registration_id in registrations_by_member.items()
+        if registration_id not in answered_registration_ids
+    }

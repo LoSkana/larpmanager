@@ -63,10 +63,10 @@ def prepare(page: Any) -> None:
     submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_tickets").check()
     submit_confirm(page)
 
@@ -149,7 +149,10 @@ def create_character(page: Any) -> None:
 
     # check previous option is not selected anymore
     expect_normalized(page, page.locator("#one"), "The character has missing values in required fields: choose")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
+    expect_normalized(page, page.locator("#one"),
+        "The character has missing values in required fields: choose "
+        "Player: Admin Test Presentation sdsa asadas",
+    )
     sidebar(page, "Edit")
 
     # check only one option available

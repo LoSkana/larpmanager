@@ -65,14 +65,14 @@ def prepare(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Email notifications")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Payments")).click()
     page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)

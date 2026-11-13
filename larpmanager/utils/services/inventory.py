@@ -1,4 +1,5 @@
 # LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
 #
 # This file is part of LarpManager and is dual-licensed:
 #
@@ -16,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -61,7 +63,7 @@ def perform_transfer(
             balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=source,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": source.event, "number": 1},
+                defaults={"amount": 0, "event_id": source.event_id, "number": 1},
             )
             if balance.amount < amount:
                 msg = "Not enough resources"
@@ -74,7 +76,7 @@ def perform_transfer(
             balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=target,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": target.event, "number": 1},
+                defaults={"amount": 0, "event_id": target.event_id, "number": 1},
             )
             balance.amount += amount
             balance.save()
@@ -99,9 +101,9 @@ def generate_base_inventories(instance: Character, *, check: bool = False) -> No
 
     inventory_name = f"{instance.name}'s Personal Storage"
     # Check if the character already has a personal inventory
-    if Inventory.objects.filter(owners=instance, event=instance.event, name=inventory_name).exists():
+    if Inventory.objects.filter(owners=instance, event_id=instance.event_id, name=inventory_name).exists():
         return
 
-    inventory = Inventory.objects.create(name=inventory_name, event=instance.event)
+    inventory = Inventory.objects.create(name=inventory_name, event_id=instance.event_id)
     inventory.owners.add(instance)
     inventory.save()

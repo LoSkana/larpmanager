@@ -55,9 +55,8 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No discounts created yet. Add a discount to offer reduced prices or promo codes to participants." %}
-        </p>
+        {% trans "Discounts offer reduced prices or promo codes to participants." as empty_text %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     {% include "elements/table/footer.html" %}
 {% endblock content %}

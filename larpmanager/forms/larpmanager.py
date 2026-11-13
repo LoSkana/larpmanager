@@ -26,9 +26,9 @@ from django.core.exceptions import ValidationError
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV3
 
 from larpmanager.forms.base import BaseForm, BaseModelForm
+from larpmanager.forms.utils import NonceReCaptchaV3
 from larpmanager.models.larpmanager import LarpManagerTicket
 from larpmanager.utils.core.common import get_recaptcha_secrets
 
@@ -45,7 +45,7 @@ def _get_captcha(form: forms.Form, request: HttpRequest | None) -> None:
 
     # Add reCAPTCHA v3 field to form
     form.fields["captcha"] = ReCaptchaField(
-        widget=ReCaptchaV3,
+        widget=NonceReCaptchaV3(request=request),
         label="",
         public_key=recaptcha_public_key,
         private_key=recaptcha_private_key,

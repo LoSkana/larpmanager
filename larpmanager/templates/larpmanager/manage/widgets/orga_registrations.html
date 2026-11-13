@@ -3,7 +3,7 @@
     <h2>
         <a href="{% url 'orga_registrations' run.get_slug %}" target="_blank"><i class="fa-solid fa-clipboard-list"></i> {% trans "Registrations" %}</a>
     </h2>
-    {% if features.registration_secret and not registrations_open %}
+    {% if features.registration_secret and not registrations_open and run.registration_secret %}
         <p>
             <a href="{% url 'register_exclusive' run.get_slug run.registration_secret %}"
                target="_blank">{% trans "Secret registration link" %}</a>

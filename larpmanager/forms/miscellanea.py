@@ -25,7 +25,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
@@ -56,8 +56,8 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
-from larpmanager.models.writing import Faction, FactionType
-from larpmanager.utils.core.copy import get_copy_choices
+from larpmanager.models.writing import Faction, FactionType, get_event_elements
+from larpmanager.utils.core.copy_choices import get_copy_choices
 from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (
@@ -363,8 +363,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         # Configure faction field if faction feature is enabled
         if "faction" in self.params["features"]:
             factions = (
-                self.params["event"]
-                .get_elements(Faction)
+                get_event_elements(self.params["event"].id, Faction, context=self.params)
                 .filter(typ=FactionType.PRIM)
                 .order_by("number")
                 .values_list("uuid", "name")
@@ -419,7 +418,7 @@ class ShuttleServiceForm(BaseModelForm):
         """Initialize form with default time value if not provided."""
         super().__init__(*args, **kwargs)
         # ~ if 'date' not in self.initial or not self.initial['date']:
-        # ~ self.initial['date'] = timezone.now().date().isoformat()
+        # ~ self.initial['date'] = timezone.localdate().isoformat()
         # ~ else:
         # ~ self.initial['date'] = self.instance.date.isoformat()
 

@@ -30,7 +30,7 @@
             </tr>
         </table>
         <h2>{% trans "Try the sheet generation" %}</h2>
-        <table class="mob ">
+        <table class="mob">
             <tr>
                 <td>
                     <select id="char">
@@ -65,144 +65,25 @@
                 {% trans "Current template:" %} <a href="{{ event.download_sheet_template }}">{% trans "download" %}</a>
             </p>
         {% endif %}
-        <h2>
-            <a href="#" class="my_toggle" tog='info'>{% trans "Template instructions" %}</a>
-        </h2>
-        <div class="hide info">
-            <table class="mob ">
-                <tr>
-                    <th>Default settings</th>
-                    <td>
-                        Place inside the field "PAGE CSS" the following code:
-                        <br />
-                        <hr />
-                        <span class="code">@page { size: "A4"; @frame content_frame { margin: 2cm; } }</span>
-                        <hr />
-                        This code will command the generated PDF to be of size A4, with a page margin of 2cm (if you wish you can change this settings, of course).
-                    </td>
-                </tr>
-                <tr>
-                    <th>Page background</th>
-                    <td>
-                        Make sure your image has size compatible with the chosen page size (for example ratio 1:1.414 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>
-                        <hr />
-                        (Please note that this command needs to be inside the @page part!)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Fonts</th>
-                    <td>
-                        <b><i>Make sure the font has format TTF (Truetype), otherwise find some online tool to convert it!</i></b>
-                        <br />
-                        <br />
-                        Then upload the font on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">@font-face { font-family: '#name#'; src: url('#internal_link#'); }
-                            <br />
-                        #char_name { font-family: '#name#'; }</span>
-                        <hr />
-                        (Change #name# with something appropriate! Commong tags: #char_name for the character name, #char_title for the character title, h2 for the paragraph titles)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Header</th>
-                    <td>
-                        Upload the HTML code that will go in the header in the field "HEADER CONTENT" (if you wish to use images, remmber to upload them on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, and to refer to them with the internal link). Then place the following in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">@page { [... other stuff ...] @frame header_frame { -pdf-frame-content: header_content; top: 1cm; } }</span>
-                        <hr />
-                        (Please note that this command needs to be inside the @page part!)
-                        <br />
-                        This code will generate a header directly on top of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Footer</th>
-                    <td>
-                        Upload the HTML code that will go in the header in the field "HEADER CONTENT". Note that you can use "&lt;pdf:pagenumber&gt;" and "&lt;pdf:pagecount&gt;" for the page numbers. Then place the following in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">@page { [... other stuff ...] @frame footer_frame { -pdf-frame-content: footer_content; top: 28.5cm;  } }</span>
-                        <hr />
-                        (Please note that this command needs to be inside the @page part!)
-                        <br />
-                        This code will generate a header directly on bottom of the page, with a margin of 0.5cm (if you wish you can change this settings, of course)
-                    </td>
-                </tr>
-                <tr>
-                    <th>Special codes</th>
-                    <td>
-                        These codes are available to be put in the header / footer:
-                        <br />
-                        "&lt;pdf:pagenumber&gt;" -> page number
-                        <br />
-                        "&lt;pdf:pagecount&gt;" -> page count
-                        <br />
-                        "&lt;pdf:number&gt;" -> character number
-                        <br />
-                        "&lt;pdf:name&gt;" -> character name
-                        <br />
-                        "&lt;pdf:title&gt;" -> character title
-                        <br />
-                        "&lt;pdf:organization&gt;" -> organization name
-                        <br />
-                        "&lt;pdf:event&gt;" -> event name
-                    </td>
-                </tr>
-                <tr>
-                    <th>Header / Footer content</th>
-                    <td>
-                        Example of text to put in either the header or the footer:
-                        <br />
-                        <hr />
-                        <span class="code">
-                            &lt;table&gt;
-                            &lt;tr&gt;
-                            &lt;td&gt;&lt;pdf:organization&gt;&lt;/td&gt;
-                            &lt;td&gt;&lt;pdf:name&gt;&lt;/td&gt;
-                            &lt;td&gt;&lt;pdf:event&gt;&lt;/td&gt;
-                            &lt;/tr&gt;
-                        &lt;/table&gt;</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Links</th>
-                    <td>
-                        Format them in the "PAGE CSS":
-                        <br />
-                        <hr />
-                        <span class="code">a { color: #desiredcolor; }</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>I WANT MORE!</th>
-                    <td>
-                        Preem, choom! <a href="https://xhtml2pdf.readthedocs.io/en/latest/format_html.html">Have fun.</a>
-                    </td>
-                </tr>
-            </table>
-        </div>
         <form action="{{ request.path }}"
               method="post"
               enctype="multipart/form-data">
             {% csrf_token %}
-            <table class="mob ">
-                {{ form.as_table }}
-            </table>
-            <input type="submit" value="{% trans "Confirm" %}">
-            <br />
-            <br />
-            <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+            <div class="form_container auto_resize">
+                <table class="mob">
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="{% trans "Confirm" %}">
+                <span id="pdf_autosave"></span>
+                <br />
+                <br />
+                <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
+            </div>
         </form>
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script nonce="{{ csp_nonce }}">window.addEventListener('DOMContentLoaded', function() {
     var old = '0'
 $(function(){
 $('#char').change(function() {
@@ -212,6 +93,27 @@ $('#char').change(function() {
         $(this).attr('href', href.replace('0/pdf', id + '/pdf' ));
     });
     old = id;
+  });
+
+// Save every change right away, so the generation can be tried without confirming
+$('#sheet_pdf form').on('change', ':input', function() {
+    var form = $('#sheet_pdf form');
+    var status = $('#pdf_autosave');
+    status.text('{% trans "Saving" %}...');
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: new FormData(form[0]),
+        processData: false,
+        contentType: false,
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        success: function() {
+            status.text('{% trans "Saved" %}');
+        },
+        error: function() {
+            status.text('{% trans "Not saved, check the fields" %}');
+        }
+    });
   });
 });
 });

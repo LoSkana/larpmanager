@@ -31,31 +31,44 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_cache, has_multiple_exp_systems
 from larpmanager.forms.experience import OrgaDeliveryExpForm
+from larpmanager.forms.utils import character_label, get_character_concepts, get_character_ids_by_concept
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
 )
+from larpmanager.models.form import (
+    RegistrationQuestion,
+    RegistrationQuestionApplicable,
+)
 from larpmanager.models.registration import Registration
-from larpmanager.models.writing import Character
-from larpmanager.utils.core.base import check_event_context, get_event_context
+from larpmanager.models.writing import Character, get_event_elements
+from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.exceptions import FeatureError, ReturnNowError, UserPermissionError
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     export_abilities,
+    export_ability_types,
+    export_calls,
     export_criterions,
     export_deliveries,
+    export_exclusives,
     export_modifiers,
     export_rules,
     zip_exports,
 )
+from larpmanager.utils.registrations.questions import get_answered_registration_ids
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
 logger = logging.getLogger(__name__)
@@ -65,7 +78,7 @@ logger = logging.getLogger(__name__)
 def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience systems for an event."""
     context = check_event_context(request, event_slug, "orga_exp_systems")
-    context["list"] = context["event"].get_elements(SystemExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, SystemExp, context=context).order_by("order")
     return render(request, "larpmanager/orga/experience/systems.html", context)
 
 
@@ -94,14 +107,40 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["upload"] = "exp_deliveries"
     context["download"] = 1
 
+    load_url = reverse("orga_exp_deliveries_load", args=[event_slug])
+    load_options = [
+        {"url": load_url, "icon": "fas fa-users", "label": _("From participants"), "link_class": "form-new"}
+    ]
+    if "checkin" in context["features"]:
+        load_options.append(
+            {
+                "url": f"{load_url}?checked_in_only=1",
+                "icon": "fas fa-user-check",
+                "label": _("From checked-in participants"),
+                "link_class": "form-new",
+            }
+        )
+    if "debrief" in context["features"]:
+        load_options.append(
+            {
+                "url": f"{load_url}?debrief_only=1",
+                "icon": "fas fa-comment-dots",
+                "label": _("From participants who filled the debrief"),
+                "link_class": "form-new",
+            }
+        )
+    context["load_options"] = load_options
+
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
+    deliveries = list(
+        get_event_elements(context["event"].id, DeliveryExp, context=context).order_by("order").select_related("system")
+    )
 
     # Get cached EXP relationship data and enrich delivery objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for delivery in deliveries:
         if delivery.id in px_cache.get("deliveries", {}):
             delivery.cached_rels = px_cache["deliveries"][delivery.id]
@@ -122,11 +161,20 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
         context = check_event_context(request, event_slug, "orga_exp_deliveries")
         try:
             run = Run.objects.get(uuid=run_id, event__slug=event_slug)
-            character_ids = (
-                Registration.objects.filter(run=run, cancellation_date__isnull=True)
-                .values_list("characters__id", flat=True)
-                .distinct()
-            )
+            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+            if request.GET.get("checked_in_only") == "1":
+                registrations = registrations.filter(check_in__checked_in_at__isnull=False)
+            if request.GET.get("debrief_only") == "1":
+                debrief_question_ids = list(
+                    RegistrationQuestion.objects.filter(
+                        event_id=context["event"].id,
+                        applicable=RegistrationQuestionApplicable.DEBRIEF,
+                        deleted__isnull=True,
+                    ).values_list("id", flat=True)
+                )
+                answered_registration_ids = get_answered_registration_ids(debrief_question_ids, registration__run=run)
+                registrations = registrations.filter(id__in=answered_registration_ids)
+            character_ids = registrations.values_list("characters__id", flat=True).distinct()
             character_ids = [cid for cid in character_ids if cid is not None]
             character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
             form = OrgaDeliveryExpForm(
@@ -156,6 +204,10 @@ def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpRespo
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
     run_uuid = context["run"].uuid
     new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run_uuid}&frame=1"
+    if request.GET.get("checked_in_only") == "1":
+        new_url += "&checked_in_only=1"
+    if request.GET.get("debrief_only") == "1":
+        new_url += "&debrief_only=1"
     return redirect(new_url)
 
 
@@ -209,13 +261,17 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["exp_templates"] = get_event_config(context["event"].id, "exp_templates", context=context)
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
+    abilities = list(
+        get_event_elements(context["event"].id, AbilityExp, context=context)
+        .order_by("order")
+        .select_related("typ", "system")
+    )
 
     # Get cached EXP relationship data and enrich ability objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for ability in abilities:
         ability.cached_rels = px_cache.get("abilities", {}).get(ability.id, [])
 
@@ -249,8 +305,15 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     # Check user has permission to access ability types management
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_ability_types(context), "Ability types"))
+
+    context["upload"] = "exp_ability_types"
+    context["download"] = 1
+
     # Retrieve and order ability types by number
-    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, AbilityTypeExp, context=context).order_by("order")
 
     return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
@@ -285,9 +348,9 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Get all rules ordered
-    rules = list(context["event"].get_elements(RuleExp).order_by("order"))
+    rules = list(get_event_elements(context["event"].id, RuleExp, context=context).order_by("order"))
     # Get cached EXP relationship data and enrich rule objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for rule in rules:
         if rule.id in px_cache.get("rules", {}):
             rule.cached_rels = px_cache["rules"][rule.id]
@@ -299,7 +362,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_exp_ability_templates")
-    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, AbilityTemplateExp, context=context).order_by("order")
     return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 
@@ -352,10 +415,10 @@ def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Retrieve ordered list of experience modifiers
-    modifiers = list(context["event"].get_elements(ModifierExp).order_by("order"))
+    modifiers = list(get_event_elements(context["event"].id, ModifierExp, context=context).order_by("order"))
 
     # Get cached EXP relationship data and enrich modifier objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for modifier in modifiers:
         if modifier.id in px_cache.get("modifiers", {}):
             modifier.cached_rels = px_cache["modifiers"][modifier.id]
@@ -395,15 +458,19 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["upload"] = "exp_criterions"
     context["download"] = 1
 
-    criterions = list(context["event"].get_elements(CriterionExp).order_by("order").select_related("system"))
+    criterions = list(
+        get_event_elements(context["event"].id, CriterionExp, context=context)
+        .order_by("order")
+        .select_related("system")
+    )
 
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for criterion in criterions:
         if criterion.id in px_cache.get("criterions", {}):
             criterion.cached_rels = px_cache["criterions"][criterion.id]
 
     context["list"] = criterions
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     return render(request, "larpmanager/orga/experience/criterions.html", context)
 
@@ -427,8 +494,80 @@ def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_
 
 
 @login_required
+def orga_exp_calls(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage the game calls for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_calls")
+
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_calls(context), "Calls"))
+
+    context["upload"] = "exp_calls"
+    context["download"] = 1
+
+    context["list"] = get_event_elements(context["event"].id, CallExp, context=context).order_by("order")
+    return render(request, "larpmanager/orga/experience/calls.html", context)
+
+
+@login_required
+def orga_exp_calls_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a call for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_CALLS)
+
+
+@login_required
+def orga_exp_calls_edit(request: HttpRequest, event_slug: str, call_uuid: str) -> HttpResponse:
+    """Edit a call for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_CALLS, call_uuid)
+
+
+@login_required
+def orga_exp_calls_delete(request: HttpRequest, event_slug: str, call_uuid: str) -> HttpResponse:
+    """Delete a call for an event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_CALLS, call_uuid)
+
+
+@login_required
+def orga_exp_exclusives(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage the exclusive groups of abilities for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_exclusives")
+
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_exclusives(context), "Exclusives"))
+
+    context["upload"] = "exp_exclusives"
+    context["download"] = 1
+
+    context["list"] = (
+        get_event_elements(context["event"].id, ExclusiveExp, context=context)
+        .order_by("order")
+        .prefetch_related("abilities")
+    )
+    return render(request, "larpmanager/orga/experience/exclusives.html", context)
+
+
+@login_required
+def orga_exp_exclusives_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create an exclusive group for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_EXCLUSIVES)
+
+
+@login_required
+def orga_exp_exclusives_edit(request: HttpRequest, event_slug: str, exclusive_uuid: str) -> HttpResponse:
+    """Edit an exclusive group for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_EXCLUSIVES, exclusive_uuid)
+
+
+@login_required
+def orga_exp_exclusives_delete(request: HttpRequest, event_slug: str, exclusive_uuid: str) -> HttpResponse:
+    """Delete an exclusive group for an event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_EXCLUSIVES, exclusive_uuid)
+
+
+@login_required
 def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse:
-    """Return up to 25 characters matching a search term for the dual-list widget."""
+    """Return up to 25 characters matching a search term for the dual-list widget (staff only)."""
     if request.method != "POST":
         return JsonResponse({"res": []})
 
@@ -436,16 +575,24 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
         context = get_event_context(request, event_slug)
     except (Http404, PermissionDenied, UserPermissionError, FeatureError):
         return JsonResponse({"res": []}, status=403)
+    if not has_event_permission(request, context, event_slug):
+        return JsonResponse({"res": []}, status=403)
 
     term = request.POST.get("term", "").strip()
     exclude_raw = request.POST.get("exclude", "")
     exclude_uuids = [u.strip() for u in exclude_raw.split(",") if u.strip()]
 
-    qs = context["event"].get_elements(Character).only("id", "uuid", "name", "number")
+    qs = get_event_elements(context["event"].id, Character, context=context).only(
+        "id", "uuid", "name", "number", "title"
+    )
 
     if term:
         qs = qs.filter(
-            Q(number__icontains=term) | Q(name__icontains=term) | Q(teaser__icontains=term) | Q(title__icontains=term)
+            Q(number__icontains=term)
+            | Q(name__icontains=term)
+            | Q(teaser__icontains=term)
+            | Q(title__icontains=term)
+            | Q(pk__in=get_character_ids_by_concept(qs, term))
         )
 
     if exclude_uuids:
@@ -453,8 +600,16 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
 
     show_number = get_event_config(context["event"].id, "writing_number", context=context)
 
-    qs = qs.order_by("name")[:25]
-    res = [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+    qs = list(qs.order_by("name")[:25])
+    concepts = get_character_concepts(context["event"].id, [ch.pk for ch in qs])
+    res = [
+        (
+            str(ch.uuid),
+            character_label(ch.number, ch.name, ch.title, concepts.get(ch.pk, ""), show_number=show_number),
+            ch.pk,
+        )
+        for ch in qs
+    ]
     return JsonResponse({"res": res})
 
 
@@ -470,26 +625,26 @@ def orga_exp_available(request: HttpRequest, event_slug: str) -> JsonResponse | 
     edit_uuid = request.POST.get("edit_uuid", "")
 
     if kind == "delivery":
-        queryset = context["event"].get_elements(DeliveryExp).order_by("number")
+        queryset = get_event_elements(context["event"].id, DeliveryExp, context=context).order_by("number")
         if filter_context == "character" and edit_uuid:
             try:
-                character = context["event"].get_elements(Character).get(uuid=edit_uuid)
+                character = get_event_elements(context["event"].id, Character, context=context).get(uuid=edit_uuid)
                 taken = character.exp_delivery_list.values_list("id", flat=True)
                 queryset = queryset.exclude(pk__in=taken)
             except ObjectDoesNotExist:
                 return JsonResponse({"res": "ko"})
     else:
-        queryset = context["event"].get_elements(AbilityExp).order_by("number")
+        queryset = get_event_elements(context["event"].id, AbilityExp, context=context).order_by("number")
         if filter_context == "character" and edit_uuid:
             try:
-                character = context["event"].get_elements(Character).get(uuid=edit_uuid)
+                character = get_event_elements(context["event"].id, Character, context=context).get(uuid=edit_uuid)
                 taken = character.exp_ability_list.values_list("id", flat=True)
                 queryset = queryset.exclude(pk__in=taken)
             except ObjectDoesNotExist:
                 return JsonResponse({"res": "ko"})
         elif filter_context == "ability" and edit_uuid:
             with contextlib.suppress(ObjectDoesNotExist):
-                ability = context["event"].get_elements(AbilityExp).get(uuid=edit_uuid)
+                ability = get_event_elements(context["event"].id, AbilityExp, context=context).get(uuid=edit_uuid)
                 queryset = queryset.exclude(pk=ability.pk)
 
     res = [(str(el.uuid), str(el)) for el in queryset]

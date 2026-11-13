@@ -28,14 +28,17 @@ import re
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from django.core.exceptions import ObjectDoesNotExist
+import stripe
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import transaction
 from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import round_decimal
+from larpmanager.accounting.gateway import GatewayError, missing_gateway_keys, payment_error_info
 from larpmanager.accounting.gateway.paypal import get_paypal_form
+from larpmanager.accounting.gateway.paypal_v2 import get_paypal_v2_form, is_paypal_v2_pending
 from larpmanager.accounting.gateway.redsys import get_redsys_form
 from larpmanager.accounting.gateway.satispay import get_satispay_form
 from larpmanager.accounting.gateway.stripe import get_stripe_form
@@ -45,9 +48,11 @@ from larpmanager.accounting.member import (
     membership_fee_pending_config_name,
     set_membership_fee_pending,
 )
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
+from larpmanager.mail.accounting import notify_gateway_not_configured
 from larpmanager.models.accounting import (
     AccountingItemCollection,
     AccountingItemDonation,
@@ -77,6 +82,7 @@ from larpmanager.models.member import MemberConfig
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.core.base import fetch_payment_details, update_payment_details
+from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.utils.services.einvoice import process_payment
 from larpmanager.utils.users.member import assign_badge
 
@@ -163,7 +169,7 @@ def set_data_invoice(
         _custom_reason_reg(context, invoice, member_real_display_name)
 
         # Check if bundle membership_fee
-        association_id = registration.run.event.association_id
+        association_id = get_run_association_id(registration.run_id, context=context)
         membership_fee = get_membership_fee_for_reg(
             association_id, registration.member_id, registration.run, registration
         )
@@ -225,9 +231,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.registration = context["registration"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(
-        context["registration"].run.event_id, "payment_custom_reason", context=context
-    )
+    event_id = get_run_event_id(context["registration"].run_id, context=context)
+    custom_reason_template = get_event_config(event_id, "payment_custom_reason", context=context)
     if not custom_reason_template:
         return
 
@@ -249,7 +254,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["registration"].run.event,
+                event_id=event_id,
                 name__iexact=question_name,
                 applicable=RegistrationQuestionApplicable.REGISTRATION,
             )
@@ -363,6 +368,51 @@ def _prepare_gateway_form(
         payment_method_slug: Payment method identifier
         require_receipt: Whether receipt upload is required
     """
+    # A PayPal capture still to be settled blocks any new payment of the same invoice key
+    if is_paypal_v2_pending(invoice):
+        context["payment_pending"] = True
+        return
+
+    # Gateways enabled without their credentials cannot start a payment
+    missing_keys = missing_gateway_keys(payment_method_slug, context)
+    if missing_keys:
+        # Admins are notified together with the executives, at most once a day
+        first_today = notify_gateway_not_configured(invoice, missing_keys)
+        error = f"Gateway not configured, missing: {', '.join(missing_keys)}"
+        _gateway_failed(request, context, invoice, error, notify=first_today)
+        return
+
+    try:
+        _dispatch_gateway_form(
+            request, context, invoice, payment_amount, payment_method_slug, require_receipt=require_receipt
+        )
+    except (GatewayError, stripe.StripeError) as err:
+        _gateway_failed(request, context, invoice, str(err))
+
+
+def _gateway_failed(
+    request: HttpRequest, context: dict, invoice: PaymentInvoice, error: str, *, notify: bool = True
+) -> None:
+    """Log a gateway that could not start a payment, notify admins if requested, and flag it in the context."""
+    logger.error("Payment gateway %s error for invoice %s: %s", invoice.method.slug, invoice.cod, error)
+    if notify:
+        notify_admins(
+            f"Payment gateway error - {invoice.method.slug} - {request.association['slug']}",
+            payment_error_info(request, context, invoice, error),
+        )
+    context["gateway_error"] = True
+
+
+def _dispatch_gateway_form(
+    request: HttpRequest,
+    context: dict,
+    invoice: PaymentInvoice,
+    payment_amount: Decimal,
+    payment_method_slug: str,
+    *,
+    require_receipt: bool,
+) -> None:
+    """Prepare the form of the selected payment method."""
     if payment_method_slug in {"wire", "paypal_nf"}:
         # Wire transfer or non-financial PayPal forms
         context["wire_form"] = WireInvoiceSubmitForm(require_receipt=require_receipt)
@@ -372,6 +422,9 @@ def _prepare_gateway_form(
     elif payment_method_slug == "paypal":
         # PayPal gateway integration
         get_paypal_form(request, context, invoice, payment_amount)
+    elif payment_method_slug == "paypal_v2":
+        # PayPal Orders v2 gateway
+        get_paypal_v2_form(request, context, invoice, payment_amount)
     elif payment_method_slug == "stripe":
         # Stripe payment gateway
         get_stripe_form(request, context, invoice, payment_amount)
@@ -427,12 +480,13 @@ def get_payment_form(
     # Retrieve payment method configuration
     payment_method: PaymentMethod = PaymentMethod.objects.get(slug=payment_method_slug)
 
-    # Attempt to retrieve existing invoice by key if provided
+    # Attempt to retrieve existing invoice by key if provided, a different method gets its own invoice
     invoice: PaymentInvoice | None = None
     if invoice_key is not None:
         try:
             invoice = PaymentInvoice.objects.get(
                 key=invoice_key,
+                method=payment_method,
                 status=PaymentStatus.CREATED,
                 member=context["member"],
                 association_id=association_id,
@@ -451,8 +505,7 @@ def get_payment_form(
         invoice.member = context["member"]
         invoice.association_id = association_id
     else:
-        # Update existing invoice with current payment method and type
-        invoice.method = payment_method
+        # Update existing invoice with current payment type
         invoice.typ = payment_type
 
     # Update payment context and invoice data with current details
@@ -595,9 +648,21 @@ def _process_membership(invoice: PaymentInvoice) -> None:
         if AccountingItemMembership.objects.filter(inv=invoice).exists():
             return
 
+        year = timezone.localdate().year
+
+        # Reject if member already has an active membership item for this year
+        if AccountingItemMembership.objects.filter(
+            member_id=invoice.member_id,
+            association_id=invoice.association_id,
+            year=year,
+            deleted__isnull=True,
+        ).exists():
+            msg = _("Membership fee for %(year)s already registered for this user") % {"year": year}
+            raise ValidationError(msg)
+
         # Create and populate new membership accounting item
         accounting_item = AccountingItemMembership()
-        accounting_item.year = timezone.now().year
+        accounting_item.year = year
         accounting_item.member_id = invoice.member_id
         accounting_item.inv = invoice
         accounting_item.value = invoice.mc_gross
@@ -768,8 +833,9 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         Creates accounting item when refund status changes to PAYED
 
     Note:
-        Uses idempotency check to prevent duplicate accounting entries
-        if signal fires multiple times.
+        Idempotency relies on the REQUEST -> PAYED transition: each refund request
+        creates its accounting item only once, even when several requests share
+        member and value.
 
     """
     if not refund_request.pk:
@@ -784,18 +850,6 @@ def process_refund_request_status_change(refund_request: HttpRequest) -> None:
         return
 
     if refund_request.status != RefundStatus.PAYED:
-        return
-
-    # Check if accounting item already exists for this refund (idempotency)
-    existing_item = AccountingItemOther.objects.filter(
-        member_id=refund_request.member_id,
-        value=refund_request.value,
-        oth=OtherChoices.REFUND,
-        association_id=refund_request.association_id,
-        descr=f"Delivered refund of {refund_request.value:.2f}",
-    ).exists()
-
-    if existing_item:
         return
 
     accounting_item = AccountingItemOther()
@@ -874,11 +928,11 @@ def cleanup_membership_fee_reservation(instance: PaymentInvoice) -> None:
     if instance.typ != PaymentType.REGISTRATION:
         return
     try:
-        registration = Registration.objects.select_related("run", "run__event").get(pk=instance.idx)
+        registration = Registration.objects.select_related("run").get(pk=instance.idx)
     except Registration.DoesNotExist:
         return
     year = registration.run.start.year
-    association_id = registration.run.event.association_id
+    association_id = get_run_association_id(registration.run_id)
     config_name = membership_fee_pending_config_name(association_id, year)
     _deleted_count, _ignored = MemberConfig.objects.filter(
         member_id=instance.member_id,

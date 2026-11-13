@@ -57,11 +57,11 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     # set config
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
-    page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character Sheet")).click()
     page.locator("#id_character_form_wri_que_max").check()
     submit_confirm(page)
 
@@ -132,13 +132,15 @@ def create_second_char(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
-        "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd text sdfdsfds",
+        "Fill in the missing information in your profile to complete your registration "
+        "Confirm your character olivaaaa is ready to propose to the staff! "
+        "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd sdfdsfds",
     )
 
 
 def show_chars(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
     submit_confirm(page)
 
@@ -163,6 +165,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/characters/")
+    check_status_tables(page)
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_que_u4").click()
@@ -187,10 +190,27 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(edit_iframe.locator('input[name="que_u6"]:checked')).to_have_value("u2")
     expect(edit_iframe.locator('input[name="que_u8"]:checked')).to_have_value("u7")
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u4"), "short text")
-    edit_iframe.get_by_role("cell", name="long text").dblclick()
+    edit_iframe.get_by_role("rowheader", name="long text").dblclick()
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u5"), "long text")
     expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()
+
+
+def check_status_tables(page: Any) -> None:
+    """Check characters split by approval status, with not signed up ones hidden behind a toggle."""
+    expect(page.get_by_role("heading", name="Proposed (1)")).to_be_visible()
+    not_signed_up = page.locator(".chars_not_signed_up")
+    expect(not_signed_up).to_be_hidden()
+    page.get_by_role("link", name="Not signed up (1)").click()
+    expect(not_signed_up).to_be_visible()
+    expect(not_signed_up.locator("tbody tr")).to_have_count(1)
+    # player column shown by default, with the profile popup
+    page.locator('[id="u2"]').locator(".post_popup_member").click()
+    expect(page.locator("#lm-modal")).to_contain_text("Admin Test")
+    expect(page.locator("#lm-modal")).to_contain_text("Email")
+    page.keyboard.press("Escape")
+    page.locator("#lm-modal").wait_for(state="hidden")
+
 
 def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
@@ -198,7 +218,6 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expand_options(edit_iframe)
     expect_normalized(page, edit_iframe.locator("#main_form"), "long descr")
     expect_normalized(page, edit_iframe.locator("#lbl_id_que_u8"), "restricted")
-    # the show/hide options link sits between the options and the question hint
     expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr")
     expect_normalized(page, edit_iframe.locator("#main_form"), "choose one option - restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
@@ -243,15 +262,14 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
-    # the show/hide options link sits between the options and the question hint
-    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available hide other options choose one option - available descr")
+    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available choose one option - available descr")
     click_option(page.locator("#id_que_u6_0"))
     click_option(page.locator("#id_que_u8_1"))
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr hide other options choose one option - restricted text")
+    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr choose one option - restricted text")
     click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available hide other options select one or more options - multiple descr options: 1 / 2"
+        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available select one or more options - multiple descr options: 1 / 2"
     )
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     click_option(page.locator("#id_que_u7_0"))
@@ -261,8 +279,10 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u13").fill("create")
     submit_confirm(page)
     page.locator("#id_que_u9").fill("fill mandatory")
-    page.locator("#id_propose").check()
     submit_confirm(page)
+
+    sidebar(page, "Confirm character")
+    page.get_by_role("button", name="Confirm").click()
 
 
 def fill_presentation_text(page: Any) -> None:

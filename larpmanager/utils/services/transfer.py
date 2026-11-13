@@ -25,8 +25,9 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
@@ -46,9 +47,12 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationTicket,
 )
+from larpmanager.models.writing import get_event_class_parent
+from larpmanager.utils.registrations.characters import get_character_full_options, get_character_full_options_warning
+from larpmanager.utils.registrations.questions import get_transferred_answer_text
 
 if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
+    from larpmanager.models.event import Run
 
 
 def transfer_registration_between_runs(
@@ -80,7 +84,7 @@ def transfer_registration_between_runs(
         ValidationError: If the transfer is not possible
     """
     # Check that the registration is not already in the target run
-    if registration.run == target_run:
+    if registration.run_id == target_run.id:
         msg = "Registration is already in the target run"
         raise ValidationError(msg)
 
@@ -141,11 +145,11 @@ def transfer_registration_between_runs(
             _delete_original_registration_data(registration)
 
     # Refresh cache for target run (where registration was moved/copied to)
-    refresh_member_accounting_cache(target_run, member_id)
+    refresh_member_accounting_cache(target_run.id, member_id)
 
     # If moving (not copying), refresh cache for source run as well
     if move_registration:
-        refresh_member_accounting_cache(source_run, member_id)
+        refresh_member_accounting_cache(source_run.id, member_id)
 
     return new_registration
 
@@ -196,10 +200,11 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
         registration=source_reg, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
     )
     transferred_choices = []
+    context: dict = {}
 
     for choice in source_choices:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(choice.question, target_reg.run.event)
+        target_question = _find_matching_question(choice.question, target_reg.run_id, context=context)
         if not target_question:
             continue
 
@@ -221,26 +226,40 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
     """Transfer text answers from source registration to destination."""
     source_answers = RegistrationAnswer.objects.filter(
         registration=source_reg,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
-    )
+        question__typ__in=[
+            BaseQuestionType.TEXT,
+            BaseQuestionType.PARAGRAPH,
+            BaseQuestionType.EDITOR,
+            RegistrationQuestionType.LIKERT,
+            RegistrationQuestionType.RANKING,
+        ],
+    ).select_related("question")
     transferred_answers = []
+    context: dict = {}
 
     for answer in source_answers:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(answer.question, target_reg.run.event)
+        target_question = _find_matching_question(answer.question, target_reg.run_id, context=context)
         if not target_question:
+            continue
+
+        # Adapt the answer to the destination question, skipping it if incompatible
+        transferred_text = get_transferred_answer_text(answer, target_question)
+        if not transferred_text:
             continue
 
         # Create the new answer
         new_answer = RegistrationAnswer.objects.create(
-            question_id=target_question["id"], text=answer.text, registration=target_reg
+            question_id=target_question["id"], text=transferred_text, registration=target_reg
         )
         transferred_answers.append(new_answer)
 
     return transferred_answers
 
 
-def _find_matching_question(source_question: RegistrationQuestion, target_event: Event) -> RegistrationQuestion | None:
+def _find_matching_question(
+    source_question: RegistrationQuestion, target_run_id: int, *, context: dict | None = None
+) -> RegistrationQuestion | None:
     """Find the corresponding question in the destination event.
 
     Matching logic:
@@ -249,7 +268,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     3. Match by name only
     """
     # Get question by type and name
-    target_questions = get_cached_registration_questions(target_event)
+    target_questions = get_cached_registration_questions(get_run_event_id(target_run_id, context=context))
     exact_match = next(
         (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
@@ -296,12 +315,12 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
     """Transfer character relationships from source registration to destination."""
     source_relations = RegistrationCharacterRel.objects.filter(registration=source_reg)
 
-    for relation in source_relations:
-        # Check that the character is available in the destination event
-        # (considering campaigns that share characters)
-        character_event = target_reg.run.event.get_class_parent("character")
+    # Check that the character is available in the destination event
+    # (considering campaigns that share characters)
+    character_event_id = get_event_class_parent(get_run_event_id(target_reg.run_id), "character")
 
-        if relation.character.event == character_event:
+    for relation in source_relations:
+        if relation.character.event_id == character_event_id:
             RegistrationCharacterRel.objects.create(
                 registration=target_reg,
                 character=relation.character,
@@ -320,6 +339,8 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
     Note: This function transfers the accounting structure but resets payment amounts to 0
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
     """
+    target_association_id = get_run_association_id(target_reg.run_id)
+
     # Transfer PaymentInvoice records linked to the registration
     payment_invoices = PaymentInvoice.objects.filter(registration=source_reg)
 
@@ -337,7 +358,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             idx=invoice.idx,
             txn_id=None,  # Reset transaction ID to avoid conflicts
             causal=f"Transfer: {invoice.causal}",
-            assoc=target_reg.run.event.assoc,
+            association_id=target_association_id,
             registration=target_reg,
             verified=False,  # Reset verification status
             hide=invoice.hide,
@@ -351,7 +372,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
         AccountingItemPayment.objects.create(
             member=payment_item.member,
             value=0,  # Reset payment amount - actual payments should be handled separately
-            assoc=target_reg.run.event.assoc,
+            association_id=target_association_id,
             pay=payment_item.pay,
             registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
@@ -368,7 +389,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             AccountingItemOther.objects.create(
                 member=other_item.member,
                 value=other_item.value,
-                assoc=target_reg.run.event.assoc,
+                association_id=target_association_id,
                 oth=other_item.oth,
                 run=target_reg.run,
                 descr=f"Transferred from {source_reg.run}: {other_item.descr}",
@@ -479,9 +500,9 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_ticket(registration, result, target_run)
 
     # Check question matching
-    source_questions = len(get_cached_registration_questions(registration.run.event))
+    source_questions = len(get_cached_registration_questions(get_run_event_id(registration.run_id)))
 
-    target_questions = len(get_cached_registration_questions(target_run.event))
+    target_questions = len(get_cached_registration_questions(target_run.event_id))
 
     if source_questions != target_questions:
         result["info"].append(f"Number of questions differs: {source_questions} -> {target_questions}")
@@ -530,11 +551,19 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
     # Check character compatibility
     source_characters = registration.characters.all()
     if source_characters:
-        character_event = target_run.event.get_class_parent("character")
-        incompatible_chars = [char.name for char in source_characters if char.event != character_event]
+        character_event_id = get_event_class_parent(target_run.event_id, "character")
+        incompatible_chars = [char.name for char in source_characters if char.event_id != character_event_id]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")
+
+        # Warn about characters exceeding the spots of their options in the target run
+        for char in source_characters:
+            if char.event_id != character_event_id:
+                continue
+            full_options = get_character_full_options(target_run.id, char.id)
+            if full_options:
+                result["warnings"].append(str(get_character_full_options_warning(char, full_options)))
 
 
 def _validate_ticket(registration: Registration, result: dict[str, list[str]], target_run: Run) -> None:

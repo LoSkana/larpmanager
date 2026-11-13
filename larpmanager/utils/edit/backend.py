@@ -32,19 +32,29 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
-from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
+from larpmanager.forms.utils import EventTraitS2Widget, OrgaEventCharacterS2Widget
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import Log
-from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
+from larpmanager.models.writing import (
+    Faction,
+    Plot,
+    PlotCharacterRel,
+    Relationship,
+    TextVersion,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
+from larpmanager.utils.edit.autosave import set_auto_save_writing
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -89,7 +99,7 @@ def save_log(
     instance = context.get("run", context["association_id"])
     if isinstance(instance, Run):
         run_id = instance.id
-        association_id = instance.event.association_id
+        association_id = get_event_association_id(instance.event_id)
     else:
         run_id = None
         association_id = instance
@@ -190,7 +200,7 @@ def _version_applicable(element: BaseModel, model_type: str) -> str:
         choices_by_question.setdefault(choice.question_id, []).append(choice.option.name)
 
     # Collect all applicable questions and their values
-    for question in get_cached_writing_questions(element.event, model_type):
+    for question in get_cached_writing_questions(element.event_id, model_type):
         if question["typ"] == "text":
             includes_text_field = True
         value = _get_field_value(element, question, answers_by_question, choices_by_question)
@@ -281,7 +291,7 @@ def check_run(element: Any, context: Any, accessor_field: Any = None) -> None:
     if accessor_field:
         element = getattr(element, accessor_field)
 
-    if hasattr(element, "run") and element.run != context["run"]:
+    if hasattr(element, "run") and element.run_id != context["run"].id:
         msg = "not your run"
         raise Http404(msg)
 
@@ -653,9 +663,8 @@ def backend_edit(
         context["nm"] = context["type"]
         context["is_writing"] = True  # Flag to indicate writing element
 
-        # Set auto-save behavior based on event configuration
         if "event" in context:
-            context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
+            set_auto_save_writing(context)
             context["download"] = 1
 
             # Set up character finder functionality
@@ -707,6 +716,8 @@ def backend_delete(
 
 def _element_display_name(element: BaseModel) -> str:
     """Return a best-effort human-readable name for an element."""
+    if hasattr(element, "get_display_name"):
+        return element.get_display_name()
     for field_name in ("name", "title", "text"):
         value = getattr(element, field_name, None)
         if value:
@@ -800,7 +811,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
         return
 
     # Select appropriate widget class based on type
-    widget_class = EventTraitS2Widget if model_type == Trait else EventCharacterS2Widget
+    widget_class = EventTraitS2Widget if model_type == Trait else OrgaEventCharacterS2Widget
 
     # Initialize widget with event configuration
     widget = widget_class(attrs={"id": "char_finder"})
@@ -934,7 +945,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or context["event"].get_elements(model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class, context=context)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
@@ -977,7 +988,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = context["event"].get_class_parent(model_class)
+    event = get_event_class_parent(context["event"].id, model_class, context=context)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):

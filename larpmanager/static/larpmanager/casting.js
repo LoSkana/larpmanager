@@ -63,12 +63,19 @@ var csrf_token = window['csrf_token'];
 // URL endpoint for toggling character assignments
 var toggle_url = window['toggle_url'];
 
+// URL endpoint for editing a player's preferences (null if disabled)
+var edit_pref_url = window['edit_pref_url'];
+
 // Translated UI strings
 var trads = window['trads'];
 
 // Priority multipliers for the optimization algorithm
 var reg_priority = window['reg_priority'];  // Registration date priority weight
 var pay_priority = window['pay_priority'];  // Payment date priority weight
+
+// Number of preferences actually submitted by each player (player_uuid -> count),
+// before the server padded the list with random not-chosen characters
+var pref_counts = window['pref_counts'];
 
 // ============================================================================
 // CONSTANTS AND UTILITY FUNCTIONS
@@ -146,7 +153,7 @@ function load_grid() {
     if (didnt_choose.length > 0) {
         $('#didnt_choose').append(trads['ge']);
         for (var ix = 0; ix < didnt_choose.length; ix++) {
-            $('#didnt_choose').append(' - ' + esc_html(players[didnt_choose[ix]]['name']));
+            $('#didnt_choose').append(' - ' + esc_html(players[didnt_choose[ix]]['name']) + edit_pref_icon(didnt_choose[ix]));
         }
         $('#didnt_choose').append(' - ' + trads['le'] + ': ');
         for (var ix = 0; ix < didnt_choose.length; ix++) {
@@ -212,16 +219,21 @@ function load_grid() {
         if (key in avoids) av = avoids[key];
 
         // Start building row: checkbox, player name, priority
-        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}</td><td>{2}</td>'.format(esc_html(players[key]['name']), key, players[key]['prior']);
+        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}{3}</td><td>{2}</td>'.format(esc_html(players[key]['name']), key, players[key]['prior'], edit_pref_icon(key));
         if (casting_avoid)
             aux += '<td>{0}</td>'.format(esc_html(av))  // Add avoid column if enabled
 
-        // Build cells for each character preference
-        for (var ix = 0; ix < Math.min(num_pref, preferences[key].length); ix++) {
+        // Build cells for each character preference (pad missing ones so column count matches header)
+        for (var ix = 0; ix < num_pref; ix++) {
+
+            if (ix >= preferences[key].length) {
+                aux += '<td id="cost_{0}" class="mn"><span class="dis EP">EP</span></td>'.format(ix);
+                continue;
+            }
 
             var k = preferences[key][ix];
             // Hidden select dropdown for preference ordering (used by algorithm)
-            aux += '<td id="cost_{0}" class="mn"><select class="pref" disabled style="display:none;">'.format(ix);
+            aux += '<td id="cost_{0}" class="mn"><select class="pref hide" disabled>'.format(ix);
             for (var iy = 0; iy < num_pref; iy++) {
                 aux += ' <option value="{0}">{1}</option>'.format(iy, iy+1);
             }
@@ -376,6 +388,13 @@ function exec_assigner() {
             // Process each preference for this player
             for (var ix = 0; ix < Math.min(num_pref, preferences[key].length); ix++) {
                 var ch = preferences[key][ix];  // Character ID
+
+                // Characters marked mirror (MR), already taken (CH), invalid (EP) or locked
+                // by the organizer (NO) can never be assigned by the algorithm
+                var disSpan = $('.p_{0} #cost_{1} .dis'.format(key, ix));
+                if (disSpan.hasClass('MR') || disSpan.hasClass('CH') || disSpan.hasClass('EP') || disSpan.hasClass('NO'))
+                    continue;
+
                 var id = 'p{0}_c{1}'.format(key, ch);  // Variable ID: "p123_c456"
                 if (logg) console.log(id);
 
@@ -419,9 +438,9 @@ function exec_assigner() {
         // Build constraint set for the optimization problem
         var constr = {};
 
-        // Constraint 1: Each player must get exactly 1 character (min: 1)
+        // Constraint 1: Each player must get exactly 1 character
         for (key in included) {
-            constr['p' + key] = {'min': 1};
+            constr['p' + key] = {'min': 1, 'max': 1};
         }
 
         // Constraint 2: No player can get an "impossible" choice (max: 0 invalid options)
@@ -434,21 +453,43 @@ function exec_assigner() {
             constr['c' + key] = {'max': 1};
         }
 
+        // Force every player-character variable to be strictly 0/1 (binary)
+        var binaries = {};
+        for (id in variab) {
+            binaries[id] = 1;
+        }
+
         // Build the linear programming model
         var model = {
             'optimize': 'disappoint',  // Minimize total disappointment
             'opType': 'min',            // Minimization problem
             'variables': variab,        // All player-character pairings with scores
             'constraints': constr,      // Constraints defined above
+            'binaries': binaries,       // Force 0/1 assignment, no fractional splits
         }
 
         // Solve the optimization problem using simplex algorithm
         var results = solver.Solve(model);
+
+        // Infeasible model: the returned variables are meaningless, so discard any
+        // previous results and block the upload
+        if (!results['feasible']) {
+            $('.sel').removeClass('sel');
+            $('#res').val('');
+            $('#assegnazioni').empty();
+            $('#not_assigned_after').empty();
+            $('#risultati').empty().append($('<p>').text(trads['nf']));
+            $('#load').hide();
+            if (dtTable) dtTable.rows().invalidate().draw(false);
+            return;
+        }
+
         // Process and display results
 
         // Counter for statistics: how many players got each preference level
         var counter = {};
         var tot = 0;  // Total assignments
+        var out_of_pref = 0;  // Assignments that fall outside what the player actually submitted
         var vl = '';  // Space-separated list of assignments
         for (var ix = 0; ix < num_pref; ix++) {
             counter[ix] = 0;
@@ -472,6 +513,11 @@ function exec_assigner() {
                 el.addClass('sel');
                 counter[ix] += 1;  // Increment counter for this preference level
                 tot += 1;
+                // Preferences beyond the player's real submitted count are padding
+                // characters added server-side to resolve ties - count those as
+                // "outside expressed preferences"
+                var real_count = pref_counts[key] !== undefined ? pref_counts[key] : preferences[key].length;
+                if (ix >= real_count) out_of_pref += 1;
                 vl += '{0}_{1}'.format(key, ch) + ' ' ;
 
                 // Build assignment string (handle mirrored characters)
@@ -487,16 +533,19 @@ function exec_assigner() {
         // Store results in hidden field
         $('#res').val(vl);
 
-        // Display statistics table (percentage of players who got each preference level)
+        // Display statistics table (percentage of players who got each preference level,
+        // plus how many were assigned a character outside what they actually submitted)
         $('#risultati').empty();
         var tx = '<table><tr>';
         for (var ix = 0; ix < num_pref; ix++) {
             tx += '<th>{0}</th>'.format(ix + 1);
         }
+        tx += '<th>{0}</th>'.format(esc_html(trads['op']));
         tx += '</tr><tr>';
         for (var ix = 0; ix < num_pref; ix++) {
             tx += '<td>{0}\%</td>'.format( (counter[ix] * 100.0 / tot).toFixed(1) );
         }
+        tx += '<td>{0}\%</td>'.format( (out_of_pref * 100.0 / tot).toFixed(1) );
         tx += '</tr></table>';
         $('#risultati').append(tx);
 
@@ -509,18 +558,30 @@ function exec_assigner() {
         }
         $('#assegnazioni').append(tx);
 
+        // Display characters that remain unassigned after this run (not taken, not
+        // mirrored, and not picked by the solver)
+        $('#not_assigned_after').empty();
+        var mirrored_ids = Object.values(mirrors);  // characters that are mirror targets (MR, unselectable)
+        var leftover = [];
+        for (var ch_id in choices) {
+            if (ass[ch_id] !== undefined) continue;
+            if (taken.includes(ch_id)) continue;
+            if (mirrored_ids.includes(ch_id)) continue;
+            leftover.push(ch_id);
+        }
+        if (leftover.length > 0) {
+            var lv = esc_html(trads['na']) + ':';
+            for (var ix = 0; ix < leftover.length; ix++) {
+                lv += ' / ' + esc_html(choices[leftover[ix]]);
+            }
+            $('#not_assigned_after').append(lv);
+        }
+
         // Show submit button
         $('#load').show();
 
         // Notify DataTable that cell content has changed
         if (dtTable) dtTable.rows().invalidate().draw(false);
-
-        // Check if solution is feasible (all constraints satisfied)
-        if (!results['feasible']) {
-            debug("WARNING - PROBLEM NOT FEASIBLE");
-            $('#load').hide();
-        } else
-            $('#load').show();
 
     }
 
@@ -558,6 +619,12 @@ $(function() {
         return false;
     });
 
+    // Edit icon - opens the player's preferences in a popup, the page reloads on save
+    $(document).on('click', '.casting-edit-pref', function() {
+        var url = edit_pref_url.replace('MEMBER_UUID', $(this).data('member'));
+        window.openIframeModal(url + '?frame=1', 'popup_dashboard');
+    });
+
     // Set form action to current URL (preserves query parameters)
     $('#load form').attr('action', document.URL);
 
@@ -566,6 +633,16 @@ $(function() {
         $(this).prop('checked', true);
     });
 });
+
+/**
+ * Returns the icon to edit a player's preferences, or empty string if editing is disabled
+ * @param {string} key - Player member uuid
+ * @returns {string} Icon html
+ */
+function edit_pref_icon(key) {
+    if (!edit_pref_url) return '';
+    return ' <i class="fas fa-pen casting-edit-pref" data-member="{0}" title="{1}"></i>'.format(esc_html(key), esc_html(trads['ep']));
+}
 
 /**
  * Sorts an object by its keys (numerical order)

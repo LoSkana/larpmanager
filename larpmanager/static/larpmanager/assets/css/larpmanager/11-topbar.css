@@ -392,6 +392,13 @@
     background 0.15s,
     border-color 0.15s;
   white-space: nowrap;
+  max-width: 16em;
+}
+
+.tv22-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tv22-pill:hover {
@@ -515,6 +522,54 @@
 
 .tv22-wwyltd-btn:hover {
   background: rgba(var(--pri-rgb), 0.1);
+}
+
+.tv22-help {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tv22-help summary {
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.tv22-help summary::-webkit-details-marker {
+  display: none;
+}
+
+.tv22-help ul {
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  right: 0;
+  margin: 0.2em 0 0;
+  padding: 0.3em 0;
+  list-style: none;
+  white-space: nowrap;
+  background: var(--sec-clr);
+  border: 1px solid rgba(var(--pri-rgb), 0.2);
+  border-radius: 6px;
+}
+
+.tv22-help ul li {
+  padding: 0;
+}
+
+.tv22-help ul li a {
+  display: block;
+  padding: 0.5em 1em;
+}
+
+.tv22-help ul li a:hover {
+  background: rgba(var(--pri-rgb), 0.08);
+}
+
+@media (max-width: 840px) {
+  .tv22-help ul {
+    position: static;
+    margin-top: 0.5em;
+  }
 }
 
 .new_v22 #topbar.topbar_v22 {

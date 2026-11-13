@@ -67,7 +67,9 @@ def test_quest_trait(pw_page: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
+        "Fill in the missing information in your profile to complete your registration "
+        "torta - nonna torta - nonna "
+        "player: admin test presentation test teaser test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="Another").first.click()
@@ -214,7 +216,7 @@ def signups(page: Any, live_server: Any) -> None:
 def casting(page: Any, live_server: Any) -> None:
     # config casting
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Casting ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Casting")).click()
     page.get_by_text("Maximum number of preferences").click()
     page.locator("#id_casting_max").click()
     page.locator("#id_casting_max").fill("3")

@@ -5,6 +5,7 @@
 {% endblock title %}
 {% block content %}
     <div id="manage">
+        {% include "larpmanager/manage/widgets/ask_bar.html" %}
         {% include "larpmanager/manage/sticky_messages.html" %}
         <div {% if effective_version >= 17 %}class="grid"{% else %}class="old_dashboard"{% endif %}>
             {% include "larpmanager/manage/widgets/demo.html" %}
@@ -52,9 +53,8 @@
           href="{% static 'node_modules/driver.js/dist/driver.css' %}">
 {% endblock css %}
 {% block js %}
-    {% include "elements/dashboard/tutorial_query.js" %}
     {% include "elements/dashboard/driver.js.html" %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     window.addEventListener('DOMContentLoaded', function() {
         $(document).ready(function() {
             {% if open_shortcuts %}

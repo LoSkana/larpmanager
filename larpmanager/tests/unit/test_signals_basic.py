@@ -121,15 +121,14 @@ class TestBasicSignals(BaseTestCase):
 
     def test_accounting_discount_save_signal(self) -> None:
         """Test that AccountingItemDiscount save operations work correctly"""
-        member = self.get_member()
+        registration = self.get_registration()
         discount = self.discount()
 
         item = AccountingItemDiscount(
-            member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            disc=discount,  # Changed from 'discount' to 'disc'
-            run=self.get_run(),
+            disc=discount,
+            registration=registration,
         )
 
         # Should not raise exception

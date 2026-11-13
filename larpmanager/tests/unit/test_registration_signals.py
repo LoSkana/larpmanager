@@ -329,18 +329,21 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         )
         discount.runs.add(run)
 
-        # Apply discount to member
-        AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=self.get_association()
-        )
-
         registration = Registration(member=member, run=run, ticket=ticket, quotas=1)
         registration.save()
+
+        # Apply discount to registration
+        AccountingItemDiscount.objects.create(
+            registration=registration,
+            disc=discount,
+            value=Decimal("20.00"),
+            association=self.get_association(),
+        )
 
         # Get fresh instance from database
         updated_registration = Registration.objects.get(id=registration.id)
         # Verify discount was applied
-        discount_exists = AccountingItemDiscount.objects.filter(member=member, run=run).exists()
+        discount_exists = AccountingItemDiscount.objects.filter(registration=registration).exists()
         self.assertTrue(discount_exists)
         # Verify tot_iscr was calculated
         self.assertIsNotNone(updated_registration.tot_iscr)
@@ -509,12 +512,15 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         )
         discount.runs.add(run)
 
-        AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("100.00"), association=self.get_association()
-        )
-
         registration = Registration(member=member, run=run, ticket=ticket, quotas=1)
         registration.save()
+
+        AccountingItemDiscount.objects.create(
+            registration=registration,
+            disc=discount,
+            value=Decimal("100.00"),
+            association=self.get_association(),
+        )
 
         registration.refresh_from_db()
 
@@ -572,15 +578,18 @@ class TestRegistrationAutomaticUpdates(BaseTestCase):
         )
         discount.runs.add(run)
 
-        discount_item = AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("25.00"), association=self.get_association()
+        AccountingItemDiscount.objects.create(
+            registration=registration,
+            disc=discount,
+            value=Decimal("25.00"),
+            association=self.get_association(),
         )
 
         # Get updated registration from database
         updated_registration = Registration.objects.get(id=registration.id)
 
         # Verify discount was applied
-        self.assertTrue(AccountingItemDiscount.objects.filter(member=member, run=run, disc=discount).exists())
+        self.assertTrue(AccountingItemDiscount.objects.filter(registration=registration, disc=discount).exists())
         # Verify registration still exists and was processed
         self.assertIsNotNone(updated_registration.id)
         self.assertIsNotNone(updated_registration.tot_iscr)

@@ -70,9 +70,8 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No members found. Members will appear here once they have submitted a membership request." %}
-        </p>
+        {% trans "Members appear here once they have submitted a membership request." as empty_text %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     <hr />
     <h2>

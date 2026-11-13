@@ -58,7 +58,7 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_reading").check()
     submit_confirm(page)
 
@@ -94,7 +94,7 @@ def reading(live_server: Any, page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
+        Presentation pppresssent totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
         """,
     )
 
@@ -122,14 +122,16 @@ def reading(live_server: Any, page: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
+        "Presentation pppresssent totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
     )
 
     # check reading plot
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
+    expect_normalized(page, page.locator("#one"),
+        "testona wwwww prova bruuuu",
+    )
 
 
 def relationships(live_server: Any, page: Any) -> None:
@@ -420,7 +422,8 @@ def auto_relationships_check(live_server: Any, page: Any) -> None:
 
     for name, text in (
         ("AutoSheetA", "manual sheet text"),
-        ("AutoSheetB", "Text"),
+        # the main sheet text is not named as source
+        ("AutoSheetB", ""),
         ("AutoFactionA", "manual faction text"),
         ("AutoFactionB", "AutoFaction"),
         ("AutoPlotA", "manual plot text"),
@@ -428,4 +431,5 @@ def auto_relationships_check(live_server: Any, page: Any) -> None:
     ):
         entry = relationships.filter(has_text=name)
         expect(entry).to_have_count(1)
-        expect(entry).to_contain_text(text)
+        if text:
+            expect(entry).to_contain_text(text)

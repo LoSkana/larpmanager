@@ -22,26 +22,45 @@ from __future__ import annotations
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Prefetch, QuerySet
+from django.db.models import Prefetch
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
-from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
+from larpmanager.cache.experience import (
+    clear_event_exp_cache,
+    clear_event_exp_calls_cache,
+    clear_event_exp_exclusives_cache,
+    clear_event_exp_systems_cache,
+)
+from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
+from larpmanager.cache.registration_lookup import (
+    clear_registration_tickets_cache,
+    get_active_registrations,
+    get_registration_tickets,
+)
 from larpmanager.cache.writing import clear_relationship_tags_cache
+from larpmanager.forms.base import DEFAULT_LIKERT_MAX
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
-from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import (
+    REGISTRATION_APPLICABLE_TO_TYPE,
+    BaseQuestionType,
+    RegistrationOption,
+    RegistrationQuestionApplicable,
+    RegistrationQuestionType,
+)
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
 )
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import (
     backend_order,
     backend_set_order,
@@ -61,6 +80,12 @@ from larpmanager.utils.edit.orga import (
     orga_new,
 )
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
+from larpmanager.utils.registrations.questions import (
+    get_ordered_registration_questions,
+    get_ranking_names,
+    get_registration_answers_by_question,
+    get_registration_choices_by_question,
+)
 
 
 @login_required
@@ -148,20 +173,6 @@ def orga_registration_sections_delete(request: HttpRequest, event_slug: str, sec
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
 
 
-def get_ordered_registration_questions(context: dict, applicable: str | None = None) -> QuerySet[RegistrationQuestion]:
-    """Get registration questions ordered by section and question order.
-
-    Args:
-        context: View context (must contain "event")
-        applicable: Optional RegistrationQuestionApplicable value to filter by. Unfiltered when None.
-
-    """
-    questions = context["event"].get_elements(RegistrationQuestion)
-    if applicable is not None:
-        questions = questions.filter(applicable=applicable)
-    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
-
-
 @login_required
 def orga_registration_form(request: HttpRequest, event_slug: str, registration_type: str | None = None) -> HttpResponse:
     """Handle the organization registration form view.
@@ -190,6 +201,23 @@ def orga_registration_form(request: HttpRequest, event_slug: str, registration_t
     # Handle download request for registration form data
     if request.method == "POST" and request.POST.get("download") == "1":
         return orga_registration_form_download(context)
+
+    # Request, debrief and matchmaker questions are not answered when registering
+    if context["typ"] == "debrief":
+        context["page_info"] = _("Manage the questions participants answer after the event, to give their feedback")
+        context["empty_text"] = _("Debrief questions collect the feedback of participants after the event.")
+    elif context["typ"] == "matchmaker":
+        context["page_info"] = _("Manage the questions participants answer on the characters they would like to play")
+        context["empty_text"] = _(
+            "Matchmaker questions collect what participants would like to play, to help you assign characters."
+        )
+    elif context["typ"] == "request":
+        context["page_info"] = _("Manage the questions players answer when they send a signup request")
+        context["empty_text"] = _(
+            "Request questions collect the information you need to approve a player, before they can register."
+        )
+    else:
+        context["empty_text"] = _("Questions collect the information you need from participants when they register.")
 
     # Configure context for template rendering
     context["upload"] = f"{context['typ']}_form"
@@ -417,6 +445,28 @@ def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, s
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)
 
 
+def _clear_reorder_caches(action: OrgaAction, context: dict, model_class: type) -> None:
+    """Clear the caches of the elements reordered through the given action."""
+    event_id = context["event"].id
+    if action.config.get("writing"):
+        reset_event_cache_all(context["run"].id)
+    if action.config.get("writing_questions"):
+        clear_writing_questions_cache(get_event_class_parent(event_id, model_class, context=context))
+    if action.config.get("registration_questions"):
+        clear_registration_questions_cache(event_id)
+    if action.config.get("exp"):
+        clear_event_exp_cache(event_id)
+        clear_event_exp_systems_cache(event_id)
+        clear_event_exp_calls_cache(event_id)
+        clear_event_exp_exclusives_cache(event_id)
+    if action.config.get("button"):
+        clear_event_button_cache(event_id)
+    if action.config.get("tickets"):
+        clear_registration_tickets_cache(event_id)
+    if action.config.get("relationship_tags"):
+        clear_relationship_tags_cache(get_event_class_parent(event_id, model_class, context=context))
+
+
 @login_required
 def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Unified drag-and-drop reorder endpoint. POST JSON {model, uuids}."""
@@ -436,16 +486,157 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     context = check_event_context(request, event_slug, model_key)
     model_class = action.config["form"].Meta.model
     backend_set_order(context, model_class, uuids)
-    if action.config.get("writing"):
-        reset_event_cache_all(context["run"])
-    if action.config.get("exp"):
-        event_id = context["event"].id
-        clear_event_exp_cache(event_id)
-        clear_event_exp_systems_cache(event_id)
-    if action.config.get("button"):
-        clear_event_button_cache(context["event"].id)
-    if action.config.get("tickets"):
-        clear_registration_tickets_cache(context["event"].id)
-    if action.config.get("relationship_tags"):
-        clear_relationship_tags_cache(context["event"].get_class_parent(model_class).id)
+    _clear_reorder_caches(action, context, model_class)
     return JsonResponse({"ok": True})
+
+
+def _orga_single_applicable_answers(
+    request: HttpRequest,
+    event_slug: str,
+    permission_slug: str,
+    applicable: RegistrationQuestionApplicable,
+    page_info: str,
+    template: str,
+) -> HttpResponse:
+    """Show, per participant, the answers to the questions of a single applicable form.
+
+    Shared by matchmaker/debrief (and any future single-applicable-question orga review
+    page): ranking answers (raw comma-separated option uuids, or faction uuids for
+    RegistrationQuestionType.FACTION_PREFERENCE) are resolved into ranked names.
+    """
+    context = check_event_context(request, event_slug, permission_slug)
+    context["page_info"] = page_info
+
+    questions = list(
+        get_ordered_registration_questions(context, applicable=applicable).prefetch_related(
+            Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
+        )
+    )
+    context["questions"] = questions
+
+    registrations = (
+        get_active_registrations(context["run"].id).select_related("member").order_by("member__name", "member__surname")
+    )
+
+    question_ids = [question.id for question in questions]
+
+    answers_by_registration = get_registration_answers_by_question(question_ids, registration__run=context["run"])
+    choices_by_registration = get_registration_choices_by_question(question_ids, registration__run=context["run"])
+
+    ranking_names = _get_ranking_names_by_question(context, questions)
+
+    rows = []
+    for registration in registrations:
+        cells = []
+        has_answer = False
+        for question in questions:
+            if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
+                value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            elif question.id in ranking_names:
+                raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
+                names = get_ranking_names(raw, ranking_names[question.id])
+                value = ", ".join(f"{i}. {name}" for i, name in enumerate(names, start=1))
+            else:
+                value = answers_by_registration.get(registration.id, {}).get(question.id, "")
+            if value:
+                has_answer = True
+            cells.append(value)
+        if has_answer:
+            rows.append({"registration": registration, "cells": cells})
+
+    context["rows"] = rows
+    context["likert_charts"] = _get_likert_charts(questions, rows)
+    context["ranking_charts"] = _get_ranking_charts(questions, answers_by_registration, rows, ranking_names)
+
+    return render(request, template, context)
+
+
+def _get_ranking_names_by_question(context: dict, questions: list) -> dict[int, dict[str, str]]:
+    """Map each ranking question id to its rankable items, as uuid -> name (in display order)."""
+    ranking_names = {}
+    faction_names = None
+    for question in questions:
+        if question.typ == RegistrationQuestionType.RANKING:
+            ranking_names[question.id] = {str(option.uuid): option.name for option in question.options.all()}
+        elif question.typ == RegistrationQuestionType.FACTION_PREFERENCE:
+            if faction_names is None:
+                faction_names = {
+                    str(uuid): name
+                    for uuid, name in get_event_elements(context["event"].id, Faction, context=context)
+                    .order_by("order")
+                    .values_list("uuid", "name")
+                }
+            ranking_names[question.id] = faction_names
+    return ranking_names
+
+
+def _get_ranking_charts(
+    questions: list, answers_by_registration: dict, rows: list, ranking_names: dict[int, dict[str, str]]
+) -> list:
+    """Build per-question average rank of each item, for bar charts (lower is better).
+
+    Items left out of a partial ranking are not counted for that participant.
+    """
+    ranking_charts = []
+    for question in questions:
+        if question.id not in ranking_names:
+            continue
+        names_by_uuid = ranking_names[question.id]
+        positions = {item_uuid: [] for item_uuid in names_by_uuid}
+        for row in rows:
+            raw = answers_by_registration.get(row["registration"].id, {}).get(question.id, "")
+            ranked = [item_uuid for item_uuid in raw.split(",") if item_uuid in names_by_uuid]
+            for position, item_uuid in enumerate(ranked, start=1):
+                positions[item_uuid].append(position)
+
+        items = [
+            {"name": names_by_uuid[item_uuid], "average": round(sum(values) / len(values), 2), "count": len(values)}
+            for item_uuid, values in positions.items()
+            if values
+        ]
+        if items:
+            items.sort(key=lambda item: item["average"])
+            ranking_charts.append({"question": question, "items": items})
+    return ranking_charts
+
+
+def _get_likert_charts(questions: list, rows: list) -> list:
+    """Build per-question answer distributions for likert questions, for bar charts."""
+    likert_charts = []
+    for idx, question in enumerate(questions):
+        if question.typ != RegistrationQuestionType.LIKERT:
+            continue
+        scale_max = question.max_length or DEFAULT_LIKERT_MAX
+        counts = [0] * scale_max
+        for row in rows:
+            value = row["cells"][idx]
+            if value.isdigit() and 1 <= int(value) <= scale_max:
+                counts[int(value) - 1] += 1
+        likert_charts.append({"question": question, "scale_max": scale_max, "counts": counts})
+    return likert_charts
+
+
+@login_required
+def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show, per participant, the answers to the matchmaker questions."""
+    return _orga_single_applicable_answers(
+        request,
+        event_slug,
+        "orga_matchmaker_answers",
+        RegistrationQuestionApplicable.MATCHMAKER,
+        _("Review participant answers to the matchmaker questions"),
+        "larpmanager/orga/matchmaker.html",
+    )
+
+
+@login_required
+def orga_debrief_answers(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show, per participant, the answers to the debrief questions."""
+    return _orga_single_applicable_answers(
+        request,
+        event_slug,
+        "orga_debrief_answers",
+        RegistrationQuestionApplicable.DEBRIEF,
+        _("Review participant answers to the debrief questions"),
+        "larpmanager/orga/debrief.html",
+    )

@@ -22,7 +22,7 @@
                     <th>{% trans "Casting priority" %}</th>
                 {% endif %}
                 <th>{% trans "Value" %}</th>
-                <th>{% trans "Details" %}</th>
+                <th>{% trans "Description" %}</th>
                 <th>{% trans "Maximum" %}</th>
                 <th>{% trans "Visible" %}</th>
                 {% if features.gift %}
@@ -86,9 +86,8 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No tickets have been created for this event yet. Use the button above to add a ticket type that participants can choose when registering." %}
-        </p>
+        {% trans "Tickets are the options participants choose when they register, each with its own price and availability." as empty_text %}
+        {% include "elements/table/empty_state.html" with text=empty_text %}
     {% endif %}
     {% include "elements/table/footer.html" %}
 {% endblock content %}

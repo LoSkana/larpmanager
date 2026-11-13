@@ -30,8 +30,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id
 from larpmanager.models.access import AssociationRole, EventRole
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.common import get_coming_runs
@@ -83,7 +84,7 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
 
 def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     """Build navigation context for authenticated user."""
-    cutoff_date = (timezone.now() - timedelta(days=10)).date()
+    cutoff_date = timezone.localdate() - timedelta(days=10)
     member = context["member"]
     association_id = context["association_id"]
     navigation_context = {}
@@ -198,7 +199,7 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
             "event_slug": run.event.slug,
             "number": run.number,
             "label": str(run),
-            "start_date": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
+            "start_date": (run.start or datetime.max.replace(tzinfo=UTC).date()),
             "cover_url": run.get_cover_url(),
         }
 
@@ -216,7 +217,7 @@ def _determine_run_roles(run: Run, event_roles_by_slug: dict[str, dict], *, is_a
     return list(event_roles_by_slug.get(run.event.slug, {}).keys()) or None
 
 
-def clear_run_event_links_cache(event: Event) -> None:
+def clear_run_event_links_cache(event_id: int) -> None:
     """Reset event link cache for all users with roles in the event.
 
     This function clears the cached event links for three categories of users:
@@ -225,7 +226,7 @@ def clear_run_event_links_cache(event: Event) -> None:
     3. All superusers in the system
 
     Args:
-        event: Event instance to reset links for. Must have association_id attribute.
+        event_id: Event ID to reset links for.
 
     Returns:
         None
@@ -235,30 +236,32 @@ def clear_run_event_links_cache(event: Event) -> None:
         May perform multiple database queries to fetch role memberships.
 
     """
+    association_id = get_event_association_id(event_id)
+
     # Clear visible_runs cache for this association (public run list may have changed)
-    cache.delete(f"visible_runs:{event.association_id}")
+    cache.delete(f"visible_runs:{association_id}")
 
     # Clear cache for all members with roles in this specific event
-    for event_role in EventRole.objects.filter(event=event).prefetch_related("members"):
+    for event_role in EventRole.objects.filter(event_id=event_id).prefetch_related("members"):
         for member in event_role.members.all():
-            reset_event_links(member.id, event.association_id)
+            reset_event_links(member.id, association_id)
 
     # Clear cache for association executives (role number 1)
     # These users typically have access to all events in the association
     try:
         association_role = AssociationRole.objects.prefetch_related("members").get(
-            association_id=event.association_id,
+            association_id=association_id,
             number=1,
         )
         for member in association_role.members.all():
-            reset_event_links(member.id, event.association_id)
+            reset_event_links(member.id, association_id)
     except ObjectDoesNotExist:
-        logger.debug("Association role #1 not found for association %s", event.association_id)
+        logger.debug("Association role #1 not found for association %s", association_id)
 
     # Clear cache for all superusers since they have global access
     superusers = User.objects.filter(is_superuser=True)
     for superuser in superusers:
-        reset_event_links(superuser.member.id, event.association_id)
+        reset_event_links(superuser.member.id, association_id)
 
 
 def on_registration_post_save_reset_event_links(instance: Registration) -> None:
@@ -268,7 +271,7 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
         return
 
     # Reset cached event links for the member and event association
-    reset_event_links(instance.member_id, instance.run.event.association_id)
+    reset_event_links(instance.member_id, get_run_association_id(instance.run_id))
 
 
 def reset_event_links(member_id: int, association_id: int) -> None:

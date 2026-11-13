@@ -271,6 +271,11 @@ nav#sidebar-nav {
   margin-left: 0.5ch;
 }
 
+#sidebar .new-menu > .sidebar-link-wrap:first-child {
+  height: var(--topbar-height);
+  flex-shrink: 0;
+}
+
 .sidebar-link,
 .explain-icon {
   display: inline-block;
@@ -309,9 +314,8 @@ nav#sidebar-nav {
 }
 
 #sidebar .new-menu .lm {
-  padding: 0.2em 0;
   margin: 0;
-  padding-bottom: 0.5em;
+  padding: 0.15em 0.45em;
 }
 
 #sidebar .new-menu .sidebar-footer,
@@ -529,6 +533,7 @@ nav#sidebar-nav {
    --------------------------------------------------------------------------- */
 
 .new_v22 #sidebar .inner {
+  padding-top: 0em;
   padding-bottom: 0.5em;
   display: flex;
   flex-direction: column;
@@ -569,8 +574,8 @@ nav#sidebar-nav {
 }
 
 .sidebar-logo {
-  width: 1.4em;
-  height: 1.4em;
+  width: 1.1em;
+  height: 1.1em;
   object-fit: contain;
   flex-shrink: 0;
 }

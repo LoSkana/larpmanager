@@ -55,7 +55,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Handout
 from larpmanager.utils.core.base import get_context, get_event_context, is_shuttle
-from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop
+from larpmanager.utils.core.common import get_album, get_object_uuid, get_workshop, local_day_start
 from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.io.pdf import (
     print_handout,
@@ -158,7 +158,7 @@ def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseR
     hp = get_object_uuid(HelpQuestion, attachment_uuid)
 
     # Check access permissions: owner or association role required
-    if hp.member != context["member"] and not context["association_role"]:
+    if hp.member_id != context["member"].id and not context["association_role"]:
         msg = "illegal access"
         raise Http404(msg)
 
@@ -383,7 +383,7 @@ def shuttle(request: HttpRequest) -> Any:
     context = get_context(request)
     check_association_feature(request, context, "shuttle")
     # get last shuttle requests
-    ref = timezone.now() - timedelta(days=5)
+    ref = local_day_start(timezone.localdate() - timedelta(days=5))
     context.update(
         {
             "list": ShuttleService.objects.exclude(status=ShuttleStatus.DONE)
@@ -391,7 +391,7 @@ def shuttle(request: HttpRequest) -> Any:
             .order_by("status", "date", "time"),
             "is_shuttle": is_shuttle(request),
             "past": ShuttleService.objects.filter(
-                created__gt=ref.date(),
+                created__gt=ref,
                 status=ShuttleStatus.DONE,
                 association_id=context["association_id"],
             ).order_by("status", "date", "time"),
@@ -423,11 +423,8 @@ def shuttle_new(request: HttpRequest) -> Any:
             return redirect("shuttle")
     else:
         form = ShuttleServiceForm(request=request, context=context)
-    return render(
-        request,
-        "larpmanager/general/writing.html",
-        {"form": form, "name": _("New shuttle request")},
-    )
+    context.update({"form": form, "name": _("New shuttle request")})
+    return render(request, "larpmanager/general/edit.html", context)
 
 
 @login_required
@@ -453,11 +450,8 @@ def shuttle_edit(request: HttpRequest, shuttle_uuid: Any) -> Any:
             return redirect("shuttle")
     else:
         form = ShuttleServiceEditForm(instance=shuttle, request=request, context=context)
-    return render(
-        request,
-        "larpmanager/general/writing.html",
-        {"form": form, "name": _("Modify shuttle request")},
-    )
+    context.update({"form": form, "name": _("Modify shuttle request")})
+    return render(request, "larpmanager/general/edit.html", context)
 
 
 _ALLOWED_ALGORITHMS = {"HS256", "HS384", "HS512"}

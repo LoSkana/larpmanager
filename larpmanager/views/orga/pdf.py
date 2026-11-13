@@ -21,7 +21,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import FileResponse, Http404, HttpRequest, HttpResponse
+from django.http import FileResponse, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -31,8 +31,8 @@ from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Faction, Handout
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.models.writing import Character, Faction, FactionType, Handout, get_event_elements
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
@@ -45,6 +45,7 @@ from larpmanager.utils.io.pdf import (
     print_character_bkg,
     print_character_friendly,
     print_faction,
+    print_faction_bkg,
     print_gallery,
     print_profiles,
 )
@@ -76,19 +77,26 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Handle form submission for PDF configuration updates
     if request.method == "POST":
         form = EventCharactersPdfForm(request.POST, request.FILES, instance=context["event"])
+        # The settings are saved on every change, to try the generation right away
+        autosave = request.headers.get("x-requested-with") == "XMLHttpRequest"
 
         # Validate and save form data, then redirect to prevent resubmission
         if form.is_valid():
             form.save()
             save_log(context, Event, context["event"], context["event"].uuid)
+            if autosave:
+                return JsonResponse({"res": "ok"})
             messages.success(request, _("Updated!"))
             return redirect(request.path_info)
+
+        if autosave:
+            return JsonResponse({"res": "ko", "errors": form.errors}, status=400)
     else:
         # Initialize form with current event data for GET requests
         form = EventCharactersPdfForm(instance=context["event"])
 
     # Retrieve ordered character list for the event
-    context["list"] = context["event"].get_elements(Character).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Character, context=context).order_by("number")
 
     # Add form to context for template rendering
     context["form"] = form
@@ -145,7 +153,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
         "handout": Handout,
     }
     for key_name, value_type in mappings.items():
-        for element in context["event"].get_elements(value_type):
+        for element in get_event_elements(context["event"].id, value_type, context=context):
             # Create dict entry with name and type for template rendering
             context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}  # noqa: SLF001  # Django model metadata
 
@@ -155,7 +163,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
 
 @login_required
 def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Regenerate PDF files for all characters in future event runs.
+    """Regenerate PDF files for all characters and factions in future event runs.
 
     Args:
         request: HTTP request object
@@ -168,14 +176,17 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for PDF operations
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
-    # Get all characters associated with the event
-    chs = context["event"].get_elements(Character)
+    # Get all characters and factions associated with the event
+    chs = get_event_elements(context["event"].id, Character, context=context)
+    facs = get_event_elements(context["event"].id, Faction, context=context)
 
     # Iterate through all future runs of the event
     for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):
-        # Generate PDF for each character in each run
+        # Generate PDF for each character and faction in each run
         for ch in chs:
             print_character_bkg(context["event"].association.slug, run.get_slug(), ch.uuid)
+        for fac in facs:
+            print_faction_bkg(context["event"].association.slug, run.get_slug(), fac.uuid)
 
     # Show success message and redirect
     messages.success(request, _("PDF regeneration has started!"))
@@ -336,7 +347,7 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
 
     Raises:
         PermissionDenied: If user lacks orga_characters_pdf permission
-        Http404: If faction with the specified number doesn't exist or isn't in cache
+        Http404: If faction with the specified uuid doesn't exist for the event
 
     """
     # Verify organizer permissions for PDF generation
@@ -344,27 +355,32 @@ def orga_factions_sheet_pdf(request: HttpRequest, event_slug: str, faction_uuid:
 
     # Load faction data into context by faction number
     get_element(context, faction_uuid, "faction", Faction)
+    faction_obj = context["faction"]
 
-    # Load all event cache data for faction sheet rendering
+    # Load all event cache data for faction sheet rendering (character list)
     get_event_cache_all(context)
 
-    for faction in context["factions"].values():
-        if faction.get("uuid", "") == faction_uuid:
-            context["sheet_faction"] = faction
+    # Build sheet data directly from the faction instance
+    sheet_faction = faction_obj.show_complete()
+    characters = []
+    if faction_obj.typ == FactionType.SECRET:
+        member_numbers = set(faction_obj.characters.values_list("number", flat=True))
+        characters = [number for number in context["chars"] if number in member_numbers]
+    else:
+        for character_number, character_data in context["chars"].items():
+            if faction_obj.number in character_data.get("factions", []):
+                characters.append(character_number)
+    sheet_faction["characters"] = characters
+    context["sheet_faction"] = sheet_faction
 
-    if "sheet_faction" not in context:
-        # Faction number not found in cache
-        msg = "Faction does not exist"
-        raise Http404(msg)
-
-    # Load custom faction fields configured for this event
-    # Only visible fields are included in the PDF
+    # Load all faction fields for this event, bypassing visibility filtering
+    context["show_all"] = True
     context["fact"] = get_writing_element_fields(
         context,
         "faction",
         QuestionApplicable.FACTION,
         context["faction"].id,
-        only_visible=True,
+        only_visible=False,
     )
 
     # Generate and return the faction sheet PDF (force=True for fresh generation)

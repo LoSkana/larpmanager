@@ -27,21 +27,72 @@ the option list can be edited in place inside the question edit page.
 from typing import Any
 
 from django.forms.models import model_to_dict
-from django.http import HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.character import OrgaWritingOptionForm
 from larpmanager.forms.registration import OrgaRegistrationOptionForm
 from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
     RegistrationOption,
     RegistrationQuestion,
     WritingOption,
     WritingQuestion,
+    _get_writing_mapping,
 )
 from larpmanager.models.member import LogOperationType
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.models.registration import RegistrationTicket
+from larpmanager.models.writing import get_event_elements
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
+
+
+def check_writing_form_type(context: dict, form_type: str) -> None:
+    """Validate writing form type and update context with type information.
+
+    Args:
+        context: Context dictionary to update with type information
+        form_type: Writing form type to validate
+
+    Raises:
+        Http404: If the writing form type is not available
+
+    """
+    form_type = form_type.lower()
+    writing_type_mapping = _get_writing_mapping()
+
+    # Build available types from choices that have corresponding features
+    available_types = {
+        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in context["features"]
+    }
+
+    # Validate the requested type is available
+    if form_type not in available_types:
+        msg = f"unknown writing form type: {form_type}"
+        raise Http404(msg)
+
+    # Update context with type information
+    context["typ"] = form_type
+    context["writing_typ"] = available_types[form_type]
+    context["label_typ"] = form_type.capitalize()
+    context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
+
+
+def _allows_default(context: dict) -> bool:
+    """Check whether the options of the edited question can be marked as default.
+
+    Only the single choice questions of the character form are filled automatically, so the flag
+    is meaningless anywhere else.
+    """
+    # The question is held by "question" when saving an option, by "el" when editing the question
+    for key in ("question", "el"):
+        question = context.get(key)
+        if isinstance(question, WritingQuestion):
+            return question.typ == BaseQuestionType.SINGLE and question.applicable == QuestionApplicable.CHARACTER
+
+    return False
 
 
 def _inline_models(permission: str) -> tuple[type, type, type]:
@@ -69,24 +120,25 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
             "show_max": "wri_que_max" in features,
             "show_requirements": "wri_que_requirements" in features,
             "show_tickets": "wri_que_tickets" in features,
+            "show_default": _allows_default(context),
         }
         if cfg["show_requirements"]:
             cfg["requirements_choices"] = (
-                context["event"]
-                .get_elements(WritingOption)
+                get_event_elements(context["event"].id, WritingOption, context=context)
                 .select_related("question")
                 .order_by("question__order", "order")
             )
         if cfg["show_tickets"]:
-            from larpmanager.models.registration import RegistrationTicket  # noqa: PLC0415
-
-            cfg["tickets_choices"] = context["event"].get_elements(RegistrationTicket).order_by("order")
+            cfg["tickets_choices"] = get_event_elements(
+                context["event"].id, RegistrationTicket, context=context
+            ).order_by("order")
     else:
         cfg = {
             "show_price": True,
             "show_max": True,
             "show_requirements": False,
             "show_tickets": False,
+            "show_default": False,
         }
 
     # Secondary (expandable) row is needed when there is more than the name to edit
@@ -104,6 +156,10 @@ def _serialize_option(option: Any, *, show_price: bool) -> dict[str, Any]:
     }
     if show_price:
         data["price"] = f"{option.price:.2f}"
+
+    # The default flag is present only on WritingOption
+    if hasattr(option, "default"):
+        data["default"] = option.default
 
     # M2M fields are present only on WritingOption
     for m2m in ("requirements", "tickets"):
@@ -161,8 +217,6 @@ def options_inline_save(
 
     if writing_type:
         # Local import to avoid a circular dependency with utils.edit.orga
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     # Resolve instance and parent question
@@ -215,8 +269,6 @@ def options_inline_reorder(
         return JsonResponse({"success": False}, status=405)
 
     if writing_type:
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     _question_model, option_model, _form_class = _inline_models(permission)
@@ -225,7 +277,7 @@ def options_inline_reorder(
     if not uuids:
         return JsonResponse({"success": False}, status=400)
 
-    options = list(context["event"].get_elements(option_model).filter(uuid__in=uuids))
+    options = list(get_event_elements(context["event"].id, option_model, context=context).filter(uuid__in=uuids))
     by_uuid = {str(opt.uuid): opt for opt in options}
 
     # All options must exist and belong to a single question
@@ -253,8 +305,6 @@ def options_inline_delete(
         return JsonResponse({"success": False}, status=405)
 
     if writing_type:
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     _question_model, option_model, _form_class = _inline_models(permission)

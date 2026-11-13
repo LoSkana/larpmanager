@@ -32,7 +32,8 @@ from decimal import Decimal
 from pprint import pformat
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from Crypto.Cipher import DES3
+from cryptography.hazmat.decrepit.ciphers.algorithms import TripleDES
+from cryptography.hazmat.primitives.ciphers import Cipher, modes
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
@@ -295,9 +296,9 @@ class RedSysClient:
             raise TypeError(msg)
         initialization_vector = b"\0\0\0\0\0\0\0\0"
         decoded_secret_key = base64.b64decode(self.secret_key)
-        triple_des_cipher = DES3.new(decoded_secret_key, DES3.MODE_CBC, IV=initialization_vector)
+        encryptor = Cipher(TripleDES(decoded_secret_key), modes.CBC(initialization_vector)).encryptor()
         padded_order = order.encode().ljust(16, b"\0")
-        return triple_des_cipher.encrypt(padded_order)
+        return encryptor.update(padded_order) + encryptor.finalize()
 
     @staticmethod
     def sign_hmac256(encrypted_order: bytes, merchant_parameters: bytes) -> bytes:

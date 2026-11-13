@@ -17,19 +17,60 @@
     <p>{{ texts.guides_sub }}</p>
 {% endblock landing_subtitle %}
 {% block landing_content %}
-    {% if list %}
-        <div class="guide-grid">
-            {% for post in list %}
-                <a class="guide-card"
-                   href="{% url 'guide' post.slug %}{% if iframe %}?in_iframe=1{% endif %}">
-                    <h3>
-                        {% if post.icon %}<i class="fa-solid fa-{{ post.icon }}"></i>{% endif %}
-                        {{ post.title }}
-                    </h3>
-                    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
-                    <span>Read the guide <i class="fa-solid fa-arrow-right"></i></span>
-                </a>
-            {% endfor %}
+    {% if groups %}
+        <div class="guide-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search"
+                   id="guide-search"
+                   placeholder="{% trans "Search guides" %}"
+                   aria-label="{% trans "Search guides" %}" />
         </div>
+        <p id="guide-no-results" class="guide-no-results" hidden>{% trans "No guide matches your search" %}</p>
+        {% for group, guides in groups.items %}
+            <section class="guide-group">
+                {% if group %}<h2>{{ group }}</h2>{% endif %}
+                {% for post in guides %}
+                    <div class="guide-row"
+                         data-search="{{ group }} {{ post.title }} {{ post.description|default:"" }} {{ post.keywords|default:"" }}">
+                        <div class="guide-row-text">
+                            <h3>
+                                <a href="{% url 'guide' post.slug %}{% if iframe %}?in_iframe=1{% endif %}">
+                                    {% if post.icon %}<i class="fa-solid fa-{{ post.icon }}"></i>{% endif %}
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+                        </div>
+                        <div class="guide-row-actions">
+                            {% if post.video_id %}
+                                <button type="button"
+                                        class="guide-watch"
+                                        data-video-id="{{ post.video_id }}"
+                                        data-title="{{ post.title }}">
+                                    <i class="fa-solid fa-play"></i> {% trans "Watch" %}
+                                </button>
+                            {% endif %}
+                            <a class="guide-read"
+                               href="{% url 'guide' post.slug %}{% if iframe %}?in_iframe=1{% endif %}">
+                                {% trans "Read" %} <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endfor %}
+        <dialog id="guide-video-modal" class="guide-video-modal">
+            <button type="button"
+                    class="demo-confirm-close"
+                    id="guide-video-close"
+                    aria-label="{% trans "Close" %}">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 id="guide-video-title"></h2>
+            <iframe id="guide-video-frame"
+                    class="guide-video"
+                    allow="autoplay; fullscreen"
+                    allowfullscreen></iframe>
+        </dialog>
     {% endif %}
 {% endblock landing_content %}

@@ -31,6 +31,9 @@ from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
     AccountingItemPayment,
+    OtherChoices,
+    RefundRequest,
+    RefundStatus,
 )
 from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
@@ -113,7 +116,7 @@ class TestUtilitySignals(BaseTestCase):
         modifier_px.requirements.add(option)
 
         # Populate cache with the original option name
-        cached = get_event_exp_cache(event)
+        cached = get_event_exp_cache(event.id)
         rels = cached["modifiers"][modifier_px.id]["requirement_rels"]["list"]
         self.assertIn((option.uuid, "Original Name"), rels)
 
@@ -121,7 +124,7 @@ class TestUtilitySignals(BaseTestCase):
         option.name = "Renamed"
         option.save()
 
-        cached_after = get_event_exp_cache(event)
+        cached_after = get_event_exp_cache(event.id)
         rels_after = cached_after["modifiers"][modifier_px.id]["requirement_rels"]["list"]
         names_after = [name for _uuid, name in rels_after]
         self.assertIn("Renamed", names_after, f"modifier requirement_rels not refreshed after option save: {rels_after}")
@@ -418,6 +421,31 @@ class TestUtilitySignals(BaseTestCase):
         refund.refresh_from_db()
         self.assertIsNotNone(refund.id)
 
+    def test_refund_requests_same_value_each_create_refund_item(self) -> None:
+        """Test that each delivered refund request creates its own item, even with the same value"""
+        member = self.get_member()
+        association = self.get_association()
+
+        for _index in range(2):
+            refund = RefundRequest.objects.create(
+                member=member,
+                value=Decimal("160.00"),
+                details="Test refund request",
+                association=association,
+            )
+            refund.status = RefundStatus.PAYED
+            refund.save()
+            # Saving again once delivered must not duplicate the item
+            refund.save()
+
+        refund_items = AccountingItemOther.objects.filter(
+            member=member,
+            association=association,
+            oth=OtherChoices.REFUND,
+            value=Decimal("160.00"),
+        )
+        self.assertEqual(refund_items.count(), 2)
+
     def test_collection_pre_save_validates_collection(self) -> None:
         """Test that Collection pre_save signal validates collection"""
         # Signal creates AccountingItemOther when status changes to PAYED
@@ -451,13 +479,12 @@ class TestUtilitySignals(BaseTestCase):
         """Test that AccountingItemDiscount post_save signal updates discount usage"""
         from larpmanager.models.accounting import AccountingItemDiscount
 
-        member = self.get_member()
+        registration = self.get_registration()
         discount = self.discount()
         item = AccountingItemDiscount(
-            member=member,
             value=Decimal("10.00"),
             association=self.get_association(),
-            run=self.get_run(),
+            registration=registration,
             disc=discount,
         )
         item.save()

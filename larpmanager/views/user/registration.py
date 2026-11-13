@@ -22,13 +22,13 @@ from __future__ import annotations
 import logging
 import secrets
 import traceback
-from datetime import timedelta
+from datetime import UTC, datetime
 from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.db import models, transaction
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -39,7 +39,9 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.discount import get_member_reservations, reserve_discount
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.base import get_question_key
@@ -49,20 +51,13 @@ from larpmanager.forms.registration import (
     RegistrationGiftForm,
     RequestApprovalForm,
 )
-from larpmanager.mail.base import bring_friend_instructions
-from larpmanager.mail.registration import send_registration_request_received_email, update_registration_status_bkg
+from larpmanager.mail.registration import send_registration_request_received_email
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
-    AccountingItemOther,
     Discount,
-    DiscountType,
-    OtherChoices,
-    PaymentInvoice,
-    PaymentStatus,
-    PaymentType,
 )
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -71,13 +66,12 @@ from larpmanager.models.event import (
     RegistrationStatus,
     Run,
 )
-from larpmanager.models.member import Member, MembershipStatus
+from larpmanager.models.member import MembershipStatus
 from larpmanager.models.registration import (
     Registration,
     RegistrationTicket,
     TicketTier,
 )
-from larpmanager.models.utils import my_uuid
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import (
@@ -85,16 +79,57 @@ from larpmanager.utils.core.exceptions import (
     RewokedMembershipError,
     check_event_feature,
 )
+from larpmanager.utils.core.headers import get_url, hdr
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+    set_auto_save,
+)
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
-from larpmanager.utils.users.registration import (
-    _set_membership_context,
-    casting_preferences_pending,
-    check_assign_character,
-    get_reduced_available_count,
+from larpmanager.utils.registrations.casting_status import casting_preferences_pending
+from larpmanager.utils.registrations.context import (
+    _register_prepare,
+    get_registration_gift,
 )
+from larpmanager.utils.registrations.discount import _check_discount
+from larpmanager.utils.registrations.save import save_registration
+from larpmanager.utils.registrations.signals import get_reduced_available_count
+from larpmanager.utils.registrations.status import _set_membership_context
 
 logger = logging.getLogger(__name__)
+
+REGISTRATION_STALE_MESSAGE = _(
+    "This registration was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
+
+
+def _save_pre_registration(context: dict, form: PreRegistrationForm) -> None:
+    """Save a new pre-registration entry and update the member's data-share consent."""
+    new_event_uuid = form.cleaned_data["new_event"]
+    # Only save if an event was actually selected
+    if new_event_uuid != "":
+        with transaction.atomic():
+            new_event = get_object_uuid(Event, new_event_uuid)
+            # Get new_pref from form or stored default if field was removed
+            new_pref = getattr(form, "_default_new_pref", form.cleaned_data.get("new_pref"))
+            PreRegistration(
+                member=context["member"],
+                event=new_event,
+                pref=new_pref,
+                info=form.cleaned_data["new_info"],
+            ).save()
+
+    if "share" in form.cleaned_data:
+        membership = context["membership"]
+        if membership.status == MembershipStatus.EMPTY:
+            membership.status = MembershipStatus.JOINED
+        membership.save()
 
 
 @login_required
@@ -169,20 +204,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     if request.method == "POST":
         form = PreRegistrationForm(request.POST, context=context)
         if form.is_valid():
-            new_event_uuid = form.cleaned_data["new_event"]
-            # Only save if an event was actually selected
-            if new_event_uuid != "":
-                with transaction.atomic():
-                    new_event = get_object_uuid(Event, new_event_uuid)
-                    # Get new_pref from form or stored default if field was removed
-                    new_pref = getattr(form, "_default_new_pref", form.cleaned_data.get("new_pref"))
-                    PreRegistration(
-                        member=context["member"],
-                        event=new_event,
-                        pref=new_pref,
-                        info=form.cleaned_data["new_info"],
-                    ).save()
-
+            _save_pre_registration(context, form)
             messages.success(request, _("Pre-registrations saved!"))
             return redirect("pre_register")
     else:
@@ -209,213 +231,6 @@ def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
 def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any = "", discount_code: Any = "") -> Any:
     """Handle exclusive event registration (delegates to main register function)."""
     return register(request, event_slug, secret_code, discount_code)
-
-
-# Non-player tiers that do not consume a max_pg slot
-_NON_PLAYER_TIERS = {
-    TicketTier.STAFF,
-    TicketTier.WAITING,
-    TicketTier.FILLER,
-    TicketTier.SELLER,
-    TicketTier.LOTTERY,
-    TicketTier.NPC,
-    TicketTier.COLLABORATOR,
-}
-
-
-def _enforce_capacity_under_lock(run: Run, registration: Registration) -> None:
-    """Re-check event and per-ticket capacity under the held run lock.
-
-    Must be called inside the transaction that locked the run row. Raises
-    PermissionDenied if adding this registration would exceed the event's
-    max_pg or the chosen ticket's max_available (closes oversell TOCTOU races
-    left open by the pre-lock, form-level validation).
-    """
-    # Event-wide player cap
-    if run.event.max_pg > 0 and registration.ticket and registration.ticket.tier not in _NON_PLAYER_TIERS:
-        player_count = (
-            Registration.objects.filter(run=run, cancellation_date__isnull=True)
-            .exclude(ticket__tier__in=_NON_PLAYER_TIERS)
-            .exclude(pk=registration.pk)
-            .count()
-        )
-        if player_count >= run.event.max_pg:
-            raise PermissionDenied
-
-    # Per-ticket availability cap
-    if registration.ticket and registration.ticket.max_available > 0:
-        other_seats = (
-            Registration.objects.filter(
-                run=run,
-                ticket=registration.ticket,
-                cancellation_date__isnull=True,
-            )
-            .exclude(pk=registration.pk)
-            .aggregate(total=models.Sum(1 + models.F("additionals")))["total"]
-            or 0
-        )
-        if other_seats >= registration.ticket.max_available:
-            raise PermissionDenied
-
-
-def save_registration(
-    context: dict,
-    form: object,  # Registration form instance
-    run: Run,
-    event: Event,
-    registration: Registration | None,
-    *,
-    gifted: bool = False,
-) -> Registration:
-    """Save registration data and handle payment processing.
-
-    This function creates or updates a registration record within a database transaction,
-    handling standard registration data, questions, discounts, and special features.
-
-    Args:
-        context: Context dictionary with form data, event info, and feature flags
-        form: Registration form instance with cleaned data
-        run: Run instance being registered for
-        event: Event instance associated with the run
-        registration: Existing registration instance to update, or None to create new
-        gifted: Whether this is a gifted registration requiring redeem code
-
-    Returns:
-        Registration: The saved registration instance
-
-    Note:
-        This function handles special features like user_character assignment
-        and bring_friend functionality based on context feature flags.
-
-    """
-    is_new = not registration
-
-    # Create or update registration within atomic transaction
-    with transaction.atomic():
-        # Lock the run row to serialise concurrent new registrations
-        if is_new:
-            Run.objects.select_for_update().get(pk=run.pk)
-
-        # Initialize new registration if none provided
-        if is_new:
-            registration = Registration()
-            registration.run = run
-            registration.member = context["member"]
-            # Generate redeem code for gifted registrations
-            if gifted:
-                registration.redeem_code = my_uuid(16)
-            registration.save()
-
-        # Determine if registration should be provisional
-        provisional = is_registration_provisional(registration)
-
-        # Save standard registration fields and data
-        save_registration_standard(context, event, form, registration, gifted=gifted, provisional=provisional)
-
-        # Enforce max_pg and per-ticket availability atomically under the run lock
-        if is_new:
-            _enforce_capacity_under_lock(run, registration)
-
-        # Process and save registration-specific questions
-        form.save_registration_questions(registration, is_organizer=False)
-
-        # Confirm and finalize any pending discounts for this member/run
-        que = AccountingItemDiscount.objects.filter(member=context["member"], run=registration.run)
-        for el in que:
-            # Remove expiration date to confirm discount usage
-            if el.expires is not None:
-                el.expires = None
-                el.save()
-
-        # Save the updated registration instance
-        registration.save()
-
-        # Handle special feature processing based on context flags
-        if "user_character" in context["features"]:
-            check_assign_character(context)
-        if "bring_friend" in context["features"]:
-            save_registration_bring_friend(context, form, registration)
-
-    # Send background notification email for registration update
-    update_registration_status_bkg(registration.id)
-
-    return registration
-
-
-def save_registration_standard(
-    context: dict,
-    event: Event,
-    form: RegistrationForm,
-    registration: Registration,
-    *,
-    gifted: bool,
-    provisional: bool,
-) -> None:
-    """Save standard registration with ticket and payment processing.
-
-    Processes a standard registration by updating modification counter,
-    handling additional participants, quotas, ticket selection, and
-    custom payment amounts based on form data.
-
-    Args:
-        context: Context dictionary containing event and form data, including 'tot_payed'
-        event: Event instance for validation and processing
-        form: Registration form instance with cleaned_data
-        gifted: Whether this is a gifted registration (skips modification counter)
-        provisional: Whether registration is provisional (skips modification counter)
-        registration: Registration instance to update with form data
-
-    Raises:
-        Http404: When ticket doesn't exist, belongs to wrong event, or has lower price
-                than current ticket for paid registrations
-
-    Side Effects:
-        Modifies the registration instance with form data including:
-        - Increments modification counter for non-gifted, non-provisional registrations
-        - Updates additionals count, quotas, ticket selection, and payment amount
-
-    """
-    # Increment modification counter for standard registrations
-    if not gifted and not provisional:
-        registration.modified = registration.modified + 1
-
-    # Process additional participants count
-    if "additionals" in form.cleaned_data:
-        additionals_value = form.cleaned_data["additionals"]
-        registration.additionals = int(additionals_value) if additionals_value else 0
-
-    # Handle quota assignments if present
-    if form.cleaned_data.get("quotas"):
-        quotas_value = form.cleaned_data["quotas"]
-        registration.quotas = int(quotas_value) if quotas_value else 0
-
-    # Process ticket selection and validation
-    if "ticket" in form.cleaned_data:
-        sel = form.cleaned_data["ticket"]
-
-        # Validate ticket exists and belongs to correct event
-        if not sel:
-            msg = "RegistrationTicket does not exist"
-            raise Http404(msg)
-
-        if sel.event != event:
-            msg = "RegistrationTicket wrong event"
-            raise Http404(msg)
-
-        # Prevent downgrading ticket price for paid registrations
-        if (
-            context["tot_payed"]
-            and registration.ticket
-            and registration.ticket.price > 0
-            and sel.price < registration.ticket.price
-        ):
-            msg = "lower price"
-            raise Http404(msg)
-        registration.ticket = sel
-
-    # Set custom payment amount if specified
-    if form.cleaned_data.get("pay_what"):
-        registration.pay_what = int(form.cleaned_data["pay_what"])
 
 
 def registration_redirect(
@@ -494,73 +309,6 @@ def registration_redirect(
     return redirect("event", event_slug=registration.run.get_slug())
 
 
-def save_registration_bring_friend(context: dict, form: object, registration: Registration) -> None:
-    """Process bring-a-friend discount codes for registration.
-
-    This function handles the bring-a-friend functionality by:
-    1. Sending instructions email to the registrant
-    2. Validating the provided friend code
-    3. Creating accounting entries for both parties
-    4. Applying discounts to both the registrant and their friend
-
-    Args:
-        context: Context dictionary containing bring friend configuration including:
-            - bring_friend_discount_from: Discount amount for code user
-            - bring_friend_discount_to: Discount amount for code owner
-            - run: Event run instance
-            - a_id: Association ID
-        form: Registration form with bring_friend field containing the friend code
-        registration: Registration instance for the current registrant
-
-    Raises:
-        Http404: When the provided friend code is not found in the database
-
-    """
-    # Send bring-a-friend instructions email to the new registrant
-    bring_friend_instructions(registration, context)
-
-    # Early return if no bring_friend field in form data
-    if "bring_friend" not in form.cleaned_data:
-        return
-    logger.debug("Bring friend form data: %s", form.cleaned_data)
-
-    # Extract and validate the friend code from form
-    cod = form.cleaned_data["bring_friend"]
-    logger.debug("Processing bring friend code: %s", cod)
-    if not cod:
-        return
-
-    # Look up the registration associated with the friend code
-    friend = get_object_uuid(Registration, cod)
-
-    # Create accounting entries atomically for both parties
-    with transaction.atomic():
-        # Create discount token for the person using the friend code
-        AccountingItemOther.objects.create(
-            member=context["member"],
-            value=int(context["bring_friend_discount_from"]),
-            run=context["run"],
-            oth=OtherChoices.TOKEN,
-            descr=_("You have used a friend code.") + f" - {friend.member.display_member()} - {cod}",
-            association_id=context["association_id"],
-            ref_addit=registration.id,
-        )
-
-        # Create discount token for the friend whose code was used
-        AccountingItemOther.objects.create(
-            member=friend.member,
-            value=int(context["bring_friend_discount_to"]),
-            run=context["run"],
-            oth=OtherChoices.TOKEN,
-            descr=_("Your friend code has been used") + f" - {context['member'].display_member()} - {cod}",
-            association_id=context["association_id"],
-            ref_addit=friend.id,
-        )
-
-        # Trigger accounting update for the friend's registration
-        friend.save()
-
-
 def register_info(request: HttpRequest, context: dict, form: object, registration: Any, discount_info: Any) -> None:
     """Display registration information and status.
 
@@ -591,7 +339,13 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
     if registration:
         registration.provisional = is_registration_provisional(registration)
 
-    _set_membership_context(context, context["run"], context["member"], registration)
+    _set_membership_context(
+        context,
+        context["run"],
+        context["member"],
+        registration,
+        get_run_basic_cache(context["run"].id, context=context),
+    )
 
 
 def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:
@@ -624,6 +378,18 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
 
     if not context["submitted"].get("ticket") and hasattr(form, "initial") and form.initial.get("ticket"):
         context["submitted"]["ticket"] = str(form.initial["ticket"])
+
+
+def _warn_expired_discounts(request: HttpRequest, context: dict) -> None:
+    """Warn the user about reserved discounts that expired before the registration was saved."""
+    if not context.get("expired_discounts"):
+        return
+    messages.warning(
+        request,
+        _("The reservation of these discounts has expired, so they were not applied")
+        + ": "
+        + ", ".join(context["expired_discounts"]),
+    )
 
 
 @login_required
@@ -661,6 +427,73 @@ def register(
     # Set up registration context for the current run
     registration = context.get("registration")
 
+    closed_response = _register_closed_redirect(request, context, current_run, registration)
+    if closed_response is not None:
+        return closed_response
+
+    # Apply ticket selection if provided, verifying it belongs to this event
+    _apply_ticket(context, ticket_uuid, current_event.pk)
+
+    # Check if payment features are enabled for this association
+    context["payment_feature"] = "payment" in get_association_features(context["association_id"])
+
+    # Prepare new registration or load existing one
+    is_new_registration = _register_prepare(context, registration)
+
+    auto_save_response = _register_auto_save_setup(request, context, registration)
+    if auto_save_response is not None:
+        return auto_save_response
+
+    # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
+    if is_new_registration and not context.get("ticket"):
+        # If the approval process is enabled, players must submit a signup request instead
+        if get_event_config(current_event.id, "registration_approval_process", context=context):
+            return redirect("request_signup", event_slug=current_run.get_slug())
+
+        redirect_response = _check_redirect_registration(request, context, secret_code)
+        if redirect_response:
+            return redirect_response
+
+    # Verify user membership status and permissions
+    current_membership = context["membership"]
+    if current_membership.status == MembershipStatus.REWOKED:
+        raise RewokedMembershipError
+
+    # Process form submission or display registration form
+    if request.method == "POST":
+        form = RegistrationForm(request.POST, context=context, instance=registration)
+        form.sel_ticket_map(request.POST.get("ticket", ""))
+        if is_stale(context, request, registration):
+            messages.error(request, REGISTRATION_STALE_MESSAGE)
+        # Validate form and save registration if valid
+        elif form.is_valid():
+            draft_key = draft_element_key(context, "registration", registration, request)
+            context["request"] = request
+            saved_registration = save_registration(
+                context,
+                form,
+                current_run,
+                current_event,
+                registration,
+            )
+            clear_draft(context["member"], draft_key)
+            _warn_expired_discounts(request, context)
+            return registration_redirect(
+                request, context, saved_registration, current_run, is_new_registration=is_new_registration
+            )
+    else:
+        # Display empty form for GET requests
+        form = RegistrationForm(context=context, instance=registration)
+
+    # Prepare additional registration information and render page
+    register_info(request, context, form, registration, discount_code)
+    return render(request, "larpmanager/event/register.html", context)
+
+
+def _register_closed_redirect(
+    request: HttpRequest, context: dict, current_run: Run, registration: Registration | None
+) -> HttpResponse | None:
+    """Redirect away from the registration form when the run is closed or the request is a pending signup."""
     # Prevent new registrations or changes on concluded or cancelled runs: existing ones stay readable
     concluded = current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]
     if concluded and (not registration or request.method == "POST"):
@@ -678,53 +511,40 @@ def register(
         messages.info(request, _("Your signup request is awaiting organizer approval"))
         return redirect("event", event_slug=current_run.get_slug())
 
-    # Apply ticket selection if provided, verifying it belongs to this event
-    _apply_ticket(context, ticket_uuid, current_event.pk)
+    return None
 
-    # Check if payment features are enabled for this association
-    context["payment_feature"] = "payment" in get_association_features(context["association_id"])
 
-    # Prepare new registration or load existing one
-    is_new_registration = _register_prepare(context, registration)
+def _register_ajax(request: HttpRequest, context: dict, registration: Registration | None) -> JsonResponse:
+    """Stash the registration form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "registration", registration)
 
-    # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
-    if is_new_registration and not context.get("ticket"):
-        # If the approval process is enabled, players must submit a signup request instead
-        if get_event_config(current_event.id, "registration_approval_process", context=context):
-            return redirect("request_signup", event_slug=current_run.get_slug())
 
-        redirect_response = _check_redirect_registration(request, context, secret_code)
-        if redirect_response:
-            return redirect_response
+def _register_auto_save_setup(
+    request: HttpRequest, context: dict, registration: Registration | None
+) -> HttpResponse | None:
+    """Wire auto-save for the registration form.
 
-    # Verify user membership status and permissions
-    current_membership = context["membership"]
-    if current_membership.status in [MembershipStatus.REWOKED]:
-        raise RewokedMembershipError
+    Returns the ajax draft response when this request is an auto-save call, otherwise seeds
+    a restored draft (if any) into the context and returns None.
+    """
+    set_auto_save(context)
+    init_auto_save(context, registration)
+    context["auto_save_form_id"] = "register_form"
+    # no field gates a not-yet-created registration: a ticket pick or an answered question is enough
+    context["auto_save_required_field"] = ""
 
-    # Process form submission or display registration form
-    if request.method == "POST":
-        form = RegistrationForm(request.POST, context=context, instance=registration)
-        form.sel_ticket_map(request.POST.get("ticket", ""))
-        # Validate form and save registration if valid
-        if form.is_valid():
-            saved_registration = save_registration(
-                context,
-                form,
-                current_run,
-                current_event,
-                registration,
-            )
-            return registration_redirect(
-                request, context, saved_registration, current_run, is_new_registration=is_new_registration
-            )
-    else:
-        # Display empty form for GET requests
-        form = RegistrationForm(context=context, instance=registration)
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _register_ajax(request, context, registration)
 
-    # Prepare additional registration information and render page
-    register_info(request, context, form, registration, discount_code)
-    return render(request, "larpmanager/event/register.html", context)
+    if request.method == "GET" and context.get("auto_save"):
+        context["auto_save_draft"] = pop_draft(
+            context["member"],
+            draft_element_key(context, "registration", registration, request),
+            registration.updated if registration else None,
+        )
+
+    return None
 
 
 def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None:
@@ -790,7 +610,7 @@ def request_signup(request: HttpRequest, event_slug: str) -> HttpResponse:
     return render(request, "larpmanager/event/request_signup.html", context)
 
 
-def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:  # noqa: PLR0911
+def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:
     """Check if registration should be redirected based on event status and settings.
 
     This function performs various checks to determine if a user's registration
@@ -800,7 +620,6 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
     Args:
         request: Django HTTP request object containing user and session data
         context: Context dictionary containing event, run data, features, and tier info
-        event: Event model instance being registered for
         secret_code: Optional secret code for registration access, None if not provided
 
     Returns:
@@ -826,6 +645,11 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
         # Secret code is correct, allow registration bypassing other checks
         return None
 
+    return _check_registration_status(request, context)
+
+
+def _check_registration_status(request: HttpRequest, context: dict) -> HttpResponse | None:
+    """Return the redirect or error page matching the run registration status, None if registration is open."""
     # Get registration status from run
     registration_status = context["run"].registration_status
 
@@ -853,51 +677,6 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
         return redirect("pre_register", event_slug=context["event"].slug)
 
     return None
-
-
-def _add_bring_friend_discounts(context: dict) -> None:
-    """Add bring-a-friend discount configuration to context if feature is enabled."""
-    if "bring_friend" not in context["features"]:
-        return
-
-    # Retrieve discount configuration for both directions (to/from)
-    for discount_config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-        context[discount_config_name] = get_event_config(context["event"].id, discount_config_name, context=context)
-
-
-def _register_prepare(context: dict, registration: Any) -> Any:
-    """Prepare registration context with payment information and locks.
-
-    Args:
-        context: Context dictionary to update
-        registration: Existing registration instance or None for new registration
-
-    Returns:
-        bool: True if this is a new registration, False if updating existing
-
-    """
-    is_new_registration = True
-    context["tot_payed"] = 0
-    if registration:
-        context["tot_payed"] = registration.tot_payed
-        is_new_registration = False
-
-        # we lock changing values with lower prices if there is already a payment (done or submitted)
-        has_pending_payment = (
-            PaymentInvoice.objects.filter(
-                idx=registration.id,
-                member_id=registration.member_id,
-                status=PaymentStatus.SUBMITTED,
-                typ=PaymentType.REGISTRATION,
-            ).count()
-            > 0
-        )
-        context["payment_lock"] = has_pending_payment or registration.tot_payed > 0
-        registration.pending = has_pending_payment
-
-    _add_bring_friend_discounts(context)
-
-    return is_new_registration
 
 
 def register_reduced(request: HttpRequest, event_slug: str) -> JsonResponse:
@@ -934,42 +713,6 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
     return render(request, "larpmanager/event/register_conditions.html", context)
 
 
-# ~ def discount_bring_friend(request: HttpRequest, context: dict, cod):
-# ~ # check if there is a registration with that cod
-# ~ try:
-# ~ friend = Registration.objects.get(uuid=cod)
-# ~ except Exception as e:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount code not valid")})
-# ~ if friend.member == context["member"]:
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Nice Try! But no, I'm sorry.')})
-# ~ # check same event
-# ~ if friend.run.event != context['event']:
-# ~ Return Jsonresonse ({'res': 'ko', 'msg': _ ('Code applicable only to run of the same event!')})
-# ~ # check future run
-# ~ if friend.run.end < timezone.now().date():
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('Code not valid for runs passed!')})
-# ~ # get discount friend
-# ~ disc = Discount.objects.get(typ=DiscountType.FRIEND, runs__in=[context['run']])
-# ~ if disc.max_redeem > 0:
-# ~ if AccountingItemDiscount.objects.filter(disc=disc, run=context['run']).count() > disc.max_redeem:
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('We are sorry, the maximum number of concessions has been reached a friend')})
-# ~ # check if not already registered
-# ~ try:
-# ~ reg = Registration.objects.get(member=context["member"], run=context['run'])
-# ~ if disc.only_reg:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discounts only applicable with new registrations")})
-# ~ except Exception as e:
-# ~ pass
-# ~ # check there are no discount stores a friend
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.STANDARD).count() > 0:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits.")})
-# ~ # check the user TO don't already have the discount
-# ~ try:
-# ~ ac = AccountingItemDiscount.objects.get(disc=disc, member=context["member"], run=context['run'])
-# ~ Return Jsonresonse ({'res': 'Ko', 'msg': _ ('You have already used a personal code')})
-# ~ except Exception as e:
-# ~ pass
-# ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.PLAYAGAIN).count() > 0:
 @login_required
 @require_POST
 def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
@@ -1012,10 +755,6 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 
-    # Clean up expired discount reservations
-    now = timezone.now()
-    AccountingItemDiscount.objects.filter(expires__lte=now).delete()
-
     # Extract context variables for discount validation
     member = context["member"]
     run = context["run"]
@@ -1030,15 +769,8 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
         if check:
             return error(check)
 
-        # Create temporary discount reservation with 15-minute expiration
-        AccountingItemDiscount.objects.create(
-            value=disc.value,
-            member=member,
-            expires=now + timedelta(minutes=15),
-            disc=disc,
-            run=run,
-            association_id=context["association_id"],
-        )
+        # Reserve the discount until the registration is saved
+        reserve_discount(run.id, disc.id, member.id)
 
     # Return success response with reservation confirmation
     return JsonResponse(
@@ -1049,107 +781,6 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
             ),
         },
     )
-
-
-def _check_discount(discount: Any, member: Any, run: Any, event: Any) -> Any:
-    """Validate if a discount can be applied to a member's registration.
-
-    Args:
-        discount: Discount object to validate
-        member: Member attempting to use discount
-        run: Event run instance
-        event: Event instance
-
-    Returns:
-        str or None: Error message if invalid, None if valid
-
-    """
-    if _is_discount_invalid_for_registration(discount, member, run):
-        return _("Discounts only applicable with new registrations")
-
-    if _is_discount_already_used(discount, member, run):
-        return _("Code already used")
-
-    if _is_type_already_used(discount.typ, member, run):
-        return _("Non-cumulative code")
-
-    if discount.max_redeem > 0 and _is_discount_maxed(discount, run):
-        return _("This discount code has reached its limit.")
-
-    if not _validate_exclusive_logic(discount, member, run, event):
-        return _("Discount not combinable with other benefits.")
-
-    return None
-
-
-def _is_discount_invalid_for_registration(discount: Discount, member: Member, run: Run) -> bool:
-    """Check if discount is invalid due to existing registration.
-
-    Returns True if discount is registration-only and member already registered.
-    """
-    # Discount not limited to registration-only
-    if not discount.only_reg:
-        return False
-
-    # Check if member has active registration for this run
-    return Registration.objects.filter(member=member, run=run, cancellation_date__isnull=True).exists()
-
-
-def _is_discount_already_used(discount: Discount, member: Member, run: Run) -> bool:
-    """Check if discount has already been used by member for run."""
-    return AccountingItemDiscount.objects.filter(disc=discount, member=member, run=run).exists()
-
-
-def _is_type_already_used(
-    discount_type: DiscountType,
-    member: Member,
-    run: Run,
-) -> bool:
-    """Check if a discount type has already been used by a member for a run."""
-    return AccountingItemDiscount.objects.filter(disc__typ=discount_type, member=member, run=run).exists()
-
-
-def _is_discount_maxed(discount: Discount, run: Run) -> bool:
-    """Check if discount has exceeded maximum redemptions for a run."""
-    redemption_count = AccountingItemDiscount.objects.filter(disc=discount, run=run).count()
-    return redemption_count > discount.max_redeem
-
-
-def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, event: Event) -> bool:
-    """Validate exclusive discount logic for member registrations.
-
-    Ensures that PLAYAGAIN discounts are mutually exclusive with other discounts
-    and validates eligibility requirements.
-
-    Args:
-        discount: The discount to validate
-        member: The member applying for the discount
-        run: The specific run for this registration
-        event: The event containing multiple runs
-
-    Returns:
-        True if the discount can be applied, False otherwise
-
-    """
-    # For PLAYAGAIN discount: no other discounts and has another registration
-    if discount.typ == DiscountType.PLAYAGAIN:
-        # Check if member already has any discount for this run
-        if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
-            return False
-
-        # Verify member has an active registration in another run of the same event
-        if not (
-            Registration.objects.filter(member=member, run__event=event, cancellation_date__isnull=True, pending=False)
-            .exclude(run=run)
-            .exists()
-        ):
-            return False
-
-    # If PLAYAGAIN discount was already applied, no other allowed
-    elif AccountingItemDiscount.objects.filter(member=member, run=run, disc__typ=DiscountType.PLAYAGAIN).exists():
-        return False
-
-    return True
 
 
 @login_required
@@ -1169,30 +800,25 @@ def discount_list(request: HttpRequest, event_slug: str) -> JsonResponse:
     """
     # Get the event run context from the request and identifier
     context = get_event_context(request, event_slug, check_visibility=False)
-    now = timezone.now()
+    member = context["member"]
+    run = context["run"]
 
-    # Bulk delete expired discount items for this user and run
-    AccountingItemDiscount.objects.filter(member=context["member"], run=context["run"], expires__lte=now).delete()
+    # Discounts confirmed on the member active registrations for this run
+    lst = [
+        {"name": item.disc.name, "value": item.value, "expires": ""}
+        for item in AccountingItemDiscount.objects.filter(
+            registration__run=run,
+            registration__member=member,
+            registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
+        ).select_related("disc")
+    ]
 
-    # Get remaining valid discount items with optimized query
-    # Filter for current user/run and non-expired items
-    discount_items = (
-        AccountingItemDiscount.objects.filter(member=context["member"], run=context["run"])
-        .select_related("disc")
-        .filter(models.Q(expires__isnull=True) | models.Q(expires__gt=now))
-    )
-
-    # Build response list efficiently
-    # Convert discount items to JSON-serializable format
-    lst = []
-    for aid in discount_items:
-        j = {"name": aid.disc.name, "value": aid.value}
-        # Format expiration time or set empty string for permanent discounts
-        if aid.expires:
-            j["expires"] = aid.expires.strftime("%H:%M")
-        else:
-            j["expires"] = ""
-        lst.append(j)
+    # Discounts reserved by the member, pending registration save
+    reservations = get_member_reservations(run.id, list(run.discounts.values_list("id", flat=True)), member.id)
+    for disc in Discount.objects.filter(id__in=reservations):
+        expires = timezone.localtime(datetime.fromtimestamp(reservations[disc.id], tz=UTC))
+        lst.append({"name": disc.name, "value": disc.value, "expires": expires.strftime("%H:%M")})
 
     return JsonResponse({"lst": lst})
 
@@ -1236,7 +862,7 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
             email_body += ".<br /><br />"
             email_body += _("To process the cancellation, click here:") + " "
             email_body += f"<a href='{cancel_url}'>{cancel_url}</a>"
-            for organizer in get_event_organizers(event):
+            for organizer in get_event_organizers(run.id):
                 my_send_mail(email_subject, email_body, organizer, run)
 
             mes = _("Your cancellation request has been sent to the staff; please wait for their response")
@@ -1389,26 +1015,6 @@ def _form_gift(request: HttpRequest, event_slug: str, gift_uuid: str | None = No
     init_form_submitted(context, context["form"], request, registration)
 
     return render(request, "larpmanager/event/gift_edit.html", context)
-
-
-def get_registration_gift(context: dict, gift_uuid: str) -> Registration | None:
-    """Get a registration with gift redeem code for the current user."""
-    if not gift_uuid:
-        return None
-
-    try:
-        # Query for valid gift registration matching all criteria
-        return Registration.objects.get(
-            uuid=gift_uuid,
-            run=context["run"],
-            member=context["member"],
-            redeem_code__isnull=False,  # Must have a redeem code (gift)
-            cancellation_date__isnull=True,  # Must not be cancelled
-        )
-    except Exception as error:
-        # Convert any lookup error to 404 for security
-        msg = "what are you trying to do?"
-        raise Http404(msg) from error
 
 
 @login_required

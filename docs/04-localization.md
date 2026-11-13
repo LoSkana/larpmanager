@@ -388,6 +388,7 @@ Defined in `AssociationTextType` enum in `larpmanager/models/association.py`:
 ```python
 # In larpmanager/models/association.py
 
+
 class AssociationTextType(models.TextChoices):
     # ... existing types ...
     WELCOME = "w", _("Welcome Email")  # New type
@@ -400,13 +401,10 @@ class AssociationTextType(models.TextChoices):
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.models.association import AssociationTextType
 
+
 def send_welcome_email(association_id, member_email, language="en"):
     """Send welcome email using cached association text."""
-    email_body = get_association_text(
-        association_id,
-        AssociationTextType.WELCOME,
-        language
-    )
+    email_body = get_association_text(association_id, AssociationTextType.WELCOME, language)
     # Use email_body to send email
 ```
 
@@ -610,17 +608,18 @@ When reviewing auto-translated text:
 ```python
 # In larpmanager/forms/event.py
 
+
 class OrgaCharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ['name', 'description']
+        fields = ["name", "description"]
         labels = {
-            'name': _('Character name'),
-            'description': _('Character description'),
+            "name": _("Character name"),
+            "description": _("Character description"),
         }
         help_texts = {
-            'name': _('Enter the name of your character'),
-            'description': _('Provide a detailed background for your character'),
+            "name": _("Enter the name of your character"),
+            "description": _("Provide a detailed background for your character"),
         }
 ```
 
@@ -656,6 +655,7 @@ When the same word has different meanings:
 ```python
 # In view
 from django.utils.translation import pgettext_lazy
+
 
 class EventForm(forms.ModelForm):
     # "Close" as in "close the form"
@@ -695,13 +695,9 @@ def privacy_policy(request):
     context = get_context(request)
 
     # Try to get organization's custom text, otherwise use default
-    context["privacy_content"] = (
-            get_association_text(
-                context["association_id"],
-                AssociationTextType.PRIVACY,
-                request.LANGUAGE_CODE
-            ) or _("Default privacy policy text")
-    )
+    context["privacy_content"] = get_association_text(
+        context["association_id"], AssociationTextType.PRIVACY, request.LANGUAGE_CODE
+    ) or _("Default privacy policy text")
 
     return render(request, "privacy.html", context)
 ```

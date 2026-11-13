@@ -22,6 +22,8 @@ from datetime import date
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
 from django.db.models import Sum
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
@@ -36,6 +38,7 @@ from larpmanager.accounting.balance import (
     get_run_accounting,
 )
 from larpmanager.accounting.invoice import invoice_verify
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.forms.accounting import ExePaymentForm
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
@@ -60,15 +63,22 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
+from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import Registration
 from larpmanager.models.utils import get_sum
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.core.common import get_object_uuid
+from larpmanager.utils.core.checks import check_association_context
+from larpmanager.utils.core.common import get_object_uuid, local_day_start
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get
+from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.security.confirm import confirm_post
+from larpmanager.utils.users.member_flags import (
+    get_member_flags_eye_html,
+    get_member_flags_html,
+    get_member_in_association,
+    member_flags_active,
+)
 from larpmanager.views.orga.accounting import payment_edit
 
 # Slug of permission / page for each invoice type
@@ -133,6 +143,8 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             # Add delete view name for delete button
             "delete_view": "exe_outflows_delete",
         },
@@ -275,7 +287,7 @@ def exe_donations(request: HttpRequest) -> HttpResponse:
     context.update(
         {
             "fields": [
-                ("member", _("Member")),  # Donation maker
+                ("member", _("User")),  # Donation maker
                 ("descr", _("Description")),  # Donation description/purpose
                 ("value", _("Value")),  # Monetary amount
                 ("created", _("Date")),  # When donation was created
@@ -337,7 +349,7 @@ def exe_credits(request: HttpRequest) -> HttpResponse:
             "subtype": "credits",
             # Define table columns for credits display
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -404,7 +416,7 @@ def exe_tokens(request: HttpRequest) -> HttpResponse:
             "subtype": "tokens",
             # Define table columns with localized headers
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -466,7 +478,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
             "selrel": ("run", "run__event"),
             # Define table columns with display names
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("type", _("Type")),
                 ("action", _("Action")),
                 ("run", _("Event")),
@@ -480,12 +492,16 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approve button only for non-approved expenses
-                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
-                if not el.is_approved
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
+                    if not el.is_approved
+                    else ""
+                ),
                 # Display human-readable expense type
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "exe_expenses_delete",
         },
     )
@@ -545,6 +561,7 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
     # Mark expense as approved and save changes
     exp.is_approved = True
     exp.save()
+    save_log(context, AccountingItemExpense, exp, exp.uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to expenses list
     messages.success(request, _("Request approved"))
@@ -574,6 +591,11 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     if not Registration.objects.filter(run__event__association_id=context["association_id"]).exists():
         context["hide_new"] = True
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("exe_payment_member_flags") if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals requiring confirmation
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -587,7 +609,7 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
 
     # Define base fields to display in payments table
     fields = [
-        ("member", _("Member")),
+        ("member", _("User")),
         ("method", _("Method")),
         ("type", _("Type")),
         ("status", _("Status")),
@@ -604,6 +626,14 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    def _member_cell(row: AccountingItemPayment) -> str:
+        if not row.member:
+            return ""
+        cell = str(row.member)
+        if show_flags_eye:
+            cell += get_member_flags_eye_html(row.member.uuid, flags_url)
+        return cell
+
     # Configure pagination context with field definitions and data callbacks
     context.update(
         {
@@ -612,15 +642,28 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
             "fields": fields,  # Table column definitions
             # Callbacks for formatting display values in each column
             "callbacks": {
+                "member": _member_cell,
                 "run": lambda row: str(row.registration.run) if row.registration and row.registration.run else "",
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
-                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
-                else "",
+                "receipt": lambda el: (
+                    f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                    if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                    else ""
+                ),
+            },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "member": ["registration__member__surname", "registration__member__name"],
+                "method": ["inv__method__name"],
+                "run": ["registration__run__search"],
+                "type": ["pay"],
+                "status": ["inv__status"],
+                "net": ["net"],
+                "trans": ["trans"],
             },
             "delete_view": "exe_payments_delete",
         },
@@ -634,6 +677,23 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
         "larpmanager/exe/accounting/payments.html",
         "exe_payments_edit",
     )
+
+
+@login_required
+def exe_payment_member_flags(request: HttpRequest) -> JsonResponse:
+    """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
+    context = check_association_context(request, "exe_payments")
+
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required
@@ -717,7 +777,16 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
         raise Http404(msg)
 
     # Persist changes to database
-    context["el"].save()
+    try:
+        context["el"].save()
+    except ValidationError as exc:
+        error_message = "; ".join(exc.messages)
+        if is_frame:
+            context["error_message"] = error_message
+            return render(request, "elements/dashboard/approve_confirm.html", context)
+        messages.error(request, error_message)
+        return redirect(page)
+    save_log(context, PaymentInvoice, context["el"], context["el"].uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to the page listing invoices of that type
     messages.success(request, _("Element approved!"))
@@ -791,7 +860,7 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
         {
             "fields": [
                 ("details", _("General information")),
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("value", _("Total required")),
                 ("credits", _("Remaining credits")),
                 ("status", _("Status")),
@@ -802,10 +871,14 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
                 # Display human-readable status text
                 "status": lambda el: el.get_status_display(),
                 # Show action button only for unpaid refunds
-                "action": lambda el: f"<a href='{reverse('exe_refunds_confirm', args=[el.uuid])}'>{done}</a>"
-                if el.status != RefundStatus.PAYED
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('exe_refunds_confirm', args=[el.uuid])}'>{done}</a>"
+                    if el.status != RefundStatus.PAYED
+                    else ""
+                ),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"status": ["status"]},
             "delete_view": "exe_refunds_delete",
         },
     )
@@ -856,17 +929,18 @@ def exe_refunds_confirm(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     # Retrieve the specific refund request by number
     backend_get(context, RefundRequest, refund_uuid)
 
-    # Verify the refund request is in the correct status for confirmation
-    if context["el"].status == RefundStatus.REQUEST:
-        # Update status to indicate the refund has been paid
-        context["el"].status = RefundStatus.PAYED
-    else:
-        # Prevent duplicate processing of already confirmed requests
-        msg = "already done"
-        raise Http404(msg)
+    # Lock the request so concurrent confirmations cannot both deliver it
+    with transaction.atomic():
+        refund = RefundRequest.objects.select_for_update().get(pk=context["el"].pk)
 
-    # Persist the status change to the database
-    context["el"].save()
+        # Prevent duplicate processing of already confirmed requests
+        if refund.status != RefundStatus.REQUEST:
+            msg = "already done"
+            raise Http404(msg)
+
+        # Update status to indicate the refund has been paid
+        refund.status = RefundStatus.PAYED
+        refund.save()
 
     # Show success message to the user and redirect to refunds list
     messages.success(request, _("Element approved!"))
@@ -923,7 +997,7 @@ def exe_run_accounting(request: HttpRequest, run_uuid: str) -> HttpResponse:
 
     # Get the run and verify ownership
     context["run"] = get_object_uuid(Run, run_uuid)
-    if context["run"].event.association_id != context["association_id"]:
+    if get_run_association_id(context["run"].id) != context["association_id"]:
         msg = "not your run"
         raise Http404(msg)
 
@@ -975,10 +1049,10 @@ def check_year(request: HttpRequest, context: dict) -> int:
     """
     # Get association and generate valid years range
     association = Association.objects.get(pk=context["association_id"])
-    context["years"] = list(range(timezone.now().year, association.created.year - 1, -1))
+    context["years"] = list(range(timezone.localdate().year, timezone.localtime(association.created).year - 1, -1))
 
     if not context["years"]:
-        context["years"] = [timezone.now().year]
+        context["years"] = [timezone.localdate().year]
 
     # Process POST data if present
     if request.POST:
@@ -1028,6 +1102,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     # Define date range for the selected year
     start = date(year, 1, 1)
     end = date(year + 1, 1, 1)
+    start_datetime = local_day_start(start)
+    end_datetime = local_day_start(end)
 
     # Calculate total membership fees for the year
     context["memberships"] = get_sum(
@@ -1039,8 +1115,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
             year=year + 1,
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1048,8 +1124,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     context["donations"] = get_sum(
         AccountingItemDonation.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1058,14 +1134,14 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
         AccountingItemPayment.objects.filter(
             association_id=context["association_id"],
             pay=PaymentChoices.MONEY,
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     ) - get_sum(
         AccountingItemTransaction.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
         ),
     )
 
@@ -1095,8 +1171,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     context["rimb"] = get_sum(
         AccountingItemOther.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
             oth=OtherChoices.REFUND,
         ),
     )
@@ -1109,8 +1185,8 @@ def exe_balance(request: HttpRequest) -> HttpResponse:
     for el in (
         AccountingItemExpense.objects.filter(
             association_id=context["association_id"],
-            created__gte=start,
-            created__lt=end,
+            created__gte=start_datetime,
+            created__lt=end_datetime,
             is_approved=True,
         )
         .values("balance")
@@ -1182,7 +1258,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     context["todo"] = (
         PaymentInvoice.objects.filter(association_id=context["association_id"], verified=False)
         .exclude(status=PaymentStatus.CREATED)
-        .exclude(method__slug__in=["redsys", "satispay", "paypal", "stripe", "sumup"])
+        .exclude(method__slug__in=["redsys", "satispay", "paypal", "paypal_v2", "stripe", "sumup"])
         .select_related("method")
     )
 
@@ -1212,7 +1288,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
     # Handle file upload for payment verification
     if request.method == "POST":
         form = UploadElementsForm(request.POST, request.FILES, only_one=True)
-        if form.is_valid():
+        if form.is_valid() and "first" in request.FILES:
             # Process uploaded verification file and count verified payments
             counter = invoice_verify(context, request.FILES["first"])
             messages.success(request, _("Verified payments!") + " " + str(counter))

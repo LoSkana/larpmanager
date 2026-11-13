@@ -1,5 +1,5 @@
 {% load i18n static %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     // ========== AJAX Utilities ==========
@@ -29,6 +29,10 @@ window.addEventListener('DOMContentLoaded', function() {
     // Exposed globally: the inline options editor uses it when the question is new.
     window.lmEnsureQuestionSaved = function(callback) {
         const $mainForm = $('#main_form');
+        window.lmWhenFilesBuffered($mainForm[0], function() { saveQuestion($mainForm, callback); });
+    };
+
+    function saveQuestion($mainForm, callback) {
         const $optionInputs = $('#inline-options').find('input, textarea, select');
         $optionInputs.prop('disabled', true);
         const formData = new FormData($mainForm[0]);
@@ -67,18 +71,49 @@ window.addEventListener('DOMContentLoaded', function() {
                 $mainForm.submit();
             }
         });
-    };
+    }
 
 
     // ========== Form Field Visibility ==========
+
+    // Label and help text of the max length field, by question type
+    const maxLengthMeanings = {
+        "m": {
+            label: '{% filter escapejs %}{% trans "Maximum options" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum number of options that can be selected (0 = no limit)" %}{% endfilter %}'
+        },
+        "l": {
+            label: '{% filter escapejs %}{% trans "Scale" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum value of the scale, starting from 1 (0 = default 5)" %}{% endfilter %}'
+        },
+        "r": {
+            label: '{% filter escapejs %}{% trans "Options to rank" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Number of options to put in order of preference (0 = all)" %}{% endfilter %}'
+        },
+        "additional_tickets": {
+            label: '{% filter escapejs %}{% trans "Maximum tickets" %}{% endfilter %}',
+            help: '{% filter escapejs %}{% trans "Maximum number of additional tickets that can be reserved (0 = no limit)" %}{% endfilter %}'
+        }
+    };
+    const maxLengthText = {
+        label: '{% filter escapejs %}{% trans "Maximum length" %}{% endfilter %}',
+        help: '{% filter escapejs %}{% trans "Maximum number of characters (0 = no limit)" %}{% endfilter %}'
+    };
+
+    function updateMaxLengthMeaning(selectedValue) {
+        const meaning = maxLengthMeanings[selectedValue] || maxLengthText;
+        $('#lbl_id_max_length').text(meaning.label);
+        $('#id_max_length_tr .helptext').first().text(meaning.help);
+    }
 
     // Toggle visibility of form fields based on question type
     function toggleOptions() {
         const selectedValue = $('#id_typ').val();
         const speed = 300;
 
-        // Options section visibility
-        if (["m", "s"].includes(selectedValue)) {
+        // Options section visibility; ranking options have no price nor maximum
+        $('#options').toggleClass('options-ranking', selectedValue === "r");
+        if (["m", "s", "r"].includes(selectedValue)) {
             if (!$('#options').is(':visible')) {
                 $('#options').removeClass('hide').fadeIn(speed);
             }
@@ -90,18 +125,22 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Max length field visibility
-        const maxLengtheable = ["m", "t", "p", "e", "name", "teaser", "text", "title", "additional_tickets"];
+        // Max length field visibility, with label and help text matching its meaning for the type
+        const maxLengtheable = ["m", "t", "p", "e", "l", "r", "name", "teaser", "text", "title", "additional_tickets"];
         $('#id_max_length_tr').toggle(maxLengtheable.includes(selectedValue));
+        updateMaxLengthMeaning(selectedValue);
 
         // Printable and visibility fields
-        if (["s", "m", "t", "p", "e", "c"].includes(selectedValue)) {
+        if (["s", "m", "t", "p", "e", "l", "r", "c", "title", "file"].includes(selectedValue)) {
             $('#id_printable_tr').fadeIn(speed);
             $('#id_visibility_tr').fadeIn(speed);
         } else {
             $('#id_printable_tr').fadeOut(speed);
             $('#id_visibility_tr').fadeOut(speed);
         }
+
+        // Requirements gate only the questions rendered with their own field key
+        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e", "l", "r", "file"].includes(selectedValue));
 
         // Hide visibility for specific types
         if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
@@ -138,7 +177,16 @@ window.addEventListener('DOMContentLoaded', function() {
         $('#options').insertBefore('#form_submit');
 
         // Prevent inline-option inputs from being submitted with the question form
-        $('#main_form').on('submit', function() {
+        $('#main_form').on('submit', function(ev) {
+            const selectedValue = $('#id_typ').val();
+            if (["m", "s"].includes(selectedValue)) {
+                const optionCount = $('#inline-options-body').find('.inline-option').length;
+                if (optionCount === 0) {
+                    ev.preventDefault();
+                    alert('{% filter escapejs %}{% trans "Add at least one option for this question type" %}{% endfilter %}');
+                    return;
+                }
+            }
             $('#inline-options').find('input, textarea, select').prop('disabled', true);
         });
 

@@ -22,7 +22,7 @@ from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -34,22 +34,43 @@ from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.utils import GuildInviteS2Widget
 from larpmanager.forms.writing import GuildForm
 from larpmanager.mail.base import my_send_mail
-from larpmanager.models.association import hdr
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
+from larpmanager.models.writing import (
+    Character,
+    Guild,
+    GuildMembership,
+    GuildMembershipStatus,
+    GuildRole,
+    get_event_elements,
+)
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.services.character import filter_playing_characters
-from larpmanager.utils.users.registration import get_player_characters
+from larpmanager.utils.core.headers import hdr
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+    set_auto_save,
+)
+from larpmanager.utils.registrations.characters import get_player_characters
+from larpmanager.utils.services.playing_filter import filter_playing_characters
+
+GUILD_STALE_MESSAGE = _(
+    "This guild was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
 
 
 def _get_my_character_ids(context: dict) -> list[int]:
     """Return the ids of the current player's characters in this event."""
-    return list(get_player_characters(context["member"], context["event"]).values_list("id", flat=True))
+    return list(get_player_characters(context["member"], context["event"].id).values_list("id", flat=True))
 
 
 def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool = False) -> Character | None:
     """Return an event character by uuid, following the campaign parent for inherited elements."""
-    queryset = context["event"].get_elements(Character)
+    queryset = get_event_elements(context["event"].id, Character, context=context)
     if only_mine:
         queryset = queryset.filter(player=context["member"])
     return queryset.filter(uuid=character_uuid).first()
@@ -57,7 +78,9 @@ def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool 
 
 def _get_playing_character(context: dict, character_uuid: str) -> Character | None:
     """Return a visible event character by uuid, only if active and playing in the current run."""
-    queryset = filter_playing_characters(context["event"].get_elements(Character).filter(hide=False), context["run"])
+    queryset = filter_playing_characters(
+        get_event_elements(context["event"].id, Character, context=context).filter(hide=False), context["run"]
+    )
     return queryset.filter(uuid=character_uuid).first()
 
 
@@ -142,11 +165,11 @@ def _get_my_guild_ids(context: dict, my_character_ids: list[int] | None = None) 
 
 
 def _guild_max_number(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_number", context=context)
+    return int(get_event_config(context["event"].id, "guild_max_number", context=context))
 
 
 def _guild_max_members(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_members", context=context)
+    return int(get_event_config(context["event"].id, "guild_max_members", context=context))
 
 
 @login_required
@@ -165,7 +188,7 @@ def guilds(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     max_number = _guild_max_number(context)
     total_number = Guild.objects.filter(event=context["event"]).count()
-    context["can_create_guild"] = bool(get_player_characters(context["member"], context["event"]).exists()) and (
+    context["can_create_guild"] = bool(get_player_characters(context["member"], context["event"].id).exists()) and (
         max_number <= 0 or total_number < max_number
     )
 
@@ -221,7 +244,7 @@ def guild_invites(request: HttpRequest, event_slug: str) -> HttpResponse:
     """List pending guild invites for any of the current player's characters."""
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
-    my_character_ids = list(get_player_characters(context["member"], context["event"]).values_list("id", flat=True))
+    my_character_ids = list(get_player_characters(context["member"], context["event"].id).values_list("id", flat=True))
     context["invites"] = (
         GuildMembership.objects.filter(
             character_id__in=my_character_ids,
@@ -239,7 +262,7 @@ def guild_create(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new guild; the creating character becomes its first admin."""
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
-    my_characters = get_player_characters(context["member"], context["event"])
+    my_characters = get_player_characters(context["member"], context["event"].id)
     if not my_characters.exists():
         messages.error(request, _("You need a character to create a guild"))
         return redirect("guilds", event_slug=event_slug)
@@ -282,10 +305,26 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
     _check_admin(context, guild_obj)
 
+    set_auto_save(context)
+    init_auto_save(context, guild_obj)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _guild_edit_ajax(request, context, guild_obj)
+
+    if request.method == "GET" and context.get("auto_save"):
+        context["auto_save_draft"] = pop_draft(
+            context["member"], draft_element_key(context, "guild", guild_obj), guild_obj.updated
+        )
+
     if request.method == "POST":
+        # Keep the submitted data on screen, so the player can copy it before reloading
         form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
-        if form.is_valid():
+        if is_stale(context, request, guild_obj):
+            messages.error(request, GUILD_STALE_MESSAGE)
+        elif form.is_valid():
             form.save()
+            clear_draft(context["member"], draft_element_key(context, "guild", guild_obj))
             messages.success(request, _("Guild updated!"))
             return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
     else:
@@ -294,6 +333,11 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
     context["guild"] = guild_obj
     context["form"] = form
     return render(request, "larpmanager/event/guild_edit.html", context)
+
+
+def _guild_edit_ajax(request: HttpRequest, context: dict, guild_obj: Guild) -> JsonResponse:
+    """Stash the guild form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, "guild", guild_obj)
 
 
 @login_required

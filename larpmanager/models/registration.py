@@ -70,6 +70,21 @@ class TicketTier(models.TextChoices):
             TicketTier.SELLER: "Seller",
         }
 
+    @classmethod
+    def non_player_tiers(cls) -> frozenset:
+        """Return tiers that do not consume a max_pg player slot / are excluded from player counts."""
+        return frozenset(
+            {
+                cls.LOTTERY,
+                cls.WAITING,
+                cls.FILLER,
+                cls.STAFF,
+                cls.NPC,
+                cls.COLLABORATOR,
+                cls.SELLER,
+            }
+        )
+
 
 class RegistrationTicket(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationTicket model."""
@@ -526,3 +541,23 @@ class RegistrationCharacterRel(BaseModel):
         format="JPEG",
         options={"quality": 90},
     )
+
+
+class CheckIn(BaseModel):
+    """Tracks on-site QR code check-in for a registration."""
+
+    registration = models.OneToOneField(Registration, on_delete=models.CASCADE, related_name="check_in")
+
+    checked_in_at = models.DateTimeField(null=True, blank=True)
+
+    checked_in_by = models.ForeignKey(
+        Member,
+        on_delete=models.SET_NULL,
+        related_name="checkins_performed",
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.registration} - {self.checked_in_at}"

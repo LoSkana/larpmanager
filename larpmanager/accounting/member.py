@@ -22,7 +22,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -46,7 +46,6 @@ from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, MemberConfig, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.common import get_now
 
 
 def info_accounting(context: dict) -> None:
@@ -152,7 +151,7 @@ def _init_regs(
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
     if registration.run.start:
-        if registration.run.start < timezone.now().date():
+        if registration.run.start < timezone.localdate():
             return
         context["registration_years"][registration.run.start.year] = 1
 
@@ -292,7 +291,7 @@ def _info_membership(context: dict, member: Member) -> None:
         return
 
     # Get current year for membership calculations
-    current_year = timezone.now().year
+    current_year = timezone.localdate().year
 
     # Retrieve all membership fee years for this member and association
     context["membership_fee"] = []
@@ -328,14 +327,16 @@ def _info_membership(context: dict, member: Member) -> None:
         # Build full date string with current year
         membership_day += f"-{current_year}"
 
-        # Parse and make aware with explicit UTC
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(tzinfo=UTC)
+        # Parse and make aware in the current timezone
+        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(
+            tzinfo=timezone.get_current_timezone(),
+        )
 
         # Add grace period months
         membership_deadline_date += relativedelta(months=membership_grace_period_months)
 
         # Check if we're still within the grace period
-        context["grazing"] = get_now() < membership_deadline_date
+        context["grazing"] = timezone.now() < membership_deadline_date
 
 
 def membership_fee_pending_config_name(association_id: int, year: int) -> str:
@@ -359,6 +360,12 @@ def set_membership_fee_pending(member_id: int, association_id: int, year: int, r
     return created or obj.value == str(registration_id)
 
 
+def is_membership_fee_reserved(association_id: int, member_id: int, year: int) -> bool:
+    """Return True if a registration invoice already reserves this year's membership fee for the member."""
+    config_name = membership_fee_pending_config_name(association_id, year)
+    return MemberConfig.objects.filter(member_id=member_id, name=config_name, deleted__isnull=True).exists()
+
+
 def get_membership_fee_for_reg(
     association_id: int,
     member_id: int,
@@ -371,6 +378,7 @@ def get_membership_fee_for_reg(
      - membership_fee_separated is False
      - the event is not in a past year
      - the member has not already paid the membership fee
+     - the member has no wire-transfer membership invoice pending staff approval
      - the signup is not gifted (redeem_code)
      - no other registration's invoice already reserves the fee for the same year.
     """
@@ -381,21 +389,33 @@ def get_membership_fee_for_reg(
         or redeem_code
     ):
         return 0
-    current_year = timezone.now().year
+
+    current_year = timezone.localdate().year
     event_year = run.start.year
     if event_year < current_year:
         return 0
+
     fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
         return 0
+
     already_paid = AccountingItemMembership.objects.filter(
         member_id=member_id,
         association_id=association_id,
         year=event_year,
         deleted__isnull=True,
     ).exists()
-    if already_paid:
+
+    pending_wire = PaymentInvoice.objects.filter(
+        member_id=member_id,
+        association_id=association_id,
+        typ=PaymentType.MEMBERSHIP,
+        status=PaymentStatus.SUBMITTED,
+    ).exists()
+
+    if already_paid or pending_wire:
         return 0
+
     # If another registration's invoice already includes the fee, don't bundle again
     config_name = membership_fee_pending_config_name(association_id, event_year)
     qs = MemberConfig.objects.filter(member_id=member_id, name=config_name, deleted__isnull=True)
@@ -403,4 +423,5 @@ def get_membership_fee_for_reg(
         qs = qs.exclude(value=str(registration.id))
     if qs.exists():
         return 0
+
     return fee

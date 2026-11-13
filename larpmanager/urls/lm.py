@@ -30,9 +30,19 @@ urlpatterns = [
         name="ses_notification",
     ),
     path(
+        "csp-report/",
+        views_lm.csp_report,
+        name="csp_report",
+    ),
+    path(
         "get-started/",
         views_lm.get_started,
         name="get_started",
+    ),
+    path(
+        "get-started-real/",
+        views_lm.get_started_real,
+        name="get_started_real",
     ),
     path(
         "join/",
@@ -48,6 +58,11 @@ urlpatterns = [
         "guides/",
         views_lm.guides,
         name="guides",
+    ),
+    path(
+        "concepts/",
+        views_lm.concepts,
+        name="concepts",
     ),
     path(
         "guide/<slug:slug>/",
@@ -158,6 +173,11 @@ urlpatterns = [
         "<slug:event_slug>/activate/<slug:feature_slug>/",
         views_lm.activate_feature_event,
         name="activate_feature_event",
+    ),
+    path(
+        "accessibility/",
+        views_lm.set_accessibility,
+        name="set_accessibility",
     ),
     path(
         "toggle_sidebar/",

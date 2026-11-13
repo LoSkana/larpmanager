@@ -1,282 +1,214 @@
-from difflib import SequenceMatcher
-from pathlib import Path
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from typing import Any
 
-import deepl
 from bs4 import BeautifulSoup
-from django.conf import settings as conf_settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
-from django.http import HttpRequest, JsonResponse
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.db import connection
 from django.urls import reverse
-from whoosh.fields import ID, TEXT, Schema
-from whoosh.index import create_in, open_dir
-from whoosh.qparser import QueryParser
+from django.utils.text import slugify
 
-from larpmanager.models.access import AssociationPermission, EventPermission
-from larpmanager.models.event import Run
 from larpmanager.models.larpmanager import LarpManagerGuide, LarpManagerTutorial
-from larpmanager.utils.larpmanager.tasks import background_auto, notify_admins
 
-TUTORIAL_INDEX = "data/whoosh/tutorial_index"
+SEARCH_CONFIG = "english"
 
-GUIDE_INDEX = "data/whoosh/GUIDE_INDEX"
+GUIDES_LIMIT = 5
 
-
-def _save_index(index_dir: str, schema: Any) -> object:
-    """Create or open a Whoosh index directory."""
-    # Create directory if it doesn't exist and return new index
-    if not Path(index_dir).exists():
-        Path(index_dir).mkdir(mode=0o770, parents=True, exist_ok=True)
-        return create_in(index_dir, schema, "MAIN")
-
-    # Open existing index directory
-    return open_dir(index_dir, "MAIN")
+TUTORIALS_LIMIT = 10
 
 
-def get_or_create_index_tutorial(tutorial_index_directory: str) -> object:
-    """Get or create a tutorial search index with predefined schema."""
-    # Define schema for tutorial search indexing
-    tutorial_schema = Schema(
-        tutorial_id=ID(stored=True),
-        slug=TEXT(stored=True),
-        title=TEXT(stored=True),
-        section_title=TEXT(stored=True),
-        content=TEXT(stored=True),
-    )
-    # Create and return the index using the defined schema
-    return _save_index(tutorial_index_directory, tutorial_schema)
+def _html_to_text(html: str | None) -> str:
+    """Strip HTML tags, returning the plain text content."""
+    return BeautifulSoup(html or "", "html.parser").get_text(" ", strip=True)
 
 
-@background_auto(queue="whoosh", skip_duplicates=True)
-def add_tutorial_to_search_index(tutorial_id: int) -> None:
-    """Index tutorial content for search functionality.
+def _html_sections(html: str | None, *, include_subsections: bool = False) -> list[tuple[str, str]]:
+    """Split HTML into (heading, text) pairs, one for each H2/H3 section with content.
 
-    Parses tutorial HTML content to extract sections and indexes them
-    for full-text search. Each H2/H3 section is indexed separately
-    with its associated content.
-
-    Args:
-        tutorial_id: The primary key ID of the tutorial to index.
-
-    Returns:
-        None: Function performs indexing operations but returns nothing.
-
-    Raises:
-        No exceptions are raised - ObjectDoesNotExist is handled internally.
-
+    An H2 section stops at its first H3, so sections do not overlap when ranked. With
+    include_subsections it extends to the next H2 instead.
     """
-    # Attempt to retrieve the tutorial instance
-    try:
-        instance = LarpManagerTutorial.objects.get(pk=tutorial_id)
-    except ObjectDoesNotExist:
-        return
-
-    # Initialize search index and writer
-    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
-    writer = ix.writer()
-
-    # Remove any existing index entries for this tutorial
-    writer.delete_by_term("tutorial_id", str(tutorial_id))
-
-    # Parse HTML content to extract sections
-    soup = BeautifulSoup(instance.descr, "html.parser")
-
-    # Process each section (H2/H3 headings)
-    for section in soup.find_all(["h2", "h3"]):
+    sections = []
+    soup = BeautifulSoup(html or "", "html.parser")
+    for heading in soup.find_all(["h2", "h3"]):
         content = []
-
-        # Collect content following this section until next heading
-        for sib in section.find_next_siblings():
-            if sib.name in ["h2", "h3"]:
+        # Collect content following this heading until the next one
+        for sibling in heading.find_next_siblings():
+            if sibling.name == "h2" or (sibling.name == "h3" and (heading.name == "h3" or not include_subsections)):
                 break
-            content.append(sib.get_text())
+            content.append(sibling.get_text())
+        text = "\n".join(content).strip()
+        if text:
+            sections.append((heading.get_text().strip(), text))
+    return sections
 
-        # Add section to search index
-        writer.add_document(
-            tutorial_id=str(tutorial_id),
-            slug=instance.slug,
-            title=instance.name,
-            section_title=section.get_text(),
-            content="\n".join(content),
+
+def _rank_sections(sections: list[tuple[Any, str, str]], search_text: str) -> list[int]:
+    """Return the indexes of the (owner, title, content) sections matching, best first."""
+    if not sections:
+        return []
+
+    # Rank every section in a single query, weighting headings over their content
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT section.idx
+            FROM unnest(%s::text[], %s::text[]) WITH ORDINALITY AS section(title, content, idx),
+                 websearch_to_tsquery(%s::regconfig, %s) AS query,
+                 LATERAL (
+                     SELECT setweight(to_tsvector(%s::regconfig, section.title), 'A')
+                         || setweight(to_tsvector(%s::regconfig, section.content), 'B') AS vector
+                 ) AS doc
+            WHERE doc.vector @@ query
+            ORDER BY ts_rank(doc.vector, query) DESC
+            """,
+            [
+                [section_title for _owner, section_title, _content in sections],
+                [content for _owner, _section_title, content in sections],
+                SEARCH_CONFIG,
+                search_text,
+                SEARCH_CONFIG,
+                SEARCH_CONFIG,
+            ],
         )
-
-    # Commit changes to the index
-    writer.commit()
+        return [row[0] - 1 for row in cursor.fetchall()]
 
 
-@background_auto(queue="whoosh", skip_duplicates=True)
-def remove_tutorial_from_search_index(tutorial_id: int) -> None:
-    """Remove a tutorial from the search index by ID."""
-    # Get or create the tutorial index
-    ix = get_or_create_index_tutorial(TUTORIAL_INDEX)
-
-    # Create writer and delete tutorial by ID
-    writer = ix.writer()
-    writer.delete_by_term("tutorial_id", str(tutorial_id))
-    writer.commit()
+def _tutorial_doc(tutorial: LarpManagerTutorial, section_title: str, text: str) -> dict[str, str]:
+    """Build the result for a tutorial section, linked through its anchor."""
+    url = reverse("tutorials", args=[tutorial.slug])
+    ref = tutorial.slug
+    if section_title:
+        url += f"#{slugify(section_title)}"
+        ref += f"#{slugify(section_title)}"
+    return {"title": tutorial.name, "section": section_title, "url": url, "text": text, "ref": ref}
 
 
-def get_or_create_index_guide(index_directory_path: str) -> object:
-    """Get or create a search index for guide documents."""
-    # Define schema for guide documents with searchable fields
-    guide_schema = Schema(
-        guide_id=ID(stored=True),
-        slug=TEXT(stored=True),
-        title=TEXT(stored=True),
-        content=TEXT(stored=True),
+def search_guides(search_text: str) -> list[dict[str, str]]:
+    """Full-text search published guides, best matches first, each with its best section."""
+    search_query = SearchQuery(search_text, config=SEARCH_CONFIG, search_type="websearch")
+    vector = SearchVector("title", weight="A", config=SEARCH_CONFIG) + SearchVector(
+        "text", weight="B", config=SEARCH_CONFIG
     )
-    # Create or open the index using the defined schema
-    return _save_index(index_directory_path, guide_schema)
+    guides = (
+        LarpManagerGuide.objects.filter(published=True)
+        .annotate(search=vector, rank=SearchRank(vector, search_query))
+        .filter(search=search_query)
+        .order_by("-rank")[:GUIDES_LIMIT]
+    )
+
+    sections = [
+        (guide, section_title, content) for guide in guides for section_title, content in _html_sections(guide.text)
+    ]
+    best_sections: dict[int, tuple[str, str]] = {}
+    for index in _rank_sections(sections, search_text):
+        guide, section_title, content = sections[index]
+        best_sections.setdefault(guide.pk, (section_title, content))
+
+    results = []
+    for guide in guides:
+        section_title, text = best_sections.get(guide.pk, ("", _html_to_text(guide.text)))
+        results.append(
+            {"title": guide.title, "section": section_title, "url": reverse("guide", args=[guide.slug]), "text": text}
+        )
+    return results
 
 
-@background_auto(queue="whoosh", skip_duplicates=True)
-def add_guide_to_search_index(guide_id: Any) -> None:
-    """Index a guide document for search functionality.
+def search_tutorials(search_text: str) -> list[dict[str, str]]:
+    """Full-text search tutorial sections, grouped by tutorial relevance.
 
-    Args:
-        guide_id: ID of the LarpManagerGuide to index
-
+    Tutorials are ranked on their whole content, then the H2/H3 sections of the
+    matching ones are ranked individually, keeping only the sections that match.
     """
-    try:
-        instance = LarpManagerGuide.objects.get(pk=guide_id)
-    except ObjectDoesNotExist:
-        return
-
-    if not instance.published:
-        return
-
-    ix = get_or_create_index_guide(GUIDE_INDEX)
-    writer = ix.writer()
-    writer.delete_by_term("guide_id", str(guide_id))
-
-    soup = BeautifulSoup(instance.text, "html.parser")
-    text = soup.get_text(" ", strip=True)
-    writer.add_document(
-        guide_id=str(guide_id),
-        slug=instance.slug,
-        title=instance.title,
-        content=text,
+    search_query = SearchQuery(search_text, config=SEARCH_CONFIG, search_type="websearch")
+    vector = SearchVector("name", weight="A", config=SEARCH_CONFIG) + SearchVector(
+        "descr", weight="B", config=SEARCH_CONFIG
     )
-    writer.commit()
-
-
-@background_auto(queue="whoosh", skip_duplicates=True)
-def remove_guide_from_search_index(guide_id: int) -> None:
-    """Remove a guide from the search index by ID."""
-    # Get or create the guide search index
-    ix = get_or_create_index_guide(GUIDE_INDEX)
-
-    # Create writer and delete guide by ID
-    writer = ix.writer()
-    writer.delete_by_term("guide_id", str(guide_id))
-    writer.commit()
-
-
-def similarity(first_string: str, second_string: str) -> float:
-    """Calculate similarity ratio between two strings (case-insensitive)."""
-    return SequenceMatcher(None, first_string.lower(), second_string.lower()).ratio()
-
-
-def get_sorted_permissions(model: type, query: str) -> list[dict[str, str]]:
-    """Get permissions filtered by query and sorted by name similarity."""
-    # Filter permissions by name or description containing the query
-    permissions = model.objects.filter(Q(name__icontains=query) | Q(descr__icontains=query)).values(
-        "name",
-        "slug",
-        "descr",
+    tutorials = (
+        LarpManagerTutorial.objects.annotate(search=vector, rank=SearchRank(vector, search_query))
+        .filter(search=search_query)
+        .order_by("-rank")[:TUTORIALS_LIMIT]
     )
 
-    # Sort by similarity to query string, most similar first
-    return sorted(permissions, key=lambda permission: similarity(permission["name"], query), reverse=True)
+    sections = [
+        (tutorial, section_title, content)
+        for tutorial in tutorials
+        for section_title, content in _html_sections(tutorial.descr)
+    ]
+    matching_indexes = _rank_sections(sections, search_text)
+
+    # Keep tutorial relevance as primary order, section relevance as secondary
+    tutorial_order = {tutorial.pk: position for position, tutorial in enumerate(tutorials)}
+    matching_indexes.sort(key=lambda index: tutorial_order[sections[index][0].pk])
+
+    return [
+        _tutorial_doc(sections[index][0], sections[index][1], sections[index][2])
+        for index in matching_indexes[:TUTORIALS_LIMIT]
+    ]
 
 
-def query_index(request: HttpRequest) -> JsonResponse:
-    """Handle search queries with translation support.
+def get_tutorial_doc(tutorial_reference: str) -> dict[str, str] | None:
+    """Return the tutorial named by a "slug" or "slug#section" reference, narrowed to that section."""
+    slug, _separator, section_slug = tutorial_reference.replace("/", "").partition("#")
+    tutorial = LarpManagerTutorial.objects.filter(slug=slug).first()
+    if not tutorial:
+        return None
 
-    Processes search requests and translates content using DeepL API,
-    then searches through both permission-based navigation links, guides and
-    tutorial content to provide relevant results.
+    for section_title, content in _html_sections(tutorial.descr, include_subsections=True):
+        if section_slug and slugify(section_title) == section_slug:
+            return _tutorial_doc(tutorial, section_title, content)
+    return _tutorial_doc(tutorial, "", _html_to_text(tutorial.descr))
 
-    Args:
-        request: Django HTTP request object containing POST data with:
-            - q: Search query string
-            - r: Optional run UUID for event-specific search
 
-    Returns:
-        JsonResponse containing search results with guides, tutorials, and links.
-        Returns empty JsonResponse if run lookup fails.
+def get_tutorial_index() -> list[tuple[str, str, list[str]]]:
+    """Return every tutorial as (slug, name, section titles), in display order."""
+    return [
+        (tutorial.slug, tutorial.name, [title for title, _content in _html_sections(tutorial.descr)])
+        for tutorial in LarpManagerTutorial.objects.order_by("order", "slug")
+    ]
 
-    Raises:
-        ObjectDoesNotExist: If specified run doesn't exist (handled internally)
 
-    """
-    # Extract and validate input parameters
-    original_search_query: str = request.POST.get("q", "")
-    run_uuid: str = request.POST.get("r", "")
+def _html_to_markdown(html: str | None) -> str:
+    """Convert simple HTML (headings, paragraphs, lists, links) to compact Markdown."""
+    soup = BeautifulSoup(html or "", "html.parser")
+    for link in soup.find_all("a"):
+        href = link.get("href", "")
+        link.replace_with(f"[{link.get_text(strip=True)}]({href})" if href else link.get_text())
+    lines = []
+    for element in soup.find_all(["h2", "h3", "h4", "p", "li"]):
+        text = " ".join(element.get_text(" ", strip=True).split())
+        if not text:
+            continue
+        if element.name in {"h2", "h3", "h4"}:
+            lines.append(f"\n### {text}")
+        elif element.name == "li":
+            lines.append(f"- {text}")
+        else:
+            lines.append(text)
+    return "\n".join(lines).strip()
 
-    # Translate query string to English for consistent search
-    translator = deepl.Translator(conf_settings.DEEPL_API_KEY)
-    translated_query: str = str(translator.translate_text(original_search_query, target_lang="EN-US"))
 
-    # Log search activity for admin monitoring
-    notify_admins(f"query_index: {translated_query}", f"{original_search_query} - {request.user}")
-
-    # Build permission-based navigation links
-    permission_links: list[dict[str, str]] = []
-    if run_uuid:
-        # Event-specific permissions and links
-        try:
-            run = Run.objects.select_related("event").get(
-                uuid=run_uuid, event__association_id=request.association["id"]
-            )
-        except ObjectDoesNotExist:
-            return JsonResponse({})
-
-        sorted_permissions: list[dict[str, Any]] = get_sorted_permissions(EventPermission, translated_query)
-        permission_links = [
-            {
-                "name": permission["name"],
-                "descr": permission["descr"],
-                "href": reverse(permission["slug"], args=[run.get_slug()]),
-            }
-            for permission in sorted_permissions
-        ]
-    else:
-        # Organization-wide permissions and links
-        sorted_permissions = get_sorted_permissions(AssociationPermission, translated_query)
-        permission_links = [
-            {"name": permission["name"], "descr": permission["descr"], "href": reverse(permission["slug"])}
-            for permission in sorted_permissions
-        ]
-
-    # Search through guide content using Whoosh index
-    guide_index = get_or_create_index_tutorial(GUIDE_INDEX)
-    with guide_index.searcher() as searcher:
-        query = QueryParser("content", guide_index.schema).parse(translated_query)
-        search_results = searcher.search(query, limit=5)
-        matching_guides: list[dict[str, str]] = [
-            {"slug": result["slug"], "title": result["title"], "snippet": result["content"][:300]}
-            for result in search_results
-        ]
-
-    # Search through tutorial content using Whoosh index
-    tutorial_index = get_or_create_index_tutorial(TUTORIAL_INDEX)
-    with tutorial_index.searcher() as searcher:
-        query = QueryParser("content", tutorial_index.schema).parse(translated_query)
-        search_results = searcher.search(query, limit=10)
-        matching_tutorials: list[dict[str, str]] = [
-            {
-                "slug": result["slug"],
-                "title": result["title"],
-                "section": result["section_title"],
-                "snippet": result["content"][:300],
-            }
-            for result in search_results
-        ]
-
-    # Return consolidated search results
-    return JsonResponse(
-        {"guides": matching_guides, "tutorials": matching_tutorials, "links": permission_links},
-        safe=False,
-    )
+def get_guides_markdown() -> list[tuple[str, str, str]]:
+    """Return every published guide as (title, url, Markdown text), in display order."""
+    return [
+        (guide.title, reverse("guide", args=[guide.slug]), _html_to_markdown(guide.text))
+        for guide in LarpManagerGuide.objects.filter(published=True).order_by("number", "slug")
+    ]

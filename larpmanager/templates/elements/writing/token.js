@@ -1,4 +1,4 @@
-<script>
+<script nonce="{{ csp_nonce }}">
 
 if (typeof window.generateToken === 'undefined') {
     window.generateToken = function(length = 32) {

@@ -39,13 +39,16 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     Operation,
     RuleExp,
     SystemExp,
 )
+from larpmanager.models.writing import get_event_elements
 
 
 class OrgaSystemExpForm(BaseModelForm):
@@ -100,7 +103,7 @@ class OrgaDeliveryExpForm(ExpBaseForm):
         super().__init__(*args, **kwargs)
 
         event = self.params.get("event")
-        systems = list(event.get_elements(SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp, context=self.params)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001
@@ -150,7 +153,7 @@ class OrgaAbilityExpForm(ExpBaseForm):
         event = self.params.get("event")
 
         # Handle system field visibility
-        systems = list(event.get_elements(SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp, context=self.params)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001
@@ -173,6 +176,13 @@ class OrgaAbilityExpForm(ExpBaseForm):
         if not exp_user:
             self.delete_field("visible")
 
+        # Creation only is meaningful only for participants creating characters under the review process
+        creation_review = "user_character" in self.params.get("features", {}) and get_event_config(
+            event.id, "user_character_approval", context=self.params
+        )
+        if not exp_user or not creation_review:
+            self.delete_field("creation_only")
+
     def clean(self) -> dict:
         """Validate that the ability is not listed as its own prerequisite."""
         cleaned_data = super().clean()
@@ -192,6 +202,58 @@ class OrgaAbilityTypeExpForm(BaseModelForm):
     class Meta:
         model = AbilityTypeExp
         exclude = ("number",)
+
+
+class OrgaCallExpForm(BaseModelForm):
+    """Form for OrgaCallExp."""
+
+    page_title = _("Call")
+
+    page_info = _(
+        "Manage the game calls; participants see the calls written in uppercase in the description of their abilities"
+    )
+
+    class Meta:
+        model = CallExp
+        exclude = ("number",)
+
+        widgets: ClassVar[dict] = {"descr": WritingTinyMCE()}
+
+
+class OrgaExclusiveExpForm(BaseModelForm):
+    """Form for OrgaExclusiveExp."""
+
+    page_title = _("Exclusive group")
+
+    page_info = _(
+        "Manage the groups of abilities of which a character can obtain only a maximum number; "
+        "staff can always assign any ability"
+    )
+
+    class Meta:
+        model = ExclusiveExp
+        exclude = ("number", "order")
+        widgets: ClassVar[dict] = {"abilities": AbilityS2WidgetMulti}
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure event-related fields."""
+        super().__init__(*args, **kwargs)
+        self.configure_field_event("abilities", self.params.get("event"))
+
+    def clean(self) -> dict:
+        """Validate that the maximum is lower than the number of abilities in the group."""
+        cleaned_data = super().clean()
+        abilities = cleaned_data.get("abilities")
+        max_count = cleaned_data.get("max_count")
+        if abilities is None or max_count is None:
+            return cleaned_data
+
+        min_abilities = 2
+        if len(abilities) < min_abilities:
+            self.add_error("abilities", _("Select at least two abilities."))
+        elif max_count >= len(abilities):
+            self.add_error("max_count", _("The maximum must be lower than the number of abilities in the group."))
+        return cleaned_data
 
 
 class OrgaRuleExpForm(BaseModelForm):
@@ -268,7 +330,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
         self.delete_field("name")
 
         event = self.params.get("event")
-        systems = list(event.get_elements(SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp, context=self.params)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001

@@ -1,29 +1,31 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
+
+// drafts are saved automatically, no need to warn before leaving
+window.lmDraftAutosave = true;
 
 var lm_auto_save = {
     url: '{{ request.path }}',
+    form_id: '{{ auto_save_form_id|default:"main_form" }}',
     interval: 5 * 1000,
     timeout: 15 * 1000,
-    stopped: false,
+    // field that must be filled before a not-yet-created element is auto-saved for the first time;
+    // empty when the form always edits an already existing element (no such gating needed)
+    required_field: '{{ auto_save_required_field|default_if_none:"id_name" }}',
     running: false,
     last_data: null
 };
+
+function lmAutoSaveForm() {
+    return $('#' + lm_auto_save.form_id);
+}
 
 function lmAutoSaveData() {
     if (window.tinyMCE && typeof tinyMCE.triggerSave === 'function') {
         tinyMCE.triggerSave();
     }
-    return $('#main_form').serialize();
-}
-
-function lmAutoSaveFlash() {
-    var submit = $('#form_submit');
-    submit.addClass('auto_saved');
-    setTimeout(function() {
-        submit.removeClass('auto_saved');
-    }, 1000);
+    return lmAutoSaveForm().serialize();
 }
 
 function lmAutoSaveWarn(text) {
@@ -40,44 +42,27 @@ function lmAutoSaveWarn(text) {
 }
 
 function lmAutoSaveSubmit() {
-    if (lm_auto_save.stopped || lm_auto_save.running) return;
+    if (lm_auto_save.running) return;
 
     var data = lmAutoSaveData();
 
     // nothing changed since the last save
     if (data === lm_auto_save.last_data) return;
 
-    // a new character is created only once it has a name
-    if (!$('#base_updated').val() && !$.trim($('#id_name').val()).length) return;
+    // a not-yet-created element is auto-saved only once its required field is filled
+    if (!$('#base_updated').val() && lm_auto_save.required_field
+        && !$.trim($('#' + lm_auto_save.required_field).val()).length) return;
 
     lm_auto_save.running = true;
 
+    // stashes a staging draft server-side (redis, keyed by user + element); never writes the real record
     $.ajax({
         type: "POST",
         url: lm_auto_save.url,
         data: data + "&ajax=1",
         timeout: lm_auto_save.timeout
-    }).done(function(msg) {
-        if (!msg || msg.res !== 'ok') {
-            if (msg && msg.stale) {
-                lm_auto_save.stopped = true;
-                lmAutoSaveWarn(msg.warn);
-            }
-            return;
-        }
-
+    }).done(function() {
         lm_auto_save.last_data = data;
-        $('#base_updated').val(msg.updated);
-
-        // the character has just been created: keep on saving on its edit page
-        if (msg.url) {
-            lm_auto_save.url = msg.url;
-            lm_auto_save.last_data = null;
-            window.history.replaceState(null, '', msg.url);
-            $('#main_form').attr('action', msg.url);
-        }
-
-        lmAutoSaveFlash();
     }).fail(function() {
         lmAutoSaveWarn('{% trans "Network or server error" %}');
     }).always(function() {
@@ -85,13 +70,59 @@ function lmAutoSaveSubmit() {
     });
 }
 
+function lmAutoSaveRestoreDraft(draftData) {
+    var $form = lmAutoSaveForm();
+
+    // clear checkbox/radio state first: the draft only carries pairs for checked ones
+    $form.find('input:checkbox, input:radio').prop('checked', false);
+
+    $.each(draftData.split('&'), function(index, pair) {
+        if (!pair) return;
+        var parts = pair.split('=');
+        var name = decodeURIComponent(parts[0].replace(/\+/g, ' '));
+        var value = decodeURIComponent((parts[1] || '').replace(/\+/g, ' '));
+        var $field = $form.find('[name="' + name + '"]');
+        if (!$field.length) return;
+
+        if ($field.is(':checkbox, :radio')) {
+            $field.filter('[value="' + value + '"]').prop('checked', true);
+        } else {
+            $field.val(value);
+        }
+        $field.trigger('change');
+    });
+
+    if (window.tinyMCE) {
+        $.each(tinyMCE.editors, function(index, editor) {
+            editor.load();
+        });
+    }
+
+    var $banner = $('<div class="auto-save-draft-banner">')
+        .append($('<span>').text('{% trans "An unsaved draft was restored. You can submit the form to confirm the changes, or reload the page to discard them." %}'))
+        .append(
+            $('<a href="#" class="auto-save-draft-dismiss" title="' + '{% trans "Dismiss" %}' + '">')
+                .append($('<i class="fas fa-times">'))
+        );
+    $banner.find('.auto-save-draft-dismiss').on('click', function(event) {
+        event.preventDefault();
+        $banner.remove();
+    });
+    $('#banner').after($banner);
+}
+
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         // version stamp of the loaded element, to detect saves done from another window
-        $('#main_form').append(
+        lmAutoSaveForm().append(
             $('<input>').attr({type: 'hidden', name: 'base_updated', id: 'base_updated'})
                         .val('{{ base_updated }}')
         );
+
+        var draftData = '{{ auto_save_draft|default:""|escapejs }}';
+        if (draftData) {
+            lmAutoSaveRestoreDraft(draftData);
+        }
 
         lm_auto_save.last_data = lmAutoSaveData();
 

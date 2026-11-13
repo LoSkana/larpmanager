@@ -82,7 +82,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
 
     # Signup
     go_to(page, live_server, "/")
-    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("link", name="Registrations are open!").click()
     page.locator("#register_form").click()
     submit_register(page)
 
@@ -165,7 +165,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
 def check_special_cod(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#id_registration_no_grouping").check()
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
@@ -175,7 +175,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
         edit_iframe.locator("#one"),
-        "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
+        "Registration Member (*) Admin Test - orga@test.it Admin Test - orga@test.it",
     )
     save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")

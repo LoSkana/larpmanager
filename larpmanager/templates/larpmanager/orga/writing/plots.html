@@ -3,6 +3,10 @@
 {% block title %}
     {% trans "Plots" %} - {{ event.name }}
 {% endblock title %}
+{% block empty_state %}
+    {% trans "Plots are storylines that involve several characters." as empty_text %}
+    {% include "elements/table/empty_state.html" with text=empty_text %}
+{% endblock empty_state %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>

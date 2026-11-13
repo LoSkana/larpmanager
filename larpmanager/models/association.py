@@ -19,6 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import zoneinfo
+from functools import cache
 from typing import Any, ClassVar
 
 from babel.numbers import get_currency_symbol
@@ -62,6 +64,19 @@ class Currency(models.TextChoices):
     CAD = "c", "CAD"
     JPY = "j", "JPY"
     SEK = "s", "SEK"
+
+
+DEFAULT_TIMEZONE = "Europe/Rome"
+
+
+@cache
+def timezone_choices() -> list[tuple[str, str]]:
+    """Return the selectable IANA timezones, sorted by name."""
+    names = {
+        name for name in zoneinfo.available_timezones() if "/" in name and not name.startswith(("Etc/", "SystemV/"))
+    }
+    names.add("UTC")
+    return [(name, name.replace("_", " ")) for name in sorted(names)]
 
 
 class AssociationPlan(models.TextChoices):
@@ -177,6 +192,14 @@ class Association(UuidMixin, BaseModel):
         null=True,
         verbose_name=_("Payment currency"),
         help_text=_("The currency you want to use for all payments and pricing"),
+    )
+
+    timezone = models.CharField(
+        max_length=64,
+        choices=timezone_choices,
+        default=DEFAULT_TIMEZONE,
+        verbose_name=_("Timezone"),
+        help_text=_("Timezone used to enter and display dates and times"),
     )
 
     promoter = models.ImageField(
@@ -350,7 +373,7 @@ class AssociationConfig(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="configs")
 
@@ -391,9 +414,10 @@ class AssociationTextType(models.TextChoices):
     PRIVACY = "y", _("Privacy")
 
     REMINDER_MEMBERSHIP = "rm", _("Membership request reminder email")
-    REMINDER_MEMBERSHIP_FEE = "rf", _("Membership request reminder email")
+    REMINDER_MEMBERSHIP_FEE = "rf", _("Membership fee reminder email")
     REMINDER_PAY = "rp", _("Payment reminder email")
     REMINDER_PROFILE = "rr", _("Profile completion reminder email")
+    REMINDER_CHARACTER = "rc", _("Character creation reminder email")
 
 
 class AssociationText(UuidMixin, BaseModel):
@@ -427,6 +451,11 @@ class AssociationText(UuidMixin, BaseModel):
         """Return string representation combining type and language displays."""
         # noinspection PyUnresolvedReferences
         return f"{self.get_typ_display()} {self.get_language_display()}"
+
+    def get_display_name(self) -> str:
+        """Return the display name combining language and type."""
+        # noinspection PyUnresolvedReferences
+        return f"{self.get_language_display()} - {self.get_typ_display()}"
 
     class Meta:
         constraints: ClassVar[list] = [
@@ -540,52 +569,6 @@ class AssociationTranslation(UuidMixin, BaseModel):
         verbose_name_plural = _("Association Translations")
 
 
-def hdr(association_or_related_object: Association | Any) -> str:
-    """Return a formatted header string with the association name in brackets."""
-    # Check if object is an Association instance directly
-    if isinstance(association_or_related_object, Association):
-        return f"[{association_or_related_object.name}] "
-    # Check if object has an associated Association via association attribute
-    if association_or_related_object.association:
-        return f"[{association_or_related_object.association.name}] "
-    return "[LarpManager] "
-
-
 def get_association_maintainers(association: Association) -> Any:
     """Get all maintainers for an association."""
     return association.maintainers.all()
-
-
-def get_url(path: str, obj: object = None) -> str:
-    """Generate a URL for the given path and object.
-
-    Constructs URLs based on the type of object provided. For Association objects,
-    uses the association's slug and domain. For objects with an 'association' attribute,
-    uses the associated organization's slug and domain. Falls back to default
-    larpmanager.com domain when no object is provided.
-
-    Args:
-        path: The path/route to append to the base URL
-        obj: Optional object to determine the base URL. Can be Association,
-             an object with 'association' attribute, or a string slug
-
-    Returns:
-        Complete URL string with proper protocol formatting
-
-    """
-    if obj:
-        # Handle Association objects directly
-        if isinstance(obj, Association):
-            url = f"https://{obj.slug}.{obj.skin.domain}/{path}"
-        # Handle objects that belong to an association
-        elif hasattr(obj, "association"):
-            url = f"https://{obj.association.slug}.{obj.association.skin.domain}/{path}"
-        # Handle string slugs or other objects
-        else:
-            url = f"https://{obj}.larpmanager.com/{path}"
-    else:
-        # Default to main larpmanager.com domain
-        url = "https://larpmanager.com/" + path
-
-    # Clean up double slashes while preserving protocol
-    return url.replace("//", "/").replace(":/", "://")

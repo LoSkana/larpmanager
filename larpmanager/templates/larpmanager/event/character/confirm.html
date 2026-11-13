@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {{ character }} - {% trans "Confirm character" %}
+{% endblock title %}
+{% block info %}
+    {% trans "Is your character ready?" %}
+{% endblock info %}
+{% block content %}
+    <div class="user_resize">
+        <p>
+            {% trans "Click here to confirm that you have completed the character and are ready to propose it to the staff. Be careful: some fields may no longer be editable." %}
+        </p>
+        <br />
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn">{% trans "Confirm" %}</button>
+        </form>
+    </div>
+{% endblock content %}

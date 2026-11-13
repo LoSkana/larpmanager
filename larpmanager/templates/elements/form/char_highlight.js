@@ -1,6 +1,6 @@
 {% load tz show_tags static  i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 var tinymce_count = ["teaser", "text", "e"];
 
@@ -9,7 +9,7 @@ function openQtip(pageX, pageY, x, y, content) {
     $('#qtip-cursor-helper').qtip({
         content: { text: content },
         style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow'
+            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
         }, show: {
             ready: true,
             effect: function(offset) {

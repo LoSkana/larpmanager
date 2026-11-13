@@ -190,6 +190,7 @@ div.ui-lm_tooltip {
 .popup_tutorial,
 .popup_dashboard,
 .popup_delete,
+.popup_confirm,
 .popup_edit {
   border-radius: 2em;
   background-color: var(--sec-clr);
@@ -329,15 +330,19 @@ div.ui-lm_tooltip {
 .popup_delete {
   width: fit-content;
   min-width: 400px;
-  max-width: 40vw;
+  max-width: 60vw;
   height: fit-content;
   min-height: 300px;
-  max-height: 50vh;
+  max-height: 85vh;
 }
 
 .popup_delete #lm-modal-content,
 .popup_delete .frame-container {
   height: auto;
+}
+
+.popup_delete #lm-modal-content {
+  max-height: calc(85vh - 2em);
 }
 
 .popup_delete .frame-container iframe {
@@ -346,15 +351,16 @@ div.ui-lm_tooltip {
 }
 
 #lm-modal {
+  position: relative;
   padding: 1em;
 }
 
 #lm-modal-content {
   height: 100%;
+  overflow-y: auto;
 }
 
 #lm-modal,
-#lm-modal-content,
 .frame-container {
   overflow: hidden;
 }
@@ -368,6 +374,14 @@ div.ui-lm_tooltip {
 .frame-container iframe {
   transition: height 0.2s ease;
   height: 100%;
+  border: none;
+  visibility: hidden;
+}
+
+.member-popup-thumb {
+  width: 15em;
+  margin: 1em;
+  border-radius: 5%;
 }
 
 body.floating_iframe #wrapper {
@@ -524,7 +538,7 @@ dialog::backdrop {
   transform: translate(-50%, -50%);
   padding: 3em;
   border-radius: 2em;
-  background-color: rgba(var(--sec-rgb), 0.9);
+  background-color: rgba(var(--sec-rgb), 1);
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
@@ -536,7 +550,7 @@ dialog::backdrop {
   transition: opacity 0.2s;
   transition-delay: 0.1s;
   pointer-events: none;
-  z-index: 99;
+  z-index: 999;
 }
 
 #excel-edit iframe {
@@ -551,6 +565,48 @@ dialog::backdrop {
 #excel-edit.visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* the page-level v20/v22 rules left-align headings and option rows: the popup centers them */
+#excel-edit h1,
+#excel-edit h2,
+#excel-edit h3,
+#excel-edit h4,
+#excel-edit p {
+  text-align: center;
+}
+
+#excel-edit input,
+#excel-edit textarea {
+  margin: auto;
+}
+
+#excel-edit .my-checkbox-class > div,
+#excel-edit .my-radio-class > div,
+#excel-edit .reg-checkbox-class > div,
+#excel-edit .reg-radio-class > div {
+  text-align: center;
+}
+
+#excel-edit .my-checkbox-class label,
+#excel-edit .my-radio-class label,
+#excel-edit .reg-checkbox-class label,
+#excel-edit .reg-radio-class label {
+  justify-content: center;
+  text-align: center;
+}
+
+#excel-edit .opt-body,
+#excel-edit .opt-card-body {
+  flex: 0 1 auto;
+}
+
+#excel-edit .opt-card-header {
+  justify-content: center;
+}
+
+#excel-edit .opt-card-price {
+  margin-left: 0;
 }
 
 #excel-edit .close {
@@ -605,8 +661,8 @@ dialog::backdrop {
 }
 
 #chat-widget-dialog {
-  width: 26em;
-  height: 34em;
+  width: 40em;
+  height: 38em;
   border-radius: 2em;
   background-color: var(--sec-clr);
   color: var(--pri-clr) !important;
@@ -641,11 +697,13 @@ dialog::backdrop {
   padding-right: 0.5em;
 }
 
-#chat-widget-hint {
-  font-size: 0.8em;
-  opacity: 0.7;
-  margin: 0 0 0.5em;
-  text-align: center;
+.chat-widget-sources {
+  margin-top: 0.5em;
+  font-size: 0.85em;
+}
+
+.chat-widget-sources a {
+  display: block;
 }
 
 .chat-widget-message {
@@ -667,7 +725,55 @@ dialog::backdrop {
 }
 
 .chat-widget-message.chat-widget-pending {
-  opacity: 0.6;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  white-space: normal;
+}
+
+.chat-widget-spinner {
+  width: 1.8em;
+  height: 1.8em;
+  flex-shrink: 0;
+  animation: chat-widget-spin 1.6s linear infinite;
+}
+
+.chat-widget-pending-text {
+  opacity: 0.75;
+  font-style: italic;
+}
+
+@keyframes chat-widget-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-widget-spinner {
+    animation: none;
+  }
+}
+
+.chat-widget-message.chat-widget-rich {
+  white-space: normal;
+}
+
+.chat-widget-message.chat-widget-rich p {
+  margin: 0 0 0.5em 0;
+}
+
+.chat-widget-message.chat-widget-rich ol,
+.chat-widget-message.chat-widget-rich ul {
+  margin: 0 0 0.5em 0;
+  padding-left: 1.4em;
+}
+
+.chat-widget-message.chat-widget-rich a {
+  text-decoration: underline;
 }
 
 #chat-widget-form {
@@ -677,4 +783,92 @@ dialog::backdrop {
 
 #chat-widget-input {
   flex: 1;
+}
+
+.popup_confirm {
+  width: fit-content;
+  min-width: 300px;
+  max-width: 40em;
+  height: fit-content;
+}
+
+.popup_confirm .confirm-dialog {
+  padding: 1.5em 1em 1em 1em;
+}
+
+.popup_confirm .confirm-message {
+  margin-bottom: 1.5em;
+}
+
+.popup_confirm .form-actions {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+}
+
+@media (max-width: 840px) {
+  .popup_confirm {
+    max-width: 90vw;
+  }
+}
+
+/* Accessibility panel */
+
+#a11y-dialog :focus-visible {
+  outline: 3px solid var(--ter-clr);
+  outline-offset: 2px;
+}
+
+#a11y-dialog {
+  width: 24em;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 1.5em;
+  border: none;
+  background-color: var(--sec-clr);
+  color: var(--pri-clr);
+  padding: 1em 1.5em;
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  text-align: left;
+}
+
+#a11y-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#a11y-dialog h2 {
+  margin: 0 0 0.5em 0;
+}
+
+#a11y-dialog fieldset {
+  border: none;
+  margin: 0 0 1em 0;
+  padding: 0;
+}
+
+#a11y-dialog legend {
+  font-weight: 700;
+  margin-bottom: 0.3em;
+}
+
+#a11y-dialog fieldset label {
+  display: block;
+  margin: 0.2em 0 0.2em 1em;
+  text-align: left;
+  cursor: pointer;
+}
+
+#a11y-close {
+  position: absolute;
+  top: 0.5em;
+  right: 0.8em;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: var(--pri-clr);
+  font-size: 1.3em;
+  line-height: 1;
+  padding: 0.3em;
+  cursor: pointer;
 }

@@ -99,6 +99,11 @@ urlpatterns = [
         name="character_edit",
     ),
     path(
+        "<slug:event_slug>/character/<slug:character_uuid>/confirm/",
+        views_uc.character_confirm,
+        name="character_confirm",
+    ),
+    path(
         "<slug:event_slug>/character/<slug:character_uuid>/customize/",
         views_uc.character_customize,
         name="character_customize",
@@ -227,6 +232,11 @@ urlpatterns = [
         "<slug:event_slug>/matchmaker/",
         views_ue.matchmaker,
         name="matchmaker",
+    ),
+    path(
+        "<slug:event_slug>/debrief/",
+        views_ue.debrief,
+        name="debrief",
     ),
     path(
         "<slug:event_slug>/factions/",

@@ -16,17 +16,22 @@
 {% endblock landing_title %}
 {% block landing_content %}
     <div id="tutorials">
-        <div class="column">
-            {% for el in list %}
-                <a href="{% url 'tutorials' el.2 %}{% if iframe %}?in_iframe=1{% endif %}"
-                   {% if el.1 == seq %}class="select"{% endif %}>{{ el.0 | template_trans }}</a>
-            {% endfor %}
-        </div>
+        {% if not iframe %}
+            <div class="column">
+                {% for el in list %}
+                    <a href="{% url 'tutorials' el.2 %}"
+                       {% if el.1 == seq %}class="select"{% endif %}>{{ el.0 | template_trans }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class="feature">
             {% if intro %}
                 <p>
                     <i>
                     {% trans "With these tutorials, you can learn how to use the tool in no time! You can read them in order, or scroll directly to the one that interests you most." %}</i>
+                </p>
+                <p>
+                    <a href="{% url 'concepts' %}{% if iframe %}?in_iframe=1{% endif %}">{% trans "New here? Start from the key concepts" %}</a>
                 </p>
             {% endif %}
             <div id="tutorial-nav" class="anchor-nav"></div>
@@ -50,7 +55,7 @@
     </div>
 {% endblock landing_content %}
 {% block js2 %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     function slugify(text) {
@@ -89,6 +94,12 @@ window.addEventListener('DOMContentLoaded', function() {
         link.href = '#' + slug;
         link.textContent = text;
         nav.appendChild(link);
+    });
+
+    // sub-sections have an anchor too, without an entry in the nav
+    document.querySelectorAll('#tutorial-descr h3').forEach(function (heading) {
+        var slug = slugify(heading.textContent);
+        if (slug) heading.id = slug;
     });
 
     // all content links open in a new page

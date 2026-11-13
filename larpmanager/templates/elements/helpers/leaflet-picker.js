@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function () {
     var latField = document.getElementById('id_pub_lat');
     var lonField = document.getElementById('id_pub_lon');

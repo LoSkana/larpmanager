@@ -201,7 +201,7 @@ def clear_event_warehouse_assignments_cache(event_id: int) -> None:
     logger.debug("Reset warehouse assignments cache for event %s", event_id)
 
 
-def build_event_warehouse_assignments_cache(event: Any) -> dict[int, dict[str, Any]]:
+def build_event_warehouse_assignments_cache(event_id: int) -> dict[int, dict[str, Any]]:
     """Build cache of item assignments for an event, keyed by item ID.
 
     Each entry is {"list": [(area_uuid, area_name, quantity), ...], "count": N}.
@@ -210,32 +210,32 @@ def build_event_warehouse_assignments_cache(event: Any) -> dict[int, dict[str, A
 
     try:
         rows: dict[int, list] = {}
-        for assignment in WarehouseItemAssignment.objects.filter(event=event).select_related("area", "item"):
+        for assignment in WarehouseItemAssignment.objects.filter(event_id=event_id).select_related("area", "item"):
             rows.setdefault(assignment.item_id, []).append(
                 (assignment.area.uuid, assignment.area.name, assignment.quantity or 0),
             )
         for item_id, entries in rows.items():
             assignments_cache[item_id] = {"list": entries, "count": len(entries)}
 
-        cache_key = get_event_warehouse_assignments_key(event.id)
+        cache_key = get_event_warehouse_assignments_key(event_id)
         cache.set(cache_key, assignments_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Cached warehouse assignments for event %s (%s items)", event.id, len(assignments_cache))
+        logger.debug("Cached warehouse assignments for event %s (%s items)", event_id, len(assignments_cache))
 
     except Exception:
-        logger.exception("Error building warehouse assignments cache for event %s", event.id)
+        logger.exception("Error building warehouse assignments cache for event %s", event_id)
         assignments_cache = {}
 
     return assignments_cache
 
 
-def get_event_warehouse_assignments_cache(event: Any) -> dict[int, dict[str, Any]]:
+def get_event_warehouse_assignments_cache(event_id: int) -> dict[int, dict[str, Any]]:
     """Get warehouse assignments cache for an event, initializing if not present."""
-    cache_key = get_event_warehouse_assignments_key(event.id)
+    cache_key = get_event_warehouse_assignments_key(event_id)
     cached_assignments = cache.get(cache_key)
 
     if cached_assignments is None:
-        logger.debug("Cache miss for event %s warehouse assignments, initializing", event.id)
-        cached_assignments = build_event_warehouse_assignments_cache(event)
+        logger.debug("Cache miss for event %s warehouse assignments, initializing", event_id)
+        cached_assignments = build_event_warehouse_assignments_cache(event_id)
 
     return cached_assignments
 

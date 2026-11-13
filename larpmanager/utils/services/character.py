@@ -29,9 +29,11 @@ from django.http import Http404
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_systems
+from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
+from larpmanager.cache.run import get_event_and_children_run_ids
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.form import (
@@ -47,45 +49,24 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
-    CharacterConfig,
+    CharacterStatus,
+    Faction,
     FactionType,
     Guild,
     GuildMembershipStatus,
     PlotCharacterRel,
     Relationship,
+    get_event_class_parent,
 )
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
+from larpmanager.utils.registrations.characters import check_character_payment_lock
 from larpmanager.utils.services.event import has_access_character
-from larpmanager.utils.services.experience import add_char_addit
+from larpmanager.utils.services.experience import add_char_addit, get_character_calls
 
 logger = logging.getLogger(__name__)
-
-
-def filter_playing_characters(queryset: Any, run: Any) -> Any:
-    """Restrict characters to active ones assigned to a non cancelled registration of the run.
-
-    Args:
-        queryset: Character queryset to filter
-        run: Run the characters must be playing in
-
-    Returns:
-        Filtered character queryset
-
-    """
-    inactive_ids = CharacterConfig.objects.filter(
-        character_id__in=queryset.values_list("id", flat=True),
-        name="inactive",
-        value="True",
-    ).values_list("character_id", flat=True)
-
-    return (
-        queryset.exclude(id__in=inactive_ids)
-        .filter(rcrs__registration__run=run, rcrs__registration__cancellation_date__isnull=True)
-        .distinct()
-    )
 
 
 def get_character_relationships(context: dict, *, restrict: bool = True) -> None:
@@ -111,8 +92,9 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
     """
     relationship_text_mapping = {}
     character_data_mapping = {}
+    auto_uuids: set[str] = set()
 
-    _build_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
+    _build_relationships_mappings(context, character_data_mapping, relationship_text_mapping, auto_uuids)
 
     _build_player_relationships_mappings(context, character_data_mapping, relationship_text_mapping)
 
@@ -133,13 +115,12 @@ def get_character_relationships(context: dict, *, restrict: bool = True) -> None
             continue
 
         relationship_entry = character_data_mapping[character_uuid]
-        # Filter empty relationships if restrict is enabled
-        if restrict and len(relationship_text_mapping[character_uuid]) == 0:
+        # Filter empty relationships if restrict is enabled, keeping the ones created from references
+        if restrict and len(relationship_text_mapping[character_uuid]) == 0 and character_uuid not in auto_uuids:
             continue
 
         # Add relationship text and calculate font size based on content length
         relationship_entry["text"] = relationship_text_mapping[character_uuid]
-        relationship_entry["font_size"] = int(100 - ((len(relationship_entry["text"]) / 50) * 4))
         context["rel"].append(relationship_entry)
 
 
@@ -215,7 +196,12 @@ def _build_player_relationships_mappings(
     context["pr"] = player_relationships_mapping
 
 
-def _build_relationships_mappings(context: dict, character_data_mapping: dict, relationship_text_mapping: dict) -> None:
+def _build_relationships_mappings(
+    context: dict,
+    character_data_mapping: dict,
+    relationship_text_mapping: dict,
+    auto_uuids: set[str],
+) -> None:
     """Build mappings for system-defined character relationships.
 
     Processes Relationship objects for the source character, retrieves target
@@ -230,6 +216,7 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
             data mappings. Updated in-place.
         relationship_text_mapping: Dictionary to populate with character UUID to
             relationship text mappings. Updated in-place.
+        auto_uuids: Set to populate with the UUIDs of targets of relationships created from references.
 
     Side Effects:
         - Updates character_data_mapping with character data for all relationship targets
@@ -239,12 +226,12 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
 
     """
     # Process character relationships from the source
-    queryset = Relationship.objects.values_list("target__number", "text").filter(source=context["character"])
+    queryset = Relationship.objects.values_list("target__number", "text", "auto").filter(source=context["character"])
     relationship_rows = list(queryset)
 
     # Collect numbers of characters not already in cache
     cached_chars = context.get("chars", {})
-    missing_numbers = [num for num, _ in relationship_rows if num not in cached_chars]
+    missing_numbers = [row[0] for row in relationship_rows if row[0] not in cached_chars]
 
     # Bulk fetch missing characters
     bulk_fetched: dict = {}
@@ -255,7 +242,7 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
         ):
             bulk_fetched[target_character.number] = target_character
 
-    for target_character_number, relationship_text in relationship_rows:
+    for target_character_number, relationship_text, is_auto in relationship_rows:
         # Check if character data is already cached in context
         if target_character_number in cached_chars:
             character_data = cached_chars[target_character_number]
@@ -281,6 +268,8 @@ def _build_relationships_mappings(context: dict, character_data_mapping: dict, r
         character_data["factions_list"] = ", ".join(character_data["factions_list"])
         character_data_mapping[character_data["uuid"]] = character_data
         relationship_text_mapping[character_data["uuid"]] = relationship_text
+        if is_auto:
+            auto_uuids.add(character_data["uuid"])
 
 
 def get_character_sheet(context: dict) -> None:
@@ -312,6 +301,7 @@ def get_character_sheet_inventory(context: dict) -> None:
         return
 
     context["sheet_inventory"] = context["character"].inventory.all()
+    context["sheet_inventory_totals"] = context["character"].get_total_pool_balances()
 
 
 def get_character_sheet_exp(context: dict) -> None:
@@ -337,7 +327,11 @@ def get_character_sheet_exp(context: dict) -> None:
     context["sheet_abilities"] = {}
 
     # Group abilities by their type name
-    for ability in context["character"].exp_ability_list.select_related("typ").all():
+    abilities = list(
+        context["character"].exp_ability_list.select_related("typ", "template").order_by("typ__order", "order", "name")
+    )
+    context["sheet_calls"] = get_character_calls(event_id, abilities)
+    for ability in abilities:
         if not ability.typ or not ability.typ.name:
             continue
         # Ensure ability has valid type and name before processing
@@ -357,7 +351,7 @@ def get_character_sheet_exp(context: dict) -> None:
             "used": context["character"].addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": context["character"].addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 
@@ -447,7 +441,7 @@ def get_character_sheet_plots(context: dict) -> None:
     context["sheet_plots"] = []
 
     # Get the plot relations of the current event for the character, ordered by sequence
-    plot_relations = context["character"].get_plot_characters(context["event"])
+    plot_relations = context["character"].get_plot_characters(context["event"].id)
 
     for plot_relation in plot_relations:
         # Start with the base plot text
@@ -485,7 +479,7 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     # If we show all the factions (player / staffer)
     all_factions = {}
     if not only_visible:
-        faction_event = context["event"].get_class_parent("faction")
+        faction_event = get_event_class_parent(context["event"].id, "faction", context=context)
         faction_ids = []
         for faction in context["character"].factions_list.filter(event=faction_event).order_by("order"):
             all_factions[faction.id] = faction.show_complete()
@@ -544,6 +538,12 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
         for faction_id, question__uuid, answer_text in WritingAnswer.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.COMPUTED,
+            ],
         ).values_list("element_id", "question__uuid", "text"):
             # Initialize nested dictionary structure as needed
             if faction_id not in faction_answers_map:
@@ -554,6 +554,7 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
         for faction_id, question__uuid, option_id in WritingChoice.objects.filter(
             element_id__in=faction_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
         ).values_list("element_id", "question__uuid", "option_id"):
             # Initialize nested dictionary and list structures as needed
             if faction_id not in faction_answers_map:
@@ -583,19 +584,25 @@ def get_character_sheet_guilds(context: dict, *, only_visible: bool = False) -> 
     if "guild" not in context["features"]:
         return
 
-    guild_event = context["event"].get_class_parent("guild")
     all_guilds = {}
-    accepted_guilds = (
-        Guild.objects.filter(
-            event=guild_event,
-            memberships__character=context["character"],
-            memberships__status=GuildMembershipStatus.ACCEPTED,
+    if not only_visible:
+        guild_event = get_event_class_parent(context["event"].id, "guild", context=context)
+        accepted_guilds = (
+            Guild.objects.filter(
+                event=guild_event,
+                memberships__character=context["character"],
+                memberships__status=GuildMembershipStatus.ACCEPTED,
+            )
+            .order_by("order")
+            .distinct()
         )
-        .order_by("order")
-        .distinct()
-    )
-    for guild in accepted_guilds:
-        all_guilds[guild.id] = guild.show_complete()
+        for guild in accepted_guilds:
+            all_guilds[guild.id] = guild.show_complete()
+    else:
+        guild_numbers = context["char"].get("guilds", [])
+        for guild_number in guild_numbers:
+            guild_id = context.get("guild_mapping", {}).get(guild_number)
+            all_guilds[guild_id] = context["guilds"].get(guild_number)
 
     context["sheet_guilds"] = []
 
@@ -637,6 +644,12 @@ def _get_guilds_answers_choices(context: dict, fields_data: dict, guild_ids: lis
         for guild_id, question__uuid, answer_text in WritingAnswer.objects.filter(
             element_id__in=guild_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.COMPUTED,
+            ],
         ).values_list("element_id", "question__uuid", "text"):
             if guild_id not in guild_answers_map:
                 guild_answers_map[guild_id] = {}
@@ -645,6 +658,7 @@ def _get_guilds_answers_choices(context: dict, fields_data: dict, guild_ids: lis
         for guild_id, question__uuid, option_id in WritingChoice.objects.filter(
             element_id__in=guild_ids,
             question__uuid__in=visible_question_ids,
+            question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
         ).values_list("element_id", "question__uuid", "option_id"):
             if guild_id not in guild_answers_map:
                 guild_answers_map[guild_id] = {}
@@ -718,11 +732,19 @@ def get_char_check(
                 raise Http404(msg)
             # Non-player users see only public fields, never the full sheet
             return
+        # Player cannot access their own character until the payment proof is uploaded
+        check_character_payment_lock(context)
         if context["char"].get("locked", False):
             # Locked: player sees public fields only (no full sheet)
             return
 
-    get_element(context, character_uuid, "character", Character)
+    get_element(
+        context,
+        character_uuid,
+        "character",
+        Character,
+        queryset_base=Character.objects.select_related("player"),
+    )
     context["check"] = 1
 
 
@@ -796,7 +818,7 @@ def check_missing_mandatory(context: dict) -> None:
         **dict.fromkeys(BaseQuestionType.get_choice_types(), WritingChoice),
     }
 
-    questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
+    questions = get_cached_writing_questions(context["event"].id, QuestionApplicable.CHARACTER)
     character_id = _get_character_cache_id(context)
 
     # Collect mandatory questions grouped by model
@@ -850,15 +872,8 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         for number in extract_char_numbers_from_texts([text]):
             sources_map.setdefault(number, set()).add(source_name)
 
-    sheet_name = next(
-        (
-            q["name"]
-            for q in get_cached_writing_questions(character.event, QuestionApplicable.CHARACTER)
-            if q["typ"] == WritingQuestionType.SHEET
-        ),
-        WritingQuestionType.SHEET.label,
-    )
-    _add_refs(character.text or "", sheet_name)
+    # The main sheet text is the obvious source, so it is not named
+    _add_refs(character.text or "", "")
 
     for answer in WritingAnswer.objects.filter(element_id=character.pk, deleted__isnull=True).select_related(
         "question"
@@ -869,13 +884,13 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         _add_refs(pcr.text or "", pcr.plot.name)
         _add_refs(pcr.plot.text or "", pcr.plot.name)
 
-    faction_event = character.event.get_class_parent("faction")
+    faction_event = get_event_class_parent(character.event_id, "faction")
     faction_qs = character.factions_list.filter(event=faction_event, deleted__isnull=True)
     for faction in faction_qs:
         _add_refs(faction.text or "", faction.name)
 
     if character.player_id:
-        run_ids = list(character.event.runs.values_list("id", flat=True))
+        run_ids = get_event_and_children_run_ids(character.event_id)
         for assignment in AssignmentTrait.objects.filter(
             member_id=character.player_id, run_id__in=run_ids, deleted__isnull=True
         ).select_related("trait"):
@@ -892,7 +907,7 @@ def _persist_auto_relationships(character: Character, sources_map: dict[int, set
         ref_chars_by_number = {
             c.number: c
             for c in Character.objects.filter(
-                event=character.event, number__in=sources_map.keys(), deleted__isnull=True
+                event_id=character.event_id, number__in=sources_map.keys(), deleted__isnull=True
             )
         }
 
@@ -910,7 +925,7 @@ def _persist_auto_relationships(character: Character, sources_map: dict[int, set
             if number not in ref_chars_by_number or number in existing_manual_targets:
                 continue
             ref_char = ref_chars_by_number[number]
-            source_text = ", ".join(f"<b><i>{s}</i></b>" for s in sorted(sources))
+            source_text = ", ".join(f"<b><i>{s}</i></b>" for s in sorted(sources) if s)
             updated = Relationship.objects.filter(
                 source=character, target=ref_char, auto=True, deleted__isnull=True
             ).update(text=source_text)
@@ -934,3 +949,77 @@ def update_character_referenced_chars(character_id: int) -> None:
 def update_character_referenced_chars_background(character_id: int) -> None:
     """Compute and persist auto Relationships for characters referenced in a character's content."""
     update_character_referenced_chars(character_id)
+
+
+def reset_campaign_character_status(relation: RegistrationCharacterRel) -> bool:
+    """Move an approved campaign character back to revision when assigned to a new run.
+
+    Runs only when the campaign and user_character features and the
+    user_character_approval and reset_character_status configs are enabled, and only
+    for characters already played in a previous run. Returns True if the status was changed.
+    """
+    character = relation.character
+    if character.status != CharacterStatus.APPROVED:
+        return False
+
+    features = get_event_features(character.event_id)
+    if "campaign" not in features or "user_character" not in features:
+        return False
+
+    for config in ["user_character_approval", "reset_character_status"]:
+        if not get_event_config(character.event_id, config):
+            return False
+
+    played_before = (
+        RegistrationCharacterRel.objects.filter(
+            character_id=character.id,
+            registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
+        )
+        .exclude(registration__run_id=relation.registration.run_id)
+        .exists()
+    )
+    if not played_before:
+        return False
+
+    character.status = CharacterStatus.REVIEW
+    return True
+
+
+def auto_assign_character_faction(character: Character) -> None:
+    """Auto-assign a character to a faction matching one of its chosen options.
+
+    Runs only when the user_character and faction features and the
+    user_character_auto_faction config are enabled. If character approval is
+    enabled, only runs for approved characters. Skips characters that already
+    have a primary faction; assigns the first visible faction (by order)
+    whose name matches one of the character's chosen option names.
+    """
+    event_id = character.event_id
+    features = get_event_features(event_id)
+    if "user_character" not in features or "faction" not in features:
+        return
+
+    if not get_event_config(event_id, "user_character_auto_faction"):
+        return
+
+    if get_event_config(event_id, "user_character_approval") and character.status != CharacterStatus.APPROVED:
+        return
+
+    if character.factions_list.filter(typ=FactionType.PRIM).exists():
+        return
+
+    option_names = WritingChoice.objects.filter(
+        element_id=character.id,
+        question__event_id=get_event_class_parent(event_id, "writingquestion"),
+        question__applicable=QuestionApplicable.CHARACTER,
+    ).values_list("option__name", flat=True)
+    if not option_names:
+        return
+
+    faction_event_id = get_event_class_parent(event_id, "faction")
+    faction = (
+        Faction.objects.filter(event_id=faction_event_id, hide=False, name__in=option_names).order_by("order").first()
+    )
+    if faction:
+        character.factions_list.add(faction)

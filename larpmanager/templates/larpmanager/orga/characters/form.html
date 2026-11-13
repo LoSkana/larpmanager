@@ -65,9 +65,7 @@
                             {% if el.typ|not_in:"c" %}{{ el.get_status_display }}{% endif %}
                         </td>
                     {% endif %}
-                    <td>
-                        {% if el.typ|not_in:"name,teaser,text,factions_list" %}{{ el.get_visibility_display }}{% endif %}
-                    </td>
+                    <td>{{ el.get_visibility_display }}</td>
                     {% if approval and typ == "character" %}
                         <td>
                             {% if el.status|not_in:"d" and el.status|not_in:"h" and el.typ|not_in:"c" %}{{ el.get_editable_display }}{% endif %}

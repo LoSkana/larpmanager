@@ -196,6 +196,19 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: Debrief
+    descr: Lets organizers define custom questions for participants to fill in after the event, to collect their feedback
+    slug: debrief
+    overall: false
+    placeholder: false
+    order: 92
+    after_text: You can now set the debrief form
+    after_link: form/debrief/
+    hidden: false
+    module: event
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Help
     descr: Allows participants to submit questions, and organizers to review and organize
       them
@@ -364,6 +377,20 @@
     module: registration
     dependencies:
     - character
+- model: larpmanager.feature
+  fields:
+    name: Check-in
+    descr: Generates a unique QR code per registration and lets staff scan it on-site
+      to mark participants present, working offline with automatic sync
+    slug: checkin
+    overall: false
+    placeholder: false
+    order: 300
+    after_text: You can now scan QR codes to check-in participants
+    after_link: orga_checkin
+    hidden: false
+    module: registration
+    dependencies: []
 - model: larpmanager.feature
   fields:
     name: Chat
@@ -1626,6 +1653,19 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: User Status Flags
+    descr: Pseudo-feature activated by member_flags_active configuration
+    slug: member_status_flags
+    overall: true
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: users
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Version Upgrade
     descr: Internal pseudo-feature for the platform version upgrade page
     slug: exe_version_upgrade
@@ -1652,3 +1692,29 @@
     module: writing
     dependencies:
     - character
+- model: larpmanager.feature
+  fields:
+    name: Experience Calls
+    descr: Pseudo-feature activated by exp_calls configuration
+    slug: exp_calls
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Experience Exclusive groups
+    descr: Pseudo-feature activated by exp_exclusives configuration
+    slug: exp_exclusives
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []

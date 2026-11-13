@@ -26,7 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
-from larpmanager.cache.config import _get_event_parent_id
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.models.event import EventText, EventTextType
 
 logger = logging.getLogger(__name__)
@@ -145,7 +145,7 @@ def get_event_text(event_id: int, text_type: str, language_code: str | None = No
         return default_text
 
     # Fall back to the campaign parent event, if this event belongs to one
-    parent_id = _get_event_parent_id(event_id, None)
+    parent_id = _get_event_parent_id(event_id)
     if parent_id:
         return get_event_text(parent_id, text_type, language_code)
 

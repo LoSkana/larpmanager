@@ -35,21 +35,23 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_association_basic_cache, get_run_basic_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.discount import count_discounts_reservations
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_writing_field_names
-from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
+from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.cache.writing import get_writing_element_fields, get_writing_element_fields_batch
-from larpmanager.forms.registration import MatchmakerForm
+from larpmanager.forms.registration import DebriefForm, MatchmakerForm, SingleApplicableRegistrationForm
 from larpmanager.models.accounting import AccountingItemDiscount, PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
     DevelopStatus,
-    Event,
     EventTextType,
     PreRegistration,
     Run,
@@ -70,12 +72,22 @@ from larpmanager.models.writing import (
     CharacterStatus,
     Faction,
     FactionType,
+    get_event_elements,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs, with_geo_configs_registrations
+from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs
 from larpmanager.utils.core.exceptions import HiddenError
-from larpmanager.utils.users.registration import registration_status
+from larpmanager.utils.edit.autosave import (
+    clear_draft,
+    draft_element_key,
+    init_auto_save,
+    is_stale,
+    pop_draft,
+    save_draft_from_request,
+)
+from larpmanager.utils.registrations.context import get_checkin_qr_url, with_geo_configs_registrations
+from larpmanager.utils.registrations.status import registration_status
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
@@ -131,7 +143,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
     if "member" in context:
         # Define cutoff date (3 days ago) for filtering relevant registrations
-        cutoff_date = timezone.now() - timedelta(days=3)
+        cutoff_date = timezone.localdate() - timedelta(days=3)
 
         member = context["member"]
 
@@ -141,7 +153,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
             cancellation_date__isnull=True,  # Exclude cancelled registrations
             redeem_code__isnull=True,  # Exclude redeemed registrations
             member=member,
-            run__end__gte=cutoff_date.date(),  # Only future/recent runs
+            run__end__gte=cutoff_date,  # Only future/recent runs
         ).select_related("ticket", "run")
 
         # Create lookup dictionary for O(1) access to user registrations
@@ -164,6 +176,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     for run in runs:
         # Calculate registration status (open, closed, full, etc.)
         run.status = registration_status(context, run, context["member"])
+        set_run_assoc_basic(run, context)
 
         # Categorize runs based on registration availability
         if run.status["open"]:
@@ -178,6 +191,14 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     context["all_runs"] = sorted(context["open"] + context["future"], key=lambda run: run.end)
 
     return render(request, "larpmanager/general/calendar.html", context)
+
+
+def set_run_assoc_basic(run: Any, context: dict) -> None:
+    """Attach assoc_name/assoc_slug to a run from the basic caches, avoiding FK traversal."""
+    run_cache = get_run_basic_cache(run.id, context=context)
+    assoc_cache = get_association_basic_cache(run_cache["association_id"], context=context)
+    run.assoc_name = assoc_cache["name"]
+    run.assoc_slug = run_cache["association_slug"]
 
 
 def get_member_registrations(member: Any, association_id: int | None = None) -> QuerySet:
@@ -211,6 +232,7 @@ def build_registration_list(member: Any, my_regs: Any, association_id: int, memb
     for registration in my_regs_list:
         ctx["registration"] = registration
         registration.run.status = registration_status(ctx, registration.run, member)
+        set_run_assoc_basic(registration.run, ctx)
         result.append(registration)
 
     return result
@@ -259,7 +281,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
 
 
 def get_player_characters_dict(association_id: int, member: Any) -> dict:
-    """Get ids of the member's characters in the association, grouped by event ID.
+    """Get the member's characters in the association, grouped by event ID.
 
     Precalculates the characters owned by the player with a single query, so the
     registration status of every run can be computed without a query per run.
@@ -269,14 +291,16 @@ def get_player_characters_dict(association_id: int, member: Any) -> dict:
         member: Member object to filter characters for
 
     Returns:
-        Dictionary mapping event IDs to lists of character IDs
+        Dictionary mapping event IDs to lists of (id, uuid, name, status) tuples
 
     """
-    characters_by_event: dict[int, list[int]] = {}
+    characters_by_event: dict[int, list[tuple[int, str, str, str]]] = {}
 
-    query = Character.objects.filter(player=member, event__association_id=association_id).values_list("event_id", "id")
-    for event_id, character_id in query:
-        characters_by_event.setdefault(event_id, []).append(character_id)
+    query = Character.objects.filter(player=member, event__association_id=association_id).values_list(
+        "event_id", "id", "uuid", "name", "status"
+    )
+    for event_id, character_id, character_uuid, name, status in query:
+        characters_by_event.setdefault(event_id, []).append((character_id, character_uuid, name, status))
 
     return characters_by_event
 
@@ -417,7 +441,7 @@ def carousel(request: HttpRequest) -> HttpResponse:
 
     # Cache to track processed events and set reference date (3 days ago)
     cache = {}
-    ref = (timezone.now() - timedelta(days=3)).date()
+    ref = timezone.localdate() - timedelta(days=3)
 
     # Query runs from current association, excluding development/cancelled events
     # Order by end date descending to show most recent first
@@ -579,6 +603,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
     for run in runs:
         # Update run object with registration status data
         run.status = registration_status(context, run, context["member"])
+        set_run_assoc_basic(run, context)
 
         # Add processed run to context list
         context["list"].append(run)
@@ -684,7 +709,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Add non-provisional registered members to the display list
         for registration in que_reg.select_related("member"):
             if not is_registration_provisional(
-                registration, event=context["event"], features=features, context=context
+                registration, event_id=context["event"].id, features=features, context=context
             ):
                 context["registration_list"].append(registration.member)
 
@@ -775,63 +800,37 @@ def _get_guild_colors(context: dict) -> None:
 
 
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display main event page with runs, registration status, and event details.
+    """Display main event page with registration status and event details.
 
     Args:
         request: HTTP request object containing user authentication and session data
         event_slug: Event slug used to identify the specific event
 
     Returns:
-        HttpResponse: Rendered event template with context containing event details,
-                     runs categorized as coming/past, and registration information
+        HttpResponse: Rendered event template with context containing event details
+                     and registration information
 
     Note:
-        - Categorizes runs as 'coming' (ended within 3 days) or 'past'
         - Includes user registration status if authenticated
         - Sets no_robots flag based on development status and timing
 
     """
     # Get base context with event and run information (don't need visibility check)
     context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
-    context["coming"] = []
-    context["past"] = []
-
-    # Get all runs for the event and set reference date (3 days ago)
-    runs = Run.objects.filter(event=context["event"]).exclude(id=context["run"].id)
-    ref = timezone.now() - timedelta(days=3)
-
-    # Prepare features mapping for registration status checking
-    features_map = {context["event"].id: context["features"]}
-    context.update({"features_map": features_map, "my_regs": get_event_signups(request, context)})
-
-    # Process each run to determine registration status and categorize by timing
-    for run in runs:
-        if not run.end:
-            continue
-
-        # Update run with registration status information
-        run.status = registration_status(context, run, context["member"])
-
-        # Categorize run as coming (recent) or past based on end date
-        if run.end > ref.date():
-            context["coming"].append(run)
-        else:
-            context["past"].append(run)
-
-    # Whether the run being viewed is itself still scheduled to happen
-    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.now().date()
-
-    # Refresh event object to ensure latest data
-    context["event"] = Event.objects.get(pk=context["event"].pk)
+    # Template renders these deferred Event fields; fetch them in a single query
+    context["event"].refresh_from_db(fields=["tagline", "where", "authors", "description", "genre"])
 
     # Determine if search engines should index this page
     context["no_robots"] = (
         context["run"].development != DevelopStatus.SHOW
         or not context["run"].end
-        or timezone.now().date() > context["run"].end
+        or timezone.localdate() > context["run"].end
     )
 
     set_sold_tickets(context)
+
+    if context["registration"] and "checkin" in context["features"]:
+        context["checkin_qr_url"] = get_checkin_qr_url(context["registration"])
 
     return render(request, "larpmanager/event/event.html", context)
 
@@ -855,7 +854,7 @@ def set_sold_tickets(context: dict) -> None:
         TicketTier.SELLER,
     ]
 
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     total = 0
     sold_tickets = []
@@ -986,7 +985,7 @@ def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
 
 def get_factions(context: dict) -> None:
     """Populate context with faction data organized by type."""
-    fcs = context["event"].get_elements(Faction)
+    fcs = get_event_elements(context["event"].id, Faction, context=context)
     # Get primary factions ordered by number
     context["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
     # Get transversal factions ordered by number
@@ -1018,7 +1017,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load all event cache data into context
     get_event_cache_all(context)
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.FACTION)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.FACTION)
 
     return render(request, "larpmanager/event/factions.html", context)
 
@@ -1099,7 +1098,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
 
     context["list"] = [quest.show_complete() for quest in quest_queryset]
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quests.html", context)
 
@@ -1150,7 +1149,7 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         traits.append(res)
     context["traits"] = traits
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quest.html", context)
 
@@ -1180,21 +1179,32 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     # Count redemptions per discount for this run
     discount_counts = dict(
-        AccountingItemDiscount.objects.filter(run=context["run"])
+        AccountingItemDiscount.objects.filter(
+            registration__run=context["run"],
+            registration__cancellation_date__isnull=True,
+            registration__deleted__isnull=True,
+        )
         .values_list("disc_id")
         .annotate(total=Count("id"))
         .values_list("disc_id", "total")
     )
 
     # Build discounts list with visibility filtering
+    # Count active reservations, not yet confirmed by a registration save
+    visible_discounts = list(context["run"].discounts.exclude(visible=False))
+    reservation_counts = count_discounts_reservations(
+        context["run"].id, [discount.id for discount in visible_discounts]
+    )
+
     context["disc"] = []
-    for discount in context["run"].discounts.exclude(visible=False):
+    for discount in visible_discounts:
         dt = discount.show()
-        dt["remaining"] = _remaining(discount.max_redeem, discount_counts.get(discount.id, 0))
+        used = discount_counts.get(discount.id, 0) + reservation_counts.get(discount.id, 0)
+        dt["remaining"] = _remaining(discount.max_redeem, used)
         context["disc"].append(dt)
 
     context["tickets"] = []
@@ -1244,9 +1254,9 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """
     context = get_event(request, event_slug)
     if export_type == "char":
-        lst = context["event"].get_elements(Character).order_by("number")
+        lst = get_event_elements(context["event"].id, Character, context=context).order_by("number")
     elif export_type == "faction":
-        lst = context["event"].get_elements(Faction).order_by("number")
+        lst = get_event_elements(context["event"].id, Faction, context=context).order_by("number")
     elif export_type == "quest":
         lst = Quest.objects.filter(event=context["event"]).order_by("number")
     elif export_type == "trait":
@@ -1260,25 +1270,78 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     return JsonResponse(aux)
 
 
-@login_required
-def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Player-facing page to answer the matchmaker questions for an existing registration."""
-    context = get_event_context(request, event_slug, "matchmaker")
+SINGLE_APPLICABLE_FORM_STALE_MESSAGE = _(
+    "These answers were modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
+
+
+def _single_applicable_form_view(
+    request: HttpRequest,
+    event_slug: str,
+    feature_slug: str,
+    form_class: type[SingleApplicableRegistrationForm],
+    template: str,
+) -> HttpResponse:
+    """Handle a player-facing page for a specific form related to registrations.
+
+    Requires an existing, non-pending registration and reuses the standard answer/choice save flow.
+    """
+    context = get_event_context(request, event_slug, feature_slug)
 
     registration = context.get("registration")
     if not registration or registration.pending:
-        messages.warning(request, _("You must register for the event before answering the matchmaker questions"))
+        messages.warning(request, _("You must register for the event before answering these questions"))
         return redirect("register", event_slug=context["run"].get_slug())
 
+    context["auto_save"] = 1
+    init_auto_save(context, registration)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _single_applicable_form_ajax(request, context, feature_slug, registration)
+
+    if request.method == "GET":
+        context["auto_save_draft"] = pop_draft(
+            context["member"], draft_element_key(context, feature_slug, registration), registration.updated
+        )
+
     if request.method == "POST":
-        form = MatchmakerForm(request.POST, request.FILES, instance=registration, context=context)
-        if form.is_valid():
+        form = form_class(request.POST, request.FILES, instance=registration, context=context)
+        if is_stale(context, request, registration):
+            messages.error(request, SINGLE_APPLICABLE_FORM_STALE_MESSAGE)
+        elif form.is_valid():
             form.save()
+            clear_draft(context["member"], draft_element_key(context, feature_slug, registration))
             messages.success(request, _("Answers saved!"))
-            return redirect("matchmaker", event_slug=context["run"].get_slug())
+            return redirect(feature_slug, event_slug=context["run"].get_slug())
     else:
-        form = MatchmakerForm(instance=registration, context=context)
+        form = form_class(instance=registration, context=context)
 
     context["form"] = form
 
-    return render(request, "larpmanager/event/matchmaker.html", context)
+    return render(request, template, context)
+
+
+def _single_applicable_form_ajax(
+    request: HttpRequest,
+    context: dict,
+    feature_slug: str,
+    registration: Registration,
+) -> JsonResponse:
+    """Stash the form as a staging draft, without touching the real record."""
+    return save_draft_from_request(request, context, feature_slug, registration)
+
+
+@login_required
+def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to answer the matchmaker questions for an existing registration."""
+    return _single_applicable_form_view(
+        request, event_slug, "matchmaker", MatchmakerForm, "larpmanager/event/matchmaker.html"
+    )
+
+
+@login_required
+def debrief(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to answer the debrief questions for an existing registration."""
+    return _single_applicable_form_view(request, event_slug, "debrief", DebriefForm, "larpmanager/event/debrief.html")

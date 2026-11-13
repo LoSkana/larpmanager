@@ -26,11 +26,11 @@ queue, and player-authored relationships.
 
 from __future__ import annotations
 
-import datetime
-from datetime import UTC
+import datetime as dt
 from typing import Any
 
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
@@ -401,8 +401,8 @@ def build_player_characters_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
-    run.end = run.start + datetime.timedelta(days=2)
+    run.start = timezone.localdate() + dt.timedelta(days=60)
+    run.end = run.start + dt.timedelta(days=2)
     run.save()
     _enable_features(event, ["character", "user_character", "player_relationships"])
 

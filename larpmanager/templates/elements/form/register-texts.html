@@ -1,5 +1,5 @@
 {% load i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 
 window['texts'] = {
     'upd': '{% filter escapejs %}{% trans "Your updated registration total is" %}{% endfilter %}',

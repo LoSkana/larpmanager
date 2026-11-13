@@ -56,11 +56,13 @@ class CorrectUrlMiddleware:
         """
         path = request.get_full_path()
 
-        # Fix double slashes in URLs, but preserve Google OAuth callback URLs
-        # which legitimately contain double slashes in their structure
-        if "//" in path and "accounts/google/login/" not in path:
-            # Collapse every run of slashes in one pass
-            return redirect(re.sub(r"/{2,}", "/", path))
+        # Fix double slashes in the path only - the querystring legitimately
+        # contains "//" whenever it carries an absolute URL (e.g. a 'next'
+        # redirect target like "https://..."), which must not be collapsed
+        if "//" in request.path:
+            fixed_path = re.sub(r"/{2,}", "/", request.path)
+            query_string = request.META.get("QUERY_STRING", "")
+            return redirect(f"{fixed_path}?{query_string}" if query_string else fixed_path)
 
         # Handle "undefined" suffixes commonly added by JavaScript redirects
         # Parse the URL to safely manipulate path components

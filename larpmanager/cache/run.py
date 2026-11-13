@@ -25,17 +25,61 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, Q, QuerySet
 
+from larpmanager.cache.basic import _get_event_parent_id, get_event_association_id, reset_event_parent_cache
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
+from larpmanager.cache.config import (
+    get_event_config,
+    save_single_config_by_id,
+)
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
-from larpmanager.models.writing import Faction
+from larpmanager.models.writing import Faction, get_event_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+
+
+def event_run_ids_cache_key(event_id: int) -> str:
+    """Generate cache key for an event's run ids."""
+    return f"event_run_ids_{event_id}"
+
+
+def get_event_run_ids(event_id: int) -> list[int]:
+    """Get the ids of an event's runs, from cache if available.
+
+    Many independent signal handlers (character cache, widget cache, PDF
+    cleanup, config reset, ...) each need the run ids for an event; caching
+    this avoids re-issuing the same query from every one of them.
+    """
+    cache_key = event_run_ids_cache_key(event_id)
+    run_ids = cache.get(cache_key)
+    if run_ids is None:
+        run_ids = list(Run.objects.filter(event_id=event_id).values_list("id", flat=True))
+        cache.set(cache_key, run_ids, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return run_ids
+
+
+def reset_event_run_ids_cache(event_id: int) -> None:
+    """Invalidate the cached run ids for an event."""
+    cache.delete(event_run_ids_cache_key(event_id))
+
+
+def get_event_runs(event_id: int) -> QuerySet[Run]:
+    """Get an event's runs, using the cached run ids to build the filter."""
+    return Run.objects.filter(id__in=get_event_run_ids(event_id))
+
+
+def get_event_and_children_runs(event_id: int) -> QuerySet[Run]:
+    """Get the runs of an event and of its child events, which may inherit its elements."""
+    return Run.objects.filter(Q(event_id=event_id) | Q(event__parent_id=event_id))
+
+
+def get_event_and_children_run_ids(event_id: int) -> list[int]:
+    """Get the ids of the runs of an event and of its child events."""
+    return list(get_event_and_children_runs(event_id).values_list("id", flat=True))
 
 
 def reset_cache_run(association: Association, slug: str) -> None:
@@ -99,7 +143,8 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:
     """Handle run pre-save cache invalidation."""
     if instance.pk:
-        reset_cache_run(instance.event.association_id, instance.get_slug())
+        association_id = get_event_association_id(instance.event_id)
+        reset_cache_run(association_id, instance.get_slug())
 
 
 def on_event_pre_save_invalidate_cache(instance: Event) -> None:
@@ -109,15 +154,19 @@ def on_event_pre_save_invalidate_cache(instance: Event) -> None:
             reset_cache_run(instance.association_id, run.get_slug())
 
 
-def reset_cache_config_run(run: Run) -> None:
+def reset_cache_config_run(run_id: int) -> None:
     """Delete cached configuration for a run."""
-    cache_key = cache_config_run_key(run)
-    cache.delete(cache_key)
+    cache.delete(cache_config_run_key(run_id))
 
 
-def cache_config_run_key(run_instance: Run) -> str:
+def reset_cache_config_run_ids(run_ids: list[int]) -> None:
+    """Delete cached configuration for a list of run ids, without fetching the Run objects."""
+    cache.delete_many([cache_config_run_key(run_id) for run_id in run_ids])
+
+
+def cache_config_run_key(run_id: int) -> str:
     """Return cache key for a run's config."""
-    return f"run_config_{run_instance.id}"
+    return f"run_config_{run_id}"
 
 
 def get_cache_config_run(run: Run) -> dict:
@@ -131,7 +180,7 @@ def get_cache_config_run(run: Run) -> dict:
 
     """
     # Generate cache key for this specific run
-    cache_key = cache_config_run_key(run)
+    cache_key = cache_config_run_key(run.id)
 
     # Attempt to retrieve from cache
     cached_config = cache.get(cache_key)
@@ -166,7 +215,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     """
     event_id = run.event_id
-    parent_id = run.event.parent.id if run.event.parent else run.event_id
+    parent_id = _get_event_parent_id(event_id) or event_id
 
     # Get event features to determine what functionality is available
     event_features = get_event_features(event_id)
@@ -211,27 +260,26 @@ def init_cache_config_run(run: Run) -> dict:
 def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset."""
     if instance.pk:
-        reset_cache_config_run(instance)
+        reset_cache_config_run(instance.id)
 
 
 def on_event_post_save_reset_config_cache(instance: Event) -> None:
     """Handle event post-save cache reset."""
     if instance.pk:
-        for run in instance.runs.all():
-            reset_cache_config_run(run)
+        reset_cache_config_run_ids(get_event_run_ids(instance.pk))
 
         reset_event_parent_cache(instance.pk)
 
 
-def update_visible_factions(event: Event) -> None:
+def update_visible_factions(event_id: int) -> None:
     """Check if there are visible factions with characters for nav display."""
     has_visible_factions = (
-        "faction" in get_event_features(event.id)
-        and event.get_elements(Faction)
+        "faction" in get_event_features(event_id)
+        and get_event_elements(event_id, Faction)
         .prefetch_related("characters")
         .exclude(name="")
         .annotate(char_count=Count("characters"))
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(event, "has_visible_factions", has_visible_factions)
+    save_single_config_by_id(Event, event_id, "has_visible_factions", has_visible_factions)

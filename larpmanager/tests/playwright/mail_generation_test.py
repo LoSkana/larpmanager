@@ -98,7 +98,7 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     submit_register(page)
     # Set membership fee
     go_to(page, live_server, "/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Members")).click()
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("10")
     page.locator("#id_membership_day").click()

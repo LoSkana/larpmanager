@@ -18,25 +18,47 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
+from __future__ import annotations
+
 import logging
 import time
-from typing import Any
+from functools import partial
+from typing import TYPE_CHECKING, Any
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import activate, gettext_lazy as _
+from django.db import IntegrityError, transaction
+from django.utils.html import escape
+from django.utils.translation import activate, gettext_lazy as _, override
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
+from larpmanager.cache.config import (
+    get_association_config,
+    get_element_configs,
+    get_event_config,
+    reset_element_configs,
+)
 from larpmanager.cache.event_text import get_event_text
+from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import registration_options
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.models.writing import Character, CharacterConfig
+from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.registrations.characters import get_character_full_options_message
+from larpmanager.utils.registrations.context import get_checkin_qr_path
+
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
+    from larpmanager.models.form import WritingOption
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +69,13 @@ def update_registration_status_bkg(registration_id: Any) -> None:
     time.sleep(1)
     registration = Registration.objects.get(pk=registration_id)
     update_registration_status(registration)
+
+
+def _get_checkin_qr_attachment(instance: Registration, event_id: int) -> tuple[str | None, str | None]:
+    """Return the check-in QR attachment path/name for a registration, or (None, None) if the feature is off."""
+    if "checkin" not in get_event_features(event_id):
+        return None, None
+    return get_checkin_qr_path(instance), str(_("Check-in QR code.png"))
 
 
 def update_registration_status(instance: Any) -> None:
@@ -80,16 +109,17 @@ def update_registration_status(instance: Any) -> None:
 
     # Prepare common context for email templates
     email_context = {"event": instance.run, "user": instance.member}
+    context: dict = {}
 
     # Send notification to the registering user
     activate(instance.member.language)
 
     # Determine email subject and body based on modification type
     if instance.modified == 1:
-        email_subject = hdr(instance.run.event) + _("Registration for %(event)s") % email_context
+        email_subject = hdr_run(instance.run_id) + _("Registration for %(event)s") % email_context
         email_body = _("Hello! Your registration for <b>%(event)s</b> has been confirmed.") % email_context
     else:
-        email_subject = hdr(instance.run.event) + _("Registration updated for %(event)s") % email_context
+        email_subject = hdr_run(instance.run_id) + _("Registration updated for %(event)s") % email_context
         email_body = _("Hello! Your registration for <b>%(event)s</b> has been updated.") % email_context
 
     # Append registration details to email body
@@ -98,27 +128,41 @@ def update_registration_status(instance: Any) -> None:
     # Add link to cancel registration
     cancel_path = f"{instance.run.get_slug()}/unregister/"
     cancel_label = _("cancel your registration")
-    cancel_url = get_url(cancel_path, instance.run.event)
+    cancel_url = get_association_url(cancel_path, get_run_association_id(instance.run_id, context=context))
     email_body += "<br /><br />" + _("If you no longer wish to attend, you can")
     email_body += f" <a href='{cancel_url}'>{cancel_label}</a>."
 
     # Add custom messages from event and association configurations
+    run_cache = get_run_basic_cache(instance.run_id, context=context)
     for custom_message in [
-        get_event_text(instance.run.event_id, EventTextType.SIGNUP, instance.member.language),
-        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP, instance.member.language),
+        get_event_text(run_cache["event_id"], EventTextType.SIGNUP, instance.member.language),
+        get_association_text(
+            run_cache["association_id"],
+            AssociationTextType.SIGNUP,
+            instance.member.language,
+        ),
     ]:
         if custom_message:
             email_body += "<br />" + custom_message
 
+    # Prepare the check-in QR code if the feature is enabled
+    attachment_path, attachment_name = _get_checkin_qr_attachment(instance, run_cache["event_id"])
     # Send email to the user
-    my_send_mail(email_subject, email_body, instance.member, instance.run)
+    my_send_mail(
+        email_subject,
+        email_body,
+        instance.member,
+        instance.run,
+        attachment_path=attachment_path,
+        attachment_name=attachment_name,
+    )
 
     # Send notifications to event organizers based on configuration
-    association_id = instance.run.event.association_id
+    association_id = run_cache["association_id"]
 
     # Handle new registration notifications to organizers
     if instance.modified == 1 and get_association_config(association_id, "mail_signup_new"):
-        for organizer in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(
                 member=organizer,
                 run=instance.run,
@@ -128,13 +172,125 @@ def update_registration_status(instance: Any) -> None:
 
     # Handle registration update notifications to organizers
     elif get_association_config(association_id, "mail_signup_update"):
-        for organizer in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(
                 member=organizer,
                 run=instance.run,
                 instance=instance,
                 notification_type=NotificationType.REGISTRATION_UPDATE,
             )
+
+
+def notify_character_full_options(
+    registration: Registration,
+    character: Character,
+    full_options: list[WritingOption],
+    request: HttpRequest | None = None,
+) -> None:
+    """Notify that a character was not assigned since its limited options have no spots left.
+
+    The player sees an error on screen when a request is available, otherwise receives an
+    email; the organizers are notified (through their digest, if enabled). Player and
+    organizers are notified only once for the same character, run and full options, after
+    the transaction commits; the on-screen error is shown only once per request.
+    """
+    notified_options = ",".join(str(option.id) for option in sorted(full_options, key=lambda option: option.id))
+
+    if request:
+        shown = getattr(request, "_full_options_shown", set())
+        shown_key = (character.id, notified_options)
+        if shown_key not in shown:
+            messages.error(request, get_character_full_options_message(character, full_options))
+            shown.add(shown_key)
+            request._full_options_shown = shown  # noqa: SLF001
+
+    if not request and _mark_full_options_notified(
+        character, _full_options_emailed_key(registration.run_id), notified_options
+    ):
+        transaction.on_commit(partial(_email_player_full_options, registration, character, full_options))
+
+    if not _mark_full_options_notified(character, _full_options_notified_key(registration.run_id), notified_options):
+        return
+
+    transaction.on_commit(partial(_notify_organizers_full_options, registration, character))
+
+
+def _email_player_full_options(
+    registration: Registration, character: Character, full_options: list[WritingOption]
+) -> None:
+    """Email the player that the character was not assigned since its options have no spots left."""
+    with override(registration.member.language):
+        email_subject = hdr_run(registration.run_id) + _("Character not assigned for %(event)s") % {
+            "event": registration.run,
+        }
+        email_body = "<p>" + escape(get_character_full_options_message(character, full_options)) + "</p>"
+        email_body += "<p>" + _("Please choose different options for the character, or contact the organizers.")
+        email_body += "</p>"
+        my_send_mail(email_subject, email_body, registration.member, registration.run)
+
+
+def _notify_organizers_full_options(registration: Registration, character: Character) -> None:
+    """Notify the organizers of the run about a character blocked by options without spots."""
+    for organizer in get_event_organizers(registration.run_id):
+        my_send_digest_email(
+            member=organizer,
+            run=registration.run,
+            instance=character,
+            notification_type=NotificationType.CHARACTER_OPTION_FULL,
+        )
+
+
+def _mark_full_options_notified(character: Character, config_name: str, notified_options: str) -> bool:
+    """Store the full options notified in the character config, returning False if already stored.
+
+    The config row is locked, so concurrent requests store (and notify) the same options only once.
+    """
+    try:
+        with transaction.atomic():
+            config = CharacterConfig.objects.select_for_update().filter(character=character, name=config_name).first()
+            if config and config.value == notified_options:
+                return False
+            if config:
+                config.value = notified_options
+                config.save()
+            else:
+                CharacterConfig.objects.create(character=character, name=config_name, value=notified_options)
+    except IntegrityError:
+        # A concurrent request stored the config first
+        return False
+
+    # Reset the cache again on commit, in case it was filled with the previous configs meanwhile
+    transaction.on_commit(partial(reset_element_configs, character.id, "character"))
+    return True
+
+
+def _full_options_notified_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options notified to organizers for the run."""
+    return f"full_options_notified_{run_id}"
+
+
+def _full_options_emailed_key(run_id: int) -> str:
+    """Return the name of the character config storing the full options emailed to the player for the run."""
+    return f"full_options_emailed_{run_id}"
+
+
+def clear_character_full_options_notified(character_id: int, run_id: int) -> None:
+    """Forget the full options notified for the character in the run, so a new block is notified again."""
+    config_names = [_full_options_notified_key(run_id), _full_options_emailed_key(run_id)]
+    # Check the cached configs first, to avoid a query on every assignment save
+    character_configs = get_element_configs(character_id, "character")
+    if not any(config_name in character_configs for config_name in config_names):
+        return
+
+    deleted_count, _deleted_by_model = CharacterConfig.objects.filter(
+        character_id=character_id,
+        name__in=config_names,
+        deleted=None,
+    ).delete()
+    if deleted_count:
+        reset_element_configs(character_id, "character")
+        # Reset again on commit, in case it was filled with the previous configs meanwhile
+        transaction.on_commit(partial(reset_element_configs, character_id, "character"))
 
 
 def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
@@ -158,8 +314,10 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     if not instance.character:
         return
 
+    run_cache = get_run_basic_cache(instance.registration.run_id)
+
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.registration.run.event_id, "mail_character"):
+    if get_event_config(run_cache["event_id"], "mail_character"):
         return
 
     # Prepare context data for email template
@@ -169,15 +327,15 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     }
 
     # Construct email subject with event header and localized text
-    email_subject = hdr(instance.registration.run.event) + _("Character assigned for %(event)s") % email_context
+    email_subject = hdr_run(instance.registration.run_id) + _("Character assigned for %(event)s") % email_context
 
     # Build the main email body with character assignment information
     email_body = _("You have been assigned the character <b>%(character)s</b> for <b>%(event)s</b>.") % email_context
 
     # Generate URL for character access page
-    character_url = get_url(
+    character_url = get_association_url(
         f"{instance.registration.run.get_slug()}/character/your",
-        instance.registration.run.event,
+        run_cache["association_id"],
     )
 
     # Add character access link to email body
@@ -186,7 +344,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     }
 
     # Append custom assignment message if configured for the event
-    custom_assignment_message = get_event_text(instance.registration.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(run_cache["event_id"], EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         email_body += "<br />" + custom_assignment_message
 
@@ -221,14 +379,14 @@ def update_registration_cancellation(instance: Registration) -> None:
     # Send confirmation email to the user who cancelled
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration cancelled for %(event)s") % email_context
     email_body = _("Your registration for this event has been successfully cancelled. We are sorry to see you go!")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
-    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
+    if get_association_config(get_run_association_id(instance.run_id), "mail_signup_del"):
         # Store member and ticket info in details since registration might be deleted
-        for organizer in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(
                 member=organizer,
                 run=instance.run,
@@ -296,14 +454,14 @@ def send_registration_deletion_email(instance: Registration) -> None:
 
     # Send cancellation notification to the registered user
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
+    email_subject = hdr_run(instance.run_id) + _("Registration cancelled for %(event)s") % context
     email_body = _("Your registration for this event has been successfully cancelled.")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications
-    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
+    if get_association_config(get_run_association_id(instance.run_id), "mail_signup_del"):
         # Store member and ticket info in details since registration is being deleted
-        for organizer in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(
                 member=organizer,
                 run=instance.run,
@@ -320,24 +478,27 @@ def send_registration_request_received_email(instance: Registration) -> None:
 
     """
     email_context = {"event": instance.run, "user": instance.member}
+    context: dict = {}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request received for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request received for %(event)s") % email_context
     email_body = (
         _("Hello! We have received your request to register for <b>%(event)s</b>. An organizer will review it shortly.")
         % email_context
     )
 
     custom_message = get_event_text(
-        instance.run.event_id, EventTextType.REGISTRATION_APPROVAL, instance.member.language
+        get_run_event_id(instance.run_id, context=context),
+        EventTextType.REGISTRATION_APPROVAL,
+        instance.member.language,
     )
     if custom_message:
         email_body += "<br />" + custom_message
 
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
-    association_id = instance.run.event.association_id
+    association_id = get_run_association_id(instance.run_id, context=context)
     if get_association_config(association_id, "mail_signup_new"):
-        for organizer in get_event_organizers(instance.run.event):
+        for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(
                 member=organizer,
                 run=instance.run,
@@ -355,10 +516,10 @@ def send_registration_request_accepted_email(instance: Registration) -> None:
     """
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request approved for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request approved for %(event)s") % email_context
     email_body = _("Great news! Your request to register for <b>%(event)s</b> has been approved.") % email_context
 
-    register_url = get_url(instance.run.get_slug() + "/register", instance.run.event)
+    register_url = get_association_url(instance.run.get_slug() + "/register", get_run_association_id(instance.run_id))
     email_body += "<br /><br />" + _("Please <a href='%(url)s'>complete your registration</a>.") % {"url": register_url}
 
     my_send_mail(email_subject, email_body, instance.member, instance.run)
@@ -373,7 +534,7 @@ def send_registration_request_rejected_email(instance: Registration) -> None:
     """
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request declined for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request declined for %(event)s") % email_context
     email_body = (
         _("We regret to inform you that your request to register for <b>%(event)s</b> was not accepted.")
         % email_context

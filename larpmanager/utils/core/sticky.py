@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.models.utils import my_uuid_short
+from larpmanager.utils.core.common import ensure_timezone_aware
 
 if TYPE_CHECKING:
     from larpmanager.models.member import Member
@@ -167,7 +168,7 @@ def _process_sticky(
     # Mark expired messages for cleanup
     expires_at_str = message_data.get("expires_at")
     if expires_at_str:
-        expires_at = timezone.datetime.fromisoformat(expires_at_str)
+        expires_at = ensure_timezone_aware(timezone.datetime.fromisoformat(expires_at_str))
         if expires_at < current_time:
             messages_to_remove.append(message_id)
             return

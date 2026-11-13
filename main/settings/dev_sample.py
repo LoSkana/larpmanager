@@ -17,6 +17,10 @@ DEEPL_API_KEY = '???'
 
 ANTHROPIC_API_KEY = '???'
 
+# To test the chat assistant without an API key: set ANTHROPIC_API_KEY = None,
+# run "ant auth login" once, and enable this
+ANTHROPIC_USE_LOCAL_LOGIN = False
+
 # Optional: use an authenticated Codex or Claude CLI for translation
 # LLM_TRANSLATION_AGENT = 'codex'
 # LLM_TRANSLATION_MODEL = None

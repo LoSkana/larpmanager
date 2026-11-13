@@ -30,7 +30,7 @@ from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
 from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.services.transfer import (
@@ -186,8 +186,8 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         )
 
         # Clear all relevant caches for both source and target runs
-        reset_all_run(context["run"].event, context["run"])
-        reset_all_run(target_run.event, target_run)
+        reset_all_run(context["run"].id)
+        reset_all_run(target_run.id)
 
         return redirect("orga_registrations", event_slug=context["run"].get_slug())
 

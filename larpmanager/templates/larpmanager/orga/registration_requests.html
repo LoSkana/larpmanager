@@ -29,7 +29,7 @@
                         <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
                     </td>
                     <td>{{ el.member.email }}</td>
-                    <td>{{ el.created|date:"Y-m-d" }}</td>
+                    <td data-order="{{ el.created|date:'U' }}">{{ el.created|date:'d/m/Y' }}</td>
                     {% for cell in el.request_cells %}<td>{{ cell }}</td>{% endfor %}
                     <td>
                         <a href="{% url 'orga_registration_request_reject' run.get_slug el.uuid %}"

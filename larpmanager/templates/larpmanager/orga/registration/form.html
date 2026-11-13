@@ -115,9 +115,7 @@
     </tbody>
 </table>
 {% if not list %}
-    <p class="no-elements-available">
-        {% trans "No questions have been created yet for this form. Use the button above to add one." %}
-    </p>
+    {% include "elements/table/empty_state.html" with text=empty_text %}
 {% endif %}
 {% include "elements/table/footer.html" %}
 {% endblock content %}

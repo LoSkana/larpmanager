@@ -28,4 +28,10 @@ def is_ajax(http_request: HttpRequest) -> bool:
 
 def show_toolbar(request: HttpRequest) -> bool:
     """Determine whether to show the toolbar on a given page."""
-    return getattr(conf_settings, "DEBUG_TOOLBAR", False) and not is_ajax(request)
+    if not getattr(conf_settings, "DEBUG_TOOLBAR", False) or is_ajax(request):
+        return False
+
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        return False
+
+    return bool(request.user.member.get_config("debug_toolbar_enabled"))

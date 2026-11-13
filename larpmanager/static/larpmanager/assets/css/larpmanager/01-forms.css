@@ -15,6 +15,10 @@ form {
   margin: 0 auto 1em;
 }
 
+form.inline {
+  margin: 0;
+}
+
 .selector {
   width: 100% !important;
 }
@@ -273,6 +277,19 @@ input[type="checkbox"].checkbox_single {
   font-style: italic;
 }
 
+.form_error ul {
+  margin: 0.5em 0 0 1.5em;
+}
+
+.form_error a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.mandatory-error .form-error {
+  color: var(--ter-clr);
+}
+
 .slug_pre {
   color: rgba(var(--pri-rgb), 0.7);
   font-size: 80%;
@@ -280,6 +297,10 @@ input[type="checkbox"].checkbox_single {
   width: 100%;
   display: inline-block;
   margin: 0;
+}
+
+.slug_change {
+  font-size: 80%;
 }
 
 .slug_war {
@@ -371,6 +392,12 @@ input[type="checkbox"].checkbox_single {
   display: none;
 }
 
+/* options hidden by their unmet requirements: beats the widget display rules, and stays
+   independent from the collapse toggle, which owns the .hide class */
+.dep-hidden {
+  display: none !important;
+}
+
 .opt-show-more {
   display: inline-block;
   margin: 0.2em 0 0.4em;
@@ -398,7 +425,7 @@ input[type="checkbox"].checkbox_single {
 
 .opt-desc {
   display: block;
-  color: #888;
+  color: rgba(var(--pri-rgb), 0.6);
   font-size: 0.85em;
   margin-top: 0.1em;
   overflow-wrap: break-word;
@@ -416,6 +443,19 @@ input[type="checkbox"].checkbox_single {
 .reg-checkbox-class label,
 .reg-radio-class label {
   cursor: pointer;
+}
+
+.likert-radio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em 1.5em;
+}
+
+@media (max-width: 840px) {
+  .likert-radio {
+    flex-direction: column;
+    gap: 0.4em;
+  }
 }
 
 .opt-card-body {
@@ -446,7 +486,7 @@ input[type="checkbox"].checkbox_single {
 }
 
 .opt-card-desc {
-  color: #666;
+  color: rgba(var(--pri-rgb), 0.6);
   font-size: 0.75em;
   margin-top: 0.15em;
   white-space: normal;
@@ -455,7 +495,7 @@ input[type="checkbox"].checkbox_single {
 
 .opt-card-avail {
   font-size: 0.8em;
-  color: #888;
+  color: rgba(var(--pri-rgb), 0.6);
   margin-top: 0.1em;
 }
 

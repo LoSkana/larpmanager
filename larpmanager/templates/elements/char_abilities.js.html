@@ -1,12 +1,49 @@
 {% load show_tags i18n %}
-<script>
+{{ exp_calls|json_script:"exp-calls" }}
+<script nonce="{{ csp_nonce }}">
 
 const abilities = {{ available | safe }};
 
-window.addEventListener('DOMContentLoaded', function() {
-    $('form').on('submit', function() {
-        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure?" %}{% endfilter %}');
+// Calls written in uppercase in the ability descriptions, shown with a hover tooltip
+const callDescr = {};
+JSON.parse(document.getElementById('exp-calls').textContent).forEach(function(call) {
+    if (call.descr) callDescr[call.name] = call.descr;
+});
+const callNames = Object.keys(callDescr).sort(function(a, b) { return b.length - a.length; });
+const callRegex = callNames.length ? new RegExp(
+    '(?<![\\p{L}\\p{N}_&])(' + callNames.map(function(name) {
+        return name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }).join('|') + ')(?![\\p{L}\\p{N}_])', 'gu'
+) : null;
+
+// Split a plain text in text nodes and call spans, the description shown on hover
+function callNodes(text) {
+    if (!callRegex) return [document.createTextNode(text)];
+    const nodes = [];
+    let last = 0;
+    text.replace(callRegex, function(match, name, offset) {
+        nodes.push(document.createTextNode(text.slice(last, offset)));
+        nodes.push($('<span class="exp-call">').attr('data-call-descr', callDescr[name]).text(name)[0]);
+        last = offset + match.length;
+        return match;
     });
+    nodes.push(document.createTextNode(text.slice(last)));
+    return nodes;
+}
+
+// Replace the calls found in the text nodes of an element
+function wrapCalls(root) {
+    if (!callRegex) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    textNodes.forEach(function(node) {
+        $(node).replaceWith(callNodes(node.nodeValue));
+    });
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $('form[enctype="multipart/form-data"]').attr('data-confirm', '{% filter escapejs %}{% trans "Buy the selected ability?" %}{% endfilter %}');
 
     const typeOrder = {{ type_available | safe }};
     const typeIds = Object.keys(typeOrder);
@@ -25,6 +62,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var labelAll = "{% filter escapejs %}{% trans 'All' %}{% endfilter %}";
     var labelShowMore = "{% filter escapejs %}{% trans 'Show more' %}{% endfilter %}";
     var labelShowLess = "{% filter escapejs %}{% trans 'Show less' %}{% endfilter %}";
+    var labelFullDescr = "{% filter escapejs %}{% trans 'Show full description' %}{% endfilter %}";
     const PAGE_SIZE = 10;
     let expanded = false;
 
@@ -87,12 +125,52 @@ window.addEventListener('DOMContentLoaded', function() {
         if (ab.descr) {
             const stripped = new DOMParser().parseFromString(ab.descr, 'text/html').body.textContent || '';
             const preview = stripped.length > 100 ? stripped.slice(0, 120) + '...' : stripped;
-            $card.append($('<p class="ability-card-descr">').text(preview));
+            const $descr = $('<p class="ability-card-descr">').append(callNodes(preview + ' '));
+            const $info = $('<span>', {
+                'class': 'ability-descr-open',
+                'aria-label': labelFullDescr
+            }).append($('<i class="fa-solid fa-circle-info">'));
+            const $content = $('<div class="ability-descr-full">');
+            $content.append($('<h3>').text(ab.name));
+            const $full = $('<div>').html(ab.descr);
+            wrapCalls($full[0]);
+            $content.append($full);
+            $info.qtip({
+                content: {
+                    text: $content
+                }, style: {
+                    classes: 'qtip-dark qtip-rounded qtip-shadow qtip-ability'
+                }, position: {
+                    my: 'top center',
+                    at: 'bottom center',
+                    viewport: window
+                }
+            });
+            const modalHtml = $content.prop('outerHTML');
+            $info.on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $info.qtip('hide');
+                window.openLmModal(modalHtml, 'popup');
+            });
+            $descr.append($info);
+            $card.append($descr);
         }
         if (ab.prereqs && ab.prereqs.length > 0) {
             const $prereq = $('<p class="ability-card-prereqs">');
             $prereq.text('{% filter escapejs %}{% trans "Requirements:" %}{% endfilter %} ' + ab.prereqs.join(', '));
             $card.append($prereq);
+        }
+        if (ab.exclusives && ab.exclusives.length > 0) {
+            const $exclusive = $('<p class="ability-card-prereqs ability-card-exclusive">');
+            $exclusive.text('{% filter escapejs %}{% trans "Exclusive group:" %}{% endfilter %} ' + ab.exclusives.join(', '));
+            $card.append($exclusive);
+        }
+        if (ab.creation_only) {
+            const $creation = $('<p class="ability-card-prereqs ability-card-creation">');
+            $creation.append($('<i class="fa-solid fa-hourglass-half">'));
+            $creation.append(document.createTextNode(' {% filter escapejs %}{% trans "Available only until the character is approved" %}{% endfilter %}'));
+            $card.append($creation);
         }
         $card.on('click', function() {
             selectedUuid = uuid;

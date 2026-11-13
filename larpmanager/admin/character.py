@@ -20,17 +20,18 @@
 
 from typing import ClassVar
 
-from admin_auto_filters.filters import AutocompleteFilter
 from django.contrib import admin
 
-from larpmanager.admin.base import CharacterFilter, DefModelAdmin, EventFilter, reduced
+from larpmanager.admin.base import AutocompleteFilter, CharacterFilter, DefModelAdmin, EventFilter, reduced
 from larpmanager.models.base import BaseModel
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CallExp,
     CriterionExp,
     DeliveryExp,
+    ExclusiveExp,
     ModifierExp,
     RuleExp,
     SystemExp,
@@ -181,6 +182,26 @@ class CriterionPxAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("id", "event", "name", "system", "operation", "amount", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["event", "system", "prerequisites", "requirements", "factions"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(CallExp)
+class CallExpAdmin(DefModelAdmin):
+    """Admin interface for CallExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(ExclusiveExp)
+class ExclusiveExpAdmin(DefModelAdmin):
+    """Admin interface for ExclusiveExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "max_count", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "abilities"]
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 

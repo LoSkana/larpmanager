@@ -43,7 +43,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
     PaymentChoices,
 )
-from larpmanager.models.event import DevelopStatus
+from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.registration import TicketTier
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -346,8 +346,9 @@ class TestRunAccountingFunctions(BaseTestCase):
         )
         discount.runs.add(run)
 
+        registration = self.create_registration(member=member, run=run)
         AccountingItemDiscount.objects.create(
-            member=member, run=run, disc=discount, value=Decimal("20.00"), association=association
+            registration=registration, disc=discount, value=Decimal("20.00"), association=association
         )
 
         summary, details = get_run_accounting(run, {})
@@ -449,12 +450,58 @@ class TestAssocAccountingFunctions(BaseTestCase):
         """Test association accounting includes completed run balances"""
         association = self.get_association()
         run = self.get_run()
-        run.development = DevelopStatus.DONE
-        run.balance = Decimal("100.00")
-        run.save()
+        Run.objects.filter(pk=run.pk).update(development=DevelopStatus.DONE, balance=Decimal("100.00"))
 
         context = {"association_id": association.id}
         association_accounting(context)
 
         self.assertIn("runs", context)
         self.assertGreaterEqual(context["balance_sum"], Decimal("100.00"))
+
+
+class TestRunBalancePersistence(BaseTestCase):
+    """Test cases for the stored run balance."""
+
+    @patch("larpmanager.accounting.balance.get_event_features")
+    def test_concluding_run_stores_balance(self, mock_features: Any) -> None:
+        """Test concluding a run stores its balance and feeds the global balance."""
+        mock_features.return_value = {"payment": True, "expense": True}
+        association = self.get_association()
+        member = self.get_member()
+        run = self.get_run()
+        registration = self.create_registration(member=member, run=run, tot_iscr=Decimal("100.00"))
+        AccountingItemPayment.objects.create(
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("100.00"),
+        )
+        AccountingItemExpense.objects.create(
+            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("30.00")
+        )
+
+        run.development = DevelopStatus.DONE
+        run.save()
+
+        run.refresh_from_db()
+        self.assertEqual(run.balance, Decimal("70.00"))
+        context = {"association_id": association.id}
+        association_accounting(context)
+        self.assertEqual(context["balance_sum"], Decimal("70.00"))
+
+    @patch("larpmanager.accounting.balance.get_event_features")
+    def test_run_accounting_updates_stored_balance(self, mock_features: Any) -> None:
+        """Test computing the run accounting refreshes the stored balance."""
+        mock_features.return_value = {"payment": True, "expense": True}
+        association = self.get_association()
+        member = self.get_member()
+        run = self.get_run()
+        AccountingItemExpense.objects.create(
+            member=member, association=association, run=run, exp=ExpenseChoices.LOCAT, value=Decimal("40.00")
+        )
+
+        get_run_accounting(run, {})
+
+        run.refresh_from_db()
+        self.assertEqual(run.balance, Decimal("-40.00"))

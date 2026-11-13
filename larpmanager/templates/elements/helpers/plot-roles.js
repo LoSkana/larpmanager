@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 const editUrl = "{% url 'orga_characters_new' run.get_slug %}";
 
@@ -51,11 +51,14 @@ window.addEventListener('DOMContentLoaded', function() {
     $(function() {
         let prevSelected = ($("#id_characters").val() || []).map(String);
 
-        document.getElementById('main_form').addEventListener('submit', function(e) {
-            {% if not TINYMCE_DISABLED %}
-            tinymce.triggerSave();
-            {% endif %}
-        });
+        var mainForm = document.getElementById('main_form');
+        if (mainForm) {
+            mainForm.addEventListener('submit', function(e) {
+                {% if not TINYMCE_DISABLED %}
+                tinymce.triggerSave();
+                {% endif %}
+            });
+        }
 
         // add new
         $('#id_characters').on('select2:select select2:unselect change', function(e) {

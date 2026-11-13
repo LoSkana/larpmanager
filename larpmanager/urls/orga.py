@@ -26,11 +26,11 @@ from larpmanager.views.orga import (
     accounting as views_oa,
     casting as views_oca,
     character as views_oc,
+    checkin as views_ock,
     event as views_oe,
     experience as views_ox,
     form as views_of,
     inventory as views_ci,
-    matchmaker as views_omm,
     member as views_om,
     miscellanea as views_oms,
     pdf as views_op,
@@ -94,6 +94,16 @@ urlpatterns = [
         "<slug:event_slug>/manage/casting/history/<str:casting_type>/",
         views_oca.orga_casting_history,
         name="orga_casting_history",
+    ),
+    path(
+        "<slug:event_slug>/manage/checkin/",
+        views_ock.orga_checkin,
+        name="orga_checkin",
+    ),
+    path(
+        "<slug:event_slug>/manage/checkin/scan/",
+        views_ock.orga_checkin_scan,
+        name="orga_checkin_scan",
     ),
     path(
         "<slug:event_slug>/manage/registrations/",
@@ -1431,6 +1441,46 @@ urlpatterns = [
         name="orga_exp_criterions_delete",
     ),
     path(
+        "<slug:event_slug>/manage/experience/calls/",
+        views_ox.orga_exp_calls,
+        name="orga_exp_calls",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/new/",
+        views_ox.orga_exp_calls_new,
+        name="orga_exp_calls_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/<slug:call_uuid>/edit/",
+        views_ox.orga_exp_calls_edit,
+        name="orga_exp_calls_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/calls/<slug:call_uuid>/delete/",
+        views_ox.orga_exp_calls_delete,
+        name="orga_exp_calls_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/exclusives/",
+        views_ox.orga_exp_exclusives,
+        name="orga_exp_exclusives",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/exclusives/new/",
+        views_ox.orga_exp_exclusives_new,
+        name="orga_exp_exclusives_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/exclusives/<slug:exclusive_uuid>/edit/",
+        views_ox.orga_exp_exclusives_edit,
+        name="orga_exp_exclusives_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/exclusives/<slug:exclusive_uuid>/delete/",
+        views_ox.orga_exp_exclusives_delete,
+        name="orga_exp_exclusives_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/characters/search/",
         views_ox.orga_character_search,
         name="orga_character_search",
@@ -1444,6 +1494,16 @@ urlpatterns = [
         "<slug:event_slug>/manage/members/available/",
         views_ow.orga_members_available,
         name="orga_members_available",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/edit/<str:member_uuid>/",
+        views_oca.orga_casting_edit,
+        name="orga_casting_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/casting/edit/<str:member_uuid>/<str:casting_type>/",
+        views_oca.orga_casting_edit,
+        name="orga_casting_edit",
     ),
     path(
         "<slug:event_slug>/manage/casting/toggle/",
@@ -1477,8 +1537,13 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/manage/matchmaker/",
-        views_omm.orga_matchmaker_answers,
+        views_of.orga_matchmaker_answers,
         name="orga_matchmaker_answers",
+    ),
+    path(
+        "<slug:event_slug>/manage/debrief/",
+        views_of.orga_debrief_answers,
+        name="orga_debrief_answers",
     ),
     path(
         "<slug:event_slug>/manage/accounting/",
@@ -1539,6 +1604,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/payments/<slug:payment_uuid>/delete/",
         views_oa.orga_payments_delete,
         name="orga_payments_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/payments/member_flags/",
+        views_oa.orga_payment_member_flags,
+        name="orga_payment_member_flags",
     ),
     path(
         "<slug:event_slug>/manage/credits/",

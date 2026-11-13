@@ -1,3 +1,23 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 """Email backend implementations for different sending methods."""
 
 import logging
@@ -6,7 +26,9 @@ from abc import ABC, abstractmethod
 import boto3
 from botocore.exceptions import ClientError
 from django.conf import settings
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives, mailers
+from django.core.mail.backends.smtp import EmailBackend as DjangoSMTPBackend
+from django.core.mail.handler import DEFAULT_MAILER_ALIAS, DEFAULT_MAILER_BACKEND
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +47,13 @@ class SMTPEmailBackend(EmailBackend):
     def __init__(self, smtp_config: dict) -> None:
         """Initialize SMTP backend with custom configuration."""
         self.smtp_config = smtp_config
-        self.connection = get_connection(
+        default_backend = mailers.settings.get(DEFAULT_MAILER_ALIAS, {}).get("BACKEND", DEFAULT_MAILER_BACKEND)
+        if default_backend != DEFAULT_MAILER_BACKEND:
+            # Non-SMTP default mailer (console, locmem): keep messages local
+            self.connection = mailers.default
+            return
+        self.connection = DjangoSMTPBackend(
+            alias="custom_smtp",
             host=smtp_config.get("host"),
             port=smtp_config.get("port"),
             username=smtp_config.get("username"),
@@ -35,9 +63,7 @@ class SMTPEmailBackend(EmailBackend):
 
     def send_message(self, email_message: EmailMultiAlternatives) -> None:
         """Send email via custom SMTP server."""
-        # Set the connection on the message
-        email_message.connection = self.connection
-        email_message.send()
+        self.connection.send_messages([email_message])
         logger.debug("Email sent via custom SMTP: %s", self.smtp_config.get("host"))
 
 
@@ -93,10 +119,9 @@ class DefaultEmailBackend(EmailBackend):
 
     def __init__(self) -> None:
         """Initialize default backend."""
-        self.connection = get_connection()
+        self.connection = mailers.default
 
     def send_message(self, email_message: EmailMultiAlternatives) -> None:
         """Send email via Django's default email backend."""
-        email_message.connection = self.connection
-        email_message.send()
+        self.connection.send_messages([email_message])
         logger.debug("Email sent via default Django backend")

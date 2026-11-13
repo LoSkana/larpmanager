@@ -118,7 +118,7 @@ def discount(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name=re.compile(r"^Discounts ")).click()
+    page.locator("#register_form").get_by_role("link", name=re.compile(r"^Discounts")).click()
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
@@ -179,7 +179,7 @@ def pay(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "100")
     expect_normalized(page, page.locator("#one"), "48")
     expect_normalized(page, page.locator("#one"), "52")
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
@@ -237,7 +237,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.get_by_role("searchbox").fill("org")
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     edit_iframe.locator("#id_value").click()
@@ -262,7 +262,7 @@ def signup_pay(live_server: Any, page: Any) -> None:
     # check pay
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
-    page.get_by_role("cell", name="Wire", exact=True).click()
+    page.get_by_role("columnheader", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
     expect_normalized(page, page.locator("#one"), "100")
@@ -275,14 +275,14 @@ def setup_payment(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/features/payment/on")
 
     go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Email notifications")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()
     page.locator("#id_mail_signup_update").check()
     page.locator("#id_mail_signup_del").check()
     page.locator("#id_mail_payment").check()
 
-    page.get_by_role("link", name=re.compile(r"^Payments ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Payments")).click()
     page.locator("#id_payment_require_receipt").check()
 
     submit_confirm(page)

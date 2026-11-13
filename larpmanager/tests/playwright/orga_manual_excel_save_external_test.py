@@ -157,7 +157,7 @@ def excel(page: Any, live_server: Any) -> None:
 def external(page: Any, live_server: Any) -> None:
     # enable external access
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Characters")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_external_access").check()
     submit_confirm(page)
 
@@ -170,7 +170,7 @@ def external(page: Any, live_server: Any) -> None:
     go_to_check(page, live_server + url)
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation good friends with Test Character2 Text ciaoooo",
+        "Presentation good friends with Test Character2 ciaoooo",
     )
 
 

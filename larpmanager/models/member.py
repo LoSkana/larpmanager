@@ -25,10 +25,12 @@ from typing import Any, ClassVar
 
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.http import Http404
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -37,11 +39,14 @@ from pilkit.processors import ResizeToFill
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, MediaTokenMixin, UuidMixin
+from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
 from larpmanager.utils.core.codes import countries
+from larpmanager.utils.users.municipalities import get_province_for_birth_place
 
 logger = logging.getLogger(__name__)
+
+ITALIAN_PROVINCE_CODE_LENGTH = 2
 
 SENSITIVE_DISCLAIMER = _(
     "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants."
@@ -140,28 +145,6 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
     )
 
-    legal_name = models.CharField(
-        max_length=100,
-        verbose_name=_("Legal name"),
-        blank=True,
-        null=True,
-        help_text=_(
-            "If the first name shown on your documents is different from the one you prefer to use, then write "
-            "it here; otherwise leave this field empty.",
-        )
-        + " "
-        + SENSITIVE_DISCLAIMER,
-    )
-
-    gender = models.CharField(
-        max_length=1,
-        choices=GenderChoices.choices,
-        default=None,
-        verbose_name=_("Legal Gender"),
-        null=True,
-        help_text=_("Enter your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
-    )
-
     pronoun = models.CharField(
         max_length=20,
         verbose_name=_("Pronouns"),
@@ -219,7 +202,15 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     birth_place = models.CharField(
         max_length=150,
         verbose_name=_("Birth place"),
-        help_text=_("City and country where you were born"),
+        help_text=_("City where you were born (full name)"),
+        blank=True,
+        null=True,
+    )
+
+    birth_province = models.CharField(
+        max_length=150,
+        verbose_name=_("Birth province"),
+        help_text=_("Province where you were born (code)"),
         blank=True,
         null=True,
     )
@@ -328,6 +319,28 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
     )
 
+    legal_name = models.CharField(
+        max_length=100,
+        verbose_name=_("Legal name"),
+        blank=True,
+        null=True,
+        help_text=_(
+            "If the first name shown on your documents is different from the one you prefer to use, then write "
+            "it here; otherwise leave this field empty.",
+        )
+        + " "
+        + SENSITIVE_DISCLAIMER,
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=GenderChoices.choices,
+        default=None,
+        verbose_name=_("Legal Gender"),
+        null=True,
+        help_text=_("Enter your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
+    )
+
     # If the member is delegated, this field will hold the parent member account
     parent = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="delegated")
 
@@ -340,6 +353,24 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
                 name="member_email_idx",
             ),
         ]
+
+    def clean(self) -> None:
+        """Check birth province is a valid Italian province code, consistent with birth place."""
+        if self.nationality != "IT" or not self.birth_province:
+            return
+
+        if len(self.birth_province) > ITALIAN_PROVINCE_CODE_LENGTH:
+            raise ValidationError({"birth_province": _("Italian birth province must be a 2-letter code")})
+
+        if self.birth_place:
+            expected_province = get_province_for_birth_place(self.birth_place)
+            if expected_province and expected_province != self.birth_province.upper():
+                raise ValidationError(
+                    {
+                        "birth_province": _("Birth province does not match birth place (expected %(exp)s)")
+                        % {"exp": expected_province}
+                    }
+                )
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -417,9 +448,9 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         """Return the full file path for member request PDF."""
         return str(Path(self.get_member_filepath()) / "request.pdf")
 
-    def join(self, association: Association) -> None:
+    def join(self, association_id: int) -> None:
         """Join an association if not already a member."""
-        membership = get_user_membership(self, association.id)  # type: ignore[arg-type]
+        membership = get_user_membership(self, association_id)
         if membership.status == MembershipStatus.EMPTY:
             membership.status = MembershipStatus.JOINED
             membership.save()
@@ -451,7 +482,7 @@ class MemberConfig(BaseModel):
 
     name = models.CharField(max_length=150)
 
-    value = models.CharField(max_length=1000)
+    value = models.TextField()
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="configs")
 
@@ -667,6 +698,50 @@ class VolunteerRegistry(UuidMixin, BaseModel):
         ]
 
 
+class MemberFlagDef(UuidMixin, OrderMixin, BaseModel):
+    """Definition of a status flag that can be set on members of an association (e.g. carded, dues paid)."""
+
+    association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="member_flag_defs")
+
+    name = models.CharField(max_length=100, verbose_name=_("Name"), help_text=_("Short name shown as column header"))
+
+    descr = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name=_("Description"),
+        help_text=_("Shown as a tooltip on the column header"),
+    )
+
+    annual = models.BooleanField(
+        default=False,
+        verbose_name=_("Annual"),
+        help_text=_("If enabled, the flag resets every calendar year instead of staying permanent"),
+    )
+
+    def clean(self) -> None:
+        """Forbid changing `annual` after creation, since it would orphan already-stored config values."""
+        if self.pk:
+            previous_annual = MemberFlagDef.objects.filter(pk=self.pk).values_list("annual", flat=True).first()
+            if previous_annual is not None and previous_annual != self.annual:
+                raise ValidationError(
+                    {"annual": _("Cannot be changed after creation; delete this flag and create a new one instead.")}
+                )
+
+    def config_name(self) -> str:
+        """Return the MemberConfig name for this flag in the current calendar year, scoped to the association."""
+        name = f"flag_{self.association_id}_{self.uuid}"
+        if self.annual:
+            return f"{name}_{timezone.localdate().year}"
+        return name
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.name} ({self.association})"
+
+    class Meta:
+        ordering: ClassVar[list] = ["order"]
+
+
 class Badge(UuidMixin, BaseModel):
     """Represents Badge model."""
 
@@ -827,6 +902,7 @@ class NotificationType(models.TextChoices):
     PAYMENT_CREDIT = "payment_credit", "Credit Payment"
     PAYMENT_TOKEN = "payment_token", "Token Payment"
     INVOICE_APPROVAL = "invoice_approval", "Invoice Awaiting Approval"
+    CHARACTER_OPTION_FULL = "character_option_full", "Character Option Full"
 
     # Association-level notifications (sent to association executives)
     HELP_QUESTION = "help_question", "Help Question"
@@ -856,7 +932,7 @@ class NotificationQueue(BaseModel):
 
     def __str__(self) -> str:
         """String representation for notification in queue."""
-        member_str = self.member if self.member else "main_mail"
+        member_str = self.member or "main_mail"
         if self.run:
             return f"{self.run.search} - {member_str} - {self.get_notification_type_display()}"
         return f"{self.association.name} - {member_str} - {self.get_notification_type_display()}"

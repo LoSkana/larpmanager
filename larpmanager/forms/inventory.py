@@ -1,4 +1,5 @@
 # LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
 #
 # This file is part of LarpManager and is dual-licensed:
 #

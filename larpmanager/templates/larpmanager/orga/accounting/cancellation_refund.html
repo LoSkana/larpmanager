@@ -58,29 +58,27 @@
         </div>
     {% elif features.tokens and not features.credits %}
         <div class="nav typ">
-            <a id="typ_t" href="#" onclick="return select_typ('t');" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
+            <a id="typ_t" href="#" class="sel">{% trans "Only" %} {{ tokens_name }}</a>
         </div>
     {% elif features.credits and not features.tokens %}
         <div class="nav typ">
-            <a id="typ_c" href="#" onclick="return select_typ('c');" class="sel">{% trans "Only" %} {{ credits_name }}</a>
+            <a id="typ_c" href="#" class="sel">{% trans "Only" %} {{ credits_name }}</a>
         </div>
     {% else %}
         <div class="nav typ">
-            <a id="typ_t" href="#" onclick="return select_typ('t');">{% trans "Only" %} {{ tokens_name }}</a>
-            <a id="typ_c" href="#" onclick="return select_typ('c');">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
+            <a id="typ_t" href="#">{% trans "Only" %} {{ tokens_name }}</a>
+            <a id="typ_c" href="#">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
         </div>
     {% endif %}
     <br />
     <h3>{% trans "Refund percentage" %}</h3>
     <div class="nav p">
         {% for i in '0123456789'|make_list %}
-            <a id="p_{{ forloop.counter }}"
-               href="#"
-               onclick="return select_p('{{ forloop.counter }}');">{{ forloop.counter }}0 %</a>
+            <a id="p_{{ forloop.counter }}" href="#">{{ forloop.counter }}0 %</a>
         {% endfor %}
     </div>
     <br />
-    <form id="ref" action="{{ request.path }}" method="post">
+    <form id="ref_form" action="{{ request.path }}" method="post">
         {% csrf_token %}
         <input type="hidden" id="inp_token" name="inp_token" value="0" />
         <input type="hidden" id="inp_credit" name="inp_credit" value="0" />
@@ -88,7 +86,7 @@
     </form>
 {% endblock content %}
 {% block js %}
-    <script>
+    <script nonce="{{ csp_nonce }}">
 var typ = null;
 var perc = null;
 
@@ -171,12 +169,27 @@ window.addEventListener('DOMContentLoaded', function() {
         {% endif %}
         select_p('7');
 
-        $('form').on('submit', function() {
+        $('.nav.typ a').on('click', function(event) {
+            event.preventDefault();
+            select_typ(this.id.replace('typ_', ''));
+        });
+        $('.nav.p a').on('click', function(event) {
+            event.preventDefault();
+            select_p(this.id.replace('p_', ''));
+        });
+
+        $('#ref_form').on('submit', function() {
             {% if not features.tokens and not features.credits %}
                 if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot issue a refund: neither tokens nor credits are enabled" %}{% endfilter %}');
                 return false;
             {% else %}
-                return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
+                const form = this;
+                if (form.dataset.confirmed) return true;
+                window.lmConfirm('{% filter escapejs %}{% trans "Issue this refund to the participant?" %}{% endfilter %}', function() {
+                    form.dataset.confirmed = '1';
+                    form.requestSubmit();
+                });
+                return false;
             {% endif %}
         });
     });

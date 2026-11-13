@@ -56,6 +56,11 @@ def auto_assign_event_permission_number(event_permission: Any) -> None:
         event_permission.number = max_number + 10
 
 
+def is_association_admin(context: dict) -> bool:
+    """Return True if the user holds the main association role (number 1)."""
+    return 1 in context.get("association_role", {})
+
+
 def get_association_roles(request: HttpRequest, context: dict) -> tuple[bool, dict[str, int], list[str]]:
     """Get association roles and permissions for the current user.
 
@@ -380,7 +385,54 @@ LITE_PERMISSIONS: frozenset[str] = frozenset(
 )
 
 
-def get_index_permissions(  # noqa: C901, PLR0912
+def _is_index_permission_visible(
+    permission: dict,
+    context: dict,
+    features: dict,
+    permissions: dict,
+    permission_type: str,
+    *,
+    has_default: bool,
+) -> bool:
+    """Check whether a cached index permission should be shown to the user in the current context."""
+    slug = permission["slug"]
+    if permission["hidden"]:
+        return False
+
+    # In lite mode only essential permissions; in restricted demo only allowed sidebar entries
+    allowed_sidebar = context.get("demo_allowed_sidebar")
+    if (context.get("lite_mode", False) and slug not in LITE_PERMISSIONS) or (
+        allowed_sidebar and slug not in allowed_sidebar
+    ):
+        return False
+
+    if not is_allowed_managed(permission, context):
+        return False
+
+    # Check user has specific permission (unless has default access)
+    if not has_default and slug not in permissions:
+        return False
+
+    # Check feature is available (skip placeholder features)
+    if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
+        return False
+
+    return _is_permission_config_active(permission, context, permission_type)
+
+
+def _is_permission_config_active(permission: dict, context: dict, permission_type: str) -> bool:
+    """Check the optional config flag (active_if) a permission depends on."""
+    config_key = permission.get("active_if")
+    if not config_key:
+        return True
+    if permission_type == "event" and context.get("event"):
+        return bool(get_event_config(context["event"].id, config_key, context=context))
+    if permission_type == "association" and context.get("association_id"):
+        return bool(get_association_config(context["association_id"], config_key, context=context))
+    return False
+
+
+def get_index_permissions(
     context: dict,
     features: dict,
     permissions: dict,
@@ -407,51 +459,12 @@ def get_index_permissions(  # noqa: C901, PLR0912
 
     """
     permissions_by_module = {}
-    is_lite_mode = context.get("lite_mode", False)
-
-    # Get cached permissions for the specified type
     for permission in get_cache_index_permission(permission_type):
-        # Skip hidden permissions
-        if permission["hidden"]:
+        if not _is_index_permission_visible(
+            permission, context, features, permissions, permission_type, has_default=has_default
+        ):
             continue
-
-        # In lite mode, only show essential permissions
-        if is_lite_mode and permission["slug"] not in LITE_PERMISSIONS:
-            continue
-
-        # In a demo instance restricted to specific sidebar entries, hide the rest
-        allowed_sidebar = context.get("demo_allowed_sidebar")
-        if allowed_sidebar and permission["slug"] not in allowed_sidebar:
-            continue
-
-        # Check if permission is allowed in current context
-        if not is_allowed_managed(permission, context):
-            continue
-
-        # Check user has specific permission (unless has default access)
-        if not has_default and permission["slug"] not in permissions:
-            continue
-
-        # Check feature is available (skip placeholder features)
-        if not permission["feature__placeholder"] and permission["feature__slug"] not in features:
-            continue
-
-        # Check config-dependent permissions
-        if permission.get("active_if"):
-            config_key = permission["active_if"]
-            if permission_type == "event" and context.get("event"):
-                config_value = get_event_config(context["event"].id, config_key, context=context)
-            elif permission_type == "association" and context.get("association_id"):
-                config_value = get_association_config(context["association_id"], config_key, context=context)
-            else:
-                config_value = False
-            if not config_value:
-                continue
-
-        # Group permissions by module
         module_key = (_(permission["module__name"]), permission["module__icon"])
-        if module_key not in permissions_by_module:
-            permissions_by_module[module_key] = []
-        permissions_by_module[module_key].append(permission)
+        permissions_by_module.setdefault(module_key, []).append(permission)
 
     return permissions_by_module

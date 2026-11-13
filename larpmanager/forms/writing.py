@@ -22,9 +22,11 @@ from typing import Any, ClassVar
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import (
@@ -32,6 +34,8 @@ from larpmanager.forms.utils import (
     EventCharacterS2Widget,
     RunStaffS2Widget,
     WritingTinyMCE,
+    character_label,
+    get_character_concepts,
 )
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, ProgressStep
@@ -59,9 +63,12 @@ from larpmanager.models.writing import (
     PrologueType,
     RelationshipTag,
     SpeedLarp,
+    get_event_elements,
 )
+from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.core.validators import FileTypeValidator
-from larpmanager.utils.services.character import _get_character_cache_id
+from larpmanager.utils.services.character import _get_character_cache_id, auto_assign_character_faction
+from larpmanager.utils.services.experience import calculate_character_experience_points
 
 
 class WritingForm(BaseModelForm):
@@ -101,7 +108,7 @@ class WritingForm(BaseModelForm):
 
         if WritingQuestionType.PROGRESS in question_types:
             run_event = self.params.get("run").event
-            progress_event = run_event.parent if run_event.parent else run_event
+            progress_event = run_event.parent or run_event
             self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event).order_by("order")
             self.fields["progress"].to_field_name = "uuid"
             if self.instance.pk and self.instance.progress_id:
@@ -225,10 +232,10 @@ class BaseWritingForm(BaseRegistrationForm):
         # noinspection PyProtectedMember
         self.applicable = QuestionApplicable.get_applicable(self._meta.model._meta.model_name)  # noqa: SLF001  # Django model metadata
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Initialize questions filtered by applicable type using cache."""
         self.params.get("features", [])
-        self.questions = get_cached_writing_questions(event, self.applicable)
+        self.questions = get_cached_writing_questions(event_id, self.applicable)
 
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""
@@ -241,7 +248,7 @@ class BaseWritingForm(BaseRegistrationForm):
         """Return cache key for tracking option character count."""
         return f"option_char_{option['id']}"
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the form and handle registration questions if present.
 
         Args:
@@ -251,16 +258,29 @@ class BaseWritingForm(BaseRegistrationForm):
             The saved instance
 
         """
-        # Save parent form and persist instance
-        instance = super().save()
-        instance.save()
+        # Save parent form and persist instance. Defer the post_save experience
+        # recompute: it needs the registration questions saved below, which happen
+        # after instance.save(), otherwise it would run once here with stale data
+        # and be wasted.
+        with experience_recalc_deferred():
+            instance = super().save(commit=commit)
 
-        # Save registration questions if form has them
-        if hasattr(self, "questions"):
+        # Registration questions need a saved instance (element_id); if commit is False
+        # the caller is responsible for saving the instance and calling
+        # save_registration_questions() itself once it has a pk.
+        if commit and hasattr(self, "questions"):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga
             self.save_registration_questions(instance, is_organizer=orga)
+
+        # Recompute the character experience point now that questions are saved
+        if commit and isinstance(instance, Character):
+            calculate_character_experience_points(instance)
+
+        # Auto-assign faction now that choice options are saved
+        if commit and isinstance(instance, Character):
+            auto_assign_character_faction(instance)
 
         return instance
 
@@ -310,6 +330,7 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
                     "character__name",
                     "text",
                     "character__uuid",
+                    "character__title",
                 ),
             )
             self.init_characters = [ch[0] for ch in plot_characters_data]
@@ -327,8 +348,10 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
         self.add_char_finder = []
         self.field_link = {}
         if self.instance.pk:
+            concepts = get_character_concepts(self.params["event"].id, [ch[0] for ch in plot_characters_data])
+            show_number = get_event_config(self.params["event"].id, "writing_number")
             for ch in plot_characters_data:
-                char = f"#{ch[1]} {ch[2]}"
+                char = character_label(ch[1], ch[2], ch[5], concepts.get(ch[0], ""), show_number=show_number)
                 field = f"char_role_{ch[0]}"
                 id_field = f"id_{field}"
                 self.fields[field] = forms.CharField(
@@ -363,26 +386,33 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
             The saved instance with updated plot-character relationships.
 
         """
-        instance = super().save()
+        # Lock the plot row so a concurrent duplicate submit (e.g. double-click)
+        # blocks until this transaction commits, instead of racing on the
+        # plot-character unique constraint below.
+        with transaction.atomic():
+            if self.instance.pk:
+                Plot.objects.select_for_update().get(pk=self.instance.pk)
 
-        # Persist the instance to ensure it has a primary key
-        instance.save()
+            instance = super().save()
 
-        # Create or update plot-character relationships for each character
-        for ch_id in self.chars_id:
-            (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
+            # Persist the instance to ensure it has a primary key
+            instance.save()
 
-            # Extract role text from cleaned_data or raw data
-            field = f"char_role_{pr.character_id}"
-            value = self.cleaned_data.get(field, "")
-            if not value:
-                value = self.data.get(field, "")
-            if not value:
-                continue
+            # Create or update plot-character relationships for each character
+            for ch_id in self.chars_id:
+                (pr, _created) = PlotCharacterRel.objects.get_or_create(plot_id=instance.pk, character_id=ch_id)
 
-            # Update and save the relationship with role text
-            pr.text = value
-            pr.save()
+                # Extract role text from cleaned_data or raw data
+                field = f"char_role_{pr.character_id}"
+                value = self.cleaned_data.get(field, "")
+                if not value:
+                    value = self.data.get(field, "")
+                if not value:
+                    continue
+
+                # Update and save the relationship with role text
+                pr.text = value
+                pr.save()
 
         return instance
 
@@ -599,7 +629,7 @@ class GuildForm(WritingForm, BaseWritingForm):
         event = self.params["event"]
         if not self.instance.pk:
             self.instance.event = event
-        self._init_registration_question(self.instance, event)
+        self._init_registration_question(self.instance, event.id)
 
         fields_default = {"name", "teaser", "text", "cover", "secret"}
         fields_custom = set()
@@ -651,7 +681,7 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest type choices from event elements
-        que = self.params.get("run").event.get_elements(QuestType)
+        que = get_event_elements(self.params.get("run").event_id, QuestType, context=self.params)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -679,7 +709,7 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest choices from event elements
-        que = self.params.get("run").event.get_elements(Quest)
+        que = get_event_elements(self.params.get("run").event_id, Quest, context=self.params)
         self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -701,7 +731,7 @@ class OrgaHandoutForm(WritingForm):
         super().__init__(*args, **kwargs)
 
         # Retrieve handout templates for the associated run's event
-        que = self.params.get("run").event.get_elements(HandoutTemplate)
+        que = get_event_elements(self.params.get("run").event_id, HandoutTemplate, context=self.params)
 
         # Populate template field choices with template IDs and names
         self.fields["template"].choices = [(m.uuid, m.name) for m in que]
@@ -759,7 +789,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         # Populate prologue type choices from event elements
-        que = self.params.get("run").event.get_elements(PrologueType)
+        que = get_event_elements(self.params.get("run").event_id, PrologueType, context=self.params)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters
@@ -786,8 +816,10 @@ class OrgaSpeedLarpForm(WritingForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize writing element form."""
+        """Initialize writing element form, limiting the assigned staff to the run staff."""
         super().__init__(*args, **kwargs)
+        self.configure_field_run("assigned", self.params.get("run"))
+        self.fields["assigned"].required = False
 
 
 class OrgaRelationshipTagForm(BaseModelForm):

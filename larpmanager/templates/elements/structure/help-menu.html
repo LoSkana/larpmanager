@@ -1,0 +1,59 @@
+{% load i18n %}
+<details id="tv22-help" class="tv22-help">
+    <summary class="tv22-wwyltd-btn" aria-label="{% trans "Help" %}">
+        <i class="fa-solid fa-circle-question"></i>
+    </summary>
+    <ul>
+        {% if is_larpmanager_skin %}
+            <li>
+                <a href="#" id="wwyltd-open" class="wwyltd-open-trigger">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    {% trans "Search" %}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="chat-widget-open-trigger">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    {% trans "Ask a question" %}
+                </a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'tutorials' %}"
+               class="popup-iframe-link"
+               data-iframe-url="{% url 'tutorials' %}?in_iframe=1">
+                <i class="fa-solid fa-book"></i>
+                {% trans "All tutorials" %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'concepts' %}"
+               class="popup-iframe-link"
+               data-iframe-url="{% url 'concepts' %}?in_iframe=1">
+                <i class="fa-solid fa-lightbulb"></i>
+                {% trans "Key concepts" %}
+            </a>
+        </li>
+        <li>
+            {% if run %}
+                {% url 'manage' run.get_slug as tour_url %}
+            {% else %}
+                {% url 'manage' as tour_url %}
+            {% endif %}
+            <a href="{{ tour_url }}?tour=1">
+                <i class="fa-solid fa-route"></i>
+                {% trans "Replay the tour" %}
+            </a>
+        </li>
+        {% if association.skin_id == 1 %}
+            <li>
+                <a href="https://discord.gg/C4KuyQbuft"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    <i class="fa-brands fa-discord"></i>
+                    Discord
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</details>

@@ -21,10 +21,12 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from contextlib import nullcontext
 from typing import TYPE_CHECKING, Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.db.models import F, Prefetch, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -51,12 +53,18 @@ from larpmanager.models.access import AssociationPermission, AssociationRole, Ev
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.core.copy import copy, get_copy_sections, read_copy_picks
 from larpmanager.utils.core.exceptions import RedirectError, UserPermissionError
 from larpmanager.utils.edit.backend import backend_edit, save_log
-from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.edit.orga import (
+    OrgaAction,
+    check_registration_form_type,
+    orga_delete,
+    orga_edit,
+    orga_new,
+)
 from larpmanager.utils.io.download import _get_column_names, prepare_backup, zip_exports
 from larpmanager.utils.io.restore import execute_restore, load_restore_temp, preview_restore, save_restore_temp
 from larpmanager.utils.io.template import build_upload_template
@@ -172,15 +180,20 @@ def full_event_edit(
 
         # Validate both forms before saving
         if event_form.is_valid() and run_form.is_valid():
-            # Save event first
-            saved_event = event_form.save()
-            save_log(context, Event, saved_event, event.uuid if event else None)
+            # A new event is saved with its run so that a failure leaves neither; edits must
+            # commit right away, as the signals of the event invalidate its caches
+            with nullcontext() if event else transaction.atomic():
+                saved_event = event_form.save_unique_slug()
+                if saved_event:
+                    save_log(context, Event, saved_event, event.uuid if event else None)
+                    saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
 
-            saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
-
-            # Show success message and redirect based on access level
-            messages.success(request, _("Operation completed!"))
-            return _full_event_edit_success_response(request, context, saved_run, is_frame, is_executive=is_executive)
+            if saved_event:
+                # Show success message and redirect based on access level
+                messages.success(request, _("Operation completed!"))
+                return _full_event_edit_success_response(
+                    request, context, saved_run, is_frame, is_executive=is_executive
+                )
     else:
         # Create empty forms for GET requests
         event_form = event_form_class(instance=event, context=context, prefix="form1")
@@ -208,11 +221,15 @@ def orga_roles(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Prepare the roles list with permissions and existing roles
     prepare_roles_list(context, EventPermission, EventRole.objects.filter(event=context["event"]), def_callback)
 
-    # Attach pending (unredeemed) invites to each role for display
+    # Attach pending (unredeemed) invites to each role for display (batched to avoid one query per role)
+    pending_invites_by_role: dict[int, list[RoleInvite]] = {}
+    pending_invites = RoleInvite.objects.filter(
+        event_role_id__in=[role.id for role in context["list"]], redeemed_by__isnull=True, deleted__isnull=True
+    )
+    for invite in pending_invites:
+        pending_invites_by_role.setdefault(invite.event_role_id, []).append(invite)
     for role in context["list"]:
-        role.pending_invites = RoleInvite.objects.filter(
-            event_role=role, redeemed_by__isnull=True, deleted__isnull=True
-        )
+        role.pending_invites = pending_invites_by_role.get(role.id, [])
 
     return render(request, "larpmanager/orga/roles.html", context)
 
@@ -314,7 +331,7 @@ def orga_roles_invite(request: HttpRequest, event_slug: str, role_uuid: str) -> 
                 event_role=role,
                 invited_by=request.user.member,
             )
-            send_role_invite_email(invite)
+            send_role_invite_email(invite, context["run"])
             messages.success(request, _("Invitation sent to %(email)s") % {"email": email})
         return redirect("orga_roles", event_slug=event_slug)
     context["role"] = role
@@ -479,7 +496,7 @@ def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_act
     target_feature_id = context["feature"].id
 
     # Clear cache and media for the current run
-    clear_run_cache_and_media(context["run"])
+    clear_run_cache_and_media(context["run"].id)
 
     # Handle feature activation/deactivation logic
     if to_active:
@@ -568,7 +585,7 @@ def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_activ
     else:
         save_single_config(config_target, slug, str(to_active))
         config_target.save()
-        clear_run_cache_and_media(context["run"])
+        clear_run_cache_and_media(context["run"].id)
         message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
 
     messages.success(request, message % {"name": slug})
@@ -690,11 +707,19 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         Exception: Any error during file processing is caught and displayed to user
 
     """
-    # Check user permissions and get event context. The matchmaker form reuses the
-    # registration form's permission, since matchmaker questions are RegistrationQuestion
-    # rows managed through the same "orga_registration_form" screen.
-    permission_type = "registration_form" if upload_type == "matchmaker_form" else upload_type
+    # Check user permissions and get event context
+    permission_types = {
+        "matchmaker_form": "matchmaker_answers",
+        "debrief_form": "debrief_answers",
+        "request_form": "registration_form",
+    }
+    permission_type = permission_types.get(upload_type, upload_type)
     context = check_event_context(request, event_slug, f"orga_{permission_type}")
+
+    # Request questions are uploadable only while the approval process is active
+    if upload_type == "request_form":
+        check_registration_form_type(context, "request")
+
     context["typ"] = upload_type.rstrip("s")
     context["name"] = context["typ"]
 
@@ -706,8 +731,10 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
         form = UploadElementsForm(request.POST, request.FILES)
 
         # Prepare redirect URL for after processing
-        if upload_type == "matchmaker_form":
-            redr = reverse("orga_registration_form", args=[context["run"].get_slug(), "matchmaker"])
+        if upload_type in ("matchmaker_form", "request_form", "debrief_form"):
+            redr = reverse(
+                "orga_registration_form", args=[context["run"].get_slug(), upload_type.removesuffix("_form")]
+            )
         else:
             redr = reverse(f"orga_{upload_type}", args=[context["run"].get_slug()])
 
@@ -780,7 +807,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("manage", event_slug=context["run"].get_slug())
 
     # Reset everything
-    reset_all_run(context["event"], context["run"])
+    reset_all_run(context["run"].id)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))

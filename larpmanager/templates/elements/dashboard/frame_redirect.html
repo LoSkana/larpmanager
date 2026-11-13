@@ -4,7 +4,7 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <script>
+        <script nonce="{{ csp_nonce }}">
         if (window.parent && window.parent !== window) {
             window.parent.postMessage({type: 'dashboard_form_saved', redirect_url: '{{ redirect_url|escapejs }}'}, '*');
         } else {

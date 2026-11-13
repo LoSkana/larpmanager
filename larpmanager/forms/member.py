@@ -33,13 +33,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.forms import Textarea
 from django.template import loader
 from django.utils import timezone, translation
 from django.utils.translation import gettext_lazy as _
 from django_recaptcha.fields import ReCaptchaField
-from django_recaptcha.widgets import ReCaptchaV3
 from django_registration.forms import RegistrationFormUniqueEmail
 
 from larpmanager.cache.config import get_association_config
@@ -48,6 +47,7 @@ from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     AssociationMemberS2WidgetMulti,
     DatePickerInput,
+    NonceReCaptchaV3,
     get_members_queryset,
 )
 from larpmanager.models.accounting import AccountingItemMembership
@@ -55,6 +55,7 @@ from larpmanager.models.association import Association, MemberFieldType
 from larpmanager.models.member import (
     Badge,
     Member,
+    MemberFlagDef,
     Membership,
     MembershipStatus,
     NewsletterChoices,
@@ -189,7 +190,7 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
             public, private = get_recaptcha_secrets(self.request)
             if public and private:
                 self.fields["captcha"] = ReCaptchaField(
-                    widget=ReCaptchaV3,
+                    widget=NonceReCaptchaV3(request=self.request),
                     label="Captcha",
                     public_key=public,
                     private_key=private,
@@ -200,13 +201,14 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
     def clean_email(self) -> str:
-        """Validate that the email is not already used as a username."""
+        """Validate that the email is not already used by an existing user."""
         email = self.cleaned_data.get("email")
         if not email:
             return email
 
-        # Check if username already exists
-        if User.objects.filter(username__iexact=email).exists():
+        # Check if a user already exists with this email (as username or as email,
+        # e.g. an account created via SSO where username != email)
+        if User.objects.filter(Q(username__iexact=email) | Q(email__iexact=email)).exists():
             raise ValidationError(
                 _("A user with this email address already exists. Please use a different email or try logging in."),
             )
@@ -518,10 +520,8 @@ class ProfileForm(BaseProfileForm):
         fields = (
             "name",
             "surname",
-            "legal_name",
             "nickname",
             "pronoun",
-            "gender",
             "social_contact",
             "first_aid",
             "diet",
@@ -531,6 +531,7 @@ class ProfileForm(BaseProfileForm):
             "presentation",
             "birth_date",
             "birth_place",
+            "birth_province",
             "nationality",
             "document_type",
             "document",
@@ -538,6 +539,8 @@ class ProfileForm(BaseProfileForm):
             "document_expiration",
             "fiscal_code",
             "phone_contact",
+            "legal_name",
+            "gender",
         )
 
         widgets: ClassVar[dict] = {
@@ -550,7 +553,7 @@ class ProfileForm(BaseProfileForm):
             "document_expiration": DatePickerInput,
         }
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:  # noqa: C901 - Complex form initialization with dynamic field setup
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize member form with dynamic field validation and configuration.
 
         Sets mandatory fields, handles voting candidates, and adds required
@@ -563,26 +566,7 @@ class ProfileForm(BaseProfileForm):
         """
         super().__init__(*args, **kwargs)
 
-        # Batch process mandatory field updates
-        mandatory_asterisk = " (*)"
-        fields_to_update = {}
-
-        # Process mandatory fields
-        for field_name in self.fields:
-            if field_name in self.mandatory:
-                field = self.fields[field_name]
-                field.required = True
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Process always-required fields
-        for field_name in ["name", "surname"]:
-            if field_name in self.fields:
-                field = self.fields[field_name]
-                fields_to_update[field_name] = _(field.label) + mandatory_asterisk
-
-        # Apply all label updates at once
-        for field_name, new_label in fields_to_update.items():
-            self.fields[field_name].label = new_label
+        self._mark_mandatory_fields()
 
         # Handle presentation field for voting candidates
         if "presentation" in self.fields:
@@ -593,22 +577,11 @@ class ProfileForm(BaseProfileForm):
                 self.delete_field("presentation")
 
         # Set default values
-        initial_defaults = {}
-        if "phone_contact" not in self.initial:
-            initial_defaults["phone_contact"] = "+XX"
-        if "birth_date" not in self.initial:
-            initial_defaults["birth_date"] = "00/00/0000"
+        self.initial.setdefault("phone_contact", "+XX")
+        self.initial.setdefault("birth_date", "00/00/0000")
 
-        # Apply initial values in batch
-        self.initial.update(initial_defaults)
-
-        # Membership checking
-        share = False
-        if self.instance.pk:
-            membership = self.params.get("membership")
-            share = membership.compiled
-
-        # Add consent field only if needed
+        # Add consent field only if membership data not yet compiled
+        share = self.instance.pk and self.params.get("membership").compiled
         if not share:
             self.fields["share"] = forms.BooleanField(
                 required=True,
@@ -618,6 +591,16 @@ class ProfileForm(BaseProfileForm):
                 )
                 + "?",
             )
+
+    def _mark_mandatory_fields(self) -> None:
+        """Set mandatory fields as required, and add the mandatory marker to their labels (name and surname always)."""
+        mandatory_asterisk = " (*)"
+        for field_name, field in self.fields.items():
+            if field_name in self.mandatory:
+                field.required = True
+            elif field_name not in ("name", "surname"):
+                continue
+            field.label = _(field.label) + mandatory_asterisk
 
     def clean_phone_contact(self) -> Any:
         """Validate phone uniqueness with a helpful recovery message."""
@@ -863,7 +846,7 @@ class ExeMembershipFeeForm(BaseForm):
         member = self.cleaned_data["member"]
         if not member:
             return member
-        year = timezone.now().year
+        year = timezone.localdate().year
         association_id = self.params.get("association_id")
 
         # Check if membership fee already exists for this association and year
@@ -979,6 +962,18 @@ class ExeBadgeForm(BaseModelForm):
         """Initialize form and configure member widget with association context."""
         super().__init__(*args, **kwargs)
         self.configure_field_association("members", self.params["association_id"])
+
+
+class ExeMemberFlagDefForm(BaseModelForm):
+    """Form for ExeMemberFlagDef."""
+
+    page_title = _("User flag")
+
+    page_info = _("Manage status flags, editable from the user flags summary page")
+
+    class Meta:
+        model = MemberFlagDef
+        exclude = ()
 
 
 class ExeProfileForm(BaseModelForm):

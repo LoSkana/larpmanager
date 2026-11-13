@@ -20,12 +20,14 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.accounting import (
     ExeInvoiceForm,
@@ -46,13 +48,19 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.member import LogOperationType
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.users.member_flags import (
+    get_member_flags_eye_html,
+    get_member_flags_html,
+    get_member_in_association,
+    member_flags_active,
+)
 
 
 @login_required
@@ -184,7 +192,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
-    if context["el"].registration.run != context["run"]:
+    if context["el"].registration.run_id != context["run"].id:
         msg = "i'm sorry, what?"
         raise Http404(msg)
 
@@ -211,6 +219,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
     # Save the updated invoice status
     context["el"].save()
+    save_log(context, PaymentInvoice, context["el"], context["el"].uuid, operation_type=LogOperationType.UPDATE)
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved!"))
@@ -276,7 +285,7 @@ def orga_tokens(request: HttpRequest, event_slug: str) -> HttpResponse:
             "subtype": "tokens",  # Mark as token management subtype
             # Define table columns with localized headers for the token list
             "fields": [
-                ("member", _("Member")),  # Token holder/user
+                ("member", _("User")),  # Token holder/user
                 ("run", _("Event")),  # Associated event run
                 ("descr", _("Description")),  # Token description/purpose
                 ("value", _("Value")),  # Token monetary value
@@ -340,7 +349,7 @@ def orga_credits(request: HttpRequest, event_slug: str) -> HttpResponse:
             "subtype": "credits",  # Accounting item subtype identifier
             # Define display fields with their localized labels
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
                 ("value", _("Value")),
@@ -423,6 +432,11 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions for accessing organization payments
     context = check_event_context(request, event_slug, "orga_payments")
 
+    # Show member status flags read-only, if the pseudo-feature is active for the association
+    show_flags_eye = member_flags_active(context["association_id"], context)
+    flags_url = reverse("orga_payment_member_flags", args=[event_slug]) if show_flags_eye else None
+    context["flags_url"] = flags_url
+
     # Pending registration invoice approvals for this run
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(
@@ -436,7 +450,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Define base table fields for payment display
     fields = [
-        ("member", _("Member")),
+        ("member", _("User")),
         ("method", _("Method")),
         ("type", _("Type")),
         ("status", _("Status")),
@@ -451,6 +465,15 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         fields.append(("vat_ticket", _("VAT (Ticket)")))
         fields.append(("vat_options", _("VAT (Options)")))
 
+    def _member_cell(row: AccountingItemPayment) -> str:
+        member = row.registration.member if row.registration else None
+        if not member:
+            return ""
+        cell = str(member)
+        if show_flags_eye:
+            cell += get_member_flags_eye_html(member.uuid, flags_url)
+        return cell
+
     # Configure context with database relations and field callbacks
     context.update(
         {
@@ -460,17 +483,17 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
             "fields": fields,
             # Define callback functions for data formatting
             "callbacks": {
-                "member": lambda row: str(row.registration.member)
-                if row.registration and row.registration.member
-                else "",
+                "member": _member_cell,
                 "method": lambda el: str(el.inv.method) if el.inv else "",
                 "type": lambda el: el.get_pay_display(),
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
-                if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
-                else "",
+                "receipt": lambda el: (
+                    f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                    if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
+                    else ""
+                ),
             },
             "delete_view": "orga_payments_delete",
             # DB paths for callback fields, enabling sort and search on these columns
@@ -479,6 +502,8 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "method": ["inv__method__name"],
                 "net": ["net"],
                 "trans": ["trans"],
+                "type": ["pay"],
+                "status": ["inv__status"],
             },
         },
     )
@@ -491,6 +516,23 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         "larpmanager/orga/accounting/payments.html",
         "orga_payments_edit",
     )
+
+
+@login_required
+def orga_payment_member_flags(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return a member's status flags as read-only HTML for the payments page eye popup (AJAX POST)."""
+    context = check_event_context(request, event_slug, "orga_payments")
+
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    message = f"<h2>{member}</h2>" + get_member_flags_html(member, context["association_id"])
+    return JsonResponse({"k": 1, "v": message})
 
 
 @login_required
@@ -608,6 +650,8 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "orga_outflows_delete",
         },
     )
@@ -741,7 +785,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
         {
             "selrel": ("run", "run__event"),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("type", _("Type")),
                 ("action", _("Action")),
                 ("run", _("Event")),
@@ -755,12 +799,16 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Generate download link for expense statement documents
                 "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
-                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
-                if not el.is_approved and not context["disable_approval"]
-                else "",
+                "action": lambda el: (
+                    f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
+                    if not el.is_approved and not context["disable_approval"]
+                    else ""
+                ),
                 # Display human-readable expense type from model choices
                 "type": lambda el: el.get_exp_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"type": ["exp"]},
             "delete_view": "orga_expenses_delete",
         },
     )
@@ -826,7 +874,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
-    if exp.run.event != context["event"]:
+    if get_run_event_id(exp.run_id, context=context) != context["event"].id:
         msg = "not your orga"
         raise Http404(msg)
 
@@ -843,6 +891,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     # Update expense approval status and save to database
     exp.is_approved = True
     exp.save()
+    save_log(context, AccountingItemExpense, exp, exp.uuid, operation_type=LogOperationType.UPDATE)
 
     # Display success message and redirect to expenses list
     messages.success(request, _("Request approved"))

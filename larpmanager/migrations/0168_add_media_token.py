@@ -55,7 +55,7 @@ def populate_tokens_and_rename_pdfs(apps, schema_editor):
     assign_tokens(Run)
     assign_tokens(Member)
 
-    # ── File operations — skipped when MEDIA_ROOT/pdf is absent ──────────────
+    # ── File operations - skipped when MEDIA_ROOT/pdf is absent ──────────────
     # In CI containers or environments without a mounted media volume the renames
     # are a no-op.  Guard here makes the skip explicit and logged rather than
     # silently doing nothing while leaving files at their old paths.

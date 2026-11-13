@@ -8,6 +8,8 @@
 {% endblock nav %}
 {% block content %}
     <div class="character">
+        <nav id="sheet-quickbar" hidden>
+        </nav>
         {% if missing_fields %}
             <i>{% trans "The character has missing values in required fields:" %} {{ missing_fields }}</i>
             <hr />
@@ -30,36 +32,62 @@
                             {% include "elements/sheet/fields.html" %}
                         {% endif %}
                     </div>
-                    {% include "elements/sheet/teaser.html" %}
+                    {% if check %}
+                        {% include "elements/sheet/teaser.html" with char=sheet_char %}
+                    {% else %}
+                        {% include "elements/sheet/teaser.html" %}
+                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="sheet">
+            <hr class="clear" />
             {% if check %}
-                <hr class="clear" />
                 {% include "elements/sheet/pdf.html" %}
                 {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
+                {% include "elements/sheet/texts.html" with char=sheet_char %}
                 {% include "elements/sheet/experience.html" %}
                 {% include "elements/sheet/inventories.html" %}
-                {% include "elements/sheet/factions.html" %}
-                {% include "elements/sheet/guilds.html" %}
-                {% include "elements/sheet/texts.html" with char=sheet_char %}
+            {% endif %}
+            {% include "elements/sheet/factions.html" %}
+            {% include "elements/sheet/guilds.html" %}
+            {% if check %}
                 {% include "elements/sheet/plots.html" %}
                 {% include "elements/sheet/quests.html" %}
                 {% include "elements/sheet/relationships.html" %}
                 {% include "elements/sheet/questbuilder.html" %}
                 {% include "elements/sheet/speedlarp.html" %}
                 {% include "elements/sheet/prologue.html" %}
-            {% else %}
-                {% include "elements/sheet/texts.html" %}
             {% endif %}
         </div>
     </div>
 {% endblock content %}
 {% block js %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.0/chart.min.js">});</script>
+    <script nonce="{{ csp_nonce }}">
+window.addEventListener('DOMContentLoaded', function() {
+    var quickbar = document.getElementById('sheet-quickbar');
+    if (quickbar === null) return;
+
+    var headings = document.querySelectorAll('.sheet h1.c');
+    var links = [];
+    headings.forEach(function(heading, idx) {
+        var text = heading.textContent.trim();
+        if (text.length === 0) return;
+        heading.id = heading.id || 'sheet-h2-' + idx;
+        var link = document.createElement('a');
+        link.href = '#' + heading.id;
+        link.textContent = text;
+        links.push(link);
+    });
+
+    if (links.length < 2) return;
+    links.forEach(function(link) { quickbar.appendChild(link); });
+    quickbar.hidden = false;
+});
+    </script>
+    <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     {% if pref %}
-        <script>
+        <script nonce="{{ csp_nonce }}">
 function go_chart() {
 
     var context = document.getElementById('myChart');

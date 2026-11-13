@@ -19,20 +19,35 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import itertools
 from collections import defaultdict
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.db.models import Q, QuerySet
-from django.forms.widgets import Textarea, Widget
+from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
+from django.db import IntegrityError, transaction
+from django.db.models import Q, QuerySet, UniqueConstraint
+from django.forms.widgets import MediaAsset, Textarea, Widget
+from django.middleware.csp import get_nonce
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.html import format_html, format_html_join
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
+from django_recaptcha.widgets import ReCaptchaV3
 from django_select2 import forms as s2forms
+from lxml import etree
 from tinymce.widgets import TinyMCE
+from xhtml2pdf.context import pisaContext
+from xhtml2pdf.w3c.cssParser import CSSParseError
 
+from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.config import get_event_config
+from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
@@ -41,7 +56,13 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, AbilityTypeExp, SystemExp
-from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
+from larpmanager.models.form import (
+    QuestionApplicable,
+    WritingAnswer,
+    WritingOption,
+    WritingQuestion,
+    WritingQuestionType,
+)
 from larpmanager.models.inventory import PoolLabel, PoolType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
@@ -55,10 +76,16 @@ from larpmanager.models.writing import (
     Faction,
     FactionType,
     Plot,
+    get_event_elements,
 )
 from larpmanager.utils.auth.permission import LITE_PERMISSIONS
+from larpmanager.utils.services.playing_filter import filter_playing_characters
 
 if TYPE_CHECKING:
+    from collections.abc import Collection
+
+    from django.http import HttpRequest
+
     from larpmanager.forms.base import BaseModelForm
 
 # defer script loaded by form
@@ -66,9 +93,74 @@ if TYPE_CHECKING:
 css_delimeter = "/*@#§*/"
 
 
-def render_js(cls: Any) -> list[str]:
+def _find_stray_closing_brace(value: str) -> bool:
+    """Return True if the CSS has a '}' with no matching '{', ignoring comments and strings."""
+    depth = 0
+    index = 0
+    length = len(value)
+    while index < length:
+        char = value[index]
+        if char == "/" and value.startswith("/*", index):
+            end = value.find("*/", index + 2)
+            index = length if end == -1 else end + 2
+            continue
+        if char in {'"', "'"}:
+            index += 1
+            while index < length and value[index] != char:
+                # a backslash escapes the next character, quote included
+                index += 2 if value[index] == "\\" else 1
+            index += 1
+            continue
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth < 0:
+                return True
+        index += 1
+    return False
+
+
+def validate_css(value: str) -> None:
+    """Reject invalid CSS (use xhtml2pdf's own parser, which understands PDF at-rules like @page/@frame)."""
+    if not value:
+        return
+
+    # xhtml2pdf's parser loops forever on a '}' that closes nothing, so reject those first
+    if _find_stray_closing_brace(value):
+        raise forms.ValidationError(_("Invalid CSS: unexpected '}' closing a block that was never opened."))
+
+    context = pisaContext("")
+    context.parseCSS()
+    try:
+        context.cssParser.parse(value)
+    except CSSParseError as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+    except Exception as exc:
+        raise forms.ValidationError(_("Invalid CSS: %(error)s") % {"error": exc}) from exc
+
+
+def validate_html(value: str) -> None:
+    """Reject structurally broken HTML fragments (mismatched/unclosed tags) that would break PDF layout."""
+    if not value:
+        return
+
+    parser = etree.HTMLParser(recover=True)
+    etree.fromstring(f"<div>{value}</div>", parser=parser)
+    errors = [str(err) for err in parser.error_log if err.level_name in ("ERROR", "FATAL")]
+    if errors:
+        raise forms.ValidationError(_("Invalid HTML: %(error)s") % {"error": errors[0]})
+
+
+def render_js(cls: Any, *, attrs: dict | None = None) -> list[str]:
     """Render JavaScript includes with defer attribute for forms."""
-    return [format_html('<script defer src="{}"></script>', cls.absolute_path(path)) for path in cls._js]
+    attrs = {"defer": True, **(attrs or {})}
+    return [
+        path.render(attrs={key: value for key, value in attrs.items() if key not in path.attributes})
+        if isinstance(path, MediaAsset)
+        else path.__html__()
+        for path in cls._js
+    ]
 
 
 forms.widgets.Media.render_js = render_js
@@ -77,11 +169,42 @@ forms.widgets.Media.render_js = render_js
 # special widget
 
 
+class NonceReCaptchaV3(ReCaptchaV3):
+    """ReCaptcha v3 widget whose inline script carries the request CSP nonce."""
+
+    def __init__(self, *args: Any, request: HttpRequest | None = None, **kwargs: Any) -> None:
+        """Store the CSP nonce of the request rendering the widget."""
+        super().__init__(*args, **kwargs)
+        self.csp_nonce = get_nonce(request) if request is not None else None
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Expose the CSP nonce to the widget template."""
+        context = super().get_context(name, value, attrs)
+        context["csp_nonce"] = self.csp_nonce
+        return context
+
+
 class ReadOnlyWidget(Widget):
     """Widget for displaying read-only form fields."""
 
     input_type = None
     template_name = "forms/widgets/read_only.html"
+
+
+class ReadOnlyChoiceWidget(forms.Select):
+    """Widget displaying the labels of the selected choices as read-only text."""
+
+    template_name = "forms/widgets/read_only_choice.html"
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add the labels of the currently selected choices to the widget context."""
+        context = super().get_context(name, value, attrs)
+        values = value if isinstance(value, (list, tuple)) else [value]
+        values = {str(single) for single in values if single not in (None, "")}
+        context["widget"]["selected_labels"] = [
+            option_label for option_value, option_label in self.choices if str(option_value) in values
+        ]
+        return context
 
 
 class DatePickerInput(forms.TextInput):
@@ -102,11 +225,196 @@ class TimePickerInput(forms.TextInput):
     input_type = "time_p"
 
 
+SLUG_UNAVAILABLE_ERROR = _("This URL is not available: check the suggested one or choose another one")
+SLUG_USED_ERROR = _("Slug already used!")
+SLUG_RESERVED_ERROR = _("Reserved word, please choose another!")
+SLUG_RESELECT_FILE_ERROR = _("Please select this file again")
+# Characters of a slug that a numbered variant can replace at the maximum length
+SLUG_SUFFIX_MAX_DIGITS = 6
+
+# Hyphens are excluded because run URLs use them to separate the run number
+UrlSlugValidator = RegexValidator(
+    r"^[0-9a-z]*$", _("Only lowercase letters and numbers allowed, no spaces or special characters")
+)
+
+
 class SlugInput(forms.TextInput):
-    """Slug input widget with special formatting."""
+    """Slug input collapsed behind a preview; left closed, the slug is generated from the name."""
 
     input_type = "slug"
     template_name = "forms/widgets/slug.html"
+    opened = False
+    auto = False
+    help_text = ""
+
+    def value_from_datadict(self, data: Any, files: Any, name: str) -> Any:
+        """Read the value, remembering if it was generated instead of chosen by the user."""
+        self.auto = self.auto or data.get(f"{name}_auto") == "1"
+        return super().value_from_datadict(data, files, name)
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add to the context whether the input starts open, if its value is generated, and its help text."""
+        context = super().get_context(name, value, attrs)
+        context["widget"]["opened"] = self.opened or bool(value)
+        context["widget"]["auto"] = self.auto or not value
+        context["widget"]["help_text"] = self.help_text
+        return context
+
+
+class SlugFormMixin:
+    """Validate a slug field, generating the slug from the "name" field when left blank.
+
+    The field stays collapsed unless the slug cannot be used: the user is then asked to
+    confirm a suggestion, so that nothing is saved under an unexpected URL.
+    Subclasses define where a slug must be unique and which slugs are reserved.
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Make the slug optional, moving its help text inside the collapsed section."""
+        super().__init__(*args, **kwargs)
+
+        if "slug" in self.fields:
+            field = self.fields["slug"]
+            field.required = False
+            field.validators.append(UrlSlugValidator)
+            field.widget.help_text = field.help_text
+            field.help_text = ""
+
+    def slug_scope(self) -> QuerySet:
+        """Return the objects among which the slug must be unique."""
+        raise NotImplementedError
+
+    def reserved_slugs(self) -> Collection[str]:
+        """Return the slugs that cannot be used."""
+        raise NotImplementedError
+
+    @cached_property
+    def _reserved_slugs(self) -> Collection[str]:
+        """Return the reserved slugs, computed once per form."""
+        return self.reserved_slugs()
+
+    def slug_error(self, slug: str) -> str | None:
+        """Return the reason why a slug cannot be used, or None if it is available."""
+        if slug in self._reserved_slugs:
+            return SLUG_RESERVED_ERROR
+
+        if self.slug_scope().filter(slug=slug).exists():
+            return SLUG_USED_ERROR
+
+        return None
+
+    def clean(self) -> dict[str, Any] | None:
+        """Ask to select uploaded files again when the slug must be fixed."""
+        cleaned_data = super().clean()
+
+        if "slug" in self.errors:
+            self._ask_files_again()
+
+        return cleaned_data
+
+    def _ask_files_again(self) -> None:
+        """Report uploaded files, as browsers cannot fill a file input again and they would be silently lost."""
+        for name in self.fields:
+            if self.add_prefix(name) in self.files:
+                self.add_error(name, SLUG_RESELECT_FILE_ERROR)
+
+    def clean_slug(self) -> str:
+        """Validate the slug, or generate one when left blank or matching the slug of the name."""
+        data: str = self.cleaned_data["slug"]
+
+        if not data or data == self.slug_from_name():
+            return self.generate_slug()
+
+        error = self.slug_error(data)
+        if error:
+            raise ValidationError(error)
+
+        return data
+
+    def slug_from_name(self) -> str:
+        """Build an alphanumeric slug from the validated name, empty if there is none."""
+        name = self.cleaned_data.get("name", "")
+        return slugify(name).replace("-", "").replace("_", "")[: self.fields["slug"].max_length]
+
+    def generate_slug(self) -> str:
+        """Build the slug from the name, empty if the name is invalid as the form already reports it.
+
+        Raises:
+            ValidationError: If the name gives no usable slug, or the slug is not available.
+
+        """
+        if "name" not in self.cleaned_data:
+            return ""
+
+        base = self.slug_from_name()
+
+        if not base:
+            self.fields["slug"].widget.opened = True
+            raise ValidationError(_("The URL cannot be built from this name, please choose one"))
+
+        if self.slug_error(base) is None:
+            return base
+
+        self.suggest_slug(base)
+        raise ValidationError(SLUG_UNAVAILABLE_ERROR)
+
+    def suggest_slug(self, base: str) -> None:
+        """Open the slug field with the first available numbered variant."""
+        field = self.fields["slug"]
+        prefix = base[: field.max_length - SLUG_SUFFIX_MAX_DIGITS]
+        taken = set(self.slug_scope().filter(slug__startswith=prefix).values_list("slug", flat=True))
+
+        for counter in itertools.count(2):
+            suffix = str(counter)
+            suggestion = f"{base[: field.max_length - len(suffix)]}{suffix}"
+            if suggestion not in taken and suggestion not in self._reserved_slugs:
+                break
+
+        field.widget.opened = True
+        field.widget.auto = True
+        self.data = self.data.copy()
+        self.data[self.add_prefix("slug")] = suggestion
+
+    def save_unique_slug(self) -> Any:
+        """Save the form, reporting a slug taken by a concurrent request as a form error.
+
+        Returns:
+            The saved instance, or None if the slug was taken.
+
+        """
+        # The slug is set only on creation, so an edit cannot conflict
+        if self.instance.pk:
+            return self.save()
+
+        try:
+            with transaction.atomic():
+                return self.save()
+        except IntegrityError as error:
+            if not self._is_slug_conflict(error):
+                raise
+            self._report_taken_slug()
+            return None
+
+    def _report_taken_slug(self) -> None:
+        """Report a slug found taken on save, suggesting another one only if it was generated."""
+        base = self.slug_from_name()
+
+        if base and (self.fields["slug"].widget.auto or self.cleaned_data["slug"] == base):
+            self.suggest_slug(base)
+            self.add_error("slug", SLUG_UNAVAILABLE_ERROR)
+        else:
+            self.add_error("slug", SLUG_USED_ERROR)
+
+        self._ask_files_again()
+
+    def _is_slug_conflict(self, error: IntegrityError) -> bool:
+        """Return whether the error comes from a database constraint on the slug."""
+        diagnostics = getattr(error.__cause__, "diag", None)
+        violated = getattr(diagnostics, "constraint_name", None)
+        return any(
+            isinstance(constraint, UniqueConstraint) and "slug" in constraint.fields and constraint.name == violated
+            for constraint in self._meta.model._meta.constraints  # noqa: SLF001
+        )
 
 
 class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
@@ -180,7 +488,10 @@ class RoleCheckboxWidget(forms.CheckboxSelectMultiple):
         # Use format_html_join to safely generate the HTML
         return format_html_join(
             "\n",
-            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            '<div class="feature_checkbox"><input type="checkbox" name="{2}" value="{3}" id="{4}" {5}> '
+            '<label for="{6}">{7}</label> '
+            '<a href="#" class="lm_tooltip" feat="{8}"><span class="hide lm_tooltiptext">{0} ({1})</span>'
+            '<i class="fas fa-question-circle"></i></a></div>',
             checkbox_elements,
         )
 
@@ -528,8 +839,8 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
         .order_by("-end")
     )
     if past:
-        reference_date = timezone.now() - timedelta(days=30)
-        runs = runs.filter(end__gte=reference_date.date(), development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
+        reference_date = timezone.localdate() - timedelta(days=30)
+        runs = runs.filter(end__gte=reference_date, development__in=[DevelopStatus.SHOW, DevelopStatus.DONE])
     choices.extend([(run.uuid, str(run)) for run in runs])
 
     if "run" not in self.fields:
@@ -645,7 +956,7 @@ class TransferTargetRunS2Widget(S2Widget):
     def get_queryset(self) -> QuerySet[Run]:
         """Return runs from different events that are not concluded or cancelled."""
         return (
-            Run.objects.filter(event__association_id=self.event.association_id)
+            Run.objects.filter(event__association_id=get_event_association_id(self.event.id))
             .exclude(event_id=self.event.id)
             .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
             .select_related("event")
@@ -653,8 +964,57 @@ class TransferTargetRunS2Widget(S2Widget):
         )
 
 
+def character_label(
+    number: int | None, name: str, title: str = "", concept: str = "", *, show_number: bool = True
+) -> str:
+    """Return the character label used in selectors, with optional number prefix, title and concept."""
+    label = f"#{number} {name}" if show_number else name
+    if title:
+        label += f" - {title}"
+    if concept:
+        label += f" ({concept})"
+    return label
+
+
+def _get_concept_question_ids(event_id: int) -> list[int]:
+    """Return the ids of the event character concept questions."""
+    return [
+        question["id"]
+        for question in get_cached_writing_questions(event_id, QuestionApplicable.CHARACTER)
+        if question["typ"] == WritingQuestionType.CONCEPT
+    ]
+
+
+def get_character_concepts(event_id: int, character_ids: list[int] | None = None) -> dict[int, str]:
+    """Return character id to concept answer for the event; staff-only data, never expose to participants."""
+    question_ids = _get_concept_question_ids(event_id)
+    if not question_ids:
+        return {}
+    answers = WritingAnswer.objects.filter(question_id__in=question_ids)
+    if character_ids is not None:
+        answers = answers.filter(element_id__in=character_ids)
+    return dict(answers.values_list("element_id", "text"))
+
+
+def get_character_ids_by_concept(characters: QuerySet[Character], term: str) -> QuerySet:
+    """Return ids of the given characters whose concept answer contains the term."""
+    return WritingAnswer.objects.filter(
+        question__typ=WritingQuestionType.CONCEPT,
+        question__applicable=QuestionApplicable.CHARACTER,
+        question__deleted__isnull=True,
+        text__icontains=term,
+        element_id__in=characters.values("id"),
+    ).values("element_id")
+
+
 class EventCharacterS2:
-    """Represents EventCharacterS2 model."""
+    """Character selector mixin; set show_concept only on staff-facing widgets."""
+
+    show_concept: ClassVar[bool] = False
+
+    _concepts: dict[int, str] | None = None
+
+    _config_context: dict | None = None
 
     search_fields: ClassVar[list] = [
         "number__icontains",
@@ -670,10 +1030,35 @@ class EventCharacterS2:
     def get_queryset(self) -> QuerySet[Character]:
         """Return optimized queryset of event characters ordered by number."""
         return (
-            self.event.get_elements(Character)
+            get_event_elements(self.event.id, Character)
             .only("id", "uuid", "name", "number", "teaser", "title", "event_id")
             .order_by("number")
         )
+
+    def get_concept(self, obj: Character) -> str:
+        """Return the character concept if this widget shows it, loading the event concepts once."""
+        if not self.show_concept:
+            return ""
+        if self._concepts is None:
+            self._concepts = get_character_concepts(obj.event_id)
+        return self._concepts.get(obj.id, "")
+
+    def label_from_instance(self, obj: Character) -> str:
+        """Return character label with title (and concept for staff widgets)."""
+        if self._config_context is None:
+            self._config_context = {}
+        show_number = get_event_config(obj.event_id, "writing_number", context=self._config_context)
+        return character_label(obj.number, obj.name, obj.title, self.get_concept(obj), show_number=show_number)
+
+    def filter_queryset(
+        self, request: Any, term: str, queryset: QuerySet | None = None, **dependent_fields: Any
+    ) -> QuerySet:
+        """Filter by search fields, also matching the concept for staff widgets."""
+        filtered = super().filter_queryset(request, term, queryset, **dependent_fields)
+        if not self.show_concept or not term:
+            return filtered
+        base = queryset if queryset is not None else self.get_queryset()
+        return filtered | base.filter(pk__in=get_character_ids_by_concept(base, term))
 
 
 class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
@@ -692,12 +1077,12 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
 
     template_name = "forms/widgets/character_dual.html"
 
+    show_concept: ClassVar[bool] = True
+
     class Media:
         js: ClassVar[list] = ["larpmanager/assets/js/character-dual.js"]
 
     def _get_search_url(self) -> str:
-        from django.urls import reverse  # noqa: PLC0415
-
         if hasattr(self, "event"):
             return reverse("orga_character_search", args=[self.event.slug])
         return ""
@@ -713,14 +1098,22 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         val_list = [v for v in value if v not in ("", None)]
         if not val_list:
             return []
-        from larpmanager.cache.config import get_event_config  # noqa: PLC0415
-
         show_number = get_event_config(self.event.id, "writing_number")
-        base_qs = self.event.get_elements(Character).only("id", "uuid", "name", "number").order_by("name")
+        base_qs = (
+            get_event_elements(self.event.id, Character).only("id", "uuid", "name", "number", "title").order_by("name")
+        )
         qs = base_qs.filter(uuid__in=val_list)
         if not qs.exists():
             qs = base_qs.filter(pk__in=val_list)
-        return [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+        concepts = get_character_concepts(self.event.id, [ch.pk for ch in qs])
+        return [
+            (
+                str(ch.uuid),
+                character_label(ch.number, ch.name, ch.title, concepts.get(ch.pk, ""), show_number=show_number),
+                ch.pk,
+            )
+            for ch in qs
+        ]
 
     def get_context(self, name: str, value: list, attrs: dict | None) -> dict:
         """Build template context for the dual-list widget."""
@@ -734,7 +1127,7 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         uuids = data.getlist(name)
         if not uuids or not hasattr(self, "event"):
             return uuids
-        pks = list(self.event.get_elements(Character).filter(uuid__in=uuids).values_list("pk", flat=True))
+        pks = list(get_event_elements(self.event.id, Character).filter(uuid__in=uuids).values_list("pk", flat=True))
         return [str(pk) for pk in pks]
 
 
@@ -742,12 +1135,14 @@ class EventCharacterS2Widget(EventCharacterS2, S2Widget):
     """Represents EventCharacterS2Widget model."""
 
 
+class OrgaEventCharacterS2Widget(EventCharacterS2Widget):
+    """Staff-only character select2 widget that also shows and searches the concept."""
+
+    show_concept: ClassVar[bool] = True
+
+
 class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
     """Select2 widget for characters that returns UUID instead of ID as value."""
-
-    def label_from_instance(self, obj: Character) -> str:
-        """Return formatted label for character instance."""
-        return f"#{obj.number} {obj.name}"
 
     def result_from_instance(self, obj: Character, request: Any = None) -> dict:  # noqa: ARG002
         """Override to return UUID instead of ID in select2 results."""
@@ -755,6 +1150,12 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
             "id": obj.uuid,
             "text": self.label_from_instance(obj),
         }
+
+
+class OrgaEventCharacterS2WidgetUuid(EventCharacterS2WidgetUuid):
+    """Staff-only UUID character select2 widget that also shows and searches the concept."""
+
+    show_concept: ClassVar[bool] = True
 
 
 class GuildInviteS2Widget(EventCharacterS2WidgetUuid):
@@ -774,8 +1175,6 @@ class GuildInviteS2Widget(EventCharacterS2WidgetUuid):
 
     def get_queryset(self) -> QuerySet[Character]:
         """Return event characters that are visible, playing in the run, and not already in the guild."""
-        from larpmanager.utils.services.character import filter_playing_characters  # noqa: PLC0415
-
         queryset = super().get_queryset().filter(hide=False)
         if hasattr(self, "guild"):
             queryset = queryset.exclude(guild_memberships__guild=self.guild)
@@ -795,7 +1194,7 @@ class EventPoolLabelS2:
 
     def get_queryset(self) -> QuerySet:
         """Return queryset of event pool labels ordered by number."""
-        return self.event.get_elements(PoolLabel).order_by("number")
+        return get_event_elements(self.event.id, PoolLabel).order_by("number")
 
 
 class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2MultipleWidget):
@@ -813,7 +1212,7 @@ class EventPoolTypeS2:
 
     def get_queryset(self) -> QuerySet:
         """Return queryset of event pool types ordered by number."""
-        return self.event.get_elements(PoolType).order_by("number")
+        return get_event_elements(self.event.id, PoolType).order_by("number")
 
 
 class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, s2forms.ModelSelect2MultipleWidget):
@@ -831,10 +1230,8 @@ class RunCampaignS2:
         """Set the event to look for other campaign events."""
         if event.parent_id:
             # Event is in a campaign - get parent and all siblings
-            parent_event = Event.objects.get(id=event.parent_id)
-            # Get all children of the parent (siblings) plus the parent itself
-            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
-            event_ids.append(parent_event.id)
+            event_ids = list(Event.objects.filter(parent_id=event.parent_id).values_list("id", flat=True))
+            event_ids.append(event.parent_id)
         else:
             # Event is standalone or parent - get this event and all children
             event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
@@ -866,7 +1263,7 @@ class EventPlotS2:
 
     def get_queryset(self) -> QuerySet[Plot]:
         """Return queryset of Plot elements for this event."""
-        return self.event.get_elements(Plot)
+        return get_event_elements(self.event.id, Plot)
 
 
 class EventPlotS2WidgetMulti(EventPlotS2, S2WidgetMulti):
@@ -892,7 +1289,11 @@ class EventTraitS2:
 
     def get_queryset(self) -> QuerySet[Trait]:
         """Return optimized queryset of traits for the event, ordered by number."""
-        return self.event.get_elements(Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
+        return (
+            get_event_elements(self.event.id, Trait)
+            .only("id", "name", "number", "teaser", "event_id")
+            .order_by("number")
+        )
 
 
 class EventTraitS2Widget(EventTraitS2, S2Widget):
@@ -913,7 +1314,7 @@ class EventWritingOptionS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[WritingOption]:
         """Return queryset of WritingOption elements for the event."""
-        return self.event.get_elements(WritingOption)
+        return get_event_elements(self.event.id, WritingOption)
 
 
 class FactionS2WidgetMulti(S2WidgetMulti):
@@ -931,7 +1332,7 @@ class FactionS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[Faction]:
         """Return factions associated with this event."""
-        return self.event.get_elements(Faction)
+        return get_event_elements(self.event.id, Faction)
 
     def label_from_instance(self, instance: Faction) -> str:
         """Return faction label with type code suffix."""
@@ -953,7 +1354,7 @@ class AbilityS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
-        return self.event.get_elements(AbilityExp)
+        return get_event_elements(self.event.id, AbilityExp)
 
 
 class ComputedFieldS2Widget(S2Widget):
@@ -969,7 +1370,7 @@ class ComputedFieldS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
-        return self.event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+        return get_event_elements(self.event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
 
 
 class SystemExpS2Widget(S2Widget):
@@ -985,7 +1386,7 @@ class SystemExpS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[SystemExp]:
         """Return XP systems for this event."""
-        return self.event.get_elements(SystemExp)
+        return get_event_elements(self.event.id, SystemExp)
 
 
 class AbilityTypePxS2Widget(S2Widget):
@@ -1001,7 +1402,7 @@ class AbilityTypePxS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[AbilityTypeExp]:
         """Return ability types for this event."""
-        return self.event.get_elements(AbilityTypeExp)
+        return get_event_elements(self.event.id, AbilityTypeExp)
 
 
 class AbilityTemplateS2WidgetMulti(S2Widget):
@@ -1017,7 +1418,7 @@ class AbilityTemplateS2WidgetMulti(S2Widget):
 
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
-        return self.event.get_elements(AbilityTemplateExp)
+        return get_event_elements(self.event.id, AbilityTemplateExp)
 
     def label_from_instance(self, obj: Any) -> str:
         """Return string representation of the given object."""
@@ -1037,7 +1438,7 @@ class TicketS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
-        return self.event.get_elements(RegistrationTicket)
+        return get_event_elements(self.event.id, RegistrationTicket)
 
 
 class RegistrationSectionS2Widget(S2Widget):
@@ -1126,7 +1527,7 @@ class WarehouseAreaS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[WarehouseArea]:
         """Return warehouse areas for this event."""
-        return self.event.get_elements(WarehouseArea)
+        return get_event_elements(self.event.id, WarehouseArea)
 
 
 class WarehouseItemS2(S2Widget):
@@ -1217,55 +1618,8 @@ def get_members_queryset(association_id: int) -> QuerySet[Member]:
     return Member.objects.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
 
 
-# CSRF-aware upload handler for TinyMCE
-# This JavaScript function is injected into TinyMCE configuration to handle file uploads
-# with proper CSRF token authentication
-_TINYMCE_CSRF_UPLOAD_HANDLER = """function(blobInfo, progress) {
-    return new Promise(function(resolve, reject) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/upload_media/');
-
-        // Get CSRF token from cookie or form
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value ||
-                         document.cookie.split('; ').find(row => row.startsWith('csrftoken='))?.split('=')[1];
-
-        if (csrftoken) {
-            xhr.setRequestHeader('X-CSRFToken', csrftoken);
-        }
-
-        xhr.upload.onprogress = function(e) {
-            progress(e.loaded / e.total * 100);
-        };
-
-        xhr.onload = function() {
-            if (xhr.status === 403) {
-                reject('HTTP Error: ' + xhr.status + ' - CSRF verification failed');
-                return;
-            }
-            if (xhr.status < 200 || xhr.status >= 300) {
-                reject('HTTP Error: ' + xhr.status);
-                return;
-            }
-
-            const json = JSON.parse(xhr.responseText);
-            if (!json || typeof json.location !== 'string') {
-                reject('Invalid JSON: ' + xhr.responseText);
-                return;
-            }
-
-            resolve(json.location);
-        };
-
-        xhr.onerror = function() {
-            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status);
-        };
-
-        const formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-        xhr.send(formData);
-    });
-}"""
+# Name of the global TinyMCE upload handler defined in tinymce-upload.js, which sends the CSRF token
+_TINYMCE_CSRF_UPLOAD_HANDLER = "lmTinymceUploadHandler"
 
 
 class CSRFTinyMCE(TinyMCE):

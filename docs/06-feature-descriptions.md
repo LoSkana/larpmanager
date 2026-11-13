@@ -223,7 +223,7 @@ The Prologue feature allows organizers to create introductory texts for each act
 
 ### Promotion Feature
 
-Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging.
+Makes upcoming events visible to external sites through public API endpoints. Organizations enable publication of their event calendar data for aggregation on third-party platforms or event discovery services. Uses PublisherApiKey for secure API access with IP tracking and logging. Organizations can also push events to external platforms: ILDB, with their own credentials, and LARP Radar, by opting in through the `radar_enabled` configuration.
 
 ### Quests and Traits Feature
 
@@ -324,3 +324,22 @@ Enables comprehensive warehouse management for organizations. Allows creation of
 ### Workshop Feature
 
 Quiz-style workshop system with modules, questions, and multiple-choice options. Participants complete workshops by answering questions correctly, with immediate feedback. Tracks completion within 365 days. Organizers define modules, questions with correct answers, and participant progress. Supports pre-event educational requirements with automated tracking.
+
+### Writing Option Requirements Feature
+
+Lets organizers declare prerequisites between character options (`wri_que_requirements`, part of the `character_form` group). Each `WritingOption` has a `requirements` m2m to other options: the option becomes selectable only once its prerequisites are satisfied.
+
+**Requirement semantics:** prerequisites are grouped by the question they belong to.
+
+- Prerequisites on the **same question** are **alternatives** (OR): picking any one of them satisfies the group. A single choice question only allows one answer, so requiring several of its options as an AND would be impossible to satisfy.
+- Prerequisites on **different questions** are **all needed** (AND): every group must be satisfied.
+- Prerequisites pointing to options not available in the form (sold out, hidden) are ignored, so the player is never blocked by something they cannot select.
+
+Example: option `Psionic` requiring `Bunker`, `Wasteland` (both on question *Origin*) and `Medic` (on question *Training*) is available when the origin is either Bunker or Wasteland **and** the training is Medic.
+
+**Enforcement:** the same rule is applied on both sides, and must stay aligned when either is changed.
+
+- Client side: `larpmanager/templates/elements/form/option_dependencies.js` hides options whose requirements are unmet and deselects them, re-running until the chained requirements settle.
+- Server side: `CharacterForm._validate_dependencies()` in `larpmanager/forms/character.py` rejects invalid combinations, including auto-save submissions. Organizer forms are not bound by requirements.
+
+The option-to-prerequisites map is cached per event by `get_character_option_dependencies()` in `larpmanager/cache/question.py`, and invalidated on writing question or requirement changes.

@@ -9,6 +9,7 @@ from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.models.association import AssociationConfig
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.larpmanager.tasks import (
+    MailHeaders,
     _build_email_message,
     _prepare_email_metadata,
     my_send_simple_mail,
@@ -31,7 +32,7 @@ class TestEmailMetadataPreparation(BaseTestCase):
     @pytest.mark.django_db
     def test_prepare_metadata_with_reply_to(self):
         """Test metadata preparation with reply-to header."""
-        metadata = _prepare_email_metadata(None, None, 'reply@example.com')
+        metadata = _prepare_email_metadata(None, None, MailHeaders(reply_to='reply@example.com'))
 
         assert metadata['headers']['Reply-To'] == 'reply@example.com'
         assert metadata['headers']['List-Unsubscribe'] == '<mailto:info@larpmanager.com>'
@@ -75,7 +76,7 @@ class TestEmailMetadataPreparation(BaseTestCase):
         """Test custom reply_to is added to headers."""
         association = self.create_association(slug='testassoc', main_mail='contact@testassoc.com')
 
-        metadata = _prepare_email_metadata(association.id, None, 'custom@example.com')
+        metadata = _prepare_email_metadata(association.id, None, MailHeaders(reply_to='custom@example.com'))
 
         # Custom reply_to should be in headers
         assert metadata['headers']['Reply-To'] == 'custom@example.com'
@@ -246,7 +247,7 @@ class TestMySendSimpleMail(BaseTestCase):
             mock_get_backend.return_value = mock_backend
 
             my_send_simple_mail(
-                subj='Test', body='<p>Test</p>', m_email='test@example.com', reply_to='reply@example.com'
+                subj='Test', body='<p>Test</p>', m_email='test@example.com', headers=MailHeaders(reply_to='reply@example.com')
             )
 
             # Verify message has Reply-To header
@@ -285,7 +286,7 @@ class TestMySendSimpleMail(BaseTestCase):
                 body='<p>Test</p>',
                 m_email='test@example.com',
                 association_id=association.id,
-                reply_to='custom@example.com',
+                headers=MailHeaders(reply_to='custom@example.com'),
             )
 
             # Verify custom Reply-To is in headers (SES won't override it)

@@ -24,8 +24,10 @@ from typing import TYPE_CHECKING, Any
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.models.base import Config
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
@@ -37,7 +39,9 @@ EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "t
 
 # Centralized config defaults, used when a caller does not pass an explicit default_value.
 # Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
+# No need to set if False, as it's the default value
 CONFIG_DEFAULTS: dict[str, Any] = {
+    "debug_toolbar_enabled": False,
     "payment_custom_reason": "",
     "payment_custom_iban": "",
     # "nebula" mirrors AppearanceTheme.NEBULA.value;
@@ -60,9 +64,10 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "centauri_descr": None,
     "centauri_prob": 0,
     "character_play_max": 1,
+    "collapse_options_min": 5,
     "credits_name": None,
     "deadline_days": 0,
-    "deadlines_tolerance": "30",
+    "deadline_tolerance": "30",
     "einvoice_aliquotaiva": "",
     "einvoice_cap": None,
     "einvoice_codicedestinatario": None,
@@ -82,8 +87,6 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "free_abilities": "[]",
     "guild_max_members": 0,
     "guild_max_number": 0,
-    "footer_content": "",
-    "header_content": "",
     "ildb": "",
     "ildb_api_key": "",
     "ildb_expire": "",
@@ -96,6 +99,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "mail_server_host_password": "",
     "mail_server_host_user": "",
     "mail_server_port": "",
+    "member_a11y": "",
     "member_theme": "",
     "membership_age": "",
     "membership_day": "01-01",
@@ -103,6 +107,18 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "membership_grazing": "0",
     "organization_tax_perc": "10",
     "page_css": "",
+    "pdf_background": "",
+    "pdf_color_bold": "",
+    "pdf_color_border": "",
+    "pdf_color_link": "",
+    "pdf_color_text": "",
+    "pdf_color_title": "",
+    "pdf_font_text": "",
+    "pdf_font_title": "",
+    "pdf_margin": "",
+    "pdf_page_size": "",
+    "pdf_size_text": "",
+    "pdf_size_title": "",
     "pay_what_you_want_descr": _("Freely indicate the amount of your donation"),
     "pay_what_you_want_label": _("Free donation"),
     "payment_alert": 30,
@@ -117,6 +133,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "pub_mood": "",
     "pub_place": "",
     "pub_setting": "",
+    "radar": "",
     "receipt_codice_fiscale": "",
     "receipt_legal_name": "",
     "receipt_runts": "",
@@ -163,10 +180,34 @@ def get_config_default(config_name: str) -> Any:
     return False
 
 
-def reset_element_configs(element: BaseModel) -> None:
-    """Delete cached configs for the given element."""
-    cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
-    cache.delete(cache_key)
+def reset_element_configs(element_id: int, model_name: str) -> None:
+    """Delete cached configs for the given element id and model name."""
+    cache.delete(cache_configs_key(element_id, model_name))
+
+
+def reset_event_configs(event_id: int) -> None:
+    """Delete cached configs for an event."""
+    reset_element_configs(event_id, "event")
+
+
+def reset_run_configs(run_id: int) -> None:
+    """Delete cached configs for a run."""
+    reset_element_configs(run_id, "run")
+
+
+def reset_association_configs(association_id: int) -> None:
+    """Delete cached configs for an association."""
+    reset_element_configs(association_id, "association")
+
+
+def reset_member_configs(member_id: int) -> None:
+    """Delete cached configs for a member."""
+    reset_element_configs(member_id, "member")
+
+
+def reset_character_configs(character_id: int) -> None:
+    """Delete cached configs for a character."""
+    reset_element_configs(character_id, "character")
 
 
 def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
@@ -278,7 +319,11 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
 
     # Create new configuration records for names not already present
     for name in incoming_names - set(existing_configs.keys()):
-        obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        try:
+            with transaction.atomic():
+                obj.configs.model.objects.create(**{fk_field: obj, "name": name, "value": dct[name]})
+        except IntegrityError:
+            obj.configs.model.objects.filter(**{fk_field: obj, "name": name}).update(value=dct[name])
 
 
 def save_single_config(obj: object, name: str, value: any) -> None:
@@ -289,7 +334,18 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     obj.configs.model.objects.update_or_create(
         defaults={"value": value}, **{fk_field: obj, "name": name, "deleted": None}
     )
-    reset_element_configs(obj)
+    # noinspection PyProtectedMember
+    reset_element_configs(obj.id, obj._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
+
+
+def save_single_config_by_id(model_cls: type, obj_id: int, name: str, value: any) -> None:
+    """Save single configuration value for an element, addressed by id without loading it."""
+    fk_field = _get_fkey_config_for_class(model_cls)
+    config_model = model_cls._meta.get_field("configs").related_model  # noqa: SLF001  # Django model metadata
+    config_model.objects.update_or_create(
+        defaults={"value": value}, **{f"{fk_field}_id": obj_id, "name": name, "deleted": None}
+    )
+    reset_element_configs(obj_id, model_cls._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
 
 
 def _get_fkey_config(model_instance: object) -> str | None:
@@ -312,6 +368,11 @@ def _get_fkey_config(model_instance: object) -> str | None:
         'event'
 
     """
+    return _get_fkey_config_for_class(model_instance.__class__)
+
+
+def _get_fkey_config_for_class(model_cls: type) -> str | None:
+    """Get foreign key field name for configuration model, by model class."""
     # Map model class names to their configuration foreign key field names
     foreign_key_field_map = {
         "Event": "event",
@@ -320,12 +381,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
         "Character": "character",
         "Member": "member",
     }
-
-    # Extract the model class name from the instance
-    model_class_name = model_instance.__class__.__name__
-
-    # Return the corresponding foreign key field name
-    return foreign_key_field_map.get(model_class_name)
+    return foreign_key_field_map.get(model_cls.__name__)
 
 
 def get_element_config(element: Any, config_name: str, *, bypass_cache: bool = False) -> Any:
@@ -418,35 +474,6 @@ def get_association_config(
     )
 
 
-def _get_event_parent_id(event_id: int, context: dict | None) -> int | None:
-    """Get parent_id for an event, cached in context and Redis."""
-    if context is None:
-        context = {}
-    ctx_key = "event_parent_ids"
-    if ctx_key not in context:
-        context[ctx_key] = {}
-    if event_id in context[ctx_key]:
-        return context[ctx_key][event_id]
-
-    redis_key = f"event_parent_{event_id}"
-    cached = cache.get(redis_key)
-    if cached is not None:
-        parent_id = cached if cached != 0 else None
-    else:
-        from larpmanager.models.event import Event  # noqa: PLC0415
-
-        parent_id = Event.objects.filter(pk=event_id).values_list("parent_id", flat=True).first()
-        cache.set(redis_key, parent_id if parent_id is not None else 0, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-
-    context[ctx_key][event_id] = parent_id
-    return parent_id
-
-
-def reset_event_parent_cache(event_id: int) -> None:
-    """Invalidate cached parent_id for an event."""
-    cache.delete(f"event_parent_{event_id}")
-
-
 def get_event_config(
     event_id: int,
     config_name: str,
@@ -462,7 +489,7 @@ def get_event_config(
         lookup_id = event_id
     else:
         parent_id = _get_event_parent_id(event_id, context)
-        lookup_id = parent_id if parent_id else event_id
+        lookup_id = parent_id or event_id
 
     return _get_cached_config(lookup_id, "event", config_name, context=context, bypass_cache=bypass_cache)
 

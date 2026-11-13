@@ -28,10 +28,13 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.fields import visible_writing_fields
+from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
+from larpmanager.cache.media import get_run_media_filepath
 from larpmanager.cache.registration import search_player
+from larpmanager.cache.run import get_event_and_children_runs, get_event_runs
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -41,13 +44,24 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction, FactionType, Guild
+from larpmanager.models.writing import (
+    Character,
+    Faction,
+    FactionType,
+    Guild,
+    get_event_class_parent,
+    get_event_elements,
+)
+from larpmanager.utils.registrations.signals import apply_registration_post_save_updates
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
     from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
+
+# Keys emitted by Character.show() / search_player() only when the related value is set
+OPTIONAL_CHARACTER_CACHE_KEYS = ("cover", "thumb", "mirror", "owner", "owner_uuid", "profile")
 
 
 def delete_all_in_path(path: str) -> None:
@@ -74,9 +88,9 @@ def delete_all_in_path(path: str) -> None:
             logger.warning("could not delete %s: %s", entry, err)
 
 
-def get_event_cache_all_key(event_run: Run) -> str:
+def get_event_cache_all_key(run_id: int) -> str:
     """Generate cache key for event data."""
-    return f"event_factions_characters_{event_run.id}"
+    return f"event_factions_characters_{run_id}"
 
 
 def init_event_cache_all(context: dict) -> dict:
@@ -101,7 +115,7 @@ def init_event_cache_all(context: dict) -> dict:
     get_event_cache_characters(context, cached_event_data)
 
     # Load faction data into cache
-    get_event_cache_factions(context, cached_event_data)
+    get_event_cache_factions(context["event"].id, cached_event_data)
 
     # Load guild data into cache
     get_event_cache_guilds(context, cached_event_data)
@@ -150,7 +164,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
-    characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("order")
+    characters_query = (
+        get_event_elements(context["event"].id, Character, context=context).filter(hide=False).order_by("order")
+    )
     for character in characters_query.prefetch_related("factions_list", "guild_memberships__guild"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:
@@ -213,7 +229,9 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     question_uuids = fields_data["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
-    character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
+    character_id_mapping = dict(
+        get_event_elements(context["event"].id, Character, context=context).values_list("id", "number")
+    )
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
@@ -259,7 +277,7 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
         res["chars"][character_index]["fields"][question] = value
 
 
-def get_event_cache_factions(context: dict, result: dict) -> None:
+def get_event_cache_factions(event_id: int, result: dict) -> None:
     """Build cached faction data for events.
 
     Organizes faction information by type and prepares faction selection options,
@@ -267,7 +285,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
     mappings for the event cache.
 
     Args:
-        context: Context dictionary containing event information with 'event' key
+        event_id: ID of the event to build faction data for
         result: Result dictionary to be populated with faction data, modified in-place
 
     Returns:
@@ -286,7 +304,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
     result["fac_mapping"] = {}
 
     # If faction feature is not enabled, create single default faction with all characters
-    if "faction" not in get_event_features(context["event"].id):
+    if "faction" not in get_event_features(event_id):
         result["factions"][0] = {
             "name": "",
             "number": 0,
@@ -318,7 +336,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][FactionType.PRIM] = [0]
 
     # Process real factions from the event
-    for faction in context["event"].get_elements(Faction).order_by("order"):
+    for faction in get_event_elements(event_id, Faction).order_by("order"):
         _process_faction_cache(faction, result)
 
 
@@ -327,13 +345,23 @@ def _process_faction_cache(faction: Faction, result: dict) -> None:
     # Get faction display data
     faction_data = faction.show_red()
     faction_data["characters"] = []
-    # Find characters belonging to this faction
-    for character_number, character_data in result["chars"].items():
-        if character_data["hide"]:
-            continue
+    # Secret factions are excluded from the per-character cached list (see
+    # Character.show_factions), so fall back to the direct m2m for those only
+    if faction.typ == FactionType.SECRET:
+        member_numbers = set(faction.characters.values_list("number", flat=True))
+        for character_number, character_data in result["chars"].items():
+            if character_data["hide"]:
+                continue
 
-        if faction_data["number"] in character_data["factions"]:
-            faction_data["characters"].append(character_number)
+            if character_number in member_numbers:
+                faction_data["characters"].append(character_number)
+    else:
+        for character_number, character_data in result["chars"].items():
+            if character_data["hide"]:
+                continue
+
+            if faction.number in character_data.get("factions", []):
+                faction_data["characters"].append(character_number)
 
     # Skip factions with no characters
     if not faction_data["characters"]:
@@ -367,7 +395,7 @@ def get_event_cache_guilds(context: dict, result: dict) -> None:
     if "guild" not in get_event_features(context["event"].id):
         return
 
-    for guild in context["event"].get_elements(Guild).filter(secret=False).order_by("order"):
+    for guild in get_event_elements(context["event"].id, Guild, context=context).filter(secret=False).order_by("order"):
         _process_guild_cache(guild, result)
 
 
@@ -390,17 +418,17 @@ def _process_guild_cache(guild: Guild, result: dict) -> None:
     result["guild_mapping"][guild.number] = guild.id
 
 
-def _build_trait_relationships(event: Event) -> dict:
+def _build_trait_relationships(event_id: int) -> dict:
     """Build mapping of trait relationships (traits that reference other traits).
 
     Args:
-        event: Event to get traits for
+        event_id: ID of the event to get traits for
 
     Returns:
         Dictionary mapping trait numbers to lists of related trait numbers
     """
     trait_relationships = {}
-    for trait in Trait.objects.filter(event=event).prefetch_related("traits"):
+    for trait in Trait.objects.filter(event_id=event_id).prefetch_related("traits"):
         trait_relationships[trait.number] = []
         # Add related trait numbers, excluding self-references
         for associated_trait in trait.traits.all():
@@ -442,16 +470,16 @@ def get_event_cache_traits(context: dict, res: dict) -> None:
     """
     # Build quest types mapping ordered by number
     res["quest_types"] = {}
-    for quest_type in QuestType.objects.filter(event=context["event"]).order_by("number"):
+    for quest_type in QuestType.objects.filter(event_id=context["event"].id).order_by("number"):
         res["quest_types"][quest_type.number] = quest_type.show()
 
     # Build quests mapping with type relationships
     res["quests"] = {}
-    for quest in Quest.objects.filter(event=context["event"]).order_by("number").select_related("typ"):
+    for quest in Quest.objects.filter(event_id=context["event"].id).order_by("number").select_related("typ"):
         res["quests"][quest.number] = quest.show()
 
     # Build trait relationships mapping (traits that reference other traits)
-    trait_relationships = _build_trait_relationships(context["event"])
+    trait_relationships = _build_trait_relationships(context["event"].id)
 
     # Build main traits mapping with character assignments
     res["traits"] = {}
@@ -496,7 +524,7 @@ def get_event_cache_all(context: dict) -> None:
 
     """
     # Get cache key for the current run
-    cache_key = get_event_cache_all_key(context["run"])
+    cache_key = get_event_cache_all_key(context["run"].id)
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
@@ -509,16 +537,16 @@ def get_event_cache_all(context: dict) -> None:
     context.update(cached_result)
 
 
-def clear_run_cache_and_media(run: Run) -> None:
+def clear_run_cache_and_media(run_id: int) -> None:
     """Clear cache and delete all media files for a run."""
-    reset_event_cache_all(run)
-    media_directory_path = run.get_media_filepath()
+    reset_event_cache_all(run_id)
+    media_directory_path = get_run_media_filepath(run_id)
     delete_all_in_path(media_directory_path)
 
 
-def reset_event_cache_all(run: Run) -> None:
+def reset_event_cache_all(run_id: int) -> None:
     """Delete the event cache for the given run."""
-    cache_key = get_event_cache_all_key(run)
+    cache_key = get_event_cache_all_key(run_id)
     cache.delete(cache_key)
 
 
@@ -530,7 +558,7 @@ def update_character_fields(character: Character, character_data: dict) -> None:
         return
 
     # Build context and update data with character element fields
-    template_context = {"features": enabled_features, "event": character.event}
+    template_context = {"features": enabled_features, "writing_fields": get_event_fields_cache(character.event_id)}
     character_data.update(get_character_element_fields(template_context, character.pk, only_visible=False))
 
 
@@ -550,7 +578,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
     """
     # Get the cache key for the event and retrieve cached data
-    cache_key = get_event_cache_all_key(run)
+    cache_key = get_event_cache_all_key(run.id)
     cached_result = cache.get(cache_key)
 
     # Exit early if no cached data exists
@@ -564,7 +592,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
     # Character updates include both character data and faction refresh
     if isinstance(instance, Character):
         update_event_cache_all_character(instance, cached_result, run)
-        get_event_cache_factions({"event": run.event}, cached_result)
+        get_event_cache_factions(run.event_id, cached_result)
 
     # Registration-character relationship updates
     if isinstance(instance, RegistrationCharacterRel):
@@ -572,6 +600,15 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
     # Save the updated cache data with 1-day timeout
     cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+
+def _merge_character_cache_entry(chars: dict, number: int, character_display_data: dict) -> None:
+    """Merge fresh character data into the cache entry, dropping optional keys no longer present."""
+    entry = chars.setdefault(number, {})
+    for key in OPTIONAL_CHARACTER_CACHE_KEYS:
+        if key not in character_display_data:
+            entry.pop(key, None)
+    entry.update(character_display_data)
 
 
 def update_event_cache_all_character_reg(
@@ -588,8 +625,8 @@ def update_event_cache_all_character_reg(
     # Get character from relation instance
     character = relation.character
 
-    # Only update cache if character belongs to this event
-    if character.event_id != event_run.event_id:
+    # Only update cache if character belongs to this event (or the parent it inherits characters from)
+    if character.event_id != get_event_class_parent(event_run.event_id, Character):
         return
 
     # Generate character display data
@@ -602,12 +639,8 @@ def update_event_cache_all_character_reg(
         {"run": event_run, "assignments": {character.number: relation}},
     )
 
-    # Initialize character entry if not exists
-    if character.number not in cache_result["chars"]:
-        cache_result["chars"][character.number] = {}
-
     # Update character data in result
-    cache_result["chars"][character.number].update(character_display_data)
+    _merge_character_cache_entry(cache_result["chars"], character.number, character_display_data)
 
     # Update char_mapping to keep character number -> id mapping in sync
     if "char_mapping" not in cache_result:
@@ -624,8 +657,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
         run: Event run context
 
     """
-    # Only update cache if character belongs to this event
-    if instance.event_id != run.event_id:
+    # Only update cache if character belongs to this event (or the parent it inherits characters from)
+    if instance.event_id != get_event_class_parent(run.event_id, Character):
         return
 
     # Generate character display data for the specific run
@@ -637,12 +670,8 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     # Search and update player information
     search_player(instance, character_display_data, {"run": run})
 
-    # Initialize character entry in results if not exists
-    if instance.number not in res["chars"]:
-        res["chars"][instance.number] = {}
-
     # Update the character data in results
-    res["chars"][instance.number].update(character_display_data)
+    _merge_character_cache_entry(res["chars"], instance.number, character_display_data)
 
     # Update char_mapping to keep character number -> id mapping in sync
     if "char_mapping" not in res:
@@ -652,9 +681,13 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
 
 def update_event_cache_all_faction(instance: Faction, res: dict[str, dict], run: Run) -> None:
     """Update or add faction data in the cache result dictionary."""
+    # Only update cache if faction belongs to this event (or the parent it inherits factions from)
+    if instance.event_id != get_event_class_parent(run.event_id, Faction):
+        return
+
     if instance.number not in res["factions"]:
         # Faction missing from cache: rebuild faction data so type index and mapping stay consistent
-        get_event_cache_factions({"event": run.event}, res)
+        get_event_cache_factions(run.event_id, res)
         if instance.number not in res["factions"]:
             return
 
@@ -710,7 +743,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
 
     # Clear cache for new characters (no primary key yet)
     if not char.pk:
-        clear_event_cache_all_runs(char.event)
+        clear_event_cache_all_runs(char.event_id)
         return
 
     try:
@@ -718,16 +751,17 @@ def on_character_pre_save_update_cache(char: Character) -> None:
         prev = Character.objects.get(pk=char.pk)
 
         # Check if cache-affecting fields changed
-        # Note: number is included because char_mapping uses number as key
-        lst = ["player_id", "mirror_id", "number"]
+        # Note: number is included because char_mapping uses number as key;
+        # cover is included because the uploaded file is committed (and renamed) only after pre_save
+        lst = ["player_id", "mirror_id", "number", "cover"]
         if has_different_cache_values(char, prev, lst):
-            clear_event_cache_all_runs(char.event)
+            clear_event_cache_all_runs(char.event_id)
         else:
             # Update cache with new character data
-            update_event_cache_all_runs(char.event, char)
+            update_event_cache_all_runs(char.event_id, char)
     except ObjectDoesNotExist:
         # Fallback: clear cache if character not found
-        clear_event_cache_all_runs(char.event)
+        clear_event_cache_all_runs(char.event_id)
 
 
 def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
@@ -737,9 +771,13 @@ def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:  # n
     if action not in ["post_add", "post_remove", "post_clear"]:
         return
 
-    # Get the faction instance and clear related event cache
-    instance: Faction | None = kwargs.pop("instance", None)
-    clear_event_cache_all_runs(instance.event)
+    # Get the affected instance and clear related event cache
+    instance: Character | Faction | None = kwargs.pop("instance", None)
+    clear_event_cache_all_runs(instance.event_id)
+
+    # Invalidate the stale per-instance faction id cache
+    if isinstance(instance, Character) and hasattr(instance, "_faction_ids_cache"):
+        del instance._faction_ids_cache  # noqa: SLF001 (instance-level memoization, not real privacy)
 
 
 def on_faction_pre_save_update_cache(instance: Faction) -> None:
@@ -759,21 +797,21 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
 
     # Handle new faction creation - clear all event caches
     if not instance.pk:
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
         return
 
     # Get the previous version from database for comparison
     prev = Faction.objects.get(pk=instance.pk)
 
-    # Check if faction type or visibility/access flags changed - requires full cache clear
-    lst = ["typ", "hide", "locked"]
+    # Check if faction type, visibility/access flags or cover changed - requires full cache clear
+    lst = ["typ", "hide", "locked", "cover"]
     if has_different_cache_values(instance, prev, lst):
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
 
     # Check if display fields changed - update caches with new data
     lst = ["name", "teaser"]
     if has_different_cache_values(instance, prev, lst):
-        update_event_cache_all_runs(instance.event, instance)
+        update_event_cache_all_runs(instance.event_id, instance)
 
 
 def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
@@ -784,14 +822,14 @@ def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
 
     # Handle new QuestType creation
     if not instance.pk:
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
         return
 
     # Check if cache-affecting fields have changed
     lst = ["name"]
     prev = QuestType.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
 
 
 def on_quest_pre_save_update_cache(instance: Quest) -> None:
@@ -802,14 +840,14 @@ def on_quest_pre_save_update_cache(instance: Quest) -> None:
 
     # Clear cache for new quests
     if not instance.pk:
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
         return
 
     # Check if cache-relevant fields have changed
     lst = ["name", "teaser", "typ_id"]
     prev = Quest.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
 
 
 def on_trait_pre_save_update_cache(instance: Trait) -> None:
@@ -825,48 +863,50 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
 
     # Clear cache for new traits
     if not instance.pk:
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
         return
 
     # Check if cache-relevant fields have changed
     lst = ["name", "teaser", "quest_id"]
     prev = Trait.objects.get(pk=instance.pk)
     if has_different_cache_values(instance, prev, lst):
-        clear_event_cache_all_runs(instance.event)
+        clear_event_cache_all_runs(instance.event_id)
 
 
-def update_event_cache_all_runs(event: Event, instance: BaseModel) -> None:
-    """Update event cache for all runs of the given event."""
-    for run in event.runs.all():
+def update_event_cache_all_runs(event_id: int, instance: BaseModel) -> None:
+    """Update event cache for all runs of the given event and of its child events."""
+    for run in get_event_and_children_runs(event_id):
         update_event_cache_all(run, instance)
 
 
 def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     """Reset cache for character's registration and run."""
-    # Save registration to trigger cache invalidation
-    if rcr.registration:
-        rcr.registration.save()
+    registration = rcr.registration
+    if registration:
+        apply_registration_post_save_updates(registration)
+
     # Clear run-level cache and media
-    clear_run_cache_and_media(rcr.registration.run)
+    clear_run_cache_and_media(registration.run_id)
 
 
-def clear_event_cache_all_runs(event: Event) -> None:
+def clear_event_cache_all_runs(event_id: int) -> None:
     """Clear cache and media for all runs of event, children, siblings, and parent."""
     # Clear cache for all runs of the current event
-    for run in event.runs.all():
-        clear_run_cache_and_media(run)
+    for run in get_event_runs(event_id):
+        clear_run_cache_and_media(run.id)
 
     # Clear cache for runs of child events
-    for child_event in Event.objects.filter(parent=event).prefetch_related("runs"):
-        for run in child_event.runs.all():
-            clear_run_cache_and_media(run)
+    for child_event_id in Event.objects.filter(parent_id=event_id).values_list("id", flat=True):
+        for run in get_event_runs(child_event_id):
+            clear_run_cache_and_media(run.id)
 
-    if event.parent:
+    parent_id = _get_event_parent_id(event_id)
+    if parent_id:
         # Clear cache for runs of sibling events
-        for sibling_event in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
-            for run in sibling_event.runs.all():
-                clear_run_cache_and_media(run)
+        for sibling_event_id in Event.objects.filter(parent_id=parent_id).values_list("id", flat=True):
+            for run in get_event_runs(sibling_event_id):
+                clear_run_cache_and_media(run.id)
 
         # Clear cache for runs of parent event
-        for run in event.parent.runs.all():
-            clear_run_cache_and_media(run)
+        for run in get_event_runs(parent_id):
+            clear_run_cache_and_media(run.id)

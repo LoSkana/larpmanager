@@ -26,6 +26,7 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
@@ -34,16 +35,32 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+from httpx import HTTPError
 
+from larpmanager.accounting.gateway import GatewayError, payment_error_info
+from larpmanager.accounting.gateway.paypal_v2 import (
+    PAYPAL_V2_COMPLETED,
+    PAYPAL_V2_PENDING,
+    PaypalV2AlreadyPaidError,
+    PaypalV2CaptureRejectedError,
+    get_paypal_v2_cancel_error,
+    is_paypal_v2_order_id,
+    is_paypal_v2_pending,
+    paypal_v2_capture,
+    paypal_v2_redirect_url,
+    paypal_v2_webhook,
+)
 from larpmanager.accounting.gateway.redsys import redsys_webhook
-from larpmanager.accounting.gateway.satispay import satispay_webhook
-from larpmanager.accounting.gateway.stripe import stripe_webhook
+from larpmanager.accounting.gateway.satispay import satispay_verify, satispay_webhook
+from larpmanager.accounting.gateway.stripe import get_stripe_cancel_error, stripe_webhook
 from larpmanager.accounting.gateway.sumup import sumup_webhook
-from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
+from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting, is_membership_fee_reserved
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
+from larpmanager.cache.run import get_event_runs
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
     CollectionForm,
@@ -74,16 +91,26 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context, get_context, get_event_context
+from larpmanager.utils.core.base import (
+    fetch_payment_details,
+    get_context,
+    get_event_context,
+    update_payment_details,
+)
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
+from larpmanager.utils.larpmanager.tasks import notify_admins
+from larpmanager.utils.registrations.status import _status_payment, registration_status
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.registration import _status_payment, registration_status
 
 logger = logging.getLogger(__name__)
+
+# Minimum interval between two admin notifications of payment errors on the same invoice
+PAYMENT_ERROR_NOTIFY_SECONDS = 3600
 
 
 @login_required
@@ -568,7 +595,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         return redirect("accounting")
 
     # Check if membership fee already paid for current year
-    year = timezone.now().year
+    year = timezone.localdate().year
     try:
         AccountingItemMembership.objects.get(
             year=year,
@@ -579,6 +606,17 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
         return redirect("accounting")
     except ObjectDoesNotExist as e:
         logger.debug("Membership fee not found for member=%s, year=%s: %s", context["member"].id, year, e)
+
+    # Block if a registration invoice already bundles and reserves this year's fee (pending verification)
+    if is_membership_fee_reserved(context["association_id"], context["member"].id, year):
+        messages.warning(
+            request,
+            _(
+                "Your membership fee for this year is already included in a pending event registration payment, "
+                "awaiting verification"
+            ),
+        )
+        return redirect("accounting")
 
     # Set up context variables for template rendering
     context["year"] = year
@@ -923,6 +961,156 @@ def accounting_webhook_stripe(request: HttpRequest) -> JsonResponse:
 
 
 @csrf_exempt
+def accounting_webhook_paypal(request: HttpRequest) -> JsonResponse:
+    """Handle PayPal webhook notifications, answering with an error to have PayPal retry failed ones."""
+    if not paypal_v2_webhook(request):
+        return JsonResponse({"res": "ko"}, status=400)
+    return JsonResponse({"res": "ok"})
+
+
+@login_required
+def accounting_paypal_go(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
+    """Send the user to the PayPal page of the invoice order."""
+    invoice = PaymentInvoice.objects.filter(
+        uuid=invoice_uuid,
+        member=request.user.member,
+        association_id=request.association["id"],
+        method__slug="paypal_v2",
+        status=PaymentStatus.CREATED,
+    ).first()
+    if not invoice:
+        raise Http404
+
+    # A page opened before a capture went pending must not start a second payment
+    if is_paypal_v2_pending(invoice):
+        messages.warning(
+            request,
+            _("The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it."),
+        )
+        return redirect("accounting")
+
+    approve_url = paypal_v2_redirect_url(invoice.uuid)
+    if not approve_url:
+        messages.warning(request, _("The payment session has expired. Please start the payment again."))
+        return redirect("accounting")
+
+    return HttpResponseRedirect(approve_url)
+
+
+@login_required
+def accounting_paypal_return(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
+    """Capture the PayPal order the user has just approved, then complete the payment."""
+    invoice = (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+            method__slug="paypal_v2",
+        )
+        .select_related("method")
+        .first()
+    )
+    if not invoice:
+        raise Http404
+
+    if invoice.status != PaymentStatus.CREATED:
+        return redirect("accounting_payed", registration_uuid=invoice.uuid)
+
+    context = get_context(request)
+    update_payment_details(context)
+
+    # PayPal appends the approved order id to the return url
+    order_id = request.GET.get("token")
+    if not is_paypal_v2_order_id(order_id):
+        order_id = None
+
+    try:
+        capture_status = paypal_v2_capture(context, invoice, order_id)
+    except PaypalV2AlreadyPaidError:
+        logger.warning("PayPal order not captured, invoice key already paid - invoice %s", invoice.cod)
+        messages.info(request, _("This payment has already been completed, you have not been charged again."))
+        return redirect("accounting")
+    except PaypalV2CaptureRejectedError as err:
+        # PayPal holds the money: the payer must not retry, the organizers reconcile it by hand
+        logger.exception("PayPal capture not accepted - invoice %s", invoice.cod)
+        notify_admins(
+            f"PayPal capture not accepted - {request.association['slug']} - {request.user}",
+            payment_error_info(request, context, invoice, str(err)),
+        )
+        messages.warning(
+            request,
+            _(
+                "The payment was received by PayPal but could not be registered automatically: "
+                "the organizers will verify it. Please do not pay again."
+            ),
+        )
+        return redirect("accounting")
+    except GatewayError as err:
+        logger.exception("PayPal capture failed - invoice %s", invoice.cod)
+        notify_admins(
+            f"PayPal capture failed - {request.association['slug']} - {request.user}",
+            payment_error_info(request, context, invoice, str(err)),
+        )
+        capture_status = None
+
+    # Declined or voided captures are not expected right after the approval
+    if capture_status not in (PAYPAL_V2_COMPLETED, PAYPAL_V2_PENDING, None):
+        notify_admins(
+            f"PayPal capture {capture_status} - {request.association['slug']} - {request.user}",
+            payment_error_info(request, context, invoice, f"Capture status: {capture_status}"),
+        )
+
+    if capture_status == PAYPAL_V2_COMPLETED:
+        return redirect("accounting_payed", registration_uuid=invoice.uuid)
+
+    if capture_status == PAYPAL_V2_PENDING:
+        messages.warning(
+            request,
+            _("The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it."),
+        )
+        return redirect("accounting")
+
+    messages.warning(
+        request, _("The payment was not completed. Please try again later or choose another payment method.")
+    )
+    return redirect("accounting")
+
+
+@login_required
+@require_POST
+def accounting_sumup_error(request: HttpRequest, invoice_uuid: str) -> JsonResponse:
+    """Notify admins of a payment error reported by the SumUp card widget."""
+    invoice = (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+        )
+        .select_related("method")
+        .first()
+    )
+    if not invoice:
+        raise Http404
+
+    # Notify at most once in a while for each invoice, the widget can report errors repeatedly
+    if not cache.add(f"sumup_error_{invoice.uuid}", 1, timeout=PAYMENT_ERROR_NOTIFY_SECONDS):
+        return JsonResponse({"res": "ok"})
+
+    response_type = request.POST.get("type", "")[:50]
+    response_body = request.POST.get("body", "")[:2000]
+    notify_admins(
+        f"SumUp payment {response_type} - {request.association['slug']} - {request.user}",
+        payment_error_info(
+            request,
+            fetch_payment_details(request.association["id"]),
+            invoice,
+            f"{response_type}: {response_body}",
+        ),
+    )
+    return JsonResponse({"res": "ok"})
+
+
+@csrf_exempt
 def accounting_webhook_sumup(request: HttpRequest) -> JsonResponse:
     """Process SumUp webhook and return success response."""
     sumup_webhook(request)
@@ -947,13 +1135,55 @@ def accounting_redsys_ko(request: HttpRequest) -> HttpResponseRedirect:
 @login_required
 def accounting_wait(request: HttpRequest) -> HttpResponse:
     """Render the account waiting page."""
-    return render(request, "larpmanager/member/accounting_wait.html")
+    return render(request, "larpmanager/member/accounting_wait.html", get_context(request))
+
+
+def _get_cancelled_invoice(request: HttpRequest) -> PaymentInvoice | None:
+    """Return the cancelled invoice named in the gateway url, if it belongs to the user."""
+    invoice_uuid = request.GET.get("invoice")
+    if not invoice_uuid:
+        return None
+
+    return (
+        PaymentInvoice.objects.filter(
+            uuid=invoice_uuid,
+            member=request.user.member,
+            association_id=request.association["id"],
+        )
+        .select_related("method")
+        .first()
+    )
 
 
 @login_required
 def accounting_cancelled(request: HttpRequest) -> HttpResponse:
-    """Handle cancelled payment redirecting to accounting page."""
-    mes = _("The payment was not completed. Please contact us to find out why.")
+    """Handle cancelled payment: notify admins on detected gateway errors and redirect to accounting page."""
+    payment_details = fetch_payment_details(request.association["id"])
+    invoice = _get_cancelled_invoice(request)
+
+    # Only Stripe and PayPal let us tell a user cancellation from a gateway error
+    gateway_error = None
+    cancel_error_checks = {
+        "stripe": ("stripe_sk_api", get_stripe_cancel_error),
+        "paypal_v2": ("paypal_v2_secret", get_paypal_v2_cancel_error),
+    }
+    if invoice and invoice.status == PaymentStatus.CREATED and invoice.method.slug in cancel_error_checks:
+        required_key, get_cancel_error = cancel_error_checks[invoice.method.slug]
+        if payment_details.get(required_key):
+            gateway_error = get_cancel_error(payment_details, invoice)
+
+    if not gateway_error:
+        messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+        return redirect("accounting")
+
+    # Notify at most once in a while for each invoice, the page can be reloaded
+    if cache.add(f"payment_cancel_error_{invoice.uuid}", 1, timeout=PAYMENT_ERROR_NOTIFY_SECONDS):
+        notify_admins(
+            f"Payment cancelled - {request.association['slug']} - {request.user}",
+            payment_error_info(request, payment_details, invoice, gateway_error),
+        )
+
+    mes = _("The payment was not completed. Please try again later or choose another payment method.")
     messages.warning(request, mes)
     return redirect("accounting")
 
@@ -1029,6 +1259,28 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
     else:
         # No specific invoice to process
         inv = None
+
+    # Satispay redirects here whatever the outcome, check the actual payment status
+    if inv and inv.method.slug == "satispay" and inv.status == PaymentStatus.CREATED:
+        update_payment_details(context)
+        try:
+            satispay_status = satispay_verify(context, inv.cod)
+        except (KeyError, ValueError, HTTPError, OSError):
+            logger.exception("Satispay status check failed - invoice %s", inv.cod)
+            satispay_status = None
+
+        if satispay_status == "CANCELED":
+            messages.info(request, _("The payment was cancelled. You can try again whenever you want."))
+            return redirect("accounting")
+
+        # Not registered yet: still pending, status unreadable, or rejected by the checks
+        inv.refresh_from_db(fields=["status"])
+        if inv.status == PaymentStatus.CREATED:
+            messages.warning(
+                request,
+                _("The payment has not been confirmed yet: it will be registered as soon as Satispay confirms it."),
+            )
+            return redirect("accounting")
 
     # Set success message for payment completion
     mes = _("You have completed the payment!")
@@ -1225,7 +1477,7 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     """Add runs from events to dictionary, optionally filtering past runs."""
     for e in lis:
         # Filter and add runs to dictionary by ID
-        for r in e.runs.all():
-            if future and r.end < timezone.now().date():
+        for r in get_event_runs(e.id):
+            if future and r.end < timezone.localdate():
                 continue
             ls[r.id] = r

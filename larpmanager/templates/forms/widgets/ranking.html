@@ -1,0 +1,33 @@
+{% load i18n %}
+{% if widget.attrs.disabled %}
+    <ol class="ranking-readonly">
+        {% for uuid, name in widget.items %}
+            {% if not widget.max_rank or forloop.counter <= widget.max_rank %}<li>{{ name }}</li>{% endif %}
+        {% endfor %}
+    </ol>
+    <input type="hidden"
+           name="{{ widget.name }}"
+           value="{{ widget.value|default:'' }}" />
+{% else %}
+    <div class="ranking"
+         data-field-id="{{ widget.attrs.id }}"
+         data-max-rank="{{ widget.max_rank }}">
+        <ul class="ranking-list">
+            {% for uuid, name in widget.items %}
+                <li class="ranking-item" draggable="true" data-uuid="{{ uuid }}">
+                    <i class="fa-solid fa-grip-vertical ranking-handle"></i>
+                    <span class="ranking-position"></span>
+                    <span class="ranking-name">{{ name }}</span>
+                    <span class="ranking-buttons">
+                        <a href="#" class="ranking-up" title="{% trans "Move up" %}"><i class="fa-solid fa-arrow-up"></i></a>
+                        <a href="#" class="ranking-down" title="{% trans "Move down" %}"><i class="fa-solid fa-arrow-down"></i></a>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="hidden"
+               name="{{ widget.name }}"
+               id="{{ widget.attrs.id }}"
+               value="{{ widget.value|default:'' }}" />
+    </div>
+{% endif %}

@@ -1,0 +1,119 @@
+{% load i18n %}
+<svg class="a11y-svg-filters" aria-hidden="true" focusable="false">
+    <filter id="a11y-cb-filter" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="1 0 0 0 0 0.3256 0.4501 0.2243 0 0 0.9094 -1.2908 1.3814 0 0 0 0 0 1 0" />
+    </filter>
+</svg>
+<dialog id="a11y-dialog" aria-labelledby="a11y-title">
+    <button type="button" id="a11y-close" aria-label="{% trans "Close" %}">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+    </button>
+    <h2 id="a11y-title">{% trans "Accessibility" %}</h2>
+    <form id="a11y-form" autocomplete="off">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Font" %}</legend>
+            <label>
+                <input type="radio"
+                       name="font"
+                       value=""
+                       {% if "font-dyslexic" not in a11y_tokens and "font-sans" not in a11y_tokens %}checked{% endif %}>
+                {% trans "Default" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="font"
+                       value="dyslexic"
+                       {% if "font-dyslexic" in a11y_tokens %}checked{% endif %}>
+                {% trans "Dyslexia friendly" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="font"
+                       value="sans"
+                       {% if "font-sans" in a11y_tokens %}checked{% endif %}>
+                {% trans "Simple" %}
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Text size" %}</legend>
+            <label>
+                <input type="radio"
+                       name="size"
+                       value=""
+                       {% if "size-l" not in a11y_tokens and "size-xl" not in a11y_tokens %}checked{% endif %}>
+                {% trans "Default" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="size"
+                       value="l"
+                       {% if "size-l" in a11y_tokens %}checked{% endif %}>
+                {% trans "Large" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="size"
+                       value="xl"
+                       {% if "size-xl" in a11y_tokens %}checked{% endif %}>
+                {% trans "Extra large" %}
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Colors" %}</legend>
+            <label>
+                <input type="radio"
+                       name="color"
+                       value=""
+                       {% if "color-contrast" not in a11y_tokens and "color-cb" not in a11y_tokens %}checked{% endif %}>
+                {% trans "Default" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="color"
+                       value="contrast"
+                       {% if "color-contrast" in a11y_tokens %}checked{% endif %}>
+                {% trans "High contrast" %}
+            </label>
+            <label>
+                <input type="radio"
+                       name="color"
+                       value="cb"
+                       {% if "color-cb" in a11y_tokens %}checked{% endif %}>
+                {% trans "Color blind friendly" %}
+            </label>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Other" %}</legend>
+            <label>
+                <input type="checkbox"
+                       name="spacing"
+                       value="1"
+                       {% if "spacing" in a11y_tokens %}checked{% endif %}>
+                {% trans "Wider text spacing" %}
+            </label>
+            <label>
+                <input type="checkbox"
+                       name="links"
+                       value="1"
+                       {% if "links" in a11y_tokens %}checked{% endif %}>
+                {% trans "Underline links" %}
+            </label>
+            <label>
+                <input type="checkbox"
+                       name="nobg"
+                       value="1"
+                       {% if "nobg" in a11y_tokens %}checked{% endif %}>
+                {% trans "Hide page background" %}
+            </label>
+            <label>
+                <input type="checkbox"
+                       name="motion"
+                       value="1"
+                       {% if "motion" in a11y_tokens %}checked{% endif %}>
+                {% trans "Reduce animations" %}
+            </label>
+        </fieldset>
+        <button type="button" id="a11y-reset">{% trans "Reset" %}</button>
+    </form>
+</dialog>

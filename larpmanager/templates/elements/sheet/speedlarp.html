@@ -7,7 +7,7 @@
         time to calibrate before the event with other participants." %}
     </p>
     {% for f in sheet_speedlarps %}
-        <h2 class="c">{{ f.typ }}: {{ f.data.name }} ({{ f.station }})</h2>
+        <h2 class="c title">{{ f.typ }}: {{ f.data.name }} ({{ f.station }})</h2>
         <div class="plot">{% show_char f.data run 0 %}</div>
     {% endfor %}
     <hr class="clear" />

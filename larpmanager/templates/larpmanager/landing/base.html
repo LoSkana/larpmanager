@@ -16,10 +16,22 @@
         {% block robots %}
             {% if staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
         {% endblock robots %}
+        <link rel="canonical"
+              href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+        {% block og %}
+            <meta property="og:url"
+                  content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+            <meta property="og:type" content="website">
+            <meta property="og:site_name" content="LarpManager">
+            <meta property="og:title" content="{{ texts.page_title }}">
+            <meta property="og:description" content="{{ texts.meta_description }}">
+            <meta property="og:image"
+                  content="https://larpmanager.com/static/thumbnail.png">
+        {% endblock og %}
         <link rel="icon" href="{% static 'lm_logo.png' %}">
         {% if google_tag %}
             <!-- Google Tag Manager -->
-            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            <script nonce="{{ csp_nonce }}">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
             j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
@@ -29,7 +41,7 @@
         {% endif %}
         {% if hotjar_siteid %}
             <!-- Hotjar -->
-            <script>
+            <script nonce="{{ csp_nonce }}">
                 (function(h,o,t,j,a,r){
                     h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                     h._hjSettings={hjid:{{ hotjar_siteid }},hjsv:6};
@@ -45,13 +57,14 @@
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap"
               rel="stylesheet">
         <link rel="preload"
-              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+              href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}"
               as="style"
-              onload="this.onload=null;this.rel='stylesheet'">
+              data-async-css>
         <noscript>
             <link rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+                  href="{% static 'node_modules/@fortawesome/fontawesome-free/css/all.min.css' %}">
         </noscript>
+        {% include "elements/helpers/async-css.js" %}
         <style>
             @font-face {
                 font-family: 'future_light';
@@ -157,8 +170,10 @@
             </footer>
         {% endif %}
         {% compress js %}
+            <script defer src="{% static 'larpmanager/assets/js/slug-field.js' %}"></script>
             <script defer src="{% static 'larpmanager/landing/landing.js' %}"></script>
         {% endcompress %}
+        <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
         {% block js2 %}
         {% endblock js2 %}
     </body>

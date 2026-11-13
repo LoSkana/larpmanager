@@ -1,10 +1,10 @@
 {% load show_tags i18n %}
-<script>
+<script nonce="{{ csp_nonce }}">
 window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
         $('#slug').on('slug:changed', function (e, cleanedVal) {
-            $('.slug_pre').text("Preview: https://{{ association.slug }}.{{ association.main_domain }}/" + cleanedVal);
+            $('.slug_pre').text(cleanedVal ? "Preview: https://{{ association.slug }}.{{ association.main_domain }}/" + cleanedVal : "Preview:");
         });
     });
 });

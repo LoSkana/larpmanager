@@ -25,6 +25,9 @@ from django.http import HttpRequest
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.nav import build_profile_home_nav_items, build_profile_nav_items
+from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, get_effective_version
+from larpmanager.utils.users.accessibility import get_accessibility_tokens
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
@@ -55,6 +58,12 @@ def cache_association(request: HttpRequest) -> dict:
         association_id = request.association["id"]
         context["page_theme"] = get_association_config(association_id, "theme")
         context["is_larpmanager_skin"] = request.association.get("main_domain") == "larpmanager.com"
+        context["chat_max_question_length"] = CHAT_MAX_QUESTION_LENGTH
+        # Default for pages rendered without the base context; views providing it override this
+        member = getattr(request.user, "member", None) if hasattr(request, "user") else None
+        context["effective_version"] = get_effective_version(
+            member, request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)
+        )
 
     # Set staging flag for staging environment
     if request.enviro == "staging":
@@ -72,6 +81,7 @@ def cache_association(request: HttpRequest) -> dict:
     profile_items = build_profile_nav_items(request)
     home_items = build_profile_home_nav_items(request)
     context["profile_nav_items"] = profile_items + home_items
+    context["profile_home_nav_items"] = home_items
     context["is_profile_page"] = any(item["active"] for item in profile_items)
 
     context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
@@ -91,5 +101,9 @@ def cache_association(request: HttpRequest) -> dict:
         if above_threshold:
             hotjar_siteid = None
     context["hotjar_siteid"] = hotjar_siteid
+
+    # Personal accessibility preferences, rendered as classes on the html element
+    context["a11y_tokens"] = get_accessibility_tokens(request)
+    context["a11y_classes"] = " ".join(f"a11y-{token}" for token in context["a11y_tokens"])
 
     return context

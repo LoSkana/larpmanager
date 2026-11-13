@@ -26,7 +26,7 @@ import random
 import re
 import string
 import unicodedata
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 from decimal import ROUND_DOWN, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -44,6 +44,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, Feature
@@ -56,11 +57,11 @@ from larpmanager.models.miscellanea import (
     PlayerRelationship,
     WorkshopModule,
 )
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Handout,
     Relationship,
+    get_event_class_parent,
 )
 
 if TYPE_CHECKING:
@@ -209,18 +210,6 @@ def get_event_template(context: dict, template_uuid: str) -> None:
     )
 
 
-def get_registration(context: dict, registration_uuid: str) -> None:
-    """Get registration by ID and add to context."""
-    add_context_by_uuid(
-        context,
-        "registration",
-        Registration,
-        registration_uuid,
-        set_name=True,
-        run=context["run"],
-    )
-
-
 def get_discount(context: dict, discount_uuid: str) -> None:
     """Get discount by ID and add to context, scoped to the current run."""
     add_context_by_uuid(
@@ -332,7 +321,7 @@ def get_element_event(
     if hasattr(model_class, "association"):
         filters["association_id"] = context["association_id"]
     if hasattr(model_class, "event"):
-        filters["event"] = context["event"].get_class_parent(model_class)
+        filters["event_id"] = get_event_class_parent(context["event"].id, model_class, context=context)
 
     return get_object_uuid(
         model_class,
@@ -370,8 +359,13 @@ def get_player_relationship(context: dict, other_character_uuid: str) -> None:
 
 
 def ensure_timezone_aware(dt: datetime) -> datetime:
-    """Ensure a datetime object is timezone-aware."""
-    return dt if timezone.is_aware(dt) else timezone.make_aware(dt)
+    """Ensure a datetime object is timezone-aware, treating naive values as UTC."""
+    return dt if timezone.is_aware(dt) else timezone.make_aware(dt, UTC)
+
+
+def local_day_start(day: date) -> datetime:
+    """Return the aware datetime at midnight of the given day in the current timezone."""
+    return timezone.make_aware(datetime.combine(day, time.min))
 
 
 def get_time_diff(start_datetime: date, end_datetime: date) -> int:
@@ -384,11 +378,11 @@ def get_time_diff_today(target_date: datetime | date | None) -> int:
     if not target_date:
         return -1
 
-    # Convert datetime to date if necessary
+    # Convert datetime to local date if necessary
     if isinstance(target_date, datetime):
-        target_date = target_date.date()
+        target_date = timezone.localtime(target_date).date()
 
-    return get_time_diff(target_date, timezone.now().date())
+    return get_time_diff(target_date, timezone.localdate())
 
 
 def generate_number(length: int) -> str:
@@ -531,7 +525,7 @@ def get_payment_methods_ids(context: dict) -> set[int]:
 
 def detect_delimiter(content: str) -> str:
     """Detect CSV delimiter from content header line."""
-    header_line = content.split("\n")[0]
+    header_line = content.split("\n", maxsplit=1)[0]
     for delimiter in ["\t", ";", ","]:
         if delimiter in header_line:
             return delimiter
@@ -730,15 +724,6 @@ def format_email_skipped(recipient: object) -> str:
     return labels.get(recipient.skipped, recipient.skipped)
 
 
-def get_now() -> datetime:
-    """Get current time - if executed in debug/test, without timezone, add it."""
-    now = timezone.now()
-    if now.tzinfo is None or now.tzinfo.utcoffset(now) is None:
-        # If timezone.now() returns naive, make it aware
-        now = now.replace(tzinfo=UTC)
-    return now
-
-
 def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
     """Get display name for a choice field value."""
     for choice_key, display_name in choices:
@@ -772,17 +757,18 @@ def get_coming_runs(association_id: int | None, *, future: bool = True, include_
     # Apply date filtering and ordering based on future/past requirement
     if future:
         # Get runs ending 3+ days from now, ordered by end date (earliest first)
-        reference_date = timezone.now() - timedelta(days=3)
-        runs = runs.filter(end__gte=reference_date.date()).order_by("end")
+        reference_date = timezone.localdate() - timedelta(days=3)
+        runs = runs.filter(end__gte=reference_date).order_by("end")
     else:
         # Get runs that ended 3+ days ago, ordered by end date (latest first)
-        reference_date = timezone.now() + timedelta(days=3)
-        runs = runs.filter(end__lte=reference_date.date()).order_by("-end")
+        reference_date = timezone.localdate() + timedelta(days=3)
+        runs = runs.filter(end__lte=reference_date).order_by("-end")
 
     return runs
 
 
-def _geo_prefetch(prefix: str = "") -> Prefetch:
+def geo_prefetch(prefix: str = "") -> Prefetch:
+    """Build a Prefetch for pub_lat/pub_lon EventConfigs, optionally through a related-object prefix."""
     path = f"{prefix}__configs" if prefix else "event__configs"
     return Prefetch(
         path,
@@ -793,12 +779,7 @@ def _geo_prefetch(prefix: str = "") -> Prefetch:
 
 def with_geo_configs(runs_qs: QuerySet) -> QuerySet:
     """Prefetch pub_lat/pub_lon EventConfigs so Event.maps_url needs no extra queries."""
-    return runs_qs.prefetch_related(_geo_prefetch())
-
-
-def with_geo_configs_registrations(registrations_qs: QuerySet) -> QuerySet:
-    """Prefetch pub_lat/pub_lon EventConfigs through registration->run->event."""
-    return registrations_qs.prefetch_related(_geo_prefetch("run__event"))
+    return runs_qs.prefetch_related(geo_prefetch())
 
 
 def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_name: str) -> list:
@@ -846,3 +827,35 @@ def parse_multi_config(value: str) -> list:
         return result if isinstance(result, list) else []
     except (ValueError, SyntaxError):
         return []
+
+
+def get_exec_language(association: Association) -> str:
+    """Determine the most common language among association executives.
+
+    Analyzes the language preferences of all association executives and returns
+    the most frequently used language code. If no executives are found or no
+    language preferences are set, defaults to English.
+
+    Args:
+        association: Association instance containing executives to analyze
+
+    Returns:
+        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
+             of executives, or 'en' if no executives found or no preferences set
+
+    """
+    # Initialize dictionary to count language occurrences
+    language_counts = {}
+
+    # Iterate through all association executives
+    for executive in get_association_executives(association):
+        executive_language = executive.language
+
+        # Count each language preference
+        if executive_language not in language_counts:
+            language_counts[executive_language] = 1
+        else:
+            language_counts[executive_language] += 1
+
+    # Determine the most common language or default to English
+    return max(language_counts, key=language_counts.get) if language_counts else "en"

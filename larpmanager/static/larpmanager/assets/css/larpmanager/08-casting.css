@@ -5,7 +5,6 @@
   background-size: 0.5em;
   height: auto;
   padding-right: 0.5em;
-  display: inline;
   margin: 0 0.5em 0 0;
 }
 
@@ -272,6 +271,24 @@
 .casting-avoid {
   margin-top: 1.5rem;
   text-align: center !important;
+}
+
+.casting-submit {
+  margin-top: 1rem;
+}
+
+.casting-edit-head {
+  margin-bottom: 0.5rem;
+}
+
+.casting-edit-pref {
+  cursor: pointer;
+  margin-left: 0.4em;
+  opacity: 0.6;
+}
+
+.casting-edit-pref:hover {
+  opacity: 1;
 }
 
 /* ---------------------------------------------------------------------------

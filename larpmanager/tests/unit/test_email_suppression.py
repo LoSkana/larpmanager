@@ -511,11 +511,11 @@ class TestSuppressionOnSend(BaseTestCase):
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
             my_send_mail_bkg.task_function(recipient.pk)
             mock_send.assert_called_once()
-            unsubscribe_url = mock_send.call_args[0][8]
+            unsubscribe_url = mock_send.call_args[1]["headers"].unsubscribe_url
             assert "unsubscribe/" in unsubscribe_url
             # A transactional mail must never advertise one-click
             assert "unsubscribe-one-click/" not in unsubscribe_url
-            assert not mock_send.call_args[1]["one_click"]
+            assert not mock_send.call_args[1]["headers"].one_click
 
         recipient.refresh_from_db()
         assert recipient.skipped is None
@@ -530,8 +530,8 @@ class TestSuppressionOnSend(BaseTestCase):
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
             my_send_mail_bkg.task_function(recipient.pk)
             mock_send.assert_called_once()
-            assert "unsubscribe-one-click/" in mock_send.call_args[0][8]
-            assert mock_send.call_args[1]["one_click"]
+            assert "unsubscribe-one-click/" in mock_send.call_args[1]["headers"].unsubscribe_url
+            assert mock_send.call_args[1]["headers"].one_click
 
 
 class TestNewsletterPartition(BaseTestCase):
@@ -619,10 +619,12 @@ class TestUnsubscribeHeaders(BaseTestCase):
 
     def test_one_click_headers_present(self):
         """A bulk mail publishes the unsubscribe link together with the one-click marker."""
-        from larpmanager.utils.larpmanager.tasks import _prepare_email_metadata
+        from larpmanager.utils.larpmanager.tasks import MailHeaders, _prepare_email_metadata
 
         metadata = _prepare_email_metadata(
-            None, None, None, "https://larpmanager.com/unsubscribe-one-click/abc/", one_click=True
+            None,
+            None,
+            MailHeaders(unsubscribe_url="https://larpmanager.com/unsubscribe-one-click/abc/", one_click=True),
         )
 
         assert metadata["headers"]["List-Unsubscribe"].startswith(
@@ -632,9 +634,11 @@ class TestUnsubscribeHeaders(BaseTestCase):
 
     def test_one_click_marker_absent_on_transactional_mail(self):
         """A transactional mail publishes the link, but never offers one-click."""
-        from larpmanager.utils.larpmanager.tasks import _prepare_email_metadata
+        from larpmanager.utils.larpmanager.tasks import MailHeaders, _prepare_email_metadata
 
-        metadata = _prepare_email_metadata(None, None, None, "https://larpmanager.com/unsubscribe/abc/")
+        metadata = _prepare_email_metadata(
+            None, None, MailHeaders(unsubscribe_url="https://larpmanager.com/unsubscribe/abc/")
+        )
 
         assert metadata["headers"]["List-Unsubscribe"].startswith("<https://larpmanager.com/unsubscribe/abc/>")
         assert "List-Unsubscribe-Post" not in metadata["headers"]

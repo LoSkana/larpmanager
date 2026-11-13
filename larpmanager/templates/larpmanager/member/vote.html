@@ -21,7 +21,7 @@
                     </p>
                     <form action="{{ request.path }}"  method="post">
                         {% csrf_token %}
-                        <table class="mob ">
+                        <table class="mob">
                             {% for el in candidates %}
                                 <tr>
                                     <td>
@@ -58,7 +58,7 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script nonce="{{ csp_nonce }}">window.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function () {
     $( "input.votes" ).change(function() {
         var cnt = $( "input.votes:checked" ).length;

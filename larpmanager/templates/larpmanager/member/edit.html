@@ -19,6 +19,9 @@
     <div class="user_resize platform">{% include "elements/form/main.html" %}</div>
 {% endblock content %}
 {% block js2 %}
+    {% if auto_save %}
+        {% include "elements/form/user-auto-save.js" %}
+    {% endif %}
     {% include "elements/form/max_length.js" %}
     {% include "elements/helpers/iframe_resize.js" %}
 {% endblock js2 %}

@@ -25,6 +25,7 @@ import json
 import logging
 import os
 import random
+import re
 import secrets
 import string
 from decimal import Decimal
@@ -43,6 +44,7 @@ from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.utils.security import normalize_filename
 
 if TYPE_CHECKING:
@@ -56,6 +58,19 @@ logger = logging.getLogger(__name__)
 def generate_id(id_length: Any) -> Any:
     """Generate a cryptographically secure random alphanumeric ID string."""
     return "".join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
+
+
+_UPLOAD_ID_PREFIX = re.compile(r"^[a-z0-9]{16}_")
+
+
+def display_filename(stored_path: str) -> str:
+    """Return the original filename for a stored path, stripping the random id prefix.
+
+    Uploaded files are stored as "<16-char generate_id>_<original filename>" to avoid
+    collisions; this strips that prefix back off for display to the user.
+    """
+    name = Path(stored_path).name
+    return _UPLOAD_ID_PREFIX.sub("", name)
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:
@@ -143,8 +158,7 @@ def download(url: str) -> str:
 
 def show_thumb(height: int, image_url: str) -> SafeString:
     """Generate HTML img tag for thumbnail display."""
-    # Generate HTML img tag with inline height styling using format_html for safety
-    return format_html('<img style="height:{}px" src="{}" />', height, image_url)
+    return format_html('<img height="{}" src="{}" />', height, image_url)
 
 
 def get_attr(obj: object, attr_name: str) -> str | None:
@@ -219,8 +233,9 @@ class UploadToPathAndRename:
         path = self.sub_path
         if hasattr(instance, "event") and instance.event:
             path = str(Path(path) / instance.event.slug)
-        if hasattr(instance, "run") and instance.run:
-            path = str(Path(path) / instance.run.event.slug / str(instance.run.number))
+        if hasattr(instance, "run_id") and instance.run_id:
+            run_cache = get_run_basic_cache(instance.run_id)
+            path = str(Path(path) / run_cache["slug"] / str(run_cache["number"]))
         if hasattr(instance, "album") and instance.album:
             path = str(Path(path) / instance.album.slug)
 
@@ -339,9 +354,16 @@ def save_payment_details(association: Association, payment_details: dict) -> Non
     # Get the file path for storing encrypted payment details
     encrypted_file_path = get_payment_details_path(association)
 
-    # Write encrypted data to file
-    with Path(encrypted_file_path).open("wb") as f:
+    # Write encrypted data to file, owner and group read/write regardless of umask
+    fd = os.open(encrypted_file_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o660)
+    with os.fdopen(fd, "wb") as f:
         f.write(encrypted_data)
+
+    # Enforce mode also on pre-existing files; chmod fails if process is not the owner
+    try:
+        Path(encrypted_file_path).chmod(0o660)
+    except PermissionError:
+        logger.warning("Cannot set permissions on %s", encrypted_file_path)
 
 
 def strip_tags(html: str | None) -> str:

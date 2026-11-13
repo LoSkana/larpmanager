@@ -51,9 +51,10 @@
             <p>{% trans "Upload scans of both your signed request and your document (image or PDF format):" %}</p>
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"
-                  method="post">
+                  method="post"
+                  data-confirm="{% trans "Did you check the required data properly?" %}">
                 {% csrf_token %}
-                <table class="mob ">
+                <table class="mob">
                     {{ form.as_table }}
                 </table>
                 <input type="submit" value="{% trans "Submit" %}">
@@ -65,15 +66,14 @@
             </p>
             <form action="{{ request.path }}"
                   enctype="multipart/form-data"
-                  method="post">
+                  method="post"
+                  data-confirm="{% trans "Did you check the required data properly?" %}">
                 {% csrf_token %}
                 <hr />
                 {% if '.pdf' in doc_path %}
-                    <embed class="membership_request"
-                           src="{{ member.membership.get_document_filepath }}"
-                           type="application/pdf"
-                           width="100%"
-                           height="500px">
+                    <iframe class="membership_request membership_pdf"
+                            src="{{ member.membership.get_document_filepath }}"
+                            title="{% trans "Identity document" %}"></iframe>
                 {% else %}
                     <img class="membership_request"
                          src="{{ member.membership.get_document_filepath }}"
@@ -87,11 +87,9 @@
                 {% trans "If instead you wish to upload a new photo of your document" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
                 <hr />
                 {% if '.pdf' in req_path %}
-                    <embed class="membership_request"
-                           src="{{ member.membership.get_request_filepath }}"
-                           type="application/pdf"
-                           width="100%"
-                           height="500px">
+                    <iframe class="membership_request membership_pdf"
+                            src="{{ member.membership.get_request_filepath }}"
+                            title="{% trans "Membership request" %}"></iframe>
                 {% else %}
                     <img class="membership_request"
                          src="{{ member.membership.get_request_filepath }}"
@@ -145,13 +143,3 @@
         {% endif %}
     </div>
 {% endblock content %}
-{% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-$(function() {
-    $('form').on('submit', function() {
-        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Did you check the required data properly?" %}{% endfilter %}');
-    });
-});
-});
-    </script>
-{% endblock js %}

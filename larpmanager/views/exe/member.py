@@ -21,21 +21,21 @@
 import csv
 import logging
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import date
 from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, Count, IntegerField, Value, When
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.payment import unique_invoice_cod
 from larpmanager.accounting.registration import update_member_registrations
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, get_member_config, save_single_config
 from larpmanager.forms.member import (
     ExeMemberForm,
     ExeMembershipDocumentForm,
@@ -62,6 +62,8 @@ from larpmanager.models.member import (
     Badge,
     LogOperationType,
     Member,
+    MemberConfig,
+    MemberFlagDef,
     Membership,
     MembershipStatus,
     VolunteerRegistry,
@@ -70,7 +72,7 @@ from larpmanager.models.member import (
 )
 from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import (
     _get_help_questions,
     ensure_timezone_aware,
@@ -79,6 +81,7 @@ from larpmanager.utils.core.common import (
     get_assoc_member,
     get_help_question_member,
     get_object_uuid,
+    local_day_start,
     normalize_string,
 )
 from larpmanager.utils.core.paginate import exe_paginate
@@ -89,9 +92,17 @@ from larpmanager.utils.io.pdf import (
     print_volunteer_registry,
     return_pdf,
 )
+from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.utils.security.csv_validation import SanitizingCsvWriter
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
+from larpmanager.utils.users.member_flags import (
+    get_association_flag_defs,
+    get_member_flag_values,
+    get_member_in_association,
+    member_flags_active,
+    set_member_flags,
+)
 from larpmanager.views.orga.member import send_mail_batch
 
 logger = logging.getLogger(__name__)
@@ -131,13 +142,13 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     fees = set(
         AccountingItemMembership.objects.filter(
             association_id=context["association_id"],
-            year=timezone.now().year,
+            year=timezone.localdate().year,
         ).values_list("member_id", flat=True),
     )
 
     # Build dictionary of upcoming runs (events that haven't ended yet)
     next_runs = dict(
-        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.now().date()).values_list(
+        Run.objects.filter(event__association_id=context["association_id"], end__gt=timezone.localdate()).values_list(
             "pk",
             "search",
         ),
@@ -336,6 +347,10 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
 
         # Check each member's fiscal code for correctness
         for member in members:
+            # Skip members whose fiscal code was manually marked valid
+            if get_member_config(member.id, "fiscal_code_valid"):
+                continue
+
             check = calculate_fiscal_code(member)
             if not check:
                 continue
@@ -349,6 +364,32 @@ def exe_membership_check(request: HttpRequest) -> HttpResponse:
                 context["cf"].append(check)
 
     return render(request, "larpmanager/exe/users/membership_check.html", context)
+
+
+@login_required
+def exe_membership_check_valid(request: HttpRequest, member_uuid: str) -> HttpResponse:
+    """Mark a member's fiscal code as manually validated, skipping it in future checks.
+
+    Shows a confirmation page before applying the change: bare frame popup when opened
+    via the iframe modal, full-chrome confirm page on a direct GET otherwise.
+    """
+    context = check_association_context(request, "exe_membership_check")
+    member = get_assoc_member(member_uuid, context["association_id"])
+
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method != "POST":
+        context["frame"] = is_frame
+        context["el_name"] = str(member)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
+
+    save_single_config(member, "fiscal_code_valid", "True")
+    messages.success(request, _("Fiscal code marked as valid"))
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+    return redirect("exe_membership_check")
 
 
 @login_required
@@ -435,10 +476,10 @@ def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpRespons
 
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
-        member=context["member_edit"],
+        registration__member=context["member_edit"],
         hide=False,
         association_id=context["association_id"],
-    )
+    ).select_related("registration__run", "disc")
 
     # Process membership data for credit/token balances
     get_user_membership(context["member_edit"], context["association_id"])
@@ -718,8 +759,8 @@ def exe_enrolment(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_enrolment")
 
     # Set current year and calculate year start date
-    context["year"] = timezone.now().year
-    start = datetime(context["year"], 1, 1, tzinfo=UTC)
+    context["year"] = timezone.localdate().year
+    start = local_day_start(date(context["year"], 1, 1))
 
     # Build cache of member enrollment dates from accounting items
     cache = {}
@@ -824,7 +865,7 @@ def exe_volunteer_registry_print(request: HttpRequest) -> HttpResponse:
     )
 
     # Generate current date string for filename
-    context["date"] = timezone.now().date().strftime("%Y-%m-%d")
+    context["date"] = timezone.localdate().strftime("%Y-%m-%d")
 
     # Generate the PDF file using the context data
     fp = print_volunteer_registry(context)
@@ -853,7 +894,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_vote")
-    context["year"] = timezone.now().year
+    context["year"] = timezone.localdate().year
     association_id = context["association_id"]
 
     # Parse candidate IDs from association configuration
@@ -975,6 +1016,143 @@ def exe_badges_toggle(request: HttpRequest) -> JsonResponse:
 
 
 @login_required
+def exe_member_flags(request: HttpRequest) -> HttpResponse:
+    """Display and manage member status flag definitions."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
+
+    context["list"] = MemberFlagDef.objects.filter(association_id=context["association_id"], deleted=None).order_by(
+        "order",
+    )
+
+    return render(request, "larpmanager/exe/users/member_flags.html", context)
+
+
+@login_required
+def exe_member_flags_new(request: HttpRequest) -> HttpResponse:
+    """Create a new member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
+    return exe_new(request, ExeAction.MEMBER_FLAGS)
+
+
+@login_required
+def exe_member_flags_edit(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
+    """Edit a member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
+    return exe_edit(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
+
+
+@login_required
+def exe_member_flags_delete(request: HttpRequest, memberflagdef_uuid: str) -> HttpResponse:
+    """Delete a member status flag definition."""
+    context = check_association_context(request, "exe_member_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
+    return exe_delete(request, ExeAction.MEMBER_FLAGS, memberflagdef_uuid)
+
+
+@login_required
+def exe_members_flags(request: HttpRequest) -> HttpResponse:
+    """Display a datatable of association members with their status flag values.
+
+    Loads the value of every active flag for every eligible member with a single
+    query on MemberConfig, instead of one query per member.
+    """
+    context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        raise Http404
+    context["page_info"] = _(
+        "Datatable of users and their status flag values; click the edit icon to update a user's flags."
+    )
+    association_id = context["association_id"]
+
+    flag_defs = list(get_association_flag_defs(association_id))
+    context["flag_defs"] = flag_defs
+
+    allowed_statuses = [
+        MembershipStatus.JOINED,
+        MembershipStatus.UPLOADED,
+        MembershipStatus.SUBMITTED,
+        MembershipStatus.ACCEPTED,
+    ]
+    memberships = (
+        Membership.objects.filter(association_id=association_id, status__in=allowed_statuses)
+        .select_related("member")
+        .order_by("member__surname", "member__name")
+    )
+    members = [membership.member for membership in memberships]
+
+    config_names = {flag_def.config_name(): flag_def.id for flag_def in flag_defs}
+    member_ids = [member.id for member in members]
+    set_pairs = MemberConfig.objects.filter(
+        member_id__in=member_ids,
+        name__in=config_names,
+        deleted=None,
+    ).values_list("member_id", "name")
+
+    flags_by_member: dict[int, set[int]] = defaultdict(set)
+    for member_id, name in set_pairs:
+        flags_by_member[member_id].add(config_names[name])
+
+    context["rows"] = [
+        {
+            "member": member,
+            "flags": [flag_def.id in flags_by_member[member.id] for flag_def in flag_defs],
+        }
+        for member in members
+    ]
+
+    return render(request, "larpmanager/exe/users/members_flags.html", context)
+
+
+@login_required
+def exe_members_flags_get(request: HttpRequest) -> JsonResponse:
+    """Return a member's current flag values as HTML for the edit modal (AJAX POST)."""
+    context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    flag_defs = list(get_association_flag_defs(context["association_id"]))
+    values = get_member_flag_values(member, flag_defs)
+
+    context["member"] = member
+    context["flag_defs"] = flag_defs
+    context["values"] = values
+
+    html = render(request, "larpmanager/exe/users/members_flags_form.html", context).content.decode()
+    return JsonResponse({"k": 1, "v": html})
+
+
+@login_required
+def exe_members_flags_save(request: HttpRequest) -> JsonResponse:
+    """Save a member's flag values from the edit modal (AJAX POST)."""
+    context = check_association_context(request, "exe_members_flags")
+    if not member_flags_active(context["association_id"], context):
+        return JsonResponse({"k": 0})
+
+    try:
+        member = get_member_in_association(context["association_id"], request.POST["mid"])
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"k": 0})
+
+    flag_defs = list(get_association_flag_defs(context["association_id"]))
+    active_by_flag_id = {flag_def.id: request.POST.get(f"flag_{flag_def.id}") == "1" for flag_def in flag_defs}
+    set_member_flags(member, flag_defs, active_by_flag_id)
+
+    return JsonResponse({"k": 1})
+
+
+@login_required
 def exe_send_mail(request: HttpRequest) -> HttpResponse:
     """Handle sending mail to association members.
 
@@ -1043,9 +1221,17 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
             # Define formatting callbacks for each field
             "callbacks": {
                 "body": format_email_body,
-                "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
+                "sent": lambda el: timezone.localtime(el.sent).strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
                 "skipped": format_email_skipped,
+            },
+            # DB paths for related and callback fields, enabling sort and search on these columns
+            "field_db_paths": {
+                "run": ["email_content__run__search"],
+                "subj": ["email_content__subj"],
+                "body": ["email_content__body"],
+                "sent": ["sent"],
+                "skipped": ["skipped"],
             },
         },
     )
@@ -1164,7 +1350,15 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
     return render(request, "larpmanager/exe/users/questions_answer.html", context)
 
 
+def _exe_questions_close_name(request: HttpRequest, member_uuid: str) -> str:
+    """Return the label of the help question being closed."""
+    context = check_association_context(request, "exe_questions")
+    member = get_help_question_member(member_uuid, context["association_id"])
+    return str(_("Close question of %(member)s") % {"member": member})
+
+
 @login_required
+@confirm_post(el_name=_exe_questions_close_name)
 def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Close a help question for a member."""
     context = check_association_context(request, "exe_questions")

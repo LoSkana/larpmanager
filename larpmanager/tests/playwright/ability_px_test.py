@@ -87,7 +87,7 @@ def setup(live_server: Any, page: Any) -> None:
 
     # configure test larp
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Experience points\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_start").click()
     page.locator("#id_exp_start").fill("10")
     page.locator("#id_exp_undo").click()
@@ -97,7 +97,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_exp_rules").check()
     page.locator("#id_exp_modifiers").check()
 
-    page.get_by_role("link", name=re.compile(r"^Character creation\s.+")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Character creation")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     submit_confirm(page)
@@ -180,7 +180,7 @@ def ability(live_server: Any, page: Any) -> None:
     sidebar(page, "Abilities")
     page.locator("[id='u2']").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_text("- Select an option -").click()
     edit_iframe.locator(".select2-container--open .select2-search__field").fill("test_template")
     edit_iframe.get_by_role("option", name="test_template").click()
     save_modal(page, edit_iframe)
@@ -271,7 +271,7 @@ def rules(page: Any) -> None:
 def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
-    page.get_by_role("link", name="Registration is open!").click()
+    page.get_by_role("link", name="Registrations are open!").click()
     submit_register(page)
 
     # Assign char
@@ -293,10 +293,16 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show requirements: sword1
-        Select the new ability to obtain
-        Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
+        Buy ability All base ability double shield 2 This text should show requirements: sword1
+        Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
+
+    description = page.locator(".ability-desc", has_text="sdsfdsfds")
+    expect(description).to_be_visible()
+    page.get_by_role("link", name="Hide descriptions").click()
+    expect(description).to_be_hidden()
+    page.get_by_role("link", name="Hide descriptions").click()
+    expect(description).to_be_visible()
 
     # get ability
     page.locator(".ability-card", has_text="double shield").click()
@@ -304,23 +310,23 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        """Obtain ability all No abilities found. Select the new ability to obtain
-        Experience points 12 Total 3 Used 9 Available Abilities base ability double shield (2)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live """,
+        """
+        Experience points 12 Total 3 Used 9 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
+        double shield (2) - This text should show awards 2 first live """,
     )
-    expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
+    expect(page.locator(".ability-cards-grid")).to_have_count(0)
+    expect(page.locator("#one")).to_contain_text("There are no abilities you can buy right now")
 
     # remove ability
-    page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
+    page.locator(".inline-p", has_text="double shield").get_by_role("link").click()
     _wait_lm_ready(page)
     expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show requirements: sword1
-        Select the new ability to obtain
+        Buy ability All base ability double shield 2 This text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
+        Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
 
 
@@ -347,10 +353,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2
-        this text should show requirements: sword1 Select the new ability to obtain
+        Buy ability All base ability double shield 2
+        this text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
+        Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -363,9 +369,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All No abilities found. Select the new ability to obtain
-        Experience points 12 Total 1 Used 11 Available Abilities base ability double shield (0)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
+        Experience points 12 Total 1 Used 11 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
+        double shield (0) - This text should show awards 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -378,10 +383,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2
-        this text should show requirements: sword1 Select the new ability to obtain
+        Buy ability All base ability double shield 2
+        this text should show requirements: sword1
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
+        Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds awards 2 first live""",
     )
 
     # now test increase cost modifiers
@@ -411,9 +416,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All No abilities found. Select the new ability to obtain
-        Experience points 12 Total 4 Used 8 Available Abilities base ability double shield (3)
-        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
+        Experience points 12 Total 4 Used 8 Available Abilities Hide descriptions base ability sword1 (1) - sdsfdsfds
+        double shield (3) - This text should show awards 2 first live""",
     )
 
 
@@ -421,7 +425,8 @@ def award_auto_populate(page: Any, live_server: Any) -> None:
     """Test auto-populate award from run via Load participants button."""
     # Go to awards page and click Load participants
     go_to(page, live_server, "/test/manage/experience/awards/")
-    page.get_by_role("link", name="Load participants").click()
+    page.locator("summary", has_text="Load characters").click()
+    page.locator("details.button-dropdown a[href*='/awards/load/']").click()
     edit_iframe = get_modal_iframe(page)
 
     # Fill in award name and amount inside the modal

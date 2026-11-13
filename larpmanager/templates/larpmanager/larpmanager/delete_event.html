@@ -30,11 +30,11 @@
         </tr>
         <tr>
             <th>Start</th>
-            <td>{{ run.start|date:"Y-m-d"|default:"-" }}</td>
+            <td>{{ run.start|date:"d/m/Y"|default:"-" }}</td>
         </tr>
         <tr>
             <th>End</th>
-            <td>{{ run.end|date:"Y-m-d"|default:"-" }}</td>
+            <td>{{ run.end|date:"d/m/Y"|default:"-" }}</td>
         </tr>
         <tr>
             <th>Registrations</th>
@@ -49,7 +49,9 @@
         {% csrf_token %}
         <button type="submit"
                 class="btn btn-danger"
-                onclick="return confirm('Permanently delete {{ run.search }}?')">Delete event</button>
+                data-confirm="{% blocktrans with name=run.search %}Permanently delete {{ name }}?{% endblocktrans %}">
+            Delete event
+        </button>
         <a href="{% url 'lm_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
 {% endblock content %}

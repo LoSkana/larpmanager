@@ -26,17 +26,25 @@ from typing import TYPE_CHECKING, Any
 
 from django import forms
 from django.conf import settings as conf_settings
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import FieldDoesNotExist, ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db.models import TextChoices
+from django.db.models import ForeignKey, ManyToManyField, Q, TextChoices
+from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
-from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, FactionPreferenceWidget
+from larpmanager.forms.utils import (
+    CharacterDualListWidget,
+    ReadOnlyChoiceWidget,
+    ReadOnlyWidget,
+    WritingTinyMCE,
+    css_delimeter,
+)
+from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, RankingWidget
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -53,12 +61,15 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.utils import (
     decimal_to_str,
+    display_filename,
     generate_id,
     get_attr,
     get_option_form_text as util_get_option_form_text,
     strip_tags,
 )
-from larpmanager.models.writing import Faction
+from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
+from larpmanager.utils.registrations.questions import sanitize_ranking
+from larpmanager.utils.security.file_validation import normalize_filename
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -66,6 +77,8 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 logger = logging.getLogger(__name__)
+
+DEFAULT_LIKERT_MAX = 5
 
 
 class FormMixin:
@@ -77,28 +90,83 @@ class FormMixin:
         instance = getattr(self, "instance", None)
         return bool(instance and instance.pk)
 
+    @cached_property
+    def _collapse_unselected(self) -> bool | None:
+        """Return the collapse state for option widgets, or None when collapsing must stay off.
+
+        Single field edits (double click on a list cell) and dashboard element forms always show
+        every option, since there the user is deliberately changing that single field. Writing
+        forms opened in a frame keep collapsing, as they are full element edits.
+        """
+        params = getattr(self, "params", None) or {}
+        if params.get("excel_edit") or params.get("is_modal"):
+            return None
+        if params.get("frame") and not params.get("is_writing"):
+            return None
+        return self._is_edit
+
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
         field = self.fields[field_name]
         field.widget.set_event(event)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
 
     def configure_field_association(self, field_name: str, association_id: int) -> None:
         """Configure a form field's widget and queryset for a specific association."""
         field = self.fields[field_name]
         field.widget.set_association_id(association_id)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
 
     def configure_field_run(self, field_name: str, run: Run) -> None:
         """Configure a form field's widget and queryset for a specific run."""
         field = self.fields[field_name]
         field.widget.set_run(run)
-        field.queryset = field.widget.get_queryset()
+        field.queryset = self._keep_saved_values(field_name, field.widget.get_queryset())
+
+    def _keep_saved_values(self, field_name: str, queryset: QuerySet) -> QuerySet:
+        """Extend the queryset with the values saved on the instance that it would otherwise exclude.
+
+        Without them an edit form would render the field empty and drop (or reject) the saved values on save.
+        """
+        instance = getattr(self, "instance", None)
+        if not instance:
+            return queryset
+
+        try:
+            model_field = instance._meta.get_field(field_name)  # noqa: SLF001  # Django model metadata
+        except FieldDoesNotExist:
+            return queryset
+
+        if isinstance(model_field, ForeignKey):
+            current_id = getattr(instance, model_field.attname)
+            saved_ids = {current_id} if current_id else set()
+        elif isinstance(model_field, ManyToManyField) and instance.pk:
+            saved_ids = set(getattr(instance, field_name).values_list("pk", flat=True))
+        else:
+            return queryset
+
+        if not saved_ids:
+            return queryset
+
+        missing_ids = saved_ids - set(queryset.filter(pk__in=saved_ids).values_list("pk", flat=True))
+        if not missing_ids:
+            return queryset
+
+        return queryset.model.objects.filter(Q(pk__in=queryset.values("pk")) | Q(pk__in=missing_ids)).order_by(
+            *queryset.query.order_by
+        )
 
     def delete_field(self, field_key: str) -> None:
         """Remove a field from the form if it exists."""
         if field_key in self.fields:
             del self.fields[field_key]
+
+    def event_field_if_feature(self, field_name: str, feature: str, event: Event) -> None:
+        """Configure an event scoped field, removing it when its feature is not active."""
+        if feature not in self.params["features"]:
+            self.delete_field(field_name)
+        elif field_name in self.fields:
+            self.configure_field_event(field_name, event)
 
 
 class BaseForm(FormMixin, forms.Form):
@@ -177,6 +245,12 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         self.multiples = {}
         self.unavail = {}
         self.max_lengths = {}
+        self._has_mandatory = False
+
+    @property
+    def has_mandatory(self) -> bool:
+        """Whether any visible field is required, for the "(*) fields are required" note."""
+        return self._has_mandatory or any(f.required for f in self.fields.values())
 
     def handle_automatic(self) -> None:
         """Handle automatic fields, that should be automatically populated."""
@@ -282,7 +356,9 @@ class BaseModelForm(FormMixin, forms.ModelForm):
                 raise ValidationError(msg) from err
 
         # Validate run belongs to current association
-        if "event" in self.params and run_value.event.association_id != self.params["event"].association_id:
+        if "event" in self.params and get_event_association_id(run_value.event_id) != get_event_association_id(
+            self.params["event"].id
+        ):
             msg = _("Selected event does not belong to this organization")
             raise ValidationError(msg)
 
@@ -300,7 +376,11 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
-        return self.params["event"].get_class_parent(typ)
+        event = self.params["event"]
+        parent_id = get_event_class_parent(event.id, typ, context=self.params)
+        if parent_id == event.id:
+            return event
+        return Event.objects.get(pk=parent_id)
 
     def clean_association(self) -> Association:
         """Return association from params."""
@@ -337,7 +417,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         if event and element_type:
             # Determine the appropriate event ID based on the element type
-            parent_event_id = event.get_class_parent(element_type).id
+            parent_event_id = get_event_class_parent(event.id, element_type, context=self.params)
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
@@ -529,7 +609,18 @@ class BaseRegistrationForm(BaseModelFormRun):
         """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
         return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
 
-    def _init_registration_question(self, instance: Any | None, event: Event) -> None:
+    @cached_property
+    def _collapse_min(self) -> int:
+        """Return the minimum number of options needed to show the collapse toggle."""
+        event = self.params.get("event")
+        if not event:
+            return 2
+        try:
+            return int(get_event_config(event.id, "collapse_options_min", context=self.params))
+        except (TypeError, ValueError):
+            return get_config_default("collapse_options_min")
+
+    def _init_registration_question(self, instance: Any | None, event_id: int) -> None:
         """Initialize registration questions and answers from existing instance.
 
         Loads existing answers and choices from the database for a given registration
@@ -538,7 +629,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         Args:
             instance: Registration instance to load data from. Can be None for new registrations.
-            event: Event object providing context for question filtering and options.
+            event_id: id of the Event providing context for question filtering and options.
 
         Returns:
             None: This method modifies instance attributes in place.
@@ -565,11 +656,11 @@ class BaseRegistrationForm(BaseModelFormRun):
                     self.multiples[choice_answer.question_id].add(choice_answer)
 
         # Finalize question initialization with event context (loads cached questions)
-        self._init_questions(event)
+        self._init_questions(event_id)
 
-    def _init_questions(self, event: Event) -> None:
+    def _init_questions(self, event_id: int) -> None:
         """Initialize questions for the given event."""
-        self.questions = get_cached_registration_questions(event)
+        self.questions = get_cached_registration_questions(event_id)
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""
@@ -835,9 +926,9 @@ class BaseRegistrationForm(BaseModelFormRun):
             List of initialized field keys that were successfully created.
 
         """
-        # Get the event from the current run context
-        event = self.params["run"].event
-        self._init_registration_question(self.instance, event)
+        # Get the event id from the current run context
+        event_id = self.params["run"].event_id
+        self._init_registration_question(self.instance, event_id)
 
         # Initialize container for field keys that will be created
         field_keys = []
@@ -908,20 +999,10 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Apply user-specific field logic when not in organizer mode
         if not is_organizer:
-            # Check if question is editable for current user context
-            if not self.check_editable(question):
+            field_state = self._user_field_state(question)
+            if field_state is None:
                 return None
-
-            # Hide questions marked as hidden from users
-            if question["status"] == QuestionStatus.HIDDEN:
-                return None
-
-            # Disable fields for disabled questions or creation-only questions
-            if question["status"] == QuestionStatus.DISABLED:
-                is_field_active = False
-            else:
-                # Set field as required based on question status
-                is_required = question["status"] == QuestionStatus.MANDATORY
+            is_field_active, is_required = field_state
 
         # Initialize field type and apply type-specific configuration
         field_key = self.init_type(
@@ -937,7 +1018,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Apply user-specific field state (disabled/enabled)
         if not is_organizer:
-            self.fields[field_key].disabled = not is_field_active
+            self._apply_field_state(field_key, is_field_active=is_field_active)
 
         # Configure max length validation for applicable question types
         if question.get("max_length") and question["typ"] in get_writing_max_length():
@@ -946,13 +1027,43 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Mark mandatory fields with visual indicator and track for validation
         if question["status"] == QuestionStatus.MANDATORY:
             self.fields[field_key].label += " (*)"
-            self.has_mandatory = True
+            self._has_mandatory = True
             self.mandatory.append("id_" + field_key)
 
         # Set basic type flag for template rendering logic
         question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
 
         return field_key
+
+    def _user_field_state(self, question: dict) -> tuple[bool, bool] | None:
+        """Return (is_field_active, is_required) for a user form, or None when the question is skipped."""
+        # Check if question is editable for current user context
+        if not self.check_editable(question):
+            return None
+
+        # Hide questions marked as hidden from users
+        if question["status"] == QuestionStatus.HIDDEN:
+            return None
+
+        # Show disabled questions read only, but skip them on creation as there is nothing to show
+        if question["status"] == QuestionStatus.DISABLED:
+            if not self._is_edit:
+                return None
+            return False, False
+
+        return True, question["status"] == QuestionStatus.MANDATORY
+
+    def _apply_field_state(self, field_key: str, *, is_field_active: bool) -> None:
+        """Mark the field as disabled and add a read only hint to its help text when not editable."""
+        self.fields[field_key].disabled = not is_field_active
+        if is_field_active:
+            return
+
+        hint = _("Read only")
+        help_text = self.fields[field_key].help_text
+        self.fields[field_key].help_text = f'<span class="choice-hint">{hint}</span>' + (
+            f" - {help_text}" if help_text else ""
+        )
 
     def init_type(
         self,
@@ -989,17 +1100,27 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Handle multiple choice questions (checkboxes, multi-select)
         if question["typ"] == BaseQuestionType.MULTIPLE:
             self.init_multiple(
-                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+                field_key,
+                question,
+                registration_counts,
+                is_organizer=is_organizer,
+                is_required=is_required,
+                is_field_active=is_field_active,
             )
 
         # Handle single choice questions (radio buttons, dropdowns)
         elif question["typ"] == BaseQuestionType.SINGLE:
             self.init_single(
-                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+                field_key,
+                question,
+                registration_counts,
+                is_organizer=is_organizer,
+                is_required=is_required,
+                is_field_active=is_field_active,
             )
 
         # Handle simple text input fields
-        elif question["typ"] == BaseQuestionType.TEXT:
+        elif question["typ"] in [BaseQuestionType.TEXT, WritingQuestionType.CONCEPT]:
             self.init_text(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle multi-line text areas
@@ -1010,9 +1131,17 @@ class BaseRegistrationForm(BaseModelFormRun):
         elif question["typ"] == BaseQuestionType.EDITOR:
             self.init_editor(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
-        # Handle faction preference drag-reorder fields
-        elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
-            self.init_faction_preference(field_key, question, is_required=is_required)
+        # Handle file upload fields
+        elif question["typ"] == WritingQuestionType.FILE:
+            self.init_file(field_key, question, is_required=is_required, is_field_active=is_field_active)
+
+        # Handle ranking drag-reorder fields (options, or factions for faction preference)
+        elif question["typ"] in (RegistrationQuestionType.RANKING, RegistrationQuestionType.FACTION_PREFERENCE):
+            self.init_ranking(field_key, question, is_required=is_required)
+
+        # Handle Likert scale fields
+        elif question["typ"] == RegistrationQuestionType.LIKERT:
+            self.init_likert(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
         # Handle special question types (custom implementations)
         else:
@@ -1106,6 +1235,42 @@ class BaseRegistrationForm(BaseModelFormRun):
         if is_field_active:
             self.show_link.append(f"id_{field_key}")
 
+    def init_file(self, field_key: str, question: dict, *, is_required: bool, is_field_active: bool = True) -> None:
+        """Initialize a file upload field for a form question.
+
+        The uploaded file is stored on the default storage and its path kept in the
+        answer's text field.
+
+        Args:
+            field_key: The field key/name to use in the form
+            question: Question dict containing field configuration
+            is_required: Whether the field is required
+            is_field_active: Whether the field should be editable (if False, shows as read-only)
+
+        """
+        help_text = question["description"]
+        if question["id"] in self.answers and self.answers[question["id"]].text:
+            path = self.answers[question["id"]].text
+            help_text = format_html(
+                '{} <a href="{}" target="_blank">{}</a>',
+                help_text,
+                default_storage.url(path),
+                display_filename(path),
+            )
+
+        widget = forms.ClearableFileInput() if is_field_active else ReadOnlyWidget()
+
+        self.fields[field_key] = forms.FileField(
+            required=is_required,
+            widget=widget,
+            label=question["name"],
+            help_text=help_text,
+        )
+
+        # Fall back to the stored path when no new file is submitted
+        if question["id"] in self.answers:
+            self.initial[field_key] = self.answers[question["id"]].text
+
     def init_paragraph(
         self, field_key: str, question_config: dict, *, is_required: bool, is_field_active: bool = True
     ) -> None:
@@ -1171,38 +1336,78 @@ class BaseRegistrationForm(BaseModelFormRun):
         if form_question["id"] in self.answers:
             self.initial[field_key] = self.answers[form_question["id"]].text
 
-    def init_faction_preference(self, field_key: str, form_question: dict, *, is_required: bool) -> None:
-        """Initialize a faction-preference drag-reorder field.
+    def _get_ranking_items(self, question: dict) -> list[tuple[str, str]]:
+        """Return the (uuid, name) items to rank: the event visible factions for faction preference, else the options."""
+        if question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+            event = self.params["run"].event
+            visible_factions = (
+                get_event_elements(event.id, Faction, context=self.params).filter(hide=False).order_by("order")
+            )
+            return [(str(faction.uuid), faction.name) for faction in visible_factions]
+        return [(str(option["uuid"]), option["name"]) for option in question["options"]]
 
-        The submitted value is a comma-separated ordered list of faction UUIDs, stored
+    @staticmethod
+    def _get_max_rank(question: dict) -> int:
+        """Return how many items have to be ranked (0 means all); faction preference always ranks all."""
+        if question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+            return 0
+        return question.get("max_length") or 0
+
+    def init_ranking(self, field_key: str, form_question: dict, *, is_required: bool) -> None:
+        """Initialize a drag-reorder ranking field.
+
+        The submitted value is a comma-separated ordered list of the ranked uuids, stored
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
-        event = self.params["run"].event
-        visible_factions = list(event.get_elements(Faction).filter(hide=False).order_by("order"))
-        visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
+        names_by_uuid = dict(self._get_ranking_items(form_question))
+        max_rank = self._get_max_rank(form_question)
 
-        # Start from the previously saved order, dropping factions no longer visible
+        # Start from the previously saved order, dropping items no longer available
         ordered_uuids: list[str] = []
         if form_question["id"] in self.answers:
             saved_order = self.answers[form_question["id"]].text.split(",")
-            ordered_uuids = [uuid for uuid in saved_order if uuid in visible_uuids]
+            ordered_uuids = [item_uuid for item_uuid in saved_order if item_uuid in names_by_uuid]
 
-        # Append any visible factions not yet ranked (new factions, or first-time fill-in)
-        for faction in visible_factions:
-            faction_uuid = str(faction.uuid)
-            if faction_uuid not in ordered_uuids:
-                ordered_uuids.append(faction_uuid)
+        # Append any item not yet ranked (new items, or first-time fill-in)
+        ordered_uuids.extend(item_uuid for item_uuid in names_by_uuid if item_uuid not in ordered_uuids)
 
         self.fields[field_key] = forms.CharField(
             required=is_required,
-            widget=FactionPreferenceWidget(
-                factions=[(uuid, visible_uuids[uuid].name) for uuid in ordered_uuids],
+            widget=RankingWidget(
+                items=[(item_uuid, names_by_uuid[item_uuid]) for item_uuid in ordered_uuids],
+                max_rank=max_rank,
             ),
             label=form_question["name"],
             help_text=form_question["description"],
         )
 
-        self.initial[field_key] = ",".join(ordered_uuids)
+        ranked_uuids = ordered_uuids[:max_rank] if max_rank else ordered_uuids
+        self.initial[field_key] = ",".join(ranked_uuids)
+
+    def init_likert(self, field_key: str, question: dict, *, is_required: bool, is_field_active: bool = True) -> None:
+        """Initialize a Likert scale field, rendered as radio choices from 1 to max_length.
+
+        The submitted value is the selected integer, stored as text answer.
+        """
+        scale_max = question.get("max_length") or DEFAULT_LIKERT_MAX
+        choices = [(str(value), str(value)) for value in range(1, scale_max + 1)]
+
+        widget = (
+            forms.RadioSelect(attrs={"class": "my-radio-class likert-radio"})
+            if is_field_active
+            else ReadOnlyChoiceWidget()
+        )
+
+        self.fields[field_key] = forms.ChoiceField(
+            required=is_required,
+            choices=choices,
+            widget=widget,
+            label=question["name"],
+            help_text=question["description"],
+        )
+
+        if question["id"] in self.answers:
+            self.initial[field_key] = self.answers[question["id"]].text
 
     def init_single(
         self,
@@ -1212,6 +1417,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         *,
         is_organizer: bool,
         is_required: bool,
+        is_field_active: bool = True,
     ) -> None:
         """Initialize single choice form field.
 
@@ -1221,6 +1427,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             question: Question dict containing choices configuration and metadata
             registration_counts: Registration counts dictionary for quota tracking
             is_required: Whether the field is required for form validation
+            is_field_active: Whether the field can be changed (if False, shows the selection read-only)
 
         Side Effects:
             - Creates and adds a single choice field to self.fields
@@ -1254,7 +1461,9 @@ class BaseRegistrationForm(BaseModelFormRun):
             "label": question["name"],
             "help_text": help_text,
         }
-        if self._use_inline_widgets_v20:
+        if not is_field_active:
+            field_kwargs["widget"] = ReadOnlyChoiceWidget()
+        elif self._use_inline_widgets_v20:
             hint = _("Choose one option")
             field_kwargs["help_text"] = f'<span class="choice-hint">{hint}</span>' + (
                 f" - {help_text}" if help_text else ""
@@ -1263,7 +1472,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-radio-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
@@ -1282,6 +1492,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         *,
         is_organizer: bool,
         is_required: bool,
+        is_field_active: bool = True,
     ) -> None:
         """Set up multiple choice form field handling.
 
@@ -1296,6 +1507,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                        for quota tracking purposes
             is_organizer: True if this is an organizational form, False for regular forms
             is_required: True if the field must be filled, False if optional
+            is_field_active: Whether the field can be changed (if False, shows the selection read-only)
 
         Side Effects:
             - Creates a MultipleChoiceField in self.fields[field_key]
@@ -1321,12 +1533,15 @@ class BaseRegistrationForm(BaseModelFormRun):
         field_validators = [max_selections_validator(question["max_length"])] if question.get("max_length") else []
 
         # Create the multiple choice field with checkbox widget
-        if self._use_inline_widgets_v20:
+        if not is_field_active:
+            widget = ReadOnlyChoiceWidget()
+        elif self._use_inline_widgets_v20:
             widget = DescriptionCheckboxSelectMultiple(
                 attrs={"class": "my-checkbox-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")
@@ -1380,29 +1595,28 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.save_registration_multiple(instance, oid, question)
             elif question["typ"] == BaseQuestionType.SINGLE:
                 self.save_registration_single(instance, oid, question)
-            elif question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+            elif question["typ"] in [
+                BaseQuestionType.TEXT,
+                BaseQuestionType.PARAGRAPH,
+                BaseQuestionType.EDITOR,
+                WritingQuestionType.CONCEPT,
+                RegistrationQuestionType.LIKERT,
+            ]:
                 self.save_registration_text(instance, oid, question)
-            elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
-                self.save_registration_faction_preference(instance, oid, question)
+            elif question["typ"] == WritingQuestionType.FILE:
+                self.save_registration_file(instance, oid, question)
+            elif question["typ"] in (RegistrationQuestionType.RANKING, RegistrationQuestionType.FACTION_PREFERENCE):
+                self.save_registration_ranking(instance, oid, question)
 
-    def save_registration_faction_preference(self, instance: Any, value: str | None, question: dict) -> None:
-        """Sanitize and save the submitted faction ordering.
+    def save_registration_ranking(self, instance: Any, value: str | None, question: dict) -> None:
+        """Sanitize and save the submitted ranking.
 
-        Strips out any UUID that doesn't belong to a currently visible faction of the
-        event, so a tampered hidden-field value can't smuggle in arbitrary data.
+        Strips out any uuid that isn't a currently rankable item, so a tampered hidden-field
+        value can't smuggle in arbitrary data.
         """
-        event = self.params["run"].event
-        visible_faction_uuids = [
-            str(uuid)
-            for uuid in event.get_elements(Faction).filter(hide=False).order_by("order").values_list("uuid", flat=True)
-        ]
-        submitted = (value or "").split(",")
-        sanitized = [uuid for uuid in submitted if uuid in visible_faction_uuids]
-        # append any visible faction the client dropped, so every faction is always ranked
-        for faction_uuid in visible_faction_uuids:
-            if faction_uuid not in sanitized:
-                sanitized.append(faction_uuid)
-        self.save_registration_text(instance, ",".join(sanitized), question)
+        valid_uuids = [item[0] for item in self._get_ranking_items(question)]
+        ranking = sanitize_ranking(value, valid_uuids, max_rank=self._get_max_rank(question))
+        self.save_registration_text(instance, ranking, question)
 
     def save_registration_text(
         self,
@@ -1445,6 +1659,38 @@ class BaseRegistrationForm(BaseModelFormRun):
             self.answer_class.objects.get_or_create(
                 **{"question_id": question_id, self.instance_key: instance.id},
                 defaults={"text": value},
+            )
+
+    def save_registration_file(self, instance: Any, value: Any, question: dict) -> None:
+        """Save or update a file answer for a writing question.
+
+        Args:
+            instance: The writing element instance to attach the answer to.
+            value: An uploaded file to store, the previous stored path when
+                unchanged, or a falsy value when nothing has ever been uploaded.
+            question: The question dict being answered.
+
+        """
+        # Nothing to do: no new upload and no previous value to keep
+        if not value:
+            return
+
+        question_id = question["id"]
+
+        # Unchanged: the value is just the previously stored path, echoed back by the field
+        if isinstance(value, str):
+            return
+
+        # New upload: store the file and keep its path in the answer text
+        path = default_storage.save(f"writing_answer/{generate_id(16)}_{normalize_filename(value.name)}", value)
+
+        if question_id in self.answers:
+            self.answers[question_id].text = path
+            self.answers[question_id].save()
+        else:
+            self.answer_class.objects.get_or_create(
+                **{"question_id": question_id, self.instance_key: instance.id},
+                defaults={"text": path},
             )
 
     def save_registration_single(self, instance: Any, option_uuid: str | None, question: dict) -> None:

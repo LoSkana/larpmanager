@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     check_download,
@@ -79,13 +80,17 @@ def test_upload_download(pw_page: Any) -> None:
 
     criterions_deliveries(page)
 
+    calls(page)
+
+    exclusives(page)
+
     full(page)
 
 
 def criterions_deliveries(page: Any) -> None:
     # enable criteria
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_criterions").check()
     submit_confirm(page)
 
@@ -118,6 +123,58 @@ def criterions_deliveries(page: Any) -> None:
     check_download(page, "Download")
 
 
+def calls(page: Any) -> None:
+    # enable calls
+    page.get_by_role("link", name="Configuration").first.click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.locator("#id_exp_calls").check()
+    submit_confirm(page)
+
+    sidebar(page, "Calls")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("calls.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created STUN OK - Created BLEED",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "STUN Fall to the ground for five seconds BLEED Lose one hit point every minute",
+    )
+    check_download(page, "Download")
+
+
+def exclusives(page: Any) -> None:
+    # enable exclusive groups
+    page.get_by_role("link", name="Configuration").first.click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
+    page.locator("#id_exp_exclusives").check()
+    submit_confirm(page)
+
+    sidebar(page, "Exclusive groups")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("exclusives.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created Weapons",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    expect(page.locator("#exclusives")).to_contain_text("Weapons")
+    expect(page.locator("#exclusives")).to_contain_text("sword")
+    expect(page.locator("#exclusives")).to_contain_text("shield")
+    check_download(page, "Download")
+
+
 def abilities(page: Any) -> None:
     # add type
     page.get_by_role("link", name="Ability type").click()
@@ -128,7 +185,7 @@ def abilities(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Experience points")).click()
     page.locator("#id_exp_user").check()
     submit_confirm(page)
 
@@ -269,7 +326,7 @@ def reg_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
+        "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Read only lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
     )
     check_download(page, "Download")
 
@@ -319,32 +376,32 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
+        "Name Name Public Presentation Presentation Public Text Sheet Private Faction Factions Hidden bibi baba Multiple choice Searchable huhu trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+        page, page.locator("#one"), "Name Name Public Concept Presentation Public Text Sheet Private wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+        page, page.locator("#one"), "Name Name Public Presentation Presentation Public Text Sheet Private baba bebe Multi-line text Private"
     )
-    page.get_by_role("link", name="Quest", exact=True).click()
+    page.locator("#one").get_by_role("link", name="Quest", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
+        "Name Name Public Presentation Presentation Public Text Sheet Private asd kloi Advanced text editor Public",
     )
     page.get_by_role("link", name="Trait", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),
-        "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr | tttttt",
+        "Name Name Public Presentation Presentation Public Text Sheet Private poi rweerw Single choice Public rrrrrr tttttt",
     )
 
 def get_path(file: Any) -> Any:

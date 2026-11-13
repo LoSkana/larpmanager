@@ -42,7 +42,8 @@
                         <a href="{% url 'exe_questions_answer' el.member.uuid %}">{% trans "Answer" %}</a>
                     </td>
                     <td>
-                        <a href="{% url 'exe_questions_close' el.member.uuid %}">{% trans "Close" %}</a>
+                        <a href="{% url 'exe_questions_close' el.member.uuid %}"
+                           class="frame-confirm">{% trans "Close" %}</a>
                     </td>
                 </tr>
             {% endfor %}

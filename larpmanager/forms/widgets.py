@@ -75,17 +75,23 @@ class _DescriptionOptionsMixin:
         descriptions: dict | None = None,
         metadata: dict | None = None,
         collapse_unselected: bool | None = None,
+        collapse_min: int = 2,
+        gated_options: set[str] | None = None,
         **kwargs: Any,
     ) -> None:
         """Prepare widget metadata.
 
         collapse_unselected drives the collapse toggle: None disables it, True renders the
         unselected options already collapsed, False renders them visible with the link to collapse.
+        collapse_min is the minimum number of options required for the toggle to appear.
+        gated_options are the values hidden by their unmet requirements, left out of that count.
         """
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
         self.collapse_unselected = collapse_unselected
+        self.collapse_min = max(2, collapse_min)
+        self.gated_options: set[str] = gated_options or set()
 
     def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
         """Add flags telling the template which options can be collapsed, and the initial state."""
@@ -97,9 +103,11 @@ class _DescriptionOptionsMixin:
             options = [
                 option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
             ]
+            # the options gated by their unmet requirements are not on the page: they do not count
+            options = [option for option in options if str(option["value"]) not in self.gated_options]
             selected_count = sum(1 for option in options if option["selected"])
-            # a single option has nothing to toggle, keep it always visible
-            collapsible = len(options) > 1
+            # below the minimum number of options there is nothing worth hiding
+            collapsible = len(options) >= self.collapse_min
             # start collapsed only if some option would actually stay out of view
             collapsed = collapsible and self.collapse_unselected and selected_count < len(options)
         widget_context["collapsible"] = collapsible
@@ -145,27 +153,33 @@ class DescriptionCheckboxSelectMultiple(_DescriptionOptionsMixin, forms.Checkbox
         self.attrs["class"] = (self.attrs["class"] + " reg-checkbox-class").strip()
 
 
-class FactionPreferenceWidget(forms.Widget):
-    """Drag-reorder list of factions, backed by a hidden comma-separated UUID input.
+class RankingWidget(forms.Widget):
+    """Drag-reorder list of items, backed by a hidden comma-separated UUID input.
 
     ``value`` is the comma-separated ordered UUID string (matches what's stored in
-    ``RegistrationAnswer.text``); ``factions`` is the ordered list of ``(uuid, name)``
-    tuples to render as draggable rows. Self-contained: dropped into a form field's
-    widget, it renders its full UI wherever ``{{ field }}`` is called.
+    ``RegistrationAnswer.text``); ``items`` is the ordered list of ``(uuid, name)``
+    tuples to render as draggable rows. When ``max_rank`` is set, only the first
+    ``max_rank`` rows are ranked, the others are shown as unranked. Self-contained:
+    dropped into a form field's widget, it renders its full UI wherever ``{{ field }}``
+    is called.
     """
 
-    template_name = "forms/widgets/faction_preference.html"
+    template_name = "forms/widgets/ranking.html"
 
     class Media:
-        js: ClassVar[list] = ["larpmanager/assets/js/faction-preference.js"]
+        js: ClassVar[list] = ["larpmanager/assets/js/ranking.js"]
 
-    def __init__(self, *args: Any, factions: list[tuple[str, str]] | None = None, **kwargs: Any) -> None:
-        """Store the ordered (uuid, name) faction list to render."""
+    def __init__(
+        self, *args: Any, items: list[tuple[str, str]] | None = None, max_rank: int = 0, **kwargs: Any
+    ) -> None:
+        """Store the ordered (uuid, name) item list to render, and how many of them are ranked."""
         super().__init__(*args, **kwargs)
-        self.factions = factions or []
+        self.items = items or []
+        self.max_rank = max_rank
 
     def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
         """Build template context for the drag-reorder widget."""
         ctx = super().get_context(name, value, attrs)
-        ctx["widget"]["factions"] = self.factions
+        ctx["widget"]["items"] = self.items
+        ctx["widget"]["max_rank"] = self.max_rank
         return ctx

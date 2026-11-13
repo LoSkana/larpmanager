@@ -165,7 +165,7 @@ def fill_matchmaker(page: Any, live_server: Any, short_value: str, long_value: s
     go_to(page, live_server, "/test/matchmaker/")
 
     # matchmaker questions must not be mixed into the standard registration form
-    expect(page.locator("#matchmaker")).to_be_visible()
+    expect(page.locator("#main_form")).to_be_visible()
 
     # the form is bound to the existing registration: the options start collapsed
     expand_options(page)

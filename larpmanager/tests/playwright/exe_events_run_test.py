@@ -24,6 +24,7 @@ Verifies creation of new events with slug generation, quick setup workflow,
 date configuration, and event dashboard access.
 """
 
+import re
 from typing import Any
 
 import pytest
@@ -70,7 +71,8 @@ def test_exe_events_run(pw_page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("Prova Event")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#slug").fill("prova")
+    expect(edit_iframe.locator(".slug_pre")).to_contain_text("provaevent")
+    expect(edit_iframe.locator("#slug")).to_be_disabled()
     fill_tinymce(edit_iframe, "id_form1-description", "sadsadasdsaas", False)
     edit_iframe.locator("#id_form1-max_pg").click()
     edit_iframe.locator("#id_form1-max_pg").fill("10")
@@ -81,8 +83,39 @@ def test_exe_events_run(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator("#one"), "Prova Event")
-    go_to(page, live_server, "/prova/manage/")
+    go_to(page, live_server, "/provaevent/manage/")
 
     expect_normalized(page, page.locator("body"), "Prova Event")
     go_to(page, live_server, "")
     expect_normalized(page, page.locator("#one"), "Prova Event")
+
+    check_slug_conflict(page, live_server)
+
+
+def check_slug_conflict(page: Any, live_server: Any) -> None:
+    """Check that a name already used opens the slug field with an available suggestion."""
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").fill("Prova Event")
+    edit_iframe.locator("#id_form1-max_pg").fill("10")
+    fill_date(edit_iframe, "#id_form2-start", "2056-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2056-06-13")
+    edit_iframe.get_by_role("button", name=re.compile(r"^Confirm$", re.IGNORECASE)).click()
+
+    # The form is shown again with the suggestion, nothing was saved
+    expect(edit_iframe.locator("#slug")).to_have_value("provaevent2")
+    expect(edit_iframe.locator("#slug")).to_be_enabled()
+    expect(edit_iframe.locator(".slug_pre")).to_contain_text("provaevent2")
+    expect(edit_iframe.locator(".slug_change")).to_have_count(0)
+
+    # Emptying the input falls back to the slug generated from the name
+    edit_iframe.locator("#slug").fill("")
+    expect(edit_iframe.locator(".slug_pre")).to_contain_text("provaevent")
+    expect(edit_iframe.locator(".slug_pre")).not_to_contain_text("provaevent2")
+
+    edit_iframe.locator("#slug").fill("provaevent2")
+    save_modal(page, edit_iframe)
+
+    go_to(page, live_server, "/provaevent2/manage/")
+    expect_normalized(page, page.locator("body"), "Prova Event")

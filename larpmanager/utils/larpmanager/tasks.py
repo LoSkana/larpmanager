@@ -23,30 +23,37 @@ import hashlib
 import logging
 import re
 import traceback
+from dataclasses import dataclass
 from functools import wraps
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from background_task import background
+from background_task.models import Task
 from django.conf import settings as conf_settings
 from django.core import signing
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.mail import EmailMultiAlternatives
 from django.core.validators import validate_email
-from django.utils import timezone
+from django.db import transaction
+from django.dispatch import Signal
+from django.utils import timezone, translation
+from django.utils.translation import gettext as _
 
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.mail.suppression import get_suppressed_emails, is_suppressed, unsuppress_email
 from larpmanager.models.access import AssociationRole
-from larpmanager.models.association import Association, AssociationTextType, get_url
+from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.event import Event, Run
 from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
+from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 if TYPE_CHECKING:
@@ -54,7 +61,13 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Sent with event_ids after child events are detached from a deleted parent, so their caches get cleared
+events_detached = Signal()
+
 INTERNAL_KWARGS = {"schedule", "repeat", "repeat_until", "remove_existing_tasks"}
+
+# Kwarg carrying the timezone active at scheduling time into background tasks
+TIMEZONE_KWARG = "active_timezone"
 
 
 def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **background_kwargs: Any) -> Any:
@@ -84,8 +97,15 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
             or schedules it as a background task based on configuration.
 
         """
+
+        @wraps(original_function)
+        def run_in_timezone(*args: Any, active_timezone: str | None = None, **kwargs: Any) -> Any:
+            """Run the function under the timezone that was active when the task was scheduled."""
+            with timezone.override(active_timezone):
+                return original_function(*args, **kwargs)
+
         # Create background task from the original function
-        background_task = background(schedule=schedule, **background_kwargs)(original_function)
+        background_task = background(schedule=schedule, **background_kwargs)(run_in_timezone)
 
         @wraps(original_function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -96,10 +116,9 @@ def background_auto(schedule: Any = 0, *, skip_duplicates: bool = False, **backg
                 filtered_kwargs = {key: value for key, value in kwargs.items() if key not in INTERNAL_KWARGS}
                 # Execute function directly in foreground
                 return original_function(*args, **filtered_kwargs)
+            kwargs[TIMEZONE_KWARG] = timezone.get_current_timezone_name()
             # Skip scheduling if an identical pending task already exists
             if skip_duplicates:
-                from background_task.models import Task  # noqa: PLC0415
-
                 filtered_kwargs = {k: v for k, v in kwargs.items() if k not in INTERNAL_KWARGS}
                 if Task.objects.get_task(background_task.name, args=list(args), kwargs=filtered_kwargs).exists():
                     return None
@@ -268,7 +287,7 @@ def _create_bulk_recipients(
     return recipient_ids
 
 
-def _broadcast_size_allowed(total_recipients: int) -> bool:
+def _broadcast_size_allowed(total_recipients: int, *, skip_limit: bool = False) -> bool:
     """Check that a broadcast has recipients and stays within the configured limit.
 
     Opted out addresses are traced as skipped rows, so they count towards the size.
@@ -276,6 +295,9 @@ def _broadcast_size_allowed(total_recipients: int) -> bool:
     if not total_recipients:
         logger.info("Broadcast skipped: no recipient left")
         return False
+
+    if skip_limit:
+        return True
 
     max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
     if total_recipients > max_recipients:
@@ -305,6 +327,8 @@ def send_mail_exec(
     run_id: int | None = None,
     interval: int | None = None,
     opted_out: list | None = None,
+    *,
+    skip_limit: bool = False,
 ) -> None:
     """Send bulk emails to multiple recipients with batch delivery.
 
@@ -323,6 +347,7 @@ def send_mail_exec(
         run_id: Run ID for determining sender context (alternative to association_id)
         interval: Seconds to wait between each batch (defaults to MAIL_BATCH_INTERVAL)
         opted_out: Addresses already known to have opted out, excluded from recipient_list
+        skip_limit: Bypass MAIL_MAX_RECIPIENTS (only for trusted, already-gated callers)
 
     Returns:
         None
@@ -359,7 +384,7 @@ def send_mail_exec(
     # Parse symbol-separated email list
     recipients = split_recipients(recipient_list)
 
-    if not _broadcast_size_allowed(len(recipients) + len(opted_out or [])):
+    if not _broadcast_size_allowed(len(recipients) + len(opted_out or []), skip_limit=skip_limit):
         return
 
     # Notify administrators about bulk email operation, only when something is really sent
@@ -454,7 +479,8 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 
         # Append unsubscribe footer, reusing the same link in the message headers
         unsubscribe_url = build_unsubscribe_url(association, email_recipient.recipient)
-        body += add_unsubscribe_body(unsubscribe_url)
+        with translation.override(email_recipient.language_code):
+            body += add_unsubscribe_body(unsubscribe_url)
 
         # RFC 8058 one-click is meant for bulk mail only: pressing the mail client button
         # on a receipt or a password reset must not silently drop the newsletter
@@ -466,13 +492,13 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.subj,
             body,
             email_recipient.recipient,
-            email_content.association_id,
-            email_content.run_id,
-            email_content.reply_to,
-            email_content.attachment_path,
-            email_content.attachment_name,
-            header_url,
-            one_click=email_content.bulk,
+            association_id=email_content.association_id,
+            run_id=email_content.run_id,
+            headers=MailHeaders(
+                reply_to=email_content.reply_to, unsubscribe_url=header_url, one_click=email_content.bulk
+            ),
+            attachment_path=email_content.attachment_path,
+            attachment_name=email_content.attachment_name,
         )
 
         # Only mark as sent if successful
@@ -495,18 +521,31 @@ def clean_sender(sender_name: Any) -> Any:
     return re.sub(r"\s+", " ", sender_name).strip()
 
 
-def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole message description
+@dataclass(frozen=True)
+class MailHeaders:
+    """Optional headers of an outgoing mail.
+
+    Attributes:
+        reply_to: Custom Reply-To email address header
+        unsubscribe_url: Unsubscribe link, published in the List-Unsubscribe header
+        one_click: Whether the link accepts an RFC 8058 one-click post (bulk mails only)
+    """
+
+    reply_to: str | None = None
+    unsubscribe_url: str | None = None
+    one_click: bool = False
+
+
+def my_send_simple_mail(
     subj: str,
     body: str,
     m_email: str,
+    *,
     association_id: int | None = None,
     run_id: int | None = None,
-    reply_to: str | None = None,
+    headers: MailHeaders | None = None,
     attachment_path: str | None = None,
     attachment_name: str | None = None,
-    unsubscribe_url: str | None = None,
-    *,
-    one_click: bool = False,
 ) -> None:
     """Send email with association/event-specific configuration.
 
@@ -522,11 +561,9 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
         m_email: Recipient email address
         association_id: Association ID for custom SMTP settings and sender configuration
         run_id: Run ID for event-specific SMTP settings (overrides association settings)
-        reply_to: Custom Reply-To email address header
+        headers: Optional Reply-To and unsubscribe headers
         attachment_path: Optional absolute filesystem path to a file to attach as PDF
         attachment_name: Optional filename to use in the email attachment (overrides the on-disk name)
-        unsubscribe_url: Optional unsubscribe link, published in the message headers
-        one_click: Whether the link accepts an RFC 8058 one-click post (bulk mails only)
 
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
@@ -537,7 +574,7 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
     """
     try:
         # Gather metadata (sender, BCC, headers)
-        metadata = _prepare_email_metadata(association_id, run_id, reply_to, unsubscribe_url, one_click=one_click)
+        metadata = _prepare_email_metadata(association_id, run_id, headers)
 
         # Build email message
         email_message = _build_email_message(subj, body, m_email, metadata)
@@ -570,19 +607,14 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
 def _prepare_email_metadata(
     association_id: int | None,
     run_id: int | None,
-    reply_to: str | None,
-    unsubscribe_url: str | None = None,
-    *,
-    one_click: bool = False,
+    headers: MailHeaders | None = None,
 ) -> dict:
     """Extract email metadata from association/event config.
 
     Args:
         association_id: Association ID for metadata extraction
         run_id: Run ID for event-specific metadata
-        reply_to: Custom Reply-To email address
-        unsubscribe_url: Unsubscribe link to publish in the headers
-        one_click: Whether to advertise RFC 8058 one-click support
+        headers: Optional Reply-To and unsubscribe headers
 
     Returns:
         Dict containing sender_email, sender_name, headers, and bcc_recipients
@@ -640,19 +672,14 @@ def _prepare_email_metadata(
                 metadata["sender_email"] = f"{association.slug}@larpmanager.com"
                 metadata["sender_name"] = association.name
 
-    _add_email_headers(metadata, reply_to, unsubscribe_url, one_click=one_click)
+    _add_email_headers(metadata, headers or MailHeaders())
 
     return metadata
 
 
-def _add_email_headers(
-    metadata: dict,
-    reply_to: str | None,
-    unsubscribe_url: str | None,
-    *,
-    one_click: bool = False,
-) -> None:
+def _add_email_headers(metadata: dict, headers: MailHeaders) -> None:
     """Fill the message headers with the reply-to and unsubscribe entries."""
+    reply_to = headers.reply_to
     if reply_to:
         if "\r" in reply_to or "\n" in reply_to:
             msg = "Invalid characters in reply-to address"
@@ -661,9 +688,9 @@ def _add_email_headers(
 
     # RFC 8058: mailbox providers require an http link plus the one-click marker, which
     # may only be advertised on bulk mails
-    if unsubscribe_url:
-        metadata["headers"]["List-Unsubscribe"] = f"<{unsubscribe_url}>, <mailto:{metadata['sender_email']}>"
-        if one_click:
+    if headers.unsubscribe_url:
+        metadata["headers"]["List-Unsubscribe"] = f"<{headers.unsubscribe_url}>, <mailto:{metadata['sender_email']}>"
+        if headers.one_click:
             metadata["headers"]["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
     else:
         metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
@@ -783,8 +810,9 @@ def build_unsubscribe_url(association: Any, recipient_email: str = "", *, one_cl
 
 def add_unsubscribe_body(unsubscribe_url: str) -> str:
     """Add unsubscribe footer to email body."""
+    link = f"<a ses:no-track href='{unsubscribe_url}'>{_('unsubscribe')}</a>"
     html_footer = "<br /><br />-<br />"
-    html_footer += f"<a ses:no-track href='{unsubscribe_url}'>Unsubscribe</a>"
+    html_footer += _("If you are not interested in further communications from us, please %(link)s.") % {"link": link}
     return html_footer
 
 
@@ -873,7 +901,7 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
         # Handle direct model instances
         if isinstance(context_object, Run):
             run_id = context_object.id  # type: ignore[attr-defined]
-            association_id = context_object.event.association_id  # type: ignore[attr-defined]
+            association_id = get_run_association_id(run_id)
         elif isinstance(context_object, Event):
             association_id = context_object.association_id  # type: ignore[attr-defined]
         elif isinstance(context_object, Association):
@@ -881,11 +909,11 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
         # Handle objects with foreign key relationships
         elif hasattr(context_object, "run_id") and context_object.run_id:
             run_id = context_object.run_id
-            association_id = context_object.run.event.association_id
+            association_id = get_run_association_id(run_id)
         elif hasattr(context_object, "association_id") and context_object.association_id:
             association_id = context_object.association_id
         elif hasattr(context_object, "event_id") and context_object.event_id:
-            association_id = context_object.event.association_id
+            association_id = get_event_association_id(context_object.event_id)
     return association_id, run_id
 
 
@@ -912,19 +940,35 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
 # DELETION
 
 
-@background(schedule=0)
-def delete_run_task(run_uuid: str) -> None:
-    """Delete the event (and all its runs) identified by this run uuid.
+def is_last_run(run: Run) -> bool:
+    """Return True if the run is the only one left in its event."""
+    return not Run.objects.filter(event_id=run.event_id).exclude(pk=run.pk).exists()
 
+
+@background_auto(schedule=0)
+def delete_run_task(run_uuid: str, *, whole_event: bool = False) -> None:
+    """Delete the run identified by this uuid, or its whole event.
+
+    The event is deleted if whole_event is set or if the run is the last one left; the event
+    row is locked so concurrent deletions of sibling runs never leave an event without runs.
     Nulls out parent FK on child events first to prevent cascade-deleting them.
     """
-    try:
-        run = Run.objects.select_related("event").get(uuid=run_uuid)
-    except Run.DoesNotExist:
-        return
-    event = run.event
-    Event.objects.filter(parent=event).update(parent=None)
-    event.delete()
+    with transaction.atomic():
+        try:
+            run = Run.objects.get(uuid=run_uuid)
+        except Run.DoesNotExist:
+            return
+        event = Event.objects.select_for_update().get(pk=run.event_id)
+        if not whole_event and not is_last_run(run):
+            run.delete()
+            return
+        child_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))
+        Event.objects.filter(id__in=child_ids).update(parent=None)
+        event.delete()
+
+    if child_ids:
+        # Cache cleanup handled by on_events_detached in larpmanager/models/signals.py
+        events_detached.send(sender=Event, event_ids=child_ids)
 
 
 @background(schedule=0)

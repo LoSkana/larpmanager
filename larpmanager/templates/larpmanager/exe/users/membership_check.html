@@ -18,6 +18,7 @@
                     <th>{% trans "Calculated" %}</th>
                     <th>{% trans "Supplied" %}</th>
                     <th>{% trans "Error" %}</th>
+                    <th></th>
                 </tr>
             </thead>
             {% for el in cf %}
@@ -30,6 +31,10 @@
                     <td>{{ el.calculated_cf }}</td>
                     <td>{{ el.supplied_cf }}</td>
                     <td>{{ el.error_cf }}</td>
+                    <td>
+                        <a href="{% url 'exe_membership_check_valid' el.member_uuid %}"
+                           class="frame-confirm">{% trans "Mark as valid" %}</a>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

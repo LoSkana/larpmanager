@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, load_image, \
+from larpmanager.tests.utils import fill_slug, expect_normalized, fill_date, get_modal_iframe, go_to, load_image, \
     login_orga, submit, submit_confirm, save_modal, LONG_TIMEOUT
 
 pytestmark = pytest.mark.e2e
@@ -64,8 +64,7 @@ def test_exe_join(pw_page: Any) -> None:
     name_input = page.locator("#id_name")
     name_input.fill("prova°°à!* cs")
     expect(page.locator("#slug")).to_have_value("provaacs")
-    page.locator("#slug").click()
-    page.locator("#slug").fill("proaacs")
+    fill_slug(page, "proaacs")
     name_input.click()
     name_input.fill("prova°    °à!* cs")
     expect(page.locator("#slug")).to_have_value("proaacs")
@@ -96,7 +95,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.get_by_role("link", name="Nuovo evento").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").fill("Prova Event")
-    edit_iframe.locator("#slug").fill("prova")
+    fill_slug(edit_iframe, "prova")
     edit_iframe.locator("#id_form1-max_pg").fill("10")
     fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2055-06-13")

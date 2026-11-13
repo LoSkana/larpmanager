@@ -2,7 +2,7 @@
 
 {% include "elements/writing/token.js" %}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 window.addEventListener('DOMContentLoaded', function() {
 
@@ -78,6 +78,10 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         const form = document.getElementById('form-excel');
+        window.lmWhenFilesBuffered(form, function() { sendExcelForm(form, auto); });
+    }
+
+    function sendExcelForm(form, auto) {
         const formData = new FormData(form);
 
         formData.append('edit_uuid', edit_uuid);
@@ -191,23 +195,18 @@ window.addEventListener('DOMContentLoaded', function() {
                         keyTinyMCE = editorId;
                         setUpCharFinder(editorId);
                         setUpHighlight(editorId);
+                        // set up max length once the editor is available
+                        if (res.max_length > 0) {
+                            prepare_tinymce(editorId, res.max_length);
+                        }
+                    });
+                } else if (res.max_length > 0) {
+                    // set up max length on the plain input
+                    update_count(res.key, res.max_length, res.typ);
+                    $('#' + res.key).on('input', function() {
+                        update_count(res.key, res.max_length, res.typ);
                     });
                 }
-
-                setTimeout(() => {
-                    // set up max length
-                    if (res.max_length > 0) {
-                        if (res.tinymce) {
-                            // prepare tinymce count
-                            prepare_tinymce(res.key, res.max_length);
-                        } else {
-                            update_count(res.key, res.max_length, res.typ);
-                            $('#' + res.key).on('input', function() {
-                                update_count(res.key, res.max_length, res.typ);
-                            });
-                        }
-                    }
-                }, 100);
 
                 $('#excel-edit input[type="submit"]').on("click", function() {
                     submitExcelForm(false);

@@ -19,29 +19,39 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
+from decimal import Decimal
 from typing import Any
 
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
+from dateutil.relativedelta import relativedelta
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
+from django.db.models import Sum
 from django.utils import dateparse, timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.basic import (
+    get_association_basic_cache,
+    get_run_association_id,
+    get_run_basic_cache,
+    get_run_event_id,
+)
+from larpmanager.cache.config import get_association_config, get_event_config, save_single_config_by_id
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.registration import get_active_registrations
+from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
 from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
     notify_deadlines,
+    remember_character_creation,
     remember_membership,
     remember_membership_fee,
     remember_pay,
@@ -49,25 +59,27 @@ from larpmanager.mail.remind import (
 )
 from larpmanager.models.access import AssociationRole, EventRole, get_association_executives
 from larpmanager.models.accounting import (
-    AccountingItemDiscount,
     AccountingItemMembership,
-    DiscountType,
+    AccountingItemPayment,
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
 )
-from larpmanager.models.association import Association, AssociationConfig
+from larpmanager.models.association import Association, AssociationConfig, AssociationPlan
 from larpmanager.models.base import PaymentMethod
-from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.event import DevelopStatus, Event, Run, RunConfig
 from larpmanager.models.larpmanager import LarpManagerChatLog
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
+from larpmanager.utils.core.common import ensure_timezone_aware, get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
+from larpmanager.utils.larpmanager.csp import send_csp_digest
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
+from larpmanager.views.larpmanager import get_run_lm_payment
 
 # AWS reviews accounts above 5% bounces or 0.1% complaints
 BOUNCE_RATE_LIMIT = 0.05
@@ -139,7 +151,9 @@ class Command(BaseCommand):
         # Process feature-specific checks for each association
         # Only run checks if the association has the required features enabled
         for association in Association.objects.all():
-            self.check_association(association)
+            with timezone.override(association.timezone):
+                self.check_association(association)
+                self.check_free_plan_summary(association)
 
         # Perform standard system-wide maintenance checks
         # These checks run regardless of feature flags
@@ -157,22 +171,29 @@ class Command(BaseCommand):
         # Warn admins when SES bounce or complaint rates approach AWS thresholds
         self.check_email_reputation()
 
+        # Send admins the Content-Security-Policy violations collected since yesterday
+        send_csp_digest()
+
+        # Remind admins about paid-plan runs still unpaid
+        self.check_lm_payment_reminders()
+
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
             event_features = get_event_features(run.event_id)
 
-            # Check and process deadline notifications
-            if "deadlines" in event_features:
-                self.check_deadline(run)
+            with timezone.override(get_association_basic_cache(get_run_association_id(run.id))["timezone"]):
+                # Check and process deadline notifications
+                if "deadlines" in event_features:
+                    self.check_deadline(run)
 
-            # Update run-specific accounting records
-            if "record_acc" in event_features:
-                check_run_accounting(run)
+                # Update run-specific accounting records
+                if "record_acc" in event_features:
+                    check_run_accounting(run)
 
-            # Generate background PDF documents for the run
-            if "print_pdf" in event_features:
-                print_run_bkg(run.event.association.slug, run.get_slug())
+                # Generate background PDF documents for the run
+                if "print_pdf" in event_features:
+                    print_run_bkg(get_run_basic_cache(run.id)["association_slug"], run.get_slug())
 
     def check_association(self, association: Association) -> None:
         """Run all feature-specific automation checks for a single association."""
@@ -199,6 +220,225 @@ class Command(BaseCommand):
         """Trigger publication sync for all visible runs."""
         for run in Run.objects.filter(event__association=association, development=DevelopStatus.SHOW):
             publish_event_all(run)
+
+    _FREE_SUMMARY_MIN_REGISTRATIONS = 5
+    _FREE_SUMMARY_FEE_RATE = Decimal("0.06")
+    _FIRST_EVENT_SUMMARY_KEY = "free_summary_sent_first_event"
+
+    @staticmethod
+    def check_free_plan_summary(association: Association) -> None:
+        """Email system admins a metrics summary for free-plan associations.
+
+        Two independent triggers, each sent at most once per condition:
+        - the association's first concluded event with more than 5 registrations
+        - the yearly anniversary of the association's creation, if there was any
+          registration activity since the previous anniversary
+        """
+        if association.plan != AssociationPlan.FREE:
+            return
+
+        Command._check_free_plan_first_event(association)
+        Command._check_free_plan_birthday(association)
+
+    @staticmethod
+    def _admin_notice_contacts_html(association: Association) -> str:
+        """Render an HTML list of the association's contact emails (main mail and executives).
+
+        For inclusion in the body of an admin notice email; the notice itself is
+        still only sent to system admins.
+        """
+        contacts = []
+        if association.main_mail:
+            contacts.append(association.main_mail)
+        contacts.extend(executive.email for executive in get_association_executives(association) if executive.email)
+        contact_lines = "".join(f"<li>{contact}</li>" for contact in contacts)
+        return f"<ul>{contact_lines or '<li>None</li>'}</ul>"
+
+    @staticmethod
+    def _free_plan_metrics(association: Association, since: date | None = None) -> dict:
+        """Aggregate registration, revenue, fee and character metrics for an association.
+
+        Args:
+            association: Association to aggregate metrics for
+            since: If given, restrict to items created on/after this date; otherwise all-time
+        """
+        registrations = Registration.objects.filter(
+            run__event__association=association, cancellation_date__isnull=True, pending=False
+        )
+        payments = AccountingItemPayment.objects.filter(association=association)
+        characters = Character.objects.filter(event__association=association)
+        if since is not None:
+            registrations = registrations.filter(created__date__gte=since)
+            payments = payments.filter(created__date__gte=since)
+            characters = characters.filter(created__date__gte=since)
+
+        revenue = payments.aggregate(total=Sum("value"))["total"] or 0
+        fee = (revenue * Command._FREE_SUMMARY_FEE_RATE).quantize(Decimal("0.01"))
+
+        return {
+            "registrations": registrations.count(),
+            "revenue": revenue,
+            "fee": fee,
+            "characters": characters.count(),
+        }
+
+    @staticmethod
+    def _format_metrics_html(metrics: dict, currency_symbol: str) -> str:
+        """Render a metrics dict (from `_free_plan_metrics`) as an HTML list."""
+        return f"""<ul>
+                <li>Registrations: {metrics["registrations"]}</li>
+                <li>Revenue: {metrics["revenue"]}{currency_symbol}</li>
+                <li>6% fee: {metrics["fee"]}{currency_symbol}</li>
+                <li>Characters: {metrics["characters"]}</li>
+            </ul>"""
+
+    @staticmethod
+    def _check_free_plan_first_event(association: Association) -> None:
+        """Send the one-shot summary email after the first concluded event with enough registrations."""
+        if AssociationConfig.objects.filter(association=association, name=Command._FIRST_EVENT_SUMMARY_KEY).exists():
+            return
+
+        today = timezone.localdate()
+        for run in Run.objects.filter(event__association=association, end__lt=today).select_related("event"):
+            registration_count = get_active_registrations(run.id).count()
+            if registration_count <= Command._FREE_SUMMARY_MIN_REGISTRATIONS:
+                continue
+
+            metrics = Command._free_plan_metrics(association)
+            currency_symbol = association.get_currency_symbol()
+            subject = f"[LarpManager] First concluded event for free-plan association '{association.name}'"
+            body = f"""
+                Admin notice,<br /><br />
+                Free-plan association <i>{association.name}</i> (slug: <b>{association.slug}</b>) just
+                concluded its first event with more than {Command._FREE_SUMMARY_MIN_REGISTRATIONS}
+                registrations: <b>{run.event.name}</b>.<br /><br />
+                <b>All-time metrics:</b><br />
+                {Command._format_metrics_html(metrics, currency_symbol)}
+                <b>Association contacts:</b><br />
+                {Command._admin_notice_contacts_html(association)}
+                - LarpManager Automate
+                """
+            for _name, email in conf_settings.ADMINS:
+                my_send_mail(subject, body, email)
+
+            save_single_config_by_id(
+                Association, association.id, Command._FIRST_EVENT_SUMMARY_KEY, timezone.now().isoformat()
+            )
+            return
+
+    @staticmethod
+    def _check_free_plan_birthday(association: Association) -> None:
+        """Send the yearly anniversary summary email, catching up if a run was missed on the exact day."""
+        if association.demo_type_id is not None:
+            return
+
+        today = timezone.localdate()
+        created = timezone.localtime(association.created).date()
+
+        if today.year == created.year:
+            # Skip anniversary in the year the association was created
+            return
+
+        try:
+            this_year_anniversary = date(today.year, created.month, created.day)
+        except ValueError:
+            # Feb 29 birthday, non-leap year
+            this_year_anniversary = date(today.year, 2, 28)
+
+        if today < this_year_anniversary:
+            return
+
+        year_key = f"free_summary_sent_birthday_{today.year}"
+        if AssociationConfig.objects.filter(association=association, name=year_key).exists():
+            return
+
+        try:
+            previous_anniversary = date(today.year - 1, created.month, created.day)
+        except ValueError:
+            previous_anniversary = date(today.year - 1, 2, 28)
+
+        metrics_since_last_year = Command._free_plan_metrics(association, since=previous_anniversary)
+        if metrics_since_last_year["registrations"] < Command._FREE_SUMMARY_BIRTHDAY_MIN_REGISTRATIONS:
+            return
+
+        metrics_all_time = Command._free_plan_metrics(association)
+        currency_symbol = association.get_currency_symbol()
+        subject = f"[LarpManager] Yearly summary for free-plan association '{association.name}'"
+        body = f"""
+            Admin notice,<br /><br />
+            Free-plan association <i>{association.name}</i> (slug: <b>{association.slug}</b>) reached its
+            yearly anniversary on LarpManager (created {created.strftime("%Y-%m-%d")}).<br /><br />
+            <b>Metrics since last anniversary:</b><br />
+            {Command._format_metrics_html(metrics_since_last_year, currency_symbol)}
+            <b>All-time metrics:</b><br />
+            {Command._format_metrics_html(metrics_all_time, currency_symbol)}
+            <b>Association contacts:</b><br />
+            {Command._admin_notice_contacts_html(association)}
+            - LarpManager Automate
+            """
+        for _name, email in conf_settings.ADMINS:
+            my_send_mail(subject, body, email)
+
+        save_single_config_by_id(Association, association.id, year_key, timezone.now().isoformat())
+
+    _FREE_SUMMARY_BIRTHDAY_MIN_REGISTRATIONS = 10
+
+    _LM_PAYMENT_REMINDER_MONTHS = 2
+    _LM_PAYMENT_MIN_REGISTRATIONS = 10
+    _LM_PAYMENT_REMINDER_KEY = "lm_payment_reminder_sent"
+
+    @staticmethod
+    def check_lm_payment_reminders() -> None:
+        """Notify admins about paid-plan runs still unpaid 2 months after they ended.
+
+        For each qualifying run, lists its own registration count plus the
+        registration counts of the same association's other previous unpaid runs.
+        """
+        cutoff = timezone.localdate() - relativedelta(months=Command._LM_PAYMENT_REMINDER_MONTHS)
+        due_runs = (
+            Run.objects.filter(paid__isnull=True, end__lte=cutoff)
+            .exclude(plan__in=[AssociationPlan.FREE, None])
+            .select_related("event", "event__association")
+        )
+
+        for run in due_runs:
+            if RunConfig.objects.filter(run=run, name=Command._LM_PAYMENT_REMINDER_KEY).exists():
+                continue
+
+            get_run_lm_payment(run)
+            if run.active_registrations < Command._LM_PAYMENT_MIN_REGISTRATIONS:
+                continue
+
+            association = run.event.association
+            other_unpaid_runs = (
+                Run.objects.filter(event__association=association, paid__isnull=True, end__lt=run.end)
+                .exclude(plan__in=[AssociationPlan.FREE, None])
+                .select_related("event")
+            )
+            other_lines = ""
+            for other_run in other_unpaid_runs:
+                get_run_lm_payment(other_run)
+                if other_run.active_registrations < Command._LM_PAYMENT_MIN_REGISTRATIONS:
+                    continue
+                other_lines += f"<li>{other_run.event.name} ({other_run.get_slug()}) - {other_run.active_registrations} registrations</li>"
+
+            subject = f"[LarpManager] Payment reminder: '{association.name}' - {run.event.name}"
+            body = f"""
+                Admin notice,<br /><br />
+                The run <i>{run.event.name}</i> ({run.get_slug()}) of association <b>{association.name}</b>
+                (slug: <b>{association.slug}</b>) ended more than
+                {Command._LM_PAYMENT_REMINDER_MONTHS} months ago and is still unpaid.<br /><br />
+                <b>Registrations for this run:</b> {run.active_registrations}<br /><br />
+                <b>Other previous unpaid runs of this association:</b><br />
+                <ul>{other_lines or "<li>None</li>"}</ul>
+                <b>Association contacts:</b><br />
+                {Command._admin_notice_contacts_html(association)}
+                - LarpManager Automate
+                """
+            for _name, email in conf_settings.ADMINS:
+                my_send_mail(subject, body, email)
+
+            save_single_config_by_id(Run, run.id, Command._LM_PAYMENT_REMINDER_KEY, timezone.now().isoformat())
 
     _DELETION_WARNING_KEY = "deletion_warning_sent"
     _NO_DELETE_KEY = "no_delete"
@@ -255,6 +495,7 @@ class Command(BaseCommand):
                 warning_date = dateparse.parse_datetime(warning_config.value)
                 if not warning_date:
                     continue
+                warning_date = ensure_timezone_aware(warning_date)
                 days_since_warning = (now - warning_date).days
                 admin_notice_threshold = Command._WARNING_GRACE_DAYS - Command._ADMIN_NOTICE_DAYS_BEFORE
                 if days_since_warning >= admin_notice_threshold:
@@ -314,7 +555,8 @@ class Command(BaseCommand):
         exec_lines = "".join(f"<li>{m.user.get_full_name()} &lt;{m.user.email}&gt;</li>" for m in executives)
         events = list(Event.objects.filter(association=association).values("name", "slug", "created"))
         event_lines = "".join(
-            f"<li>{e['name']} ({e['slug']}) - created {e['created'].strftime('%Y-%m-%d')}</li>" for e in events
+            f"<li>{e['name']} ({e['slug']}) - created {timezone.localtime(e['created']).strftime('%Y-%m-%d')}</li>"
+            for e in events
         )
         registration_count = Registration.objects.filter(run__event__association=association).count()
         delete_url = f"https://larpmanager.com/lm/clean/{association.slug}/"
@@ -328,7 +570,7 @@ class Command(BaseCommand):
             <ul>
                 <li>Name: {association.name}</li>
                 <li>Slug: {association.slug}</li>
-                <li>Created: {association.created.strftime("%Y-%m-%d")}</li>
+                <li>Created: {timezone.localtime(association.created).strftime("%Y-%m-%d")}</li>
                 <li>Contact email: {association.main_mail or "-"}</li>
                 <li>Total registrations: {registration_count}</li>
             </ul>
@@ -397,7 +639,7 @@ class Command(BaseCommand):
         # Notify payment invoices not approved
         for payment_invoice in PaymentInvoice.objects.filter(status=PaymentStatus.SUBMITTED):
             try:
-                notify_invoice_check(payment_invoice)
+                notify_invoice_check(payment_invoice, reminder=True)
             except ObjectDoesNotExist:
                 payment_invoice.delete()
             except Exception as exception:  # noqa: BLE001 - Batch operation must continue and notify admins on any error
@@ -497,9 +739,9 @@ class Command(BaseCommand):
         processed_staff_events = set()
 
         # Process past events for participation and staff/organizer roles
-        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
+        for run in Run.objects.filter(end__lt=timezone.localdate(), event__association=association):
             # Process regular player registrations
-            registrations = get_active_registrations(run)
+            registrations = get_active_registrations(run.id)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
@@ -528,13 +770,6 @@ class Command(BaseCommand):
 
             # Cache event data for reference
             events_by_id[run.event_id] = run.event
-
-        # Process future events for friend referral tracking
-        for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in get_active_registrations(run).exclude(
-                ticket__tier=TicketTier.WAITING,
-            ):
-                self.check_friends_player(registration, cache)
 
     def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
         """Award a badge to a member if not already possessed.
@@ -643,45 +878,6 @@ class Command(BaseCommand):
         # Increment counter and return new value
         activity_cache[counter_name][member.id] += increment_value
         return activity_cache[counter_name][member.id]
-
-    def check_friends_player(self, registration: Registration, cache: dict) -> None:
-        """Check and award friend referral badges based on friend count.
-
-        This method counts how many friends a player has referred and awards
-        appropriate tier badges (bronze, silver, gold, platinum) based on
-        predefined thresholds.
-
-        Args:
-            registration: Registration instance to check friend count for
-            cache: Activity cache dictionary for tracking friend counts
-                  and preventing duplicate badge awards
-
-        Returns:
-            None
-
-        """
-        # Count total friend referral discounts associated with this registration
-        friend_discount_count = AccountingItemDiscount.objects.filter(
-            detail=registration.id,
-            disc__typ=DiscountType.FRIEND,
-        ).count()
-
-        # Get current friend count from cache or calculate if not cached
-        current_friend_count = self.get_count("friend", cache, registration.member, friend_discount_count)
-
-        # Define badge tiers and their corresponding friend count thresholds
-        badge_tiers = ["bronze", "silver", "gold", "platinum"]
-        tier_thresholds = [1, 4, 8, 12]  # Minimum friends required for each tier
-
-        # Iterate through each tier and award badges if threshold is met
-        for tier_index in range(len(badge_tiers)):
-            # Skip tier if friend count doesn't meet minimum requirement
-            if current_friend_count < tier_thresholds[tier_index]:
-                continue
-
-            # Generate badge key and award to member
-            badge_key = f"friends-{badge_tiers[tier_index]}"
-            self.add_member_badge(badge_key, registration.member, cache)
 
     def check_ach_player(self, registration: Registration, cache: dict) -> None:
         """Check and award player participation badges based on play count.
@@ -875,11 +1071,11 @@ class Command(BaseCommand):
         registrations_queryset = get_regs(association)
 
         # Calculate reference date (3 days from now) to filter out immediate events
-        minimum_start_date = timezone.now() + timedelta(days=3)
+        minimum_start_date = timezone.localdate() + timedelta(days=3)
 
         # Filter registrations to exclude events without start dates or starting too soon
         registrations_queryset = registrations_queryset.exclude(run__start__isnull=True).exclude(
-            run__start__lte=minimum_start_date.date(),
+            run__start__lte=minimum_start_date,
         )
 
         # Process each qualifying registration for reminder emails
@@ -903,7 +1099,7 @@ class Command(BaseCommand):
 
         """
         # Get event features and user membership for this registration
-        event_features = get_event_features(registration.run.event_id)
+        event_features = get_event_features(get_run_event_id(registration.run_id))
         get_user_membership(registration.member, association.id)
 
         # Check if today is the scheduled day to send reminder emails
@@ -931,9 +1127,52 @@ class Command(BaseCommand):
             if not reminder_sent and not membership.compiled:
                 remember_profile(registration)
 
+            # Send character creation/confirmation reminder if character creation is enabled
+            if "user_character" in event_features and registration.ticket.tier not in (
+                TicketTier.STAFF,
+                TicketTier.NPC,
+            ):
+                self.check_character(registration)
+
         # Check payment status and send payment reminders if registration has alerts
         if registration.alert:
             self.check_payment(registration)
+
+    @staticmethod
+    def check_character(registration: Registration) -> None:
+        """Check if character creation/confirmation reminder should be sent.
+
+        Args:
+            registration: Registration instance to check character status for
+
+        Returns:
+            None: Function performs side effects (sending reminders) but returns nothing
+
+        Note:
+            Sends a "not created" reminder if the player has fewer characters than
+            required, or a "not approved" reminder if approval is required and the
+            player's characters have not all been approved yet.
+
+        """
+        event_id = get_run_event_id(registration.run_id)
+        required_characters = int(get_event_config(event_id, "user_character_max"))
+
+        # characters are an inheritable element: in a campaign they live on the parent event
+        characters_event_id = get_event_class_parent(event_id, Character)
+        characters = Character.objects.filter(
+            event_id=characters_event_id, player_id=registration.member_id, deleted__isnull=True
+        )
+        if characters.count() < required_characters:
+            remember_character_creation(registration)
+            return
+
+        requires_approval = get_event_config(event_id, "user_character_approval")
+        if not requires_approval:
+            return
+
+        uncorfimed_characters = characters.filter(status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW]).count()
+        if uncorfimed_characters > 0:
+            remember_character_creation(registration, requires_approval=True)
 
     @staticmethod
     def check_membership_fee(registration: Registration) -> None:
@@ -955,7 +1194,7 @@ class Command(BaseCommand):
 
         """
         # Get current year for membership fee validation
-        current_year = timezone.now().year
+        current_year = timezone.localdate().year
 
         # Skip if registration is not for current year
         if current_year != registration.run.end.year:
@@ -965,7 +1204,7 @@ class Command(BaseCommand):
         membership_fee_already_paid = AccountingItemMembership.objects.filter(
             year=registration.run.end.year,
             member=registration.member,
-            association_id=registration.run.event.association_id,
+            association_id=get_run_association_id(registration.run_id),
         ).count()
         if membership_fee_already_paid > 0:
             return
@@ -1041,12 +1280,12 @@ class Command(BaseCommand):
             return
 
         # Calculate reference date (7 days ago) and skip if run is too old or has no start date
-        reference_date = timezone.now() - timedelta(days=7)
-        if not run.start or run.start < reference_date.date():
+        reference_date = timezone.localdate() - timedelta(days=7)
+        if not run.start or run.start < reference_date:
             return
 
         # Get deadline interval configuration for the association
-        deadline_interval_days = int(get_association_config(run.event.association_id, "deadline_days"))
+        deadline_interval_days = int(get_association_config(get_run_association_id(run.id), "deadline_days"))
         if not deadline_interval_days:
             return
 

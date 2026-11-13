@@ -17,7 +17,7 @@
                 {% endif %}
                 {% if association.id == 0 %}
                     <td>
-                        <b>{{ run.event.association.name }} </b>
+                        <b>{{ run.assoc_name }} </b>
                     </td>
                 {% endif %}
                 {% if 'genre' in association.features %}
@@ -70,7 +70,7 @@
                 </h3>
                 {% if association.id == 0 %}
                     <div class="run-card-meta">
-                        <i class="fa-solid fa-building"></i> <b>{{ run.event.association.name }}</b>
+                        <i class="fa-solid fa-building"></i> <b>{{ run.assoc_name }}</b>
                     </div>
                 {% endif %}
                 {% if 'genre' in association.features and run.event.genre %}

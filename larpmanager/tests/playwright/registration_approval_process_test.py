@@ -81,7 +81,7 @@ def test_registration_approval_process(pw_page: Any) -> None:
 
 def enable_approval_process(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Registrations ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Registrations")).click()
     page.locator("#id_registration_approval_process").check()
     submit_confirm(page)
 

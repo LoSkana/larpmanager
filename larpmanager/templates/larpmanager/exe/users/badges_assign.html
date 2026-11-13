@@ -19,12 +19,11 @@
             </div>
             <div id="panels" class="casting-layout">
                 <div class="casting-panel">
-                    <h4>{% trans "Members" %}</h4>
+                    <h4>{% trans "Users" %}</h4>
                     <input type="text"
                            id="member-search"
                            class="casting-search"
-                           placeholder="{% trans "Search" %}..."
-                           oninput="render_left()">
+                           placeholder="{% trans "Search" %}...">
                     <div id="member-list" class="char-list"></div>
                 </div>
                 <div class="casting-panel">
@@ -42,7 +41,7 @@
     {{ block.super }}
     {{ badges_data|json_script:"badges-data" }}
     {{ members_data|json_script:"members-data" }}
-    <script>
+    <script nonce="{{ csp_nonce }}">
     var all_badges = JSON.parse(document.getElementById('badges-data').textContent);
     var all_members = JSON.parse(document.getElementById('members-data').textContent);
     var toggle_url = "{% url 'exe_badges_toggle' %}";
@@ -93,7 +92,7 @@
         var assigned = assignments[current_badge];
 
         if (!search) {
-            list.innerHTML = '<div class="pref-empty"><i class="fas fa-search"></i> {% filter escapejs %}{% trans "Type to search members" %}{% endfilter %}</div>';
+            list.innerHTML = '<div class="pref-empty"><i class="fas fa-search"></i> {% filter escapejs %}{% trans "Type to search users" %}{% endfilter %}</div>';
             return;
         }
 
@@ -104,7 +103,7 @@
         });
 
         if (visible.length === 0) {
-            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No members found" %}{% endfilter %}</div>';
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No users found" %}{% endfilter %}</div>';
             return;
         }
 
@@ -138,7 +137,7 @@
         document.getElementById('assigned-count').textContent = '(' + members.length + ')';
 
         if (members.length === 0) {
-            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No members assigned" %}{% endfilter %}</div>';
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No users assigned" %}{% endfilter %}</div>';
             return;
         }
 
@@ -213,6 +212,8 @@
     }
 
     window.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('member-search').addEventListener('input', function() { render_left(); });
+
         var sel = document.getElementById('badge-select');
         all_badges.forEach(function(b) {
             var opt = document.createElement('option');

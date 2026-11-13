@@ -308,6 +308,7 @@ Upload a specific file to a file input.
 
 ```python
 from pathlib import Path
+
 csv_path = Path(__file__).parent / "test_data.csv"
 upload(page, "#id_data_file", csv_path)
 ```
@@ -955,6 +956,7 @@ load_image(page, "#id_file")
 2. Use correct path:
 ```python
 from pathlib import Path
+
 image_path = Path(__file__).parent / "test_file.jpg"
 upload(page, "#id_file", image_path)
 ```

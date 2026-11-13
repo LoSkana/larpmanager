@@ -38,7 +38,7 @@ from django.core.management import call_command
 from django.db import DatabaseError, connection, transaction
 from django.test.utils import ContextList
 from playwright.sync_api import BrowserContext, BrowserType, Dialog, Page, Response
-from pytest_django.fixtures import SettingsWrapper
+from pytest_django.fixtures import Settings as SettingsWrapper
 
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
@@ -68,7 +68,7 @@ def _copy_test_media() -> None:
 
 @pytest.fixture(autouse=True)
 def _email_backend(settings: SettingsWrapper) -> None:
-    settings.EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
+    settings.MAILERS = {"default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}}
 
 
 @pytest.fixture(autouse=True)

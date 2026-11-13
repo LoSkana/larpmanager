@@ -20,10 +20,12 @@
 
 """Test: auto-save of the player character form.
 
-Verifies that the character form of the player is saved in background, both when creating a
-new character and when editing an existing one, without confirming the form.
+Verifies that the character form of the player is staged in background as a redis draft
+(never touching the real record), and that leaving without confirming the form restores it
+on the next visit without ever having created or modified anything in the database.
 """
 
+import re
 from typing import Any
 
 import pytest
@@ -41,7 +43,7 @@ pytestmark = pytest.mark.e2e
 
 
 def test_character_auto_save(pw_page: Any) -> None:
-    """Test the background auto-save of the player character form."""
+    """Test the background draft auto-save of the player character form."""
     page, live_server, _unused = pw_page
 
     login_orga(page, live_server)
@@ -53,9 +55,8 @@ def test_character_auto_save(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register/")
     submit_register(page)
 
-    auto_save_new_character(page, live_server)
-    auto_save_existing_character(page, live_server)
-    auto_save_two_pages_open(page)
+    auto_save_new_character_not_created(page, live_server)
+    auto_save_existing_character_restored(page, live_server)
 
 
 def auto_save(page: Any) -> None:
@@ -65,52 +66,65 @@ def auto_save(page: Any) -> None:
     assert response_info.value.ok
 
 
-def auto_save_new_character(page: Any, live_server: Any) -> None:
-    """A new character is created by the auto-save, once it has a name."""
+def auto_save_new_character_not_created(page: Any, live_server: Any) -> None:
+    """A not-yet-created character is never saved to the real record, only staged as a draft."""
     go_to(page, live_server, "/test/character/create/")
 
-    page.locator("#id_name").fill("auto saved character")
+    page.locator("#id_name").fill("drafted character")
     auto_save(page)
 
-    # the creation page now points to the character just created
-    page.wait_for_url("**/change/")
-    page.reload()
-    expect(page.locator("#id_name")).to_have_value("auto saved character")
+    # the draft never creates the character: the page stays on the creation URL
+    expect(page).to_have_url(re.compile(r".*/character/create/$"))
 
-
-def auto_save_existing_character(page: Any, live_server: Any) -> None:
-    """The changes of an existing character are stored without confirming the form."""
-    page.locator("#id_name").fill("renamed by auto save")
-    auto_save(page)
-
-    page.reload()
-    expect(page.locator("#id_name")).to_have_value("renamed by auto save")
-
-    # the character exists without the form ever being confirmed
+    # leaving without confirming the form leaves no trace in the character list
     go_to(page, live_server, "/test/character/list/")
-    expect(page.locator("body")).to_contain_text("renamed by auto save")
+    expect(page.locator("body")).not_to_contain_text("drafted character")
+
+    # reopening the creation form restores the unsaved draft and shows the restore banner
+    go_to(page, live_server, "/test/character/create/")
+    expect(page.locator(".auto-save-draft-banner")).to_be_visible()
+    expect(page.locator("#id_name")).to_have_value("drafted character")
+
+    # dismissing the banner does not touch the field values
+    page.locator(".auto-save-draft-dismiss").click()
+    expect(page.locator(".auto-save-draft-banner")).to_have_count(0)
+    expect(page.locator("#id_name")).to_have_value("drafted character")
+
+    # the draft was consumed on that reload: a further reload shows nothing to restore
+    page.reload()
+    expect(page.locator(".auto-save-draft-banner")).to_have_count(0)
+    expect(page.locator("#id_name")).to_have_value("")
+
+    # confirming the form for real is the only way to actually create the character
+    page.locator("#id_name").fill("confirmed character")
+    page.locator("#form_submit").click()
+    # a real submit redirects to the character detail page
+    page.wait_for_url(re.compile(r".*/character/[^/]+/$"))
+
+    go_to(page, live_server, "/test/character/list/")
+    expect(page.locator("body")).to_contain_text("confirmed character")
+    expect(page.locator("body")).not_to_contain_text("drafted character")
 
 
-def auto_save_two_pages_open(page: Any) -> None:
-    """With the same character open in two pages, the second one is refused instead of overwriting."""
-    page.go_back()
-    edit_url = page.url
-    second_page = page.context.new_page()
-    second_page.goto(edit_url)
+def auto_save_existing_character_restored(page: Any, live_server: Any) -> None:
+    """An accidental edit on an existing character is never persisted unless explicitly confirmed."""
+    go_to(page, live_server, "/test/character/list/")
+    page.locator("#characters tbody tr", has_text="confirmed character").locator("a").first.click()
 
-    # the first page saves
-    page.locator("#id_name").fill("saved by first page")
+    page.locator("#id_name").fill("accidentally renamed")
     auto_save(page)
 
-    # the second page was loaded before, so its auto-save is refused with a warning
-    second_page.locator("#id_name").fill("saved by second page")
-    auto_save(second_page)
-    expect(second_page.locator(".jq-toast-single")).to_be_visible()
+    # leaving without confirming leaves the real record untouched
+    go_to(page, live_server, "/test/character/list/")
+    expect(page.locator("body")).to_contain_text("confirmed character")
+    expect(page.locator("body")).not_to_contain_text("accidentally renamed")
 
-    # confirming the form of the second page does not overwrite either
-    second_page.locator("#form_submit").click()
-    expect(second_page.locator("body")).to_contain_text("modified in another window")
+    # reopening the form restores the unsaved draft
+    page.locator("#characters tbody tr", has_text="confirmed character").locator("a").first.click()
+    expect(page.locator(".auto-save-draft-banner")).to_be_visible()
+    expect(page.locator("#id_name")).to_have_value("accidentally renamed")
 
+    # discarding the restored value and reloading again shows no draft (it was consumed already)
     page.reload()
-    expect(page.locator("#id_name")).to_have_value("saved by first page")
-    second_page.close()
+    expect(page.locator(".auto-save-draft-banner")).to_have_count(0)
+    expect(page.locator("#id_name")).to_have_value("confirmed character")

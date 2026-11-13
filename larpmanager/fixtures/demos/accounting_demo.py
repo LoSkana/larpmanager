@@ -27,13 +27,13 @@ event accounting overview is fully populated.
 
 from __future__ import annotations
 
-import datetime
-from datetime import UTC
+import datetime as dt
 from typing import Any
 
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemExpense,
@@ -66,8 +66,8 @@ EVENT_SLUG = "midwinter-fair"
 DEMO_TYPE_SLUG = "accounting"
 
 
-def _days_ago(days: int) -> datetime.datetime:
-    return timezone.now() - datetime.timedelta(days=days)
+def _days_ago(days: int) -> dt.datetime:
+    return timezone.now() - dt.timedelta(days=days)
 
 
 def _enable_event_features(event: Event, slugs: list[str]) -> None:
@@ -262,17 +262,27 @@ def _create_discount(event: Event, run: Any) -> Discount:
 
 def _build_installments(event: Event, tickets: dict[str, RegistrationTicket]) -> None:
     applicable = [tickets["standard"], tickets["new_player"], tickets["waiting"]]
-    today = datetime.datetime.now(tz=UTC).date()
+    today = timezone.localdate()
 
     deposit = RegistrationInstallment.objects.create(
-        event=event, number=1, amount=30, date_deadline=today - datetime.timedelta(days=25)
+        event=event, number=1, amount=30, date_deadline=today - dt.timedelta(days=25)
     )
     deposit.tickets.set(applicable)
 
     balance = RegistrationInstallment.objects.create(
-        event=event, number=2, amount=0, date_deadline=today - datetime.timedelta(days=5)
+        event=event, number=2, amount=0, date_deadline=today - dt.timedelta(days=5)
     )
     balance.tickets.set(applicable)
+
+
+def _add_discount(registration: Registration, discount: Discount) -> None:
+    # The discount post_save signal re-saves the registration, recomputing tot_iscr.
+    AccountingItemDiscount.objects.create(
+        registration=registration,
+        association_id=get_run_basic_cache(registration.run_id)["association_id"],
+        disc=discount,
+        value=discount.value,
+    )
 
 
 def _make_registration(
@@ -337,10 +347,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
     )
 
     ben = _make_member("demo-acct-ben", "Ben", "Voss", association)
-    AccountingItemDiscount.objects.create(
-        member=ben, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         standard,
         ben,
@@ -349,12 +356,10 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         reg_days_ago=40,
         paid_days_ago=26,
     )
+    _add_discount(registration, discount)
 
     clara = _make_member("demo-acct-clara", "Clara", "Wynn", association)
-    AccountingItemDiscount.objects.create(
-        member=clara, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         standard,
         clara,
@@ -368,6 +373,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         paid=82,
         reg_days_ago=30,
     )
+    _add_discount(registration, discount)
 
     dario = _make_member("demo-acct-dario", "Dario", "Kell", association)
     _make_registration(
@@ -443,10 +449,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
     )
 
     isla = _make_member("demo-acct-isla", "Isla", "Novak", association)
-    AccountingItemDiscount.objects.create(
-        member=isla, association=association, run=run, disc=discount, value=discount.value
-    )
-    _make_registration(
+    registration = _make_registration(
         run,
         new_player,
         isla,
@@ -461,6 +464,7 @@ def _build_registrations(event: Event, association: Association, form: dict[str,
         paid=25,
         reg_days_ago=15,
     )
+    _add_discount(registration, discount)
 
     jules = _make_member("demo-acct-jules", "Jules", "Farrow", association)
     _make_registration(
@@ -516,7 +520,7 @@ def _build_staff_accounting(event: Event, association: Association) -> None:
         is_approved=True,
     )
 
-    today = datetime.datetime.now(tz=UTC).date()
+    today = timezone.localdate()
     AccountingItemOutflow.objects.create(
         association=association,
         run=run,
@@ -652,8 +656,8 @@ def build_accounting_demo() -> LarpManagerDemoType:
         ),
     )
     run = event.runs.first()
-    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
-    run.end = run.start + datetime.timedelta(days=2)
+    run.start = timezone.localdate() + dt.timedelta(days=60)
+    run.end = run.start + dt.timedelta(days=2)
     run.save()
 
     _enable_event_features(

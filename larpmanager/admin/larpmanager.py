@@ -119,8 +119,8 @@ class LarpManagerTutorialAdmin(CSRFTinyMCEModelAdmin):
 class LarpManagerGuideAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerGuide model."""
 
-    list_display = ("title", "slug", "number", "published", "text_red", "show_thumb")
-    list_filter = ("published",)
+    list_display = ("title", "slug", "group", "number", "published", "video_id", "text_red", "show_thumb")
+    list_filter = ("published", "group")
     search_fields = ("title", "description", "slug")
 
 

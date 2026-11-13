@@ -34,7 +34,7 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
-from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
@@ -223,7 +223,7 @@ def exe_log(request: HttpRequest) -> HttpResponse:
         {
             "selrel": ("member", "run__event"),
             "fields": [
-                ("member", _("Member")),
+                ("member", _("User")),
                 ("operation_type", _("Operation")),
                 ("element_name", _("Element")),
                 ("info", _("Info")),
@@ -232,6 +232,8 @@ def exe_log(request: HttpRequest) -> HttpResponse:
             "callbacks": {
                 "operation_type": lambda el: el.get_operation_type_display(),
             },
+            # DB paths for callback fields, enabling sort and search on these columns
+            "field_db_paths": {"operation_type": ["operation_type"]},
         }
     )
 

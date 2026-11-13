@@ -59,6 +59,30 @@
   border-radius: 10%;
 }
 
+/*** spoiler ***/
+
+.spoiler {
+  background-color: #000;
+  color: #000;
+  border-radius: 0.2em;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.spoiler:hover,
+.spoiler:active {
+  color: #fff;
+}
+
+.spoiler::selection {
+  color: #fff;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 /*** GALLERY ***/
 
 .title {
@@ -139,6 +163,7 @@
 }
 
 .gallery .icon img {
+  display: block;
   width: 100%;
   border-radius: 10%;
   height: 100%;
@@ -174,14 +199,20 @@
 .relationships .el {
   text-align: right;
   align-self: center;
-  width: 8em !important;
-  margin: 0 2em;
+  width: 10em !important;
+  margin: 0 0 0 1em;
 }
 
 .relationships .icon {
-  width: 8em;
-  height: 8em;
+  width: 10em;
+  height: 10em;
   padding: 0em;
+}
+
+.relationships .el .info {
+  width: 10em;
+  text-align: left;
+  white-space: normal;
 }
 
 .list .el {
@@ -201,10 +232,14 @@
 .gallery .text {
   width: 100%;
   text-align: left;
-  padding: 0 1em;
+  padding: 0;
 }
 
 /* Character sheet: text column on the left, sticky profile picture on the right */
+
+.sheet {
+  text-align: center;
+}
 
 .gallery.sheet-cols {
   display: flex;
@@ -217,12 +252,36 @@
   flex: 0 0 15em;
   position: sticky;
   top: 1em;
+  margin: 0 0 0 1em;
+}
+
+@media (max-width: 840px) {
+  .gallery.sheet-cols .el {
+    margin: 0;
+  }
 }
 
 .gallery.sheet-cols .text {
   order: 1;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+.page_character_view h2 {
+  margin-left: 1em;
+}
+
+.sheet h1.c {
+  font-size: 180%;
+  text-align: left;
+  border-left: 4px solid rgba(var(--pri-rgb), 0.6);
+  padding-left: 0.5em;
+}
+
+.sheet h2.title {
+  font-size: 150%;
+  letter-spacing: 0.05em;
+  margin-left: 2em;
 }
 
 /*** plot ***/
@@ -253,8 +312,17 @@ form .plot {
 }
 
 .plot p {
-  margin: 0.5em 0;
+  margin: 0 0 1em 0;
   line-height: 1.3;
+}
+
+.plot p:last-child {
+  margin-bottom: 0;
+}
+
+.rel_teaser {
+  max-height: 12em;
+  margin-bottom: 1em;
 }
 
 .diff-version {
@@ -372,6 +440,11 @@ form .plot {
   width: auto;
 }
 
+.paypal-v2-button {
+  display: inline-block;
+  margin-top: 1em;
+}
+
 /*** MOBILE ***/
 
 @media screen and (max-width: 1200px) {
@@ -397,7 +470,6 @@ form .plot {
     margin: 0 !important;
     padding: 0 !important;
     width: 100%;
-    padding-right: 1em;
   }
 
   .gallery .el {
@@ -448,6 +520,14 @@ form .plot {
 .reg-links span + span::before {
   content: " | ";
   opacity: 0.4;
+}
+
+.checkin-qr {
+  text-align: center;
+}
+
+.checkin-qr img {
+  max-width: 200px;
 }
 
 .reg_profile {
@@ -611,6 +691,12 @@ form .plot {
    Application - Membership
    --------------------------------------------------------------------------- */
 
+.membership_pdf {
+  border: 0;
+  height: 500px;
+  width: 100%;
+}
+
 .membership_request {
   width: 50%;
 }
@@ -639,6 +725,10 @@ form .plot {
 
 .inv_photo {
   height: 5em;
+}
+
+.inv_photo[data-popup-image] {
+  cursor: pointer;
 }
 
 .satispay-button {
@@ -841,9 +931,52 @@ form .plot {
   color: white;
 }
 
-/*** character auto save ***/
+/*** auto-save draft ***/
 
-#form_submit.auto_saved {
-  background-color: rgba(var(--pri-rgb), 0.9);
-  color: white;
+.auto-save-draft-banner {
+  background: rgba(var(--ter-rgb), 0.15);
+  border: 1px solid rgba(var(--ter-rgb), 0.4);
+  border-radius: 0.3em;
+  display: inline-flex;
+  align-items: center;
+  gap: 1em;
+  font-style: italic;
+  margin: 0.5em 2em;
+  padding: 0.7em;
+}
+
+.auto-save-draft-dismiss {
+  flex-shrink: 0;
+  margin-left: 1em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Character search filters
+   --------------------------------------------------------------------------- */
+
+.search-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+
+.search-filters .search-filter {
+  flex: 0 1 auto;
+}
+
+.search-filters .search-filter .user_resize {
+  width: auto;
+}
+
+.search-filter-label {
+  font-weight: bold;
+  margin-right: 0.3em;
 }

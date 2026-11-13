@@ -6,6 +6,8 @@ import os
 import re
 from pathlib import Path
 
+from django.utils.csp import CSP
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,7 +35,6 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'tinymce',
     'django_select2',
-    'admin_auto_filters',
     'paypal.standard.ipn',
     'imagekit',
     'corsheaders',
@@ -64,7 +65,7 @@ MIDDLEWARE = [
     # Security middleware
     'django.middleware.security.SecurityMiddleware',
     # Content-Security-Policy headers
-    'csp.middleware.CSPMiddleware',
+    'django.middleware.csp.ContentSecurityPolicyMiddleware',
     # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
     # Axes: rate limiting on login
@@ -73,6 +74,8 @@ MIDDLEWARE = [
     'larpmanager.middleware.url.CorrectUrlMiddleware',
     # Messages depends on sessions
     'django.contrib.messages.middleware.MessageMiddleware',
+    # Remembers the subdomain a social login started from - needs the session
+    'larpmanager.middleware.sso.SocialLoginTargetMiddleware',
     # Token auth (login using social provider) - before standard auth
     'larpmanager.middleware.token.TokenAuthMiddleware',
     # Authentication (must be before anything that depends on request.user)
@@ -110,6 +113,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.csp',
                 'larpmanager.utils.core.context_processors.cache_association',
             ],
         },
@@ -190,7 +194,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
@@ -211,10 +215,12 @@ TINYMCE_DEFAULT_CONFIG = {
     'width': '100%',
     'height': '15em',
     'plugins': 'lists advlist autosave fullscreen table image link code autoresize wordcount autolink accordion emoticons media searchreplace codesample anchor',
-    'toolbar': 'undo redo | styleselect | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
+    'toolbar': 'undo redo | styles | bold italic fontsizeselect forecolor backcolor hr | alignleft aligncenter alignright alignjustify | outdent indent | numlist bullist | restoredraft searchreplace | fullscreen code wordcount | image media emoticons accordion codesample anchor',
     'menubar': 'file edit insert view format table link image tools help',
     'convert_urls': False,
-    'content_style': 'p {margin: 0.2em} .marker { color: #006ce7 !important; font-weight: bold; }',
+    'content_style': 'p {margin: 0.2em} .marker { color: #006ce7 !important; font-weight: bold; } .spoiler { background-color: #000; color: #000; }',
+    'style_formats': [{'title': 'Spoiler', 'inline': 'span', 'classes': 'spoiler'}],
+    'style_formats_merge': True,
     'contextmenu': False,
     'license_key': 'gpl',
     'promotion': False,
@@ -231,13 +237,15 @@ TINYMCE_DEFAULT_CONFIG = {
 
 
 TINYMCE_COMPRESSOR = False
+# Loaded before init_tinymce.js, which resolves named callbacks from window
+TINYMCE_EXTRA_MEDIA = {'js': ['larpmanager/assets/js/tinymce-upload.js']}
 
 SECURE_REFERRER_POLICY = 'origin'
 
 # Prevent browser MIME-sniffing of served content (esp. user uploads in /media/)
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# Content-Security-Policy (django-csp). Inline scripts/styles are still used
+# Content-Security-Policy (Django built-in). Inline scripts/styles are still used
 # throughout the templates, so 'unsafe-inline' stays for now; the policy still
 # restricts script/style loading to self plus the known CDNs and blocks
 # object/base injection as defense-in-depth against stored XSS.
@@ -251,77 +259,88 @@ _CSP_CDN_HOSTS = [
     'https://static.cloudflareinsights.com/'
 ]
 
-CONTENT_SECURITY_POLICY = {
-    'DIRECTIVES': {
-        'default-src': ["'self'"],
-        'script-src': [
-            "'self'",
-            "'unsafe-inline'",
-            "'unsafe-eval'",
-            *_CSP_CDN_HOSTS,
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://www.googletagmanager.com',
-            'https://www.google.com',
-            'https://www.gstatic.com',
-            'https://static.hotjar.com',
-            'https://script.hotjar.com',
-            'https://*.hotjar.com',
-        ],
-        'style-src': [
-            "'self'",
-            "'unsafe-inline'",
-            *_CSP_CDN_HOSTS,
-            'https://*.hotjar.com',
-            'https://fonts.googleapis.com',
-        ],
-        'font-src': [
-            "'self'",
-            'data:',
-            *_CSP_CDN_HOSTS,
-            'https://*.hotjar.com',
-            'https://fonts.gstatic.com',
-        ],
-        'img-src': ["'self'", 'data:', 'blob:', 'https:'],
-        'media-src': ["'self'", 'data:', 'blob:', 'https:'],
-        'connect-src': [
-            "'self'",
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://api.thecatapi.com',
-            'https://*.hotjar.com',
-            'https://*.hotjar.io',
-            # Hotjar streams recordings over WebSocket; wss: is not covered by the https: sources
-            'wss://*.hotjar.com',
-            # Google Analytics / Tag Manager / Ads beacons
-            'https://www.google-analytics.com',
-            'https://*.google-analytics.com',
-            'https://*.analytics.google.com',
-            'https://www.googletagmanager.com',
-            'https://*.googletagmanager.com',
-            'https://www.google.com',
-            'https://ad.doubleclick.net',
-            'https://*.g.doubleclick.net',
-            # Address lookup in the leaflet map picker
-            'https://nominatim.openstreetmap.org',
-        ],
-        # Hotjar (and other libs) spawn workers from blob: URLs; without this it
-        # falls back to default-src 'self' and the worker is blocked
-        'worker-src': ["'self'", 'blob:'],
-        'frame-src': [
-            "'self'",
-            'https://*.paypal.com',
-            'https://gateway.sumup.com',
-            'https://www.youtube.com',
-            'https://www.google.com',
-            'https://www.googletagmanager.com',
-            'https://larpmanager.com',
-            'https://*.larpmanager.com',
-        ],
-        'object-src': ["'none'"],
-        'base-uri': ["'self'"],
-        'frame-ancestors': ["'self'", 'https://larpmanager.com', 'https://*.larpmanager.com'],
-    },
+SECURE_CSP = {
+    'default-src': [CSP.SELF],
+    'script-src': [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        CSP.UNSAFE_EVAL,
+        *_CSP_CDN_HOSTS,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://www.googletagmanager.com',
+        'https://www.google.com',
+        'https://www.gstatic.com',
+        'https://static.hotjar.com',
+        'https://script.hotjar.com',
+        'https://*.hotjar.com',
+    ],
+    'style-src': [
+        CSP.SELF,
+        CSP.UNSAFE_INLINE,
+        *_CSP_CDN_HOSTS,
+        'https://*.hotjar.com',
+        'https://fonts.googleapis.com',
+    ],
+    'font-src': [
+        CSP.SELF,
+        'data:',
+        *_CSP_CDN_HOSTS,
+        'https://*.hotjar.com',
+        'https://fonts.gstatic.com',
+    ],
+    'img-src': [CSP.SELF, 'data:', 'blob:', 'https:'],
+    'media-src': [CSP.SELF, 'data:', 'blob:', 'https:'],
+    'connect-src': [
+        CSP.SELF,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://api.thecatapi.com',
+        'https://*.hotjar.com',
+        'https://*.hotjar.io',
+        # Hotjar streams recordings over WebSocket; wss: is not covered by the https: sources
+        'wss://*.hotjar.com',
+        # Google Analytics / Tag Manager / Ads beacons
+        'https://www.google-analytics.com',
+        'https://*.google-analytics.com',
+        'https://*.analytics.google.com',
+        'https://www.googletagmanager.com',
+        'https://*.googletagmanager.com',
+        'https://www.google.com',
+        'https://www.googleadservices.com',
+        'https://ad.doubleclick.net',
+        'https://*.g.doubleclick.net',
+        # Address lookup in the leaflet map picker
+        'https://nominatim.openstreetmap.org',
+    ],
+    # Hotjar (and other libs) spawn workers from blob: URLs; without this it
+    # falls back to default-src 'self' and the worker is blocked
+    'worker-src': [CSP.SELF, 'blob:'],
+    'frame-src': [
+        CSP.SELF,
+        'https://*.paypal.com',
+        'https://gateway.sumup.com',
+        'https://www.youtube.com',
+        'https://www.google.com',
+        'https://www.googletagmanager.com',
+        'https://larpmanager.com',
+        'https://*.larpmanager.com',
+    ],
+    'object-src': [CSP.NONE],
+    'base-uri': [CSP.SELF],
+    'frame-ancestors': [CSP.SELF, 'https://larpmanager.com', 'https://*.larpmanager.com'],
+}
+
+# Stricter policy only reported, never enforced: inline scripts need the request nonce
+# and eval is forbidden. Violations are collected by /csp-report/ and mailed daily.
+SECURE_CSP_REPORT_ONLY = {
+    **SECURE_CSP,
+    'script-src': [
+        CSP.NONCE if source == CSP.UNSAFE_INLINE else source
+        for source in SECURE_CSP['script-src']
+        if source != CSP.UNSAFE_EVAL
+    ],
+    'report-uri': ['/csp-report/'],
 }
 
 # Session and CSRF cookie security
@@ -369,7 +388,11 @@ ALLOWED_MIME_TYPES = {
 
 # email
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+MAILERS = {
+    'default': {
+        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
 
 MAIL_BATCH_SIZE = 10
 
@@ -390,6 +413,13 @@ AWS_SNS_TOPIC_ARN = None
 
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
+
+# LARP Radar partner API (optional - publication is disabled if the key is unset)
+LARP_RADAR_API_KEY = None
+LARP_RADAR_ORIGIN = 'https://larpmanager.com'
+
+# Development only: without an API key, use the credentials of a local "ant auth login"
+ANTHROPIC_USE_LOCAL_LOGIN = False
 
 # Optional CLI agent used for translation instead of DeepL.
 LLM_TRANSLATION_AGENT = None
@@ -454,6 +484,9 @@ DATE_INPUT_FORMATS = ['%Y-%m-%d']
 SELECT2_I18N_AVAILABLE_LANGUAGES = ['en']
 
 # paypal
+
+# Sandbox PayPal environment, set to False in production
+PAYPAL_TEST = True
 
 PAYPAL_BUY_BUTTON_IMAGE = 'https://www.paypalobjects.com/digitalassets/c/website/marketing/apac/C2/logos-buttons/44_Yellow_CheckOut_Pill_Button.png'
 

@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 
 import requests
 from django.core.cache import cache
-from django.db.models import Max, Min
+from django.db.models import Max, Min, TextChoices
 from django.utils import timezone, translation
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
@@ -40,12 +40,11 @@ from larpmanager.cache.config import (
     save_config,
     save_single_config,
 )
-from larpmanager.forms.event import PromotionEventType, PromotionLanguage
-from larpmanager.mail.digest import get_exec_language
+from larpmanager.cache.run import get_event_runs
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
-from larpmanager.utils.core.common import clean_html, parse_multi_config
+from larpmanager.utils.core.common import clean_html, get_exec_language, parse_multi_config
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
@@ -119,7 +118,7 @@ def _ensure_ildb_expire(association: Association, api_key: str) -> None:
     stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG)
     expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG)
     if stored_hash != key_hash or not expire_val:
-        expire_date = (timezone.now() + timedelta(days=270)).date().isoformat()
+        expire_date = (timezone.localdate() + timedelta(days=270)).isoformat()
         save_single_config(association, ILDB_EXPIRE_CONFIG, expire_date)
         save_single_config(association, ILDB_KEY_HASH_CONFIG, key_hash)
 
@@ -151,7 +150,7 @@ def sync_event(event: Event) -> None:
     ctx = _get_ildb_context(event)
     if not ctx:
         return
-    for run in event.runs.all():
+    for run in get_event_runs(event.id):
         run_ctx = _get_ildb_context(event, run)
         try:
             _sync_run(run, run_ctx)
@@ -179,7 +178,7 @@ def _sync_run(run: Run, ctx: IldbCtx) -> None:
     ]
     missing = [f for f in required if f not in payload]
     if missing:
-        logger.exception("ILDB: skipping run %s - missing required fields: %s", run.search, missing)
+        logger.error("ILDB: skipping run %s - missing required fields: %s", run.search, missing)
         return
 
     ctx.ildb_event_id = _find_event_id(run, ctx)
@@ -321,6 +320,17 @@ _MEALS_MAP = {
 }
 
 
+MAX_LATITUDE = 90
+MAX_LONGITUDE = 180
+
+
+def get_player_ticket_prices(event_id: int) -> dict:
+    """Return the minimum (costo) and maximum (costo_max) price of the player tickets of an event."""
+    return RegistrationTicket.objects.filter(event_id=event_id, tier__in=PLAYER_TIERS, deleted__isnull=True).aggregate(
+        costo=Min("price"), costo_max=Max("price")
+    )
+
+
 def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     """Build the payload with the event data."""
     days = (run.end - run.start).days + 1 if run.start and run.end else None
@@ -329,9 +339,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
         run=run, cancellation_date__isnull=True, ticket__tier__in=PLAYER_TIERS
     ).count()
 
-    ticket_prices = RegistrationTicket.objects.filter(
-        event=run.event, tier__in=PLAYER_TIERS, deleted__isnull=True
-    ).aggregate(costo=Min("price"), costo_max=Max("price"))
+    ticket_prices = get_player_ticket_prices(run.event_id)
 
     # Load publication metadata from EventConfig
     genre_map = _get_genre_slug_map()
@@ -363,7 +371,7 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
     lon = get_element_config(event, "pub_lon").strip()
     location = f"{lat},{lon}" if lat and lon else None
 
-    locandina = event.cover if event.cover else None
+    locandina = event.cover or None
 
     payload = {
         "nome": run.search,
@@ -610,3 +618,87 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
         )
 
     my_send_mail(subject, body, association.main_mail, association)
+
+
+class PromotionAccommodation(TextChoices):
+    """Accommodation type for publication."""
+
+    INCLUDED = "included", _("Included")
+    NOT_INCLUDED = "nope", _("Not included")
+    NON_RESIDENTIAL = "nonres", _("Non-residential")
+
+
+class PromotionAccommodationType(TextChoices):
+    """Accommodation facility details for publication."""
+
+    CAMPING = "camping", _("Camping")
+    FARM_STAY = "agritourism", _("Agritourism")
+    HISTORIC_RESIDENCE = "historical", _("Historic residence")
+    HOTEL = "hotel", _("Hotel")
+    OTHER = "other", _("Other")
+
+
+class PromotionMeals(TextChoices):
+    """Meals included for publication."""
+
+    NOT_INCLUDED = "nope", _("Not included")
+    RESTAURANT = "restaurant", _("Restaurant")
+    SELF_CATERING = "diy", _("Self-catering")
+    INTERNAL_CATERING = "internal", _("Internal catering")
+    EXTERNAL_CATERING = "external", _("External catering")
+
+
+class PromotionSetting(TextChoices):
+    """Event setting (world/genre) for publication. Values are lowercase slugs."""
+
+    FANTASY = "fantasy", "Fantasy"
+    HORROR = "horror", "Horror"
+    SCI_FI = "science-fiction", "Sci-Fi"
+    HISTORICAL = "historical", "Historical"
+    CONTEMPORARY = "contemporary", "Contemporary"
+    POST_APOCALYPTIC = "post-apocalyptic", "Post-Apocalyptic"
+    CYBERPUNK = "cyberpunk", "Cyberpunk"
+    STEAMPUNK = "steampunk", "Steampunk"
+    SUPERHEROES = "superheroes", "Superheroes"
+    GOTHIC = "gothic", "Gothic"
+    WESTERN = "western", "Western"
+
+
+class PromotionMood(TextChoices):
+    """Event mood/tone for publication. Values are lowercase slugs."""
+
+    ADVENTURE = "adventure", "Adventure"
+    THRILLER = "thriller", "Thriller"
+    DRAMA = "drama", "Drama"
+    COMEDY = "comedy", "Comedy"
+    SURREAL = "surreal", "Surreal"
+
+
+class PromotionEventType(TextChoices):
+    """Event category for publication."""
+
+    ONE_SHOT = "one_shot", "One shot"
+    SERIES = "serie", "Series"
+    CAMPAIGN = "campaign", "Campaign"
+    EDU_LARP = "edu_larp", "Edu larp"
+    CONVENTION = "convention", "Convention"
+    OTHER = "other", "Other"
+    CHAMBER_LARP = "chamber", "Chamber larp"
+    LAOG = "laog", "LAOG"
+
+
+class PromotionLanguage(TextChoices):
+    """Event language for publication."""
+
+    ENGLISH = "en", "English"
+    ITALIAN = "it", "Italian"
+    FRENCH = "fr", "French"
+    SPANISH = "es", "Spanish"
+    GERMAN = "de", "German"
+    SLOVENIAN = "sl", "Slovenian"
+    CHINESE = "zh", "Chinese"
+    HUNGARIAN = "hu", "Hungarian"
+    POLISH = "pl", "Polish"
+    DUTCH = "nl", "Dutch"
+    BULGARIAN = "bg", "Bulgarian"
+    GREEK = "el", "Greek"

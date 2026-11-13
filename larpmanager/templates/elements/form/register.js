@@ -2,7 +2,7 @@
 
 {{ form.unavail|json_script:"unavail" }}
 
-<script>
+<script nonce="{{ csp_nonce }}">
 
 var unavail = JSON.parse(document.getElementById('unavail').textContent);
 
@@ -35,12 +35,14 @@ function parseLocalNum(num) {
 
 var submitted = {{ submitted | safe }};
 
- var price_regex = /(\d+(?:\.\d+)?){{ currency_symbol }}/g;
+ // currency symbol escaped, so symbols like "$" are not read as regex anchors
+ var currency_regex = '{{ currency_symbol|escapejs }}'.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+ var price_regex = new RegExp('(\\d+(?:\\.\\d+)?)' + currency_regex, 'g');
 
  function get_price(s) {
      found = s.match(price_regex);
             if (!found) return 0;
-    v = parseFloat(found[0].replace("{{ currency_symbol }}", ""));
+    v = parseFloat(found[0].replace("{{ currency_symbol|escapejs }}", ""));
     return v;
  }
 
@@ -262,44 +264,11 @@ function slugify(text) {
     .replace(/-+/g, '-');           // rimuove ripetizioni di -
 }
 
+{% include "elements/form/mandatory.js" %}
+
 function check_mandatory() {
-
-    for (var ix = 0; ix < mandatory.length; ix++) {
-        var k = mandatory[ix];
-        var el = $('#' + k);
-
-        if (el.attr('type') === 'hidden') continue;
-
-        if (el.parent().parent().hasClass('not-required')) continue;
-
-        empty = true;
-        if (el.is('input:text')) {
-            empty = (!$.trim(el.val()).length);
-        } else if (el.is('select')) {
-            empty = (!el.val());
-        } else if (el.is('textarea')) {
-            empty = (!$.trim(el.val()));
-        } else if (el.is('div')) {
-            empty = (!el.find('input:checked').length)
-        }
-
-        el.next('p').remove();
-        if (empty) {
-            el.after( "<p><b class='form-error' style='color: var(--ter-clr);'>Please select a value</b></p>" );
-            if (k in sections) $(".sec_" + slugify(sections[k])).show();
-            window.jump_to($('#' + k));
-            return false;
-        }
-    }
-
-    return true;
-
+    return check_mandatory_fields(mandatory, sections);
 }
-
-
-
-
-
 
 function check_tickets_map() {
     // get selected ticket (select or radio group)
@@ -308,34 +277,7 @@ function check_tickets_map() {
     if( !sel ) sel = 0;
 
     $.each(tickets_map, function(index, value) {
-        var f = $.inArray(sel, value) !== -1;
-        var el = $('#id_' + index);
-
-        if (f) {
-            // show the question
-            el.parent().parent().show();
-            el.prop('disabled', false);
-            el.parent().parent().removeClass('not-required');
-            // restore required attribute if it was originally required
-            if (el.data('was-required')) el.prop('required', true);
-        } else {
-            // hide the question
-            el.parent().parent().hide();
-            $('#id_' + index + ' :checkbox').prop( "checked", false );
-            $('#id_' + index + ' option:selected').removeAttr("selected");
-            if (el.is('select')) {
-                var non = el.find("option:first")
-                if (non.text() != diss)
-                    el.prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
-                else non.prop('selected', true);
-                el.prop('disabled', true);
-            }
-            // remove required to prevent browser native validation on hidden fields
-            if (el.prop('required')) el.data('was-required', true);
-            el.prop('required', false);
-
-            el.parent().parent().addClass('not-required');
-        }
+        toggle_question($('#id_' + index), $.inArray(sel, value) !== -1);
     });
 
     $('table.section').each(function(index, value) {

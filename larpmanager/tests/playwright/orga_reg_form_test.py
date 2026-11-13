@@ -207,16 +207,17 @@ def check_reserve(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
-          - cell "Ticket (*)"
+          - rowheader "Ticket (*)"
           - cell "Standard 5€ sadsadsadsa Your registration ticket2":
             - radio "Standard 5€ sadsadsadsa" [checked]
+            - text: Standard 5€ sadsadsadsa Your registration ticket2
         """
     )
 
     # enable config
     go_to(page, live_server, "test/manage")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Reserve ")).click()
+    page.locator("#main_form").get_by_role("link", name=re.compile(r"^Reserve")).click()
     page.locator("#id_filler_always").check()
     submit_confirm(page)
 

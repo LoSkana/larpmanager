@@ -1,15 +1,31 @@
+# LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
+#
+# This file is part of LarpManager and is dual-licensed:
+#
+# 1. Under the terms of the GNU Affero General Public License (AGPL) version 3,
+#    as published by the Free Software Foundation. You may use, modify, and
+#    distribute this file under those terms.
+#
+# 2. Under a commercial license, allowing use in closed-source or proprietary
+#    environments without the obligations of the AGPL.
+#
+# If you have obtained this file under the AGPL, and you make it available over
+# a network, you must also make the complete source code available under the same license.
+#
+# For more information or to purchase a commercial license, contact:
+# commercial@larpmanager.com
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from __future__ import annotations
 
-import csv
-import re
-import unicodedata
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from django.conf import settings as conf_settings
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.utils.users.member import almost_equal, count_differences
+from larpmanager.utils.users.municipalities import _clean_birth_place, _extract_municipality_code
 
 if TYPE_CHECKING:
     from datetime import date
@@ -115,91 +131,6 @@ def _extract_birth_date(birth_date: date | None, *, male: bool) -> str:
     day_with_gender_offset = birth_date.day + (40 if not male else 0)
 
     return f"{year_two_digits}{month_code}{str(day_with_gender_offset).zfill(2)}"
-
-
-def _clean_birth_place(birth_place: str | None) -> str:
-    """Remove parenthetical content from birth place string."""
-    if not birth_place:
-        return ""
-    # Remove everything in parenthesis
-    return re.sub(r"\(.*?\)", "", birth_place)
-
-
-def _slugify(input_text: Any) -> Any:
-    """Normalize text for fiscal code generation by removing accents and special characters.
-
-    Args:
-        input_text: Input text to be normalized
-
-    Returns:
-        str: Normalized text with accents removed, lowercased, and special characters replaced
-
-    """
-    # Remove accents
-    normalized_text = input_text
-    for accented_char in ["à", "è", "é", "ì", "ò", "ù"]:
-        normalized_text = normalized_text.replace(accented_char, "")
-    # Normalize text to remove accents and convert to ASCII
-    normalized_text = unicodedata.normalize("NFKD", normalized_text).encode("ascii", "ignore").decode("ascii")
-    # Convert text to lowercase
-    normalized_text = normalized_text.lower()
-    # Remove quotes
-    normalized_text = normalized_text.replace('"', "").replace("'", "")
-    # Replace any non-alphanumeric character (excluding hyphens) with a space
-    normalized_text = re.sub(r"[^a-z0-9\s-]", "", normalized_text)
-    # Replace any sequence of whitespace or hyphens with a single hyphen
-    normalized_text = re.sub(r"[\s-]+", "-", normalized_text)
-    # Strip leading and trailing hyphens
-    return normalized_text.strip("-")
-
-
-def _extract_municipality_code(birth_place: str) -> str:
-    """Extract municipality code from birth place name using ISTAT data.
-
-    This function searches for ISTAT codes by first checking against nation codes,
-    then municipality codes with exact matching, and finally partial matching.
-
-    Args:
-        birth_place (str): Name of the birth place (city/nation) to look up.
-
-    Returns:
-        str: ISTAT code for the municipality, or empty string if not found.
-
-    Note:
-        The function performs case-insensitive matching using slugified names.
-        It searches first in nations data, then in municipality codes with
-        exact and partial matching strategies.
-
-    """
-    # Convert birth place to slugified format for consistent matching
-    slugified_birth_place = _slugify(birth_place)
-
-    # First search: Look for exact matches in nations data
-    nations_file_path = Path(conf_settings.BASE_DIR) / ".." / "data" / "istat-nations.csv"
-    with nations_file_path.open() as nations_file:
-        nations_reader = csv.reader(nations_file)
-        # Search for exact nation name matches
-        for nation_row in nations_reader:
-            if slugified_birth_place == _slugify(nation_row[0]):
-                return nation_row[1]
-
-    # Second search: Look in municipality codes file
-    municipalities_file_path = Path(conf_settings.BASE_DIR) / ".." / "data" / "istat-codes.csv"
-    with municipalities_file_path.open() as municipalities_file:
-        municipalities_reader = csv.reader(municipalities_file)
-        # First pass: Search for exact matches in split municipality names
-        for municipality_row in municipalities_reader:
-            for municipality_name_variant in municipality_row[0].split("/"):
-                if slugified_birth_place == _slugify(municipality_name_variant):
-                    return municipality_row[1]
-
-        # Second pass: Search for partial matches in municipality names
-        for municipality_row in municipalities_reader:
-            if slugified_birth_place in _slugify(municipality_row[0]):
-                return municipality_row[1]
-
-    # Return empty string if no match found in any dataset
-    return ""
 
 
 def _calculate_check_digit(cf_without_check_digit: str) -> str:
@@ -313,7 +244,39 @@ def _calculate_check_digit(cf_without_check_digit: str) -> str:
     return chr((weighted_sum % 26) + ord("A"))
 
 
-def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 - Complex fiscal code generation algorithm
+def _fiscal_code_mismatch_error(calculated: str, supplied: str) -> str | None:
+    """Return a targeted error message describing how the supplied fiscal code differs, if detectable."""
+    expected_fiscal_code_length = 16
+    checks = [
+        (lambda: almost_equal(calculated, supplied), _("One symbol more or less than expected")),
+        (lambda: len(supplied) != expected_fiscal_code_length, _("Wrong length")),
+        (
+            lambda: count_differences(calculated, supplied) == 1,
+            _("Differs by only one symbol from the expected one"),
+        ),
+        (
+            lambda: calculated[:6] != supplied[:6],
+            _(
+                "Symbols for first and last name do not match (remember to enter the correct first "
+                "and last names in legal_name)",
+            ),
+        ),
+        (
+            lambda: calculated[-6:-1] != supplied[-6:-1],
+            _("Symbols for place of birth do not match (check exact municipality)"),
+        ),
+        (
+            lambda: calculated[6:10] != supplied[6:10],
+            _("Symbols for date of birth do not match (check exact date)"),
+        ),
+    ]
+    for check, message in checks:
+        if check():
+            return message
+    return None
+
+
+def _go(member: Member, *, male: bool = True) -> dict[str, Any]:
     """Generate Italian fiscal code for a member and validate against existing code.
 
     Implements the complete fiscal code algorithm including name/surname processing,
@@ -336,7 +299,6 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
             - correct_cf (bool): True if calculated matches supplied code
 
     """
-    expected_fiscal_code_length = 16
     expected_name_parts_count = 2
 
     # Process legal name by splitting into name and surname components
@@ -347,55 +309,26 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
         else:
             member.name = name_parts[0]
 
-    # Initialize validation context
     validation_context: dict = {"membership_cf": True}
 
-    # Extract fiscal code components using helper functions
     last_name_code = _extract_last_name(member.surname)
     first_name_code = _extract_first_name(member.name)
     birth_date_code = _extract_birth_date(member.birth_date, male=male)
-
-    # Process birth place and get municipality code
-    cleaned_birth_place = _clean_birth_place(member.birth_place)
-    municipality_code = _extract_municipality_code(cleaned_birth_place)
+    municipality_code = _extract_municipality_code(_clean_birth_place(member.birth_place)).upper()
 
     # Construct fiscal code without check digit and add check digit
     fiscal_code_without_check_digit = f"{last_name_code}{first_name_code}{birth_date_code}{municipality_code}"
-    check_digit = _calculate_check_digit(fiscal_code_without_check_digit)
+    calculated = fiscal_code_without_check_digit + _calculate_check_digit(fiscal_code_without_check_digit)
+    supplied = member.fiscal_code.upper() if member.fiscal_code else ""
+    validation_context["calculated_cf"] = calculated
+    validation_context["supplied_cf"] = supplied
 
-    # Store calculated and supplied fiscal codes in context
-    validation_context["calculated_cf"] = fiscal_code_without_check_digit + check_digit
-    if member.fiscal_code:
-        validation_context["supplied_cf"] = member.fiscal_code.upper()
-    else:
-        validation_context["supplied_cf"] = ""
+    error = _fiscal_code_mismatch_error(calculated, supplied)
+    if not error and not municipality_code:
+        error = _("Place of birth not included in the ISTAT list")
+    if error:
+        validation_context["error_cf"] = error
 
-    # Check for municipality code validity
-    if not municipality_code:
-        validation_context["error_cf"] = _("Place of birth not included in the ISTAT list")
-
-    # Perform detailed validation checks with specific error messages
-    if almost_equal(validation_context["calculated_cf"], validation_context["supplied_cf"]):
-        validation_context["error_cf"] = _("One symbol more or less than expected")
-    elif len(validation_context["supplied_cf"]) != expected_fiscal_code_length:
-        validation_context["error_cf"] = _("Wrong length")
-    elif count_differences(validation_context["calculated_cf"], validation_context["supplied_cf"]) == 1:
-        validation_context["error_cf"] = _("Differs by only one symbol from the expected one")
-
-    # Check specific sections of the fiscal code for targeted error messages
-    elif validation_context["calculated_cf"][:6] != validation_context["supplied_cf"][:6]:
-        validation_context["error_cf"] = _(
-            "Symbols for first and last name do not match (remember to enter the correct first "
-            "and last names in legal_name)",
-        )
-    elif validation_context["calculated_cf"][-6:-1] != validation_context["supplied_cf"][-6:-1]:
-        validation_context["error_cf"] = _(
-            "Symbols for place of birth do not match (check exact municipality)",
-        )
-    elif validation_context["calculated_cf"][6:10] != validation_context["supplied_cf"][6:10]:
-        validation_context["error_cf"] = _("Symbols for date of birth do not match (check exact date)")
-
-    # Set final validation result
     validation_context["correct_cf"] = validation_context["calculated_cf"] == validation_context["supplied_cf"]
 
     return validation_context

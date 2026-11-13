@@ -1,4 +1,5 @@
 # LarpManager - https://larpmanager.com
+# Copyright (C) 2025 Scanagatta Mauro
 #
 # This file is part of LarpManager and is dual-licensed:
 #
@@ -16,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+
 from typing import Any, ClassVar
 
 from django.db import models
@@ -24,7 +26,7 @@ from django.db.models import QuerySet
 from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, get_event_elements
 
 
 class InventoryType(UuidMixin, BaseConceptModel):
@@ -70,7 +72,7 @@ class Inventory(UuidMixin, BaseConceptModel):
         - Type assigned, no labels selected, all pool types (safe default).
         - Type assigned, labels selected, only pool types belonging to those labels.
         """
-        all_pools = self.event.get_elements(PoolType).order_by("number")
+        all_pools = get_event_elements(self.event_id, PoolType).order_by("number")
         if self.inventory_type_id is None:
             return all_pools
         labels = self.inventory_type.labels.all()
@@ -90,10 +92,40 @@ class Inventory(UuidMixin, BaseConceptModel):
             balance, _created = PoolBalance.objects.get_or_create(
                 inventory=self,
                 pool_type=pool_type,
-                defaults={"amount": 0, "event": self.event, "number": 1},
+                defaults={"amount": 0, "event_id": self.event_id, "number": 1},
             )
             pool_balances.append({"type": pool_type, "balance": balance})
         return pool_balances
+
+    def get_pool_balances_by_label(self) -> list[dict[str, Any]]:
+        """Return pool balances grouped by PoolLabel, for collapsible display.
+
+        A pool type belonging to several labels is listed under each of them.
+        Pool types with no label are grouped together under a group with
+        label=None (rendered as "Other" by the template).
+        """
+        entries = self.get_pool_balances()
+        labels_by_pool_type = {
+            pool_type.id: list(pool_type.labels.all())
+            for pool_type in PoolType.objects.filter(id__in=[entry["type"].id for entry in entries]).prefetch_related(
+                "labels"
+            )
+        }
+
+        groups: dict[int, dict[str, Any]] = {}
+        unlabeled: list[dict[str, Any]] = []
+        for entry in entries:
+            labels = labels_by_pool_type[entry["type"].id]
+            if not labels:
+                unlabeled.append(entry)
+                continue
+            for label in labels:
+                groups.setdefault(label.id, {"label": label, "entries": []})
+                groups[label.id]["entries"].append(entry)
+        result = sorted(groups.values(), key=lambda g: g["label"].number)
+        if unlabeled:
+            result.append({"label": None, "entries": unlabeled})
+        return result
 
 
 class PoolLabel(UuidMixin, BaseConceptModel):
