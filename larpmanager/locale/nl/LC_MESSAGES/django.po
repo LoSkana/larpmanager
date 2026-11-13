@@ -2129,6 +2129,9 @@ msgstr "Gebruikersgegevens"
 msgid "Visibility"
 msgstr "Zichtbaarheid"
 
+msgid "Visible to"
+msgstr "Zichtbaar voor"
+
 msgid "Volunteers"
 msgstr "Vrijwilligers"
 
@@ -11496,6 +11499,13 @@ msgstr ""
 "Indien ingeschakeld, wordt automatisch opslaan tijdens het bewerken van "
 "schrijfelementen uitgeschakeld."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Als de vaardigheid niet zichtbaar is, kunnen deze personages haar toch zien "
+"en kopen"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11916,6 +11926,13 @@ msgid ""
 msgstr ""
 "Je moet minstens één optie aanmaken voordat je een keuze- of "
 "rangschikkingsvraag opslaat."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Optioneel) Personages die de vaardigheid kunnen zien als die niet zichtbaar"
+" is, gescheiden door komma's"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

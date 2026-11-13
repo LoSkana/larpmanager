@@ -376,6 +376,7 @@ from larpmanager.utils.services.event import (
 from larpmanager.utils.services.experience import (
     _recalcuate_characters_experience_points,
     calculate_character_experience_points,
+    on_ability_visible_characters_m2m_changed,
     on_experience_characters_m2m_changed,
     on_modifier_abilities_m2m_changed,
     on_rule_abilities_m2m_changed,
@@ -1889,6 +1890,7 @@ def on_plot_characters_refs_changed(
 
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=DeliveryExp.characters.through)
 m2m_changed.connect(on_experience_characters_m2m_changed, sender=AbilityExp.characters.through)
+m2m_changed.connect(on_ability_visible_characters_m2m_changed, sender=AbilityExp.visible_characters.through)
 m2m_changed.connect(on_modifier_abilities_m2m_changed, sender=ModifierExp.abilities.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed, sender=RuleExp.abilities.through)
 

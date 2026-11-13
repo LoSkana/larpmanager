@@ -69,14 +69,24 @@ def export_abilities(context: Any) -> Any:
               where keys are column headers and values are ability data rows
 
     """
-    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements", "visible", "creation_only"]
+    column_headers = [
+        "name",
+        "cost",
+        "typ",
+        "descr",
+        "prerequisites",
+        "requirements",
+        "visible",
+        "visible_characters",
+        "creation_only",
+    ]
     multiple_systems = _add_system_header(context, column_headers)
 
     ability_queryset = (
         get_event_elements(context["event"].id, AbilityExp, context=context)
         .order_by("number")
         .select_related("typ", "system")
-        .prefetch_related("requirements", "prerequisites")
+        .prefetch_related("requirements", "prerequisites", "visible_characters")
     )
     ability_rows = []
     for ability in ability_queryset:
@@ -88,6 +98,7 @@ def export_abilities(context: Any) -> Any:
             ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
             ", ".join([req.name for req in ability.requirements.all()]),
             _visible_cell(ability),
+            ", ".join([character.name for character in ability.visible_characters.all()]),
             _creation_only_cell(ability),
         ]
         if multiple_systems:

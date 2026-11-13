@@ -2129,6 +2129,9 @@ msgstr "Dati degli utenti"
 msgid "Visibility"
 msgstr "Visibilità"
 
+msgid "Visible to"
+msgstr "Visibile a"
+
 msgid "Volunteers"
 msgstr "Volontari"
 
@@ -11495,6 +11498,13 @@ msgstr ""
 "Se abilitato, il salvataggio automatico durante la modifica degli elementi "
 "di scrittura verrà disabilitato."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Se l'abilità non è visibile, questi personaggi possono comunque vederla e "
+"acquistarla"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11925,6 +11935,13 @@ msgid ""
 msgstr ""
 "Devi definire almeno un'opzione prima di salvare una domanda a scelta o di "
 "classifica."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Opzionale) Personaggi che possono vedere l'abilità quando non è visibile, "
+"separati da virgola"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

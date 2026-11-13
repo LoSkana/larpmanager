@@ -2129,6 +2129,9 @@ msgstr "Käyttäjien tiedot"
 msgid "Visibility"
 msgstr "Näkyvyys"
 
+msgid "Visible to"
+msgstr "Näkyvissä"
+
 msgid "Volunteers"
 msgstr "Vapaaehtoiset"
 
@@ -11302,6 +11305,12 @@ msgstr ""
 "Jos käytössä, automaattinen tallennus kirjoituselementtejä muokattaessa "
 "poistetaan käytöstä."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Jos kyky ei ole näkyvissä, nämä hahmot voivat silti nähdä ja ostaa sen"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11696,6 +11705,13 @@ msgid ""
 msgstr ""
 "Määritä vähintään yksi vaihtoehto ennen kuin tallennat valinta- tai "
 "järjestyskysymyksen."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Valinnainen) Hahmot, jotka näkevät kyvyn silloinkin, kun se ei ole "
+"näkyvissä, pilkulla erotettuina"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

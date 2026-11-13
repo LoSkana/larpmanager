@@ -2129,6 +2129,9 @@ msgstr "Uppgifter om användare"
 msgid "Visibility"
 msgstr "Synlighet"
 
+msgid "Visible to"
+msgstr "Synlig för"
+
 msgid "Volunteers"
 msgstr "Volontärer"
 
@@ -11270,6 +11273,11 @@ msgstr ""
 "Om det är aktiverat inaktiveras automatisk sparning medan du redigerar "
 "skrivelement."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr "Om förmågan inte är synlig kan dessa karaktärer ändå se och köpa den"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11671,6 +11679,13 @@ msgid ""
 msgstr ""
 "Du måste lägga till minst ett alternativ innan du sparar en val- eller "
 "rangordningsfråga."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Valfritt) Karaktärer som kan se förmågan när den inte är synlig, "
+"kommaseparerade"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "

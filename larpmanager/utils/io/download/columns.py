@@ -53,6 +53,7 @@ def _exp_column_names(context: dict) -> None:
             "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
             "requirements": _("(Optional) Character options as requirements, comma-separated"),
             "visible": _("(Optional) Whether the ability is visible to users: true or false"),
+            "visible_characters": _("(Optional) Characters that can see the ability when not visible, comma-separated"),
             "creation_only": _(
                 "(Optional) Whether the ability can be obtained only before the character is approved: true or false"
             ),

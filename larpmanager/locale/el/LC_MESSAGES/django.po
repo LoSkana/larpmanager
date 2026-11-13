@@ -2129,6 +2129,9 @@ msgstr "Δεδομένα χρηστών"
 msgid "Visibility"
 msgstr "Ορατότητα"
 
+msgid "Visible to"
+msgstr "Ορατή σε"
+
 msgid "Volunteers"
 msgstr "Εθελοντές"
 
@@ -11595,6 +11598,13 @@ msgstr ""
 "Αν ενεργοποιηθεί, η αυτόματη αποθήκευση κατά την επεξεργασία στοιχείων "
 "συγγραφής θα απενεργοποιηθεί."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Αν η ικανότητα δεν είναι ορατή, αυτοί οι χαρακτήρες μπορούν να τη δουν και "
+"να την αγοράσουν"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -12025,6 +12035,13 @@ msgid ""
 msgstr ""
 "Πρέπει να ορίσεις τουλάχιστον μία επιλογή πριν αποθηκεύσεις μια ερώτηση "
 "επιλογής ή κατάταξης."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Προαιρετικό) Χαρακτήρες που μπορούν να δουν την ικανότητα όταν δεν είναι "
+"ορατή, χωρισμένοι με κόμμα"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
