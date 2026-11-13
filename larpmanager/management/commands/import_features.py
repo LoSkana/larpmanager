@@ -32,6 +32,9 @@ from django.db.models import ForeignKey, ManyToManyField
 
 from larpmanager.management.commands.utils import check_virtualenv
 
+# Fixtures whose yaml is the full content of the table
+PRUNED_FIXTURES = {"tutorial"}
+
 
 class Command(BaseCommand):
     """Django management command."""
@@ -57,6 +60,7 @@ class Command(BaseCommand):
             "payment_methods",
             "skin",
             "guide",
+            "tutorial",
         ]:
             fixture_path = Path(conf_settings.BASE_DIR) / ".." / "larpmanager" / "fixtures" / f"{fixture}.yaml"
             with fixture_path.open(encoding="utf-8") as f:
@@ -64,6 +68,7 @@ class Command(BaseCommand):
 
             # Collect deferred M2M assignments to process after all instances exist
             deferred_m2m = []
+            imported_slugs = set()
 
             for obj in data:
                 model_label = obj["model"]
@@ -90,6 +95,12 @@ class Command(BaseCommand):
                     instance, _ = Model.objects.update_or_create(defaults=fields, **lookup)
 
                 deferred_m2m.append((Model, model_label, instance, m2m_fields))
+                if "slug" in fields:
+                    imported_slugs.add(fields["slug"])
+
+            # Fixtures that own the whole table: remove rows no longer in the fixture
+            if fixture in PRUNED_FIXTURES and data:
+                Model.objects.exclude(slug__in=imported_slugs).delete()
 
             # Second pass: set M2M fields after all instances are created
             for model_class, model_label, instance, m2m_fields in deferred_m2m:

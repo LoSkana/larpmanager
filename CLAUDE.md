@@ -160,7 +160,7 @@ Models are organized in `larpmanager/models/` by domain:
 ### Development Workflow
 - **Pre-commit hooks**: Installed via `pre-commit install`
   - Includes: ruff, djlint, translate, gitleaks, prevent-main-commit
-- **Git LFS**: Required for test fixtures (`git lfs install && git lfs pull`)
+- **Git LFS**: Required for test fixtures and tutorial screenshots (`git lfs install && git lfs pull`); deploy fails if they are not downloaded (`scripts/check_lfs.sh`)
 - **Branch naming**: `prefix/feature-name`
   - Prefixes: `hotfix`, `fix`, `feature`, `refactor`, `locale`
 - **Translations**: DeepL API integration requires `DEEPL_API_KEY` in dev settings
@@ -172,9 +172,16 @@ Models are organized in `larpmanager/models/` by domain:
   - Avoid refactoring unless approved beforehand
   - Keep commits focused and atomic
 
+### Tutorials
+The public tutorials (`/tutorials/`) are defined in `larpmanager/fixtures/tutorial.yaml` (loaded by `import_features` on deploy, matched by `slug`; tutorials missing from the file are deleted). Their screenshots are WebP files in `larpmanager/static/tutorials/` (Git LFS), referenced as `/static/tutorials/<file>.webp`.
+- **If a branch changes a feature** (a page, a label, a button, a form field, a URL, a config, a flow or a default), in the same branch: search `tutorial.yaml` and `guide.yaml` for its feature slug, URL path and labels, update the text and links of every tutorial and guide touched, and state in the PR which tutorial screenshots need retaking (with the `write-larpmanager-tutorial` skill) and which guide videos need re-recording (see below).
+- Edit tutorials in the yaml, never only in the admin (overwritten on deploy); `manage.py export_tutorials` writes the DB back to the yaml.
+- A retaken screenshot gets a new file name (static files have no content hash, browsers would show the cached copy); delete the old file.
+- Run `.venv/bin/python .claude/skills/write-larpmanager-tutorial/check_tutorials.py [--slug <slug>]` after editing: it reports broken links, labels that no longer match the UI and missing images.
+
 ### Guide Videos
 The public guides (`/guides/`) are defined in `larpmanager/fixtures/guide.yaml` (loaded by `import_features` on deploy, matched by `slug`) and each embeds a video recorded by a Playwright storyboard in `larpmanager/tests/playwright/guide_videos/<name>_storyboard.py`.
-- **If a branch changes a behaviour shown in a guide** (a page, a label, a button, a form field, a flow or a default listed below), in the same branch: update the storyboard so it still runs, update the steps of the guide `text` in `guide.yaml`, and state in the PR which guide videos need re-recording (with the `create-larpmanager-guide-video` skill). After the new upload, the `video_id` is set in the admin (it is not in the fixture).
+- **If a branch changes a behaviour shown in a guide** (a page, a label, a button, a form field, a flow or a default listed below), in the same branch: update the storyboard so it still runs, update the steps of the guide `text` in `guide.yaml`, and state in the PR which guide videos need re-recording (with the `create-larpmanager-guide-video` skill). After the new upload, set the new YouTube `video_id` in `guide.yaml`.
 - Never rename a guide `slug`: it is the public URL `/guide/<slug>/`, linked by other guides.
 - Keep one `<h4>Step N</h4>` per `step()` of the storyboard.
 

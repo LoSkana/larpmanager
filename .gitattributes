@@ -1,3 +1,4 @@
 *.sql filter=lfs diff=lfs merge=lfs -text
 # Exclude test_db.sql from LFS and diff it as text - dump_test normalizes dynamic values for stability
 larpmanager/tests/test_db.sql -filter text
+larpmanager/static/tutorials/** filter=lfs diff=lfs merge=lfs -text

@@ -21,7 +21,7 @@ from lm_shots import (
     set_config,
 )
 
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp, SystemExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp, ExclusiveExp, SystemExp
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.inventory import Inventory, InventoryTransfer, InventoryType, PoolBalance, PoolLabel, PoolType
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -114,6 +114,13 @@ def test_character_form(browser_type, live_server) -> None:
     refresh()
     page = sh.goto(sh.page(ORGA), f"test/manage/writing/character/form/{question.uuid}/edit/?frame=1")
     sh.shot(3, page.locator(".inline-options-table").first, "Options of a character field")
+
+    set_config(base["event"], "character_form_wri_que_max", "True")
+    for max_available, option in zip([2, 4, 1], WritingOption.objects.filter(question=question).order_by("order")):
+        WritingOption.objects.filter(pk=option.pk).update(max_available=max_available)
+    refresh()
+    page = sh.goto(sh.page(ORGA), f"test/manage/writing/character/form/{question.uuid}/edit/?frame=1")
+    sh.shot(11, page.locator(".inline-options-table").first, "Options with the maximum number of characters")
 
     page = sh.goto(sh.page(ORGA), "test/manage/config/char_form/")
     sh.shot(4, section(page, "Character sheet"), "Character sheet configuration")
@@ -244,7 +251,7 @@ def test_xp(browser_type, live_server) -> None:
     sh.goto(page, f"test/character/{characters[0].uuid}/abilities/")
     sh.shot(
         7,
-        [page.locator("h1", has_text="Experience points"), page.locator("table.abilities")],
+        [page.locator("h1", has_text="Experience points"), page.locator(".inline-p").last],
         "Owned abilities with undo",
     )
 
@@ -255,6 +262,30 @@ def test_xp(browser_type, live_server) -> None:
     sh.shot(10, page.locator("form table").first, "New rule")
     page = sh.goto(sh.page(ORGA), "test/manage/experience/modifiers/new/?frame=1")
     sh.shot(11, page.locator("form table").first, "New modifier")
+
+    set_config(event, "exp_exclusives", "True")
+    magic = AbilityTypeExp.objects.create(event=event, number=2, name="Magic")
+    elements = ExclusiveExp.objects.create(event=event, number=1, name="Elements", max_count=1)
+    for number, (name, creation_only) in enumerate([("Fire affinity", True), ("Frost affinity", False)], 3):
+        ability = AbilityExp.objects.create(
+            event=event,
+            number=number,
+            name=name,
+            typ=magic,
+            system=system,
+            cost=1,
+            visible=True,
+            creation_only=creation_only,
+            descr="<p>Bond with an element.</p>",
+        )
+        elements.abilities.add(ability)
+    refresh()
+    page = sh.goto(sh.page(PLAYER), f"test/character/{characters[0].uuid}/abilities/")
+    sh.shot(
+        12,
+        [page.locator("h1", has_text="Buy ability"), page.locator(".ability-cards-grid")],
+        "Creation only and exclusive group notes on the abilities",
+    )
     sh.close()
 
 

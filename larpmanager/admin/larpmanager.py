@@ -18,9 +18,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-from typing import ClassVar
+from typing import Any, ClassVar
 
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.http import HttpRequest, HttpResponse
 
 from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
@@ -108,6 +109,16 @@ class LarpManagerTutorialAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerTutorial model with CSRF-aware TinyMCE."""
 
     list_display = ("name", "slug", "order", "descr_red")
+
+    def changeform_view(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Warn that tutorials are overwritten from the fixture on deploy."""
+        if request.method == "GET":
+            messages.warning(
+                request,
+                "Tutorials are loaded from larpmanager/fixtures/tutorial.yaml on deploy: "
+                "run 'manage.py export_tutorials' and commit, or the changes will be lost.",
+            )
+        return super().changeform_view(request, *args, **kwargs)
 
     @staticmethod
     def descr_red(instance: LarpManagerTutorial) -> str:

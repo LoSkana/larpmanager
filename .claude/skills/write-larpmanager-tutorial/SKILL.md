@@ -11,20 +11,20 @@ Tutorials are stored in the database as HTML documents. Each tutorial covers one
 
 The existing tutorials (see `screenshots.md` for the full list with their order) cover: create-organization, player-information (title "Personal Data"), organization-roles, organization-appearance, manage-events, event-roles, event-appearance, promotion, registrations, manage-ticket, registration-form, registration-accounting, payments, characters, character-references, pdf-generation, character-form, character-creation, character-inventory, xp, factions, ensemble, guilds, plots, writing-extras, matchmaker, casting, quests, deadlines, users, user-flags, membership, accounting, checkin, debrief, event-tools, organization-tools, italian-associations, manage-mails.
 
-## Data Structure (JSON export)
+## Data Structure (fixture)
 
-```json
-{
-  "id": "<integer>",
-  "name": "Feature Name",
-  "slug": "feature-slug",
-  "descr": "<html content>",
-  "order": "<integer>",
-  "created": "YYYY-MM-DD HH:MM",
-  "updated": "YYYY-MM-DD HH:MM",
-  "deleted": "",
-  "deleted_by_cascade": "0"
-}
+Tutorials live in `larpmanager/fixtures/tutorial.yaml`, loaded by `manage.py import_features` (on every deploy, matched by
+`slug`; tutorials missing from the file are deleted). Edit the yaml, not the admin: admin edits are overwritten on the
+next deploy unless exported with `manage.py export_tutorials` and committed.
+
+```yaml
+- model: larpmanager.larpmanagertutorial
+  fields:
+    slug: feature-slug
+    order: 205
+    name: Feature Name
+    descr: |
+      <p>...html content...</p>
 ```
 
 ## HTML Content Structure
@@ -42,7 +42,7 @@ The existing tutorials (see `screenshots.md` for the full list with their order)
 
 **Screenshots** appear after nearly every step. Use the pattern:
 ```html
-<p><img src="/media/tutorial_screenshots/<order>_<slug>_<nn>.png" alt="<short description>" width="<w>" height="<h>"></p>
+<p><img src="/static/tutorials/<order>_<slug>_<nn>.webp" alt="<short description>" width="<w>" height="<h>"></p>
 ```
 When writing a new tutorial, use placeholder `[SCREENSHOT: description]` instead of real image tags.
 
@@ -212,9 +212,12 @@ pytest .claude/skills/write-larpmanager-tutorial/playwright/<group>_shots_test.p
 - `dump_test.py`: saves HTML and a full-page PNG of any page (`DUMP_URLS`, `DUMP_FEATURES`) to find selectors for new
   capture steps. Claude in Chrome can be used for the same purpose on a dev server.
 - Output: `tutorial_screenshots/` at the repo root (not committed). A failed crop writes `*_FAILED.html` there.
-- Review with a contact sheet (`montage tutorial_screenshots/<order>_*.png ...`), then copy the folder to
-  `MEDIA_ROOT/tutorial_screenshots/` on the server. Tutorial images point to `/media/tutorial_screenshots/<file>`, with
-  `alt`, `width` and `height` taken from the JSON index (CSS pixels, half the PNG size).
+- Review with a contact sheet (`montage tutorial_screenshots/<order>_*.png ...`), then convert each PNG to WebP into
+  `larpmanager/static/tutorials/` (Pillow, `quality=85, method=6`), tracked with Git LFS and served as static files.
+  Tutorial images point to `/static/tutorials/<file>.webp`, with `alt`, `width` and `height` taken from the JSON index
+  (CSS pixels, half the PNG size).
+- Static files have no content hash: when retaking an image, save it under a new name (e.g. `205_xp_01b.webp`), update
+  the `src`, and delete the old file, so browsers do not show a cached copy.
 
 Gotchas:
 
@@ -253,7 +256,7 @@ Gotchas:
 Run the checker, and fix everything it reports for the tutorials you changed:
 
 ```bash
-.venv/bin/python .claude/skills/write-larpmanager-tutorial/check_tutorials.py <export.json> [--slug <slug>]
+.venv/bin/python .claude/skills/write-larpmanager-tutorial/check_tutorials.py [--slug <slug>]
 ```
 
 It checks bold labels against the UI strings, redirect links against the URLconf, tutorial links and section anchors, image alt/size, banned wording, terminology, heading case, separators and the related-tutorials line. Then check by hand:

@@ -18,6 +18,7 @@ python manage.py compilemessages
 python manage.py migrate --noinput
 
 echo "Static files..."
+scripts/check_lfs.sh
 cd larpmanager/static
 npm install
 cd ../../
