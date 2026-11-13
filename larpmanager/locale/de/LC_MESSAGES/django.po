@@ -7426,6 +7426,9 @@ msgstr "Der CSS-Code zur Anpassung des PDF-Drucks."
 msgid "The following registrations were drawn:"
 msgstr "Die folgenden Anmeldungen wurden ausgelost:"
 
+msgid "The question is not shown to the player"
+msgstr "Die Frage wird dem Spieler nicht angezeigt"
+
 msgid "The question status, allowed values are"
 msgstr "Der Fragestatus, zulässige Werte sind"
 
@@ -7513,6 +7516,9 @@ msgstr "Fotos und Videos erfolgreich hochgeladen!"
 
 msgid "Set casting options in the configuration"
 msgstr "Stelle Casting-Optionen in der Konfiguration ein"
+
+msgid "The answer is hidden to all participants"
+msgstr "Die Antwort ist für alle Teilnehmer verborgen"
 
 msgid "The collection was delivered to the user"
 msgstr "Die Sammlung wurde dem Benutzer zugestellt"
@@ -8124,6 +8130,9 @@ msgstr "Richte die Tickets und das Anmeldeformular ein."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Die Option „%(option)s“ erfordert: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Die Frage muss vom Spieler ausgefüllt werden"
+
 msgid "View the list of characters and participants!"
 msgstr "Die Liste der Charaktere und Teilnehmer anzeigen!"
 
@@ -8336,6 +8345,9 @@ msgstr "Text, der am Anfang aller Charakterbögen angezeigt wird"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Die Fähigkeiten, die zu dieser exklusiven Gruppe gehören"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Die Antwort auf diese Frage ist öffentlich sichtbar"
 
 msgid "The name of the question this option belongs to"
 msgstr "Der Name der Frage, zu der diese Option gehört"
@@ -8839,6 +8851,9 @@ msgstr "Als letzten Schritt bitten wir dich, dein Profil zu vervollständigen."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-Präferenzen gespeichert auf '%(type)s' für %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Charaktere können nach dieser Frage gefiltert werden"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Wähle aus, wie Teilnehmende bezahlen, und öffne dann die Anmeldungen."
 
@@ -8972,6 +8987,9 @@ msgstr ""
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Einige Funktionen erfordern \"Charakter\", der nicht aktiv ist"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Die Frage wird angezeigt und kann vom Spieler ausgefüllt werden"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Diese Einladung wurde an eine andere E-Mail-Adresse gesendet."
@@ -9573,6 +9591,10 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Die maximale Anzahl an Gilden für dieses Event ist erreicht"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr ""
+"Die Frage wird schreibgeschützt angezeigt, der Spieler kann sie nicht ändern"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Der Nutzer hat eine Anmeldung für diese Veranstaltung eingereicht."
 
@@ -9798,6 +9820,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Legt fest, wie oft Erinnerungs-E-Mails gesendet werden, in Tagen (Standard: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Die Antwort auf diese Frage ist nur für den Teilnehmer sichtbar"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr ""
