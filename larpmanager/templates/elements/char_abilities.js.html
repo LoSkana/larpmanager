@@ -200,6 +200,8 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+        allMatches.sort(function(a, b) { return a.ab.rank - b.ab.rank; });
+
         if (allMatches.length === 0) {
             $emptyMsg.show();
             return;
