@@ -2136,6 +2136,9 @@ msgstr "Uppgifter om användare"
 msgid "Visibility"
 msgstr "Synlighet"
 
+msgid "Visible to"
+msgstr "Synlig för"
+
 msgid "Volunteers"
 msgstr "Volontärer"
 
@@ -2234,6 +2237,9 @@ msgstr "Anslutningar"
 
 msgid "Cover image"
 msgstr "Omslagsbild"
+
+msgid "Custom IBAN"
+msgstr "Anpassat IBAN"
 
 msgid "Description"
 msgstr "Beskrivning"
@@ -2859,6 +2865,9 @@ msgstr "Hög kontrast"
 
 msgid "Inflows total"
 msgstr "Totala intäkter"
+
+msgid "Inherit roles"
+msgstr "Ärv roller"
 
 msgid "Internal link"
 msgstr "Intern länk"
@@ -4333,6 +4342,9 @@ msgstr "Historisk bostad"
 
 msgid "Information saved!"
 msgstr "Informationen har sparats!"
+
+msgid "Inherit appearance"
+msgstr "Ärv utseende"
 
 msgid "Invite a character"
 msgstr "Bjud in en karaktär"
@@ -7416,6 +7428,9 @@ msgstr "CSS-koden för att anpassa PDF-utskrifter."
 msgid "The following registrations were drawn:"
 msgstr "Följande registreringar lottades ut:"
 
+msgid "The question is not shown to the player"
+msgstr "Frågan visas inte för spelaren"
+
 msgid "The question status, allowed values are"
 msgstr "Frågans status, tillåtna värden är"
 
@@ -7503,6 +7518,9 @@ msgstr "Foton och videor har laddats upp framgångsrikt!"
 
 msgid "Set casting options in the configuration"
 msgstr "Ställ in casting-alternativ i konfigurationen"
+
+msgid "The answer is hidden to all participants"
+msgstr "Svaret är dolt för alla deltagare"
 
 msgid "The collection was delivered to the user"
 msgstr "Insamlingen levererades till användaren"
@@ -8117,6 +8135,9 @@ msgstr "Ställ in biljetterna och anmälningsformuläret."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Alternativet '%(option)s' kräver: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Frågan måste fyllas i av spelaren"
+
 msgid "View the list of characters and participants!"
 msgstr "Visa listan över karaktärer och deltagare!"
 
@@ -8328,6 +8349,9 @@ msgstr "Text som visas i början av alla karaktärsblad"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Förmågorna som tillhör den här exklusiva gruppen"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Svaret på den här frågan är synligt för alla"
 
 msgid "The name of the question this option belongs to"
 msgstr "Namnet på den fråga som detta alternativ hör till"
@@ -8807,6 +8831,9 @@ msgstr "Som ett sista steg ber vi dig att fylla i din profil."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Castingpreferenser sparade på '%(type)s' för %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Karaktärer kan filtreras utifrån den här frågan"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Välj hur deltagare betalar och öppna sedan anmälningarna."
 
@@ -8929,6 +8956,9 @@ msgstr ""
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Karaktär\", som inte är aktiv"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Frågan visas och kan fyllas i av spelaren"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Denna inbjudan skickades till en annan e-postadress."
@@ -9461,6 +9491,9 @@ msgstr "Granska och godkänn utgiftsrapporter som lämnats in av medarbetare"
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Det maximala antalet guilder för detta evenemang har uppnåtts"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr "Frågan visas skrivskyddad, spelaren kan inte ändra den"
+
 msgid "The user has submitted a request to register for this event."
 msgstr ""
 "Användaren har skickat in en ansökan om att anmäla sig till detta evenemang."
@@ -9649,6 +9682,9 @@ msgstr "Valfri notering om denna token (t.ex. mottagarens namn, syfte)"
 
 msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr "Anger hur ofta påminnelsemejl skickas, i dagar (standard: 5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Svaret på den här frågan är bara synligt för deltagaren"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr "Detta är de workshops som du måste genomföra innan du kan spela."
@@ -11276,6 +11312,11 @@ msgstr ""
 "Om det är aktiverat inaktiveras automatisk sparning medan du redigerar "
 "skrivelement."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr "Om förmågan inte är synlig kan dessa karaktärer ändå se och köpa den"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -11684,6 +11725,13 @@ msgid ""
 msgstr ""
 "Du måste lägga till minst ett alternativ innan du sparar en val- eller "
 "rangordningsfråga."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Valfritt) Karaktärer som kan se förmågan när den inte är synlig, "
+"kommaseparerade"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -15708,6 +15756,13 @@ msgstr ""
 "erfarenhetsnivå och slutligen ditt expertområde."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Om aktiverat får ett nytt evenemang som läggs till i kampanjen rollerna, med"
+" sina medlemmar och behörigheter, från kampanjens senaste evenemang."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -15801,6 +15856,14 @@ msgstr ""
 "Om detta är aktiverat kan spelare skapa, välja eller komma åt sina "
 "karaktärer först efter att de har laddat upp ett betalningsbevis (eller "
 "gjort en betalning) för sin anmälan."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Om det anges är detta IBAN-numret som visas för deltagarna vid "
+"banköverföringar för det här eventet, i stället för det som angetts i "
+"organisationens betalningsuppgifter."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
@@ -15943,6 +16006,15 @@ msgstr ""
 "Hej! Du har anmält dig till %(event)s men har ännu inte fyllt i din profil. "
 "Det tar bara 5 minuter – <a href='%(url)s'>klicka här</a> för att fylla i "
 "formuläret."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Om det är aktiverat får ett nytt evenemang som läggs till i kampanjen samma "
+"utseende (tema, färger, bilder, typsnitt och anpassad CSS) som kampanjens "
+"senaste evenemang."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

@@ -1041,6 +1041,30 @@ msgstr ""
 msgid "Sheet"
 msgstr ""
 
+msgid "The question is shown, and can be filled by the player"
+msgstr ""
+
+msgid "The question needs to be filled by the player"
+msgstr ""
+
+msgid "The question is shown read only, the player cannot change it"
+msgstr ""
+
+msgid "The question is not shown to the player"
+msgstr ""
+
+msgid "Characters can be filtered according to this question"
+msgstr ""
+
+msgid "The answer to this question is publicly visible"
+msgstr ""
+
+msgid "The answer to this question is only visible to the participant"
+msgstr ""
+
+msgid "The answer is hidden to all participants"
+msgstr ""
+
 msgid "Manage the selectable options for a character form question"
 msgstr ""
 
@@ -1611,6 +1635,23 @@ msgid ""
 "the character they played in the previous run."
 msgstr ""
 
+msgid "Inherit roles"
+msgstr ""
+
+msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their "
+"members and permissions, of the most recent event of the campaign."
+msgstr ""
+
+msgid "Inherit appearance"
+msgstr ""
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+
 msgid "Experience points"
 msgstr ""
 
@@ -1908,6 +1949,14 @@ msgid ""
 msgstr ""
 
 msgid "You can use the following fields; they will be filled in automatically:"
+msgstr ""
+
+msgid "Custom IBAN"
+msgstr ""
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
 msgstr ""
 
 msgid "Disable provisional registrations"
@@ -4488,6 +4537,13 @@ msgstr ""
 
 msgid ""
 "Enter whether the ability is visible to users, and can be freely purchased"
+msgstr ""
+
+msgid "Visible to"
+msgstr ""
+
+msgid ""
+"If the ability is not visible, these characters can still see and purchase it"
 msgstr ""
 
 msgid "Creation only"
@@ -12844,6 +12900,11 @@ msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr ""
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
 msgstr ""
 
 msgid ""

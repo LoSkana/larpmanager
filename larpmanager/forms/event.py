@@ -941,6 +941,25 @@ class OrgaConfigForm(ConfigForm):
             disable_auto_assign_help_text,
         )
 
+        inherit_roles_label = _("Inherit roles")
+        inherit_roles_help_text = _(
+            "If enabled, a new event added to the campaign receives the roles, with their members and "
+            "permissions, of the most recent event of the campaign.",
+        )
+        self.add_configs("campaign_inherit_roles", ConfigType.BOOL, inherit_roles_label, inherit_roles_help_text)
+
+        inherit_appearance_label = _("Inherit appearance")
+        inherit_appearance_help_text = _(
+            "If enabled, a new event added to the campaign receives the appearance (theme, colors, images, "
+            "fonts and custom CSS) of the most recent event of the campaign.",
+        )
+        self.add_configs(
+            "campaign_inherit_appearance",
+            ConfigType.BOOL,
+            inherit_appearance_label,
+            inherit_appearance_help_text,
+        )
+
     def set_config_experience(self) -> None:
         """Configure the experience points settings, if the experience feature is enabled."""
         if "experience" not in self.params["features"]:
@@ -1269,6 +1288,14 @@ class OrgaConfigForm(ConfigForm):
                 + " {player_name}, {question_name}."
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
+
+            # Custom IBAN used for wire transfers of this event, overriding the organisation one
+            custom_iban_label = _("Custom IBAN")
+            custom_iban_help_text = _(
+                "If present, indicates the IBAN shown to participants for wire transfers of this event, "
+                "instead of the one set in the organisation's payment details.",
+            )
+            self.add_configs("payment_custom_iban", ConfigType.CHAR, custom_iban_label, custom_iban_help_text)
 
             # Option to disable provisional registrations - auto-confirm all registrations
             disable_provisional_label = _("Disable provisional registrations")
@@ -1811,12 +1838,16 @@ class OrgaRunForm(ConfigForm):
         )
 
         writing_elements = _get_writing_elements()
+        feature_mapping = _get_writing_mapping()
 
         basic_types = BaseQuestionType.get_basic_types()
         basic_types.add(WritingQuestionType.COMPUTED)
         self.set_section("visibility", _("Visibility"))
         for writing_element_key, writing_element_label, writing_element_type in writing_elements:
-            if writing_element_key in ["plot", "prologue"]:
+            if (
+                writing_element_key in ["plot", "prologue"]
+                or feature_mapping.get(writing_element_key) not in self.params["features"]
+            ):
                 continue
             questions = [
                 q

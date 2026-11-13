@@ -2136,6 +2136,9 @@ msgstr "Benutzerdaten"
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
+msgid "Visible to"
+msgstr "Sichtbar für"
+
 msgid "Volunteers"
 msgstr "Freiwillige"
 
@@ -2234,6 +2237,9 @@ msgstr "Verbindungen"
 
 msgid "Cover image"
 msgstr "Titelbild"
+
+msgid "Custom IBAN"
+msgstr "Eigene IBAN"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -2859,6 +2865,9 @@ msgstr "Hoher Kontrast"
 
 msgid "Inflows total"
 msgstr "Einnahmen insgesamt"
+
+msgid "Inherit roles"
+msgstr "Rollen übernehmen"
 
 msgid "Internal link"
 msgstr "Interner Link"
@@ -4333,6 +4342,9 @@ msgstr "Historischer Wohnsitz"
 
 msgid "Information saved!"
 msgstr "Informationen gespeichert!"
+
+msgid "Inherit appearance"
+msgstr "Aussehen übernehmen"
 
 msgid "Invite a character"
 msgstr "Eine Figur einladen"
@@ -7418,6 +7430,9 @@ msgstr "Der CSS-Code zur Anpassung des PDF-Drucks."
 msgid "The following registrations were drawn:"
 msgstr "Die folgenden Anmeldungen wurden ausgelost:"
 
+msgid "The question is not shown to the player"
+msgstr "Die Frage wird dem Spieler nicht angezeigt"
+
 msgid "The question status, allowed values are"
 msgstr "Der Fragestatus, zulässige Werte sind"
 
@@ -7505,6 +7520,9 @@ msgstr "Fotos und Videos erfolgreich hochgeladen!"
 
 msgid "Set casting options in the configuration"
 msgstr "Stelle Casting-Optionen in der Konfiguration ein"
+
+msgid "The answer is hidden to all participants"
+msgstr "Die Antwort ist für alle Teilnehmer verborgen"
 
 msgid "The collection was delivered to the user"
 msgstr "Die Sammlung wurde dem Benutzer zugestellt"
@@ -8120,6 +8138,9 @@ msgstr "Richte die Tickets und das Anmeldeformular ein."
 msgid "The option '%(option)s' requires: %(missing)s"
 msgstr "Die Option „%(option)s“ erfordert: %(missing)s"
 
+msgid "The question needs to be filled by the player"
+msgstr "Die Frage muss vom Spieler ausgefüllt werden"
+
 msgid "View the list of characters and participants!"
 msgstr "Die Liste der Charaktere und Teilnehmer anzeigen!"
 
@@ -8332,6 +8353,9 @@ msgstr "Text, der am Anfang aller Charakterbögen angezeigt wird"
 
 msgid "The abilities belonging to this exclusive group"
 msgstr "Die Fähigkeiten, die zu dieser exklusiven Gruppe gehören"
+
+msgid "The answer to this question is publicly visible"
+msgstr "Die Antwort auf diese Frage ist öffentlich sichtbar"
 
 msgid "The name of the question this option belongs to"
 msgstr "Der Name der Frage, zu der diese Option gehört"
@@ -8835,6 +8859,9 @@ msgstr "Als letzten Schritt bitten wir dich, dein Profil zu vervollständigen."
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
 msgstr "Casting-Präferenzen gespeichert auf '%(type)s' für %(event)s"
 
+msgid "Characters can be filtered according to this question"
+msgstr "Charaktere können nach dieser Frage gefiltert werden"
+
 msgid "Choose how participants pay, then open registrations."
 msgstr "Wähle aus, wie Teilnehmende bezahlen, und öffne dann die Anmeldungen."
 
@@ -8968,6 +8995,9 @@ msgstr ""
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Einige Funktionen erfordern \"Charakter\", der nicht aktiv ist"
+
+msgid "The question is shown, and can be filled by the player"
+msgstr "Die Frage wird angezeigt und kann vom Spieler ausgefüllt werden"
 
 msgid "This invitation was sent to a different email address."
 msgstr "Diese Einladung wurde an eine andere E-Mail-Adresse gesendet."
@@ -9569,6 +9599,10 @@ msgstr ""
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Die maximale Anzahl an Gilden für dieses Event ist erreicht"
 
+msgid "The question is shown read only, the player cannot change it"
+msgstr ""
+"Die Frage wird schreibgeschützt angezeigt, der Spieler kann sie nicht ändern"
+
 msgid "The user has submitted a request to register for this event."
 msgstr "Der Nutzer hat eine Anmeldung für diese Veranstaltung eingereicht."
 
@@ -9794,6 +9828,9 @@ msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 "Legt fest, wie oft Erinnerungs-E-Mails gesendet werden, in Tagen (Standard: "
 "5)."
+
+msgid "The answer to this question is only visible to the participant"
+msgstr "Die Antwort auf diese Frage ist nur für den Teilnehmer sichtbar"
 
 msgid "These are the workshops you must complete before you can play."
 msgstr ""
@@ -11624,6 +11661,13 @@ msgstr ""
 "Wenn aktiviert, wird das automatische Speichern beim Bearbeiten von "
 "Textelementen deaktiviert."
 
+msgid ""
+"If the ability is not visible, these characters can still see and purchase "
+"it"
+msgstr ""
+"Wenn die Fähigkeit nicht sichtbar ist, können diese Charaktere sie trotzdem "
+"sehen und kaufen"
+
 #, python-format
 msgid ""
 "If you are not interested in further communications from us, please "
@@ -12061,6 +12105,13 @@ msgid ""
 msgstr ""
 "Du musst mindestens eine Option festlegen, bevor du eine Auswahl- oder "
 "Rangfolge-Frage speicherst."
+
+msgid ""
+"(Optional) Characters that can see the ability when not visible, comma-"
+"separated"
+msgstr ""
+"(Optional) Charaktere, die die Fähigkeit sehen können, wenn sie nicht "
+"sichtbar ist, durch Kommas getrennt"
 
 msgid ""
 "Cannot be changed after creation; delete this flag and create a new one "
@@ -16165,6 +16216,14 @@ msgstr ""
 "Erfahrungsniveau an und gib schließlich dein Fachgebiet genau an."
 
 msgid ""
+"If enabled, a new event added to the campaign receives the roles, with their"
+" members and permissions, of the most recent event of the campaign."
+msgstr ""
+"Wenn aktiviert, erhält ein neues Event, das zur Kampagne hinzugefügt wird, "
+"die Rollen samt ihren Mitgliedern und Berechtigungen vom neuesten Event der "
+"Kampagne."
+
+msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
 "that an organizer must approve before they can complete registration."
 msgstr ""
@@ -16262,6 +16321,14 @@ msgstr ""
 "Wenn aktiviert, können Spieler ihre Charaktere erst erstellen, auswählen "
 "oder darauf zugreifen, nachdem sie einen Zahlungsnachweis für ihre Anmeldung"
 " hochgeladen (oder eine Zahlung getätigt) haben."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Falls angegeben, ist dies die IBAN, die den Teilnehmenden für Überweisungen "
+"zu diesem Event angezeigt wird, anstelle der in den Zahlungsdetails der "
+"Organisation hinterlegten."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
@@ -16409,6 +16476,15 @@ msgstr ""
 "Hallo! Du hast dich für %(event)s angemeldet, dein Profil aber noch nicht "
 "vervollständigt. Das dauert nur 5 Minuten – <a href='%(url)s'>klick "
 "hier</a>, um das Formular auszufüllen."
+
+msgid ""
+"If enabled, a new event added to the campaign receives the appearance "
+"(theme, colors, images, fonts and custom CSS) of the most recent event of "
+"the campaign."
+msgstr ""
+"Wenn aktiviert, übernimmt ein neues Event, das der Kampagne hinzugefügt "
+"wird, das Aussehen (Theme, Farben, Bilder, Schriftarten und "
+"benutzerdefiniertes CSS) des neuesten Events der Kampagne."
 
 msgid ""
 "If we do not hear from you, we will assume you are no longer interested in "

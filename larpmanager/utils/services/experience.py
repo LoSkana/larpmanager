@@ -260,7 +260,7 @@ def _get_available_abilities(
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
         px_avail_by_system: Mapping of system_id to available EXP points for that system.
         character_faction_ids: Set of faction IDs the character belongs to.
-        visible_only: If True, only return visible abilities.
+        visible_only: If True, only return abilities visible to the character.
 
     Returns:
         List of AbilityExp instances the character can purchase.
@@ -268,7 +268,7 @@ def _get_available_abilities(
     """
     qs = get_event_elements(char.event_id, AbilityExp).exclude(pk__in=current_character_abilities)
     if visible_only:
-        qs = qs.filter(visible=True, system__hidden=False)
+        qs = qs.filter(Q(visible=True) | Q(visible_characters=char), system__hidden=False).distinct()
     if is_creation_closed(char):
         qs = qs.exclude(creation_only=True)
     exclusive_blocked = get_exclusive_blocked_abilities(char.event_id, current_character_abilities)
@@ -685,6 +685,7 @@ def _handle_free_abilities(
     # Use a dict with 0 for all systems (we only want cost=0 abilities here)
     zero_avail: dict[int, int] = defaultdict(int)
     newly_added_ids: set[int] = set()
+    visible_to_character_ids = set(character.exp_ability_visible.values_list("pk", flat=True))
     for ability in _get_available_abilities(
         character,
         current_character_abilities,
@@ -694,7 +695,11 @@ def _handle_free_abilities(
         character_faction_ids,
         visible_only=False,
     ):
-        if ability.cost == 0 and ability.id not in free_ability_ids and (ability.visible or ability.system.hidden):
+        if (
+            ability.cost == 0
+            and ability.id not in free_ability_ids
+            and (ability.visible or ability.system.hidden or ability.id in visible_to_character_ids)
+        ):
             # Abilities granted in this same loop may have filled an exclusive group
             if newly_added_ids and ability.id in get_exclusive_blocked_abilities(
                 character.event_id, current_character_abilities | newly_added_ids
@@ -800,8 +805,8 @@ def get_available_ability_exp(
 ) -> list:
     """Get list of abilities available for purchase with character's EXP.
 
-    Retrieves all visible abilities that the character can purchase based on their
-    available EXP points, prerequisites, and requirements. Applies cost modifiers
+    Retrieves all abilities visible to the character that the character can purchase,
+    based on its available EXP points, prerequisites, and requirements. Applies cost modifiers
     and filters out unaffordable abilities.
 
     Args:
@@ -883,6 +888,30 @@ def on_experience_characters_m2m_changed(
         # Get character IDs from pk_set or instance relationship
         char_ids = list(pk_set) if pk_set else list(instance.characters.values_list("id", flat=True))
         calculate_character_experience_points_bgk(char_ids)
+
+
+def on_ability_visible_characters_m2m_changed(
+    sender: Any,  # noqa: ARG001
+    instance: AbilityExp | Character,
+    action: str,
+    pk_set: set | None,
+    **kwargs: Any,  # noqa: ARG001
+) -> None:
+    """Recalculate experience for characters whose visible abilities changed."""
+    if action not in {"post_add", "post_remove", "pre_clear"}:
+        return
+
+    if is_experience_recalc_deferred():
+        return
+
+    if isinstance(instance, Character):
+        calculate_character_experience_points_bgk(instance.id)
+    elif action == "pre_clear":
+        char_ids = list(instance.visible_characters.values_list("id", flat=True))
+        if char_ids:
+            calculate_character_experience_points_bgk(char_ids)
+    elif pk_set:
+        calculate_character_experience_points_bgk(list(pk_set))
 
 
 def on_rule_abilities_m2m_changed(

@@ -147,6 +147,13 @@ window.addEventListener('DOMContentLoaded', function() {
             $('#id_visibility_tr').fadeOut(speed);
         }
 
+        // Hidden status forces hidden visibility
+        const $visibility = $('#id_visibility');
+        if ($('#id_status').val() === "h" && $visibility.length) {
+            $visibility.val("h").trigger('change');
+            $('#id_visibility_tr').fadeOut(speed);
+        }
+
         // Status field visibility
         if (["ticket", "c"].includes(selectedValue)) {
             $('#id_status_tr').fadeOut(speed);

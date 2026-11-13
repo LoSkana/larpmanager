@@ -125,6 +125,14 @@ class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
         help_text=_("Enter whether the ability is visible to users, and can be freely purchased"),
     )
 
+    visible_characters = models.ManyToManyField(
+        Character,
+        related_name="exp_ability_visible",
+        blank=True,
+        verbose_name=_("Visible to"),
+        help_text=_("If the ability is not visible, these characters can still see and purchase it"),
+    )
+
     creation_only = models.BooleanField(
         default=False,
         verbose_name=_("Creation only"),
