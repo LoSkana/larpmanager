@@ -281,6 +281,8 @@ SECURE_CSP = {
         *_CSP_CDN_HOSTS,
         'https://*.hotjar.com',
         'https://fonts.googleapis.com',
+        # Stylesheet injected by the browser built-in page translation
+        'https://www.gstatic.com',
     ],
     'font-src': [
         CSP.SELF,
