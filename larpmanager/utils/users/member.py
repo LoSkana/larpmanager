@@ -23,6 +23,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.db import transaction
 from django.db.models import Max
@@ -34,8 +35,6 @@ from larpmanager.models.miscellanea import EmailRecipient
 from larpmanager.utils.core.common import get_object_uuid
 
 if TYPE_CHECKING:
-    from django.contrib.auth.models import User
-
     from larpmanager.models.association import Association
     from larpmanager.models.event import Run
 
@@ -307,3 +306,12 @@ def queue_executive_notification(
     return NotificationQueue.objects.create(
         association=association, member=member, notification_type=notification_type, object_id=object_id
     )
+
+
+def get_system_member(username: str, first_name: str, last_name: str) -> Member:
+    """Return the member of an inactive service user, creating it on first use, to own automatic log entries."""
+    system_user, _created = User.objects.get_or_create(
+        username=username,
+        defaults={"first_name": first_name, "last_name": last_name, "is_active": False},
+    )
+    return system_user.member

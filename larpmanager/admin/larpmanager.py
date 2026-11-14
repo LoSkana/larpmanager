@@ -33,6 +33,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerDemoHintDismissal,
     LarpManagerDemoType,
     LarpManagerDiscover,
+    LarpManagerEventReport,
     LarpManagerFaq,
     LarpManagerFaqType,
     LarpManagerGuide,
@@ -260,3 +261,12 @@ class LarpManagerChatLogAdmin(DefModelAdmin):
 
     list_display = ("member", "question")
     search_fields: ClassVar[list] = ["id", "question"]
+
+
+@admin.register(LarpManagerEventReport)
+class LarpManagerEventReportAdmin(DefModelAdmin):
+    """Admin interface for the run summaries received from other installations."""
+
+    list_display = ("association_name", "event_name", "association_uuid", "run_uuid", "updated")
+    search_fields: ClassVar[list] = ["association_name", "event_name", "association_uuid", "run_uuid"]
+    readonly_fields = ("association_uuid", "run_uuid", "association_name", "event_name", "data")

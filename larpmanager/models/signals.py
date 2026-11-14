@@ -338,6 +338,7 @@ from larpmanager.utils.io.pdf import (
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
+from larpmanager.utils.larpmanager.event_report import send_event_reports, send_run_report
 from larpmanager.utils.larpmanager.tasks import events_detached, notify_admins
 from larpmanager.utils.larpmanager.tutorial import auto_assign_faq_sequential_number, generate_tutorial_url_slug
 from larpmanager.utils.publication.base import (
@@ -962,6 +963,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Schedule event publication (skip if being soft-deleted)
     if instance.deleted is None:
         publish_event(instance.id)
+        send_event_reports(instance.id)
 
 
 @receiver(events_detached, sender=Event)
@@ -1740,6 +1742,8 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     # Schedule publication for this run's event
     publish_event(instance.event_id)
+
+    send_run_report(instance.id)
 
     # Store the final balance once the run is concluded
     if not kwargs.get("raw"):

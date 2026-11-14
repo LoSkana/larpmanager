@@ -31,11 +31,11 @@ from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Log
 from larpmanager.utils.core.common import parse_multi_config
 from larpmanager.utils.larpmanager.tasks import notify_admins
 from larpmanager.utils.publication.ildb import PromotionMood, PromotionSetting
+from larpmanager.utils.users.member import get_system_member
 from larpmanager.views.manage import _get_registration_status_code
 
 
@@ -68,10 +68,7 @@ def log_api_access(api_key: PublisherApiKey, request: HttpRequest, response_stat
     try:
         # Get or create a system member for API logging
         # This ensures all API logs are associated with a consistent system user
-        system_member, _created = Member.objects.get_or_create(
-            username="api_system",
-            defaults={"email": "api@larpmanager.com", "first_name": "API", "last_name": "System"},
-        )
+        system_member = get_system_member("api_system", "API", "System")
 
         # Build comprehensive log data dictionary
         log_data = {

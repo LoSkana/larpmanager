@@ -76,6 +76,7 @@ from larpmanager.models.writing import Character, CharacterStatus, get_event_cla
 from larpmanager.utils.core.common import ensure_timezone_aware, get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.csp import send_csp_digest
+from larpmanager.utils.larpmanager.event_report import send_all_run_reports
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
@@ -176,6 +177,8 @@ class Command(BaseCommand):
 
         # Remind admins about paid-plan runs still unpaid
         self.check_lm_payment_reminders()
+
+        send_all_run_reports()
 
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing

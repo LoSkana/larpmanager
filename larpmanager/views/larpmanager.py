@@ -24,6 +24,7 @@ import random
 import re
 import unicodedata
 from datetime import date, timedelta
+from http import HTTPStatus
 from typing import TYPE_CHECKING, Any
 
 from bs4 import BeautifulSoup
@@ -113,6 +114,12 @@ from larpmanager.utils.larpmanager.chat import (
     is_chat_quota_reached,
 )
 from larpmanager.utils.larpmanager.csp import record_csp_report
+from larpmanager.utils.larpmanager.event_report import (
+    EVENT_REPORT_TOKEN_HEADER,
+    MAX_EVENT_REPORT_SIZE,
+    is_event_report_receiver,
+    save_run_report,
+)
 from larpmanager.utils.larpmanager.tasks import (
     delete_association_task,
     delete_run_task,
@@ -120,6 +127,7 @@ from larpmanager.utils.larpmanager.tasks import (
     release_suppressed_emails,
     send_mail_exec,
 )
+from larpmanager.utils.publication.api import get_client_ip
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
 from larpmanager.utils.users.accessibility import accessibility_from_post, save_accessibility
@@ -1396,6 +1404,29 @@ def csp_report(request: HttpRequest) -> HttpResponse:
 
     record_csp_report(payload)
     return HttpResponse(status=204)
+
+
+@csrf_exempt
+@require_POST
+@ratelimit(key="ip", rate="120/m", block=True)
+def event_report(request: HttpRequest) -> HttpResponse:
+    """Receive the summary of a run sent by another installation, and store it."""
+    if not is_event_report_receiver():
+        return HttpResponse(status=404)
+
+    if len(request.body) > MAX_EVENT_REPORT_SIZE:
+        return JsonResponse({"res": "too large"}, status=413)
+
+    try:
+        payload = json.loads(request.body.decode())
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({"res": "invalid"}, status=400)
+
+    token = request.headers.get(EVENT_REPORT_TOKEN_HEADER, "")
+    status = save_run_report(payload, token, get_client_ip(request))
+    if status != HTTPStatus.OK:
+        return JsonResponse({"res": status.phrase.lower()}, status=status)
+    return JsonResponse({"res": "ok"})
 
 
 @login_required

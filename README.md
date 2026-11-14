@@ -31,6 +31,8 @@ LarpManager is distributed under a **dual license** model:
 - **Commercial License**: Allows private modifications and removes the attribution requirement.
   For details or licensing inquiries, contact [commercial@larpmanager.com](mailto:commercial@larpmanager.com).
 
+- **Event reporting**: Self-hosted installations, under either license, agree to send to [larpmanager.com](https://larpmanager.com) summary and aggregated data on their events.
+
 Refer to the `LICENSE` file for full terms.
 
 ---

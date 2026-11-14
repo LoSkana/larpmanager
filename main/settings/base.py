@@ -418,6 +418,9 @@ ANTHROPIC_API_KEY = None
 LARP_RADAR_API_KEY = None
 LARP_RADAR_ORIGIN = 'https://larpmanager.com'
 
+# Endpoint for event data
+EVENT_REPORT = 'https://larpmanager.com/event-report/'
+
 # Development only: without an API key, use the credentials of a local "ant auth login"
 ANTHROPIC_USE_LOCAL_LOGIN = False
 
