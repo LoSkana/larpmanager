@@ -58,3 +58,6 @@ TINYMCE_DISABLED = True
 ADMINS = [
     ('test', 'test@test.it')
 ]
+
+# Never send event reports from tests and development
+EVENT_REPORT = None

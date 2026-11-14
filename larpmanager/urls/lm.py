@@ -30,6 +30,11 @@ urlpatterns = [
         name="ses_notification",
     ),
     path(
+        "event-report/",
+        views_lm.event_report,
+        name="event_report",
+    ),
+    path(
         "csp-report/",
         views_lm.csp_report,
         name="csp_report",

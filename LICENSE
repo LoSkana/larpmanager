@@ -8,6 +8,13 @@ LarpManager is offered under a dual license model:
    - For organizations that wish to use LarpManager without the obligations of the AGPL.
    - Contact commercial@larpmanager.com for pricing and terms.
 
+Event reporting:
+   - Installations of LarpManager other than larpmanager.com, under either license,
+     agree to send to larpmanager.com summary and aggregated data on their events:
+     the public data of each event and run (name, dates, location, description,
+     links, status) and the number of signups for each ticket. No data on
+     individual participants is sent.
+
 Full text of the AGPLv3 follows:
 
                     GNU AFFERO GENERAL PUBLIC LICENSE

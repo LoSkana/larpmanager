@@ -58,6 +58,40 @@ class LarpManagerChatLog(BaseModel):
     answer = models.TextField(blank=True, default="")
 
 
+class LarpManagerEventReport(BaseModel):
+    """Latest summary of a run received from another installation, as JSON text."""
+
+    association_uuid = models.CharField(max_length=32, db_index=True)
+
+    run_uuid = models.CharField(max_length=32)
+
+    # Hash of the token of the sending installation, bound on the first report of the association
+    token_hash = models.CharField(max_length=64, blank=True, default="")
+
+    association_name = models.CharField(max_length=150, blank=True, default="")
+
+    event_name = models.CharField(max_length=150, blank=True, default="")
+
+    data = models.TextField()
+
+    class Meta:
+        constraints: ClassVar[list] = [
+            models.UniqueConstraint(
+                fields=["association_uuid", "run_uuid", "deleted"],
+                name="unique_event_report_with_optional",
+            ),
+            models.UniqueConstraint(
+                fields=["association_uuid", "run_uuid"],
+                condition=models.Q(deleted=None),
+                name="unique_event_report_without_optional",
+            ),
+        ]
+
+    def __str__(self) -> str:
+        """Return the association and event names."""
+        return f"{self.association_name} - {self.event_name}"
+
+
 class LarpManagerReview(BaseModel):
     """Model for storing user reviews and testimonials.
 
