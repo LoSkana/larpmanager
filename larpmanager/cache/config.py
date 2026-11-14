@@ -84,6 +84,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "einvoice_provincia": None,
     "einvoice_regimefiscale": None,
     "ensemble_default_mode": "book",
+    "exp_name": "",
     "exp_start": 0,
     "exp_undo": 0,
     "free_abilities": "[]",

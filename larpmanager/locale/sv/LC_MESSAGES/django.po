@@ -12807,6 +12807,13 @@ msgstr ""
 "karaktär tilldelas."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Namn som visas för erfarenhetspoäng i karaktärsbladet (standard är "
+"'Erfarenhetspoäng')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

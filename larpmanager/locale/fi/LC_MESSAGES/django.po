@@ -12823,6 +12823,11 @@ msgstr ""
 "hahmo."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr "Kokemuspisteiden nimi hahmolomakkeella (oletus on 'Kokemuspisteet')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

@@ -12749,6 +12749,13 @@ msgstr ""
 "karakter tildeles."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Navn, der vises for erfaringspoint på karakterarket (standard er "
+"'Erfaringspoint')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

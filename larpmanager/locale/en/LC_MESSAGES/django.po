@@ -1655,6 +1655,14 @@ msgstr ""
 msgid "Experience points"
 msgstr ""
 
+msgid "Name"
+msgstr ""
+
+msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+
 msgid "Player selection"
 msgstr ""
 
@@ -1802,9 +1810,6 @@ msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr ""
 
 msgid "Character customisation"
-msgstr ""
-
-msgid "Name"
 msgstr ""
 
 msgid ""

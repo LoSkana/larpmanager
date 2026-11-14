@@ -13063,6 +13063,13 @@ msgstr ""
 "personage wordt toegewezen."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Naam die in het personagesheet wordt getoond voor ervaringspunten (standaard"
+" is 'Ervaringspunten')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""
