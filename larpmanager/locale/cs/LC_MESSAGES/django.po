@@ -12625,6 +12625,13 @@ msgstr ""
 "Pokud je povoleno, neodešle účastníkovi oznámení při přiřazení postavy."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Název zobrazený pro zkušenostní body v listu postavy (výchozí je "
+"'Zkušenostní body')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

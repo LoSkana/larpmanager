@@ -967,6 +967,13 @@ class OrgaConfigForm(ConfigForm):
 
         self.set_section("experience", _("Experience points"))
 
+        # Display name configuration - label shown for experience points in the character sheet
+        name_label = _("Name")
+        name_help_text = _(
+            "Name shown for experience points in the character sheet (default is 'Experience points').",
+        )
+        self.add_configs("exp_name", ConfigType.CHAR, name_label, name_help_text)
+
         # Player selection configuration - allows participants to choose abilities
         player_selection_label = _("Player selection")
         player_selection_help_text = _(

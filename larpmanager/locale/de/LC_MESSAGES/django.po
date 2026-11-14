@@ -13202,6 +13202,13 @@ msgstr ""
 "wenn ein Charakter zugewiesen wird."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Name, der im Charakterbogen für Erfahrungspunkte angezeigt wird (Standard "
+"ist 'Erfahrungspunkte')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

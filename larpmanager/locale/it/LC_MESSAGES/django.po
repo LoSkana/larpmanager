@@ -13071,6 +13071,13 @@ msgstr ""
 "un personaggio."
 
 msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Nome mostrato per i punti esperienza nella scheda del personaggio "
+"(predefinito: 'Punti esperienza')."
+
+msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""

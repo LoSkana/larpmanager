@@ -322,6 +322,7 @@ def get_character_sheet_exp(context: dict) -> None:
 
     event_id = context["character"].event_id
     context["exp_auto_buy"] = get_event_config(event_id, "exp_auto_buy")
+    context["exp_name"] = get_event_config(event_id, "exp_name")
 
     # Initialize abilities dictionary for grouping by type
     context["sheet_abilities"] = {}
