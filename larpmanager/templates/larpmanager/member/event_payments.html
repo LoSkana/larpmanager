@@ -44,12 +44,12 @@
                 </div>
             </div>
         </div>
-        {% if membership_fee == 'bundled' %}
+        {% if membership_fee == "bundled" %}
             <p class="payment-membership-info">
                 <i class="fa-solid fa-circle-info"></i>
                 {% blocktrans with year=run.start.year|default:"" amount=membership_amount_display|default:"" %}Your {{ year }} membership fee is outstanding and will be added to your next payment. {{ amount }}{% endblocktrans %}
             </p>
-        {% elif membership_fee == 'done' %}
+        {% elif membership_fee == "done" %}
             <p class="payment-membership-info">
                 <i class="fa-solid fa-circle-check"></i>
                 {% blocktrans with year=run.start.year|default:"" amount=membership_amount_paid_display|default:"" %}Your {{ year }} membership fee has been paid. {{ amount }}{% endblocktrans %}

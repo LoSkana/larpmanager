@@ -54,7 +54,11 @@
     {% endif %}
     {% if features.ensemble %}
         <td>
-            {% if el.color %}<div class="faction-color-swatch" style="background-color: {{ el.color }}"></div>{% endif %}
+            {% if el.color %}
+                {# djlint:off H021 #}
+                <div class="faction-color-swatch" style="background-color: {{ el.color }}"></div>
+                {# djlint:on #}
+            {% endif %}
         </td>
     {% endif %}
     {% include "elements/writing/questions_body.html" %}

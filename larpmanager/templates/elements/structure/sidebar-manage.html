@@ -14,8 +14,11 @@
                         </span>
                         <span class="sidebar-link-wrap"
                               descr="{% trans "Set your interface preferences" %}">
-                            <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
-                            <a href="#" class="explain-icon" tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
+                            <a class="sidebar-link"
+                               href="{% url 'orga_preferences' run.get_slug %}">{% trans "Preferences" %}</a>
+                            <a href="#"
+                               class="explain-icon"
+                               tog="orga_preferences"><i class="fas fa-question-circle"></i></a>
                         </span>
                     </p>
                     {% for mod, list in event_pms.items %}
@@ -33,7 +36,9 @@
                                                   id="{{ ap.slug }}">
                                                 <a class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
                                                    href="{% url ap.slug run.get_slug %}">{% trans ap.name %}</a>
-                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                                <a href="#"
+                                                   class="explain-icon"
+                                                   tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                             </span>
                                         {% endif %}
                                     {% endfor %}
@@ -51,7 +56,9 @@
                         <span class="sidebar-link-wrap"
                               descr="{% trans "Set your interface preferences" %}">
                             <a class="sidebar-link" href="{% url 'exe_preferences' %}">{% trans "Preferences" %}</a>
-                            <a href="#" class="explain-icon" tog="exe_preferences"><i class="fas fa-question-circle"></i></a>
+                            <a href="#"
+                               class="explain-icon"
+                               tog="exe_preferences"><i class="fas fa-question-circle"></i></a>
                         </span>
                     </p>
                     {% for mod, list in association_pms.items %}
@@ -68,7 +75,9 @@
                                                   descr="{% trans ap.descr %}"
                                                   id="{{ ap.slug }}">
                                                 <a class="sidebar-link" href="{% url ap.slug %}">{% trans ap.name %}</a>
-                                                <a href="#" class="explain-icon" tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
+                                                <a href="#"
+                                                   class="explain-icon"
+                                                   tog="{{ ap.slug }}"><i class="fas fa-question-circle"></i></a>
                                             </span>
                                         {% endif %}
                                     {% endfor %}

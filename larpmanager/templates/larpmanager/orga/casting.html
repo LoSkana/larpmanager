@@ -28,7 +28,7 @@
         <form action="{{ request.path }}"
               method="post"
               enctype="multipart/form-data">
-            <div class="casting ">
+            <div class="casting">
                 <p>{{ result }}</p>
                 <p id="not_chosen"></p>
                 <p id="didnt_choose"></p>
@@ -73,7 +73,7 @@
             {% else %}
                 <hr />
                 <div class="centerized">
-                    <button id="exec">{% trans "Start algorithm" %}</button>
+                    <button type="button" id="exec">{% trans "Start algorithm" %}</button>
                 </div>
                 <hr />
                 <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>

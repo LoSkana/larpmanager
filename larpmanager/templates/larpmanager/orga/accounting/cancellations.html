@@ -32,21 +32,13 @@
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
                     <td></td>
-                    <td>
-                        {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
-                    </td>
-                    <td>
-                        {% if el.payments.a %}{{ el.payments.a | floatformat:"0" }}{% endif %}
-                    </td>
+                    <td>{% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}</td>
+                    <td>{% if el.payments.a %}{{ el.payments.a | floatformat:"0" }}{% endif %}</td>
                     {% if features.tokens %}
-                        <td>
-                            {% if el.payments.c %}{{ el.payments.c | floatformat:"0" }}{% endif %}
-                        </td>
+                        <td>{% if el.payments.c %}{{ el.payments.c | floatformat:"0" }}{% endif %}</td>
                     {% endif %}
                     {% if features.credits %}
-                        <td>
-                            {% if el.payments.b %}{{ el.payments.b | floatformat:"0" }}{% endif %}
-                        </td>
+                        <td>{% if el.payments.b %}{{ el.payments.b | floatformat:"0" }}{% endif %}</td>
                     {% endif %}
                     <td>
                         <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
@@ -64,14 +56,10 @@
                         </td>
                     {% endif %}
                     {% if features.tokens %}
-                        <td>
-                            {% if el.refunds.t %}{{ el.refunds.t | floatformat:"0" }}{% endif %}
-                        </td>
+                        <td>{% if el.refunds.t %}{{ el.refunds.t | floatformat:"0" }}{% endif %}</td>
                     {% endif %}
                     {% if features.credits %}
-                        <td>
-                            {% if el.refunds.c %}{{ el.refunds.c | floatformat:"0" }}{% endif %}
-                        </td>
+                        <td>{% if el.refunds.c %}{{ el.refunds.c | floatformat:"0" }}{% endif %}</td>
                     {% endif %}
                 </tr>
             {% endfor %}

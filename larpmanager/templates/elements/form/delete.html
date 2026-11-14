@@ -2,14 +2,13 @@
 {% if not form.prevent_canc %}
     {% if form.instance.pk %}
         <div class="no_new_v18">
-            <br />
+            <div class="spacer"></div>
             <h4>
                 <a href="#" class="my_toggle" tog='delete'>{% trans "Delete" %}</a>
             </h4>
             <div class="hide delete">
                 {% trans "If you are absolutely certain that you want to delete this item, click on this button." %}
-                <br />
-                <br />
+                <div class="spacer-double"></div>
                 <input type="hidden" name="delete" id="id_delete" />
                 <input id="delete_confirm"
                        type="submit"

@@ -5,30 +5,32 @@
     {% if field.auto_id in form.sections %}
         {% get_field form.sections field.auto_id as section %}
         {% if section != old_section %}
-        </table>
-    </div>
-    {% if not form.hide_section_headers %}
-        <h1>
-            <a href="#"
-               class="my_toggle section-link"
-               tog='sec_{{ section | slugify }}'>
-                {{ section | template_trans }}
-                <i class="fa-solid fa-chevron-down"></i>
-            </a>
-        </h1>
-    {% endif %}
-    <div class="form_container auto_resize {% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
-        {% if section in form.section_descriptions %}
-            {% get_field form.section_descriptions section as description %}
-            {{ description | safe }}
+            </table>
+            </div>
+            {% if not form.hide_section_headers %}
+                <h1>
+                    <a href="#"
+                       class="my_toggle section-link"
+                       tog='sec_{{ section | slugify }}'>
+                        {{ section | template_trans }}
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </a>
+                </h1>
+            {% endif %}
+            <div class="form_container auto_resize {% if not form.show_sections %}hide{% endif %} sec_{{ section | slugify }}">
+                {% if section in form.section_descriptions %}
+                    {% get_field form.section_descriptions section as description %}
+                    {{ description | safe }}
+                {% endif %}
+                <table>
+                    {% define section as old_section %}
         {% endif %}
-        <table>
-            {% define section as old_section %}
-        {% endif %}
     {% endif %}
+    {# djlint:off H021 #}
     <tr id="{{ field.auto_id }}_tr"
         {% if field.field.custom_class %}class="{{ field.field.custom_class }}"{% endif %}
         {% if field.field.custom_style %}style="{{ field.field.custom_style }}"{% endif %}>
+        {# djlint:on #}
         <th>
             {% if form.plot_reorder_uuids and field.auto_id in form.plot_reorder_uuids %}
                 {% get_field form.plot_reorder_uuids field.auto_id as plot_uuid %}
@@ -62,7 +64,7 @@
                 {% endautoescape %}
             {% endif %}
             {% if form.show_link and field.auto_id in form.show_link %}
-                <div class="hide  f_{{ field.auto_id }}">{{ field }}</div>
+                <div class="hide f_{{ field.auto_id }}">{{ field }}</div>
                 <p>
                     <a href="#" class="my_toggle" tog="f_{{ field.auto_id }}">
                         <span class="sl-show"><i class="fa-regular fa-eye"></i> {% trans "Show" %}</span>

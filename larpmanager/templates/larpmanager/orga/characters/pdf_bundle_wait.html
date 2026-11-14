@@ -8,7 +8,9 @@
 {% endblock info %}
 {% block meta %}
     {{ block.super }}
+    {# djlint:off H052 #}
     {% if not bundle_ready %}<meta http-equiv="refresh" content="10">{% endif %}
+    {# djlint:on #}
 {% endblock meta %}
 {% block content %}
     <div id="bundle_wait">

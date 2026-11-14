@@ -28,7 +28,9 @@
                                    rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i></a>
                             {% endif %}
                         </td>
-                        <td>{% include "elements/reg_status.html" with run_status=registration.run.status registration=registration %}</td>
+                        <td>
+                            {% include "elements/reg_status.html" with run_status=registration.run.status registration=registration %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

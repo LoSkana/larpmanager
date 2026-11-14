@@ -32,8 +32,10 @@
                                     <div class="el">
                                         <div class="icon">
                                             <a href="{% url 'character' run.get_slug ch.uuid %}">
+                                                {# djlint:off H021 #}
                                                 <div class="img_cover"
                                                      style="background-image:url('{% get_char_profile ch %}')"></div>
+                                                {# djlint:on #}
                                                 <div class="icon-name">
                                                     <p>
                                                         {{ ch.name }}
@@ -75,8 +77,10 @@
                                 <div class="el">
                                     <div class="icon">
                                         <a href="{% url 'character' run.get_slug ch.uuid %}">
+                                            {# djlint:off H021 #}
                                             <div class="img_cover"
                                                  style="background-image:url('{% get_char_profile ch %}')"></div>
+                                            {# djlint:on #}
                                             <div class="icon-name">
                                                 <p>
                                                     {{ ch.name }}

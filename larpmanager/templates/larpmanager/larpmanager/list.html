@@ -35,7 +35,9 @@
                 <td>{{ el.total_registrations }}</td>
                 <td>{{ el.get_plan_display }}</td>
                 <td>
-                    {% if el.gdpr_contract %}<a href="{{ el.gdpr_contract.url }}"><i class="fa-solid fa-check"></i></a>{% endif %}
+                    {% if el.gdpr_contract %}
+                        <a href="{{ el.gdpr_contract.url }}"><i class="fa-solid fa-check"></i></a>
+                    {% endif %}
                 </td>
                 <td>
                     {% if el.promoter %}<i class="fa-solid fa-check"></i>{% endif %}
@@ -46,8 +48,8 @@
                 <td>
                     {% if el.images_shared %}<i class="fa-solid fa-check"></i>{% endif %}
                 </td>
-            {% endfor %}
-        </tr>
+        {% endfor %}
+    </tr>
     </table>
     <p>
         {% for el in list %}

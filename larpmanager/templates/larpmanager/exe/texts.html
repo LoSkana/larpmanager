@@ -25,7 +25,8 @@
                 <tr id="{{ el.uuid }}">
                     <td></td>
                     <td>
-                        <a href="{% url 'exe_texts_edit' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'exe_texts_edit' el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el.get_typ_display }}</td>
                     <td>{{ el.language }}</td>

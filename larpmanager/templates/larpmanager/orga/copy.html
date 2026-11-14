@@ -13,8 +13,7 @@
     <p>
         <i>{% trans "ATTENTION: Elements of this event with the same name are overwritten" %}</i>
     </p>
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <form action="{{ request.path }}" method="post">
         {% csrf_token %}
         <table class="mob">

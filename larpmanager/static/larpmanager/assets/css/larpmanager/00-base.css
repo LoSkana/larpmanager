@@ -249,6 +249,16 @@ i.fas {
   max-width: 100% !important;
 }
 
+.spacer {
+  height: 1.5em;
+  height: 1lh;
+}
+
+.spacer-double {
+  height: 3em;
+  height: 2lh;
+}
+
 .centerized {
   text-align: center;
 }

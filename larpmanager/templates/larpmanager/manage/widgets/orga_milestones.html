@@ -2,7 +2,8 @@
 {% if widgets.milestones %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'orga_milestones' run.get_slug %}" target="_blank"><i class="fas fa-flag"></i> {% trans "Milestones" %}</a>
+            <a href="{% url 'orga_milestones' run.get_slug %}"
+               target="_blank"><i class="fas fa-flag"></i> {% trans "Milestones" %}</a>
         </h2>
         <table>
             {% for m in widgets.milestones.milestones %}

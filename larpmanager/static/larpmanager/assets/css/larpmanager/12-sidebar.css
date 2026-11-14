@@ -10,7 +10,7 @@
   color: #173d3d;
 }
 
-#menu-open img,
+.menu-open img,
 #sidebar-open img {
   margin: auto;
   top: 0.3em;
@@ -19,7 +19,7 @@
 }
 
 @media screen and (max-width: 840px) {
-  #menu-open img,
+  .menu-open img,
   #sidebar-open img {
     top: 0.95em;
   }

@@ -9,19 +9,22 @@
 {% block content %}
     <div class="ensemble-toolbar">
         <div class="ensemble-modes">
-            <button class="ensemble-btn {% if ensemble_default_mode == 'book' %}active{% endif %}"
+            <button type="button"
+                    class="ensemble-btn {% if ensemble_default_mode == 'book' %}active{% endif %}"
                     data-mode="book"
                     title="{% trans "Book" %}">
                 <i class="fa-solid fa-book-open"></i>
                 <span>{% trans "Book" %}</span>
             </button>
-            <button class="ensemble-btn {% if ensemble_default_mode == 'cards' %}active{% endif %}"
+            <button type="button"
+                    class="ensemble-btn {% if ensemble_default_mode == 'cards' %}active{% endif %}"
                     data-mode="cards"
                     title="{% trans "Cards" %}">
                 <i class="fa-solid fa-address-card"></i>
                 <span>{% trans "Cards" %}</span>
             </button>
-            <button class="ensemble-btn {% if ensemble_default_mode == 'compact' %}active{% endif %}"
+            <button type="button"
+                    class="ensemble-btn {% if ensemble_default_mode == 'compact' %}active{% endif %}"
                     data-mode="compact"
                     title="{% trans "Compact list" %}">
                 <i class="fa-solid fa-list"></i>
@@ -34,7 +37,8 @@
                    placeholder="{% trans "Search" %}..."
                    autocomplete="off">
         </div>
-        <button id="ensemble-print"
+        <button type="button"
+                id="ensemble-print"
                 class="ensemble-btn"
                 title="{% trans "Print current view" %}">
             <i class="fa-solid fa-print"></i>
@@ -67,8 +71,10 @@
                                 <b>{% trans "Factions:" %}</b>
                                 {% for f in ch.factions %}
                                     {% if f.name %}
+                                        {# djlint:off H021 #}
                                         <span class="ens-faction-tag"
                                               {% if f.color %}style="background-color:{{ f.color }}; color: white"{% endif %}>{{ f.name }}</span>
+                                        {# djlint:on #}
                                     {% endif %}
                                 {% endfor %}
                             </p>
@@ -78,8 +84,10 @@
                                 <b>{% trans "Guilds:" %}</b>
                                 {% for g in ch.guilds %}
                                     {% if g.name %}
+                                        {# djlint:off H021 #}
                                         <span class="ens-guild-tag"
                                               {% if g.color %}style="background-color:{{ g.color }}; color: white"{% endif %}>{{ g.name }}</span>
+                                        {# djlint:on #}
                                     {% endif %}
                                 {% endfor %}
                             </p>
@@ -102,7 +110,11 @@
                      data-search="{{ ch.name|lower }} {{ ch.title|lower }} {{ ch.teaser|lower|striptags }}">
                     {% if ch.faction_colors %}
                         <div class="ens-faction-bar">
-                            {% for f in ch.faction_colors %}<div style="flex:1;background-color:{{ f.color }};"></div>{% endfor %}
+                            {% for f in ch.faction_colors %}
+                                {# djlint:off H021 #}
+                                <div style="flex:1;background-color:{{ f.color }};"></div>
+                                {# djlint:on #}
+                            {% endfor %}
                         </div>
                         <div class="ens-card-factions-print">
                             {% for f in ch.factions %}
@@ -112,7 +124,11 @@
                     {% endif %}
                     {% if ch.guild_colors %}
                         <div class="ens-guild-bar">
-                            {% for g in ch.guild_colors %}<div style="flex:1;background-color:{{ g.color }};"></div>{% endfor %}
+                            {% for g in ch.guild_colors %}
+                                {# djlint:off H021 #}
+                                <div style="flex:1;background-color:{{ g.color }};"></div>
+                                {# djlint:on #}
+                            {% endfor %}
                         </div>
                         <div class="ens-card-guilds-print">
                             {% for g in ch.guilds %}
@@ -136,14 +152,20 @@
                         {% if ch.factions %}
                             <div class="ens-card-factions-screen">
                                 {% for f in ch.factions %}
-                                    {% if f.name %}<span class="ens-faction-tag" style="background-color:{{ f.color }};">{{ f.name }}</span>{% endif %}
+                                    {# djlint:off H021 #}
+                                    {% if f.name %}<span class="ens-faction-tag"
+                                                         style="background-color:{{ f.color }}">{{ f.name }}</span>{% endif %}
+                                    {# djlint:on #}
                                 {% endfor %}
                             </div>
                         {% endif %}
                         {% if ch.guilds %}
                             <div class="ens-card-guilds-screen">
                                 {% for g in ch.guilds %}
-                                    {% if g.name %}<span class="ens-guild-tag" style="background-color:{{ g.color }};">{{ g.name }}</span>{% endif %}
+                                    {# djlint:off H021 #}
+                                    {% if g.name %}<span class="ens-guild-tag"
+                                                         style="background-color:{{ g.color }}">{{ g.name }}</span>{% endif %}
+                                    {# djlint:on #}
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -198,7 +220,12 @@
                                 <td>
                                     {% for f in ch.factions %}
                                         {{ f.name }}
-                                        {% if f.color %}<span class="ens-compact-color" style="background-color:{{ f.color }};"></span>{% endif %}
+                                        {% if f.color %}
+                                            {# djlint:off H021 #}
+                                            <span class="ens-compact-color"
+                                                  style="background-color:{{ f.color }}"></span>
+                                            {# djlint:on #}
+                                        {% endif %}
                                         {% if not forloop.last %}|{% endif %}
                                     {% endfor %}
                                 </td>
@@ -209,7 +236,12 @@
                                 <td>
                                     {% for g in ch.guilds %}
                                         {{ g.name }}
-                                        {% if g.color %}<span class="ens-compact-color" style="background-color:{{ g.color }};"></span>{% endif %}
+                                        {% if g.color %}
+                                            {# djlint:off H021 #}
+                                            <span class="ens-compact-color"
+                                                  style="background-color:{{ g.color }}"></span>
+                                            {# djlint:on #}
+                                        {% endif %}
                                         {% if not forloop.last %}|{% endif %}
                                     {% endfor %}
                                 </td>

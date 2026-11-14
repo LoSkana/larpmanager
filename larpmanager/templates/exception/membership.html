@@ -10,14 +10,12 @@
 {% endblock nav %}
 {% block content %}
     {% trans "You have requested a specific page of an organisation, but it is not specified in the address given" %}
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     {% if not assocs %}
         <i>({% trans "Please check the address again, especially its beginning" %})</i>
     {% else %}
         <i>({% trans "Select the organisation to proceed to" %})</i>
-        <br />
-        <br />
+        <div class="spacer-double"></div>
         {% for el in assocs %}
             <a href='https://{{ el.slug }}.{{ request.build_absolute_uri|cut:"https://"|cut:"http://" }}'>{{ el.name }}</a>
             <br />

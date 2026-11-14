@@ -39,10 +39,14 @@
                     <div class="nav">
                         {% trans "Questions:" %}
                         {% for key, que in reg_questions.items %}
-                            {% if que.typ == 'e' or que.typ == 'p' %}
-                                <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
+                            {% if que.typ == "e" or que.typ == "p" %}
+                                <a href="#"
+                                   class="table_toggle no_jump"
+                                   tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
                             {% else %}
-                                <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
+                                <a href="#"
+                                   class="load_que lq_{{ key }}"
+                                   key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
                                 <a href="#" class="table_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
                             {% endif %}
                         {% endfor %}
@@ -143,8 +147,8 @@
                                 <th class="acc options_price">{% trans "Options" %}</th>
                             {% endif %}
                             <th class="acc pay_a">{% trans "Money" %}</th>
-                            {% if 'credits' in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
-                            {% if 'tokens' in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
+                            {% if "credits" in association.features %}<th class="acc pay_b">{{ credits_name }}</th>{% endif %}
+                            {% if "tokens" in association.features %}<th class="acc pay_c">{{ tokens_name }}</th>{% endif %}
                             <th></th>
                         </tr>
                     </thead>
@@ -201,7 +205,8 @@
                                 {% endif %}
                                 {% if features.questbuilder %}
                                     {% for key, qt in quest_types.items %}
-                                        <td class="qt_{{ qt.uuid }}"  tooltip="{{ qt.name }}">{{ registration.traits | get:qt.uuid }}</td>
+                                        <td class="qt_{{ qt.uuid }}"
+                                            tooltip="{{ qt.name }}">{{ registration.traits | get:qt.uuid }}</td>
                                     {% endfor %}
                                 {% endif %}
                                 {% if features.custom_character %}
@@ -232,31 +237,32 @@
                                     {% endfor %}
                                 {% endif %}
                                 {% for key, que in reg_questions.items %}
-                                    {% if que.typ == 'e' or que.typ == 'p' %}
+                                    {% if que.typ == "e" or que.typ == "p" %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
-                                            {% with ed_id=key|concat:'_red' %}
+                                            {% with ed_id=key|concat:"_red" %}
                                                 {% lookup registration ed_id as value %}
                                                 {{ value | safe }}
                                             {% endwith %}
                                         </td>
-                                    {% elif que.typ == 'additional_tickets' %}
+                                    {% elif que.typ == "additional_tickets" %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% if registration.additionals %}{{ registration.additionals }}{% endif %}
                                         </td>
-                                    {% elif que.typ == 'pay_what_you_want' %}
+                                    {% elif que.typ == "pay_what_you_want" %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% if registration.pay_what %}{{ registration.pay_what }}{% endif %}
                                         </td>
-                                    {% elif que.typ == 'reg_quotas' %}
+                                    {% elif que.typ == "reg_quotas" %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% if registration.quotas %}{{ registration.quotas }}{% endif %}
                                         </td>
-                                    {% elif que.typ == 'reg_surcharges' %}
+                                    {% elif que.typ == "reg_surcharges" %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             {% if registration.surcharge %}{{ registration.surcharge }}{% endif %}
                                         </td>
-                                    {% elif que.typ == 'ticket' %}
-                                        <td class="question q_{{ key }}" tooltip="{{ que.name }}">{{ registration.ticket_show }}</td>
+                                    {% elif que.typ == "ticket" %}
+                                        <td class="question q_{{ key }}"
+                                            tooltip="{{ que.name }}">{{ registration.ticket_show }}</td>
                                     {% else %}
                                         <td class="question q_{{ key }}" tooltip="{{ que.name }}">
                                             <!-- filled later -->
@@ -272,8 +278,10 @@
                                         <a href="{% url 'orga_registration_discounts' run.get_slug registration.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
-                                <td class="date" data-order="{{ registration.created|date:'U' }}">{{ registration.created|date:'d/m/Y H:i' }}</td>
-                                <td class="date" data-order="{{ registration.updated|date:'U' }}">{{ registration.updated|date:'d/m/Y H:i' }}</td>
+                                <td class="date"
+                                    data-order="{{ registration.created|date:'U' }}">{{ registration.created|date:'d/m/Y H:i' }}</td>
+                                <td class="date"
+                                    data-order="{{ registration.updated|date:'U' }}">{{ registration.updated|date:'d/m/Y H:i' }}</td>
                                 <td class="date" data-order="{{ registration.payment_date|date:'U' }}">
                                     {% if registration.payment_date %}{{ registration.payment_date|date:'d/m/Y H:i' }}{% endif %}
                                 </td>
@@ -313,13 +321,13 @@
                                     tooltip="{% trans "Sum of payments received with means of payment" %}">
                                     <!-- filled later -->
                                 </td>
-                                {% if 'credits' in association.features %}
+                                {% if "credits" in association.features %}
                                     <td class="acc pay_b"
                                         tooltip="{% trans "Sum of payments received through" %} {{ credits_name }}">
                                         <!-- filled later -->
                                     </td>
                                 {% endif %}
-                                {% if 'tokens' in association.features %}
+                                {% if "tokens" in association.features %}
                                     <td class="acc pay_c"
                                         tooltip="{% trans "Sum of payments received through" %} {{ tokens_name }}">
                                         <!-- filled later -->

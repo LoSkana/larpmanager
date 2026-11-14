@@ -28,9 +28,7 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el }}</td>
-                    <td>
-                        {% if el.util %}{{ el.util.size }}{% endif %}
-                    </td>
+                    <td>{% if el.util %}{{ el.util.size }}{% endif %}</td>
                     <td>
                         {% if el.cod %}
                             <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'util' el.cod %}">{{ request.scheme }}://{{ request.get_host }}{% url 'util' el.cod %}</a>

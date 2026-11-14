@@ -20,12 +20,12 @@
                         <b>{{ run.assoc_name }} </b>
                     </td>
                 {% endif %}
-                {% if 'genre' in association.features %}
+                {% if "genre" in association.features %}
                     <td>
                         <i>{{ run.event.genre }} </i>
                     </td>
                 {% endif %}
-                {% if 'website' in association.features %}
+                {% if "website" in association.features %}
                     <td>
                         {% if run.event.website %}
                             <a href="{{ run.event.website }}"><i class="fa-solid fa-globe"></i> {% trans "Website" %}</a>
@@ -35,7 +35,7 @@
                 <td>
                     <i>{{ run.pretty_dates }}</i>
                 </td>
-                {% if 'where' in association.features %}
+                {% if "where" in association.features %}
                     <td>
                         {% if run.event.where %}<i>{{ run.event.where }} </i>{% endif %}
                         {% if run.event.maps_url %}
@@ -45,7 +45,9 @@
                         {% endif %}
                     </td>
                 {% endif %}
-                <td>{% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}</td>
+                <td>
+                    {% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}
+                </td>
             </tr>
         {% endfor %}
     </table>
@@ -73,7 +75,7 @@
                         <i class="fa-solid fa-building"></i> <b>{{ run.assoc_name }}</b>
                     </div>
                 {% endif %}
-                {% if 'genre' in association.features and run.event.genre %}
+                {% if "genre" in association.features and run.event.genre %}
                     <div class="run-card-meta">
                         <i class="fa-solid fa-masks-theater"></i> {{ run.event.genre }}
                     </div>
@@ -81,7 +83,7 @@
                 <div class="run-card-meta">
                     <i class="fa-solid fa-calendar"></i> {{ run.pretty_dates }}
                 </div>
-                {% if 'where' in association.features %}
+                {% if "where" in association.features %}
                     {% if run.event.where or run.event.maps_url %}
                         <div class="run-card-meta">
                             <i class="fa-solid fa-map-location-dot"></i>
@@ -96,7 +98,7 @@
                         </div>
                     {% endif %}
                 {% endif %}
-                {% if 'website' in association.features and run.event.website %}
+                {% if "website" in association.features and run.event.website %}
                     <div class="run-card-meta">
                         <a href="{{ run.event.website }}"><i class="fa-solid fa-globe"></i> {% trans "Website" %}</a>
                     </div>

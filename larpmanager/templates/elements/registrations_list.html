@@ -19,7 +19,7 @@
     {% endif %}
     {% if reg_questions %}
         {% for key, que in reg_questions.items %}
-            {% if que.typ == 's' or que.typ == 'm' %}
+            {% if que.typ == "s" or que.typ == "m" %}
                 | <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
                 <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
             {% endif %}
@@ -27,7 +27,7 @@
     {% endif %}
 </p>
 <div class="hide email_players">
-    <br />
+    <div class="spacer"></div>
     <h4>{% trans "Players" %}</h4>
     <table class="mob">
         <tr>
@@ -49,7 +49,7 @@
     </table>
 </div>
 <div class="hide email_tickets">
-    <br />
+    <div class="spacer"></div>
     <h4>{% trans "Tickets" %}</h4>
     <table class="mob">
         <tr>
@@ -79,7 +79,7 @@
     </table>
 </div>
 <div class="hide email_type">
-    <br />
+    <div class="spacer"></div>
     <h4>Email - {% trans "Registration" %}</h4>
     <table class="mob">
         <tr>
@@ -110,7 +110,7 @@
 </div>
 {% if features.membership %}
     <div class="hide email_memb">
-        <br />
+        <div class="spacer"></div>
         <h4>Email - {% trans "Membership" %}</h4>
         <table class="mob">
             <tr>
@@ -142,7 +142,7 @@
 {% endif %}
 {% if features.discount %}
     <div class="hide email_disc">
-        <br />
+        <div class="spacer"></div>
         <h4>Email - {% trans "Discounts" %}</h4>
         <table class="mob">
             {% for key, t in list_discount.items %}
@@ -168,7 +168,7 @@
 {% endif %}
 {% if features.character and char_by_count %}
     <div class="hide char_count">
-        <br />
+        <div class="spacer"></div>
         <h4>{% trans "Characters" %}</h4>
         <table class="mob">
             <thead>
@@ -228,9 +228,9 @@
 {% endif %}
 {% if reg_questions %}
     {% for key, que in reg_questions.items %}
-        {% if que.typ == 's' or que.typ == 'm' %}
+        {% if que.typ == "s" or que.typ == "m" %}
             <div class="hide email_que_{{ key }}">
-                <br />
+                <div class="spacer"></div>
                 <h4>{{ que.name }}</h4>
                 <table class="mob">
                     <thead>

@@ -24,9 +24,7 @@
                             <a href="{% url 'public' el.you.uuid %}">{{ el.you.display_member }}</a>
                         </td>
                         <td>{{ el.last_message }}</td>
-                        <td>
-                            {% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}
-                        </td>
+                        <td>{% if el.num_unread > 0 %}{{ el.num_unread }}{% endif %}</td>
                         <td>
                             <a href="{% url 'chat' el.you.uuid %}">Chat</a>
                         </td>

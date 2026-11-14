@@ -2,7 +2,8 @@
 {% if widgets.progress %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'orga_progress_steps' run.get_slug %}" target="_blank"><i class="fas fa-tasks"></i> {% trans "Progress steps" %}</a>
+            <a href="{% url 'orga_progress_steps' run.get_slug %}"
+               target="_blank"><i class="fas fa-tasks"></i> {% trans "Progress steps" %}</a>
         </h2>
         <table>
             {% for step in widgets.progress.steps %}

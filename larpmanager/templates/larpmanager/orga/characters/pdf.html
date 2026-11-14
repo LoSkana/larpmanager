@@ -75,8 +75,7 @@
                 </table>
                 <input type="submit" value="{% trans "Confirm" %}">
                 <span id="pdf_autosave"></span>
-                <br />
-                <br />
+                <div class="spacer-double"></div>
                 <a href="{% url 'orga_pdf_regenerate' run.get_slug %}">{% trans "Regenerate (recreates all pdf: slow)" %}</a>
             </div>
         </form>

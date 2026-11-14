@@ -12,8 +12,7 @@
                 {{ form.as_table }}
             </table>
             <input type="submit" class="login_go" value="{% trans "Verify" %}" />
-            <br />
-            <br />
+            <div class="spacer-double"></div>
             <p class="password_reset">
                 <a href="{% url 'login' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">{% trans "Cancel" %}</a>
             </p>

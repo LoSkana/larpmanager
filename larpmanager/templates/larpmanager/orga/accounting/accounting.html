@@ -31,14 +31,14 @@
             <i>{% trans "Net profit of the event, difference between realized revenue and total costs" %}</i>
         </p>
     {% endif %}
-    {% if 'organization_tax' in features %}
+    {% if "organization_tax" in features %}
         <h2>{% trans "Organizational fee:" %} {{ summary.tax }}</h2>
         <p>
             <i>{% trans "Minimum net profit to retain for the association infrastructure fee" %}</i>
         </p>
     {% endif %}
     <hr />
-    <table class="go_datatable ">
+    <table class="go_datatable">
         <thead>
             <tr>
                 <th></th>
@@ -64,7 +64,7 @@
     </table>
     {% for k, v in details.items %}
         <h2>{{ v.name }}: {{ v.tot }}</h2>
-        <table class="go_datatable ">
+        <table class="go_datatable">
             <thead>
                 <tr>
                     <th></th>

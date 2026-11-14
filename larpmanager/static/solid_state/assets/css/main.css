@@ -3245,7 +3245,7 @@ button:disabled,
 }
 
 @media screen and (max-width: 480px) {
-  #menu-open span {
+  .menu-open span {
     display: none;
   }
 }
