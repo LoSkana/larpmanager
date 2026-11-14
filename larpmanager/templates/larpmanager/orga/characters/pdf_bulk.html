@@ -29,9 +29,7 @@
                                 <input type="checkbox" id="{{ key }}" name="{{ key }}">
                             </td>
                             <td>{{ element.name }}</td>
-                            <td>
-                                {% if element.type %}{{ element.type }}{% endif %}
-                            </td>
+                            <td>{% if element.type %}{{ element.type }}{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -40,6 +38,6 @@
                 <p class="no-elements-available">{% trans "No characters or handouts available to export as PDF." %}</p>
             {% endif %}
             <input type="submit" value="{% trans "Confirm" %}">
-        </form>
-    {% endif %}
+            </form>
+        {% endif %}
 {% endblock content %}

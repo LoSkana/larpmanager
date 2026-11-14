@@ -13,8 +13,7 @@
           method="post">
         {% csrf_token %}
         {% trans "Select a file with extension csv. The first column contains the amounts, the second the receipts. Get this data from the bank or an equivalent entity to verify the marked entries." %}
-        <br />
-        <br />
+        <div class="spacer-double"></div>
         <table>
             {{ form.as_table }}
         </table>
@@ -46,17 +45,13 @@
                 <td>{{ el.mc_gross|format_decimal }}</td>
                 <td>{{ el.created | date:"d/m/Y h:m" }}</td>
                 <td>{{ el.get_typ_display }}</td>
-                <td>
-                    {% if el.method %}{{ el.method.name }}{% endif %}
-                </td>
+                <td>{% if el.method %}{{ el.method.name }}{% endif %}</td>
                 <td>
                     {% if el.invoice %}
                         <a href="{{ el.download }}">{% trans "Receipt" %}</a>
                     {% endif %}
                 </td>
-                <td>
-                    {% if el.reg_cod %}{{ el.reg_cod }}{% endif %}
-                </td>
+                <td>{% if el.reg_cod %}{{ el.reg_cod }}{% endif %}</td>
             </tr>
         {% endfor %}
     </table>

@@ -101,9 +101,7 @@
                     <td>{{ el.member.fiscal_code }}</td>
                     <td>{{ el.member.get_residence }}</td>
                     <td>{{ el.start | date:"d/m/Y" }}</td>
-                    <td>
-                        {% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}
-                    </td>
+                    <td>{% if el.end %}{{ el.end | date:"d/m/Y" }}{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>

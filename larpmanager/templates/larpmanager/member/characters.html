@@ -34,7 +34,9 @@
                                             <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">{{ rel.character.name }}</a>
                                         </td>
                                         <td>
-                                            {% if rel.character.configs_dict.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
+                                            {% if rel.character.configs_dict.inactive != "True" %}
+                                                <i class="fa fa-check"></i>
+                                            {% endif %}
                                         </td>
                                         <td>{{ rel.registration.run }}</td>
                                     </tr>

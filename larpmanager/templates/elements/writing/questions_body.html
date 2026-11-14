@@ -1,37 +1,37 @@
 {% load static show_tags %}
 {% if form_questions %}
     {% for key, que in form_questions.items %}
-        {% if que.typ == 'teaser' or que.typ == 'text' %}
+        {% if que.typ == "teaser" or que.typ == "text" %}
             <td class="q_{{ key }} editable"
                 question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
-                {% with ed_id=que.typ|concat:'_red' %}
+                {% with ed_id=que.typ|concat:"_red" %}
                     {% lookup el ed_id as value %}
                     {{ value | safe }}
                 {% endwith %}
             </td>
             <td class="stats">
-                {% with ed_id=que.typ|concat:'_ln' %}
+                {% with ed_id=que.typ|concat:"_ln" %}
                     {% lookup el ed_id as value %}
                     {{ value }}
                 {% endwith %}
             </td>
-        {% elif que.typ == 'e' or que.typ == 'p' %}
+        {% elif que.typ == "e" or que.typ == "p" %}
             <td class="question q_{{ key }} editable"
                 question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
-                {% with ed_id=key|concat:'_red' %}
+                {% with ed_id=key|concat:"_red" %}
                     {% lookup el ed_id as value %}
                     {{ value | safe }}
                 {% endwith %}
             </td>
             <td class="question stats">
-                {% with ed_id=key|concat:'_ln' %}
+                {% with ed_id=key|concat:"_ln" %}
                     {% lookup el ed_id as value %}
                     {{ value }}
                 {% endwith %}
             </td>
-        {% elif que.basic_typ or que.typ == 'c' or que.typ == 'file' or que.typ == 'concept' %}
+        {% elif que.basic_typ or que.typ == "c" or que.typ == "file" or que.typ == "concept" %}
             <td class="question q_{{ key }} editable"
                 question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
@@ -41,24 +41,24 @@
             <td class="q_{{ key }} editable"
                 question_uuid="{{ que.uuid }}"
                 tooltip="{{ que.name }}">
-                {% if que.typ == 'progress' %}
+                {% if que.typ == "progress" %}
                     {% include "elements/show_progress.html" with el=el %}
-                {% elif que.typ == 'title' %}
+                {% elif que.typ == "title" %}
                     {{ el.title | safe | striptags }}
-                {% elif que.typ == 'assigned' %}
+                {% elif que.typ == "assigned" %}
                     {% if el.assigned_id %}{{ assigned|get:el.assigned_id }}{% endif %}
-                {% elif que.typ == 'faction' %}
+                {% elif que.typ == "faction" %}
                     {% for g in el.faction_rels.list %}
                         {% include "elements/comma.html" %}
                         <a href="{% url 'orga_factions_edit' run.get_slug g.0 %}">{{ g.1 }}</a>
                     {% endfor %}
-                {% elif que.typ == 'mirror' %}
+                {% elif que.typ == "mirror" %}
                     {% if el.mirror %}<i>{{ el.mirror }}</i>{% endif %}
-                {% elif que.typ == 'hide' %}
+                {% elif que.typ == "hide" %}
                     {% if el.hide %}<i class="fa-solid fa-check"></i>{% endif %}
-                {% elif que.typ == 'locked' %}
+                {% elif que.typ == "locked" %}
                     {% if el.locked %}<i class="fa-solid fa-check"></i>{% endif %}
-                {% elif que.typ == 'cover' %}
+                {% elif que.typ == "cover" %}
                     {% if el.cover %}
                         <a href="{{ el.thumb.url }}">
                             <img src="{{ el.thumb.url }}"

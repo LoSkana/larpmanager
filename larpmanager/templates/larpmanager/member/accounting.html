@@ -77,7 +77,7 @@
                     <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
                 {% endif %}
             </p>
-            {% if member.membership.credit > 0 and 'refund' in association.features %}
+            {% if member.membership.credit > 0 and "refund" in association.features %}
                 {% url 'accounting_refund' as accounting_refund_url %}
                 <p>
                     {% blocktrans trimmed %}
@@ -106,10 +106,10 @@
             </p>
             <hr />
         {% endif %}
-        {% if 'membership' in association.features %}
-            {% if member.membership.status == 'a' %}
+        {% if "membership" in association.features %}
+            {% if member.membership.status == "a" %}
                 {% if year_membership_fee %}
-                    {% if 'vote' in association.features and association.voting_open %}
+                    {% if "vote" in association.features and association.voting_open %}
                         <h2>{% trans "Executive Vote" %} {{ year }}</h2>
                         <p>
                             <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive!" %}</a>
@@ -129,7 +129,7 @@
                             {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting!" %} <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                         </p>
                         <hr />
-                    {% elif 'vote' in association.features and association.voting_open %}
+                    {% elif "vote" in association.features and association.voting_open %}
                         <h2>{% trans "Payment membership fee:" %} {{ year }}</h2>
                         <p>
                             {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and to vote at the association's assembly meetings." %} <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
@@ -143,25 +143,25 @@
                         <hr />
                     {% endif %}
                 {% endif %}
-            {% elif member.membership.status == 'e' or member.membership.status == 'j' %}
+            {% elif member.membership.status == "e" or member.membership.status == "j" %}
                 <h2>{% trans "Membership request not submitted" %}</h2>
                 <p>
                     {% trans "You have not yet submitted your application for membership to the Organization. If you are not a Member, we cannot accept payment from you, and you cannot confirm your event registrations." %} <a href="{% url 'membership' %}">{% trans "Make the request now!" %}</a>
                 </p>
                 <hr />
-            {% elif member.membership.status == 's' %}
+            {% elif member.membership.status == "s" %}
                 <h2>{% trans "Membership request submitted" %}</h2>
                 <p>
                     {% trans "You have submitted your application for membership in the Organization. The request will be considered at the next meeting of the Board. When it is approved, you will be able to settle payments for the events you have signed up for!" %}
                 </p>
                 <hr />
-            {% elif member.membership.status == 'r' %}
+            {% elif member.membership.status == "r" %}
                 <h2>{% trans "Member revoked" %}</h2>
                 <p>{% trans "What are you doing here?" %}</p>
                 <hr />
             {% endif %}
         {% endif %}
-        {% if 'membership_fee' in association.features %}
+        {% if "membership_fee" in association.features %}
             {% if membership_fee %}
                 <h2>{% trans "Membership fee" %}</h2>
                 <p>
@@ -174,44 +174,44 @@
             {% endif %}
             <hr />
         {% endif %}
-        {% if 'collection' in association.features %}
+        {% if "collection" in association.features %}
             <h2>{% trans "Collection" %}</h2>
             <p>
                 {% trans "Want to help one of your friends play with us? Organize a collection: you and anyone who wants to contribute will be able to donate part of their registration fees!" %} <a href="{% url 'accounting_collection' %}">{% trans "Create a new collection" %}</a>.
                 {% if collections %}
-                </p>
-                <table class="mob">
-                    {% for el in collections %}
-                        <tr>
-                            <td>
-                                {{ el.name }} -
-                                {% if el.status == 'o' %}
-                                    {% trans "Active collection" %}
-                                {% elif el.status == 'd' %}
-                                    {% trans "Closed collection" %}
-                                    - {% trans "Collection total:" %} {{ el.total }}
-                                {% elif el.status == 'p' %}
-                                    {% trans "Collections delivered" %}
-                                    - {% trans "Collection total:" %} {{ el.total }}
-                                {% endif %}
-                                - <a href="{% url 'accounting_collection_manage' el.contribute_code %}">{% trans "Manage it here!" %}</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                {% if collection_gifts %}
-                    <p>
-                        {% trans "Collections you have participated in:" %}
-                        {% for el in collection_gifts %}
-                            {% include "elements/comma.html" %}
-                            <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})
-                        {% endfor %}
                     </p>
+                    <table class="mob">
+                        {% for el in collections %}
+                            <tr>
+                                <td>
+                                    {{ el.name }} -
+                                    {% if el.status == "o" %}
+                                        {% trans "Active collection" %}
+                                    {% elif el.status == "d" %}
+                                        {% trans "Closed collection" %}
+                                        - {% trans "Collection total:" %} {{ el.total }}
+                                    {% elif el.status == "p" %}
+                                        {% trans "Collections delivered" %}
+                                        - {% trans "Collection total:" %} {{ el.total }}
+                                    {% endif %}
+                                    - <a href="{% url 'accounting_collection_manage' el.contribute_code %}">{% trans "Manage it here!" %}</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    {% if collection_gifts %}
+                        <p>
+                            {% trans "Collections you have participated in:" %}
+                            {% for el in collection_gifts %}
+                                {% include "elements/comma.html" %}
+                                <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                    <hr />
                 {% endif %}
-                <hr />
-            {% endif %}
         {% endif %}
-        {% if 'donate' in association.features %}
+        {% if "donate" in association.features %}
             <h2>{% trans "Donation" %}</h2>
             <p>
                 {% trans "If you would like to make a donation to the Organization" %}, <a href="{% url 'accounting_donate' %}">{% trans "follow this link" %}</a>. {% trans "You will have our eternal thanks for believing in us!" %}

@@ -2,7 +2,8 @@
 {% if widgets.deadlines %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'exe_deadlines' %}" target="_blank"><i class="fa-solid fa-clock"></i> {% trans "Deadlines" %}</a>
+            <a href="{% url 'exe_deadlines' %}"
+               target="_blank"><i class="fa-solid fa-clock"></i> {% trans "Deadlines" %}</a>
         </h2>
         <table>
             {% if widgets.deadlines.pay_del %}

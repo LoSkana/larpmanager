@@ -36,7 +36,7 @@
                         <td>{{ membership.character.name }}</td>
                         <td>{{ membership.get_role_display }}</td>
                         <td>
-                            {% if membership.role == 'a' %}
+                            {% if membership.role == "a" %}
                                 <form action="{% url 'guild_demote' run.get_slug guild.uuid membership.character.uuid %}"
                                       method="post">
                                     {% csrf_token %}
@@ -65,7 +65,7 @@
                 {% endfor %}
             </table>
         {% endif %}
-        {% if my_membership and my_membership.status == 'a' %}
+        {% if my_membership and my_membership.status == "a" %}
             <form action="{% url 'guild_leave' run.get_slug guild.uuid %}"
                   method="post">
                 {% csrf_token %}

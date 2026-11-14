@@ -10,8 +10,7 @@
 {% endblock nav %}
 {% block content %}
     {% trans "The requested object does not exist; it may have been deleted recently." %}
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <i>({% trans "If you think this is an error, get in touch with us to resolve it" %})</i>
     {% include "elements/error_actions.html" %}
 {% endblock content %}

@@ -90,8 +90,7 @@
                 {% include "elements/structure/sidebar.html" %}
             {% endif %}
             <!-- Page Wrapper -->
-            <div id="page-wrapper"
-                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
+            <div id="page-wrapper" class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %}">
                 <script nonce="{{ csp_nonce }}">
                     (function() {
                         try {

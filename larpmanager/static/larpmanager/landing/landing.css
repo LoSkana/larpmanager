@@ -95,8 +95,8 @@ body.landing .site-nav .wrap {
 }
 
 body.landing .nav-brand {
-  font-family: "future_light", ui-monospace, "SF Mono", Menlo, Consolas,
-    monospace;
+  font-family:
+    "future_light", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 1.3rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;

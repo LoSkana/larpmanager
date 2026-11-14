@@ -6,23 +6,23 @@
 {% block nav %}
 {% endblock nav %}
 {% block meta %}
+    {# djlint:off H052 #}
     <meta http-equiv="refresh" content="5" />
+    {# djlint:on #}
 {% endblock meta %}
 {% block title %}
     Oops!
 {% endblock title %}
 {% block content %}
     Something went wrong with your request. Please stay on this page, we'll fix ASAP!
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     Please enjoy some cute cat image while you wait:
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <div class="container"></div>
     {% if exception %}<p>Additional info: {{ exception }}</p>{% endif %}
 {% endblock content %}
 {% block js %}
-    <script nonce="{{ csp_nonce }}" language="JavaScript" type="text/javascript">
+    <script nonce="{{ csp_nonce }}" language="JavaScript">
 function redirect(){
    location.reload(true);
 }

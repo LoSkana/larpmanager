@@ -51,9 +51,7 @@
                     {% if tiers|length > 1 %}<td>{{ el.get_tier_display }}</td>{% endif %}
                     {% if features.casting %}<td>{{ el.casting_priority }}</td>{% endif %}
                     <td>{{ el.price }}</td>
-                    <td>
-                        {% if el.description %}{{ el.description }}{% endif %}
-                    </td>
+                    <td>{% if el.description %}{{ el.description }}{% endif %}</td>
                     <td>{{ el.max_available }}</td>
                     <td>
                         {% if el.visible %}<i class="fa-solid fa-check"></i>{% endif %}
@@ -69,8 +67,10 @@
                         </td>
                     {% endif %}
                     <td>
-                        <a href="{% url 'register' run.get_slug el.uuid %}" target="_blank">{% trans "Signup link" %}</a>
-                        <button class="copy-link-btn"
+                        <a href="{% url 'register' run.get_slug el.uuid %}"
+                           target="_blank">{% trans "Signup link" %}</a>
+                        <button type="button"
+                                class="copy-link-btn"
                                 data-url="{% url 'register' run.get_slug el.uuid %}"
                                 title="{% trans "Copy link to clipboard" %}">
                             <i class="fa-solid fa-copy"></i>

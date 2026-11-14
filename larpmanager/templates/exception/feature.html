@@ -10,8 +10,7 @@
 {% endblock nav %}
 {% block content %}
     {% trans "To use the feature you requested, you need to activate the following feature:" %} {{ feature.name }}
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     {% if feature.descr %}
         <p>{% trans feature.descr %}</p>
     {% endif %}

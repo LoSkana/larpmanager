@@ -19,7 +19,7 @@
         <div class="text">
             <h3>
                 <a href="{% url 'character' run.get_slug membership.character.uuid %}">{{ membership.character.name }}</a>
-                {% if membership.role == 'a' %}
+                {% if membership.role == "a" %}
                     <i class="fa-solid fa-star" title="{% trans "Admin" %}"></i>
                 {% endif %}
             </h3>

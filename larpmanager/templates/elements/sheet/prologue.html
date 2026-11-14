@@ -7,8 +7,7 @@
     {% for p in sheet_prologues %}
         <h2 class="c title">{{ p.data.name }} ({{ p.typ.name }})</h2>
         <div class="plot">{% show_char p.data run 1 %}</div>
-        <br />
-        <br />
+        <div class="spacer-double"></div>
     {% endfor %}
     <hr class="clear" />
 {% endif %}

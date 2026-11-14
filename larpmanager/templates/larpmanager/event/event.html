@@ -233,7 +233,7 @@
                             <span class="event-fact-value">{{ event.authors }}</span>
                         </div>
                     {% endif %}
-                    {% if 'help' in association.features %}
+                    {% if "help" in association.features %}
                         <a class="event-fact event-fact-action"
                            href="{% url 'help' run.get_slug %}">
                             <i class="fa-solid fa-envelope"></i>

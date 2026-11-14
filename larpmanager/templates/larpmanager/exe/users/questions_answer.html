@@ -14,7 +14,7 @@
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        <table class="mob  ">
+        <table class="mob">
             {{ form.as_table }}
         </table>
         <input type="submit" value="{% trans "Confirm" %}">
@@ -26,7 +26,8 @@
             {% if el.run %}[{{ el.run }}] -{% endif %}
             {{ el.text }}
             {% if el.attachment %}
-                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.uuid %}" target="_blank">{% trans "Attachment" %}</a>)
+                &nbsp;&nbsp;&nbsp;(<a href="{% url 'help_attachment' el.uuid %}"
+                                      target="_blank">{% trans "Attachment" %}</a>)
             {% endif %}
         </div>
     {% endfor %}

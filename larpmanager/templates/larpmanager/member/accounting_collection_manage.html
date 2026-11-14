@@ -5,14 +5,14 @@
 {% endblock title %}
 {% block content %}
     <div class="form_container user_resize">
-        {% if coll.status == 'p' %}
+        {% if coll.status == "p" %}
             <p>{% trans "The collection was delivered to the user" %} {{ coll.member }}</p>
-        {% elif coll.status == 'd' %}
+        {% elif coll.status == "d" %}
             <p>
                 {% trans "The collection is ready to be delivered, give this link to the recipient:" %}
                 <a href="{% url 'accounting_collection_redeem' coll.redeem_code %}">{% trans "Redeem link" %}</a>
             </p>
-        {% elif coll.status == 'o' %}
+        {% elif coll.status == "o" %}
             <p>
                 {% trans "The collection is active! To participate click on the following link, or copy it to whoever you want to get involved:" %}
                 <a href="{% url 'accounting_collection_participate' coll.contribute_code %}">{% trans "Link to participate in" %}</a>
@@ -20,7 +20,7 @@
             <br />
             <p>
                 {% trans "When you want to close the collection, follow this link. A special redemption code will be generated, to be given to the recipient:" %}<a href="{% url 'accounting_collection_close' coll.contribute_code %}"
-   data-confirm="{% trans "Close the collection? No further contributions will be possible." %}">{% trans "Close the collection" %}</a>
+                                                                                                                                                                    data-confirm="{% trans "Close the collection? No further contributions will be possible." %}">{% trans "Close the collection" %}</a>
             </p>
             <br />
         {% endif %}

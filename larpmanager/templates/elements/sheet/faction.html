@@ -6,24 +6,24 @@
 {% endif %}
 {% count_sheet_titles fact.fields fact.questions screen faction.text show_text=True visibility_e_only=False teaser_content=faction.teaser show_teaser=True as title_count %}
 {% for idx, question in fact.questions.items %}
-    {% if question.typ == 'teaser' %}
+    {% if question.typ == "teaser" %}
         {% if faction.teaser %}
             <div class="go-block">
                 {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
                 <div class="plot">{% show_char faction.teaser run 1 %}</div>
             </div>
         {% endif %}
-    {% elif question.typ == 'text' %}
+    {% elif question.typ == "text" %}
         {% if faction.text %}
             {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
             <div class="plot">{% show_char faction.text run 1 %}</div>
         {% endif %}
-    {% elif question.typ == 'e' or question.typ == 'p' %}
+    {% elif question.typ == "e" or question.typ == "p" %}
         {% with fact.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
                     {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
-                    {% if question.typ == 'e' %}
+                    {% if question.typ == "e" %}
                         <div class="plot">{% show_char field run 1 %}</div>
                     {% else %}
                         <div class="plot">{{ field|linebreaksbr }}</div>
@@ -31,13 +31,14 @@
                 {% endif %}
             {% endif %}
         {% endwith %}
-    {% elif question.typ == 'file' %}
+    {% elif question.typ == "file" %}
         {% with fact.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
                     <div class="go-inline">
                         <span class="hide-screen">|</span>
-                        <b>{{ question.name }}:&nbsp;</b><a href="{{ field|storage_url:event }}" target="_blank">{{ field|storage_filename }}</a>
+                        <b>{{ question.name }}:&nbsp;</b><a href="{{ field|storage_url:event }}"
+                                                            target="_blank">{{ field|storage_filename }}</a>
                     </div>
                 {% endif %}
             {% endif %}
@@ -63,7 +64,9 @@
                     <tr>
                         <td class="rel-img-cell">
                             {% with faction.char_images|get:chnum as char_img %}
-                                {% if char_img %}<img class="rel-img" src="{{ char_img }}" alt="character profile" />{% endif %}
+                                {% if char_img %}
+                                    <img class="rel-img" src="{{ char_img }}" alt="character profile" />
+                                {% endif %}
                             {% endwith %}
                         </td>
                         <td class="rel-text-cell">
@@ -97,7 +100,7 @@
                                     <b>{% trans "Factions:" %}</b>
                                     {% for fnum in el.factions %}
                                         {% with factions|get:fnum as g %}
-                                            {% if not g.typ == 'g' %}
+                                            {% if not g.typ == "g" %}
                                                 {% include "elements/comma.html" %}
                                                 {{ g.name }}
                                             {% endif %}
@@ -147,7 +150,7 @@
                                 <b>{% trans "Factions:" %}</b>
                                 {% for fnum in el.factions %}
                                     {% with factions|get:fnum as g %}
-                                        {% if not g.typ == 'g' %}
+                                        {% if not g.typ == "g" %}
                                             {% include "elements/comma.html" %}
                                             {{ g.name }}
                                         {% endif %}

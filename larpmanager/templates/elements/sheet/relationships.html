@@ -5,17 +5,17 @@
         <div class="gallery single relationships">
             <div class="el">
                 <div class="icon">
+                    {# djlint:off H021 #}
                     <div class="img_cover"
                          style="background-image:url('{% get_char_profile el %}')"></div>
+                    {# djlint:on #}
                 </div>
                 <div class="info">
                     <p class="character-name">
                         <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
                         {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                     </p>
-                    <p>
-                        {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                    </p>
+                    <p>{% if el.pronoun %}({{ el.pronoun }}){% endif %}</p>
                     {% if el.player_uuid %}
                         <p>
                             <b>{% trans "Player:" %}&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>

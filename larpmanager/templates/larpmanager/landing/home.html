@@ -134,7 +134,8 @@
                         <h3>{{ el.title }}</h3>
                         <div class="prob-text">{{ el.text | safe }}</div>
                         {% if el.blog %}
-                            <a class="prob-link" href="{% url 'blog' el.blog.slug %}">{{ texts.learn_more }} <i class="fa-solid fa-arrow-right"></i></a>
+                            <a class="prob-link"
+                               href="{% url 'blog' el.blog.slug %}">{{ texts.learn_more }} <i class="fa-solid fa-arrow-right"></i></a>
                         {% endif %}
                     </div>
                 {% endfor %}
@@ -189,7 +190,9 @@
                     {% for el in highlights %}
                         <div class="game-card">
                             <div class="game-photo">
-                                {% if el.reduced_url %}<img src="{{ el.reduced_url }}" alt="{{ el.info }}" loading="lazy">{% endif %}
+                                {% if el.reduced_url %}
+                                    <img src="{{ el.reduced_url }}" alt="{{ el.info }}" loading="lazy">
+                                {% endif %}
                             </div>
                             <div class="game-meta">
                                 <small>{{ el.info }}</small>
@@ -243,7 +246,9 @@
                                target="_blank"
                                rel="noopener noreferrer"
                                class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                {% if el.profile_thumb_url %}
+                                    <img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">
+                                {% endif %}
                                 <span>
                                     <span class="partner-name">{{ el.name }}</span>
                                     {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
@@ -251,7 +256,9 @@
                             </a>
                         {% else %}
                             <div class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                {% if el.profile_thumb_url %}
+                                    <img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">
+                                {% endif %}
                                 <span>
                                     <span class="partner-name">{{ el.name }}</span>
                                     {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
@@ -270,9 +277,11 @@
                 <h2 class="promoters-title">{{ texts.associations_list }}</h2>
                 <div class="strip" id="promoterStrip">
                     {% for el in promoters %}
+                        {# djlint:off H021 #}
                         <div class="promoter-card"
                              style="background-image: url('{{ el.promoter_url }}')"
                              aria-label="{{ el.name }}"></div>
+                        {# djlint:on #}
                     {% endfor %}
                 </div>
             </div>
@@ -303,7 +312,9 @@
                     {% for el in screenshots %}
                         <div class="screen-card">
                             <div class="screen-photo">
-                                {% if el.reduced_url %}<img src="{{ el.reduced_url }}" alt="{{ el.caption }}" loading="lazy">{% endif %}
+                                {% if el.reduced_url %}
+                                    <img src="{{ el.reduced_url }}" alt="{{ el.caption }}" loading="lazy">
+                                {% endif %}
                             </div>
                             <div class="screen-meta">
                                 <small>{{ el.caption }}</small>

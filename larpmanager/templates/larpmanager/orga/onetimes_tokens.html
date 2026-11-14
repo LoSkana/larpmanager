@@ -41,7 +41,8 @@
                            class="btn btn-sm btn-primary">
                             <i class="fa fa-external-link"></i> {% trans "Open Link" %}
                         </a>
-                        <button class="btn btn-sm btn-secondary copy-token-url"
+                        <button type="button"
+                                class="btn btn-sm btn-secondary copy-token-url"
                                 data-url="{{ request.scheme }}://{{ request.get_host }}{% url 'onetime_access' el.token %}">
                             <i class="fa fa-copy"></i> {% trans "Copy URL" %}
                         </button>
@@ -54,12 +55,8 @@
                             <span class="badge badge-success">{% trans "Unused" %}</span>
                         {% endif %}
                     </td>
-                    <td>
-                        {% if el.used_at %}{{ el.used_at|date:"SHORT_DATETIME_FORMAT" }}{% endif %}
-                    </td>
-                    <td>
-                        {% if el.used_by %}{{ el.used_by.get_full_name }}{% endif %}
-                    </td>
+                    <td>{% if el.used_at %}{{ el.used_at|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
+                    <td>{% if el.used_by %}{{ el.used_by.get_full_name }}{% endif %}</td>
                     <td>
                         {% if el.ip_address %}<code>{{ el.ip_address }}</code>{% endif %}
                     </td>

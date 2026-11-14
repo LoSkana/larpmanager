@@ -5,14 +5,14 @@
     <div class="plot teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
 {% for idx, question in char.questions.items %}
-    {% if question.typ == 'p' or question.typ == 'e' %}
+    {% if question.typ == "p" or question.typ == "e" %}
         {% with char.fields|get:idx as field %}
-            {% if field and question.visibility != 'e' %}
+            {% if field and question.visibility != "e" %}
                 {% if screen or question.printable %}
                     <div class="go-block">
                         {% if block_count > 1 %}<b>{{ question.name }}:</b>{% endif %}
                         <div class="plot">
-                            {% if question.typ == 'e' %}
+                            {% if question.typ == "e" %}
                                 {% show_char field run 1 %}
                             {% else %}
                                 {{ field|linebreaksbr }}

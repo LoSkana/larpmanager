@@ -61,9 +61,7 @@
                     <td>{{ el.description | truncatechars:50 }}</td>
                     <td>{{ el.get_typ_display }}</td>
                     {% if status %}
-                        <td>
-                            {% if el.typ|not_in:"c" %}{{ el.get_status_display }}{% endif %}
-                        </td>
+                        <td>{% if el.typ|not_in:"c" %}{{ el.get_status_display }}{% endif %}</td>
                     {% endif %}
                     <td>{{ el.get_visibility_display }}</td>
                     {% if approval and typ == "character" %}

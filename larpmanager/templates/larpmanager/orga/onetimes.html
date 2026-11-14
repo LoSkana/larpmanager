@@ -32,11 +32,10 @@
                     <td>{{ el.name }}</td>
                     <td>{{ el.description|truncatewords:10 }}</td>
                     <td>
-                        {% if el.file %}<a href="{{ el.file.url }}" target="_blank">{{ el.file.name|basename }}</a>{% endif %}
+                        {% if el.file %}<a href="{{ el.file.url }}"
+                                           target="_blank">{{ el.file.name|basename }}</a>{% endif %}
                     </td>
-                    <td>
-                        {% if el.file_size %}{{ el.file_size|filesizeformat }}{% endif %}
-                    </td>
+                    <td>{% if el.file_size %}{{ el.file_size|filesizeformat }}{% endif %}</td>
                     <td>{{ el.content_type }}</td>
                     <td>
                         {% if el.active %}
