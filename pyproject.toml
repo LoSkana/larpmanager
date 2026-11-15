@@ -77,7 +77,7 @@ dependencies = [
   "requests==2.34.2",
   "ruff==0.17.4",
   "setuptools==84.2.1",
-  "stripe==16.1.0",
+  "stripe==17.0.0",
   "tzdata==2026.6",
   "xhtml2pdf==0.2.28",
   "boto3>=1.42.54",
