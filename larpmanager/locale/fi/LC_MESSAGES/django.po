@@ -659,6 +659,9 @@ msgstr "Ladattu"
 msgid "Locked"
 msgstr "Lukittu"
 
+msgid "Log In"
+msgstr "Kirjaudu sisään"
+
 msgid "Log in"
 msgstr "Kirjaudu sisään"
 
@@ -1082,6 +1085,9 @@ msgstr "Kirjaudu sisään"
 
 msgid "Sign in"
 msgstr "Kirjaudu sisään"
+
+msgid "Sign up"
+msgstr "Rekisteröidy"
 
 msgid "Signups"
 msgstr "Ilmoittautumiset"

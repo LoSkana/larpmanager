@@ -659,6 +659,9 @@ msgstr "Načteno"
 msgid "Locked"
 msgstr "Uzamčeno"
 
+msgid "Log In"
+msgstr "Přihlásit se"
+
 msgid "Log in"
 msgstr "Přihlásit se"
 
@@ -1082,6 +1085,9 @@ msgstr "Přihlásit se"
 
 msgid "Sign in"
 msgstr "Přihlásit se"
+
+msgid "Sign up"
+msgstr "Zaregistrovat se"
 
 msgid "Signups"
 msgstr "Přihlášení"

@@ -659,6 +659,9 @@ msgstr "Geladen"
 msgid "Locked"
 msgstr "Gesperrt"
 
+msgid "Log In"
+msgstr "Anmelden"
+
 msgid "Log in"
 msgstr "Einloggen"
 
@@ -1082,6 +1085,9 @@ msgstr "Anmelden"
 
 msgid "Sign in"
 msgstr "Anmelden"
+
+msgid "Sign up"
+msgstr "Registrieren"
 
 msgid "Signups"
 msgstr "Anmeldungen"

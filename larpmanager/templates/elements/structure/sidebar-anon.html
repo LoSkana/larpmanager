@@ -3,14 +3,14 @@
     <span class="sidebar-link-wrap">
         <a class="sidebar-link" href="{% url 'login' %}{% auth_next_query %}">
             <i class="fa-solid fa-right-to-bracket"></i>
-            <span>Log In</span>
+            <span>{% trans "Log In" %}</span>
         </a>
     </span>
     <span class="sidebar-link-wrap">
         <a class="sidebar-link"
            href="{% url 'registration_register' %}{% auth_next_query %}">
             <i class="fa-solid fa-user-plus"></i>
-            <span>{% trans "Register" %}</span>
+            <span>{% trans "Sign up" %}</span>
         </a>
     </span>
     <span class="sidebar-link-wrap">

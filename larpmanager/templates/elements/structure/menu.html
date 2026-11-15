@@ -86,10 +86,10 @@
                 </form>
             {% else %}
                 <li>
-                    <a href="{% url 'login' %}{% auth_next_query %}"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
+                    <a href="{% url 'login' %}{% auth_next_query %}"><i class="fa-solid fa-right-to-bracket"></i> {% trans "Log In" %}</a>
                 </li>
                 <li>
-                    <a href="{% url 'registration_register' %}{% auth_next_query %}"><i class="fa-solid fa-user-plus"></i> {% trans "Register" %}</a>
+                    <a href="{% url 'registration_register' %}{% auth_next_query %}"><i class="fa-solid fa-user-plus"></i> {% trans "Sign up" %}</a>
                 </li>
                 <li>
                     <a href="{% url 'password_reset' %}{% auth_next_query %}"><i class="fa-solid fa-key"></i> {% trans "Change password" %}</a>

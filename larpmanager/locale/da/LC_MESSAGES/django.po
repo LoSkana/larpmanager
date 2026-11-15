@@ -659,6 +659,9 @@ msgstr "Indlæst"
 msgid "Locked"
 msgstr "Låst"
 
+msgid "Log In"
+msgstr "Log ind"
+
 msgid "Log in"
 msgstr "Log ind"
 
@@ -1082,6 +1085,9 @@ msgstr "Log ind"
 
 msgid "Sign in"
 msgstr "Log ind"
+
+msgid "Sign up"
+msgstr "Tilmeld dig"
 
 msgid "Signups"
 msgstr "Tilmeldinger"

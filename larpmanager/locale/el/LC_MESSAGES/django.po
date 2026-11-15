@@ -659,6 +659,9 @@ msgstr "Φορτωμένο"
 msgid "Locked"
 msgstr "Κλειδωμένο"
 
+msgid "Log In"
+msgstr "Σύνδεση"
+
 msgid "Log in"
 msgstr "Σύνδεση"
 
@@ -1082,6 +1085,9 @@ msgstr "Σύνδεση"
 
 msgid "Sign in"
 msgstr "Σύνδεση"
+
+msgid "Sign up"
+msgstr "Εγγραφή"
 
 msgid "Signups"
 msgstr "Εγγραφές"
