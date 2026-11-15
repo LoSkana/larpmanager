@@ -659,6 +659,9 @@ msgstr "Lastet"
 msgid "Locked"
 msgstr "Låst"
 
+msgid "Log In"
+msgstr "Logg inn"
+
 msgid "Log in"
 msgstr "Logg inn"
 
@@ -1082,6 +1085,9 @@ msgstr "Logg inn"
 
 msgid "Sign in"
 msgstr "Logg inn"
+
+msgid "Sign up"
+msgstr "Registrer deg"
 
 msgid "Signups"
 msgstr "Påmeldinger"

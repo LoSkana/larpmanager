@@ -659,6 +659,9 @@ msgstr "Cargado"
 msgid "Locked"
 msgstr "Bloqueado"
 
+msgid "Log In"
+msgstr "Iniciar sesión"
+
 msgid "Log in"
 msgstr "Conectarse"
 
@@ -1082,6 +1085,9 @@ msgstr "Iniciar sesión"
 
 msgid "Sign in"
 msgstr "Iniciar sesión"
+
+msgid "Sign up"
+msgstr "Regístrate"
 
 msgid "Signups"
 msgstr "Inscripciones"

@@ -659,6 +659,9 @@ msgstr "Caricato"
 msgid "Locked"
 msgstr "Bloccato"
 
+msgid "Log In"
+msgstr "Accedi"
+
 msgid "Log in"
 msgstr "Accedi"
 
@@ -1082,6 +1085,9 @@ msgstr "Accedi"
 
 msgid "Sign in"
 msgstr "Accedi"
+
+msgid "Sign up"
+msgstr "Registrati"
 
 msgid "Signups"
 msgstr "Iscrizioni"

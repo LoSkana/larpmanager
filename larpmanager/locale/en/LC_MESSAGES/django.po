@@ -6622,6 +6622,12 @@ msgstr ""
 msgid "Profiling"
 msgstr ""
 
+msgid "Log In"
+msgstr ""
+
+msgid "Sign up"
+msgstr ""
+
 msgid "Change password"
 msgstr ""
 
