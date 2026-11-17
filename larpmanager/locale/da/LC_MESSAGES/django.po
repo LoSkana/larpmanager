@@ -659,6 +659,9 @@ msgstr "Indlæst"
 msgid "Locked"
 msgstr "Låst"
 
+msgid "Log In"
+msgstr "Log ind"
+
 msgid "Log in"
 msgstr "Log ind"
 
@@ -1082,6 +1085,9 @@ msgstr "Log ind"
 
 msgid "Sign in"
 msgstr "Log ind"
+
+msgid "Sign up"
+msgstr "Tilmeld dig"
 
 msgid "Signups"
 msgstr "Tilmeldinger"
@@ -12747,6 +12753,13 @@ msgid ""
 msgstr ""
 "Hvis aktiveret, sendes der ikke en notifikation til deltageren, når en "
 "karakter tildeles."
+
+msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Navn, der vises for erfaringspoint på karakterarket (standard er "
+"'Erfaringspoint')."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

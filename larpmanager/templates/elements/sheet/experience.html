@@ -1,6 +1,12 @@
 {% load show_tags i18n %}
 {% if features.experience and not exp_auto_buy %}
-    <h1 class="c">{% trans "Experience points" %}</h1>
+    <h1 class="c">
+        {% if exp_name %}
+            {{ exp_name }}
+        {% else %}
+            {% trans "Experience points" %}
+        {% endif %}
+    </h1>
     {% if exp_systems_data|length > 1 %}
         <table class="exp-systems-table">
             <thead>

@@ -659,6 +659,9 @@ msgstr "Załadowany"
 msgid "Locked"
 msgstr "Zablokowany"
 
+msgid "Log In"
+msgstr "Zaloguj się"
+
 msgid "Log in"
 msgstr "Zaloguj się"
 
@@ -1082,6 +1085,9 @@ msgstr "Zaloguj się"
 
 msgid "Sign in"
 msgstr "Zaloguj się"
+
+msgid "Sign up"
+msgstr "Zarejestruj się"
 
 msgid "Signups"
 msgstr "Zapisy"
@@ -12894,6 +12900,13 @@ msgid ""
 msgstr ""
 "Jeśli włączone, nie wysyła powiadomienia do uczestnika po przypisaniu "
 "postaci."
+
+msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Nazwa punktów doświadczenia wyświetlana w karcie postaci (domyślnie 'Punkty "
+"doświadczenia')."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

@@ -1075,6 +1075,8 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     context = check_char_abilities(request, event_slug, character_uuid)
     char = context["character"]
 
+    context["exp_name"] = get_event_config(context["event"].id, "exp_name", context=context)
+
     # Ensure char.addit is populated with per-system exp data
     add_char_addit(char)
 

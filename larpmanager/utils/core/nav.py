@@ -185,7 +185,7 @@ def _add_registration_items(
         items.append(
             _item(
                 reverse("register", args=[slug]),
-                "fa-solid fa-user-plus",
+                "fa-solid fa-ticket",
                 _("Register"),
                 str(_("Register to the event")),
                 active=active == "register",
