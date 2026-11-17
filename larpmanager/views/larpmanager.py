@@ -111,6 +111,7 @@ from larpmanager.utils.larpmanager.chat import (
     count_chat_answer,
     get_chat_answer,
     get_chat_quota_key,
+    is_chat_configured,
     is_chat_quota_reached,
 )
 from larpmanager.utils.larpmanager.csp import record_csp_report
@@ -567,7 +568,7 @@ def chat_ask(request: HttpRequest) -> Any:
     if request.method != "POST":
         return JsonResponse({"error": _("Invalid request method")}, status=405)
 
-    if request.association.get("main_domain") != "larpmanager.com":
+    if request.association.get("main_domain") != "larpmanager.com" or not is_chat_configured():
         raise Http404
 
     question = request.POST.get("question", "").strip()

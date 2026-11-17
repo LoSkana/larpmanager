@@ -457,13 +457,25 @@ class TestHelpMenu(BaseTestCase):
         self.assertNotIn("wwyltd-open-trigger", self._render())
         self.assertIn("wwyltd-open-trigger", self._render(is_larpmanager_skin=True))
 
-    def test_dashboard_ask_bar_only_on_the_larpmanager_skin(self) -> None:
+    def test_dashboard_ask_bar_only_when_chat_enabled(self) -> None:
         """The ask bar of the dashboards is shown where the chat is served."""
         template = "larpmanager/manage/widgets/ask_bar.html"
-        self.assertNotIn("dashboard-ask-bar", render_to_string(template, {}))
-        html = render_to_string(template, {"is_larpmanager_skin": True, "chat_max_question_length": 10})
+        self.assertNotIn("dashboard-ask-bar", render_to_string(template, {"is_larpmanager_skin": True}))
+        html = render_to_string(template, {"chat_enabled": True, "chat_max_question_length": 10})
         self.assertIn("dashboard-ask-bar", html)
         self.assertIn('maxlength="10"', html)
+
+    def test_chat_hidden_without_credentials(self) -> None:
+        """The chat is offered only when Anthropic credentials are configured."""
+        request = RequestFactory().get("/")
+        request.user = self.get_user()
+        request.enviro = "test"
+        request.association = {"id": self.get_association().id, "main_domain": "larpmanager.com"}
+        with self.settings(ANTHROPIC_API_KEY=None, ANTHROPIC_USE_LOCAL_LOGIN=False):
+            self.assertFalse(cache_association(request)["chat_enabled"])
+            self.assertNotIn("chat-widget-open-trigger", self._render(is_larpmanager_skin=True))
+        with self.settings(ANTHROPIC_API_KEY="key"):
+            self.assertTrue(cache_association(request)["chat_enabled"])
 
     def test_replay_targets_the_dashboard(self) -> None:
         """The replay link reloads the current dashboard."""

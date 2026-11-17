@@ -25,7 +25,7 @@ from django.http import HttpRequest
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.nav import build_profile_home_nav_items, build_profile_nav_items
-from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH
+from larpmanager.utils.larpmanager.chat import CHAT_MAX_QUESTION_LENGTH, is_chat_configured
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, get_effective_version
 from larpmanager.utils.users.accessibility import get_accessibility_tokens
 from main.settings import CACHE_TIMEOUT_1_DAY
@@ -58,6 +58,7 @@ def cache_association(request: HttpRequest) -> dict:
         association_id = request.association["id"]
         context["page_theme"] = get_association_config(association_id, "theme")
         context["is_larpmanager_skin"] = request.association.get("main_domain") == "larpmanager.com"
+        context["chat_enabled"] = context["is_larpmanager_skin"] and is_chat_configured()
         context["chat_max_question_length"] = CHAT_MAX_QUESTION_LENGTH
         # Default for pages rendered without the base context; views providing it override this
         member = getattr(request.user, "member", None) if hasattr(request, "user") else None
