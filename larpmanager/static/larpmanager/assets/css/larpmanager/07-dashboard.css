@@ -278,8 +278,9 @@
 .onetime-body,
 .onetime-error-body,
 .onetime-used-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
   color: #fff;
   display: flex;
   align-items: center;

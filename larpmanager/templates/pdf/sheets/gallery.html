@@ -67,8 +67,8 @@
                     {% for number, el in chars.items %}
                         {% include "pdf/sheets/gallery_el.html" %}
                         {% if not forloop.last and forloop.counter|divisibleby:4 %}
-                        </tr>
-                        <tr>
+                            </tr>
+                            <tr>
                         {% endif %}
                     {% endfor %}
                 </tr>
@@ -86,8 +86,8 @@
                     {% for el in first_aid %}
                         {% include "pdf/sheets/gallery_el.html" %}
                         {% if not forloop.last and forloop.counter|divisibleby:4 %}
-                        </tr>
-                        <tr>
+                            </tr>
+                            <tr>
                         {% endif %}
                     {% endfor %}
                 </tr>

@@ -54,7 +54,7 @@
                             <br />
                             <b>{% trans "Factions:" %}</b>
                             {% for g in el.factions %}
-                                {% if not g.typ == 'g' %}
+                                {% if not g.typ == "g" %}
                                     {% include "elements/comma.html" %}
                                     {{ g.name }}
                                 {% endif %}

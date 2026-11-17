@@ -8,8 +8,7 @@
 {% endblock info %}
 {% block content %}
     <a href="{% url 'pre_register' run.event.slug %}">{% trans "Pre-registration link" %}</a>
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <h2>
         {% trans "Unconverted pre-registrations:" %} <b>{{ dc.pred | length }}</b>
     </h2>

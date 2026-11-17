@@ -15,14 +15,14 @@
           enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form_container auto_resize">
-            <table class="mob  ">
+            <table class="mob">
                 {{ form.as_table }}
             </table>
             <input type="submit" value="Submit">
         </div>
     </form>
     <hr class="c" />
-    {% if '.pdf' in doc_path %}
+    {% if ".pdf" in doc_path %}
         <iframe class="membership_pdf"
                 src="{{ member_edit.membership.get_document_filepath }}"
                 title="{% trans "Identity document" %}"></iframe>
@@ -32,7 +32,7 @@
              alt="membership request" />
     {% endif %}
     <hr class="c" />
-    {% if '.pdf' in req_path %}
+    {% if ".pdf" in req_path %}
         <iframe class="membership_pdf"
                 src="{{ member_edit.membership.get_request_filepath }}"
                 title="{% trans "Membership request" %}"></iframe>

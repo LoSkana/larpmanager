@@ -17,8 +17,10 @@
         <div class="slider">
             {% for el in list %}
                 <div class="card">
+                    {# djlint:off H021 #}
                     <div class="card-bg {{ el.slug }}"
                          style="background-image: url({{ el.cover }})"></div>
+                    {# djlint:on #}
                 </div>
             {% endfor %}
         </div>

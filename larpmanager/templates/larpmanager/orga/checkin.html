@@ -66,10 +66,9 @@
     {{ checkin_data|json_script:"checkin_data" }}
 {% endblock content %}
 {% block js %}
-    <script type="text/javascript"
-            src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
+    <script src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
             defer></script>
-    <script nonce="{{ csp_nonce }}" type="text/javascript">
+    <script nonce="{{ csp_nonce }}">
 (function () {
   "use strict";
 

@@ -30,9 +30,7 @@
                 <th>{{ el }}</th>
                 <td>{{ el.event.association }}</td>
                 <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
-                <td data-order="{{ el.end|date:'U' }}">
-                    {% if el.end %}{{ el.end|date:'d/m/Y' }}{% endif %}
-                </td>
+                <td data-order="{{ el.end|date:'U' }}">{% if el.end %}{{ el.end|date:'d/m/Y' }}{% endif %}</td>
                 <td>{{ el.features }}</td>
                 <td>{{ el.get_plan_display }}</td>
                 <td>{{ el.active_registrations }}</td>
@@ -41,8 +39,8 @@
                     <a href='{% url "lm_payments_confirm" el.uuid %}'
                        data-confirm="{% trans "Confirm this payment?" %}">Confirm</a>
                 </td>
-            {% endfor %}
-        </tr>
+        {% endfor %}
+    </tr>
     </table>
     <table>
         {% for year, total in totals.items %}

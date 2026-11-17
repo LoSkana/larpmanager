@@ -9,7 +9,9 @@
 {% endblock title %}
 {% if not deleted %}
     {% block head_extra %}
+        {# djlint:off H052 #}
         <meta http-equiv="refresh" content="10">
+        {# djlint:on #}
     {% endblock head_extra %}
 {% endif %}
 {% block content %}

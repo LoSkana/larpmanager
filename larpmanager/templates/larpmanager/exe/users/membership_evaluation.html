@@ -25,7 +25,7 @@
         </form>
     </div>
     <hr class="c" />
-    {% if '.pdf' in doc_path %}
+    {% if ".pdf" in doc_path %}
         <iframe class="membership_pdf"
                 src="{{ member.membership.get_document_filepath }}"
                 title="{% trans "Identity document" %}"></iframe>
@@ -36,7 +36,7 @@
     {% endif %}
     <a href="{{ member.membership.get_document_filepath }}" target="_blank">{% trans "Download" %}</a>
     <hr class="c" />
-    {% if '.pdf' in req_path %}
+    {% if ".pdf" in req_path %}
         <iframe class="membership_pdf"
                 src="{{ member.membership.get_request_filepath }}"
                 title="{% trans "Membership request" %}"></iframe>

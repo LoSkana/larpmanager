@@ -50,29 +50,29 @@
                             {% if registration.deadline > 0 %}
                                 <a href="{% url 'accounting_registration' registration.uuid %}">
                                     {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol days=registration.payment.deadline %}{{ amount }}{{ currency }} within {{ days }} days{% endblocktrans %}</a>
-                                {% else %}
-                                    <a href="{% url 'accounting_registration' registration.uuid %}">
-                                        {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol %} {{ amount }}{{ currency }} immediately{% endblocktrans %}
-                                    </a>
-                                    <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
-                                {% endif %}
-                            {% elif registration.pending %}
-                                {% trans "Payment currently in review by the staff." %}
                             {% else %}
-                                <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
-                                <i> -
-                                    {% trans "copy this link and give it to your friend:" %}
-                                </i>
-                                <b>
-                                    {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
-                                </b>
+                                <a href="{% url 'accounting_registration' registration.uuid %}">
+                                    {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol %} {{ amount }}{{ currency }} immediately{% endblocktrans %}
+                                </a>
+                                <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                             {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <p>
-                <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
-            </p>
-        </div>
-    {% endblock content %}
+                        {% elif registration.pending %}
+                            {% trans "Payment currently in review by the staff." %}
+                        {% else %}
+                            <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
+                            <i> -
+                                {% trans "copy this link and give it to your friend:" %}
+                            </i>
+                            <b>
+                                {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}
+                            </b>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note: The special code is re-generated each time you change the gift card" %}</i>
+        </p>
+    </div>
+{% endblock content %}

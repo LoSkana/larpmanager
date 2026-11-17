@@ -53,7 +53,9 @@
                 <table class="mob">
                     {{ form.as_table }}
                 </table>
+                {# djlint:off H053 #}
                 <input id="submit" type="submit" value="{% trans "Confirm" %}">
+                {# djlint:on #}
             </form>
         {% endif %}
     </div>

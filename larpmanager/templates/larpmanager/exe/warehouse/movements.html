@@ -28,9 +28,7 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     {% if optionals.quantity %}
-                        <td>
-                            {% if el.quantity %}{{ el.quantity }}{% endif %}
-                        </td>
+                        <td>{% if el.quantity %}{{ el.quantity }}{% endif %}</td>
                     {% endif %}
                     <td>
                         <a href="{% url 'exe_warehouse_items_edit' el.item.uuid %}">{{ el.item }}</a>
@@ -59,7 +57,7 @@
         </p>
     {% endif %}
     <div id="imagePopup">
-        <img id="popupImg" src="" alt="popup image" />
+        <img id="popupImg" alt="popup image" />
     </div>
     {% include "elements/table/footer.html" %}
 {% endblock content %}

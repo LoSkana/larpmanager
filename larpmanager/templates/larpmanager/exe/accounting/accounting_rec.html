@@ -10,21 +10,19 @@
     <h2>{% trans "Global balance" %}</h2>
     <br />
     <i>({% trans "Operating margin, taking into account the budgets of completed events, minus credits or tokens issued." %})</i>
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <canvas id="globalSumContainer" class="accounting_record"></canvas>
     <h2>{% trans "Overall balance" %}</h2>
     <br />
     <i>({% trans "Net financial availability, held in the organization's bank and financial accounts." %})</i>
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <canvas id="bankSumContainer" class="accounting_record"></canvas>
 {% endblock content %}
 {% block js %}
     <script src="{% static 'node_modules/chart.js/dist/chart.umd.min.js' %}"></script>
     <script src="{% static 'node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js' %}"></script>
     <script src="{% static 'node_modules/chartjs-plugin-zoom/dist/chartjs-plugin-zoom.min.js' %}"></script>
-    <script nonce="{{ csp_nonce }}" type="text/javascript">
+    <script nonce="{{ csp_nonce }}">
 function balanceChartOptions(label) {
   return {
     type: "line",

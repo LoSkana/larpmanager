@@ -27,14 +27,15 @@
                 <hr />
             </div>
         {% endif %}
-        {% if member.membership.status == 'e' or member.membership.status == 'j' %}
+        {% if member.membership.status == "e" or member.membership.status == "j" %}
             <h3>{% trans "You are not yet a Member of the Organization!" %}</h3>
             <p>{% trans "To participate in the organization's events, you must apply to become a member." %}</p>
             {% url 'membership_request' as membership_request_url %}
             {% url 'profile' as profile_url %}
             <p>
                 {% blocktrans trimmed %}
-                    We have pre-filled the application form with your details: <a href="{{ membership_request_url }}" download>download it here</a>.
+                    We have pre-filled the application form with your details: <a href="{{ membership_request_url }}"
+                                                                                  download>download it here</a>.
                 {% endblocktrans %}
                 <br />
                 (
@@ -59,7 +60,7 @@
                 </table>
                 <input type="submit" value="{% trans "Submit" %}">
             </form>
-        {% elif member.membership.status == 'u' %}
+        {% elif member.membership.status == "u" %}
             <h3>{% trans "Confirmation of registration request" %}</h3>
             <p>
                 {% trans "We only ask for a moment of your time to check the documents you have uploaded, it won't take long!" %}
@@ -70,7 +71,7 @@
                   data-confirm="{% trans "Did you check the required data properly?" %}">
                 {% csrf_token %}
                 <hr />
-                {% if '.pdf' in doc_path %}
+                {% if ".pdf" in doc_path %}
                     <iframe class="membership_request membership_pdf"
                             src="{{ member.membership.get_document_filepath }}"
                             title="{% trans "Identity document" %}"></iframe>
@@ -86,7 +87,7 @@
                 <hr />
                 {% trans "If instead you wish to upload a new photo of your document" %}, <a href="{% url 'membership' %}">{% trans "click here" %}</a>.
                 <hr />
-                {% if '.pdf' in req_path %}
+                {% if ".pdf" in req_path %}
                     <iframe class="membership_request membership_pdf"
                             src="{{ member.membership.get_request_filepath }}"
                             title="{% trans "Membership request" %}"></iframe>
@@ -107,18 +108,19 @@
                 <hr />
                 <input type="submit" value="{% trans "Submit" %}">
             </form>
-        {% elif member.membership.status == 's' %}
+        {% elif member.membership.status == "s" %}
             <h3>{% trans "Request sent for approval" %}</h3>
             <p>
                 {% trans "Your request will be evaluated at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon." %}
             </p>
             <p>
-                {% trans "Request submitted:" %} <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.
+                {% trans "Request submitted:" %} <a href="{{ member.membership.get_request_filepath }}"
+                                                    download>{% trans "download it here" %}</a>.
             </p>
-        {% elif member.membership.status == 'r' %}
+        {% elif member.membership.status == "r" %}
             <h3>{% trans "Member revoked" %}</h3>
             <p>{% trans "I am not good what to say. I never thought it would happen." %}</p>
-        {% elif member.membership.status == 'a' %}
+        {% elif member.membership.status == "a" %}
             <h3>{% trans "Member of the Organization" %}</h3>
             <p>
                 {% trans "You are a regular member of our Organization. You can subscribe to events organized for our members!" %}

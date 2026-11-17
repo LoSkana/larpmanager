@@ -11,7 +11,7 @@
     <p>{% trans "The payment has not been confirmed yet: it will be registered as soon as PayPal confirms it." %}</p>
 {% else %}
     {% if not gateway_error %}
-        {% if method == 'redsys' %}
+        {% if method == "redsys" %}
             <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
                 <input type="hidden"
                        name="Ds_SignatureVersion"
@@ -25,11 +25,10 @@
                 <input type="submit" value="{% trans "Submit" %}">
             </form>
         {% endif %}
-        {% if method == 'sumup' %}
+        {% if method == "sumup" %}
             <div id="sumup-card"></div>
-            <script type="text/javascript"
-                    src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
-            <script nonce="{{ csp_nonce }}" type="text/javascript">
+            <script src="https://gateway.sumup.com/gateway/ecom/card/v2/sdk.js"></script>
+            <script nonce="{{ csp_nonce }}">
               SumUpCard.mount({
                 checkoutId: '{{ sumup_checkout_id }}',
                 showAmount: true,
@@ -41,12 +40,11 @@
               });
             </script>
         {% endif %}
-        {% if method == 'stripe' %}
+        {% if method == "stripe" %}
             <script nonce="{{ csp_nonce }}">window.location.replace("{{ stripe_ck.url }}");</script>
         {% endif %}
-        {% if method == 'satispay' %}
-            <br />
-            <br />
+        {% if method == "satispay" %}
+            <div class="spacer-double"></div>
             <a href="https://online.satispay.com/pay/{{ pay_id }}?redirect_url={{ redirect }}">
                 <img src="https://online.satispay.com/images/en-pay-red.svg"
                      alt="Pay with Satispay"
@@ -54,13 +52,13 @@
                      class="satispay-button" />
             </a>
         {% endif %}
-        {% if method == 'paypal' %}
+        {% if method == "paypal" %}
             <div class="paypal">
                 <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
                 {{ paypal_form.render }}
             </div>
         {% endif %}
-        {% if method == 'paypal_v2' %}
+        {% if method == "paypal_v2" %}
             <div class="paypal-v2">
                 <p>{% trans "Follow the link below to complete your payment on the PayPal platform." %}</p>
                 <a class="button paypal-v2-button" href="{{ paypal_url }}">
@@ -69,7 +67,7 @@
             </div>
         {% endif %}
     {% endif %}
-    {% if method == 'any' %}
+    {% if method == "any" %}
         <p>
             {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
         </p>
@@ -83,7 +81,7 @@
             <input type="submit" value="{% trans "Submit" %}">
         </form>
     {% endif %}
-    {% if method == 'wire' %}
+    {% if method == "wire" %}
         <p>
             <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered!" %}</i></b>
         </p>
@@ -143,7 +141,7 @@
             <input type="submit" value="{% trans "Submit" %}">
         </form>
     {% endif %}
-    {% if method == 'paypal_nf' %}
+    {% if method == "paypal_nf" %}
         <p>{% trans "Follow the steps below:" %}</p>
         <p>
             <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}

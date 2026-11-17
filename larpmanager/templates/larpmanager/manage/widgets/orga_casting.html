@@ -2,7 +2,8 @@
 {% if widgets.casting %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'orga_casting' run.get_slug %}" target="_blank"><i class="fas fa-users"></i> {% trans "Casting" %}</a>
+            <a href="{% url 'orga_casting' run.get_slug %}"
+               target="_blank"><i class="fas fa-users"></i> {% trans "Casting" %}</a>
         </h2>
         <table>
             {% if widgets.casting.assigned %}

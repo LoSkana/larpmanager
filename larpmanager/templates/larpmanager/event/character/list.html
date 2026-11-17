@@ -80,9 +80,7 @@
                             {% endfor %}
                         {% endif %}
                     {% endif %}
-                    <td>
-                        {% if el.last_run %}{{ el.last_run }}{% endif %}
-                    </td>
+                    <td>{% if el.last_run %}{{ el.last_run }}{% endif %}</td>
                     {% if exp_user %}
                         <td>
                             <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>

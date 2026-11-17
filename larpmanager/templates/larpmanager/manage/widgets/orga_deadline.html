@@ -2,7 +2,8 @@
 {% if widgets.deadlines %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'orga_deadlines' run.get_slug %}" target="_blank"><i class="fas fa-hourglass-end"></i> {% trans "Deadlines" %}</a>
+            <a href="{% url 'orga_deadlines' run.get_slug %}"
+               target="_blank"><i class="fas fa-hourglass-end"></i> {% trans "Deadlines" %}</a>
         </h2>
         <table>
             {% if widgets.deadlines.memb_del %}

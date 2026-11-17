@@ -8,7 +8,8 @@
 {% endif %}
 {% if faction_filter %}
     <div class="faction-chips" id="faction-chips">
-        {% for f in faction_filter %}<span class="faction-chip" data-number="{{ f.number }}">{{ f.name }}</span>{% endfor %}
+        {% for f in faction_filter %}<span class="faction-chip"
+                                           data-number="{{ f.number }}">{{ f.name }}</span>{% endfor %}
     </div>
 {% endif %}
 <div id="hidden-inputs"></div>

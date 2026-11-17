@@ -32,9 +32,11 @@
                               class="get-started-demo-form">
                             {% csrf_token %}
                             <input type="hidden" name="demo_uuid" value="{{ demo_type.uuid }}">
+                            {# djlint:off H021 #}
                             <button type="button"
                                     class="get-started-card"
                                     {% if demo_type.color %}style="border-top-color: {{ demo_type.color }};"{% endif %}>
+                                {# djlint:on #}
                                 {% if demo_type.icon %}<i class="{{ demo_type.icon }}"></i>{% endif %}
                                 <span class="get-started-card-name">{{ demo_type.name }}</span>
                                 {% if demo_type.descr %}<span class="get-started-card-descr">{{ demo_type.descr }}</span>{% endif %}
@@ -54,7 +56,9 @@
                         <p>
                             {% trans "A new demo organization will be created just for you, ready to explore as you want. This takes a few seconds." %}
                         </p>
-                        <button type="button" class="btn btn-primary" id="demo-confirm-proceed">{% trans "Proceed" %}</button>
+                        <button type="button"
+                                class="btn btn-primary"
+                                id="demo-confirm-proceed">{% trans "Proceed" %}</button>
                     </div>
                     <div class="demo-confirm-step hide" id="demo-building-step">
                         <i class="fa-solid fa-spinner fa-spin"></i>

@@ -38,16 +38,16 @@
                             </span>
                             {% if tutorial %}
                                 | <a href="#"
-    class="feature_tutorial"
-    tut="{{ tutorial }}"
-    qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
+                                     class="feature_tutorial"
+                                     tut="{{ tutorial }}"
+                                     qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
                             {% endif %}
                             {% if config and not lite_mode %}
                                 | <a href="{{ config }}"
-    class="action-link"
-    data-modal-eligible="true"
-    data-slug="config"
-    qtip="Config"><i class="fa-solid fa-gear"></i> Config</a>
+                                     class="action-link"
+                                     data-modal-eligible="true"
+                                     data-slug="config"
+                                     qtip="Config"><i class="fa-solid fa-gear"></i> Config</a>
                             {% endif %}
                         </div>
                     {% endif %}
@@ -87,7 +87,7 @@
                 {% endif %}
                 <table class="mob no_v22">
                     <tr>
-                        {% if 'help' in association.features %}
+                        {% if "help" in association.features %}
                             <td>
                                 <p>
                                     <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help?" %}</a>
@@ -99,7 +99,7 @@
                                 <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
                             </p>
                         </td>
-                        {% if 'legal_notice' in association.features %}
+                        {% if "legal_notice" in association.features %}
                             <td>
                                 <a href="{% url 'legal_notice' %}">{% trans "Legal Notice" %}</a>
                             </td>
@@ -184,7 +184,7 @@
 {% block js-req %}
     <script src="{% static 'node_modules/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js' %}"
             defer></script>
-    <script id='qtip'
+    <script id="qtip"
             src="{% static 'node_modules/qtip2/dist/jquery.qtip.min.js' %}"
             defer></script>
     <script src="{% static 'node_modules/jquery-toast-plugin/dist/jquery.toast.min.js' %}"

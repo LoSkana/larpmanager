@@ -10,7 +10,6 @@
 {% endblock nav %}
 {% block content %}
     {% trans "The event you requested is only visible to participants logged into the system." %}
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     {% trans "Wanna connect?" %} <a href="{% url 'login' %}{% auth_next_query %}">{% trans "Login" %}</a>
 {% endblock content %}

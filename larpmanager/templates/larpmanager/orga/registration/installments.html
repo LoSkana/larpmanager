@@ -28,12 +28,8 @@
                     </td>
                     <td>{{ el.order }}</td>
                     <td>{{ el.amount }}</td>
-                    <td>
-                        {% if el.days_deadline %}{{ el.days_deadline }}{% endif %}
-                    </td>
-                    <td>
-                        {% if el.date_deadline %}{{ el.date_deadline }}{% endif %}
-                    </td>
+                    <td>{% if el.days_deadline %}{{ el.days_deadline }}{% endif %}</td>
+                    <td>{% if el.date_deadline %}{{ el.date_deadline }}{% endif %}</td>
                     <td>
                         {% for ticket in el.tickets.all %}
                             {% include "elements/comma.html" %}

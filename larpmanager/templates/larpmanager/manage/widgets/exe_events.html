@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if ongoing_runs %}
-    <div class="grid-item grid-line ">
+    <div class="grid-item grid-line">
         <table class="go_datatable" no_header_cols="all" no_buttons>
             <thead>
                 <tr>
@@ -38,7 +38,8 @@
                         </td>
                         <td>
                             <p>
-                                <a href="{% url 'register' run.slug %}" target="_blank">{{ run.registration_status }}</a>
+                                <a href="{% url 'register' run.slug %}"
+                                   target="_blank">{{ run.registration_status }}</a>
                             </p>
                         </td>
                         <td>

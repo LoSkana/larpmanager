@@ -2,12 +2,10 @@
 {% load i18n static %}
 {% block extrastyle %}
     {{ block.super }}
-    <link rel="stylesheet"
-          type="text/css"
-          href="{% static "admin/css/login.css" %}" />
+    <link rel="stylesheet" href="{% static "admin/css/login.css" %}" />
     {{ form.media }}
     {% if form.show_otp %}
-        <style type="text/css">
+        <style>
         input#id_otp_token,
         select#id_otp_device
         {
@@ -83,7 +81,7 @@
             {% url 'admin_password_reset' as password_reset_url %}
             {% if password_reset_url %}
                 <div class="password-reset-link">
-                    <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+                    <a href="{{ password_reset_url }}">{% trans "Forgotten your password or username?" %}</a>
                 </div>
             {% endif %}
             <div class="submit-row">

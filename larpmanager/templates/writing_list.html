@@ -25,7 +25,9 @@
                 <hr />
                 {% if item.hidden %}
                     <h2>
-                        <a href="#" class="my_toggle" tog="{{ item.hidden }}">{{ item.title }} ({{ item.list|length }})</a>
+                        <a href="#"
+                           class="my_toggle"
+                           tog="{{ item.hidden }}">{{ item.title }} ({{ item.list|length }})</a>
                     </h2>
                 {% else %}
                     <h2>

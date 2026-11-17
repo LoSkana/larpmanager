@@ -32,12 +32,8 @@
                     <td>{{ el.features }}</td>
                     <td>{{ el.get_plan_display }}</td>
                     <td>{{ el.active_registrations }}</td>
-                    <td>
-                        {% if el.tot %}{{ el.tot | format_decimal }}€{% endif %}
-                    </td>
-                    <td>
-                        {% if el.paid %}{{ el.paid | format_decimal }}€{% endif %}
-                    </td>
+                    <td>{% if el.tot %}{{ el.tot | format_decimal }}€{% endif %}</td>
+                    <td>{% if el.paid %}{{ el.paid | format_decimal }}€{% endif %}</td>
                 </tr>
             {% endfor %}
         </tbody>

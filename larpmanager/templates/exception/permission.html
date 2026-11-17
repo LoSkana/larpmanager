@@ -10,8 +10,7 @@
 {% endblock nav %}
 {% block content %}
     {% trans "Your user does not have the required permissions to access this page." %}
-    <br />
-    <br />
+    <div class="spacer-double"></div>
     <i>({% trans "If you think this is an error, get in touch with us to resolve it" %})</i>
     {% include "elements/error_actions.html" %}
 {% endblock content %}

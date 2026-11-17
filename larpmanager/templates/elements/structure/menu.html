@@ -13,22 +13,22 @@
                 <li>
                     <a href="{% url 'accounting' %}"><i class="fa-solid fa-money-bill"></i> {% trans "Accounting" %}</a>
                 </li>
-                {% if 'membership' in association.features %}
+                {% if "membership" in association.features %}
                     <li>
                         <a href="{% url 'membership' %}"><i class="fa-solid fa-id-card"></i> {% trans "Membership" %}</a>
                     </li>
                 {% endif %}
-                {% if 'delegated_members' in association.features %}
+                {% if "delegated_members" in association.features %}
                     <li>
                         <a href="{% url 'delegated' %}"><i class="fa-solid fa-user-shield"></i> {% trans "Delegated users" %}</a>
                     </li>
                 {% endif %}
-                {% if 'chat' in association.features %}
+                {% if "chat" in association.features %}
                     <li>
                         <a href="{% url 'messages' %}"><i class="fa-solid fa-message"></i> {% trans "Messages" %}</a>
                     </li>
                 {% endif %}
-                {% if 'badge' in association.features %}
+                {% if "badge" in association.features %}
                     <li>
                         <a href="{% url 'badges' %}"><i class="fa-solid fa-trophy"></i> {% trans "Badges" %}</a>
                     </li>
@@ -78,7 +78,8 @@
                     </li>
                 {% endif %}
                 <li>
-                    <a class="logout-link" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+                    <a class="logout-link"
+                       href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </li>
                 <form method="post" action="{% url 'logout' %}" class="hide logout-form">
                     {% csrf_token %}

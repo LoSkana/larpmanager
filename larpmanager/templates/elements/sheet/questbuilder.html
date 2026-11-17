@@ -7,8 +7,10 @@
                 <div class="gallery single relationships">
                     <div class="el">
                         <div class="icon">
+                            {# djlint:off H021 #}
                             <div class="img_cover"
                                  style="background-image:url('{% if el.player_uuid %}{{ el.player_prof }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                                {# djlint:on #}
                             </div>
                         </div>
                     </div>

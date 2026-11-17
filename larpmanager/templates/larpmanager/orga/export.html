@@ -32,8 +32,10 @@
                         {% for el in row %}
                             {% if forloop.first %}
                                 <td class="member_cover">
+                                    {# djlint:off H021 #}
                                     <div class="img_cover"
                                          style="background-image:url('{% if el %}{{ el }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                                        {# djlint:on #}
                                     </div>
                                 </td>
                             {% else %}

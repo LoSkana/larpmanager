@@ -2,7 +2,8 @@
 {% if widgets.user_character %}
     <div class="grid-item">
         <h2>
-            <a href="{% url 'orga_characters' run.get_slug %}" target="_blank"><i class="fas fa-user-edit"></i> {% trans "Characters" %}</a>
+            <a href="{% url 'orga_characters' run.get_slug %}"
+               target="_blank"><i class="fas fa-user-edit"></i> {% trans "Characters" %}</a>
         </h2>
         <table>
             {% if widgets.user_character.creation %}

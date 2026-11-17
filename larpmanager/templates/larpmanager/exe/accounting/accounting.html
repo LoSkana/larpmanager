@@ -218,7 +218,8 @@
                     {% if el.tokens %}
                         <tr id="tokens_{{ el.uuid }}">
                             <td>
-                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'exe_member' el.uuid %}"
+                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>{{ el }}</td>
                             <td>{{ el.tokens }}</td>
@@ -246,7 +247,8 @@
                     {% if el.credit %}
                         <tr id="credits_{{ el.uuid }}">
                             <td>
-                                <a href="{% url 'exe_member' el.uuid %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                                <a href="{% url 'exe_member' el.uuid %}"
+                                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                             </td>
                             <td>{{ el }}</td>
                             <td>{{ el.credit }}</td>
@@ -278,9 +280,7 @@
                         <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
                     </td>
                     <td>{{ el.balance }}</td>
-                    <td>
-                        {% if el.development != '9' %}NO{% endif %}
-                    </td>
+                    <td>{% if el.development != "9" %}NO{% endif %}</td>
                     <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
                 </tr>
             {% endfor %}

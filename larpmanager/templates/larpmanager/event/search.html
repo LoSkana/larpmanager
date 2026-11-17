@@ -73,15 +73,18 @@
                     <div class="user_resize">
                         {% for fnum in factions_typ.s %}
                             {% with factions|get:fnum as f %}
-                                {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
+                                {% if f.name %}<a typ="faction"
+                                                  tog="{{ f.number }}"
+                                                  href="#">{{ f.name }}</a>{% endif %}
                             {% endwith %}
                         {% endfor %}
                         {% if factions_typ.t %}
-                            <br />
-                            <br />
+                            <div class="spacer-double"></div>
                             {% for fnum in factions_typ.t %}
                                 {% with factions|get:fnum as f %}
-                                    {% if f.name %}<a typ="faction" tog="{{ f.number }}" href="#">{{ f.name }}</a>{% endif %}
+                                    {% if f.name %}<a typ="faction"
+                                                      tog="{{ f.number }}"
+                                                      href="#">{{ f.name }}</a>{% endif %}
                                 {% endwith %}
                             {% endfor %}
                         {% endif %}

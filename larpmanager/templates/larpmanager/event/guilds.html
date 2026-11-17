@@ -29,7 +29,9 @@
                     <tr>
                         <td>
                             <h3>
-                                {% if el.thumb %}<img class="faction-logo" src="{{ el.thumb.url }}" alt="guild logo" />{% endif %}
+                                {% if el.thumb %}
+                                    <img class="faction-logo" src="{{ el.thumb.url }}" alt="guild logo" />
+                                {% endif %}
                                 <a href="{% url 'guild' run.get_slug el.uuid %}">{{ el.name }}</a>
                                 {% if el.secret %}
                                     <i class="fa-solid fa-user-secret"

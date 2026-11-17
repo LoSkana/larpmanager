@@ -239,7 +239,7 @@
             {% endif %}
             {% if form_questions %}
                 {% for key, que in form_questions.items %}
-                    {% if que.typ == 's' or que.typ == 'm' %}
+                    {% if que.typ == "s" or que.typ == "m" %}
                         <a href="#" class="load_email_que" key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
                         <a href="#" class="my_toggle hide" tog='email_que_{{ key }}'>hidden</a>
                     {% endif %}
@@ -249,7 +249,7 @@
     {% endif %}
     {% if user_character_approval and character_status_choices %}
         <div class="char_status hide">
-            <br />
+            <div class="spacer"></div>
             <h4>{% trans "Status" %}</h4>
             <table>
                 <thead>
@@ -293,9 +293,9 @@
     {% endif %}
     {% if form_questions %}
         {% for key, que in form_questions.items %}
-            {% if que.typ == 's' or que.typ == 'm' %}
+            {% if que.typ == "s" or que.typ == "m" %}
                 <div class="email_que_{{ key }} hide">
-                    <br />
+                    <div class="spacer"></div>
                     <h4>{{ que.name }}</h4>
                     <table>
                         <thead>

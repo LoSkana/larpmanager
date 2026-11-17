@@ -72,9 +72,7 @@
                         <span class="value {% if not el.loaded %}hide{% endif %}"><i class="fa-solid fa-check"></i></span>
                     </td>
                     {% if optionals.quantity %}
-                        <td>
-                            {% if el.quantity %}{{ el.quantity }}{% endif %}
-                        </td>
+                        <td>{% if el.quantity %}{{ el.quantity }}{% endif %}</td>
                     {% endif %}
                     <td>{{ el.notes }}</td>
                     <td>
@@ -103,7 +101,7 @@
         <p class="no-elements-available">{% trans "No items have been assigned to any area yet." %}</p>
     {% endif %}
     <div id="imagePopup">
-        <img id="popupImg" src="" alt="popup image" />
+        <img id="popupImg" alt="popup image" />
     </div>
     {% include "elements/table/footer.html" %}
 {% endblock content %}

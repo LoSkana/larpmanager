@@ -61,14 +61,14 @@
                 {% csrf_token %}
                 <div>
                     {% include "elements/form/register.html" %}
-                    {% if features.discount and 'waiting' not in run_status %}
+                    {% if features.discount and "waiting" not in run_status %}
                         <h1 class="head_discount">
                             <a href="#" class="my_toggle section-link" tog='sec_discount'>
                                 {% trans "Discounts" %} <i class="fa-solid fa-chevron-down"></i>
                             </a>
                         </h1>
                         <div class="hide sec_discount">
-                            <table class="mob section " section="discount">
+                            <table class="mob section" section="discount">
                                 <tr>
                                     <td class="discount_wrp">
                                         <p id="discount_res" class="error hide"></p>
@@ -94,7 +94,7 @@
                     <input type="button" id="confirm" value="{% trans "Continue" %}" />
                 </div>
                 <div id="riepilogo" class="hide form_container">
-                    <br />
+                    <div class="spacer"></div>
                     <table class="mob">
                         <tbody>
                             <tr>
@@ -102,19 +102,19 @@
                                     <h3>{% trans "Summary" %}</h3>
                                 </th>
                             </tr>
-                            {% if 'membership' in association.features %}
+                            {% if "membership" in association.features %}
                                 {% if not features.laog and membership_amount %}
-                                    {% if membership_fee == 'done' %}
+                                    {% if membership_fee == "done" %}
                                         <tr>
                                             <td>{% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}</td>
                                         </tr>
-                                    {% elif membership_fee == 'future' %}
+                                    {% elif membership_fee == "future" %}
                                         <tr>
                                             <td>
                                                 {% trans "To participate in this event, you will have to pay the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             </td>
                                         </tr>
-                                    {% elif membership_fee == 'todo' %}
+                                    {% elif membership_fee == "todo" %}
                                         <tr>
                                             <td>
                                                 {% trans "To participate in this event, you will have to pay in addition the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
@@ -122,7 +122,7 @@
                                         </tr>
                                     {% endif %}
                                 {% endif %}
-                                {% if member.membership.status == 'e' or member.membership.status == 'j' %}
+                                {% if member.membership.status == "e" or member.membership.status == "j" %}
                                     <tr>
                                         <td>
                                             {% trans "In order to confirm your registration, you must request to register as a member of the Association. The procedure will automatically take you through the required steps." %}
@@ -147,9 +147,9 @@
             {% if auto_save %}
                 {% include "elements/form/user-auto-save.js" %}
             {% endif %}
-        </div>
-        {% include "elements/form/register-texts.html" %}
-    {% endif %}
+            </div>
+            {% include "elements/form/register-texts.html" %}
+        {% endif %}
 {% endblock content %}
 {% block js %}
     {% include "elements/form/question_toggle.js" %}

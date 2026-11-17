@@ -95,7 +95,7 @@
                     <span class="label-bold">Data emissione:</span> {{ accounting_item.created|date:"d/m/Y" }}
                 </td>
                 <td class="align-right">
-                    <span class="label-bold">Importo: &euro; {{ accounting_item.value }}</span>
+                    <span class="label-bold">Importo: € {{ accounting_item.value }}</span>
                 </td>
             </tr>
         </table>
@@ -107,20 +107,20 @@
             {% endif %}
             {% if member.get_residence %}, residente a <strong>{{ member.get_residence }}</strong>{% endif %}
             ,
-            la somma di Euro <strong>&euro; {{ accounting_item.value }}</strong>
+            la somma di Euro <strong>€ {{ accounting_item.value }}</strong>
             {% if method %}versata tramite <strong>{{ method }}</strong>{% endif %}
             .
         </div>
         <div class="causale-label">Causale:</div>
         <div class="causale-text">{{ causal }}</div>
         <div class="legal-box">
-            Operazione fuori campo IVA ai sensi dell&rsquo;Art. 4, comma 4, DPR 633/72.
-            Documento esente da imposta di bollo ai sensi dell&rsquo;Art. 82, comma 10, D.Lgs. 117/2017 (Codice del Terzo Settore).
+            Operazione fuori campo IVA ai sensi dell'Art. 4, comma 4, DPR 633/72.
+            Documento esente da imposta di bollo ai sensi dell'Art. 82, comma 10, D.Lgs. 117/2017 (Codice del Terzo Settore).
         </div>
-        <div class="signature-area">Firma omessa ai sensi dell&rsquo;art. 3 del D.Lgs. n. 39/1993</div>
+        <div class="signature-area">Firma omessa ai sensi dell'art. 3 del D.Lgs. n. 39/1993</div>
         {% if is_donation %}
             <div class="donation-note">
-                <em>Nota per il donatore: In caso di erogazione liberale effettuata con mezzi tracciabili, la presente ricevuta &egrave; valida ai fini delle detrazioni/deduzioni fiscali previste dall&rsquo;Art. 83 del D.Lgs. 117/2017.</em>
+                <em>Nota per il donatore: In caso di erogazione liberale effettuata con mezzi tracciabili, la presente ricevuta è valida ai fini delle detrazioni/deduzioni fiscali previste dall'Art. 83 del D.Lgs. 117/2017.</em>
             </div>
         {% endif %}
     </body>
