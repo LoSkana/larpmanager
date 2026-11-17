@@ -48,14 +48,25 @@ CSP_DIGEST_SIZE = 50
 # Longest value kept for each report field
 CSP_FIELD_MAX_LENGTH = 300
 
-# Sources injected by browser extensions, which the site cannot fix
-CSP_IGNORED_SCHEMES = ("chrome-extension", "moz-extension", "safari-extension", "safari-web-extension")
+# Sources injected by browser extensions and userscript managers, which the site cannot fix
+CSP_IGNORED_SCHEMES = (
+    "chrome-extension",
+    "moz-extension",
+    "safari-extension",
+    "safari-web-extension",
+    "user-script",
+)
 
 # Placeholder source files Firefox reports for code run by extensions rather than by the page
 CSP_IGNORED_SOURCES = ("sandbox eval code",)
 
-# Resources injected by in-app browsers (Facebook/Instagram) or extensions (Scite), not by the page
-CSP_IGNORED_BLOCKED = ("https://connect.facebook.net/en_US/pcm.js", "https://cdn.scite.ai/")
+# Resources injected by in-app browsers (Facebook/Instagram) or extensions (Scite), not by the page;
+# Google Ads remarketing redirects to country-specific google domains, which cannot be listed
+CSP_IGNORED_BLOCKED = (
+    "https://connect.facebook.net/en_US/pcm.js",
+    "https://cdn.scite.ai/",
+    "https://www.google.com/rmkt/collect/",
+)
 
 # Framing by third-party sites: blocked by design, nothing to fix
 CSP_IGNORED_DIRECTIVES = ("frame-ancestors",)

@@ -85,6 +85,10 @@ class TestCspAggregation(BaseTestCase):
         )
         assert not record_csp_report(build_report(**{"effective-directive": "frame-ancestors"}))
         assert not record_csp_report(build_report(**{"source-file": "about", "document-uri": "about"}))
+        assert not record_csp_report(build_report(**{"source-file": "user-script", "line-number": 1}))
+        assert not record_csp_report(
+            build_report(**{"effective-directive": "connect-src", "blocked-uri": "https://www.google.com/rmkt/collect/1/"})
+        )
 
         assert pop_csp_reports() == []
 

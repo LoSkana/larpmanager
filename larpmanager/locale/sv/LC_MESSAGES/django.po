@@ -659,6 +659,9 @@ msgstr "Laddad"
 msgid "Locked"
 msgstr "Låst"
 
+msgid "Log In"
+msgstr "Logga in"
+
 msgid "Log in"
 msgstr "Logga in"
 
@@ -1082,6 +1085,9 @@ msgstr "Logga in"
 
 msgid "Sign in"
 msgstr "Logga in"
+
+msgid "Sign up"
+msgstr "Registrera dig"
 
 msgid "Signups"
 msgstr "Anmälningar"
@@ -12805,6 +12811,13 @@ msgid ""
 msgstr ""
 "Om det är aktiverat skickas ingen notifiering till deltagaren när en "
 "karaktär tilldelas."
+
+msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Namn som visas för erfarenhetspoäng i karaktärsbladet (standard är "
+"'Erfarenhetspoäng')."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

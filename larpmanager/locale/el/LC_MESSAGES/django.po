@@ -659,6 +659,9 @@ msgstr "Φορτωμένο"
 msgid "Locked"
 msgstr "Κλειδωμένο"
 
+msgid "Log In"
+msgstr "Σύνδεση"
+
 msgid "Log in"
 msgstr "Σύνδεση"
 
@@ -1082,6 +1085,9 @@ msgstr "Σύνδεση"
 
 msgid "Sign in"
 msgstr "Σύνδεση"
+
+msgid "Sign up"
+msgstr "Εγγραφή"
 
 msgid "Signups"
 msgstr "Εγγραφές"
@@ -13173,6 +13179,13 @@ msgid ""
 msgstr ""
 "Αν ενεργοποιηθεί, δεν στέλνει ειδοποίηση στον συμμετέχοντα όταν του "
 "ανατίθεται ένας χαρακτήρας."
+
+msgid ""
+"Name shown for experience points in the character sheet (default is "
+"'Experience points')."
+msgstr ""
+"Όνομα που εμφανίζεται για τους πόντους εμπειρίας στο φύλλο χαρακτήρα (η "
+"προεπιλογή είναι 'Πόντοι εμπειρίας')."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

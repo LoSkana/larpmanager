@@ -81,6 +81,8 @@ DROP = {
     "larpmanager.EmailSuppression",
     "larpmanager.TextVersion",
     "larpmanager.RoleInvite",
+    "larpmanager.OneTimeAccessToken",
+    "socialaccount.SocialAccount",
 }
 DROP_PREFIXES = ("larpmanager.LarpManager",)
 
@@ -101,7 +103,20 @@ GLOBAL = {
 ROOT = {"larpmanager.Association", "larpmanager.AssociationSkin"}
 MEMBER = {"larpmanager.Member", "auth.User"}
 # Tables owned only by a member or user, pruned together with them
-MEMBER_ATTACHED = {"larpmanager.MemberConfig", "account.EmailAddress", "socialaccount.SocialAccount"}
+MEMBER_ATTACHED = {"larpmanager.MemberConfig", "account.EmailAddress"}
+
+# Member columns left untouched when anonymizing an account
+ANONYMIZE_KEEP = {
+    "id",
+    "uuid",
+    "created",
+    "updated",
+    "deleted",
+    "deleted_by_cascade",
+    "media_token",
+    "user_id",
+    "parent_id",
+}
 
 UNMANAGED_TABLES = {"django_migrations"}
 
@@ -316,7 +331,45 @@ def prune_members(schema: Schema, association_id: int) -> None:
     run(f"DELETE FROM {member_table} WHERE id NOT IN (SELECT id FROM keep_member)")
     user_table = qn(schema.table("auth.User"))
     run(f"DELETE FROM {user_table} WHERE id NOT IN (SELECT user_id FROM {member_table})")
+    anonymize_members(schema, association_id)
     run(f"UPDATE {user_table} SET is_staff = false, is_superuser = false")
+
+
+def anonymize_members(schema: Schema, association_id: int) -> None:
+    """Strip personal data and login from platform staff and from members without a membership."""
+    member_table = qn(schema.table("larpmanager.Member"))
+    user_table = qn(schema.table("auth.User"))
+    membership_table = qn(schema.table("larpmanager.Membership"))
+    ids = [
+        r[0]
+        for r in fetch(
+            f"SELECT m.id FROM {member_table} m JOIN {user_table} u ON u.id = m.user_id "
+            f"WHERE u.is_staff OR u.is_superuser OR NOT EXISTS "
+            f"(SELECT 1 FROM {membership_table} ms WHERE ms.member_id = m.id AND ms.association_id = %s)",
+            [association_id],
+        )
+    ]
+    print(f"members anonymized: {ids}")
+    if not ids:
+        return
+    assignments = []
+    for f in schema.models["larpmanager.Member"]._meta.concrete_fields:
+        if f.column in ANONYMIZE_KEEP or f.column in ("email", "name"):
+            continue
+        if f.null:
+            assignments.append(f"{qn(f.column)} = NULL")
+        elif f.get_internal_type() in ("CharField", "TextField", *FILE_TYPES):
+            assignments.append(f"{qn(f.column)} = ''")
+    assignments += ["email = 'removed-' || id || '@invalid'", "name = 'Removed'"]
+    run(f"UPDATE {member_table} SET {', '.join(assignments)} WHERE id = ANY(%s)", [ids])
+    user_ids = f"(SELECT user_id FROM {member_table} WHERE id = ANY(%s))"
+    run(
+        f"UPDATE {user_table} SET password = '!', username = 'removed-' || id, email = 'removed-' || id || '@invalid', "
+        f"first_name = '', last_name = '' WHERE id IN {user_ids}",
+        [ids],
+    )
+    run(f"DELETE FROM {qn(schema.table('account.EmailAddress'))} WHERE user_id IN {user_ids}", [ids])
+    run(f"DELETE FROM {qn(schema.table('larpmanager.MemberConfig'))} WHERE member_id = ANY(%s)", [ids])
 
 
 def scrub(schema: Schema, association_id: int) -> None:

@@ -281,6 +281,8 @@ SECURE_CSP = {
         *_CSP_CDN_HOSTS,
         'https://*.hotjar.com',
         'https://fonts.googleapis.com',
+        # Stylesheet injected by the browser built-in page translation
+        'https://www.gstatic.com',
     ],
     'font-src': [
         CSP.SELF,
@@ -417,6 +419,9 @@ ANTHROPIC_API_KEY = None
 # LARP Radar partner API (optional - publication is disabled if the key is unset)
 LARP_RADAR_API_KEY = None
 LARP_RADAR_ORIGIN = 'https://larpmanager.com'
+
+# Endpoint for event data
+EVENT_REPORT = 'https://larpmanager.com/event-report/'
 
 # Development only: without an API key, use the credentials of a local "ant auth login"
 ANTHROPIC_USE_LOCAL_LOGIN = False

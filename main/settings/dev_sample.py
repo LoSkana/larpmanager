@@ -42,3 +42,6 @@ ANTHROPIC_USE_LOCAL_LOGIN = False
 ADMINS = [
     ('test', 'test@test.it')
 ]
+
+# Never send event reports from tests and development
+EVENT_REPORT = None
