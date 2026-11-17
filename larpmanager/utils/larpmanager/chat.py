@@ -394,14 +394,18 @@ def _run_tool(name: str, tool_input: dict, docs: dict[str, dict]) -> tuple[str, 
     return f"Unknown tool {name}.", True
 
 
+def is_chat_configured() -> bool:
+    """Return whether the assistant has Anthropic credentials (API key or local login)."""
+    return bool(conf_settings.ANTHROPIC_API_KEY) or getattr(conf_settings, "ANTHROPIC_USE_LOCAL_LOGIN", False)
+
+
 def _call_anthropic(messages: list[dict], docs: dict[str, dict]) -> str | None:
     """Run the assistant on the conversation, executing its documentation lookups.
 
     Alerts the admins and returns None on failure.
     """
     api_key = conf_settings.ANTHROPIC_API_KEY
-    use_local_login = getattr(conf_settings, "ANTHROPIC_USE_LOCAL_LOGIN", False)
-    if not api_key and not use_local_login:
+    if not is_chat_configured():
         notify_admins("Chat assistant: Anthropic API key not configured")
         return None
 
