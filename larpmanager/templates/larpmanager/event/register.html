@@ -106,18 +106,20 @@
                                 {% if not features.laog and membership_amount %}
                                     {% if membership_fee == "done" %}
                                         <tr>
-                                            <td>{% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}</td>
+                                            <td>
+                                                {% blocktrans with year=run.start.year %}You have already paid your membership fee for {{ year }}, so you are already covered for this event!{% endblocktrans %}
+                                            </td>
                                         </tr>
                                     {% elif membership_fee == "future" %}
                                         <tr>
                                             <td>
-                                                {% trans "To participate in this event, you will have to pay the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% blocktrans with year=run.start.year %}To participate in this event, you will have to pay the {{ year }} annual membership fee of:{% endblocktrans %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             </td>
                                         </tr>
                                     {% elif membership_fee == "todo" %}
                                         <tr>
                                             <td>
-                                                {% trans "To participate in this event, you will have to pay in addition the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% blocktrans with year=run.start.year %}To participate in this event, you will have to pay in addition the {{ year }} annual membership fee of:{% endblocktrans %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             </td>
                                         </tr>
                                     {% endif %}

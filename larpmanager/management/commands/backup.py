@@ -43,7 +43,7 @@ class Command(BaseCommand):
         """Database backup command with compression.
 
         Creates compressed backup files for all active runs (non-DONE, non-CANCELLED)
-        in an organized directory structure by event ID and date.
+        of non-demo, non-template associations in an organized directory structure by event ID and date.
 
         Args:
             *args: Variable length argument list from command line
@@ -62,8 +62,12 @@ class Command(BaseCommand):
         # Get current date for organizing backup files by date
         now_date = timezone.localdate()
 
-        # Process all runs that are not done or cancelled
-        for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
+        # Process all runs that are not done or cancelled, skipping demo and demo template associations
+        runs = Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]).filter(
+            event__association__demo_type__isnull=True,
+            event__association__demo_types__isnull=True,
+        )
+        for run in runs:
             # Prepare context with run, event, and feature information
             context = {"run": run, "event": run.event, "features": get_event_features(run.event_id)}
             prepare_run(context)
