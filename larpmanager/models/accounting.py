@@ -114,8 +114,6 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
     verified = models.BooleanField(default=False)
 
-    hide = models.BooleanField(default=False)
-
     key = models.CharField(max_length=500, null=True)
 
     class Meta:
@@ -305,8 +303,6 @@ class AccountingItem(UuidMixin, BaseModel):
     inv = models.OneToOneField(PaymentInvoice, on_delete=models.SET_NULL, null=True, blank=True)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
-
-    hide = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         """Return string representation of the accounting entry.
@@ -825,8 +821,6 @@ class RefundRequest(UuidMixin, BaseModel):
         help_text=_("Enter the amount of reimbursement desired"),
         validators=[MinValueValidator(Decimal("0.01"))],
     )
-
-    hide = models.BooleanField(default=False)
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE)
 

@@ -92,8 +92,6 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
 
 def send_membership_payment_notification_email(membership_item: AccountingItemMembership) -> None:
     """Send notification when membership fee payment is received."""
-    if membership_item.hide:
-        return
     if membership_item.pk:
         return
     # to user

@@ -450,9 +450,7 @@ def _orga_registrations_discount(context: dict) -> None:
     discount_items_query = AccountingItemDiscount.objects.filter(registration__run=context["run"])
 
     # Process each discount item and organize by registration
-    for accounting_item_discount in discount_items_query.select_related("registration__member", "disc").exclude(
-        hide=True
-    ):
+    for accounting_item_discount in discount_items_query.select_related("registration__member", "disc"):
         regs_list_add(
             context, "list_discount", accounting_item_discount.disc.name, accounting_item_discount.registration.member
         )

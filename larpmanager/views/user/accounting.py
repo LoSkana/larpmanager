@@ -187,24 +187,22 @@ def accounting_tokens(request: HttpRequest) -> HttpResponse:
         HttpResponse: Rendered token accounting page with given/used token lists
 
     Note:
-        Only shows non-hidden accounting items for the user's current association.
+        Only shows accounting items for the user's current association.
 
     """
     # Initialize context with default user data
     context = get_context(request)
 
-    # Query for tokens given to the user (non-hidden, within current association)
+    # Query for tokens given to the user within current association
     given_tokens = AccountingItemOther.objects.filter(
         member=context["member"],
-        hide=False,
         oth=OtherChoices.TOKEN,
         association_id=context["association_id"],
     )
 
-    # Query for tokens used by the user (non-hidden, within current association)
+    # Query for tokens used by the user within current association
     used_tokens = AccountingItemPayment.objects.filter(
         member=context["member"],
-        hide=False,
         pay=PaymentChoices.TOKEN,
         association_id=context["association_id"],
     )
@@ -247,28 +245,24 @@ def accounting_credits(request: HttpRequest) -> HttpResponse:
             # Approved expenses for the user in current association
             "exp": AccountingItemExpense.objects.filter(
                 member=context["member"],
-                hide=False,
                 is_approved=True,
                 association_id=context["association_id"],
             ),
             # Credits given to the user in current association
             "given": AccountingItemOther.objects.filter(
                 member=context["member"],
-                hide=False,
                 oth=OtherChoices.CREDIT,
                 association_id=context["association_id"],
             ),
             # Payments made using credits by the user in current association
             "used": AccountingItemPayment.objects.filter(
                 member=context["member"],
-                hide=False,
                 pay=PaymentChoices.CREDIT,
                 association_id=context["association_id"],
             ),
             # Refunds issued to the user in current association
             "ref": AccountingItemOther.objects.filter(
                 member=context["member"],
-                hide=False,
                 oth=OtherChoices.REFUND,
                 association_id=context["association_id"],
             ),
@@ -1430,7 +1424,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     invoices = (
         PaymentInvoice.objects.filter(
             registration=registration,
-            hide=False,
         )
         .select_related("method")
         .order_by("-created")
@@ -1439,7 +1432,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     payment_items = (
         AccountingItemPayment.objects.filter(
             registration=registration,
-            hide=False,
         )
         .select_related("inv")
         .order_by("created")
@@ -1448,7 +1440,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     other_items = AccountingItemOther.objects.filter(
         run=registration.run,
         member=registration.member,
-        hide=False,
     ).order_by("created")
 
     remaining = registration.tot_iscr - registration.tot_payed

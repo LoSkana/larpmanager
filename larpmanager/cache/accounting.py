@@ -130,7 +130,7 @@ def _get_accounting_context(run_id: int, event_id: int, member_filter: int | Non
         payments_query = payments_query.filter(pay__in=payment_types)
 
         # Aggregate payment data by member and payment type
-        for member_id, payment_value, payment_type in payments_query.exclude(hide=True).values_list(
+        for member_id, payment_value, payment_type in payments_query.values_list(
             "member_id",
             "value",
             "pay",

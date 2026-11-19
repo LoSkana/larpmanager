@@ -164,10 +164,6 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
         if prev.registration_id != instance.registration_id:
             AccountingItemTransaction.objects.filter(inv_id=instance.inv_id).update(registration=instance.registration)
     else:
-        # Early return if payment should be hidden from notifications
-        if instance.hide:
-            return
-
         # Check if payment notifications are enabled for this association
         association_id = get_run_association_id(instance.registration.run_id)
         if not get_association_config(association_id, "mail_payment"):

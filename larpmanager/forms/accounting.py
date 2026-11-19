@@ -74,7 +74,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemExpense
-        exclude = ("member", "is_approved", "inv", "hide")
+        exclude = ("member", "is_approved", "inv")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and conditionally remove balance field based on feature flag."""
@@ -99,7 +99,7 @@ class OrgaExpenseForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemExpense
-        exclude = ("inv", "hide")
+        exclude = ("inv",)
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -130,7 +130,7 @@ class OrgaTokenForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        exclude = ("inv", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -161,7 +161,7 @@ class OrgaCreditForm(BaseModelFormRun):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        exclude = ("inv", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": RunMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -196,7 +196,7 @@ class ExePaymentForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemPayment
-        exclude = ("inv", "hide", "member", "vat_ticket", "vat_options")
+        exclude = ("inv", "member", "vat_ticket", "vat_options")
         widgets: ClassVar[dict] = {"registration": AssocRegS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -237,7 +237,7 @@ class ExeOutflowForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOutflow
-        exclude = ("member", "inv", "hide")
+        exclude = ("member", "inv")
 
         widgets: ClassVar[dict] = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
@@ -281,7 +281,7 @@ class ExeInflowForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemInflow
-        exclude = ("member", "inv", "hide")
+        exclude = ("member", "inv")
 
         widgets: ClassVar[dict] = {"payment_date": DatePickerInput, "run": RunS2Widget}
 
@@ -317,7 +317,7 @@ class ExeDonationForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemDonation
-        exclude = ("inv", "hide")
+        exclude = ("inv",)
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -364,7 +364,7 @@ class ExeCreditForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        exclude = ("inv", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -395,7 +395,7 @@ class ExeTokenForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemOther
-        exclude = ("inv", "hide", "registration", "cancellation", "ref_addit", "oth")
+        exclude = ("inv", "registration", "cancellation", "ref_addit", "oth")
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -428,7 +428,7 @@ class ExeExpenseForm(BaseModelForm):
 
     class Meta:
         model = AccountingItemExpense
-        exclude = ("inv", "hide")
+        exclude = ("inv",)
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget, "run": RunS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -652,7 +652,7 @@ class ExeRefundRequestForm(BaseModelForm):
 
     class Meta:
         model = RefundRequest
-        exclude = ("status", "hide")
+        exclude = ("status",)
         widgets: ClassVar[dict] = {"member": AssociationMemberS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

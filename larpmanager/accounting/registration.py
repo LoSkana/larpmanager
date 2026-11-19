@@ -139,7 +139,7 @@ def get_registration_payments(
     if accounting_payments is None:
         accounting_payments = AccountingItemPayment.objects.filter(
             registration=registration,
-        ).exclude(hide=True)
+        )
 
     total_paid = 0
     registration.payments = {}
