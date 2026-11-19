@@ -75,14 +75,14 @@ class Command(BaseCommand):
             # Generate the backup content
             resp = prepare_backup(context)
 
-            # Build hierarchical path: base_path/event_id/year/month/day/run_name.zip
+            # Build hierarchical path: base_path/event_id/year/month/day/run_slug.zip
             path = Path(
                 options["path"],
                 str(run.event_id),
                 str(now_date.year),
                 str(now_date.month).zfill(2),
                 str(now_date.day).zfill(2),
-                f"{run!s}.zip",
+                f"{run.get_slug()}.zip",
             )
 
             # Create directory structure if it doesn't exist
