@@ -462,7 +462,6 @@ CREATE TABLE public.larpmanager_accountingitemcollection (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     association_id integer NOT NULL,
     collection_id integer NOT NULL,
     member_id integer,
@@ -487,7 +486,6 @@ CREATE TABLE public.larpmanager_accountingitemdiscount (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     association_id integer NOT NULL,
     disc_id integer NOT NULL,
     inv_id integer,
@@ -512,7 +510,6 @@ CREATE TABLE public.larpmanager_accountingitemdonation (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     descr character varying(1000) NOT NULL,
     association_id integer NOT NULL,
     member_id integer,
@@ -537,7 +534,6 @@ CREATE TABLE public.larpmanager_accountingitemexpense (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     invoice character varying(100) NOT NULL,
     descr character varying(150) NOT NULL,
     exp character varying(1) NOT NULL,
@@ -567,7 +563,6 @@ CREATE TABLE public.larpmanager_accountingiteminflow (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     descr character varying(500) NOT NULL,
     invoice character varying(100),
     payment_date date,
@@ -595,7 +590,6 @@ CREATE TABLE public.larpmanager_accountingitemmembership (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     year integer NOT NULL,
     association_id integer NOT NULL,
     member_id integer,
@@ -620,7 +614,6 @@ CREATE TABLE public.larpmanager_accountingitemother (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     oth character varying(1) NOT NULL,
     descr character varying(150) NOT NULL,
     cancellation boolean NOT NULL,
@@ -649,7 +642,6 @@ CREATE TABLE public.larpmanager_accountingitemoutflow (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     descr character varying(500) NOT NULL,
     invoice character varying(100),
     payment_date date,
@@ -679,7 +671,6 @@ CREATE TABLE public.larpmanager_accountingitempayment (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     pay character varying(1) NOT NULL,
     info character varying(150),
     vat_options numeric(10,2) NOT NULL,
@@ -708,7 +699,6 @@ CREATE TABLE public.larpmanager_accountingitemtransaction (
     updated timestamp with time zone NOT NULL,
     search character varying(150) NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     user_burden boolean NOT NULL,
     association_id integer NOT NULL,
     member_id integer,
@@ -3325,7 +3315,6 @@ CREATE TABLE public.larpmanager_paymentinvoice (
     causal character varying(500) NOT NULL,
     cod character varying(50) NOT NULL,
     verified boolean NOT NULL,
-    hide boolean NOT NULL,
     key character varying(500),
     association_id integer NOT NULL,
     member_id integer NOT NULL,
@@ -3798,7 +3787,6 @@ CREATE TABLE public.larpmanager_refundrequest (
     status character varying(1) NOT NULL,
     details text NOT NULL,
     value numeric(10,2) NOT NULL,
-    hide boolean NOT NULL,
     association_id integer NOT NULL,
     member_id integer NOT NULL,
     uuid character varying(12) NOT NULL
@@ -5230,6 +5218,7 @@ INSERT INTO public.django_migrations VALUES (269, 'larpmanager', '0201_remove_ca
 INSERT INTO public.django_migrations VALUES (270, 'larpmanager', '0202_chat_log_answer', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (271, 'larpmanager', '0203_abilityexp_visible_characters', '2025-01-01 00:00:00.000000+01');
 INSERT INTO public.django_migrations VALUES (273, 'larpmanager', '0204_larpmanagereventreport', '2025-01-01 00:00:00.000000+01');
+INSERT INTO public.django_migrations VALUES (274, 'larpmanager', '0205_remove_accounting_hide', '2025-01-01 00:00:00.000000+01');
 
 INSERT INTO public.larpmanager_association VALUES (1, NULL, false, '2025-01-01 00:00:00.000000+01', '2025-01-01 00:00:00.000000+01', 'Test Orga', 'def', '2025-01-01 00:00:00.000000+01', 'association/d3f86006e94d41849dfd79d1172b9074.jpg', '', '', 'test@test.it', 'e', '', '', '', '', NULL, NULL, NULL, 'f', '', false, false, '\x5049644e665a4348497a436f4934724659396a76514c744f7254724c31564232717746464351364c566e343d', '', 1, false, 'u1', NULL, 'Europe/Rome');
 
@@ -8299,7 +8288,7 @@ SELECT pg_catalog.setval('public.django_admin_log_id_seq', 1, false);
 
 SELECT pg_catalog.setval('public.django_content_type_id_seq', 1, false);
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 273, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 274, true);
 
 SELECT pg_catalog.setval('public.larpmanager_abilityexp_visible_characters_id_seq', 1, false);
 
@@ -12982,4 +12971,4 @@ ALTER TABLE ONLY public.socialaccount_socialaccount
     ADD CONSTRAINT socialaccount_socialaccount_user_id_8146e70c_fk_auth_user_id FOREIGN KEY (user_id) REFERENCES public.auth_user(id) DEFERRABLE INITIALLY DEFERRED;
 
 
--- LARPMANAGER_SCHEMA_VERSION: 0204_larpmanagereventreport
+-- LARPMANAGER_SCHEMA_VERSION: 0205_remove_accounting_hide

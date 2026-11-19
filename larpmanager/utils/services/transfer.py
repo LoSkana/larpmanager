@@ -361,7 +361,6 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             association_id=target_association_id,
             registration=target_reg,
             verified=False,  # Reset verification status
-            hide=invoice.hide,
             key=None,  # Reset key to avoid conflicts
         )
 
@@ -377,7 +376,6 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
             vat=payment_item.vat,
-            hide=payment_item.hide,
         )
 
     # Transfer AccountingItemOther records linked to the run
@@ -395,7 +393,6 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
                 descr=f"Transferred from {source_reg.run}: {other_item.descr}",
                 cancellation=False,  # Reset cancellation flag
                 ref_addit=other_item.ref_addit,
-                hide=other_item.hide,
             )
 
 

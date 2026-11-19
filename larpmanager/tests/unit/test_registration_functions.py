@@ -408,30 +408,6 @@ class TestPaymentCalculationFunctions(BaseTestCase):
 
         self.assertEqual(result, Decimal("50.00"))
 
-    def test_get_registration_payments_excludes_hidden(self) -> None:
-        """Test payment calculation excludes hidden payments"""
-        member = self.get_member()
-        association = self.get_association()
-        run = self.get_run()
-        registration = self.create_registration(member=member, run=run)
-
-        AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
-        )
-        AccountingItemPayment.objects.create(
-            member=member,
-            association=association,
-            registration=registration,
-            pay=PaymentChoices.MONEY,
-            value=Decimal("20.00"),
-            hide=True,
-        )
-
-        result = get_registration_payments(registration)
-
-        # Should exclude hidden payment
-        self.assertEqual(result, Decimal("30.00"))
-
     def test_get_registration_payments_sets_dictionary(self) -> None:
         """Test payment calculation sets payments dictionary"""
         member = self.get_member()

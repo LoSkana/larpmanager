@@ -477,7 +477,6 @@ def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpRespons
     # Get member discounts for current association
     context["discounts"] = AccountingItemDiscount.objects.filter(
         registration__member=context["member_edit"],
-        hide=False,
         association_id=context["association_id"],
     ).select_related("registration__run", "disc")
 
@@ -521,12 +520,11 @@ def exe_member_registrations(request: HttpRequest, member_uuid: str) -> HttpResp
 def member_add_accountingitempayment(context: dict, member: Member) -> None:
     """Add accounting item payment information to context for a member.
 
-    Retrieves non-hidden payments for the member and sets display type based on payment method.
+    Retrieves payments for the member and sets display type based on payment method.
     """
-    # Fetch visible payments for the member in the current association
+    # Fetch payments for the member in the current association
     context["pays"] = AccountingItemPayment.objects.filter(
         member=member,
-        hide=False,
         association_id=context["association_id"],
     ).select_related("registration")
 
@@ -542,10 +540,9 @@ def member_add_accountingitempayment(context: dict, member: Member) -> None:
 
 def member_add_accountingitemother(context: dict, member: Member) -> None:
     """Add accounting other items to member context with localized type labels."""
-    # Query non-hidden accounting items for the member in current association
+    # Query accounting items for the member in current association
     context["others"] = AccountingItemOther.objects.filter(
         member=member,
-        hide=False,
         association_id=context["association_id"],
     ).select_related("run")
 

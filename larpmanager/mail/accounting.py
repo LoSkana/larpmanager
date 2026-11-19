@@ -66,7 +66,7 @@ def send_expense_notification_email(instance: AccountingItemExpense) -> None:
 
     This function handles post-save events for expense accounting items by sending
     notification emails to all event organizers when a new expense item is created.
-    No notification is sent for hidden expenses or when updating existing expenses.
+    No notification is sent when updating existing expenses.
 
     Args:
         instance: The AccountingItemExpense instance that was saved
@@ -75,10 +75,6 @@ def send_expense_notification_email(instance: AccountingItemExpense) -> None:
         None
 
     """
-    # Skip notification if expense is marked as hidden
-    if instance.hide:
-        return
-
     # Only send email notifications for newly created expenses
     # that are associated with a run and event (skip soft-deleted events)
     if instance.run_id and Event.objects.filter(id=get_run_event_id(instance.run_id)).exists():
@@ -108,9 +104,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         None
 
     """
-    # Skip hidden or new expense items
-    if expense_item.hide:
-        return
+    # Skip new expense items
     if not expense_item.pk:
         return
 
@@ -286,11 +280,10 @@ def send_token_credit_notification_email(accounting_item: AccountingItemOther) -
     """Send notification emails for token, credit, or refund accounting items.
 
     Handles email notifications when new accounting items are created (not updated).
-    Skips hidden items and only processes tokens, credits, and refunds.
+    Only processes tokens, credits, and refunds.
 
     Args:
         accounting_item: AccountingItemOther instance being saved. Must have attributes:
-            - hide: Boolean indicating if item should be hidden
             - pk: Primary key (None for new instances)
             - oth: Type of accounting item (TOKEN, CREDIT, or REFUND)
             - association_id: Associated organization ID
@@ -299,10 +292,6 @@ def send_token_credit_notification_email(accounting_item: AccountingItemOther) -
         None
 
     """
-    # Skip processing if item is marked as hidden
-    if accounting_item.hide:
-        return
-
     # Get organization-specific names for tokens and credits
     tokens_name, credits_name = get_token_credit_name(accounting_item.association_id)
 
@@ -414,8 +403,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     """Send confirmation email to member after donation is processed.
 
     This function handles pre-save events for donation accounting items by sending
-    a confirmation email to the donor. The email is only sent for new donations
-    that are not hidden.
+    a confirmation email to the donor. The email is only sent for new donations.
 
     Args:
         instance: The AccountingItemDonation instance being saved
@@ -424,10 +412,6 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
         None
 
     """
-    # Skip email if donation is marked as hidden
-    if instance.hide:
-        return
-
     # Skip email if this is an existing donation (has primary key)
     if instance.pk:
         return
