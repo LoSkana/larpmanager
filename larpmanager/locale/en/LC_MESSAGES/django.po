@@ -7230,19 +7230,22 @@ msgstr ""
 msgid "If you have a discount code, enter it here and press enter."
 msgstr ""
 
+#, python-format
 msgid ""
-"You have already paid your dues for the current year, so you are already "
+"You have already paid your membership fee for %(year)s, so you are already "
 "covered for this event!"
 msgstr ""
 
+#, python-format
 msgid ""
-"To participate in this event, you will have to pay the annual membership fee "
-"of:"
+"To participate in this event, you will have to pay the %(year)s annual "
+"membership fee of:"
 msgstr ""
 
+#, python-format
 msgid ""
-"To participate in this event, you will have to pay in addition the annual "
-"membership fee of:"
+"To participate in this event, you will have to pay in addition the %(year)s "
+"annual membership fee of:"
 msgstr ""
 
 msgid ""
@@ -9066,6 +9069,10 @@ msgid "Returned"
 msgstr ""
 
 msgid "Payment membership fee"
+msgstr ""
+
+#, python-format
+msgid "You are paying the annual membership fee for the year <b>%(year)s</b>."
 msgstr ""
 
 msgid "Indicates the details of the request:"

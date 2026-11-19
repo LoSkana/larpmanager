@@ -5,6 +5,14 @@
 {% endblock title %}
 {% block content %}
     <div class="user_resize platform form_container">
+        <h2>{% trans "Membership fee" %} {{ year }}</h2>
+        <p>
+            {% blocktrans %}You are paying the annual membership fee for the year <b>{{ year }}</b>.{% endblocktrans %}
+            {% if membership_fee %}
+                {% trans "Amount" %}: <b>{{ membership_fee }}{{ currency_symbol }}</b>
+            {% endif %}
+        </p>
+        <hr />
         {% if invoice %}
             {% include "elements/payment_go.html" %}
         {% else %}
