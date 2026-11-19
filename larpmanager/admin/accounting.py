@@ -171,9 +171,13 @@ class AccountingItemPaymentAdmin(AccountingItemAdmin):
 class AccountingItemMembershipAdmin(AccountingItemAdmin):
     """Admin interface for membership fee accounting items."""
 
-    list_display = ("id", "year", "member", "value")
+    list_display = ("id", "year", "association", "member", "value")
     list_filter = (MemberFilter, AssociationFilter)
     autocomplete_fields: ClassVar[list] = ["member", "inv", "association"]
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        """Prefetch association and member for list display."""
+        return super().get_queryset(request).select_related("association", "member")
 
 
 @admin.register(AccountingItemOther)
