@@ -129,13 +129,16 @@
                 {% trans "In the membership book the number of your membership card is:" %}  <b>{{ member.membership.card_number|stringformat:"04d" }}</b>
             </p>
             {% if fee_payed %}
-                <p>
-                    {% trans "The payment of your membership fee for this year has been received. You have the right to take part in the organization's events." %}
-                </p>
+                <p>{% trans "The payment of your membership fee for this year has been received." %}</p>
             {% elif fee_payable %}
-                <h2>{% trans "Payment membership fee:" %} {{ year }}</h2>
+                <h2>{% trans "Membership fee payment" %} {{ year }}</h2>
                 <p>
-                    {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and the organization's meetings." %} <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                    {% if fee_registered %}
+                        {% trans "You are registered for an event to be held this year, but we have not received your membership fee payment: it is required to take part in the event." %}
+                    {% elif vote_open %}
+                        {% trans "The payment of your membership fee for this year is required to cast your vote." %}
+                    {% endif %}
+                    <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                 </p>
             {% endif %}
         {% endif %}

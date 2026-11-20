@@ -152,7 +152,7 @@ def membership_fees(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/accounting")
-    expect_normalized(page, page.locator("#one"), "Payment membership fee")
+    expect_normalized(page, page.locator("#one"), "Membership fee payment")
     page.get_by_role("link", name="Pay the annual fee").click()
     page.get_by_role("columnheader", name="test wire").click()
     submit(page)
@@ -172,7 +172,7 @@ def membership_fees(page: Any, live_server: Any) -> None:
     confirm_modal(page)
 
     go_to(page, live_server, "/accounting")
-    expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
+    expect(page.locator("#one")).not_to_contain_text("Membership fee payment")
 
 
 def collections(page: Any, live_server: Any) -> None:
