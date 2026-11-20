@@ -5432,6 +5432,9 @@ msgstr "Le iscrizioni sono chiuse."
 msgid "Registrations are open!"
 msgstr "Le iscrizioni sono aperte!"
 
+msgid "Registrations cancelled"
+msgstr "Iscrizioni annullate"
+
 msgid "Registrations not open!"
 msgstr "Le iscrizioni non sono ancora aperte!"
 
@@ -5473,6 +5476,9 @@ msgstr "Hai già un account?"
 
 msgid "Association Translations"
 msgstr "Traduzioni dell'associazione"
+
+msgid "Cancel all registrations"
+msgstr "Annulla tutte le iscrizioni"
 
 msgid "Cancel your registration"
 msgstr "Cancella iscrizione"
@@ -6507,6 +6513,9 @@ msgstr "La data di inizio dell'evento"
 msgid "The name entered does not match"
 msgstr "Il nome inserito non corrisponde"
 
+msgid "This operation cannot be undone"
+msgstr "Questa operazione non può essere annullata"
+
 msgid "To get started, check these out"
 msgstr "Per iniziare, dai un'occhiata a questi"
 
@@ -7236,6 +7245,9 @@ msgstr "Seleziona l'organizzazione verso cui procedere"
 
 msgid "Set the organization payment currency"
 msgstr "Imposta la valuta di pagamento dell'organizzazione"
+
+msgid "The event must be in cancelled status"
+msgstr "L'evento deve essere in stato annullato"
 
 msgid "The question type, allowed values are"
 msgstr "Il tipo di domanda, i valori ammessi sono"
@@ -9349,6 +9361,9 @@ msgid "Manage the answer options available for workshop questions"
 msgstr ""
 "Gestisci le opzioni di risposta disponibili per le domande del workshop"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr "I soldi pagati verranno rimborsati ai partecipanti come crediti"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 "Nome dell'opzione, visualizzato all'interno della domanda (tienilo corto)"
@@ -10935,6 +10950,12 @@ msgstr ""
 "Questo URL non è disponibile: controlla quello suggerito o scegline un altro"
 
 msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+"I gettoni e i crediti usati per il pagamento verranno restituiti ai "
+"partecipanti"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Carica una ricevuta della quota associativa per confermare il pagamento "
@@ -12519,6 +12540,13 @@ msgstr ""
 "tradotte nello spazio dell'organizzazione"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Annulla tutte le iscrizioni attive di questo evento annullato e rimborsa i "
+"partecipanti"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13821,6 +13849,13 @@ msgid ""
 msgstr ""
 "Gestisci i modelli di evento utilizzati come base per i nuovi eventi, "
 "compresi i ruoli e la configurazione"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"I soldi pagati non verranno rimborsati automaticamente: dovrai rimborsare tu"
+" i partecipanti"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -16317,6 +16352,15 @@ msgstr ""
 "Sembra che esista già un account con questo numero di telefono! Puoi "
 "recuperare il tuo account dalla pagina di accesso oppure contattare "
 "l'assistenza se hai bisogno di aiuto."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Tutte le iscrizioni verranno annullate: assegnazioni dei personaggi, trait, "
+"sconti e bonus verranno rimossi, e ogni partecipante riceverà una notifica "
+"via email"
 
 msgid ""
 "Below you will find all the features available; you can write a search "

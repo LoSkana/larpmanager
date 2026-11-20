@@ -5432,6 +5432,9 @@ msgstr "Ya no puedes inscribirte."
 msgid "Registrations are open!"
 msgstr "¡Las inscripciones están abiertas!"
 
+msgid "Registrations cancelled"
+msgstr "Inscripciones canceladas"
+
 msgid "Registrations not open!"
 msgstr "La inscripción aún no está abierta!"
 
@@ -5473,6 +5476,9 @@ msgstr "¿Ya tienes una cuenta?"
 
 msgid "Association Translations"
 msgstr "Traducciones de la asociación"
+
+msgid "Cancel all registrations"
+msgstr "Cancelar todas las inscripciones"
 
 msgid "Cancel your registration"
 msgstr "Cancelar inscripción"
@@ -6507,6 +6513,9 @@ msgstr "Fecha de inicio del evento"
 msgid "The name entered does not match"
 msgstr "El nombre introducido no coincide"
 
+msgid "This operation cannot be undone"
+msgstr "Esta operación no se puede deshacer"
+
 msgid "To get started, check these out"
 msgstr "Para empezar, échale un vistazo a esto"
 
@@ -7236,6 +7245,9 @@ msgstr "Selecciona la organización a la que proceder"
 
 msgid "Set the organization payment currency"
 msgstr "Configura la moneda de pago de la organización"
+
+msgid "The event must be in cancelled status"
+msgstr "El evento debe estar en estado cancelado"
 
 msgid "The question type, allowed values are"
 msgstr "El tipo de pregunta, los valores permitidos son"
@@ -9347,6 +9359,9 @@ msgid "Manage the answer options available for workshop questions"
 msgstr ""
 "Gestiona las opciones de respuesta disponibles para las preguntas del taller"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr "El dinero pagado se reembolsará a los participantes como créditos"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nombre de la opción, que aparece en la pregunta (manténlo breve)"
 
@@ -10932,6 +10947,11 @@ msgid ""
 msgstr "Esta URL no está disponible: revisa la sugerida o elige otra"
 
 msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+"Los tokens y créditos usados para pagar se devolverán a los participantes"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Sube un recibo de la cuota de membresía para confirmar el pago del año "
@@ -12504,6 +12524,13 @@ msgstr ""
 "organización"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Cancela todas las inscripciones activas de este evento cancelado y reembolsa"
+" a los participantes"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13806,6 +13833,13 @@ msgid ""
 msgstr ""
 "Gestiona las plantillas de eventos que se usan como base para crear nuevos "
 "eventos, incluyendo sus roles y su configuración"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"El dinero pagado no se reembolsará automáticamente: tendrás que reembolsar "
+"tú a los participantes"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -16297,6 +16331,15 @@ msgstr ""
 "¡Parece que ya hay una cuenta con este número de teléfono! Puedes recuperar "
 "tu cuenta desde la página de inicio de sesión o ponerte en contacto con el "
 "servicio de atención al cliente si necesitas ayuda."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Se cancelarán todas las inscripciones: se eliminarán las asignaciones de "
+"personajes, los traits, los descuentos y las bonificaciones, y se notificará"
+" a cada participante por email"
 
 msgid ""
 "Below you will find all the features available; you can write a search "

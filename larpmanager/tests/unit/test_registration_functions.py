@@ -31,6 +31,8 @@ from larpmanager.accounting.base import round_to_nearest_cent
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.accounting.registration import (
     cancel_reg,
+    cancel_run,
+    get_cancel_run_summary,
     get_date_surcharge,
     get_registration_iscr,
     get_registration_payments,
@@ -42,13 +44,16 @@ from larpmanager.accounting.registration import (
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,
+    AccountingItemOther,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
     DiscountType,
+    OtherChoices,
     PaymentChoices,
 )
 from larpmanager.models.association import AssociationConfig
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import (
@@ -616,6 +621,78 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
 
         # Should delete character relationships
         self.assertEqual(RegistrationCharacterRel.objects.filter(registration=registration).count(), 0)
+
+
+class TestCancelRun(BaseTestCase):
+    """Test cases for cancelling all registrations of a cancelled run"""
+
+    def _setup_paid_registration(self) -> tuple[Any, Any, Any]:
+        """Create a cancelled run with a registration paid with money and credits."""
+        member = self.get_member()
+        association = self.get_association()
+        run = self.get_run()
+        run.development = DevelopStatus.CANC
+        run.save()
+        registration = self.create_registration(member=member, run=run)
+        for pay, value in [(PaymentChoices.MONEY, Decimal("80.00")), (PaymentChoices.CREDIT, Decimal("20.00"))]:
+            AccountingItemPayment.objects.create(
+                member=member, association=association, registration=registration, pay=pay, value=value
+            )
+        return member, run, registration
+
+    def test_cancel_run_requires_cancelled_status(self) -> None:
+        """Test runs not in cancelled status are left untouched"""
+        run = self.get_run()
+        registration = self.create_registration(member=self.get_member(), run=run)
+
+        self.assertEqual(cancel_run(run), 0)
+
+        registration.refresh_from_db()
+        self.assertIsNone(registration.cancellation_date)
+
+    def test_get_cancel_run_summary(self) -> None:
+        """Test summary counts active registrations and payment totals"""
+        _member, run, _registration = self._setup_paid_registration()
+
+        summary = get_cancel_run_summary(run)
+
+        self.assertEqual(summary["registrations"], 1)
+        self.assertEqual(summary["money"], Decimal("80.00"))
+        self.assertEqual(summary["credits"], Decimal("20.00"))
+        self.assertEqual(summary["tokens"], Decimal(0))
+
+    @patch("larpmanager.accounting.registration.get_event_features", return_value={"credits": 1})
+    def test_cancel_run_refunds_money_as_credits(self, mock_features: Any) -> None:
+        """Test money paid becomes credits and spent credits are returned"""
+        member, run, registration = self._setup_paid_registration()
+
+        self.assertEqual(cancel_run(run), 1)
+
+        registration.refresh_from_db()
+        self.assertIsNotNone(registration.cancellation_date)
+        self.assertTrue(registration.refunded)
+        self.assertFalse(
+            AccountingItemPayment.objects.filter(registration=registration, pay=PaymentChoices.CREDIT).exists()
+        )
+        refund = AccountingItemOther.objects.get(member=member, run=run, cancellation=True)
+        self.assertEqual(refund.oth, OtherChoices.CREDIT)
+        self.assertEqual(refund.value, Decimal("80.00"))
+
+        # Running again does not refund twice
+        self.assertEqual(cancel_run(run), 0)
+        self.assertEqual(AccountingItemOther.objects.filter(member=member, run=run, cancellation=True).count(), 1)
+
+    @patch("larpmanager.accounting.registration.get_event_features", return_value={})
+    def test_cancel_run_without_credits_leaves_money(self, mock_features: Any) -> None:
+        """Test money paid is not refunded when credits are disabled"""
+        member, run, registration = self._setup_paid_registration()
+
+        cancel_run(run)
+
+        registration.refresh_from_db()
+        self.assertIsNotNone(registration.cancellation_date)
+        self.assertFalse(registration.refunded)
+        self.assertFalse(AccountingItemOther.objects.filter(member=member, run=run, cancellation=True).exists())
 
 
 @pytest.mark.django_db(transaction=True)
