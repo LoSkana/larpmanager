@@ -7917,6 +7917,9 @@ msgstr ""
 msgid "Token balance:"
 msgstr ""
 
+msgid "Year"
+msgstr ""
+
 msgid ""
 "No user flags have been created yet. Use the button above to add a new one."
 msgstr ""

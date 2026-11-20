@@ -272,6 +272,9 @@ msgstr "Co"
 msgid "When"
 msgstr "Kdy"
 
+msgid "Year"
+msgstr "Rok"
+
 msgid "days"
 msgstr "dny"
 

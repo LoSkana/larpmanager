@@ -45,7 +45,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, RegistrationOption, RegistrationQuestion
 from larpmanager.models.member import Member, MemberConfig, get_user_membership
-from larpmanager.models.registration import Registration
+from larpmanager.models.registration import Registration, TicketTier
 
 
 def info_accounting(context: dict) -> None:
@@ -380,6 +380,7 @@ def get_membership_fee_for_reg(
      - the member has not already paid the membership fee
      - the member has no wire-transfer membership invoice pending staff approval
      - the signup is not gifted (redeem_code)
+     - the registration is not on the waiting list
      - no other registration's invoice already reserves the fee for the same year.
     """
     redeem_code = registration.redeem_code if registration else None
@@ -387,6 +388,7 @@ def get_membership_fee_for_reg(
         "membership" not in get_association_features(association_id)
         or get_association_config(association_id, "membership_fee_separated")
         or redeem_code
+        or (registration and registration.ticket_id and registration.ticket.tier == TicketTier.WAITING)
     ):
         return 0
 

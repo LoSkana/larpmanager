@@ -272,6 +272,9 @@ msgstr "Mikä"
 msgid "When"
 msgstr "Milloin"
 
+msgid "Year"
+msgstr "Vuosi"
+
 msgid "days"
 msgstr "päivät"
 

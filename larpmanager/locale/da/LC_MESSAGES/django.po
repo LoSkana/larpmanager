@@ -272,6 +272,9 @@ msgstr "Hvad"
 msgid "When"
 msgstr "Hvornår"
 
+msgid "Year"
+msgstr "År"
+
 msgid "days"
 msgstr "dage"
 

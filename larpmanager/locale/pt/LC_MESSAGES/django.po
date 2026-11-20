@@ -272,6 +272,9 @@ msgstr "O quê"
 msgid "When"
 msgstr "Quando"
 
+msgid "Year"
+msgstr "Ano"
+
 msgid "days"
 msgstr "dias"
 

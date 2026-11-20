@@ -272,6 +272,9 @@ msgstr "Vad"
 msgid "When"
 msgstr "När"
 
+msgid "Year"
+msgstr "År"
+
 msgid "days"
 msgstr "dagar"
 

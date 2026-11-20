@@ -1254,6 +1254,24 @@ class TestMembershipFeeForReg(BaseTestCase):
         result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
         self.assertEqual(result, self.MEMBERSHIP_FEE)
 
+    @patch("larpmanager.accounting.member.get_association_features", return_value={"membership": 1})
+    def test_waiting_ticket_returns_zero(self, mock_features: Any) -> None:
+        """Waiting list registrations do not bundle the fee."""
+        from django.utils import timezone
+
+        from larpmanager.models.registration import RegistrationTicket, TicketTier
+
+        year = timezone.now().year
+        association, _member, registration = self._setup(year, separated=False)
+        registration.ticket = RegistrationTicket.objects.create(
+            event=registration.run.event,
+            name="Waiting",
+            tier=TicketTier.WAITING,
+            price=0,
+        )
+        result = get_membership_fee_for_reg(association.id, registration.member_id, registration.run, registration)
+        self.assertEqual(result, 0)
+
 
 @pytest.mark.django_db(transaction=True)
 class TestProcessPaymentMembershipSplit(BaseTestCase):

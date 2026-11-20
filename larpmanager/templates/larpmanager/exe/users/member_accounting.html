@@ -67,6 +67,29 @@
             </tbody>
         </table>
     {% endif %}
+    {% if memberships %}
+        <h2>{% trans "Membership fees" %}</h2>
+        <table id="members_membership" class="writing go_datatable">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Year" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Value" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in memberships %}
+                    <tr>
+                        <td></td>
+                        <td>{{ el.year }}</td>
+                        <td data-order="{{ el.created|date:'U' }}">{{ el.created|date:'d/m/Y' }}</td>
+                        <td>{{ el.value }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
     {% if discounts %}
         <h2>{% trans "Discount" %}</h2>
         <table id="members_discount" class="writing go_datatable">

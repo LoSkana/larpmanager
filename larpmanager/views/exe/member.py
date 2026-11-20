@@ -480,6 +480,12 @@ def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpRespons
         association_id=context["association_id"],
     ).select_related("registration__run", "disc")
 
+    # Get membership fees paid for current association
+    context["memberships"] = AccountingItemMembership.objects.filter(
+        member=context["member_edit"],
+        association_id=context["association_id"],
+    ).order_by("-year")
+
     # Process membership data for credit/token balances
     get_user_membership(context["member_edit"], context["association_id"])
 

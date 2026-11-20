@@ -272,6 +272,9 @@ msgstr "Co"
 msgid "When"
 msgstr "Kiedy"
 
+msgid "Year"
+msgstr "Rok"
+
 msgid "days"
 msgstr "dni"
 

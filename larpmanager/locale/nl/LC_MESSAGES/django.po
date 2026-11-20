@@ -272,6 +272,9 @@ msgstr "Wat"
 msgid "When"
 msgstr "Wanneer"
 
+msgid "Year"
+msgstr "Jaar"
+
 msgid "days"
 msgstr "dagen"
 
