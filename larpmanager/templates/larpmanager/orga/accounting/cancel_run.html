@@ -1,0 +1,58 @@
+{% extends "utils.html" %}
+{% load show_tags i18n %}
+{% block title %}
+    {% trans "Cancel all registrations" %} - {{ run.search }}
+{% endblock title %}
+{% block info %}
+    {% trans "Cancel every active registration of this cancelled event and refund the participants" %}
+{% endblock info %}
+{% block content %}
+    <table class="table">
+        <tr>
+            <th>{% trans "Registrations" %}</th>
+            <td>{{ summary.registrations }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Payment" %}</th>
+            <td>{{ summary.money | floatformat:"2" }}</td>
+        </tr>
+        {% if features.tokens %}
+            <tr>
+                <th>{{ tokens_name }}</th>
+                <td>{{ summary.tokens | floatformat:"2" }}</td>
+            </tr>
+        {% endif %}
+        {% if features.credits %}
+            <tr>
+                <th>{{ credits_name }}</th>
+                <td>{{ summary.credits | floatformat:"2" }}</td>
+            </tr>
+        {% endif %}
+    </table>
+    <div class="alert alert-warning">
+        <ul>
+            <li>
+                {% trans "All registrations will be cancelled: character assignments, traits, discounts and bonuses will be removed, and every participant will be notified by email" %}
+            </li>
+            {% if features.tokens or features.credits %}
+                <li>{% trans "Tokens and credits used for payment will be returned to the participants" %}</li>
+            {% endif %}
+            {% if features.credits %}
+                <li>{% trans "Money paid will be refunded to the participants as credits" %}</li>
+            {% else %}
+                <li>
+                    {% trans "Money paid will not be refunded automatically: you will have to refund the participants yourself" %}
+                </li>
+            {% endif %}
+            <li>{% trans "This operation cannot be undone" %}</li>
+        </ul>
+    </div>
+    {% if summary.registrations %}
+        <form method="post" action="{% url 'orga_cancel_run' run.get_slug %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <button type="submit" class="btn btn-danger">{% trans "Cancel all registrations" %}</button>
+            </div>
+        </form>
+    {% endif %}
+{% endblock content %}

@@ -5432,6 +5432,9 @@ msgstr "Tilmelding er lukket."
 msgid "Registrations are open!"
 msgstr "Tilmeldingen er åben!"
 
+msgid "Registrations cancelled"
+msgstr "Tilmeldinger annulleret"
+
 msgid "Registrations not open!"
 msgstr "Registreringer er ikke åbne!"
 
@@ -5473,6 +5476,9 @@ msgstr "Har du allerede en konto?"
 
 msgid "Association Translations"
 msgstr "Foreningsoversættelser"
+
+msgid "Cancel all registrations"
+msgstr "Annullér alle tilmeldinger"
 
 msgid "Cancel your registration"
 msgstr "Annullér din tilmelding"
@@ -6507,6 +6513,9 @@ msgstr "Datoen, hvor dette event begynder"
 msgid "The name entered does not match"
 msgstr "Det indtastede navn stemmer ikke overens"
 
+msgid "This operation cannot be undone"
+msgstr "Denne handling kan ikke fortrydes"
+
 msgid "To get started, check these out"
 msgstr "Tjek disse ud for at komme i gang"
 
@@ -7236,6 +7245,9 @@ msgstr "Vælg organisationen for at fortsætte til"
 
 msgid "Set the organization payment currency"
 msgstr "Angiv organisationens betalingsvaluta"
+
+msgid "The event must be in cancelled status"
+msgstr "Eventet skal have status som aflyst"
 
 msgid "The question type, allowed values are"
 msgstr "Spørgsmålstypen, tilladte værdier er"
@@ -9293,6 +9305,9 @@ msgid "Manage the answer options available for workshop questions"
 msgstr ""
 "Administrer de svarmuligheder, der er tilgængelige for workshopspørgsmål"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr "Betalte penge bliver refunderet til deltagerne som kreditter"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Indstillingsnavn, der vises i spørgsmålet (hold det kort)"
 
@@ -10686,6 +10701,11 @@ msgid ""
 "This URL is not available: check the suggested one or choose another one"
 msgstr ""
 "Denne URL er ikke tilgængelig: tjek den foreslåede, eller vælg en anden"
+
+msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+"Tokens og kreditter brugt til betaling bliver returneret til deltagerne"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -12203,6 +12223,13 @@ msgstr ""
 "organisationens område"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Annullér alle aktive tilmeldinger til dette aflyste event, og refundér "
+"deltagerne"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13496,6 +13523,12 @@ msgid ""
 msgstr ""
 "Administrer eventskabeloner, der bruges som grundlag for nye events, "
 "inklusive deres roller og konfiguration"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"Betalte penge refunderes ikke automatisk: du skal selv refundere deltagerne"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -15953,6 +15986,14 @@ msgstr ""
 "Det ser ud til, at der allerede findes en konto med dette telefonnummer! Du "
 "kan gendanne din konto fra login-siden eller kontakte support, hvis du har "
 "brug for hjælp."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Alle tilmeldinger bliver annulleret: karaktertildelinger, traits, rabatter "
+"og bonusser fjernes, og alle deltagere får besked via e-mail"
 
 msgid ""
 "Below you will find all the features available; you can write a search "
