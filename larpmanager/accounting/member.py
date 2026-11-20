@@ -308,6 +308,7 @@ def _info_membership(context: dict, member: Member) -> None:
     # Check for pending membership payment invoices
     pending_invoices_query = PaymentInvoice.objects.filter(
         member=member,
+        association_id=context["association_id"],
         status=PaymentStatus.SUBMITTED,
         typ=PaymentType.MEMBERSHIP,
     )
