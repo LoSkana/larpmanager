@@ -14157,6 +14157,11 @@ msgid ""
 "registration payment, awaiting verification"
 msgstr ""
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+
 msgid "The collection has been activated!"
 msgstr ""
 

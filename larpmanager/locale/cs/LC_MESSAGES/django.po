@@ -15467,6 +15467,13 @@ msgstr ""
 "Obnovení smazaných dat <b>nebude</b> možné. <i>Pokud si nejsi jistý, co "
 "děláš, kontaktuj prosím správce systému</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Roční poplatek můžeš zaplatit samostatně jen na začátku členského roku: "
+"jinak se platí společně s registrací na akci"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

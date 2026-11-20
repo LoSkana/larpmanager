@@ -15684,6 +15684,13 @@ msgstr ""
 "Poistettuja tietoja <b>ei</b> voi palauttaa. <i>Jos et ole varma, mitä olet "
 "tekemässä, ota yhteyttä järjestelmän ylläpitäjiin</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Jäsenmaksun voi maksaa erikseen vain jäsenyysvuoden alussa: muuten se "
+"maksetaan tapahtumailmoittautumisen yhteydessä"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

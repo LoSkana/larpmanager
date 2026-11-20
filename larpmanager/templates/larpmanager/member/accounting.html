@@ -109,7 +109,7 @@
         {% if "membership" in association.features %}
             {% if member.membership.status == "a" %}
                 {% if year_membership_fee %}
-                    {% if "vote" in association.features and association.voting_open %}
+                    {% if vote_open %}
                         <h2>{% trans "Executive Vote" %} {{ year }}</h2>
                         <p>
                             <a href="{% url 'vote' %}">{% trans "Cast your vote for the new Executive!" %}</a>
@@ -129,7 +129,7 @@
                             {% trans "You are registered for an event to be held in this calendar year, but we are not aware of your dues payment. Be careful: if you don't complete it, <b>you won't be able to attend events</b>, nor vote at the Membership Meeting!" %} <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                         </p>
                         <hr />
-                    {% elif "vote" in association.features and association.voting_open %}
+                    {% elif vote_open %}
                         <h2>{% trans "Payment membership fee:" %} {{ year }}</h2>
                         <p>
                             {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and to vote at the association's assembly meetings." %} <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>

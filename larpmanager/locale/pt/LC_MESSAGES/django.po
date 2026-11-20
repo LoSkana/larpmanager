@@ -15799,6 +15799,13 @@ msgstr ""
 "tiver certeza do que está fazendo, entre em contato com os administradores "
 "do sistema</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"A taxa anual só pode ser paga sozinha no início do ano de associação: caso "
+"contrário, é paga junto com a inscrição num evento"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

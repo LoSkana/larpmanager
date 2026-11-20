@@ -27,6 +27,7 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
@@ -248,9 +249,8 @@ def upload_membership(page: Any, live_server: Any) -> None:
 
     expect_normalized(page, page.locator("#one"), "You are a regular member of our Organization")
     expect_normalized(page, page.locator("#one"), "In the membership book the number of your membership card is: 0001")
-    expect_normalized(page,
-        page.locator("#one"), "The payment of your membership fee for this year has NOT been receive"
-    )
+    # No upcoming registration this year, no payment window, no open vote: standalone fee not payable
+    expect(page.locator("#one")).not_to_contain_text("has NOT been received")
 
 
 def upload_membership_fee(page: Any, live_server: Any) -> None:

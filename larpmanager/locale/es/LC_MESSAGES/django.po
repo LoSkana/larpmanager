@@ -15943,6 +15943,13 @@ msgstr ""
 "no estás seguro de lo que estás haciendo, contacta con los administradores "
 "del sistema</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"La cuota anual solo se puede pagar por separado al inicio del año de "
+"membresía: si no, se paga junto con la inscripción a un evento"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

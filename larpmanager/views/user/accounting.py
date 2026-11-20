@@ -55,7 +55,12 @@ from larpmanager.accounting.gateway.redsys import redsys_webhook
 from larpmanager.accounting.gateway.satispay import satispay_verify, satispay_webhook
 from larpmanager.accounting.gateway.stripe import get_stripe_cancel_error, stripe_webhook
 from larpmanager.accounting.gateway.sumup import sumup_webhook
-from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting, is_membership_fee_reserved
+from larpmanager.accounting.member import (
+    get_membership_fee_for_reg,
+    info_accounting,
+    is_membership_fee_payable,
+    is_membership_fee_reserved,
+)
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
@@ -608,6 +613,17 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
             _(
                 "Your membership fee for this year is already included in a pending event registration payment, "
                 "awaiting verification"
+            ),
+        )
+        return redirect("accounting")
+
+    # Outside the standalone payment window the fee is paid only alongside a registration or a vote
+    if not is_membership_fee_payable(context["member"], context["association_id"], context):
+        messages.warning(
+            request,
+            _(
+                "The annual fee can be paid on its own only at the start of the membership year: "
+                "otherwise it is paid together with an event registration"
             ),
         )
         return redirect("accounting")

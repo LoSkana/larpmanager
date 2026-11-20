@@ -15672,6 +15672,13 @@ msgstr ""
 "Återställning av raderad data kommer <b>inte</b> att vara möjlig. <i>Om du "
 "inte är säker på vad du gör, kontakta systemadministratörerna</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Årsavgiften kan bara betalas separat i början av medlemsåret: annars betalas"
+" den tillsammans med en eventanmälan"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

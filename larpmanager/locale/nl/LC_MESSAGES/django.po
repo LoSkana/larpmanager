@@ -15957,6 +15957,14 @@ msgstr ""
 "Herstel van verwijderde gegevens is <b>niet</b> mogelijk. <i>Weet je niet "
 "zeker wat je doet? Neem dan contact op met de systeembeheerders</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"De jaarlijkse contributie kun je alleen aan het begin van het "
+"lidmaatschapsjaar los betalen: anders betaal je die samen met een "
+"evenementinschrijving"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"
