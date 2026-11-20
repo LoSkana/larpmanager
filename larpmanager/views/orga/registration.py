@@ -43,8 +43,10 @@ from slugify import slugify
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.registration import (
     cancel_reg,
+    cancel_run,
     check_registration_background,
     get_accounting_refund,
+    get_cancel_run_summary,
     get_registration_payments,
 )
 from larpmanager.cache.character import get_event_cache_all
@@ -63,6 +65,7 @@ from larpmanager.models.accounting import (
     AccountingItemPayment,
     OtherChoices,
 )
+from larpmanager.models.event import DevelopStatus
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -1265,7 +1268,31 @@ def orga_cancellations(request: HttpRequest, event_slug: str) -> Any:
         get_accounting_refund(r)
 
         r.days = get_time_diff(context["run"].end, timezone.localtime(r.cancellation_date).date())
+
+    if context["run"].development == DevelopStatus.CANC:
+        context["active_registrations"] = Registration.objects.filter(
+            run=context["run"], cancellation_date__isnull=True
+        ).exists()
     return render(request, "larpmanager/orga/accounting/cancellations.html", context)
+
+
+@login_required
+def orga_cancel_run(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show the effect of cancelling all registrations of a cancelled run, and apply it on POST."""
+    context = check_event_context(request, event_slug, "orga_cancellations")
+    run = context["run"]
+
+    if run.development != DevelopStatus.CANC:
+        messages.error(request, _("The event must be in cancelled status"))
+        return redirect("orga_cancellations", event_slug=run.get_slug())
+
+    if request.method == "POST":
+        cancelled_count = cancel_run(run)
+        messages.success(request, _("Registrations cancelled") + f": {cancelled_count}")
+        return redirect("orga_cancellations", event_slug=run.get_slug())
+
+    context["summary"] = get_cancel_run_summary(run)
+    return render(request, "larpmanager/orga/accounting/cancel_run.html", context)
 
 
 @login_required

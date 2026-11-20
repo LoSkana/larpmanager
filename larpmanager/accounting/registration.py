@@ -473,74 +473,75 @@ def registration_payments_status(registration: Registration) -> None:
             registration.payment_status = "t"
 
 
-def cancel_run(instance: Run) -> None:
-    """Cancel all registrations for a run and process refunds.
+def get_cancel_run_summary(run: Run) -> dict[str, Decimal | int]:
+    """Return the active registrations count and the payment totals by type that cancelling the run would affect."""
+    totals = dict(
+        AccountingItemPayment.objects.filter(registration__run=run, registration__cancellation_date__isnull=True)
+        .values("pay")
+        .annotate(total=models.Sum("value"))
+        .values_list("pay", "total")
+    )
+    return {
+        "registrations": Registration.objects.filter(run=run, cancellation_date__isnull=True).count(),
+        "money": totals.get(PaymentChoices.MONEY, Decimal(0)),
+        "tokens": totals.get(PaymentChoices.TOKEN, Decimal(0)),
+        "credits": totals.get(PaymentChoices.CREDIT, Decimal(0)),
+    }
+
+
+def cancel_run(run: Run) -> int:
+    """Cancel all active registrations of a cancelled run and refund them.
+
+    Tokens and credits spent are returned to the members' balances. Money paid is
+    refunded as credits if the credits feature is enabled, otherwise the registration
+    is left not refunded for the organizer to handle.
 
     Args:
-        instance: Run instance to cancel registrations for
+        run: Run to cancel registrations for, must be in cancelled status
 
-    Side effects:
-        Cancels all non-cancelled registrations and processes refunds
-        for non-refunded registrations
+    Returns:
+        Number of registrations cancelled
 
     """
-    # Use atomic transaction to prevent interferences
+    if run.development != DevelopStatus.CANC:
+        return 0
+
+    run_cache = get_run_basic_cache(run.id)
+    association_id = run_cache["association_id"]
+    credits_enabled = "credits" in get_event_features(run_cache["event_id"])
+
     with transaction.atomic():
-        # Cancel all non-cancelled registrations
-        for r in Registration.objects.filter(cancellation_date__isnull=True, run=instance).select_for_update():
-            cancel_reg(r)
+        registrations = list(Registration.objects.select_for_update().filter(run=run, cancellation_date__isnull=True))
+        for registration in registrations:
+            cancel_reg(registration)
 
-        # Process refunds for non-refunded registrations
-        non_refunded_regs = Registration.objects.select_for_update().filter(refunded=False, run=instance)
+            payments = AccountingItemPayment.objects.select_for_update().filter(registration=registration)
 
-        # Collect member IDs for bulk operations
-        member_ids = list(non_refunded_regs.values_list("member_id", flat=True))
+            # Return spent tokens and credits to the member balance
+            for payment in payments.filter(pay__in=[PaymentChoices.TOKEN, PaymentChoices.CREDIT]):
+                payment.delete()
 
-        if not member_ids:
-            return
+            if registration.refunded:
+                continue
 
-        # Bulk delete token and credit payments
-        AccountingItemPayment.objects.filter(
-            member_id__in=member_ids,
-            pay=PaymentChoices.TOKEN,
-            registration__run=instance,
-        ).delete()
+            money_paid = payments.filter(pay=PaymentChoices.MONEY).aggregate(total=models.Sum("value"))["total"] or 0
+            if money_paid > 0:
+                if not credits_enabled:
+                    continue
+                AccountingItemOther.objects.get_or_create(
+                    oth=OtherChoices.CREDIT,
+                    run=run,
+                    descr="Refund",
+                    member_id=registration.member_id,
+                    association_id=association_id,
+                    value=money_paid,
+                    cancellation=True,
+                    defaults={},
+                )
 
-        AccountingItemPayment.objects.filter(
-            member_id__in=member_ids,
-            pay=PaymentChoices.CREDIT,
-            registration__run=instance,
-        ).delete()
+            Registration.objects.filter(pk=registration.pk).update(refunded=True)
 
-        # Process money payments and create refund credits
-        money_payments = (
-            AccountingItemPayment.objects.filter(
-                member_id__in=member_ids,
-                pay=PaymentChoices.MONEY,
-                registration__run=instance,
-            )
-            .values("member_id")
-            .annotate(total=models.Sum("value"))
-        )
-
-        # Create refund credits for members with money payments
-        refund_credits = [
-            AccountingItemOther(
-                member_id=payment["member_id"],
-                oth=OtherChoices.CREDIT,
-                descr=f"Refund per {instance}",
-                run=instance,
-                value=payment["total"],
-            )
-            for payment in money_payments
-            if payment["total"] > 0
-        ]
-
-        if refund_credits:
-            AccountingItemOther.objects.bulk_create(refund_credits)
-
-        # Mark all registrations as refunded
-        non_refunded_regs.update(refunded=True)
+    return len(registrations)
 
 
 def cancel_reg(registration: Registration) -> None:

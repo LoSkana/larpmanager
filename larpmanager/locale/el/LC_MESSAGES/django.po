@@ -5432,6 +5432,9 @@ msgstr "Οι εγγραφές είναι κλειστές."
 msgid "Registrations are open!"
 msgstr "Οι εγγραφές είναι ανοιχτές!"
 
+msgid "Registrations cancelled"
+msgstr "Οι εγγραφές ακυρώθηκαν"
+
 msgid "Registrations not open!"
 msgstr "Οι εγγραφές δεν είναι ανοιχτές!"
 
@@ -5473,6 +5476,9 @@ msgstr "Έχεις ήδη λογαριασμό;"
 
 msgid "Association Translations"
 msgstr "Μεταφράσεις συλλόγου"
+
+msgid "Cancel all registrations"
+msgstr "Ακύρωση όλων των εγγραφών"
 
 msgid "Cancel your registration"
 msgstr "Ακύρωσε την εγγραφή σου"
@@ -6507,6 +6513,9 @@ msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσ�
 msgid "The name entered does not match"
 msgstr "Το όνομα που έγραψες δεν ταιριάζει"
 
+msgid "This operation cannot be undone"
+msgstr "Αυτή η ενέργεια δεν μπορεί να αναιρεθεί"
+
 msgid "To get started, check these out"
 msgstr "Για να ξεκινήσεις, ρίξε μια ματιά σε αυτά"
 
@@ -7237,6 +7246,9 @@ msgstr "Επίλεξε τον οργανισμό για να προχωρήσε�
 
 msgid "Set the organization payment currency"
 msgstr "Όρισε το νόμισμα πληρωμής του οργανισμού"
+
+msgid "The event must be in cancelled status"
+msgstr "Η εκδήλωση πρέπει να είναι σε κατάσταση ακύρωσης"
 
 msgid "The question type, allowed values are"
 msgstr "Ο τύπος της ερώτησης, οι επιτρεπόμενες τιμές είναι"
@@ -9387,6 +9399,10 @@ msgid "Manage the answer options available for workshop questions"
 msgstr ""
 "Διαχειρίσου τις διαθέσιμες επιλογές απάντησης για ερωτήσεις εργαστηρίων"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr ""
+"Τα χρήματα που πληρώθηκαν θα επιστραφούν στους συμμετέχοντες ως πιστώσεις"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 "Όνομα επιλογής, που εμφανίζεται μέσα στην ερώτηση (κράτησέ το σύντομο)"
@@ -11031,6 +11047,12 @@ msgstr ""
 "Αυτό το URL δεν είναι διαθέσιμο: δες το προτεινόμενο ή διάλεξε κάποιο άλλο"
 
 msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+"Οι μάρκες και οι πιστώσεις που χρησιμοποιήθηκαν για πληρωμή θα επιστραφούν "
+"στους συμμετέχοντες"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Ανέβασε απόδειξη συνδρομής μέλους για να επιβεβαιώσεις την πληρωμή για το "
@@ -12625,6 +12647,13 @@ msgstr ""
 "φράσεων στον χώρο του οργανισμού"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Ακύρωσε κάθε ενεργή εγγραφή αυτής της ακυρωμένης εκδήλωσης και επίστρεψε τα "
+"χρήματα στους συμμετέχοντες"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13925,6 +13954,13 @@ msgid ""
 msgstr ""
 "Διαχειρίσου πρότυπα event που χρησιμοποιούνται ως βάση για νέα events, "
 "συμπεριλαμβανομένων των ρόλων και της διαμόρφωσής τους"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"Τα χρήματα που πληρώθηκαν δεν θα επιστραφούν αυτόματα: θα πρέπει να κάνεις "
+"εσύ την επιστροφή στους συμμετέχοντες"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -16443,6 +16479,15 @@ msgstr ""
 "Φαίνεται ότι υπάρχει ήδη λογαριασμός με αυτόν τον αριθμό τηλεφώνου! Μπορείς "
 "να ανακτήσεις τον λογαριασμό σου από τη σελίδα σύνδεσης ή να επικοινωνήσεις "
 "με την υποστήριξη αν χρειάζεσαι βοήθεια."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Όλες οι εγγραφές θα ακυρωθούν: οι αναθέσεις χαρακτήρων, τα traits, οι "
+"εκπτώσεις και τα μπόνους θα αφαιρεθούν και κάθε συμμετέχων θα ειδοποιηθεί "
+"μέσω email"
 
 msgid ""
 "Below you will find all the features available; you can write a search "

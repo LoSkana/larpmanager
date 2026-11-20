@@ -5432,6 +5432,9 @@ msgstr "Påmeldingen er stengt."
 msgid "Registrations are open!"
 msgstr "Påmeldingen er åpen!"
 
+msgid "Registrations cancelled"
+msgstr "Påmeldinger avlyst"
+
 msgid "Registrations not open!"
 msgstr "Registreringen er ennå ikke åpnet!"
 
@@ -5473,6 +5476,9 @@ msgstr "Har du allerede en konto?"
 
 msgid "Association Translations"
 msgstr "Foreningsoversettelser"
+
+msgid "Cancel all registrations"
+msgstr "Avlys alle påmeldinger"
 
 msgid "Cancel your registration"
 msgstr "Avbryt registreringen din"
@@ -6507,6 +6513,9 @@ msgstr "Datoen da denne hendelsen begynner"
 msgid "The name entered does not match"
 msgstr "Navnet du skrev inn stemmer ikke"
 
+msgid "This operation cannot be undone"
+msgstr "Denne handlingen kan ikke angres"
+
 msgid "To get started, check these out"
 msgstr "Ta en titt på disse for å komme i gang"
 
@@ -7237,6 +7246,9 @@ msgstr "Velg organisasjonen du vil gå videre til"
 
 msgid "Set the organization payment currency"
 msgstr "Angi organisasjonens betalingsvaluta"
+
+msgid "The event must be in cancelled status"
+msgstr "Arrangementet må ha statusen avlyst"
 
 msgid "The question type, allowed values are"
 msgstr "Spørsmålstypen, tillatte verdier er"
@@ -9304,6 +9316,9 @@ msgstr ""
 "Administrer svaralternativene som er tilgjengelige for spørsmålene i "
 "workshopen"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr "Innbetalte penger blir refundert til deltakerne som kreditter"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
@@ -10761,6 +10776,10 @@ msgid ""
 "This URL is not available: check the suggested one or choose another one"
 msgstr ""
 "Denne URL-en er ikke tilgjengelig: sjekk den foreslåtte eller velg en annen"
+
+msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr "Tokens og kreditter brukt til betaling blir returnert til deltakerne"
 
 msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
@@ -12273,6 +12292,13 @@ msgstr ""
 "organisasjonens rom"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Avlys alle aktive påmeldinger til dette avlyste arrangementet og refunder "
+"deltakerne"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13566,6 +13592,13 @@ msgid ""
 msgstr ""
 "Administrer hendelsesmaler som brukes som utgangspunkt for nye hendelser, "
 "inkludert roller og konfigurasjon"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"Innbetalte penger blir ikke refundert automatisk: du må refundere deltakerne"
+" selv"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -16030,6 +16063,14 @@ msgstr ""
 "Det ser ut til at det allerede finnes en konto med dette telefonnummeret! Du"
 " kan gjenopprette kontoen din fra påloggingssiden, eller kontakte "
 "kundestøtte hvis du trenger hjelp."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Alle påmeldinger blir avlyst: karaktertildelinger, trait, rabatter og "
+"bonuser fjernes, og alle deltakere får beskjed på e-post"
 
 msgid ""
 "Below you will find all the features available; you can write a search "

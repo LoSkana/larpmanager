@@ -5432,6 +5432,9 @@ msgstr "De inschrijving is gesloten."
 msgid "Registrations are open!"
 msgstr "Inschrijvingen zijn open!"
 
+msgid "Registrations cancelled"
+msgstr "Inschrijvingen geannuleerd"
+
 msgid "Registrations not open!"
 msgstr "De inschrijvingen zijn nog niet geopend!"
 
@@ -5473,6 +5476,9 @@ msgstr "Heb je al een account?"
 
 msgid "Association Translations"
 msgstr "Vertalingen van de vereniging"
+
+msgid "Cancel all registrations"
+msgstr "Alle inschrijvingen annuleren"
 
 msgid "Cancel your registration"
 msgstr "Je registratie annuleren"
@@ -6507,6 +6513,9 @@ msgstr "De datum waarop dit evenement begint"
 msgid "The name entered does not match"
 msgstr "De ingevoerde naam komt niet overeen"
 
+msgid "This operation cannot be undone"
+msgstr "Deze actie kan niet ongedaan worden gemaakt"
+
 msgid "To get started, check these out"
 msgstr "Bekijk deze om te beginnen"
 
@@ -7236,6 +7245,9 @@ msgstr "Selecteer de organisatie om verder te gaan"
 
 msgid "Set the organization payment currency"
 msgstr "De betalingsvaluta van de organisatie instellen"
+
+msgid "The event must be in cancelled status"
+msgstr "Het evenement moet de status geannuleerd hebben"
 
 msgid "The question type, allowed values are"
 msgstr "Het vraagtype, toegestane waarden zijn"
@@ -9344,6 +9356,9 @@ msgstr ""
 msgid "Manage the answer options available for workshop questions"
 msgstr "Beheer de antwoordopties voor workshopvragen"
 
+msgid "Money paid will be refunded to the participants as credits"
+msgstr "Betaald geld wordt aan de deelnemers terugbetaald als credits"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
@@ -10945,6 +10960,12 @@ msgstr ""
 "andere"
 
 msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+"Tokens en credits die voor de betaling zijn gebruikt, worden teruggegeven "
+"aan de deelnemers"
+
+msgid ""
 "Upload a membership-fee receipt to confirm payment for the current year."
 msgstr ""
 "Upload een ontvangstbewijs van de lidmaatschapsbijdrage om de betaling voor "
@@ -12512,6 +12533,13 @@ msgstr ""
 " de ruimte van de organisatie"
 
 msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+"Annuleer elke actieve inschrijving van dit geannuleerde evenement en betaal "
+"de deelnemers terug"
+
+msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -13815,6 +13843,13 @@ msgid ""
 msgstr ""
 "Beheer de evenementensjablonen die als basis dienen voor nieuwe evenementen,"
 " inclusief de rollen en instellingen"
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+"Betaald geld wordt niet automatisch terugbetaald: je moet de deelnemers zelf"
+" terugbetalen"
 
 msgid ""
 "Note that existing ability types with the same name, will be overwritten "
@@ -16317,6 +16352,15 @@ msgstr ""
 "Het lijkt erop dat er al een account bestaat met dit telefoonnummer! Je kunt"
 " je account herstellen via de inlogpagina, of contact opnemen met de "
 "klantenservice als je hulp nodig hebt."
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+"Alle inschrijvingen worden geannuleerd: toewijzingen van personages, traits,"
+" kortingen en bonussen worden verwijderd en elke deelnemer krijgt een "
+"melding per e-mail"
 
 msgid ""
 "Below you will find all the features available; you can write a search "

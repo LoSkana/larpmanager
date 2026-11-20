@@ -9499,6 +9499,35 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
+msgid "Cancel all registrations"
+msgstr ""
+
+msgid ""
+"Cancel every active registration of this cancelled event and refund the "
+"participants"
+msgstr ""
+
+msgid ""
+"All registrations will be cancelled: character assignments, traits, "
+"discounts and bonuses will be removed, and every participant will be "
+"notified by email"
+msgstr ""
+
+msgid ""
+"Tokens and credits used for payment will be returned to the participants"
+msgstr ""
+
+msgid "Money paid will be refunded to the participants as credits"
+msgstr ""
+
+msgid ""
+"Money paid will not be refunded automatically: you will have to refund the "
+"participants yourself"
+msgstr ""
+
+msgid "This operation cannot be undone"
+msgstr ""
+
 #, python-format
 msgid "Refund for %(registration)s"
 msgstr ""
@@ -14057,6 +14086,12 @@ msgid "Signup request approved!"
 msgstr ""
 
 msgid "Signup request rejected!"
+msgstr ""
+
+msgid "The event must be in cancelled status"
+msgstr ""
+
+msgid "Registrations cancelled"
 msgstr ""
 
 msgid "Please select both a registration and an event"

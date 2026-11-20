@@ -7,6 +7,11 @@
     {% trans "Review all cancelled registrations and track their refund status" %}
 {% endblock info %}
 {% block content %}
+    {% if active_registrations %}
+        <p>
+            <a href="{% url 'orga_cancel_run' run.get_slug %}">{% trans "Cancel all registrations" %}</a>
+        </p>
+    {% endif %}
     <table id="cancellations" class="go_datatable writing">
         <thead>
             <tr>
