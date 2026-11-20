@@ -341,7 +341,7 @@ SECURE_CSP_REPORT_ONLY = {
         CSP.NONCE if source == CSP.UNSAFE_INLINE else source
         for source in SECURE_CSP['script-src']
         if source != CSP.UNSAFE_EVAL
-    ],
+    ] + [CSP.REPORT_SAMPLE],
     'report-uri': ['/csp-report/'],
 }
 
