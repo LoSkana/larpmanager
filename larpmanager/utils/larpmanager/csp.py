@@ -22,6 +22,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
@@ -47,6 +48,44 @@ CSP_DIGEST_SIZE = 50
 
 # Longest value kept for each report field
 CSP_FIELD_MAX_LENGTH = 300
+
+# Distinct script samples and browsers kept for each violation
+CSP_MAX_DETAILS = 5
+
+# In-app browsers, matched before the generic browsers since they embed them
+CSP_IN_APP_BROWSERS = (
+    ("FBAN", "Facebook app"),
+    ("FBAV", "Facebook app"),
+    ("Instagram", "Instagram app"),
+    ("WhatsApp", "WhatsApp app"),
+    ("TikTok", "TikTok app"),
+    ("Line/", "Line app"),
+    ("Telegram", "Telegram app"),
+)
+
+# Browser tokens with their display name, most specific first
+CSP_BROWSERS = (
+    ("SamsungBrowser/", "Samsung"),
+    ("Edg/", "Edge"),
+    ("EdgA/", "Edge"),
+    ("OPR/", "Opera"),
+    ("Firefox/", "Firefox"),
+    ("FxiOS/", "Firefox"),
+    ("CriOS/", "Chrome"),
+    ("Chrome/", "Chrome"),
+    ("Version/", "Safari"),
+)
+
+# Operating system tokens with their display name, most specific first
+CSP_SYSTEMS = (
+    ("iPhone", "iOS"),
+    ("iPad", "iOS"),
+    ("Android", "Android"),
+    ("Windows", "Windows"),
+    ("Mac OS X", "macOS"),
+    ("CrOS", "ChromeOS"),
+    ("Linux", "Linux"),
+)
 
 # Sources injected by browser extensions and userscript managers, which the site cannot fix
 CSP_IGNORED_SCHEMES = (
@@ -89,7 +128,33 @@ def _field(report: dict, name: str) -> str:
     return str(report.get(name, ""))[:CSP_FIELD_MAX_LENGTH]
 
 
-def record_csp_report(payload: Any) -> bool:
+def browser_family(user_agent: str) -> str:
+    """Return a short browser, major version and system label from a user agent."""
+    if not user_agent:
+        return ""
+
+    system = next((name for token, name in CSP_SYSTEMS if token in user_agent), "")
+    browser = next((name for token, name in CSP_IN_APP_BROWSERS if token in user_agent), "")
+    if not browser:
+        for token, name in CSP_BROWSERS:
+            match = re.search(re.escape(token) + r"(\d+)", user_agent)
+            if match:
+                browser = f"{name} {match.group(1)}"
+                break
+
+    return " ".join(part for part in (browser or "Other", system) if part)
+
+
+def _add_detail(entry: dict, key: str, value: str) -> bool:
+    """Add a value to a bounded list of the violation entry, returning True if it changed."""
+    values = entry.setdefault(key, [])
+    if not value or value in values or len(values) >= CSP_MAX_DETAILS:
+        return False
+    values.append(value)
+    return True
+
+
+def record_csp_report(payload: Any, user_agent: str = "") -> bool:
     """Count a violation report sent by the browser, returning False if it was discarded."""
     if not isinstance(payload, dict):
         return False
@@ -102,6 +167,8 @@ def record_csp_report(payload: Any) -> bool:
     source = _strip_query(_field(report, "source-file"))
     line = _field(report, "line-number")
     document = _strip_query(_field(report, "document-uri"))
+    sample = _field(report, "script-sample")
+    browser = browser_family(user_agent)
 
     is_extension = source in CSP_IGNORED_SOURCES or any(
         value.startswith(CSP_IGNORED_SCHEMES) for value in (blocked, source)
@@ -117,9 +184,11 @@ def record_csp_report(payload: Any) -> bool:
     signature = hashlib.md5(f"{directive}|{blocked}|{source}|{line}".encode(), usedforsecurity=False).hexdigest()
     count_key = CSP_COUNT_PREFIX + signature
 
+    index = cache.get(CSP_INDEX_KEY) or {}
+    changed = False
+
     # First hit of a new violation: register it in the index, unless the index is full
     if cache.add(count_key, 0, CSP_REPORT_TIMEOUT):
-        index = cache.get(CSP_INDEX_KEY) or {}
         if len(index) >= CSP_MAX_SIGNATURES:
             cache.delete(count_key)
             return False
@@ -130,6 +199,14 @@ def record_csp_report(payload: Any) -> bool:
             "line": line,
             "document": document,
         }
+        changed = True
+
+    # Keep a few script samples and browsers to tell page code from injected code
+    entry = index.get(signature)
+    if entry is not None:
+        changed = _add_detail(entry, "samples", sample) or changed
+        changed = _add_detail(entry, "browsers", browser) or changed
+    if changed:
         cache.set(CSP_INDEX_KEY, index, CSP_REPORT_TIMEOUT)
 
     try:
@@ -168,8 +245,13 @@ def send_csp_digest() -> None:
         location = escape(violation["source"])
         if violation["line"]:
             location += f":{escape(violation['line'])}"
-        lines.append(
+        line = (
             f"<b>{violation['count']}x</b> {escape(violation['directive'])} - blocked {escape(violation['blocked'])}"
             f"<br />at {location or '-'}<br />page {escape(violation['document']) or '-'}"
         )
+        if violation.get("browsers"):
+            line += f"<br />browsers {escape(', '.join(violation['browsers']))}"
+        for sample in violation.get("samples", []):
+            line += f"<br />sample <code>{escape(sample)}</code>"
+        lines.append(line)
     notify_admins("CSP violations daily digest", "<br /><br />".join(lines))

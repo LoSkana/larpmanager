@@ -1403,7 +1403,7 @@ def csp_report(request: HttpRequest) -> HttpResponse:
     except (json.JSONDecodeError, UnicodeDecodeError):
         return HttpResponse(status=400)
 
-    record_csp_report(payload)
+    record_csp_report(payload, request.headers.get("user-agent", ""))
     return HttpResponse(status=204)
 
 

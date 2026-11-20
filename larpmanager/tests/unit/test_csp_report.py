@@ -33,7 +33,15 @@ from django.urls import reverse
 
 from larpmanager.forms.utils import CSRFTinyMCE
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.larpmanager.csp import pop_csp_reports, record_csp_report, send_csp_digest
+from larpmanager.utils.larpmanager.csp import browser_family, pop_csp_reports, record_csp_report, send_csp_digest
+
+CHROME_ANDROID = (
+    "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36"
+)
+INSTAGRAM_IOS = (
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) "
+    "Mobile/15E148 Instagram 340.0.0.22.109"
+)
 
 
 def build_report(**fields):
@@ -87,7 +95,9 @@ class TestCspAggregation(BaseTestCase):
         assert not record_csp_report(build_report(**{"source-file": "about", "document-uri": "about"}))
         assert not record_csp_report(build_report(**{"source-file": "user-script", "line-number": 1}))
         assert not record_csp_report(
-            build_report(**{"effective-directive": "connect-src", "blocked-uri": "https://www.google.com/rmkt/collect/1/"})
+            build_report(
+                **{"effective-directive": "connect-src", "blocked-uri": "https://www.google.com/rmkt/collect/1/"}
+            )
         )
 
         assert pop_csp_reports() == []
@@ -102,6 +112,36 @@ class TestCspAggregation(BaseTestCase):
         body = notify.call_args.args[1]
         assert "<script>" not in body
         assert "&lt;script&gt;" in body
+
+    def test_samples_and_browsers_are_kept(self):
+        """Script samples and browser families are collected per violation, without duplicates."""
+        record_csp_report(build_report(**{"script-sample": "window.a = 1;"}), CHROME_ANDROID)
+        record_csp_report(build_report(**{"script-sample": "window.a = 1;"}), CHROME_ANDROID)
+        record_csp_report(build_report(**{"script-sample": "injected()"}), INSTAGRAM_IOS)
+
+        violation = pop_csp_reports()[0]
+
+        assert violation["count"] == 3
+        assert violation["samples"] == ["window.a = 1;", "injected()"]
+        assert violation["browsers"] == ["Chrome 131 Android", "Instagram app iOS"]
+
+    def test_browser_family(self):
+        """User agents are reduced to browser, major version and system."""
+        assert browser_family(CHROME_ANDROID) == "Chrome 131 Android"
+        assert browser_family(INSTAGRAM_IOS) == "Instagram app iOS"
+        assert browser_family("") == ""
+        assert browser_family("curl/8.0") == "Other"
+
+    def test_digest_lists_samples_escaped(self):
+        """Samples and browsers appear in the digest, escaped."""
+        record_csp_report(build_report(**{"script-sample": "<b>x</b>"}), CHROME_ANDROID)
+
+        with patch("larpmanager.utils.larpmanager.csp.notify_admins") as notify:
+            send_csp_digest()
+
+        body = notify.call_args.args[1]
+        assert "Chrome 131 Android" in body
+        assert "&lt;b&gt;x&lt;/b&gt;" in body
 
     def test_digest_skipped_without_reports(self):
         """No email is sent when nothing was reported."""
@@ -122,11 +162,16 @@ class TestCspReportEndpoint(BaseTestCase):
     def test_report_is_recorded(self):
         """A valid report is accepted without a CSRF token."""
         response = self.client.post(
-            reverse("csp_report"), json.dumps(build_report()), content_type="application/csp-report"
+            reverse("csp_report"),
+            json.dumps(build_report()),
+            content_type="application/csp-report",
+            headers={"user-agent": CHROME_ANDROID},
         )
 
         assert response.status_code == HTTPStatus.NO_CONTENT
-        assert pop_csp_reports()[0]["count"] == 1
+        violation = pop_csp_reports()[0]
+        assert violation["count"] == 1
+        assert violation["browsers"] == ["Chrome 131 Android"]
 
     def test_invalid_body_is_rejected(self):
         """A body that is not JSON is refused."""
