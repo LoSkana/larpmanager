@@ -150,7 +150,7 @@ def _init_regs(
         context["payments_pending"].append(registration)
     elif registration.quota > 0:
         context["payments_todo"].append(registration)
-    if registration.run.start:
+    if registration.run.start and not registration.cancellation_date:
         if registration.run.start < timezone.localdate():
             return
         context["registration_years"][registration.run.start.year] = 1
@@ -283,7 +283,8 @@ def _info_membership(context: dict, member: Member) -> None:
         - year_membership_fee: Boolean indicating if current year fee exists
         - year_membership_pending: Boolean indicating pending membership payments
         - year: Current year
-        - grazing: Boolean indicating if within grace period
+        - grazing: Boolean indicating if within the standalone payment window
+        - vote_open: Boolean indicating if voting is currently open
 
     """
     # Early return if membership feature is not enabled
@@ -316,27 +317,58 @@ def _info_membership(context: dict, member: Member) -> None:
     # Store current year in context
     context["year"] = current_year
 
-    # Get membership day configuration (default: January 1st)
-    membership_day = get_association_config(context["association_id"], "membership_day", context=context)
-    if membership_day:
-        # Get grace period in months (default: 0 months)
-        membership_grace_period_months = int(
-            get_association_config(context["association_id"], "membership_grazing", context=context),
+    context["grazing"] = is_membership_grazing(context["association_id"], context)
+    context["vote_open"] = is_membership_vote_open(context["association_id"], context)
+
+
+def is_membership_grazing(association_id: int, context: dict | None = None) -> bool:
+    """Return whether today falls in the standalone payment window at the start of the membership year."""
+    membership_day = get_association_config(association_id, "membership_day", context=context)
+    if not membership_day:
+        return False
+
+    grace_period_months = int(get_association_config(association_id, "membership_grazing", context=context))
+    window_start = datetime.strptime(f"{membership_day}-{timezone.localdate().year}", "%d-%m-%Y").replace(
+        tzinfo=timezone.get_current_timezone(),
+    )
+    return timezone.now() < window_start + relativedelta(months=grace_period_months)
+
+
+def is_membership_vote_open(association_id: int, context: dict | None = None) -> bool:
+    """Return whether the vote feature is active and voting is currently open."""
+    features = context["features"] if context and "features" in context else get_association_features(association_id)
+    if "vote" not in features:
+        return False
+    return bool(get_association_config(association_id, "vote_open", context=context))
+
+
+def has_upcoming_registration_this_year(member: Member, association_id: int) -> bool:
+    """Return whether the member has an active registration to a run starting between today and year end."""
+    today = timezone.localdate()
+    return (
+        Registration.objects.filter(
+            member=member,
+            run__event__association_id=association_id,
+            cancellation_date__isnull=True,
+            run__start__gte=today,
+            run__start__year=today.year,
         )
+        .exclude(run__development=DevelopStatus.CANC)
+        .exists()
+    )
 
-        # Build full date string with current year
-        membership_day += f"-{current_year}"
 
-        # Parse and make aware in the current timezone
-        membership_deadline_date = datetime.strptime(membership_day, "%d-%m-%Y").replace(
-            tzinfo=timezone.get_current_timezone(),
-        )
+def is_membership_fee_payable(member: Member, association_id: int, context: dict | None = None) -> bool:
+    """Return whether the member may pay the annual fee on its own.
 
-        # Add grace period months
-        membership_deadline_date += relativedelta(months=membership_grace_period_months)
-
-        # Check if we're still within the grace period
-        context["grazing"] = timezone.now() < membership_deadline_date
+    Allowed inside the standalone payment window, while voting is open, or with an upcoming
+    registration in the current year.
+    """
+    return (
+        is_membership_grazing(association_id, context)
+        or is_membership_vote_open(association_id, context)
+        or has_upcoming_registration_this_year(member, association_id)
+    )
 
 
 def membership_fee_pending_config_name(association_id: int, year: int) -> str:

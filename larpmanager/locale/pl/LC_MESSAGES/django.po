@@ -15739,6 +15739,13 @@ msgstr ""
 "Odzyskanie usuniętych danych <b>nie</b> będzie możliwe. <i>Jeśli nie masz "
 "pewności, co robisz, skontaktuj się z administratorami systemu</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Składkę roczną możesz opłacić osobno tylko na początku roku członkowskiego: "
+"w przeciwnym razie opłacasz ją razem z rejestracją na wydarzenie"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

@@ -15571,6 +15571,13 @@ msgstr ""
 "Gendannelse af slettede data vil <b>ikke</b> være mulig. <i>Hvis du ikke er "
 "sikker på, hvad du laver, så kontakt systemadministratorerne</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Årskontingentet kan kun betales for sig selv i starten af medlemsåret: "
+"ellers betales det sammen med en tilmelding til et event"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"

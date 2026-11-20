@@ -60,7 +60,7 @@ from django_otp import login as otp_login, match_token
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from PIL import Image, UnidentifiedImageError
 
-from larpmanager.accounting.member import info_accounting
+from larpmanager.accounting.member import info_accounting, is_membership_fee_payable
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import update_member_event_character_cache
 from larpmanager.cache.config import get_association_config, save_single_config
@@ -619,9 +619,12 @@ def membership(request: HttpRequest) -> HttpResponse:
         member_id=context["member"].id,
     ).exists()
 
-    # Add statute text for accepted memberships
+    # Add statute text and standalone fee payment availability for accepted memberships
     if el.status == MembershipStatus.ACCEPTED:
         context["statute"] = get_association_text(context["association_id"], AssociationTextType.STATUTE)
+        context["fee_payable"] = not context["fee_payed"] and is_membership_fee_payable(
+            context["member"], context["association_id"], context
+        )
 
     # Disable join functionality for this view
     context["disable_join"] = True

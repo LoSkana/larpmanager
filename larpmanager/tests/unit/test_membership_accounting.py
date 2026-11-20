@@ -24,6 +24,14 @@ from decimal import Decimal
 from typing import Any
 from unittest.mock import patch
 
+from django.utils import timezone
+
+from larpmanager.accounting.member import (
+    has_upcoming_registration_this_year,
+    is_membership_fee_payable,
+    is_membership_grazing,
+    is_membership_vote_open,
+)
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
@@ -32,6 +40,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.member import Membership, MembershipStatus
+from larpmanager.models.registration import Registration
 from larpmanager.tests.unit.base import BaseTestCase
 
 
@@ -615,3 +624,65 @@ class TestMembershipAccountingAutomation(BaseTestCase):
         # Verify balance recalculated: 10 - 5 = 5
         updated_membership = Membership.objects.get(id=membership.id)
         self.assertEqual(updated_membership.tokens, Decimal("5.00"))
+
+
+class TestMembershipFeePayable(BaseTestCase):
+    """Test the rule allowing the annual fee to be paid on its own"""
+
+    def _configs(self, **values: Any) -> Any:
+        """Patch association configs with the given values, falling back to empty."""
+        return patch(
+            "larpmanager.accounting.member.get_association_config",
+            side_effect=lambda _association_id, name, **_kwargs: values.get(name, ""),
+        )
+
+    def _features(self, *features: str) -> dict:
+        """Build a context exposing the given association features."""
+        return {"features": dict.fromkeys(features, 1)}
+
+    def test_grazing_inside_window(self) -> None:
+        """Fee is payable while inside the standalone payment window"""
+        association = self.get_association()
+        with self._configs(membership_day="01-01", membership_grazing="12"):
+            self.assertTrue(is_membership_grazing(association.id, self._features()))
+
+    def test_grazing_outside_window(self) -> None:
+        """Fee is not payable once the standalone payment window has passed"""
+        association = self.get_association()
+        with self._configs(membership_day="01-01", membership_grazing="0"):
+            self.assertFalse(is_membership_grazing(association.id, self._features()))
+
+    def test_grazing_without_membership_day(self) -> None:
+        """No window applies when the membership day is not configured"""
+        association = self.get_association()
+        with self._configs(membership_grazing="12"):
+            self.assertFalse(is_membership_grazing(association.id, self._features()))
+
+    def test_vote_open_requires_feature(self) -> None:
+        """Open voting allows the payment only with the vote feature active"""
+        association = self.get_association()
+        with self._configs(vote_open=True):
+            self.assertTrue(is_membership_vote_open(association.id, self._features("vote")))
+            self.assertFalse(is_membership_vote_open(association.id, self._features()))
+
+    def test_upcoming_registration_allows_payment(self) -> None:
+        """An active registration to a run later this year allows the payment"""
+        member = self.get_member()
+        association = self.get_association()
+        Registration.objects.filter(member=member).delete()
+        run = self.create_run(event=self.create_event(association=association), number=2, start=timezone.localdate())
+        registration = self.create_registration(member=member, run=run)
+
+        self.assertTrue(has_upcoming_registration_this_year(member, association.id))
+
+        registration.cancellation_date = timezone.now()
+        registration.save()
+        self.assertFalse(has_upcoming_registration_this_year(member, association.id))
+
+    def test_not_payable_outside_all_conditions(self) -> None:
+        """Fee is not payable outside the window, without voting and without registrations"""
+        member = self.get_member()
+        association = self.get_association()
+        Registration.objects.filter(member=member).delete()
+        with self._configs(membership_day="", vote_open=False):
+            self.assertFalse(is_membership_fee_payable(member, association.id, self._features("vote")))

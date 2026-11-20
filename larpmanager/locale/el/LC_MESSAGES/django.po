@@ -16046,6 +16046,13 @@ msgstr ""
 "είσαι σίγουρος για το τι κάνεις, επικοινώνησε με τους διαχειριστές του "
 "συστήματος</i>."
 
+msgid ""
+"The annual fee can be paid on its own only at the start of the membership "
+"year: otherwise it is paid together with an event registration"
+msgstr ""
+"Η ετήσια συνδρομή μπορεί να πληρωθεί μόνη της μόνο στην αρχή του έτους "
+"συνδρομής: διαφορετικά πληρώνεται μαζί με μια εγγραφή σε event"
+
 #, python-format
 msgid ""
 "A participant tried to pay with <b>%(method)s</b>, but the payment could not"
