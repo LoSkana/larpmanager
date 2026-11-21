@@ -36,17 +36,31 @@ window.addEventListener('DOMContentLoaded', function() {
         return '';
     }
 
+    function linkTag(href, label) {
+        var target = /^https:\/\//.test(href) ? ' target="_blank" rel="noopener"' : '';
+        return '<a href="' + escapeHtml(href).replace(/"/g, '%22') + '"' + target + '>' + label + '</a>';
+    }
+
+    function renderCode(html, linkify) {
+        // Code spans holding a concrete path or https URL become links, unless already inside a link
+        return html.replace(/`([^`]+)`/g, function(match, code) {
+            var raw = $('<textarea></textarea>').html(code).text();
+            var href = linkify && /^[^\s<>{}]+$/.test(raw) ? safeUrl(raw) : '';
+            var tag = '<code>' + code + '</code>';
+            return href ? linkTag(href, tag) : tag;
+        });
+    }
+
     function renderInline(text) {
         var html = escapeHtml(text);
         html = html.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function(match, label, url) {
             var href = safeUrl($('<textarea></textarea>').html(url).text());
-            if (!href) return label;
-            var target = /^https:\/\//.test(href) ? ' target="_blank" rel="noopener"' : '';
-            return '<a href="' + escapeHtml(href).replace(/"/g, '%22') + '"' + target + '>' + label + '</a>';
+            return href ? linkTag(href, label) : label;
         });
         html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-        return html;
+        return html.split(/(<a [^>]*>.*?<\/a>)/).map(function(part) {
+            return renderCode(part, part.indexOf('<a ') !== 0);
+        }).join('');
     }
 
     function renderMarkdown(text) {

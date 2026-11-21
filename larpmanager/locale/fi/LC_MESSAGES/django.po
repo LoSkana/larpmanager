@@ -5866,6 +5866,9 @@ msgstr "Ilmoittautuminen %(event)s"
 msgid "Registrations not yet open"
 msgstr "Ilmoittautuminen ei ole vielä auki"
 
+msgid "Regular participant ticket"
+msgstr "Tavallinen osallistujalippu"
+
 msgid "Select one or more options"
 msgstr "Valitse yksi tai useampi vaihtoehto"
 
@@ -10199,6 +10202,10 @@ msgid "Enter your email below to receive instructions on how to change it:"
 msgstr ""
 "Kirjoita sähköpostiosoitteesi alle saadaksesi ohjeet sen muuttamiseen:"
 
+msgid "Higher-priced ticket, each one sold makes reduced tickets available"
+msgstr ""
+"Kalliimpi lippu, jokainen myyty lippu tuo saataville alennettuja lippuja"
+
 msgid "How the relationship is described from this character's perspective"
 msgstr "Miten suhdetta kuvataan tämän hahmon näkökulmasta"
 
@@ -10299,6 +10306,9 @@ msgid "Do you want to enable a secret registration link for early sign-ups?"
 msgstr ""
 "Haluatko ottaa käyttöön salaisen ilmoittautumislinkin varhaisille "
 "ilmoittautumisille?"
+
+msgid "For collaborators of the event, counted separately from participants"
+msgstr "Tapahtuman yhteistyökumppaneille, lasketaan erikseen osallistujista"
 
 msgid "If enabled, enables the consistency check tool for character sheets."
 msgstr ""
@@ -10471,6 +10481,9 @@ msgstr ""
 
 msgid "Follow the link below to complete your payment on the PayPal platform."
 msgstr "Seuraa alla olevaa linkkiä suorittaaksesi maksusi PayPal-alustalla."
+
+msgid "For sellers present at the event, counted separately from participants"
+msgstr "Tapahtumassa oleville myyjille, lasketaan erikseen osallistujista"
 
 #, python-format
 msgid "Friends who use your code get %(discount)s%(symbol)s off their ticket."
@@ -11820,6 +11833,12 @@ msgstr ""
 "uusi."
 
 msgid ""
+"Discounted ticket, its availability depends on the number of patron tickets "
+"sold"
+msgstr ""
+"Alennettu lippu, sen saatavuus riippuu myytyjen kannatuslippujen määrästä"
+
+msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
 "payments."
 msgstr ""
@@ -12422,6 +12441,13 @@ msgstr ""
 "osallistumista"
 
 msgid ""
+"Reserved to users who have never participated in an event of the "
+"organization before"
+msgstr ""
+"Varattu käyttäjille, jotka eivät ole aiemmin osallistuneet yhteenkään "
+"organisaation tapahtumaan"
+
+msgid ""
 "Review which characters and traits have been assigned to players, grouped by"
 " faction"
 msgstr ""
@@ -12764,6 +12790,13 @@ msgstr ""
 "järjestäjän lähettämän tiedoston."
 
 msgid ""
+"For participants willing to replace last-minute dropouts, with a separate "
+"capacity limit"
+msgstr ""
+"Osallistujille, jotka ovat valmiita korvaamaan viime hetken peruutukset, "
+"erillisellä kapasiteettirajalla"
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""
@@ -12917,6 +12950,13 @@ msgid ""
 msgstr ""
 "Osallistuaksesi tähän tapahtumaan sinun täytyy maksaa vuoden %(year)s "
 "vuosijäsenmaksu, joka on:"
+
+msgid ""
+"Unlimited free ticket, a random draw later converts a number of them into "
+"regular tickets"
+msgstr ""
+"Rajoittamaton ilmaislippu, myöhemmin arvonta muuttaa osan niistä "
+"tavallisiksi lipuiksi"
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "
@@ -13959,6 +13999,13 @@ msgstr ""
 "lainsäädännön mukaisesti"
 
 msgid ""
+"Available only when the primary tickets are sold out, participants can be "
+"moved up when spots free up"
+msgstr ""
+"Saatavilla vain, kun ensisijaiset liput on myyty loppuun, osallistujia "
+"voidaan siirtää eteenpäin, kun paikkoja vapautuu"
+
+msgid ""
 "By pressing confirm, this registration will be assigned to you, and you will"
 " then be duly registered:"
 msgstr ""
@@ -14281,6 +14328,13 @@ msgstr ""
 "Lisää 'Patron' ja 'Reduced' lipputyypit. Jokainen ostettu Patron-lippu "
 "vapauttaa yhden Reduced-lipun"
 
+msgid ""
+"For the organizing staff, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+"Järjestäjätiimille, ei lasketa osallistujaksi ja jätetään pois lisämaksuista"
+" ja hahmomuistutuksista"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -14394,6 +14448,13 @@ msgid ""
 msgstr ""
 "Määritä osallistujille roolit tarkastelemalla heidän mieltymyksiään ja "
 "suorittamalla Casting-optimointialgoritmi"
+
+msgid ""
+"For non-player characters, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+"Ei-pelaajahahmoille, ei lasketa osallistujaksi ja jätetään pois "
+"lisämaksuista ja hahmomuistutuksista"
 
 msgid ""
 "If you select one (or more) character abilities, this modifier applies only "
