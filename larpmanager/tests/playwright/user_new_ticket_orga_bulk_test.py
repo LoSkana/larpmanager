@@ -345,7 +345,6 @@ def new_ticket(live_server: Any, page: Any) -> None:
     # add ticket
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_text("Type of ticket").click()
     edit_iframe.locator("#id_tier").select_option("y")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("new")
