@@ -412,6 +412,16 @@
       <p>If the <a href="https://larpmanager.com/redirect/event/manage/features/character/on/" target="_blank" rel="noopener"><strong>Characters</strong></a> feature is active (see the <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a> tutorial), you can assign a character by entering its name in the Character field.</p>
       <p><img src="/static/tutorials/090_registrations_02.webp" alt="Registration with its character" width="1260" height="284"></p>
       <hr>
+      <h2>Import and export</h2>
+      <p><em>Add or update many registrations at once from a CSV file, and download them for your own records.</em></p>
+      <p>At the bottom of <a href="https://larpmanager.com/redirect/event/manage/registrations/" target="_blank" rel="noopener"><strong>Event &gt; Registrations</strong></a> you find two buttons:</p>
+      <ul>
+      <li><strong>Upload</strong>: imports registrations from a CSV file encoded in UTF-8. The page describes each column, lists the registration questions you can add as extra columns, and lets you download an example template. Existing registrations with the same participant email are overwritten with the uploaded data.</li>
+      <li><strong>Download</strong>: exports all registrations, with their answers and accounting data, as CSV files collected in a ZIP archive.</li>
+      </ul>
+      <p><em>Note: a registration is imported only if the participant has consented to share their data with your organization; otherwise the row is skipped.</em></p>
+      <p>The same <strong>Upload</strong> button is available in <a href="https://larpmanager.com/redirect/event/manage/tickets/" target="_blank" rel="noopener"><strong>Event &gt; Tickets</strong></a> and <a href="https://larpmanager.com/redirect/event/manage/form/" target="_blank" rel="noopener"><strong>Event &gt; Form</strong></a>, to import tickets and registration questions with their options.</p>
+      <hr>
       <h2>Cancellations</h2>
       <p>To cancel a registration from <a href="https://larpmanager.com/redirect/event/manage/registrations/" target="_blank" rel="noopener"><strong>Event &gt; Registrations</strong></a>, click the "Delete" icon. Participants will find the link to perform this action on their registration page.</p>
       <p>You can manage the cancelled registrations in <a href="https://larpmanager.com/redirect/event/manage/cancellations/" target="_blank" rel="noopener"><strong>Event &gt; Cancellations</strong></a>:</p>
@@ -809,6 +819,26 @@
       <h2>Single field edit</h2>
       <p>You can edit a character's field directly by double-clicking on it. This opens a popup allowing you to edit the field without opening the full character editor.</p>
       <p><img src="/static/tutorials/170_characters_05.webp" alt="Popup to edit a single field" width="1901" height="985"></p>
+      <hr>
+      <h2>Import and export</h2>
+      <p><em>Create or update many characters at once from a CSV file, and download them as a backup or to edit them offline.</em></p>
+      <p>At the bottom of <a href="https://larpmanager.com/redirect/event/manage/characters/" target="_blank" rel="noopener"><strong>Event &gt; Characters</strong></a> you find two buttons:</p>
+      <ul>
+      <li><strong>Upload</strong>: imports characters from a CSV file encoded in UTF-8. The first line lists the field names: the page shows the allowed columns (one for each character field) and lets you download an example template. The only mandatory column is the name; existing characters with the same name are overwritten with the uploaded data.</li>
+      <li><strong>Download</strong>: exports all characters, with every field, as CSV files collected in a ZIP archive.</li>
+      </ul>
+      <p>If the <a href="https://larpmanager.com/redirect/event/manage/features/relationships/on/" target="_blank" rel="noopener"><strong>Relationships</strong></a> feature is active, you can upload a second file with the relationships between characters.</p>
+      <hr>
+      <p>The same buttons are available for every writing element:</p>
+      <ul>
+      <li>factions, in <a href="https://larpmanager.com/redirect/event/manage/factions/" target="_blank" rel="noopener"><strong>Event &gt; Factions</strong></a> (see the <a href="https://larpmanager.com/tutorials/factions/" target="_blank" rel="noopener"><em><strong>Factions</strong></em></a> tutorial);</li>
+      <li>plots, in <a href="https://larpmanager.com/redirect/event/manage/plots/" target="_blank" rel="noopener"><strong>Event &gt; Plots</strong></a>, with a second file for the roles of the characters in each plot (see the <a href="https://larpmanager.com/tutorials/plots/" target="_blank" rel="noopener"><em><strong>Plots</strong></em></a> tutorial);</li>
+      <li>quests and traits, in <a href="https://larpmanager.com/redirect/event/manage/quests/" target="_blank" rel="noopener"><strong>Event &gt; Quests</strong></a> and <a href="https://larpmanager.com/redirect/event/manage/traits/" target="_blank" rel="noopener"><strong>Event &gt; Traits</strong></a> (see the <a href="https://larpmanager.com/tutorials/quests/" target="_blank" rel="noopener"><em><strong>Quests and Traits</strong></em></a> tutorial);</li>
+      <li>prologues, in <a href="https://larpmanager.com/redirect/event/manage/prologues/" target="_blank" rel="noopener"><strong>Event &gt; Prologues</strong></a> (see the <a href="https://larpmanager.com/tutorials/writing-extras/" target="_blank" rel="noopener"><em><strong>Writing Extras</strong></em></a> tutorial);</li>
+      <li>guilds, in <a href="https://larpmanager.com/redirect/event/manage/guilds/" target="_blank" rel="noopener"><strong>Event &gt; Guilds</strong></a> (see the <a href="https://larpmanager.com/tutorials/guilds/" target="_blank" rel="noopener"><em><strong>Guilds</strong></em></a> tutorial).</li>
+      </ul>
+      <p>To import the questions of the character sheet, with their options, use the <strong>Upload</strong> button in <a href="https://larpmanager.com/redirect/event/manage/writing/form/" target="_blank" rel="noopener"><strong>Event &gt; Sheet</strong></a>.</p>
+      <p><em>Note: the buttons are not shown in Lite Mode.</em></p>
       <hr>
       <h2>Relationships</h2>
       <p>Allows staff to define inter-character relationships. To use it, activate the <a href="https://larpmanager.com/redirect/event/manage/features/relationships/on/" target="_blank" rel="noopener"><strong>Relationships</strong></a> feature.</p>
@@ -1288,6 +1318,8 @@
       <p>If the <a href="https://larpmanager.com/redirect/event/manage/features/user_character/on/" target="_blank" rel="noopener"><strong>Character creation</strong></a> feature is active (see the <a href="https://larpmanager.com/tutorials/character-creation/" target="_blank" rel="noopener"><em><strong>Character Creation</strong></em></a> tutorial), a new checkbox, <strong>Selectable</strong>, is added to the faction form.</p>
 
       <p>Participants can select this faction in the <strong>Faction</strong> field when creating or editing their character.</p>
+      <p>To import or export factions as CSV files, see <a href="https://larpmanager.com/tutorials/characters/#import-and-export" target="_blank" rel="noopener"><em><strong>Import and export</strong></em></a> in the Characters tutorial.</p>
+      <hr>
       <hr>
       <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a>, <a href="https://larpmanager.com/tutorials/guilds/" target="_blank" rel="noopener"><em><strong>Guilds</strong></em></a>, <a href="https://larpmanager.com/tutorials/casting/" target="_blank" rel="noopener"><em><strong>Casting</strong></em></a></em></p>
 - model: larpmanager.larpmanagertutorial
@@ -1369,6 +1401,8 @@
       <p>Organizers can see and edit every guild, including the secret ones, in <a href="https://larpmanager.com/redirect/event/manage/guilds/" target="_blank" rel="noopener"><strong>Event &gt; Guilds</strong></a>:</p>
       <p><img src="/static/tutorials/217_guilds_08.webp" alt="Guilds for the organizers" width="992" height="336"></p>
       <p>To add custom fields to guilds, go to <a href="https://larpmanager.com/redirect/event/manage/writing/guild/form/" target="_blank" rel="noopener"><strong>Event &gt; Sheet</strong></a> (see the <a href="https://larpmanager.com/tutorials/character-form/" target="_blank" rel="noopener"><em><strong>Character Sheet</strong></em></a> tutorial).</p>
+      <p>To import or export guilds as CSV files, see <a href="https://larpmanager.com/tutorials/characters/#import-and-export" target="_blank" rel="noopener"><em><strong>Import and export</strong></em></a> in the Characters tutorial.</p>
+      <hr>
       <hr>
       <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/factions/" target="_blank" rel="noopener"><em><strong>Factions</strong></em></a>, <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a></em></p>
 - model: larpmanager.larpmanagertutorial
@@ -1410,6 +1444,8 @@
       <h2>Visibility</h2>
       <p>Plots are shown to a participant only once a character is assigned to them. If you control which elements participants can see, select <strong>Plots</strong> among the elements shown in <a href="https://larpmanager.com/redirect/event/manage/event/" target="_blank" rel="noopener"><strong>Event &gt; Event</strong></a> (see <a href="https://larpmanager.com/tutorials/characters/#characters-configuration" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a>).</p>
       <p>To read all the plots and characters of the event in one place, use <a href="https://larpmanager.com/redirect/event/manage/reading/" target="_blank" rel="noopener"><strong>Event &gt; Reading</strong></a>.</p>
+      <p>To import or export plots as CSV files, see <a href="https://larpmanager.com/tutorials/characters/#import-and-export" target="_blank" rel="noopener"><em><strong>Import and export</strong></em></a> in the Characters tutorial.</p>
+      <hr>
       <hr>
       <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a>, <a href="https://larpmanager.com/tutorials/factions/" target="_blank" rel="noopener"><em><strong>Factions</strong></em></a>, <a href="https://larpmanager.com/tutorials/writing-extras/" target="_blank" rel="noopener"><em><strong>Writing Extras</strong></em></a></em></p>
 - model: larpmanager.larpmanagertutorial
@@ -1460,6 +1496,8 @@
       <p>Create the modules in <a href="https://larpmanager.com/redirect/event/manage/workshops/modules/" target="_blank" rel="noopener"><strong>Event &gt; Modules</strong></a>, then their questions in <a href="https://larpmanager.com/redirect/event/manage/workshops/questions/" target="_blank" rel="noopener"><strong>Event &gt; Questions</strong></a> and the possible answers, marking the correct ones, in <a href="https://larpmanager.com/redirect/event/manage/workshops/options/" target="_blank" rel="noopener"><strong>Event &gt; Answers</strong></a>:</p>
       <p><img src="/static/tutorials/223_writing-extras_06.webp" alt="New workshop module" width="1260" height="164"></p>
       <p>Participants find a new entry, <strong>Workshop</strong>, in the event menu. <a href="https://larpmanager.com/redirect/event/manage/workshops/" target="_blank" rel="noopener"><strong>Event &gt; Workshops</strong></a> shows which participants have not yet completed all the modules in the last year.</p>
+      <p>To import or export prologues as CSV files, see <a href="https://larpmanager.com/tutorials/characters/#import-and-export" target="_blank" rel="noopener"><em><strong>Import and export</strong></em></a> in the Characters tutorial.</p>
+      <hr>
       <hr>
       <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/plots/" target="_blank" rel="noopener"><em><strong>Plots</strong></em></a>, <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a>, <a href="https://larpmanager.com/tutorials/event-tools/" target="_blank" rel="noopener"><em><strong>Event Tools</strong></em></a></em></p>
 - model: larpmanager.larpmanagertutorial
@@ -1625,6 +1663,8 @@
       <p><img src="/static/tutorials/240_quests_07.webp" alt="Trait preferences for the organizers" width="983" height="623"></p>
       <p>You can also assign a trait directly when editing a registration in <a href="https://larpmanager.com/redirect/event/manage/registrations/" target="_blank" rel="noopener"><strong>Event &gt; Registrations</strong></a>:</p>
       <p><img src="/static/tutorials/240_quests_08.webp" alt="Assign a trait from the registration" width="1260" height="307"></p>
+      <p>To import or export quests and traits as CSV files, see <a href="https://larpmanager.com/tutorials/characters/#import-and-export" target="_blank" rel="noopener"><em><strong>Import and export</strong></em></a> in the Characters tutorial.</p>
+      <hr>
       <hr>
       <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/casting/" target="_blank" rel="noopener"><em><strong>Casting</strong></em></a>, <a href="https://larpmanager.com/tutorials/characters/" target="_blank" rel="noopener"><em><strong>Characters</strong></em></a></em></p>
 - model: larpmanager.larpmanagertutorial

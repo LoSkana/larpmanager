@@ -5866,6 +5866,9 @@ msgstr "Registrace na %(event)s"
 msgid "Registrations not yet open"
 msgstr "Registrace zatím nejsou otevřené"
 
+msgid "Regular participant ticket"
+msgstr "Běžná vstupenka pro účastníka"
+
 msgid "Select one or more options"
 msgstr "Vyber jednu nebo více možností"
 
@@ -10110,6 +10113,9 @@ msgstr "Zapni nebo vypni funkce pro tvoji organizaci a všechny její akce"
 msgid "Enter your email below to receive instructions on how to change it:"
 msgstr "Zadej svůj e-mail níže a obdržíš pokyny, jak jej změnit:"
 
+msgid "Higher-priced ticket, each one sold makes reduced tickets available"
+msgstr "Dražší vstupenka, každá prodaná zpřístupní zlevněné vstupenky"
+
 msgid "How the relationship is described from this character's perspective"
 msgstr "Jak je vztah popsán z pohledu této postavy"
 
@@ -10200,6 +10206,9 @@ msgstr "Datum, kdy bylo členství oficiálně schváleno organizací"
 
 msgid "Do you want to enable a secret registration link for early sign-ups?"
 msgstr "Chceš zapnout tajný registrační odkaz pro předčasné přihlášení?"
+
+msgid "For collaborators of the event, counted separately from participants"
+msgstr "Pro spolupracovníky akce, počítá se odděleně od účastníků"
 
 msgid "If enabled, enables the consistency check tool for character sheets."
 msgstr ""
@@ -10358,6 +10367,9 @@ msgstr ""
 
 msgid "Follow the link below to complete your payment on the PayPal platform."
 msgstr "Dokonči platbu na platformě PayPal pomocí odkazu níže."
+
+msgid "For sellers present at the event, counted separately from participants"
+msgstr "Pro prodejce přítomné na akci, počítá se odděleně od účastníků"
 
 #, python-format
 msgid "Friends who use your code get %(discount)s%(symbol)s off their ticket."
@@ -11642,6 +11654,13 @@ msgstr ""
 "Po vytvoření už nelze změnit; místo toho tento příznak smaž a vytvoř nový."
 
 msgid ""
+"Discounted ticket, its availability depends on the number of patron tickets "
+"sold"
+msgstr ""
+"Zlevněná vstupenka, její dostupnost závisí na počtu prodaných mecenášských "
+"vstupenek"
+
+msgid ""
 "If selected, participants must provide a receipt or invoice for manual "
 "payments."
 msgstr ""
@@ -12232,6 +12251,13 @@ msgid ""
 msgstr "Před účastí na akci vyžaduje schválení členství výkonným výborem"
 
 msgid ""
+"Reserved to users who have never participated in an event of the "
+"organization before"
+msgstr ""
+"Vyhrazeno uživatelům, kteří se ještě nikdy nezúčastnili žádné akce "
+"organizace"
+
+msgid ""
 "Review which characters and traits have been assigned to players, grouped by"
 " faction"
 msgstr ""
@@ -12564,6 +12590,13 @@ msgstr ""
 "organizátorem."
 
 msgid ""
+"For participants willing to replace last-minute dropouts, with a separate "
+"capacity limit"
+msgstr ""
+"Pro účastníky ochotné nahradit ty, kdo se odhlásí na poslední chvíli, se "
+"samostatným limitem kapacity"
+
+msgid ""
 "If you don't find a user, save the role and then invite them by clicking on "
 "this symbol:"
 msgstr ""
@@ -12721,6 +12754,13 @@ msgid ""
 msgstr ""
 "Pro účast na této akci budeš muset zaplatit roční členský příspěvek za rok "
 "%(year)s ve výši:"
+
+msgid ""
+"Unlimited free ticket, a random draw later converts a number of them into "
+"regular tickets"
+msgstr ""
+"Neomezená bezplatná vstupenka, náhodné losování později část z nich převede "
+"na běžné vstupenky"
 
 msgid ""
 "Upload an image of any size; it will be automatically optimized. Square "
@@ -13761,6 +13801,13 @@ msgstr ""
 "souladu s italskými právními předpisy"
 
 msgid ""
+"Available only when the primary tickets are sold out, participants can be "
+"moved up when spots free up"
+msgstr ""
+"Dostupná pouze po vyprodání hlavních vstupenek, účastníci se mohou posunout "
+"výš, když se uvolní místa"
+
+msgid ""
 "By pressing confirm, this registration will be assigned to you, and you will"
 " then be duly registered:"
 msgstr ""
@@ -14082,6 +14129,13 @@ msgstr ""
 "Přidává typy vstupenek 'Patron' a 'Snížené'. Každá zakoupená vstupenka "
 "'Patron' zpřístupní jednu vstupenku 'Snížené'"
 
+msgid ""
+"For the organizing staff, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+"Pro organizační tým, nepočítá se jako účastník a nevztahují se na ni "
+"příplatky ani připomínky k postavám"
+
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
@@ -14195,6 +14249,13 @@ msgid ""
 msgstr ""
 "Přiřaď účastníkům role na základě jejich preferencí a spuštěním algoritmu "
 "pro optimalizaci Casting."
+
+msgid ""
+"For non-player characters, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+"Pro nehráčské postavy, nepočítá se jako účastník a nevztahují se na ni "
+"příplatky ani připomínky k postavám"
 
 msgid ""
 "If you select one (or more) character abilities, this modifier applies only "

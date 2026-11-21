@@ -2809,6 +2809,53 @@ msgstr ""
 msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr ""
 
+msgid "Regular participant ticket"
+msgstr ""
+
+msgid ""
+"Reserved to users who have never participated in an event of the "
+"organization before"
+msgstr ""
+
+msgid ""
+"Unlimited free ticket, a random draw later converts a number of them into "
+"regular tickets"
+msgstr ""
+
+msgid ""
+"Available only when the primary tickets are sold out, participants can be "
+"moved up when spots free up"
+msgstr ""
+
+msgid ""
+"For participants willing to replace last-minute dropouts, with a separate "
+"capacity limit"
+msgstr ""
+
+msgid ""
+"Discounted ticket, its availability depends on the number of patron tickets "
+"sold"
+msgstr ""
+
+msgid "Higher-priced ticket, each one sold makes reduced tickets available"
+msgstr ""
+
+msgid ""
+"For the organizing staff, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+
+msgid ""
+"For non-player characters, not counted as participant and excluded from "
+"surcharges and character reminders"
+msgstr ""
+
+msgid "For collaborators of the event, counted separately from participants"
+msgstr ""
+
+msgid "For sellers present at the event, counted separately from participants"
+msgstr ""
+
 msgid ""
 "Organize registration form questions into named sections to group related "
 "fields together"

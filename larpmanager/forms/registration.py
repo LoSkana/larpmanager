@@ -1249,6 +1249,7 @@ class OrgaRegistrationTicketForm(BaseModelForm):
         tiers = self.get_tier_available(self.params["run"].event, self.params)
         if len(tiers) > 1:
             self.fields["tier"].choices = tiers
+            self._init_tier_help_text(tiers)
         else:
             self.delete_field("tier")
 
@@ -1263,6 +1264,40 @@ class OrgaRegistrationTicketForm(BaseModelForm):
         # Remove sold count field if the event does not show sold tickets
         if not get_event_config(self.params["event"].id, "ticket_sold", context=self.params):
             self.delete_field("show_sold")
+
+    def _init_tier_help_text(self, tiers: list[tuple[str, str]]) -> None:
+        """Describe each available ticket tier in the tier field help text."""
+        help_texts = {
+            TicketTier.STANDARD: _("Regular participant ticket"),
+            TicketTier.NEW_PLAYER: _(
+                "Reserved to users who have never participated in an event of the organization before"
+            ),
+            TicketTier.LOTTERY: _(
+                "Unlimited free ticket, a random draw later converts a number of them into regular tickets"
+            ),
+            TicketTier.WAITING: _(
+                "Available only when the primary tickets are sold out, participants can be moved up when spots free up"
+            ),
+            TicketTier.FILLER: _(
+                "For participants willing to replace last-minute dropouts, with a separate capacity limit"
+            ),
+            TicketTier.REDUCED: _("Discounted ticket, its availability depends on the number of patron tickets sold"),
+            TicketTier.PATRON: _("Higher-priced ticket, each one sold makes reduced tickets available"),
+            TicketTier.STAFF: _(
+                "For the organizing staff, not counted as participant and excluded from surcharges and "
+                "character reminders"
+            ),
+            TicketTier.NPC: _(
+                "For non-player characters, not counted as participant and excluded from surcharges and "
+                "character reminders"
+            ),
+            TicketTier.COLLABORATOR: _("For collaborators of the event, counted separately from participants"),
+            TicketTier.SELLER: _("For sellers present at the event, counted separately from participants"),
+        }
+
+        self.fields["tier"].help_text = "<br />".join(
+            f"<b>{label}</b>: {help_texts[value]}" for value, label in tiers if value in help_texts
+        )
 
     @staticmethod
     def get_tier_available(event: Event, context: dict) -> list[tuple[str, str]]:
