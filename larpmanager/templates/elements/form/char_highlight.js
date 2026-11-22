@@ -44,7 +44,7 @@ function setUpHighlight(key) {
         if (!selected) return;
 
         // If it is not exactly #XX (where X are numbers) then exit
-        selected = $.trim(selected);
+        selected = selected.trim();
         if (!/^[#@^]\d+$/.test(selected)) return;
 
         var win = editor.getWin();

@@ -51,7 +51,7 @@ function lmAutoSaveSubmit() {
 
     // a not-yet-created element is auto-saved only once its required field is filled
     if (!$('#base_updated').val() && lm_auto_save.required_field
-        && !$.trim($('#' + lm_auto_save.required_field).val()).length) return;
+        && !String($('#' + lm_auto_save.required_field).val() || '').trim().length) return;
 
     lm_auto_save.running = true;
 

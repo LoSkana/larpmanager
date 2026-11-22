@@ -6,7 +6,7 @@ function is_mandatory_empty(el) {
         var val = el.val();
         return !val || (Array.isArray(val) && !val.length);
     }
-    return !$.trim(el.val()).length;
+    return !String(el.val() || '').trim().length;
 }
 
 // Marks every empty mandatory field, opens their sections and jumps to the first one
@@ -57,7 +57,7 @@ function show_mandatory_summary(missing) {
 
     var list = $('<ul></ul>');
     $.each(missing, function(index, k) {
-        var label = $.trim($('label[for="' + k + '"]').first().text()).replace(/:$/, '').replace(/\s*\(\*\)$/, '');
+        var label = $('label[for="' + k + '"]').first().text().trim().replace(/:$/, '').replace(/\s*\(\*\)$/, '');
         var link = $('<a href="#" class="form-error-link"></a>').attr('data-field', k).text(label || k);
         list.append($('<li></li>').append(link));
     });

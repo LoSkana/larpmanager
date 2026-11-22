@@ -19,6 +19,7 @@
     "javascript-lp-solver": "1.x",
     "jquery": "4.1.0",
     "jquery-datetimepicker": "2.x",
+    "jquery-migrate": "4.x",
     "jquery-toast-plugin": "1.x",
     "jszip": "3.x",
     "language-icons": "0.x",
