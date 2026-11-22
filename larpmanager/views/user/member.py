@@ -60,7 +60,12 @@ from django_otp import login as otp_login, match_token
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from PIL import Image, UnidentifiedImageError
 
-from larpmanager.accounting.member import info_accounting, is_membership_fee_payable
+from larpmanager.accounting.member import (
+    has_upcoming_registration_this_year,
+    info_accounting,
+    is_membership_grazing,
+    is_membership_vote_open,
+)
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import update_member_event_character_cache
 from larpmanager.cache.config import get_association_config, save_single_config
@@ -613,17 +618,22 @@ def membership(request: HttpRequest) -> HttpResponse:
         context.update(calculate_fiscal_code(context["member"]))
 
     # Check if membership fee has been paid for current year
+    context["year"] = timezone.localdate().year
     context["fee_payed"] = AccountingItemMembership.objects.filter(
         association_id=context["association_id"],
-        year=timezone.localdate().year,
+        year=context["year"],
         member_id=context["member"].id,
     ).exists()
 
     # Add statute text and standalone fee payment availability for accepted memberships
     if el.status == MembershipStatus.ACCEPTED:
         context["statute"] = get_association_text(context["association_id"], AssociationTextType.STATUTE)
-        context["fee_payable"] = not context["fee_payed"] and is_membership_fee_payable(
-            context["member"], context["association_id"], context
+        context["fee_registered"] = has_upcoming_registration_this_year(context["member"], context["association_id"])
+        context["vote_open"] = is_membership_vote_open(context["association_id"], context)
+        context["fee_payable"] = not context["fee_payed"] and (
+            context["fee_registered"]
+            or context["vote_open"]
+            or is_membership_grazing(context["association_id"], context)
         )
 
     # Disable join functionality for this view

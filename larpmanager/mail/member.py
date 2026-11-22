@@ -82,7 +82,7 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
     if membership_fee_amount:
         email_body += " " + _(
             "Please note that an annual membership fee of %(amount)d %(currency)s "
-            "is required to participate in events.",
+            "is required for each year in which you take part in our events.",
         ) % {"amount": membership_fee_amount, "currency": request.association["currency_symbol"]}
 
     # Add closing message and send email
@@ -204,7 +204,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     if requires_membership_fee and get_association_config(association_id, "membership_fee"):
         membership_fee_url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
-            "Payment of the membership fee for this year is required to participate in events. "
+            "Payment of the membership fee for this year is required to take part in the events you are registered for. "
             "You can pay your fee <a href='%(url)s'>here</a>.",
         ) % {"url": membership_fee_url}
 
