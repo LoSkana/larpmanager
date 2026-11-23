@@ -711,7 +711,8 @@ def check_bundled_membership_fee(
     """Handle the payment of registration fee bundled with membership fee.
 
     If the invoice reserved a bundled membership fee, split it out now: reduce the registration payment by the
-    membership amount and create the membership fee payment.
+    membership amount and create the membership fee payment linked to the invoice. If the membership fee for that
+    year is already paid, the whole amount stays on the registration.
     """
     association_id = invoice.association_id
     event_year = registration.run.start.year
@@ -736,16 +737,26 @@ def check_bundled_membership_fee(
     if invoice.mc_gross < membership_fee:
         return
 
-    # Reduce the payment for the registration fee
-    accounting_item.value = invoice.mc_gross - membership_fee
-
-    # Create the membership fee payment
-    AccountingItemMembership.objects.get_or_create(
+    # Membership fee already paid for this year: keep the whole amount on the registration
+    if AccountingItemMembership.objects.filter(
         member_id=registration.member_id,
         association_id=association_id,
         year=event_year,
-        deleted=None,
-        defaults={"value": membership_fee},
+        deleted__isnull=True,
+    ).exists():
+        pending_config.delete()
+        return
+
+    # Reduce the payment for the registration fee
+    accounting_item.value = invoice.mc_gross - membership_fee
+
+    # Create the membership fee payment, linked to the invoice that collected it
+    AccountingItemMembership.objects.create(
+        member_id=registration.member_id,
+        association_id=association_id,
+        year=event_year,
+        value=membership_fee,
+        inv=invoice,
     )
 
     # Delete pending config

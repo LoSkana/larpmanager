@@ -388,7 +388,11 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("50.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("50.00"),
         )
 
         result = get_registration_payments(registration)
@@ -403,10 +407,18 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("30.00"),
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("20.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("20.00"),
         )
 
         result = get_registration_payments(registration)
@@ -421,10 +433,18 @@ class TestPaymentCalculationFunctions(BaseTestCase):
         registration = self.create_registration(member=member, run=run)
 
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.MONEY, value=Decimal("30.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.MONEY,
+            value=Decimal("30.00"),
         )
         AccountingItemPayment.objects.create(
-            member=member, association=association, registration=registration, pay=PaymentChoices.TOKEN, value=Decimal("20.00")
+            member=member,
+            association=association,
+            registration=registration,
+            pay=PaymentChoices.TOKEN,
+            value=Decimal("20.00"),
         )
 
         get_registration_payments(registration)
@@ -1432,6 +1452,43 @@ class TestProcessPaymentMembershipSplit(BaseTestCase):
             AccountingItemMembership.objects.filter(
                 member=member, association=association, year=year, deleted__isnull=True
             ).exists()
+        )
+
+    def test_membership_item_linked_to_invoice(self) -> None:
+        """AccountingItemMembership references the invoice that collected it."""
+        from django.utils import timezone
+
+        from larpmanager.accounting.payment import _process_payment
+
+        year = timezone.now().year
+        association, member, _registration, invoice = self._setup(year)
+        _process_payment(invoice)
+        item = AccountingItemMembership.objects.get(
+            member=member, association=association, year=year, deleted__isnull=True
+        )
+        self.assertEqual(item.inv_id, invoice.id)
+        self.assertEqual(item.value, self.MEMBERSHIP_FEE)
+
+    def test_existing_membership_keeps_full_payment(self) -> None:
+        """If the membership fee is already paid, the whole amount stays on the registration."""
+        from django.utils import timezone
+
+        from larpmanager.accounting.payment import _process_payment
+        from larpmanager.models.accounting import AccountingItemPayment
+
+        year = timezone.now().year
+        association, member, registration, invoice = self._setup(year)
+        AccountingItemMembership.objects.create(
+            member=member, association=association, year=year, value=self.MEMBERSHIP_FEE
+        )
+        _process_payment(invoice)
+        item = AccountingItemPayment.objects.get(registration=registration)
+        self.assertEqual(item.value, self.TICKET_PRICE + self.MEMBERSHIP_FEE)
+        self.assertEqual(
+            AccountingItemMembership.objects.filter(
+                member=member, association=association, year=year, deleted__isnull=True
+            ).count(),
+            1,
         )
 
     def test_member_config_reservation_deleted_after_payment(self) -> None:
