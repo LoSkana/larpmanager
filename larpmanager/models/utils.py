@@ -38,7 +38,7 @@ from uuid import uuid4
 from cryptography.fernet import Fernet
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
-from django.db.models import QuerySet, Sum
+from django.db.models import FileField, QuerySet, Sum
 from django.utils import timezone
 from django.utils.deconstruct import deconstructible
 from django.utils.html import format_html
@@ -244,31 +244,44 @@ class UploadToPathAndRename:
 
         # Handle backup of existing files for updates
         if instance.pk:
-            path_bkp = Path(conf_settings.MEDIA_ROOT) / path
-
-            # Find existing files that match this instance
-            if path_bkp.exists():
-                bkp_tomove = [
-                    file_entry.name
-                    for file_entry in path_bkp.iterdir()
-                    if file_entry.name.startswith(f"{instance.pk}_")
-                ]
-            else:
-                bkp_tomove = []
-
-            # Move existing files to backup directory
-            for el in bkp_tomove:
-                # Create backup directory if it doesn't exist
-                bkp = Path(conf_settings.MEDIA_ROOT) / "bkp" / path
-                bkp.mkdir(mode=0o770, parents=True, exist_ok=True)
-
-                # Generate timestamped backup filename and move file
-                bkp_fn = f"{instance.pk}_{timezone.now()}.{ext}"
-                bkp_fn = bkp / bkp_fn
-                current_fn = Path(conf_settings.MEDIA_ROOT) / path / el
-                current_fn.rename(bkp_fn)
+            self._backup_previous_file(instance)
 
         return new_fn
+
+    def _backup_previous_file(self, instance: Any) -> None:
+        """Move the file currently stored in the database for this field to the backup directory.
+
+        Only the file referenced by this instance's field is moved, so files of other
+        instances are never touched, whatever their name.
+        """
+        field_names = [
+            field.attname
+            for field in instance._meta.concrete_fields  # noqa: SLF001
+            if isinstance(field, FileField) and field.upload_to is self
+        ]
+        if not field_names:
+            return
+
+        previous_values = (
+            type(instance)._base_manager.filter(pk=instance.pk).values_list(*field_names).first()  # noqa: SLF001
+        )
+        if not previous_values:
+            return
+
+        media_root = Path(conf_settings.MEDIA_ROOT)
+        for previous_name in previous_values:
+            if not previous_name:
+                continue
+
+            current_fn = media_root / previous_name
+            if not current_fn.is_file():
+                continue
+
+            # Store the backup with a timestamp suffix, mirroring the original directory
+            bkp = media_root / "bkp" / Path(previous_name).parent
+            bkp.mkdir(mode=0o770, parents=True, exist_ok=True)
+            bkp_fn = bkp / f"{instance.pk}_{timezone.now()}{current_fn.suffix.lower()}"
+            current_fn.rename(bkp_fn)
 
 
 def _key_id(fernet_key: bytes) -> str:
