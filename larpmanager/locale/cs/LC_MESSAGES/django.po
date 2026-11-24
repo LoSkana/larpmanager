@@ -9242,6 +9242,9 @@ msgstr "Registrace na akci <i>%(run)s</i> jsou uzavřeny!"
 msgid "The user has confirmed their registration for this event."
 msgstr "Uživatel potvrdil svou registraci na tuto akci."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "Hodnota se změnila: výdaj musí být znovu schválen"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Tím budeš odstraněn(a) ze zpravodaje této organizace."
 

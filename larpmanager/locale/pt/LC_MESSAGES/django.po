@@ -9252,6 +9252,9 @@ msgstr "As inscrições para o evento <i>%(run)s</i> estão encerradas!"
 msgid "The user has confirmed their registration for this event."
 msgstr "O utilizador confirmou a inscrição neste evento."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "O valor foi alterado: a despesa tem de ser aprovada novamente"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Isto irá remover-te da newsletter desta organização."
 

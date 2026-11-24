@@ -9280,6 +9280,9 @@ msgid "The user has confirmed their registration for this event."
 msgstr ""
 "De gebruiker heeft zijn of haar aanmelding voor dit evenement bevestigd."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "De waarde is gewijzigd: de uitgave moet opnieuw worden goedgekeurd"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Hierdoor word je verwijderd uit de nieuwsbrief van deze organisatie."
 

@@ -540,6 +540,11 @@ def _backend_save(
     if not quiet:
         messages.success(request, _("Operation completed!"))
 
+    # Show warning raised by the form during save
+    save_warning = getattr(context["form"], "save_warning", None)
+    if save_warning:
+        messages.warning(request, save_warning)
+
     # Handle deletion if delete flag is set in POST data
     should_delete = request.POST.get("delete") == "1"
 
