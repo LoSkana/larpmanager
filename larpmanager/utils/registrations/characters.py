@@ -471,7 +471,8 @@ def check_assign_character(context: dict) -> list[tuple[Character, list[WritingO
     are inactive or already assigned to this registration. When the player owns more
     assignable characters than free slots, nothing is assigned: the choice is left to
     the player on the character list page. Characters whose limited options have no
-    spots left in the run are not assigned.
+    spots left in the run are not assigned, and nothing is assigned while character
+    access is locked until the registration payment.
 
     Args:
         context: Context dictionary containing event data
@@ -483,6 +484,10 @@ def check_assign_character(context: dict) -> list[tuple[Character, list[WritingO
     # Get registration
     registration = get_player_signup(context)
     if not registration:
+        return []
+
+    # Characters are not assigned while access is locked until the registration payment
+    if not context.get("staff") and is_character_access_locked(registration, context.get("features", {}), context):
         return []
 
     assignable_characters, free_slots = _get_assignable_characters(context, registration)

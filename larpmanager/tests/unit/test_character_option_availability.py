@@ -289,6 +289,35 @@ class TestCharacterOptionAvailability(BaseTestCase):
         assert blocked == [(candidate, [self.bunker])]
         assert not RegistrationCharacterRel.objects.filter(registration=registration).exists()
 
+    def _payment_lock_context(self, *, staff: bool) -> tuple[dict, object, Character]:
+        """Return a context for a registration with one assignable character."""
+        member = self._member()
+        candidate = self._character("Candidate", self.wasteland, player=member)
+        registration = self.create_registration(member=member, run=self.run)
+        context = {
+            "event": self.event,
+            "run": self.run,
+            "member": member,
+            "registration": registration,
+            "features": {"character", "user_character", "payment"},
+            "staff": staff,
+        }
+        return context, registration, candidate
+
+    @patch("larpmanager.utils.registrations.characters.is_character_access_locked", return_value=True)
+    def test_auto_assign_skipped_while_payment_locked(self, _mock_locked: object) -> None:
+        context, registration, _candidate = self._payment_lock_context(staff=False)
+
+        assert check_assign_character(context) == []
+        assert not RegistrationCharacterRel.objects.filter(registration=registration).exists()
+
+    @patch("larpmanager.utils.registrations.characters.is_character_access_locked", return_value=True)
+    def test_auto_assign_staff_ignores_payment_lock(self, _mock_locked: object) -> None:
+        context, registration, candidate = self._payment_lock_context(staff=True)
+
+        check_assign_character(context)
+        assert RegistrationCharacterRel.objects.filter(registration=registration, character=candidate).exists()
+
     @patch("larpmanager.mail.registration.my_send_digest_email")
     @patch("larpmanager.mail.registration.get_event_organizers")
     @patch("larpmanager.mail.registration.my_send_mail")
