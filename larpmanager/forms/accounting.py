@@ -61,6 +61,22 @@ from larpmanager.models.utils import save_payment_details
 from larpmanager.utils.core.validators import FileTypeValidator
 
 
+class ExpenseReapprovalMixin:
+    """Reset expense approval when its value changes, unless approval is set in the same edit."""
+
+    def save(self, commit: bool = True) -> AccountingItemExpense:  # noqa: FBT001, FBT002
+        """Save the expense, sending it back to approval if the value changed."""
+        if (
+            self.instance.pk
+            and self.initial.get("is_approved")
+            and "value" in self.changed_data
+            and "is_approved" not in self.changed_data
+        ):
+            self.instance.is_approved = False
+            self.save_warning = _("The value has changed: the expense must be approved again")
+        return super().save(commit=commit)
+
+
 class OrgaPersonalExpenseForm(BaseModelFormRun):
     """Form for contributors to add/edit their personal expenses.
 
@@ -86,7 +102,7 @@ class OrgaPersonalExpenseForm(BaseModelFormRun):
             self.delete_field("balance")
 
 
-class OrgaExpenseForm(BaseModelFormRun):
+class OrgaExpenseForm(ExpenseReapprovalMixin, BaseModelFormRun):
     """Form for organizers to manage contributor expenses.
 
     Full expense management including approval workflow
@@ -419,7 +435,7 @@ class ExeTokenForm(BaseModelForm):
         return instance
 
 
-class ExeExpenseForm(BaseModelForm):
+class ExeExpenseForm(ExpenseReapprovalMixin, BaseModelForm):
     """Form for ExeExpense."""
 
     page_title = _("Expenses")

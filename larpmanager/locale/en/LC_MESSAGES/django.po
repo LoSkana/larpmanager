@@ -142,6 +142,9 @@ msgstr ""
 msgid "Tot"
 msgstr ""
 
+msgid "The value has changed: the expense must be approved again"
+msgstr ""
+
 msgid ""
 "Track your personal expense reimbursement requests submitted for this event"
 msgstr ""

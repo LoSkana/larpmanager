@@ -9257,6 +9257,9 @@ msgstr "Ilmoittautuminen tapahtumaan <i>%(run)s</i> on päättynyt!"
 msgid "The user has confirmed their registration for this event."
 msgstr "Käyttäjä on vahvistanut ilmoittautumisensa tähän tapahtumaan."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "Arvo on muuttunut: kulu täytyy hyväksyä uudelleen"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Tämä poistaa sinut tämän organisaation uutiskirjeestä."
 

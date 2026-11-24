@@ -9247,6 +9247,9 @@ msgstr "Påmeldingen til arrangementet <i>%(run)s</i> er stengt!"
 msgid "The user has confirmed their registration for this event."
 msgstr "Brukeren har bekreftet sin påmelding til dette arrangementet."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "Beløpet er endret: utgiften må godkjennes på nytt"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Dette vil fjerne deg fra denne organisasjonens nyhetsbrev."
 

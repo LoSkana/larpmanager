@@ -9318,6 +9318,9 @@ msgstr "Οι εγγραφές για το event <i>%(run)s</i> είναι κλε
 msgid "The user has confirmed their registration for this event."
 msgstr "Ο χρήστης επιβεβαίωσε την εγγραφή του σε αυτή την εκδήλωση."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "Η τιμή άλλαξε: η δαπάνη πρέπει να εγκριθεί ξανά"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Αυτό θα σε αφαιρέσει από το ενημερωτικό δελτίο αυτού του οργανισμού."
 

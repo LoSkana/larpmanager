@@ -9308,6 +9308,9 @@ msgstr ""
 msgid "The user has confirmed their registration for this event."
 msgstr "Der Nutzer hat seine Anmeldung für diese Veranstaltung bestätigt."
 
+msgid "The value has changed: the expense must be approved again"
+msgstr "Der Wert hat sich geändert: Die Ausgabe muss erneut genehmigt werden"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Damit wirst du vom Newsletter dieser Organisation abgemeldet."
 
