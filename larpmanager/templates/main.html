@@ -212,7 +212,7 @@
         $(function() {
 
             $('div.info').filter(function() {
-              return $(this).children().length === 0 && $.trim($(this).text()) === '';
+              return $(this).children().length === 0 && $(this).text().trim() === '';
             }).hide();
 
             $('.logout-form').hide();
