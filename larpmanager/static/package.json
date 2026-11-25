@@ -24,6 +24,7 @@
     "language-icons": "0.x",
     "moment": "2.x",
     "pdfmake": "0.3.x",
+    "select2": "4.2.0",
     "tinymce": "8.x",
     "tinymce-i18n": "26.x"
   }
