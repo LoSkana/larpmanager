@@ -1424,6 +1424,92 @@ function post_popup() {
     });
 }
 
+// POST the chosen UI language to the server.
+function selectLanguage(lang) {
+    xhttp.open("POST", set_language_url, true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send("language=" + lang);
+}
+
+// Return an HTML-escaped (XSS-safe) version of the input string.
+function stripHTML(dirtyString) {
+  var container = document.createElement('div');
+  var text = document.createTextNode(dirtyString);
+  container.appendChild(text);
+  return container.innerHTML; // innerHTML will be a xss safe string
+}
+
+// String.format/f: replace {0}, {1}, ... placeholders with the given arguments.
+String.prototype.format = String.prototype.f = function() {
+    var s = this,
+        i = arguments.length;
+
+    while (i--) {
+        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
+    }
+    return s;
+};
+
+// Convert a string into a URL-safe slug (lowercase, accents stripped, hyphen-separated).
+function slugify(str) {
+  return String(str)
+    .normalize('NFKD') // split accented characters into their base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
+    .trim() // trim leading or trailing whitespace
+    .toLowerCase() // convert to lowercase
+    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
+    .replace(/\s+/g, '-') // replace spaces with hyphens
+    .replace(/-+/g, '-'); // remove consecutive hyphens
+}
+
+// Fallback String.format polyfill if not already defined above.
+if (!String.prototype.format) {
+  String.prototype.format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
+// Copy a link to the clipboard on .copy-link-btn click, with temporary check-icon feedback.
+function copyClipboardButton() {
+    // Copy link to clipboard functionality (jQuery)
+    $(document).on('click', '.copy-link-btn', function (e) {
+        e.preventDefault();
+
+        const $btn = $(this);
+        const url = window.location.origin + $btn.data('url');
+
+        navigator.clipboard.writeText(url).then(function () {
+            const $icon = $btn.find('i');
+            const originalClass = $icon.attr('class');
+
+            $icon.attr('class', 'fa-solid fa-check');
+            $btn.css('color', '#28a745');
+
+            setTimeout(function () {
+                $icon.attr('class', originalClass);
+                $btn.css('color', '');
+            }, 2000);
+        }).catch(function (err) {
+            console.error('Failed to copy:', err);
+        });
+    });
+
+    $('.opt-card-desc').each(function () {
+        var len = $(this).text().trim().length;
+        var size = len < 60 ? '0.85em' : len < 120 ? '0.75em' : len < 200 ? '0.65em' : '0.55em';
+        $(this).css('font-size', size);
+    });
+
+}
+
+});
+
 // ========== Tooltips ==========
 
 // Tooltips are positioned with Floating UI and shown through delegated hover events, so elements added later
@@ -1600,92 +1686,6 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('close', function(event) {
     if (event.target.tagName === 'DIALOG' && lmTipState.tip && event.target.contains(lmTipState.tip)) lmTipHide();
 }, true);
-
-// POST the chosen UI language to the server.
-function selectLanguage(lang) {
-    xhttp.open("POST", set_language_url, true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("language=" + lang);
-}
-
-// Return an HTML-escaped (XSS-safe) version of the input string.
-function stripHTML(dirtyString) {
-  var container = document.createElement('div');
-  var text = document.createTextNode(dirtyString);
-  container.appendChild(text);
-  return container.innerHTML; // innerHTML will be a xss safe string
-}
-
-// String.format/f: replace {0}, {1}, ... placeholders with the given arguments.
-String.prototype.format = String.prototype.f = function() {
-    var s = this,
-        i = arguments.length;
-
-    while (i--) {
-        s = s.replace(new RegExp('\\{' + i + '\\}', 'gm'), arguments[i]);
-    }
-    return s;
-};
-
-// Convert a string into a URL-safe slug (lowercase, accents stripped, hyphen-separated).
-function slugify(str) {
-  return String(str)
-    .normalize('NFKD') // split accented characters into their base characters and diacritical marks
-    .replace(/[\u0300-\u036f]/g, '') // remove all the accents, which happen to be all in the \u03xx UNICODE block.
-    .trim() // trim leading or trailing whitespace
-    .toLowerCase() // convert to lowercase
-    .replace(/[^a-z0-9 -]/g, '') // remove non-alphanumeric characters
-    .replace(/\s+/g, '-') // replace spaces with hyphens
-    .replace(/-+/g, '-'); // remove consecutive hyphens
-}
-
-// Fallback String.format polyfill if not already defined above.
-if (!String.prototype.format) {
-  String.prototype.format = function() {
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
-    });
-  };
-}
-
-// Copy a link to the clipboard on .copy-link-btn click, with temporary check-icon feedback.
-function copyClipboardButton() {
-    // Copy link to clipboard functionality (jQuery)
-    $(document).on('click', '.copy-link-btn', function (e) {
-        e.preventDefault();
-
-        const $btn = $(this);
-        const url = window.location.origin + $btn.data('url');
-
-        navigator.clipboard.writeText(url).then(function () {
-            const $icon = $btn.find('i');
-            const originalClass = $icon.attr('class');
-
-            $icon.attr('class', 'fa-solid fa-check');
-            $btn.css('color', '#28a745');
-
-            setTimeout(function () {
-                $icon.attr('class', originalClass);
-                $btn.css('color', '');
-            }, 2000);
-        }).catch(function (err) {
-            console.error('Failed to copy:', err);
-        });
-    });
-
-    $('.opt-card-desc').each(function () {
-        var len = $(this).text().trim().length;
-        var size = len < 60 ? '0.85em' : len < 120 ? '0.75em' : len < 200 ? '0.65em' : '0.55em';
-        $(this).css('font-size', size);
-    });
-
-}
-
-});
 
 // Max size of picked files buffered in memory, larger ones are uploaded as picked.
 const LM_FILE_BUFFER_MAX = 10 * 1024 * 1024;

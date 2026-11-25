@@ -128,6 +128,30 @@ select {
   background: rgba(var(--sec-rgb), 0.9) !important;
 }
 
+/* Select2 remove / clear buttons: drop the generic button styling */
+.select2-container .select2-selection__choice__remove,
+.select2-container .select2-selection__clear {
+  box-shadow: none;
+  border-width: 0 !important;
+  width: auto;
+  min-width: 0;
+  height: auto;
+  line-height: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+  color: inherit;
+}
+
+.select2-container .select2-selection--multiple .select2-selection__choice {
+  padding-left: 0 !important;
+}
+
+.select2-container .select2-selection__choice__remove {
+  position: static !important;
+  border-right: 1px solid rgba(var(--pri-rgb), 0.3) !important;
+  border-radius: 4px 0 0 4px;
+}
+
 .select2-results__option {
   background: rgba(var(--sec-rgb), 0.95) !important;
 }

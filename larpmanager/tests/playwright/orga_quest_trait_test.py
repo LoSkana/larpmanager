@@ -187,7 +187,7 @@ def signups(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("org")
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
-    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
     save_modal(page, edit_iframe)

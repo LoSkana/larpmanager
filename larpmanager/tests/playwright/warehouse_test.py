@@ -139,7 +139,7 @@ def add_items(page: Any) -> None:
     edit_iframe.get_by_role("searchbox").nth(1).fill("box A")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("ele")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
