@@ -21,7 +21,33 @@
   display: none;
 }
 
-.qtip.qtip-lm .qtip-content {
+.lm-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 15000;
+  max-width: 280px;
+  padding: 0.4em 0.7em;
+  border-radius: 5px;
+  background: #303030;
+  color: #f3f3f3;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lm-tip.lm-tip-visible {
+  opacity: 1;
+}
+
+.lm-tip a {
+  color: inherit;
+}
+
+.lm-tip.lm-tip-lm .lm-tip-content {
   font-size: 1.3em;
   line-height: 1.1;
 }
@@ -34,7 +60,7 @@ div.ui-lm_tooltip {
   max-width: 90%;
 }
 
-.qtip-char {
+.lm-tip.lm-tip-char {
   width: 250px;
 }
 

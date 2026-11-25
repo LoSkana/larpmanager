@@ -207,22 +207,34 @@ class ReadOnlyChoiceWidget(forms.Select):
         return context
 
 
-class DatePickerInput(forms.TextInput):
-    """Date picker input widget for forms."""
+class DatePickerInput(forms.DateInput):
+    """Native date input widget for forms."""
 
-    input_type = "date_p"
+    input_type = "date"
 
-
-class DateTimePickerInput(forms.TextInput):
-    """Date and time picker input widget for forms."""
-
-    input_type = "datetime_p"
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the ISO format required by native date inputs."""
+        super().__init__(attrs, format or "%Y-%m-%d")
 
 
-class TimePickerInput(forms.TextInput):
-    """Time picker input widget for forms."""
+class DateTimePickerInput(forms.DateTimeInput):
+    """Native date and time input widget for forms."""
 
-    input_type = "time_p"
+    input_type = "datetime-local"
+
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the ISO format required by native datetime-local inputs."""
+        super().__init__(attrs, format or "%Y-%m-%dT%H:%M")
+
+
+class TimePickerInput(forms.TimeInput):
+    """Native time input widget for forms."""
+
+    input_type = "time"
+
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the format required by native time inputs."""
+        super().__init__(attrs, format or "%H:%M")
 
 
 SLUG_UNAVAILABLE_ERROR = _("This URL is not available: check the suggested one or choose another one")

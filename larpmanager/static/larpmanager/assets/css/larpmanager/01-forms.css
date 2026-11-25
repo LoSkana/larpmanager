@@ -51,9 +51,9 @@ form ul li input[type="checkbox"] {
 
 input[type="slug"],
 input[type="number"],
-input[type="date_p"],
-input[type="time_p"],
-input[type="datetime_p"] {
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
   -moz-appearance: none;
   -webkit-appearance: none;
   -ms-appearance: none;
@@ -71,17 +71,17 @@ input[type="datetime_p"] {
 
 input[type="slug"]:invalid,
 input[type="number"]:invalid,
-input[type="date_p"]:invalid,
-input[type="time_p"]:invalid,
-input[type="datetime_p"]:invalid {
+input[type="date"]:invalid,
+input[type="time"]:invalid,
+input[type="datetime-local"]:invalid {
   box-shadow: none;
 }
 
 input[type="slug"]:focus,
 input[type="number"]:focus,
-input[type="date_p"]:focus,
-input[type="time_p"]:focus,
-input[type="datetime_p"]:focus {
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus {
   border-color: #5b6ba6;
 }
 
@@ -100,10 +100,6 @@ select {
   #register_form img {
     width: 100%;
   }
-}
-
-.xdsoft_datepicker {
-  width: 290px !important;
 }
 
 .select2-container--default .select2-results__option {
@@ -171,9 +167,8 @@ input[type="email"],
 input[type="number"],
 input[type="tel"],
 input[type="date"],
-input[type="date_p"],
-input[type="datetime_p"],
-input[type="time_p"],
+input[type="datetime-local"],
+input[type="time"],
 input[type="url"],
 select,
 textarea {
@@ -614,9 +609,8 @@ input,
 .form_container input[type="number"],
 .form_container input[type="tel"],
 .form_container input[type="date"],
-.form_container input[type="date_p"],
-.form_container input[type="datetime_p"],
-.form_container input[type="time_p"],
+.form_container input[type="datetime-local"],
+.form_container input[type="time"],
 .form_container input[type="url"],
 .form_container select,
 .form_container textarea {

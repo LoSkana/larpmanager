@@ -271,7 +271,7 @@ def test_quests_video(director: Director) -> None:
     director.spotlight(reference, 3.5)
     director.say("Hover the name to see who plays that character")
     director.hover(page.locator("#one .has_show_char a", has_text=MUSCLE_CHARACTER).first, 3.5)
-    expect(page.locator(".qtip").filter(has_text=MUSCLE_CHARACTER).first).to_be_visible()
+    expect(page.locator(".lm-tip").filter(has_text=MUSCLE_CHARACTER).first).to_be_visible()
     director.say("With a link to that character")
     director.spotlight(page.locator("#one .relationships").first, 3.0)
 

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@floating-ui/dom": "1.x",
     "@fontsource/opendyslexic": "5.x",
     "@fortawesome/fontawesome-free": "7.x",
     "@tholman/intense-images": "1.x",
@@ -18,14 +19,11 @@
     "html5-qrcode": "2.x",
     "javascript-lp-solver": "1.x",
     "jquery": "4.1.0",
-    "jquery-datetimepicker": "2.x",
-    "jquery-migrate": "4.x",
     "jquery-toast-plugin": "1.x",
     "jszip": "3.x",
     "language-icons": "0.x",
     "moment": "2.x",
     "pdfmake": "0.3.x",
-    "qtip2": "3.x",
     "tinymce": "8.x",
     "tinymce-i18n": "26.x"
   }

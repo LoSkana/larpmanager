@@ -555,45 +555,6 @@ function initFlashMessages() {
     }, 5000); // <-- time in milliseconds
 }
 
-// ========== Init: Tooltips ==========
-
-// Init qtip tooltips (prod only) plus character and generic hover tooltips.
-function initTooltips() {
-    /* QTIP TOOLTIP */
-    if (window.enviro == "prod") {
-        lm_tooltip();
-        add_icon_tooltips();
-    }
-
-    reload_has_char();
-
-    reload_has_tooltip();
-}
-
-// ========== Init: Date pickers ==========
-
-// Attach datetimepicker widgets to date_p / datetime_p / time_p inputs.
-function initDatepickers() {
-    $(':input[type="date_p"]').datetimepicker({
-        format:'Y-m-d',
-        timepicker: false,
-        scrollMonth : false,
-        scrollInput : false
-    });
-
-    $(':input[type="datetime_p"]').datetimepicker({
-        format:'Y-m-d H:i',
-        scrollMonth : false,
-        scrollInput : false
-    });
-
-    $(':input[type="time_p"]').datetimepicker({
-        format:'H:i',
-        datepicker: false,
-        scrollInput : false
-    });
-}
-
 // ========== Init: Slug field ==========
 
 function initSlugField() {
@@ -734,8 +695,6 @@ function initPopups() {
 
         $('#lm-modal').scrollTop( 0 );
 
-        reload_has_char();
-
         return false;
     });
 
@@ -830,10 +789,8 @@ $(document).ready(function() {
 
     // Notifications
     initFlashMessages();
-    initTooltips();
 
     // Forms / inputs
-    initDatepickers();
     initSlugField();
     initCollapsedOptions();
 
@@ -1299,26 +1256,6 @@ function data_tables() {
             });
         }
 
-        table.on('draw.dt', function() {
-            // Add tooltips to edit icons first
-            if (window.enviro == "prod") {
-                add_icon_tooltips();
-            }
-
-            // Then handle any remaining qtip attributes
-            $('a[qtip]').each(function() {
-                if (!$(this).data('qtip-initialized')) {
-                    $(this).qtip({
-                        content: { text: $(this).attr('qtip') },
-                        style: { classes: 'qtip-dark qtip-rounded qtip-shadow' },
-                        hide: { effect: function(offset) { $(this).fadeOut(500); } },
-                        show: { effect: function(offset) { $(this).fadeIn(500); } },
-                        position: { my: 'top center', at: 'bottom center' }
-                    });
-                    $(this).data('qtip-initialized', true);
-                }
-            });
-        });
 
         for (const index of hide_columns) {
             var column = table.column(index);
@@ -1452,26 +1389,6 @@ function data_tables() {
             window._datatablesInitPending = Math.max(0, (window._datatablesInitPending || 0) - 1);
         });
 
-        table.on('draw.dt', function() {
-            // Add tooltips to edit icons first
-            if (window.enviro == "prod") {
-                add_icon_tooltips();
-            }
-
-            // Then handle any remaining qtip attributes
-            $('a[qtip]').each(function() {
-                if (!$(this).data('qtip-initialized')) {
-                    $(this).qtip({
-                        content: { text: $(this).attr('qtip') },
-                        style: { classes: 'qtip-dark qtip-rounded qtip-shadow' },
-                        hide: { effect: function(offset) { $(this).fadeOut(500); } },
-                        show: { effect: function(offset) { $(this).fadeIn(500); } },
-                        position: { my: 'top center', at: 'bottom center' }
-                    });
-                    $(this).data('qtip-initialized', true);
-                }
-            });
-        });
     });
 }
 
@@ -1495,8 +1412,6 @@ function post_popup() {
 
             window.openLmModal(res.v, 'popup');
 
-			reload_has_char();
-
             $('#lm-modal').scrollTop( 0 );
             $('#lm-modal .hide').hide();
         });
@@ -1509,236 +1424,182 @@ function post_popup() {
     });
 }
 
-// (Re)bind character preview qtip tooltips to .has_show_char elements within parent.
-function reload_has_char(parent='') {
+// ========== Tooltips ==========
 
-    $(parent + ' ' + '.has_show_char').each(function() {
+// Tooltips are positioned with Floating UI and shown through delegated hover events, so elements added later
+// (DataTables redraws, ajax content, modals) need no initialization. Only one tooltip is visible at a time.
 
-        $(this).qtip({
-            content: {
-                text: $(this).next('span')
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            }, position: {
-                my: 'top left',
-                at: 'bottom center',
-            }
-        });
-    });
-
+// Return the next sibling of el if it is a span (the hidden content of the character / generic tooltips).
+function lmTipNextSpan(el) {
+    const next = el.nextElementSibling;
+    return next && next.tagName === 'SPAN' ? next : null;
 }
 
-// Bind the various qtip tooltip styles: .lm_tooltip, .explain-icon, data-tooltip, and a[qtip].
-function lm_tooltip() {
-
-    $('.lm_tooltip').each(function() {
-
-        $(this).qtip({
-            content: {
-                text: $(this).children('.lm_tooltiptext')
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            }, position: {
-                my: 'top center',
-                at: 'bottom center',
-            }
-        });
-    });
-
- $('.explain-icon').qtip({
-        content: {
-            text: function() {
-                return $(this).parent().attr('descr');
-            }
-        },
-        style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-lm'
-        },
-        show: {
-            event: 'click mouseenter',
-            solo: true
-        },
-        hide: {
-            event: 'mouseleave unfocus'
-        },
-        position: {
-            my: 'top left',
-            at: 'bottom center',
-            viewport: window,
-            adjust: { method: 'flipinvert shift' },
-            target: function() {
-                return $(this).prevAll('.sidebar-link').first();
-            }
-        }
-    });
-
-    $('[data-tooltip!=""]').qtip({
-        content: {
-            attr: 'data-tooltip'
-        }
-    });
-
-    $('a[qtip]').each(function() {
-        $(this).qtip({
-            content: {
-                text: $(this).attr('qtip')
-            },
-            style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
-            },
-            hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            },
-            show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            },
-            position: {
-                my: 'top center',
-                at: 'bottom center'
-            }
-        });
-    });
+// Return the translated tooltip text for links made only of an edit / up / down / trash icon.
+function lmTipIconText(el) {
+    const texts = window['icon_texts'] || {};
+    const icons = {'fa-edit': 'edit', 'fa-arrow-up': 'up', 'fa-arrow-down': 'down', 'fa-trash': 'delete'};
+    for (const [iconClass, key] of Object.entries(icons)) {
+        if (!el.querySelector('i.' + iconClass)) continue;
+        const custom = el.getAttribute('data-' + iconClass.replace('fa-', '') + '-tooltip');
+        return custom || texts[key] || null;
+    }
+    return null;
 }
 
-
-// (Re)bind generic qtip tooltips to .has_show_tooltip elements within parent.
-function reload_has_tooltip(parent='') {
-
-    $(parent + ' ' + '.has_show_tooltip').each(function() {
-
-        $(this).qtip({
-            content: {
-                text: $(this).next('span')
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);
-                }
-            }, position: {
-                my: 'top right',
-                at: 'bottom center',
-            }
-        });
-    });
-
+// Return the closest previous sibling of el matching selector, or el itself.
+function lmTipPrevMatch(el, selector) {
+    for (let prev = el.previousElementSibling; prev; prev = prev.previousElementSibling) {
+        if (prev.matches(selector)) return prev;
+    }
+    return el;
 }
 
-// Show the description of the calls in the ability descriptions; bound on first hover, so it also works on
-// elements added later, and inside a modal dialog the tooltip is placed in the dialog to stay above it.
-$(document).on('mouseenter', '.exp-call', function(event) {
-    const $call = $(this);
-    if ($call.data('qtip')) return;
-    const $dialog = $call.closest('dialog');
-    $call.qtip({
-        content: {
-            text: $call.attr('data-call-descr')
-        }, style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow'
-        }, show: {
-            event: event.type,
-            ready: true
-        }, position: {
-            my: 'top center',
-            at: 'bottom center',
-            container: $dialog.length ? $dialog : $(document.body),
-            viewport: window
+// Hover rules, checked in order on the hovered element: the first one returning content wins.
+// Rules with "full" are active only in prod / dev, to keep automated test pages free of hover popups.
+const LM_TIP_RULES = [
+    {selector: '.exp-call', html: el => el.getAttribute('data-call-descr')},
+    {selector: '.has_show_char', node: lmTipNextSpan, classes: 'lm-tip-char', placement: 'bottom-start'},
+    {selector: '.has_show_tooltip', node: lmTipNextSpan, placement: 'bottom-end'},
+    {selector: '.lm_tooltip', full: true, node: el => el.querySelector(':scope > .lm_tooltiptext'), classes: 'lm-tip-lm'},
+    {selector: '.explain-icon', full: true, click: true, text: el => el.parentElement.getAttribute('descr'),
+        classes: 'lm-tip-lm', placement: 'bottom-start', reference: el => lmTipPrevMatch(el, '.sidebar-link')},
+    {selector: '[qtip]', full: true, text: el => el.getAttribute('qtip')},
+    {selector: 'a', full: true, text: lmTipIconText},
+];
+
+// Tooltips bound directly to an element with lmTipBind (checked before the rules).
+const lmTipBound = new WeakMap();
+
+// Currently visible tooltip.
+const lmTipState = {tip: null, anchor: null, cleanup: null};
+
+// Bind a tooltip to a single element; options are the same of a rule, without selector.
+function lmTipBind(el, options) {
+    lmTipBound.set(el, options);
+}
+
+// Build the tooltip content node from a rule, or return null if the element has nothing to show.
+function lmTipContent(rule, el) {
+    const content = document.createElement('div');
+    content.className = 'lm-tip-content';
+    if (rule.node) {
+        const source = rule.node(el);
+        if (!source) return null;
+        // Keep the source classes (but not the hiding ones), since its styles are scoped on them
+        content.classList.add(...[...source.classList].filter(cls => cls !== 'hide' && cls !== 'lm_tooltiptext'));
+        for (const child of source.childNodes) content.appendChild(child.cloneNode(true));
+    } else if (rule.html) {
+        const html = rule.html(el);
+        if (!html) return null;
+        content.innerHTML = html;
+    } else {
+        const text = rule.text(el);
+        if (!text) return null;
+        content.textContent = text;
+    }
+    return content.childNodes.length ? content : null;
+}
+
+// Find the rule matching el that has content to show.
+function lmTipMatch(el) {
+    const bound = lmTipBound.get(el);
+    if (bound) {
+        const content = lmTipContent(bound, el);
+        return content ? {rule: bound, content: content} : null;
+    }
+    const full = window.enviro == 'prod' || window.enviro == 'dev';
+    for (const rule of LM_TIP_RULES) {
+        if (rule.full && !full) continue;
+        if (!el.matches(rule.selector)) continue;
+        const content = lmTipContent(rule, el);
+        if (content) return {rule: rule, content: content};
+    }
+    return null;
+}
+
+// Show a tooltip with content next to reference (an element or a Floating UI virtual element).
+function lmTipShow(anchor, reference, content, options = {}) {
+    lmTipHide();
+    if (!window.FloatingUIDOM) return;
+    const {computePosition, autoUpdate, offset, flip, shift} = window.FloatingUIDOM;
+
+    const tip = document.createElement('div');
+    tip.className = 'lm-tip' + (options.classes ? ' ' + options.classes : '');
+    tip.setAttribute('role', 'tooltip');
+    tip.appendChild(content);
+    // Inside a modal dialog the tooltip must live in the dialog to stay above it
+    const dialog = anchor && anchor.closest ? anchor.closest('dialog[open]') : null;
+    (dialog || document.body).appendChild(tip);
+
+    const update = function() {
+        if (anchor && anchor.isConnected === false) {
+            lmTipHide();
+            return;
         }
-    }, event);
-});
-
-// Remove the calls tooltips placed in a modal dialog when it closes, since its content is replaced on reopen.
-// The close event does not bubble, so it is caught in the capture phase.
-document.addEventListener('close', function(event) {
-    if (event.target.tagName !== 'DIALOG') return;
-    $(event.target).find('.exp-call').each(function() {
-        if ($(this).data('qtip')) $(this).qtip('destroy', true);
-    });
-}, true);
-
-// Add translated qtip tooltips to edit/up/down/trash action icons that lack one.
-function add_icon_tooltips() {
-    // Dictionary mapping icon classes to their tooltip texts
-    var iconTooltips = {
-        'fa-edit': window['icon_texts']['edit'],
-        'fa-arrow-up': window['icon_texts']['up'],
-        'fa-arrow-down': window['icon_texts']['down'],
-        'fa-trash': window['icon_texts']['delete']
+        computePosition(reference, tip, {
+            placement: options.placement || 'bottom',
+            strategy: 'fixed',
+            middleware: [offset(6), flip(), shift({padding: 8})],
+        }).then(function({x, y}) {
+            tip.style.left = x + 'px';
+            tip.style.top = y + 'px';
+            tip.classList.add('lm-tip-visible');
+        });
     };
 
-    // Process each icon type
-    Object.keys(iconTooltips).forEach(function(iconClass) {
-        var defaultText = iconTooltips[iconClass];
-
-        // Find all icons with this class (supporting both .fa-* and .fas.fa-*)
-        $('i.' + iconClass + ', i.fa-solid.' + iconClass + ', i.fas.' + iconClass).each(function() {
-            var $icon = $(this);
-            var $link = $icon.closest('a');
-
-            // Only add tooltip if the link doesn't already have qtip attribute and not already initialized
-            if ($link.length && !$link.attr('qtip') && !$link.data('qtip-initialized')) {
-                // Get translation text from data attribute or use default
-                var dataAttr = iconClass.replace('fa-', '') + '-tooltip';
-                var tooltipText = $link.data(dataAttr) || defaultText;
-                $link.attr('qtip', tooltipText);
-
-                // Initialize qtip for this link
-                $link.qtip({
-                    content: {
-                        text: tooltipText
-                    },
-                    style: {
-                        classes: 'qtip-dark qtip-rounded qtip-shadow'
-                    },
-                    hide: {
-                        effect: function(offset) {
-                            $(this).fadeOut(500);
-                        }
-                    },
-                    show: {
-                        effect: function(offset) {
-                            $(this).fadeIn(500);
-                        }
-                    },
-                    position: {
-                        my: 'top center',
-                        at: 'bottom center'
-                    }
-                });
-
-                $link.data('qtip-initialized', true);
-            }
-        });
-    });
+    lmTipState.tip = tip;
+    lmTipState.anchor = anchor;
+    lmTipState.cleanup = reference instanceof Element ? autoUpdate(reference, tip, update) : (update(), null);
 }
 
+// Hide the visible tooltip, if any.
+function lmTipHide() {
+    if (lmTipState.cleanup) lmTipState.cleanup();
+    if (lmTipState.tip) lmTipState.tip.remove();
+    lmTipState.tip = null;
+    lmTipState.anchor = null;
+    lmTipState.cleanup = null;
+}
 
+// Show the tooltip of el, if it has one; return true if shown.
+function lmTipOpen(el) {
+    const match = lmTipMatch(el);
+    if (!match) return false;
+    const reference = match.rule.reference ? match.rule.reference(el) : el;
+    lmTipShow(el, reference, match.content, match.rule);
+    return true;
+}
 
+// mouseenter / mouseleave do not bubble, so they are caught in the capture phase on every element.
+document.addEventListener('mouseenter', function(event) {
+    if (event.target instanceof Element) lmTipOpen(event.target);
+}, true);
 
+document.addEventListener('mouseleave', function(event) {
+    if (event.target === lmTipState.anchor) lmTipHide();
+}, true);
+
+// Click opens the tooltips of rules with "click" (touch devices), and closes any other tooltip.
+document.addEventListener('click', function(event) {
+    const target = event.target instanceof Element ? event.target : null;
+    const clickable = target && target.closest('.explain-icon');
+    if (clickable && lmTipState.anchor !== clickable) {
+        lmTipOpen(clickable);
+        return;
+    }
+    if (!clickable) lmTipHide();
+}, true);
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') lmTipHide();
+});
+
+// Tooltips placed in a modal dialog are removed when it closes, since its content is replaced on reopen.
+// The close event does not bubble, so it is caught in the capture phase.
+document.addEventListener('close', function(event) {
+    if (event.target.tagName === 'DIALOG' && lmTipState.tip && event.target.contains(lmTipState.tip)) lmTipHide();
+}, true);
 
 // POST the chosen UI language to the server.
 function selectLanguage(lang) {

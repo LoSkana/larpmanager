@@ -645,9 +645,10 @@ def fill_slug(locator, value):
 
 
 def fill_date(locator, selector, value):
-    """Fill a date_p input by setting value via JS, bypassing the datetimepicker popup."""
+    """Fill a native date / datetime-local input by setting its ISO value via JS."""
     locator.locator(selector).evaluate(
-        "(el, v) => { el.value = v; el.dispatchEvent(new Event('change', {bubbles: true})); }",
+        "(el, v) => { if (el.type === 'datetime-local' && !v.includes('T')) v += 'T00:00';"
+        " el.value = v; el.dispatchEvent(new Event('change', {bubbles: true})); }",
         value,
     )
 
