@@ -102,6 +102,21 @@ class TestCspAggregation(BaseTestCase):
 
         assert pop_csp_reports() == []
 
+    def test_sourceless_injected_code_is_discarded(self):
+        """Inline code and eval without a source file, and frames without a URL, are not page code."""
+        assert not record_csp_report(build_report(**{"source-file": "", "line-number": 5}))
+        assert not record_csp_report(build_report(**{"blocked-uri": "eval", "source-file": "", "line-number": 4}))
+        assert not record_csp_report(build_report(**{"effective-directive": "frame-src", "blocked-uri": ""}))
+
+        # Page code and blocked external resources are still reported
+        assert record_csp_report(build_report(**{"blocked-uri": "eval"}))
+        assert record_csp_report(build_report(**{"blocked-uri": "https://evil.example/x.js", "source-file": ""}))
+        assert record_csp_report(
+            build_report(**{"effective-directive": "frame-src", "blocked-uri": "https://x.example/"})
+        )
+
+        assert len(pop_csp_reports()) == 3
+
     def test_digest_escapes_report_content(self):
         """Report fields are attacker controlled, so they are escaped in the email."""
         record_csp_report(build_report(**{"blocked-uri": "<script>alert(1)</script>"}))

@@ -113,6 +113,10 @@ CSP_IGNORED_DIRECTIVES = ("frame-ancestors",)
 # Blank frames created by third-party scripts, whose inline code cannot carry the page nonce
 CSP_IGNORED_DOCUMENT_SCHEMES = ("about",)
 
+# Inline code and eval are always attributed to the page by the browser: without a source file
+# they come from extensions, browser features or automation tools injecting into the page
+CSP_SOURCELESS_BLOCKED = ("inline", "eval")
+
 
 def _strip_query(url: str) -> str:
     """Drop querystring and fragment from a URL, so tokens never end up in the digest."""
@@ -177,6 +181,9 @@ def record_csp_report(payload: Any, user_agent: str = "") -> bool:
         directive in CSP_IGNORED_DIRECTIVES
         or blocked.startswith(CSP_IGNORED_BLOCKED)
         or any(value.startswith(CSP_IGNORED_DOCUMENT_SCHEMES) for value in (source, document))
+        or (not source and blocked in CSP_SOURCELESS_BLOCKED)
+        # Frames with no blocked URL are spawned by the browser itself (e.g. the built-in PDF viewer)
+        or (directive == "frame-src" and not blocked)
     )
     if not directive or is_extension or is_noise:
         return False
