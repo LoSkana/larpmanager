@@ -134,20 +134,23 @@ def get_event_text(event_id: int, text_type: str, language_code: str | None = No
     if not language_code:
         language_code = get_language()
 
-    # Check if there is an event_text with the requested characteristics
-    cached_text = get_event_text_cache(event_id, text_type, language_code)
-    if cached_text:
-        return cached_text
+    # Walk up the campaign chain, stopping on loops in the parent references
+    visited_ids = set()
+    while event_id and event_id not in visited_ids:
+        visited_ids.add(event_id)
 
-    # Fall back to default language cache if no text found
-    default_text = get_event_text_cache_def(event_id, text_type)
-    if default_text:
-        return default_text
+        # Check if there is an event_text with the requested characteristics
+        cached_text = get_event_text_cache(event_id, text_type, language_code)
+        if cached_text:
+            return cached_text
 
-    # Fall back to the campaign parent event, if this event belongs to one
-    parent_id = _get_event_parent_id(event_id)
-    if parent_id:
-        return get_event_text(parent_id, text_type, language_code)
+        # Fall back to default language cache if no text found
+        default_text = get_event_text_cache_def(event_id, text_type)
+        if default_text:
+            return default_text
+
+        # Fall back to the campaign parent event, if this event belongs to one
+        event_id = _get_event_parent_id(event_id)
 
     return ""
 

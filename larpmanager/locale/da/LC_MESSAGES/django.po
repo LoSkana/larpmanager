@@ -7764,6 +7764,9 @@ msgstr "En ny version af platformen er tilgængelig"
 msgid "Added at the top of the main calendar page"
 msgstr "Tilføjet øverst på hovedkalendersiden"
 
+msgid "An event cannot be its own campaign parent"
+msgstr "En begivenhed kan ikke være sin egen kampagneforælder"
+
 msgid "Character already assigned, not selectable"
 msgstr "Karakter allerede tildelt, kan ikke vælges"
 
@@ -8487,6 +8490,9 @@ msgstr "Tilmeldingen til dette event er endnu ikke åben"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Valgte elementer vises for deltagerne."
+
+msgid "The selected event is already part of a campaign"
+msgstr "Den valgte begivenhed er allerede en del af en kampagne"
 
 msgid "The sessions for which the discount is available"
 msgstr "De sessioner, som rabatten er tilgængelig for"

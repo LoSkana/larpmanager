@@ -700,7 +700,7 @@ class CampaignS2Widget(S2Widget):
 
     def set_exclude(self, exclude: int) -> None:
         """Set the exclude flag."""
-        self.exclude = exclude
+        self.excl = exclude
 
     def get_queryset(self) -> QuerySet[Event]:
         """Return events excluding templates and child events."""
@@ -709,7 +709,7 @@ class CampaignS2Widget(S2Widget):
 
         # Exclude specific event if specified
         if hasattr(self, "excl"):
-            queryset = queryset.exclude(pk=self.exclude)
+            queryset = queryset.exclude(pk=self.excl)
 
         return queryset
 

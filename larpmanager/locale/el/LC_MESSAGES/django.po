@@ -7765,6 +7765,9 @@ msgstr "Είναι διαθέσιμη νέα έκδοση της πλατφόρ�
 msgid "Added at the top of the main calendar page"
 msgstr "Προστέθηκε στην κορυφή της κύριας σελίδας ημερολογίου"
 
+msgid "An event cannot be its own campaign parent"
+msgstr "Ένα event δεν μπορεί να είναι γονικό campaign του εαυτού του"
+
 msgid "Character already assigned, not selectable"
 msgstr "Ο χαρακτήρας έχει ήδη ανατεθεί, δεν είναι επιλέξιμος"
 
@@ -8495,6 +8498,9 @@ msgstr "Οι εγγραφές για αυτό το event δεν έχουν αν�
 
 msgid "Selected elements will be shown to participants."
 msgstr "Τα επιλεγμένα στοιχεία θα εμφανίζονται στους συμμετέχοντες."
+
+msgid "The selected event is already part of a campaign"
+msgstr "Το event που επέλεξες είναι ήδη μέρος ενός campaign"
 
 msgid "The sessions for which the discount is available"
 msgstr "Οι συνεδρίες για τις οποίες διατίθεται η έκπτωση"

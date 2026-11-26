@@ -7765,6 +7765,9 @@ msgstr "K dispozici je nová verze platformy"
 msgid "Added at the top of the main calendar page"
 msgstr "Přidáno v horní části hlavní stránky kalendáře"
 
+msgid "An event cannot be its own campaign parent"
+msgstr "Událost nemůže být sama sobě nadřazenou událostí kampaně"
+
 msgid "Character already assigned, not selectable"
 msgstr "Postava již přiřazena, nelze vybrat"
 
@@ -8487,6 +8490,9 @@ msgstr "Registrace na tuto akci ještě nebyla zahájena"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Vybrané prvky se zobrazí účastníkům."
+
+msgid "The selected event is already part of a campaign"
+msgstr "Vybraná událost už je součástí kampaně"
 
 msgid "The sessions for which the discount is available"
 msgstr "Relace, pro které je sleva k dispozici"

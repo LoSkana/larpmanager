@@ -7764,6 +7764,9 @@ msgstr "È disponibile una nuova versione della piattaforma"
 msgid "Added at the top of the main calendar page"
 msgstr "Aggiunto all'inizio della pagina principale del calendario"
 
+msgid "An event cannot be its own campaign parent"
+msgstr "Un evento non può essere il genitore della propria campagna"
+
 msgid "Character already assigned, not selectable"
 msgstr "Personaggio già assegnato, non selezionabile"
 
@@ -8492,6 +8495,9 @@ msgstr "Le iscrizioni a questo evento non sono ancora aperte"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Gli elementi selezionati verranno mostrati ai partecipanti."
+
+msgid "The selected event is already part of a campaign"
+msgstr "L'evento selezionato fa già parte di una campagna"
 
 msgid "The sessions for which the discount is available"
 msgstr "Le sessioni per cui lo sconto è disponibile"
