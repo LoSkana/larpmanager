@@ -198,7 +198,7 @@ def characters(page: Any, live_server: Any) -> None:
     sidebar(page, "Characters")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("fas")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
     # the character is already saved: the options start collapsed

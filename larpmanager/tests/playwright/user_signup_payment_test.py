@@ -152,7 +152,7 @@ def characters(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
+    edit_iframe.get_by_role("listitem", name="Test Character").get_by_role("button", name="Remove item").click()
     save_modal(page, edit_iframe)
 
     # test mails

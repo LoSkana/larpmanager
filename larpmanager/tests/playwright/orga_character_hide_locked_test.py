@@ -120,7 +120,7 @@ def _assign_to_user(page: Any, live_server: Any, char_name: str) -> None:
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("user")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
-    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill(char_name[:5])
     edit_iframe.get_by_role("option", name=char_name).click()
     save_modal(page, edit_iframe)

@@ -207,22 +207,34 @@ class ReadOnlyChoiceWidget(forms.Select):
         return context
 
 
-class DatePickerInput(forms.TextInput):
-    """Date picker input widget for forms."""
+class DatePickerInput(forms.DateInput):
+    """Native date input widget for forms."""
 
-    input_type = "date_p"
+    input_type = "date"
 
-
-class DateTimePickerInput(forms.TextInput):
-    """Date and time picker input widget for forms."""
-
-    input_type = "datetime_p"
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the ISO format required by native date inputs."""
+        super().__init__(attrs, format or "%Y-%m-%d")
 
 
-class TimePickerInput(forms.TextInput):
-    """Time picker input widget for forms."""
+class DateTimePickerInput(forms.DateTimeInput):
+    """Native date and time input widget for forms."""
 
-    input_type = "time_p"
+    input_type = "datetime-local"
+
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the ISO format required by native datetime-local inputs."""
+        super().__init__(attrs, format or "%Y-%m-%dT%H:%M")
+
+
+class TimePickerInput(forms.TimeInput):
+    """Native time input widget for forms."""
+
+    input_type = "time"
+
+    def __init__(self, attrs: dict | None = None, format: str | None = None) -> None:  # noqa: A002
+        """Render the value in the format required by native time inputs."""
+        super().__init__(attrs, format or "%H:%M")
 
 
 SLUG_UNAVAILABLE_ERROR = _("This URL is not available: check the suggested one or choose another one")
@@ -622,11 +634,17 @@ def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModel
 
 
 class _MinInputZeroMixin:
-    """Show the first elements on click instead of requiring typed input."""
+    """Show the first elements on click instead of requiring typed input.
+
+    Also omits data-allow-clear="false": select2 reads data attributes as strings,
+    so "false" would be truthy and show the clear button on required fields.
+    """
 
     def build_attrs(self, base_attrs: dict, extra_attrs: dict | None = None) -> dict:
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
         attrs["data-minimum-input-length"] = 0
+        if attrs.get("data-allow-clear") == "false":
+            del attrs["data-allow-clear"]
         return attrs
 
 
@@ -1197,7 +1215,7 @@ class EventPoolLabelS2:
         return get_event_elements(self.event.id, PoolLabel).order_by("number")
 
 
-class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2MultipleWidget):
+class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, S2WidgetMulti):
     """Multi-select widget for pool labels scoped to an event."""
 
 
@@ -1215,7 +1233,7 @@ class EventPoolTypeS2:
         return get_event_elements(self.event.id, PoolType).order_by("number")
 
 
-class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, s2forms.ModelSelect2MultipleWidget):
+class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, S2WidgetMulti):
     """Multi-select widget for pool types scoped to an event."""
 
 

@@ -135,22 +135,12 @@ window.addEventListener('DOMContentLoaded', function() {
             const $full = $('<div>').html(ab.descr);
             wrapCalls($full[0]);
             $content.append($full);
-            $info.qtip({
-                content: {
-                    text: $content
-                }, style: {
-                    classes: 'qtip-dark qtip-rounded qtip-shadow qtip-ability'
-                }, position: {
-                    my: 'top center',
-                    at: 'bottom center',
-                    viewport: window
-                }
-            });
+            lmTipBind($info[0], {node: () => $content[0], classes: 'lm-tip-ability'});
             const modalHtml = $content.prop('outerHTML');
             $info.on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                $info.qtip('hide');
+                lmTipHide();
                 window.openLmModal(modalHtml, 'popup');
             });
             $descr.append($info);

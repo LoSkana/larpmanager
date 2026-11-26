@@ -486,6 +486,9 @@ DATETIME_INPUT_FORMATS = ['%Y-%m-%d %H:%M']
 
 DATE_INPUT_FORMATS = ['%Y-%m-%d']
 
+SELECT2_JS = ['node_modules/select2/dist/js/select2.full.min.js']
+SELECT2_CSS = ['node_modules/select2/dist/css/select2.min.css']
+SELECT2_I18N_PATH = 'node_modules/select2/dist/js/i18n'
 SELECT2_I18N_AVAILABLE_LANGUAGES = ['en']
 
 # paypal

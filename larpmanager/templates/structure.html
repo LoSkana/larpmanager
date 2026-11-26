@@ -41,7 +41,6 @@
         {% block css-req %}
         {% endblock css-req %}
         <script src="{% static 'node_modules/jquery/dist/jquery.min.js' %}"></script>
-        <script src="{% static 'node_modules/jquery-migrate/dist/jquery-migrate.min.js' %}"></script>
         {% block datatables_css %}
             {% if manage %}
                 {% include "elements/structure/datatables-css.html" %}
@@ -159,8 +158,8 @@ window['dt_language'] = {
         {% endif %}
         {% if manage %}
             <link rel="stylesheet"
-                  href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
-            <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
+                  href="{% static 'node_modules/select2/dist/css/select2.min.css' %}">
+            <script src="{% static 'node_modules/select2/dist/js/select2.full.min.js' %}"></script>
             {% include "elements/dashboard/wwyltd.js.html" %}
         {% endif %}
         {% compress js %}

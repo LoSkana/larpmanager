@@ -338,7 +338,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Modifiers").click()
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.locator("#id_abilities_tr").get_by_role("listitem").click()
+    edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").click()
     edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").fill("do")
     edit_iframe.get_by_role("option", name="double shield").click()
     edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").click()

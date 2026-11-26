@@ -1,44 +1,23 @@
-{% load tz show_tags static  i18n %}
+{% load tz show_tags static i18n %}
 
 <script nonce="{{ csp_nonce }}">
 
 var tinymce_count = ["teaser", "text", "e"];
 
-function openQtip(pageX, pageY, x, y, content) {
-    $('body').append('<div id="qtip-cursor-helper" style="position:absolute;left:' + pageX + 'px;top:' + pageY + 'px;width:1px;height:1px;"></div>');
-    $('#qtip-cursor-helper').qtip({
-        content: { text: content },
-        style: {
-            classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
-        }, show: {
-            ready: true,
-            effect: function(offset) {
-                $(this).fadeIn(500);
-            }
-        }, hide: {
-            event: 'mouseleave unfocus click',
-            delay: 200,
-            effect: function(offset) {
-                $(this).fadeOut(500);
-            }
-        }, position: {
-            my: 'top left',
-            at: 'bottom center',
-            target: [x, y]
-        }, events: {
-            hide: function() {
-                $('#qtip-cursor-helper').remove();
-            }
-        }
-    });
+// Show the character preview below the point (x, y), in viewport coordinates.
+function openCharTip(x, y, html) {
+    const content = document.createElement('div');
+    content.className = 'lm-tip-content show_char';
+    content.innerHTML = html;
+    const point = {getBoundingClientRect: () => new DOMRect(x, y, 0, 0)};
+    lmTipShow(null, point, content, {classes: 'lm-tip-char', placement: 'bottom-start'});
 }
 
 function setUpHighlight(key) {
     const editor = tinymce.get(key);
     if (!editor) return;
     editor.on('selectionchange', function(e) {
-        $('#qtip-cursor-helper').remove();
-        $('.qtip').qtip('hide');
+        lmTipHide();
 
         var selected = editor.selection.getContent({ format: 'text' });
         if (!selected) return;
@@ -56,21 +35,9 @@ function setUpHighlight(key) {
             var rect = range.getBoundingClientRect();
             var iframeRect = editor.iframeElement.getBoundingClientRect();
 
-            // Scroll in iframe
-            var iframeScroll = editor.getDoc().documentElement.scrollTop || editor.getDoc().body.scrollTop;
-
-            // Scroll in page
-            var pageScrollY = window.scrollY || window.pageYOffset;
-            var pageScrollX = window.scrollX || window.pageXOffset;
-
-            // Final computation
-            var pageX = rect.left + iframeRect.left + pageScrollX;
-            var pageY = rect.top + iframeRect.top + pageScrollY + iframeScroll;
-            var x = rect.left + (rect.width / 2) + iframeRect.left + pageScrollX;
-            var y = rect.bottom + iframeRect.top + pageScrollY + iframeScroll;
-
-            // console.log('Page X:', pageX, 'Page Y:', pageY);
-            // console.log('x:', x, 'y:', y);
+            // Point below the middle of the selection, in viewport coordinates
+            var x = rect.left + (rect.width / 2) + iframeRect.left;
+            var y = rect.bottom + iframeRect.top;
 
             request = $.ajax({
                 url: "{% url 'show_char' run.get_slug %}",
@@ -80,7 +47,7 @@ function setUpHighlight(key) {
             });
 
             request.done(function(res) {
-                openQtip(pageX, pageY, x, y, res.content);
+                openCharTip(x, y, res.content);
             });
         }
     });

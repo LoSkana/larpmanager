@@ -104,8 +104,7 @@ def _fill_profile_form(page: Any, round_num: int) -> dict:
                 el.check()
             checked.append(input_id)
             continue
-        if input_type == "date_p":
-            # Set via JS to avoid the datetimepicker popup covering later fields
+        if input_type == "date":
             fill_date(page, f"#{input_id}", date_value)
             expected[input_id] = date_value
         else:

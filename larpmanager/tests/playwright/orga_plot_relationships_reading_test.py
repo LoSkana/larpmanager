@@ -298,7 +298,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect(edit_iframe.locator("#id_pl_3")).to_have_value("<p>instant role</p>")
 
     # remove third
-    edit_iframe.get_by_role("listitem", name="bibi").locator("span").click()
+    edit_iframe.get_by_role("listitem", name="bibi").get_by_role("button", name="Remove item").click()
 
     # change second
     fill_tinymce(edit_iframe, "id_pl_2", "ffff")
@@ -321,7 +321,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     # check second, then remove
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("listitem", name="gaga").locator("span").click()
+    edit_iframe.get_by_role("listitem", name="gaga").get_by_role("button", name="Remove item").click()
     edit_iframe.get_by_role("link", name="Instructions").click()
     save_modal(page, edit_iframe)
 

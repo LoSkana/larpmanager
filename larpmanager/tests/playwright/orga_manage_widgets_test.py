@@ -60,6 +60,9 @@ def _remove_user_from_role(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/roles/u1/edit/")
     btn = page.locator(".select2-selection__choice:has-text('User Test') .select2-selection__choice__remove")
     btn.evaluate("el => el.click()")
+    # select2 opens the dropdown on remove: close it so it does not cover the confirm button
+    page.evaluate("() => $('select.select2-hidden-accessible').select2('close')")
+    expect(page.locator(".select2-container--open")).to_have_count(0)
     submit_confirm(page)
 
 

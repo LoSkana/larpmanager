@@ -494,9 +494,6 @@ function search(key) {
     // Update filter labels
     $('.incl').html(get_included_labels());
     $('.escl').html(get_escluded_labels());
-
-    // Reload tooltip handlers for character cards
-    reload_has_char();
 }
 
 /**
@@ -618,37 +615,3 @@ $(document).ready(function(){
     // Attach input handler to search box
     $('#search').on('input', function() { search($(this).val()); });
 });
-
-// ============================================================================
-// TOOLTIP INITIALIZATION
-// ============================================================================
-
-/**
- * Initializes qTip tooltips for character cards
- * Must be called after character cards are added to DOM
- *
- * @param {string} parent - Optional parent selector to scope tooltip init
- */
-function reload_has_char(parent='') {
-    $(parent + ' ' + '.has_show_char').each(function() {
-        $(this).qtip({
-            content: {
-                text: $(this).next('span')  // Content from next sibling span
-            }, style: {
-                classes: 'qtip-dark qtip-rounded qtip-shadow qtip-char'
-            }, hide: {
-                effect: function(offset) {
-                    $(this).fadeOut(500);  // Fade out animation
-                }
-            }, show: {
-                effect: function(offset) {
-                    $(this).fadeIn(500);  // Fade in animation
-                }
-            }, position: {
-                my: 'top left',
-                at: 'bottom center',
-            }
-        });
-    });
-
-}
