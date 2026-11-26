@@ -7764,6 +7764,9 @@ msgstr "En ny version av plattformen finns tillgänglig"
 msgid "Added at the top of the main calendar page"
 msgstr "Tillagd högst upp på huvudkalendersidan"
 
+msgid "An event cannot be its own campaign parent"
+msgstr "Ett event kan inte vara sin egen kampanjförälder"
+
 msgid "Character already assigned, not selectable"
 msgstr "Karaktär redan tilldelad, inte valbar"
 
@@ -8487,6 +8490,9 @@ msgstr "Anmälan till detta evenemang har ännu inte öppnats"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Valda element visas för deltagarna."
+
+msgid "The selected event is already part of a campaign"
+msgstr "Det valda eventet är redan en del av en kampanj"
 
 msgid "The sessions for which the discount is available"
 msgstr "Sessionerna som rabatten gäller för"

@@ -1177,6 +1177,12 @@ msgstr ""
 msgid "Edit the basic settings of this event"
 msgstr ""
 
+msgid "An event cannot be its own campaign parent"
+msgstr ""
+
+msgid "The selected event is already part of a campaign"
+msgstr ""
+
 msgid "Event features"
 msgstr ""
 

@@ -339,15 +339,26 @@ class OrgaEventForm(SlugFormMixin, BaseModelForm):
 
     def init_campaign(self, disabled_fields: list) -> None:
         """Initialize campaign field by setting association and exclusions."""
-        # Set association for parent widget and exclude current instance if editing
-        self.configure_field_association("parent", self.params.get("association_id"))
+        # Exclude current instance if editing, then set association and queryset for parent widget
         if self.instance and self.instance.pk:
             self.fields["parent"].widget.set_exclude(self.instance.pk)
+        self.configure_field_association("parent", self.params.get("association_id"))
 
         # Remove parent field if campaign feature disabled or no parent options available
         if "campaign" not in self.params.get("features") or not self.fields["parent"].widget.get_queryset().count():
             disabled_fields.append("parent")
             return
+
+    def clean_parent(self) -> Event | None:
+        """Reject the event itself and events already in a campaign as parent (campaigns are one level deep)."""
+        parent = self.cleaned_data.get("parent")
+        if not parent:
+            return parent
+        if self.instance.pk and parent.pk == self.instance.pk:
+            raise ValidationError(_("An event cannot be its own campaign parent"))
+        if parent.parent_id:
+            raise ValidationError(_("The selected event is already part of a campaign"))
+        return parent
 
     def slug_scope(self) -> QuerySet:
         """Return the events of this association, among which the slug must be unique."""
