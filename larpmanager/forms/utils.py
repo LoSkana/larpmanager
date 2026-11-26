@@ -634,11 +634,17 @@ def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModel
 
 
 class _MinInputZeroMixin:
-    """Show the first elements on click instead of requiring typed input."""
+    """Show the first elements on click instead of requiring typed input.
+
+    Also omits data-allow-clear="false": select2 reads data attributes as strings,
+    so "false" would be truthy and show the clear button on required fields.
+    """
 
     def build_attrs(self, base_attrs: dict, extra_attrs: dict | None = None) -> dict:
         attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
         attrs["data-minimum-input-length"] = 0
+        if attrs.get("data-allow-clear") == "false":
+            del attrs["data-allow-clear"]
         return attrs
 
 
@@ -1209,7 +1215,7 @@ class EventPoolLabelS2:
         return get_event_elements(self.event.id, PoolLabel).order_by("number")
 
 
-class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2MultipleWidget):
+class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, S2WidgetMulti):
     """Multi-select widget for pool labels scoped to an event."""
 
 
@@ -1227,7 +1233,7 @@ class EventPoolTypeS2:
         return get_event_elements(self.event.id, PoolType).order_by("number")
 
 
-class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, s2forms.ModelSelect2MultipleWidget):
+class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, S2WidgetMulti):
     """Multi-select widget for pool types scoped to an event."""
 
 
