@@ -1327,6 +1327,20 @@ class OrgaConfigForm(ConfigForm):
                 disable_provisional_help_text,
             )
 
+            # Option to charge donation and extras with the first fixed installment
+            if "reg_installments" in self.params["features"]:
+                extras_first_label = _("Extras in first installment")
+                extras_first_help_text = _(
+                    "If enabled, the voluntary donation and the price of the options chosen in the registration "
+                    "form are added to the first fixed installment, instead of being left for the final installment.",
+                )
+                self.add_configs(
+                    "payment_extras_first_installment",
+                    ConfigType.BOOL,
+                    extras_first_label,
+                    extras_first_help_text,
+                )
+
         if "tokens" in self.params["features"]:
             self.set_section("tokens", _("Tokens"))
 

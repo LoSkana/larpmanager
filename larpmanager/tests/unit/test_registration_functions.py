@@ -34,6 +34,7 @@ from larpmanager.accounting.registration import (
     cancel_run,
     get_cancel_run_summary,
     get_date_surcharge,
+    get_registration_extras,
     get_registration_iscr,
     get_registration_payments,
     get_registration_transactions,
@@ -53,7 +54,7 @@ from larpmanager.models.accounting import (
     PaymentChoices,
 )
 from larpmanager.models.association import AssociationConfig
-from larpmanager.models.event import DevelopStatus
+from larpmanager.models.event import DevelopStatus, EventConfig
 from larpmanager.models.form import RegistrationChoice
 from larpmanager.models.member import get_user_membership
 from larpmanager.models.registration import (
@@ -937,6 +938,133 @@ class TestInstallmentFallbackLogic(BaseTestCase):
         # Overdue cumulative is 275 (125 + 150); quota should reflect that debt
         self.assertEqual(registration.quota, Decimal("275.00"))
         self.assertEqual(registration.deadline, -200)
+
+
+@pytest.mark.django_db(transaction=True)
+class TestInstallmentExtrasFirst(BaseTestCase):
+    """Test cases for charging donation and options with the first installment"""
+
+    def _registration_with_extras(self, *, enabled: bool = True) -> Any:
+        """Create a registration with a 300 ticket, a 50 option and a 20 donation (370 in total)."""
+        run = self.get_run()
+        ticket = self.ticket(event=run.event, price=Decimal("300.00"))
+        registration = self.create_registration(member=self.get_member(), run=run, ticket=ticket)
+        question, option, _other_option = self.question_with_options(event=run.event)
+        RegistrationChoice.objects.create(registration=registration, option=option, question=question)
+        if enabled:
+            EventConfig.objects.create(event=run.event, name="payment_extras_first_installment", value="True")
+
+        registration.pay_what = 20
+        registration.tot_iscr = Decimal("370.00")
+        registration.tot_payed = Decimal("0.00")
+        registration.quota = 0
+        return registration
+
+    def _installment(self, registration: Any, amount: int, days: int, order: int) -> None:
+        """Create an installment with a fixed date deadline, days from today."""
+        RegistrationInstallment.objects.create(
+            event=registration.run.event,
+            amount=amount,
+            date_deadline=date.today() + timedelta(days=days),
+            order=order,
+            number=order,
+        )
+
+    def test_get_registration_extras(self) -> None:
+        """Test extras sum the donation and the chosen options"""
+        registration = self._registration_with_extras()
+
+        self.assertEqual(get_registration_extras(registration), Decimal("70.00"))
+
+    def test_extras_added_to_first_installment(self) -> None:
+        """Test extras are due with the first installment"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=10, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("170.00"))
+        self.assertEqual(registration.deadline, 10)
+
+    def test_extras_not_added_when_disabled(self) -> None:
+        """Test extras stay in the final installment when the config is off"""
+        registration = self._registration_with_extras(enabled=False)
+        self._installment(registration, amount=100, days=10, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("100.00"))
+
+    def test_extras_carried_into_next_payment_when_first_expired(self) -> None:
+        """Test unpaid extras of an expired first installment are requested with the next payment"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=-5, order=1)
+        self._installment(registration, amount=100, days=10, order=2)
+        self._installment(registration, amount=0, days=90, order=3)
+        registration.tot_payed = Decimal("100.00")
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        # 100 + 100 + 70 extras, minus the 100 already paid
+        self.assertEqual(registration.quota, Decimal("170.00"))
+        self.assertEqual(registration.deadline, 10)
+
+    def test_extras_capped_at_registration_total(self) -> None:
+        """Test first installment plus extras never exceeds the registration total"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=10, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+        registration.tot_iscr = Decimal("150.00")
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("150.00"))
+
+    def test_extras_overdue_when_first_expired_and_next_distant(self) -> None:
+        """Test extras stay in the overdue amount when the next installment is beyond the alert window"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=-1, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("170.00"))
+        self.assertEqual(registration.deadline, -1)
+
+    def test_extras_overdue_when_only_fixed_amount_paid(self) -> None:
+        """Test extras are still requested after the deadline when only the fixed amount was paid"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=-1, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+        registration.tot_payed = Decimal("100.00")
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("70.00"))
+        self.assertEqual(registration.deadline, -1)
+
+    def test_extras_due_when_first_deadline_is_today(self) -> None:
+        """Test extras are due with a first installment expiring today"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=100, days=0, order=1)
+        self._installment(registration, amount=0, days=60, order=2)
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("170.00"))
+        self.assertEqual(registration.deadline, 0)
+
+    def test_extras_not_double_counted_with_only_final_installment(self) -> None:
+        """Test a schedule with only the final installment requests the registration total once"""
+        registration = self._registration_with_extras()
+        self._installment(registration, amount=0, days=10, order=1)
+
+        installment_check(registration, alert=30, association_id=self.get_association().id)
+
+        self.assertEqual(registration.quota, Decimal("370.00"))
+        self.assertEqual(registration.deadline, 10)
 
 
 class TestQuotaCheckFallbackLogic(BaseTestCase):

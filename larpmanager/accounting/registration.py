@@ -102,10 +102,7 @@ def get_registration_iscr(registration: Registration) -> int:
         total_registration_fee += registration.pay_what
 
     # Add registration choice options (extras, meals, etc.)
-    for choice in RegistrationChoice.objects.filter(
-        registration=registration, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
-    ).select_related("option"):
-        total_registration_fee += choice.option.price
+    total_registration_fee += _get_registration_options_total(registration)
 
     # Apply discounts only for non-gifted registrations
     if not registration.redeem_code:
@@ -320,6 +317,40 @@ def _calculate_installment_cumulative(installment_amount: float, current_cumulat
     return total
 
 
+def _get_registration_options_total(registration: Registration) -> Decimal:
+    """Return the total price of the options chosen in the registration form."""
+    return RegistrationChoice.objects.filter(
+        registration=registration, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
+    ).aggregate(total=models.Sum("option__price"))["total"] or Decimal(0)
+
+
+def get_registration_extras(registration: Registration) -> Decimal:
+    """Return the voluntary donation plus the price of the options chosen in the registration form."""
+    return max(Decimal(registration.pay_what or 0) + _get_registration_options_total(registration), Decimal(0))
+
+
+def _get_installment_extras(registration: Registration, event_id: int) -> Decimal:
+    """Return the extras to add to the first fixed installment, if the event charges them early."""
+    # Read without cache, as registration accounting also runs in background tasks
+    if not get_event_config(event_id, "payment_extras_first_installment", bypass_cache=True):
+        return Decimal(0)
+    return get_registration_extras(registration)
+
+
+def _add_installment_extras(
+    installment_amount: int, registration: Registration, event_id: int, *, are_extras_added: bool
+) -> tuple[Decimal | int, bool]:
+    """Add the extras to the first installment with a fixed amount.
+
+    Returns:
+        The installment amount to use and whether the extras have been added.
+
+    """
+    if are_extras_added or not installment_amount:
+        return installment_amount, are_extras_added
+    return installment_amount + _get_installment_extras(registration, event_id), True
+
+
 def _set_installment_fallback(
     registration: Registration,
     cumulative_amount: float,
@@ -362,6 +393,8 @@ def installment_check(registration: Registration, alert: int, association_id: in
 
     Processes configured installments for the event and determines
     next payment amount and deadline based on the installment schedule.
+    If the event config "payment_extras_first_installment" is enabled, the voluntary
+    donation and the chosen options are added to the first installment with a fixed amount.
 
     Args:
         registration: Registration instance to check installments for
@@ -378,9 +411,11 @@ def installment_check(registration: Registration, alert: int, association_id: in
     cumulative_amount = 0
     has_distant_installments = False
     most_overdue_deadline = None
-    installments_query = RegistrationInstallment.objects.filter(event_id=get_run_event_id(registration.run_id))
+    event_id = get_run_event_id(registration.run_id)
+    installments_query = RegistrationInstallment.objects.filter(event_id=event_id)
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets__id")).order_by("order")
     is_first_deadline = True
+    are_extras_added = False
 
     for installment in installments_query:
         if not _is_installment_applicable(installment.tickets_map, registration.ticket_id):
@@ -391,8 +426,12 @@ def installment_check(registration: Registration, alert: int, association_id: in
             has_distant_installments = True
             continue
 
+        installment_amount, are_extras_added = _add_installment_extras(
+            installment.amount, registration, event_id, are_extras_added=are_extras_added
+        )
+
         cumulative_amount = _calculate_installment_cumulative(
-            installment.amount, cumulative_amount, registration.tot_iscr
+            installment_amount, cumulative_amount, registration.tot_iscr
         )
 
         # Skip installments with invalid deadline
