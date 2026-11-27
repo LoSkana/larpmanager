@@ -5954,6 +5954,9 @@ msgstr "Saisis une valeur numérique valide"
 msgid "Event context not available"
 msgstr "Le contexte de l'événement n'est pas disponible"
 
+msgid "Extras in first installment"
+msgstr "Suppléments dans le premier versement"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Fonctionnalité %(name)s activée!"
@@ -16829,6 +16832,15 @@ msgstr ""
 "contextuelle t'aide à obtenir le numéro de référence d'un personnage ; tu "
 "peux également sélectionner un numéro de référence pour voir le nom du "
 "personnage."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Si cette option est activée, le don facultatif et le prix des options "
+"choisies dans le formulaire d'inscription sont ajoutés au premier versement "
+"fixe, au lieu d'être reportés sur le dernier versement."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

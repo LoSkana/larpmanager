@@ -5954,6 +5954,9 @@ msgstr "Zadej platnou číselnou hodnotu"
 msgid "Event context not available"
 msgstr "Kontext události není k dispozici"
 
+msgid "Extras in first installment"
+msgstr "Doplňkové služby v první splátce"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Funkce %(name)s aktivována!"
@@ -16159,6 +16162,15 @@ msgstr ""
 "Když stiskneš jeden ze speciálních referenčních symbolů, zobrazí se "
 "vyskakovací okno, které ti pomůže zjistit referenční číslo postavy; můžeš "
 "také vybrat referenční číslo a zobrazit jméno postavy."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Je-li tato možnost zapnutá, dobrovolný příspěvek a cena volitelných položek "
+"vybraných v registračním formuláři se připočítají k první pevné splátce, "
+"místo aby byly zahrnuty do poslední splátky."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

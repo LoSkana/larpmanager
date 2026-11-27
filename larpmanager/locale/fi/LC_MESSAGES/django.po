@@ -5954,6 +5954,9 @@ msgstr "Syötä kelvollinen numeerinen arvo"
 msgid "Event context not available"
 msgstr "Tapahtumakonteksti ei ole käytettävissä"
 
+msgid "Extras in first installment"
+msgstr "Lisäpalvelut ensimmäisessä erässä"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Ominaisuus %(name)s aktivoitu!"
@@ -16396,6 +16399,16 @@ msgstr ""
 "Kun painat jotakin erityisistä viitesymboleista, saat ponnahdusikkunan "
 "avulla hahmon viitenumeron; voit myös valita viitenumeron nähdäksesi hahmon "
 "nimen."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Jos tämä toiminto on käytössä, vapaaehtoinen lahjoitus ja "
+"rekisteröitymislomakkeessa valittujen vaihtoehtojen hinta lisätään "
+"ensimmäiseen kiinteään erään sen sijaan, että ne jätettäisiin viimeiseen "
+"erään."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

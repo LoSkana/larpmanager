@@ -5954,6 +5954,9 @@ msgstr "Ange ett giltigt numeriskt värde"
 msgid "Event context not available"
 msgstr "Händelsekontext inte tillgänglig"
 
+msgid "Extras in first installment"
+msgstr "Tillägg i första delbetalningen"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Funktion %(name)s aktiverad!"
@@ -16382,6 +16385,15 @@ msgstr ""
 "När du trycker på en av de speciella referenssymbolerna visas en popup-"
 "fönster som hjälper dig att få fram referensnumret för en karaktär; du kan "
 "också välja ett referensnummer för att se karaktärens namn."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Om denna funktion är aktiverad läggs den frivilliga donationen och priset "
+"för de alternativ som valts i registreringsformuläret till den första fasta "
+"delbetalningen, istället för att läggas till den sista delbetalningen."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

@@ -5954,6 +5954,9 @@ msgstr "Indtast en gyldig numerisk værdi"
 msgid "Event context not available"
 msgstr "Eventkontekst er ikke tilgængelig"
 
+msgid "Extras in first installment"
+msgstr "Ekstraudgifter i første rate"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Funktion %(name)s aktiveret!"
@@ -16309,6 +16312,15 @@ msgstr ""
 "Når du trykker på et af de særlige referencesymboler, hjælper en popup dig "
 "med at finde en karakters referencenummer; du kan også vælge et "
 "referencenummer for at se karakterens navn."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Hvis denne funktion er aktiveret, lægges det frivillige bidrag og prisen for"
+" de valgmuligheder, der er angivet i tilmeldingsformularen, til den første "
+"faste rate i stedet for at blive overført til den sidste rate."
 
 msgid ""
 "The following items will have their quantities reduced based on the "
