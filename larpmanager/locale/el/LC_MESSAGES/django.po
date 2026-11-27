@@ -5954,6 +5954,9 @@ msgstr "Εισήγαγε μια έγκυρη αριθμητική τιμή"
 msgid "Event context not available"
 msgstr "Το πλαίσιο της εκδήλωσης δεν είναι διαθέσιμο"
 
+msgid "Extras in first installment"
+msgstr "Πρόσθετα στην πρώτη δόση"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Η λειτουργία %(name)s ενεργοποιήθηκε!"
@@ -16823,6 +16826,15 @@ msgstr ""
 "Όταν πατήσεις ένα από τα ειδικά σύμβολα αναφοράς, ένα αναδυόμενο παράθυρο θα"
 " σε βοηθήσει να βρεις τον αριθμό αναφοράς ενός χαρακτήρα· μπορείς επίσης να "
 "επιλέξεις έναν αριθμό αναφοράς για να δεις το όνομα του χαρακτήρα."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Εάν η επιλογή αυτή είναι ενεργοποιημένη, η εθελοντική δωρεά και το κόστος "
+"των επιλογών που έχουν επιλεγεί στη φόρμα εγγραφής προστίθενται στην πρώτη "
+"σταθερή δόση, αντί να μεταφέρονται στην τελική δόση."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

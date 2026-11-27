@@ -5954,6 +5954,9 @@ msgstr "Gib einen gültigen numerischen Wert ein"
 msgid "Event context not available"
 msgstr "Ereigniskontext nicht verfügbar"
 
+msgid "Extras in first installment"
+msgstr "Extras in der ersten Rate"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Funktion %(name)s aktiviert!"
@@ -16862,6 +16865,15 @@ msgstr ""
 "Popup-Fenster, das dir hilft, die Referenznummer eines Charakters zu "
 "ermitteln; du kannst auch eine Referenznummer auswählen, um den Namen des "
 "Charakters zu sehen."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Wenn diese Option aktiviert ist, werden die freiwillige Spende und der Preis"
+" der im Anmeldeformular ausgewählten Optionen zur ersten festen Rate "
+"hinzugerechnet, anstatt sie für die letzte Rate aufzuheben."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

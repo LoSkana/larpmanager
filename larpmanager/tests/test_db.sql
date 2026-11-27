@@ -6633,6 +6633,7 @@ INSERT INTO public.larpmanager_larpmanagertutorial VALUES (12, NULL, false, '202
 <p>Notes:</p>
 <p><em>Defining both Days Deadline and Date Deadline is not allowed.</em></p>
 <p><em>If no installments are defined for a ticket, the default payment deadline is 7 days from registration.</em></p>
+<p><em>By default, the voluntary donation and the options with a price chosen in the registration form are paid with the final installment. To charge them with the first installment instead, enable "Extras in first installment" in <a href="https://larpmanager.com/redirect/event/manage/config/payment/" target="_blank" rel="noopener"><strong>Event &gt; Configuration &gt; Payments</strong></a>. Extras chosen or still unpaid after the first installment deadline are part of the overdue amount.</em></p>
 <hr>
 <h2>Dynamic rates</h2>
 <p>With this feature you can divide the payment of a registration fee in dynamic rates (or quotas). First, activate the <a href="https://larpmanager.com/redirect/event/manage/features/reg_quotas/on/" target="_blank" rel="noopener"><strong>Dynamic rates</strong></a> feature.</p>
@@ -6739,6 +6740,7 @@ INSERT INTO public.larpmanager_larpmanagertutorial VALUES (13, NULL, false, '202
 <li><strong>Payment reminder:</strong> If fixed or dynamic rates are selected, LarpManager will treat all payments with a deadline earlier than the specified value as urgent and notify the user accordingly.</li>
 <li><strong>Payment reference:</strong> By default, the payment justification is formatted like "<em>Registration fee of Elena Ricci for Test Event</em>". You can customize this by entering a template string; for example, inputting "Thanks {player_name} for your help!" will result in "<em>Thanks Elena Ricci for your help!</em>".</li>
 <li><strong>Disable provisional registrations:</strong> By default, registrations are marked as "provisional" unless a payment is performed. If this option is enabled, no registration are marked provisional, and are immediately confirmed.</li>
+<li><strong>Extras in first installment:</strong> Available with fixed instalments. If enabled, the voluntary donation and the options with a price chosen in the registration form are added to the first fixed installment instead of the final one.</li>
 </ul>
 <hr>
 <p><em>Related tutorials: <a href="https://larpmanager.com/tutorials/registration-accounting/" target="_blank" rel="noopener"><em><strong>Registration Accounting</strong></em></a>, <a href="https://larpmanager.com/tutorials/accounting/" target="_blank" rel="noopener"><em><strong>Accounting</strong></em></a>, <a href="https://larpmanager.com/tutorials/membership/" target="_blank" rel="noopener"><em><strong>Membership</strong></em></a></em></p>', 150);

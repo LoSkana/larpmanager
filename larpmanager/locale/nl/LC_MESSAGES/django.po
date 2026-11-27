@@ -5954,6 +5954,9 @@ msgstr "Voer een geldige numerieke waarde in"
 msgid "Event context not available"
 msgstr "Gebeurteniscontext niet beschikbaar"
 
+msgid "Extras in first installment"
+msgstr "Extra's in de eerste termijn"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Functie %(name)s geactiveerd!"
@@ -16698,6 +16701,16 @@ msgstr ""
 "Als je op een van de speciale referentiesymbolen drukt, krijg je een pop-"
 "upvenster met het referentienummer van een personage; je kunt ook een "
 "referentienummer selecteren om de naam van het personage te zien."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Als deze optie is ingeschakeld, worden de vrijwillige donatie en de prijs "
+"van de opties die je in het registratieformulier hebt gekozen, bij de eerste"
+" vaste termijn opgeteld, in plaats van dat ze bij de laatste termijn worden "
+"meegerekend."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

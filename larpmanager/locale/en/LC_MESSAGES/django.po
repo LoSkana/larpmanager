@@ -1981,6 +1981,15 @@ msgid ""
 "received."
 msgstr ""
 
+msgid "Extras in first installment"
+msgstr ""
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+
 msgid "Disable Tokens"
 msgstr ""
 

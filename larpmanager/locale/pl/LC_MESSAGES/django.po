@@ -5954,6 +5954,9 @@ msgstr "Wprowadź prawidłową wartość liczbową"
 msgid "Event context not available"
 msgstr "Kontekst zdarzenia nie jest dostępny"
 
+msgid "Extras in first installment"
+msgstr "Dodatki w pierwszej racie"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "Funkcja %(name)s aktywowana!"
@@ -16491,6 +16494,15 @@ msgstr ""
 "Po naciśnięciu jednego ze specjalnych symboli referencyjnych wyskakujące "
 "okienko pomoże ci uzyskać numer referencyjny postaci; możesz także wybrać "
 "numer referencyjny, aby zobaczyć nazwę postaci."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Jeśli ta opcja jest włączona, dobrowolna darowizna i cena opcji wybranych w "
+"formularzu rejestracyjnym są doliczane do pierwszej stałej raty, zamiast być"
+" uwzględnione w ostatniej racie."
 
 msgid ""
 "The following items will have their quantities reduced based on the "

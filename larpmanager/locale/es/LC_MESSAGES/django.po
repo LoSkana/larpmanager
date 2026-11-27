@@ -5954,6 +5954,9 @@ msgstr "Introduce un valor numérico válido"
 msgid "Event context not available"
 msgstr "Contexto de evento no disponible"
 
+msgid "Extras in first installment"
+msgstr "Extras en la primera cuota"
+
 #, python-format
 msgid "Feature %(name)s activated!"
 msgstr "¡Característica %(name)s activada!"
@@ -16666,6 +16669,15 @@ msgstr ""
 "ventana emergente que te ayudará a obtener el número de referencia de un "
 "personaje; también puedes seleccionar un número de referencia para ver el "
 "nombre del personaje."
+
+msgid ""
+"If enabled, the voluntary donation and the price of the options chosen in "
+"the registration form are added to the first fixed installment, instead of "
+"being left for the final installment."
+msgstr ""
+"Si se activa esta opción, la donación voluntaria y el precio de las opciones"
+" elegidas en el formulario de inscripción se suman a la primera cuota fija, "
+"en lugar de dejarse para la última cuota."
 
 msgid ""
 "The following items will have their quantities reduced based on the "
