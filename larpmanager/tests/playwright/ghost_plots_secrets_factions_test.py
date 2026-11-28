@@ -117,6 +117,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("eefqq")
+    fill_tinymce(edit_iframe, "id_teaser", "eefqq teaser")
     char_dual_pick(edit_iframe, "tes", "Test Character")
     save_modal(page, edit_iframe)
 
@@ -155,7 +156,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#wrapper"), "Test Teaser eefqq")
+    expect_normalized(page, page.locator("#wrapper"), "Test Teaser eefqq eefqq teaser")
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
     with page.expect_popup() as popup_info:

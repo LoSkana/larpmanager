@@ -126,6 +126,30 @@ def count_sheet_titles(
 
 
 @register.simple_tag
+def sheet_section_has_content(
+    fields: dict[str, Any],
+    questions: dict[str, Any],
+    screen: bool,  # noqa: FBT001
+    text_content: str = "",
+    show_text: bool = False,  # noqa: FBT001, FBT002
+    teaser_content: str = "",
+    show_teaser: bool = False,  # noqa: FBT001, FBT002
+) -> bool:
+    """Return whether a character sheet section (faction, guild) would render any content."""
+    for idx, question in questions.items():
+        typ = question.get("typ")
+        if typ == "text":
+            if text_content and show_text:
+                return True
+        elif typ == "teaser":
+            if teaser_content and show_teaser:
+                return True
+        elif fields.get(idx) and (screen or question.get("printable")):
+            return True
+    return False
+
+
+@register.simple_tag
 def count_public_questions(questions: dict[str, Any]) -> int:
     """Count questions for the character, excluding the name question."""
     return len([q for q in questions.values() if q.get("typ") != "name"])
